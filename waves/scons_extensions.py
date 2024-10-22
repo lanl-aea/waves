@@ -22,6 +22,20 @@ from waves._abaqus import odb_extract
 _exclude_from_namespace = set(globals().keys())
 
 
+def print_action_signature_string(s, target, source, env) -> None:
+    try:
+        action_signatures = target[0].get_executor().get_contents().decode()
+    except UnicodeDecodeError:
+        action_signatures = target[0].get_executor().get_contents()
+    if not isinstance(action_signatures, list):
+        action_signatures = [action_signatures]
+    target_text = " and ".join([str(node) for node in target])
+    action_text = "\n  ".join(action_signatures)
+    print(f"Building {target_text} with action signature string:\n  {action_text}")
+    print(s)
+    return
+
+
 def _print_failed_nodes_stdout() -> None:
     """Query the SCons reported build failures and print the associated node's STDOUT file, if it exists"""
     build_failures = SCons.Script.GetBuildFailures()
