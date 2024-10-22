@@ -206,10 +206,8 @@ class ParameterGenerator(ABC):
         :raises waves.exceptions.ChoicesError: If an unsupported output file type is requested
         """
         self.output_directory.mkdir(parents=True, exist_ok=True)
-        parameter_set_files = [pathlib.Path(set_name) for set_name in
-                               self.parameter_study.coords[_set_coordinate_key].values]
         if self.write_meta and self.provided_output_file_template:
-            self._write_meta(parameter_set_files)
+            self._write_meta()
         if self.output_file_type == 'h5':
             self._write_dataset()
         elif self.output_file_type == 'yaml':
@@ -275,8 +273,6 @@ class ParameterGenerator(ABC):
         """Write YAML formatted output to STDOUT, separate set files, or a single file
 
         Behavior as specified in :meth:`waves.parameter_generators.ParameterGenerator.write`
-
-        :param parameter_set_files: List of pathlib.Path parameter set file paths
         """
         parameter_study_dictionary = self.parameter_study_to_dict()
         # If no output file template is provided, printing to stdout or single file. Prepend set names.
@@ -321,14 +317,14 @@ class ParameterGenerator(ABC):
             with open(output_file, 'w') as outfile:
                 outfile.write(yaml.dump(parameter_dictionary))
 
-    def _write_meta(self, parameter_set_files: typing.Iterable[pathlib.Path]) -> None:
+    def _write_meta(self) -> None:
         """Write the parameter study meta data file.
 
         The parameter study meta file is always overwritten. It should *NOT* be used to determine if the parameter study
         target or dependee is out-of-date. Parameter study file paths are written as absolute paths.
-
-        :param parameter_set_files: List of pathlib.Path parameter set file paths
         """
+        parameter_set_files = [pathlib.Path(set_name) for set_name in
+                               self.parameter_study.coords[_set_coordinate_key].values]
         # Always overwrite the meta data file to ensure that *all* parameter file names are included.
         with open(self.parameter_study_meta_file, 'w') as meta_file:
             if self.output_file:
