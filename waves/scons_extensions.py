@@ -24,14 +24,11 @@ _exclude_from_namespace = set(globals().keys())
 
 def print_action_signature_string(s, target, source, env) -> None:
     try:
-        action_signatures = target[0].get_executor().get_contents().decode()
+        action_signature_string = target[0].get_executor().get_contents().decode()
     except UnicodeDecodeError:
-        action_signatures = target[0].get_executor().get_contents()
-    if not isinstance(action_signatures, list):
-        action_signatures = [action_signatures]
+        action_signature_string = target[0].get_executor().get_contents()
     target_text = " and ".join([str(node) for node in target])
-    action_text = "\n  ".join(action_signatures)
-    print(f"Building {target_text} with action signature string:\n  {action_text}")
+    print(f"Building {target_text} with action signature string:\n  {action_signature_string}")
     print(s)
     return
 
