@@ -22,6 +22,10 @@ Internal Changes
   and greater consistency between write method output file name lists (:issue:`811`, :merge:`1000`). By `Kyle
   Brindley`_.
 
+Enhancements
+============
+- Allow parameter generator ``write`` method API override for output file type (:merge:`1001`). By `Kyle Brindley`_.
+
 *******************
 0.12.0 (2024-10-17)
 *******************

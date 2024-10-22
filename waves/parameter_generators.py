@@ -185,7 +185,10 @@ class ParameterGenerator(ABC):
         if self.previous_parameter_study is not None and self.previous_parameter_study.is_file():
             self._merge_parameter_studies()
 
-    def write(self) -> None:
+    def write(
+        self,
+        output_file_type: typing.Optional[str] = None
+    ) -> None:
         """Write the parameter study to STDOUT or an output file.
 
         Writes to STDOUT by default. Requires non-default ``output_file_template`` or ``output_file`` specification to
@@ -203,14 +206,19 @@ class ParameterGenerator(ABC):
            parameter_1: 1
            parameter_2: a
 
+        :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+
         :raises waves.exceptions.ChoicesError: If an unsupported output file type is requested
         """
+        if output_file_type is None:
+            output_file_type = self.output_file_type
+
         self.output_directory.mkdir(parents=True, exist_ok=True)
         if self.write_meta and self.provided_output_file_template:
             self._write_meta()
-        if self.output_file_type == 'h5':
+        if output_file_type == "h5":
             self._write_dataset()
-        elif self.output_file_type == 'yaml':
+        elif output_file_type == "yaml":
             self._write_yaml()
         else:
             raise ChoicesError(f"Unsupported 'output_file_type': '{self.output_file_type}. " \
