@@ -213,7 +213,7 @@ class ParameterGenerator(ABC):
         if self.output_file_type == 'h5':
             self._write_dataset()
         elif self.output_file_type == 'yaml':
-            self._write_yaml(parameter_set_files)
+            self._write_yaml()
         else:
             raise ChoicesError(f"Unsupported 'output_file_type': '{self.output_file_type}. " \
                                f"The 'output_file_type' must be one of {_settings._allowable_output_file_types}")
@@ -271,30 +271,18 @@ class ParameterGenerator(ABC):
         if write:
             parameter_study.to_netcdf(path=existing_parameter_study, mode='w', format="NETCDF4", engine='h5netcdf')
 
-    def _write_yaml(self, parameter_set_files: typing.Iterable[pathlib.Path]) -> None:
+    def _write_yaml(self) -> None:
         """Write YAML formatted output to STDOUT, separate set files, or a single file
 
         Behavior as specified in :meth:`waves.parameter_generators.ParameterGenerator.write`
 
         :param parameter_set_files: List of pathlib.Path parameter set file paths
         """
-        text_list = []
-        # Construct the output text
-        for parameter_set_file, parameter_set in self.parameter_study.groupby(_set_coordinate_key):
-            text = yaml.safe_dump(
-                {key: array.values.item() for key, array in parameter_set.items()}
-            )
-            text_list.append(text)
+        parameter_study_dictionary = self.parameter_study_to_dict()
         # If no output file template is provided, printing to stdout or single file. Prepend set names.
         if not self.provided_output_file_template:
             # If no output file template is provided, printing to stdout or a single file
-            # Adjust indentation for syntactically correct YAML.
-            prefix = "  "
-            # TODO: split up text prefix change for readability
-            text_list = ["\n".join([f"{prefix}{item}" for item in text.split('\n')[:-1]]) + "\n" for text in text_list]
-            text_list = [f"{parameter_set_file.name}:\n{text}" for parameter_set_file, text in
-                         zip(parameter_set_files, text_list)]
-            output_text = "".join(text_list)
+            output_text = yaml.safe_dump(parameter_study_dictionary)
             if self.output_file and not self.dry_run:
                 self._conditionally_write_yaml(self.output_file, yaml.safe_load(output_text))
             elif self.output_file and self.dry_run:
@@ -303,13 +291,15 @@ class ParameterGenerator(ABC):
                 sys.stdout.write(output_text)
         # If output file template is provided, writing to parameter set files
         else:
-            for parameter_set_file, text in zip(parameter_set_files, text_list):
-                if self.overwrite or not parameter_set_file.is_file():
+            for parameter_set_file, parameter_set in parameter_study_dictionary.items():
+                parameter_set_path = pathlib.Path(parameter_set_file)
+                text = yaml.safe_dump(parameter_set)
+                if self.overwrite or not parameter_set_path.is_file():
                     # If dry run is specified, print the files that would have been written to stdout
                     if self.dry_run:
-                        sys.stdout.write(f"{parameter_set_file.resolve()}\n{text}")
+                        sys.stdout.write(f"{parameter_set_path.resolve()}\n{text}")
                     else:
-                        self._conditionally_write_yaml(parameter_set_file, yaml.safe_load(text))
+                        self._conditionally_write_yaml(parameter_set_path, yaml.safe_load(text))
 
     def _conditionally_write_yaml(
         self,
