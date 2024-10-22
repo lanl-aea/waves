@@ -28,8 +28,7 @@ def print_action_signature_string(s, target, source, env) -> None:
     except UnicodeDecodeError:
         action_signature_string = target[0].get_executor().get_contents()
     target_text = " and ".join([str(node) for node in target])
-    print(f"Building {target_text} with action signature string:\n  {action_signature_string}")
-    print(s)
+    print(f"Building {target_text} with action signature string:\n  {action_signature_string}\n{s}")
     return
 
 
