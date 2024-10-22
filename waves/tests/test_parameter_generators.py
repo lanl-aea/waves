@@ -275,30 +275,43 @@ class TestParameterGenerator:
             assert write_yaml_file.return_value.write.call_count == expected_call_count
 
     def test_write_type_override(self):
+        # Instantiate as YAML output.
+        WriteYAMLParameterGenerator = DummyGenerator({}, output_file_type="yaml")
+
+        # Bare call should try to write YAML.
         with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
              patch('waves.parameter_generators.ParameterGenerator._write_dataset') as mock_write_dataset, \
              patch('waves.parameter_generators.ParameterGenerator._write_yaml') as mock_write_yaml:
-            # Instantiate as YAML output.
-            WriteYAMLParameterGenerator = DummyGenerator({}, output_file_type="yaml")
-            # Bare call should try to write YAML.
-            WriteParameterGenerator.write()
+            WriteYAMLParameterGenerator.write()
             mock_write_yaml.assert_called_once()
             mock_write_dataset.assert_not_called()
-            # Override should try to write H5.
+
+        # Override should try to write H5.
+        with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
+             patch('waves.parameter_generators.ParameterGenerator._write_dataset') as mock_write_dataset, \
+             patch('waves.parameter_generators.ParameterGenerator._write_yaml') as mock_write_yaml:
             WriteYAMLParameterGenerator.write(output_file_type="h5")
-            mock_write_yaml.assert_called_once()
+            mock_write_yaml.assert_not_called()
             mock_write_dataset.assert_called_once()
 
-            # Instantiate as H5 output.
-            WriteH5ParameterGenerator = DummyGenerator({}, output_file_type="h5")
-            # Bare call should try to write H5.
-            WriteParameterGenerator.write()
+        # Instantiate as H5 output.
+        WriteH5ParameterGenerator = DummyGenerator({}, output_file_type="h5")
+
+        # Bare call should try to write H5.
+        with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
+             patch('waves.parameter_generators.ParameterGenerator._write_dataset') as mock_write_dataset, \
+             patch('waves.parameter_generators.ParameterGenerator._write_yaml') as mock_write_yaml:
+            WriteH5ParameterGenerator.write()
             mock_write_dataset.assert_called_once()
             mock_write_yaml.assert_not_called()
-            # Override should try to write YAML.
+
+        # Override should try to write YAML.
+        with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
+             patch('waves.parameter_generators.ParameterGenerator._write_dataset') as mock_write_dataset, \
+             patch('waves.parameter_generators.ParameterGenerator._write_yaml') as mock_write_yaml:
             WriteH5ParameterGenerator.write(output_file_type="yaml")
             mock_write_yaml.assert_called_once()
-            mock_write_dataset.assert_called_once()
+            mock_write_dataset.assert_not_called()
 
     set_hashes = {
         'set1': (
