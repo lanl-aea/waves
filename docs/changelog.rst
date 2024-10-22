@@ -8,6 +8,10 @@ Changelog
 0.12.1 (unreleased)
 *******************
 
+Documentation
+=============
+- Hyperlink specific portions of the SCons man page instead of quoting (:merge:`996`). By `Kyle Brindley`_.
+
 *******************
 0.12.0 (2024-10-17)
 *******************
