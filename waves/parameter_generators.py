@@ -214,8 +214,10 @@ class ParameterGenerator(ABC):
             output_file_type = self.output_file_type
 
         self.output_directory.mkdir(parents=True, exist_ok=True)
+
         if self.write_meta and self.provided_output_file_template:
             self._write_meta()
+
         if output_file_type == "h5":
             parameter_study_object = self.parameter_study
             parameter_study_iterator = parameter_study_object.groupby(_set_coordinate_key)
