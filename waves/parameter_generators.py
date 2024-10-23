@@ -240,18 +240,23 @@ class ParameterGenerator(ABC):
 
         Behavior as specified in :meth:`waves.parameter_generators.ParameterGenerator.write`
         """
+        if self.output_file_type == "h5":
+            parameter_study_object = self.parameter_study
+            parameter_study_iterator = parameter_study_object.groupby(_set_coordinate_key)
+            conditional_write_function = self._conditionally_write_dataset
+        # If no output file template is provided, printing to stdout or single file. Prepend set names.
         if not self.provided_output_file_template:
             # If no output file template is provided, printing to stdout or a single file
-            output_text = f"{self.parameter_study}\n"
+            output_text = f"{parameter_study_object}\n"
             if self.output_file and not self.dry_run:
-                self._conditionally_write_dataset(self.output_file, self.parameter_study)
+                conditional_write_function(self.output_file, parameter_study_object)
             elif self.output_file and self.dry_run:
                 sys.stdout.write(f"{self.output_file.resolve()}\n{output_text}")
             else:
                 sys.stdout.write(output_text)
         # If output file template is provided, writing to parameter set files
         else:
-            for parameter_set_file, parameter_set in self.parameter_study.groupby(_set_coordinate_key):
+            for parameter_set_file, parameter_set in parameter_study_iterator:
                 parameter_set_path = pathlib.Path(parameter_set_file)
                 text = f"{parameter_set}\n"
                 if self.overwrite or not parameter_set_path.is_file():
@@ -259,7 +264,7 @@ class ParameterGenerator(ABC):
                     if self.dry_run:
                         sys.stdout.write(f"{parameter_set_path.resolve()}\n{text}")
                     else:
-                        self._conditionally_write_dataset(parameter_set_path, parameter_set)
+                        conditional_write_function(parameter_set_path, parameter_set)
 
     def _conditionally_write_dataset(self, existing_parameter_study: str, parameter_study: xarray.Dataset) -> None:
         """Write NetCDF file over previous study if the datasets have changed or self.overwrite is True
@@ -281,20 +286,23 @@ class ParameterGenerator(ABC):
 
         Behavior as specified in :meth:`waves.parameter_generators.ParameterGenerator.write`
         """
-        parameter_study_dictionary = self.parameter_study_to_dict()
+        if self.output_file_type == "yaml":
+            parameter_study_object = self.parameter_study_to_dict()
+            parameter_study_iterator = parameter_study_object.items()
+            conditional_write_function = self._conditionally_write_yaml
         # If no output file template is provided, printing to stdout or single file. Prepend set names.
         if not self.provided_output_file_template:
             # If no output file template is provided, printing to stdout or a single file
-            output_text = yaml.safe_dump(parameter_study_dictionary)
+            output_text = yaml.safe_dump(parameter_study_object)
             if self.output_file and not self.dry_run:
-                self._conditionally_write_yaml(self.output_file, yaml.safe_load(output_text))
+                conditional_write_function(self.output_file, parameter_study_object)
             elif self.output_file and self.dry_run:
                 sys.stdout.write(f"{self.output_file.resolve()}\n{output_text}")
             else:
                 sys.stdout.write(output_text)
         # If output file template is provided, writing to parameter set files
         else:
-            for parameter_set_file, parameter_set in parameter_study_dictionary.items():
+            for parameter_set_file, parameter_set in parameter_study_iterator:
                 parameter_set_path = pathlib.Path(parameter_set_file)
                 text = yaml.safe_dump(parameter_set)
                 if self.overwrite or not parameter_set_path.is_file():
@@ -302,7 +310,7 @@ class ParameterGenerator(ABC):
                     if self.dry_run:
                         sys.stdout.write(f"{parameter_set_path.resolve()}\n{text}")
                     else:
-                        self._conditionally_write_yaml(parameter_set_path, yaml.safe_load(text))
+                        conditional_write_function(parameter_set_path, parameter_set)
 
     def _conditionally_write_yaml(
         self,
