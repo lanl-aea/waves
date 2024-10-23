@@ -283,39 +283,36 @@ class TestParameterGenerator:
             assert write_yaml_file.return_value.write.call_count == expected_call_count
 
     def test_write_type_override(self):
-        # Instantiate as YAML output.
-        WriteYAMLParameterGenerator = DummyGenerator({}, output_file_type="yaml")
+        for instantiated_type, override_type in (("yaml", "h5"), ("h5", "yaml")):
+            WriteParameterGenerator = DummyGenerator({}, output_file_type=instantiated_type)
+            private_write_arguments = {
+                "yaml": (
+                    WriteParameterGenerator.parameter_study_to_dict(),
+                    WriteParameterGenerator.parameter_study_to_dict().items(),
+                    WriteParameterGenerator._conditionally_write_yaml
+                ),
+                "h5": (
+                    WriteParameterGenerator.parameter_study,
+                    WriteParameterGenerator.parameter_study.groupby(_settings._set_coordinate_key),
+                    WriteParameterGenerator._conditionally_write_dataset
+                )
+            }
+            instantiated_arguments = private_write_arguments[instantiated_type]
+            override_arguments = private_write_arguments[override_type]
 
-        # Bare call should try to write YAML.
-        # TODO: assert called with the correct objects or continue refactoring _write
-        with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
-             patch('waves.parameter_generators.ParameterGenerator._write') as mock_write_yaml:
-            WriteYAMLParameterGenerator.write()
-            mock_write_yaml.assert_called_once()
+            # Bare call should try to write YAML.
+            # TODO: assert called with the correct objects or continue refactoring _write
+            with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
+                 patch('waves.parameter_generators.ParameterGenerator._write') as mock_private_write:
+                WriteParameterGenerator.write()
+                mock_private_write.assert_called_once_with(*instantiated_arguments)
 
-        # Override should try to write H5.
-        # TODO: assert called with the correct objects or continue refactoring _write
-        with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
-             patch('waves.parameter_generators.ParameterGenerator._write') as mock_write_dataset:
-            WriteYAMLParameterGenerator.write(output_file_type="h5")
-            mock_write_dataset.assert_called_once()
-
-        # Instantiate as H5 output.
-        WriteH5ParameterGenerator = DummyGenerator({}, output_file_type="h5")
-
-        # Bare call should try to write H5.
-        # TODO: assert called with the correct objects or continue refactoring _write
-        with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
-             patch('waves.parameter_generators.ParameterGenerator._write') as mock_write_dataset:
-            WriteH5ParameterGenerator.write()
-            mock_write_dataset.assert_called_once()
-
-        # Override should try to write YAML.
-        # TODO: assert called with the correct objects or continue refactoring _write
-        with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
-             patch('waves.parameter_generators.ParameterGenerator._write') as mock_write_yaml:
-            WriteH5ParameterGenerator.write(output_file_type="yaml")
-            mock_write_yaml.assert_called_once()
+            # Override should try to write H5.
+            # TODO: assert called with the correct objects or continue refactoring _write
+            with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
+                 patch('waves.parameter_generators.ParameterGenerator._write') as mock_private_write:
+                WriteParameterGenerator.write(output_file_type=override_type)
+                mock_private_write.assert_called_once_with(*override_arguments)
 
     def test_write_exception(self):
         """Calling a non-supported format string should raise an exception"""
