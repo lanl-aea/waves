@@ -217,12 +217,17 @@ class ParameterGenerator(ABC):
         if self.write_meta and self.provided_output_file_template:
             self._write_meta()
         if output_file_type == "h5":
-            self._write_dataset()
+            parameter_study_object = self.parameter_study
+            parameter_study_iterator = parameter_study_object.groupby(_set_coordinate_key)
+            conditional_write_function = self._conditionally_write_dataset
         elif output_file_type == "yaml":
-            self._write_yaml()
+            parameter_study_object = self.parameter_study_to_dict()
+            parameter_study_iterator = parameter_study_object.items()
+            conditional_write_function = self._conditionally_write_yaml
         else:
             raise ChoicesError(f"Unsupported 'output_file_type': '{self.output_file_type}. " \
                                f"The 'output_file_type' must be one of {_settings._allowable_output_file_types}")
+        self._write(parameter_study_object, parameter_study_iterator, conditional_write_function)
 
     def scons_write(self, target: list, source: list, env) -> None:
         """`SCons Python build function`_ wrapper for the parameter generator's write() function.
@@ -235,19 +240,16 @@ class ParameterGenerator(ABC):
         """
         self.write()
 
-    def _write_dataset(self) -> None:
-        """Write Xarray Dataset formatted output to STDOUT, separate set files, or a single file
+    def _write(self, parameter_study_object, parameter_study_iterator, conditional_write_function) -> None:
+        """Write parameter study formatted output to STDOUT, separate set files, or a single file
 
         Behavior as specified in :meth:`waves.parameter_generators.ParameterGenerator.write`
         """
-        if self.output_file_type == "h5":
-            parameter_study_object = self.parameter_study
-            parameter_study_iterator = parameter_study_object.groupby(_set_coordinate_key)
-            conditional_write_function = self._conditionally_write_dataset
         # If no output file template is provided, printing to stdout or single file. Prepend set names.
         if not self.provided_output_file_template:
             # If no output file template is provided, printing to stdout or a single file
-            output_text = f"{parameter_study_object}\n"
+            output_text = yaml.safe_dump(parameter_study_object) if isinstance(parameter_study_object, dict) \
+                else f"{parameter_study_object}\n"
             if self.output_file and not self.dry_run:
                 conditional_write_function(self.output_file, parameter_study_object)
             elif self.output_file and self.dry_run:
@@ -258,7 +260,7 @@ class ParameterGenerator(ABC):
         else:
             for parameter_set_file, parameter_set in parameter_study_iterator:
                 parameter_set_path = pathlib.Path(parameter_set_file)
-                text = f"{parameter_set}\n"
+                text = yaml.safe_dump(parameter_set) if isinstance(parameter_set, dict) else f"{parameter_set}\n"
                 if self.overwrite or not parameter_set_path.is_file():
                     # If dry run is specified, print the files that would have been written to stdout
                     if self.dry_run:
@@ -280,37 +282,6 @@ class ParameterGenerator(ABC):
                     write = False
         if write:
             parameter_study.to_netcdf(path=existing_parameter_study, mode='w', format="NETCDF4", engine='h5netcdf')
-
-    def _write_yaml(self) -> None:
-        """Write YAML formatted output to STDOUT, separate set files, or a single file
-
-        Behavior as specified in :meth:`waves.parameter_generators.ParameterGenerator.write`
-        """
-        if self.output_file_type == "yaml":
-            parameter_study_object = self.parameter_study_to_dict()
-            parameter_study_iterator = parameter_study_object.items()
-            conditional_write_function = self._conditionally_write_yaml
-        # If no output file template is provided, printing to stdout or single file. Prepend set names.
-        if not self.provided_output_file_template:
-            # If no output file template is provided, printing to stdout or a single file
-            output_text = yaml.safe_dump(parameter_study_object)
-            if self.output_file and not self.dry_run:
-                conditional_write_function(self.output_file, parameter_study_object)
-            elif self.output_file and self.dry_run:
-                sys.stdout.write(f"{self.output_file.resolve()}\n{output_text}")
-            else:
-                sys.stdout.write(output_text)
-        # If output file template is provided, writing to parameter set files
-        else:
-            for parameter_set_file, parameter_set in parameter_study_iterator:
-                parameter_set_path = pathlib.Path(parameter_set_file)
-                text = yaml.safe_dump(parameter_set)
-                if self.overwrite or not parameter_set_path.is_file():
-                    # If dry run is specified, print the files that would have been written to stdout
-                    if self.dry_run:
-                        sys.stdout.write(f"{parameter_set_path.resolve()}\n{text}")
-                    else:
-                        conditional_write_function(parameter_set_path, parameter_set)
 
     def _conditionally_write_yaml(
         self,

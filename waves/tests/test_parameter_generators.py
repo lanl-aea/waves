@@ -287,48 +287,46 @@ class TestParameterGenerator:
         WriteYAMLParameterGenerator = DummyGenerator({}, output_file_type="yaml")
 
         # Bare call should try to write YAML.
+        # TODO: assert called with the correct objects or continue refactoring _write
         with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
-             patch('waves.parameter_generators.ParameterGenerator._write_dataset') as mock_write_dataset, \
-             patch('waves.parameter_generators.ParameterGenerator._write_yaml') as mock_write_yaml:
+             patch('waves.parameter_generators.ParameterGenerator._write') as mock_write_yaml:
             WriteYAMLParameterGenerator.write()
             mock_write_yaml.assert_called_once()
-            mock_write_dataset.assert_not_called()
 
         # Override should try to write H5.
+        # TODO: assert called with the correct objects or continue refactoring _write
         with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
-             patch('waves.parameter_generators.ParameterGenerator._write_dataset') as mock_write_dataset, \
-             patch('waves.parameter_generators.ParameterGenerator._write_yaml') as mock_write_yaml:
+             patch('waves.parameter_generators.ParameterGenerator._write') as mock_write_dataset:
             WriteYAMLParameterGenerator.write(output_file_type="h5")
-            mock_write_yaml.assert_not_called()
             mock_write_dataset.assert_called_once()
 
         # Instantiate as H5 output.
         WriteH5ParameterGenerator = DummyGenerator({}, output_file_type="h5")
 
         # Bare call should try to write H5.
+        # TODO: assert called with the correct objects or continue refactoring _write
         with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
-             patch('waves.parameter_generators.ParameterGenerator._write_dataset') as mock_write_dataset, \
-             patch('waves.parameter_generators.ParameterGenerator._write_yaml') as mock_write_yaml:
+             patch('waves.parameter_generators.ParameterGenerator._write') as mock_write_dataset:
             WriteH5ParameterGenerator.write()
             mock_write_dataset.assert_called_once()
-            mock_write_yaml.assert_not_called()
 
         # Override should try to write YAML.
+        # TODO: assert called with the correct objects or continue refactoring _write
         with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
-             patch('waves.parameter_generators.ParameterGenerator._write_dataset') as mock_write_dataset, \
-             patch('waves.parameter_generators.ParameterGenerator._write_yaml') as mock_write_yaml:
+             patch('waves.parameter_generators.ParameterGenerator._write') as mock_write_yaml:
             WriteH5ParameterGenerator.write(output_file_type="yaml")
             mock_write_yaml.assert_called_once()
-            mock_write_dataset.assert_not_called()
 
     def test_write_exception(self):
         """Calling a non-supported format string should raise an exception"""
         WriteParameterGenerator = DummyGenerator({})
         with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
-             patch('waves.parameter_generators.ParameterGenerator._write_dataset') as mock_write_dataset, \
-             patch('waves.parameter_generators.ParameterGenerator._write_yaml') as mock_write_yaml, \
+             patch('waves.parameter_generators.ParameterGenerator._write') as mock_private_write, \
              pytest.raises(ChoicesError):
-            WriteParameterGenerator.write(output_file_type="unsupported")
+            try:
+                WriteParameterGenerator.write(output_file_type="unsupported")
+            finally:
+                mock_private_write.assert_not_called()
 
     set_hashes = {
         'set1': (
