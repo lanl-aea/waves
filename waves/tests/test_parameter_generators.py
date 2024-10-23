@@ -1,5 +1,6 @@
 """Test ParameterGenerator Abstract Base Class
 """
+import pathlib
 from unittest.mock import patch, mock_open
 from contextlib import nullcontext as does_not_raise
 
@@ -259,7 +260,7 @@ class TestParameterGenerator:
              patch('xarray.open_dataset', mock_open()), \
              patch('xarray.Dataset.equals', return_value=equals), \
              patch('pathlib.Path.is_file', side_effect=is_file):
-            WriteParameterGenerator._conditionally_write_dataset('dummy_string', xarray.Dataset())
+            WriteParameterGenerator._conditionally_write_dataset(pathlib.Path('dummy_string'), xarray.Dataset())
             assert xarray_to_netcdf.call_count == expected_call_count
 
     @pytest.mark.parametrize('equals, is_file, overwrite, expected_call_count',
