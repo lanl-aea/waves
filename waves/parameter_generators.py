@@ -268,7 +268,11 @@ class ParameterGenerator(ABC):
                     else:
                         conditional_write_function(parameter_set_path, parameter_set)
 
-    def _conditionally_write_dataset(self, existing_parameter_study: str, parameter_study: xarray.Dataset) -> None:
+    def _conditionally_write_dataset(
+        self,
+        existing_parameter_study: pathlib.Path,
+        parameter_study: xarray.Dataset
+    ) -> None:
         """Write NetCDF file over previous study if the datasets have changed or self.overwrite is True
 
         :param existing_parameter_study: A relative or absolute file path to a previously created parameter
@@ -276,11 +280,12 @@ class ParameterGenerator(ABC):
         :param parameter_study: Parameter study xarray dataset
         """
         write = True
-        if not self.overwrite and pathlib.Path(existing_parameter_study).is_file():
+        if not self.overwrite and existing_parameter_study.is_file():
             with xarray.open_dataset(existing_parameter_study, engine='h5netcdf') as existing_dataset:
                 if parameter_study.equals(existing_dataset):
                     write = False
         if write:
+            existing_parameter_study.parent.mkdir(parents=True, exist_ok=True)
             parameter_study.to_netcdf(path=existing_parameter_study, mode='w', format="NETCDF4", engine='h5netcdf')
 
     def _conditionally_write_yaml(
