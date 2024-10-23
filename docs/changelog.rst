@@ -21,6 +21,7 @@ Internal Changes
 - Refactor the parameter study write functions for greater consistency with the parameter study to dictionary function
   and greater consistency between write method output file name lists (:issue:`811`, :merge:`1000`). By `Kyle
   Brindley`_.
+- Unify the parameter study write-to-file logic in a single function (:merge:`1002`). By `Kyle Brindley`_.
 
 Enhancements
 ============
