@@ -187,7 +187,7 @@ class ParameterGenerator(ABC):
 
     def write(
         self,
-        output_file_type: typing.Optional[str] = None
+        output_file_type: typing.Union[_settings._allowable_output_file_typing, None] = None
     ) -> None:
         """Write the parameter study to STDOUT or an output file.
 
@@ -240,27 +240,26 @@ class ParameterGenerator(ABC):
 
         Behavior as specified in :meth:`waves.parameter_generators.ParameterGenerator.write`
         """
-        if self.output_file:
-            if self.dry_run:
-                sys.stdout.write(f"{self.output_file.resolve()}\n{self.parameter_study}\n")
-            else:
-                self.output_file.parent.mkdir(parents=True, exist_ok=True)
+        if not self.provided_output_file_template:
+            # If no output file template is provided, printing to stdout or a single file
+            output_text = f"{self.parameter_study}\n"
+            if self.output_file and not self.dry_run:
                 self._conditionally_write_dataset(self.output_file, self.parameter_study)
+            elif self.output_file and self.dry_run:
+                sys.stdout.write(f"{self.output_file.resolve()}\n{output_text}")
+            else:
+                sys.stdout.write(output_text)
+        # If output file template is provided, writing to parameter set files
         else:
             for parameter_set_file, parameter_set in self.parameter_study.groupby(_set_coordinate_key):
-                parameter_set_file = pathlib.Path(parameter_set_file)
-                # If no output file template is provided, print to stdout
-                if not self.provided_output_file_template:
-                    sys.stdout.write(f"{parameter_set_file.name}\n{parameter_set}")
-                    sys.stdout.write("\n")
-                # If overwrite is specified or if file doesn't exist
-                elif self.overwrite or not parameter_set_file.is_file():
+                parameter_set_path = pathlib.Path(parameter_set_file)
+                text = f"{parameter_set}\n"
+                if self.overwrite or not parameter_set_path.is_file():
                     # If dry run is specified, print the files that would have been written to stdout
                     if self.dry_run:
-                        sys.stdout.write(f"{parameter_set_file.resolve()}:\n{parameter_set}")
-                        sys.stdout.write("\n")
+                        sys.stdout.write(f"{parameter_set_path.resolve()}\n{text}")
                     else:
-                        self._conditionally_write_dataset(parameter_set_file, parameter_set)
+                        self._conditionally_write_dataset(parameter_set_path, parameter_set)
 
     def _conditionally_write_dataset(self, existing_parameter_study: str, parameter_study: xarray.Dataset) -> None:
         """Write NetCDF file over previous study if the datasets have changed or self.overwrite is True
