@@ -9,6 +9,7 @@ import xarray
 
 from waves.parameter_generators import ParameterGenerator, _ScipyGenerator, LatinHypercube, SobolSequence
 from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
+from waves import _settings
 
 
 class TestParameterGenerator:
@@ -147,18 +148,25 @@ class TestParameterGenerator:
             provides. Should always be 1 when no template is provided.
         """
         kwargs = {"sets": sets}
-        WriteParameterGenerator = DummyGenerator(schema, output_file_template=template, output_file_type='yaml',
-                                                 overwrite=overwrite, dry_run=dry_run, **kwargs)
-        with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
-             patch('builtins.open', mock_open()) as mock_file, \
-             patch('sys.stdout.write') as stdout_write, \
-             patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
-             patch('pathlib.Path.is_file', side_effect=is_file), \
-             patch('pathlib.Path.mkdir'):
-            WriteParameterGenerator.write()
-            mock_file.assert_not_called()
-            xarray_to_netcdf.assert_not_called()
-            assert stdout_write.call_count == stdout_calls
+        for output_file_type in _settings._allowable_output_file_types:
+            WriteParameterGenerator = DummyGenerator(
+                schema,
+                output_file_template=template,
+                output_file_type=output_file_type,
+                overwrite=overwrite,
+                dry_run=dry_run,
+                **kwargs
+            )
+            with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
+                 patch('builtins.open', mock_open()) as mock_file, \
+                 patch('sys.stdout.write') as stdout_write, \
+                 patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
+                 patch('pathlib.Path.is_file', side_effect=is_file), \
+                 patch('pathlib.Path.mkdir'):
+                WriteParameterGenerator.write()
+                mock_file.assert_not_called()
+                xarray_to_netcdf.assert_not_called()
+                assert stdout_write.call_count == stdout_calls
 
     init_write_files = {# schema, template, overwrite, dry_run,          is_file, sets, files
         'template-1':  (      {},    'out',     False,   False,          [False],    1,     1),
