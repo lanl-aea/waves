@@ -306,14 +306,26 @@ class TestParameterGenerator:
             with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
                  patch('waves.parameter_generators.ParameterGenerator._write') as mock_private_write:
                 WriteParameterGenerator.write()
-                mock_private_write.assert_called_once_with(*instantiated_arguments)
+                mock_private_write.assert_called_once()
+                assert mock_private_write.call_args[0][0] == instantiated_arguments[0]
+                # FIXME: Can't do boolean comparisons on xarray.Dataset.GroupBy objects.
+                # Prefer to refactor _write interface over complicated test
+                if isinstance(instantiated_arguments[1], dict):
+                    assert mock_private_write.call_args[0][1] == instantiated_arguments[1]
+                assert mock_private_write.call_args[0][2] == instantiated_arguments[2]
 
             # Override should try to write H5.
             # TODO: assert called with the correct objects or continue refactoring _write
             with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
                  patch('waves.parameter_generators.ParameterGenerator._write') as mock_private_write:
                 WriteParameterGenerator.write(output_file_type=override_type)
-                mock_private_write.assert_called_once_with(*override_arguments)
+                mock_private_write.assert_called_once()
+                assert mock_private_write.call_args[0][0] == override_arguments[0]
+                # FIXME: Can't do boolean comparisons on xarray.Dataset.GroupBy objects.
+                # Prefer to refactor _write interface over complicated test
+                if isinstance(override_arguments[1], dict):
+                    assert mock_private_write.call_args[0][1] == override_arguments[1]
+                assert mock_private_write.call_args[0][2] == override_arguments[2]
 
     def test_write_exception(self):
         """Calling a non-supported format string should raise an exception"""
