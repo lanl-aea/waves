@@ -35,7 +35,7 @@ dependencies:
   - sphinx >=7.1
   - sphinx-argparse
   - sphinx-copybutton >=0.5.1
-  - sphinx_rtd_theme >=1
+  - sphinx_rtd_theme >=3
   - sphinxcontrib-bibtex
   - twine >=5
   - xarray
