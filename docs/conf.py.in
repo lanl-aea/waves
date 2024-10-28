@@ -92,6 +92,9 @@ source_suffix = ['.rst']
 html_favicon = "favicon.ico"
 html_logo = '_static/waves_logo_brandmark_smaller.png'
 html_theme = 'sphinx_rtd_theme'
+html_theme_options = {
+    "version_selector": False
+}
 html_static_path = ['_static']
 html_css_files = ["custom.css"]
 
