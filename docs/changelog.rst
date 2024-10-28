@@ -15,6 +15,8 @@ New Features
 Documentation
 =============
 - Hyperlink specific portions of the SCons man page instead of quoting (:merge:`998`). By `Kyle Brindley`_.
+- Fix version number display when building with ``sphinx_rtd_theme`` version 3 (:issue:`808`, :merge:`1004`). By `Kyle
+  Brindley`_.
 
 Internal Changes
 ================
