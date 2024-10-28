@@ -61,6 +61,11 @@ env.Substfile(
     SUBST_DICT=project_substitution_dictionary
 )
 
+env.Substfile(
+    "_static/custom.css.in",
+    SUBST_DICT=project_substitution_dictionary
+)
+
 # Copy root directory files into documentation build directory
 copy_files = (
     ("README.txt", "#/README.rst"),

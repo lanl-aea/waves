@@ -2,6 +2,10 @@
     max-width: 1200px !important;
 }
 
+a.icon.icon-home:after {
+    content: "@version@"
+}
+
 button.copybtn {
    opacity: 1;
 }
