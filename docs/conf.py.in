@@ -44,7 +44,7 @@ from waves._settings import _project_name, _project_name_short
 project = _project_name_short
 release = "@version@"
 version = release
-copyright = f"{datetime.date.today().year} Triad National Security, LLC. All Rights Reserved"
+copyright = f"2022-{datetime.date.today().year} Triad National Security, LLC. All Rights Reserved"
 
 #============================================================================================== SPHINX CONFIGURATION ===
 # Suppress warnings that can't be fixed

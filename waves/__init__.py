@@ -1,5 +1,5 @@
 """
-Copyright (c) 2023, Triad National Security, LLC. All rights reserved.
+Copyright (c) 2022-2024, Triad National Security, LLC. All rights reserved.
 
 This program was produced under U.S. Government contract 89233218CNA000001 for Los Alamos National Laboratory (LANL),
 which is operated by Triad National Security, LLC for the U.S.  Department of Energy/National Nuclear Security
@@ -10,7 +10,7 @@ copies to the public, perform publicly and display publicly, and to permit other
 
 BSD 3-Clause License
 
-Copyright (c) 2023, Triad National Security, LLC. All rights reserved.
+Copyright (c) 2022-2024, Triad National Security, LLC. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
 following conditions are met:

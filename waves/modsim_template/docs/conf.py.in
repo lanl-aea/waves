@@ -19,7 +19,7 @@ for mod_name in mock_modules:
 
 release = VERSION
 version = release
-copyright = f"{datetime.date.today().year} Triad National Security, LLC. All Rights Reserved."
+copyright = f"2022-{datetime.date.today().year} Triad National Security, LLC. All Rights Reserved."
 
 # ============================================================================ GENERATE CLI OUTPUT FOR SHELL SCRIPTS ===
 # -- Project Variables -------------------------------------------------------
