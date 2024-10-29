@@ -18,6 +18,7 @@ Documentation
 - Fix version number display when building with ``sphinx_rtd_theme`` version 3 (:issue:`808`, :merge:`1004`). By `Kyle
   Brindley`_.
 - Add more acronyms to glossary and add copyright years as a range (:merge:`1005`). By `Kyle Brindley`_.
+- Build and host the modsim-template documentation on GitHub-Pages (:issue:`813`, :merge:`1006`). By `Kyle Brindley`_.
 
 Internal Changes
 ================

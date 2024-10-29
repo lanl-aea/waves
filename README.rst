@@ -10,7 +10,7 @@
 .. _WAVES repository: https://github.com/lanl-aea/waves
 .. _WAVES releases: https://github.com/lanl-aea/waves/releases/
 .. _MODSIM-TEMPLATE: https://github.com/lanl-aea/waves/tree/main/waves/modsim_template
-.. _MODSIM-TEMPLATE documentation: https://aea.re-pages.lanl.gov/python-projects/waves/modsim-template/
+.. _MODSIM-TEMPLATE documentation: https://lanl-aea.github.io/waves/modsim-template/index.html
 
 .. _`Kyle Brindley`: kbrindley@lanl.gov
 .. _`Thomas Roberts`: tproberts@lanl.gov
@@ -90,7 +90,7 @@ installation from the command line as ``waves docs``. The documentation is also 
 The `MODSIM-TEMPLATE documentation`_ is hosted as a separate webpage as a demonstration for what modsim project
 documentation can look like.
 
-* GitHub (pending): https://lanl-aea.github.io/waves/modsim-template/index.html
+* GitHub: https://lanl-aea.github.io/waves/modsim-template/index.html
 * LANL: https://aea.re-pages.lanl.gov/python-projects/waves/modsim-template/
 
 **********
