@@ -9,7 +9,7 @@
    \part{Model Repository}
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Model Repository
 
    user
@@ -22,7 +22,7 @@
    \part{Analyses}
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Analyses
 
    simulation_summary
@@ -45,13 +45,3 @@
 .. raw:: latex
 
    \part{Appendices}
-
-.. only:: html
-
-   ##################
-   Indices and tables
-   ##################
-
-   * :ref:`genindex`
-   * :ref:`modindex`
-   * :ref:`search`

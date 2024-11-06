@@ -1,11 +1,9 @@
-.wy-nav-content {
-    max-width: 1200px !important;
+.bd-page-width {
+    max-width: 115rem;
 }
 
-.wy-side-nav-search a.icon.icon-home:after {
-    content: "@version@";
-    font-weight: 400;
-    color: hsla(0,0%,100%,.3);
+a, u {
+  text-decoration: none;
 }
 
 button.copybtn {
@@ -23,6 +21,7 @@ button.copybtn {
   position: absolute;
   top: 0;
   pointer-events: none;
+  z-index: 1025; /*One more than the z-index of the article container of the Sphinx book theme*/
 }
 
 @keyframes wave {

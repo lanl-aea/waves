@@ -39,7 +39,8 @@ requirements:
     - sphinx >=7.1
     - sphinx-argparse
     - sphinx-copybutton >=0.5.1
-    - sphinx_rtd_theme >=3
+    - sphinx-book-theme
+    - sphinx-design
     - sphinxcontrib-bibtex
   run:
     # Force a Python variant package build

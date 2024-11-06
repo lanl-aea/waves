@@ -147,13 +147,13 @@ knowledge.
    $ man scons
 
 This project contains several, separate `SCons`_ project configurations, where the ``SConstruct`` file name indicates an
-`SCons`_ project by convention. The WAVES package and documentation are defined in the ``waves/SConstruct`` file. The
-modsim template and regression tests are defined in a separate ``waves/modsim_template/Sconstruct`` file. The WAVES
-tutorials each have a tutorial specific configuration file ``waves/tutorials/*SConstruct``. The following build commands
-apply to each, but must be run from their respective project configuration parent directories, ``waves``,
+`SCons`_ project by convention. The |PROJECT| package and documentation are defined in the ``waves/SConstruct`` file.
+The modsim template and regression tests are defined in a separate ``waves/modsim_template/Sconstruct`` file. The
+|PROJECT| tutorials each have a tutorial specific configuration file ``waves/tutorials/*SConstruct``. The following
+build commands apply to each, but must be run from their respective project configuration parent directories, ``waves``,
 ``waves/modsim_template`` and ``waves/tutorials``. The available targets and aliases differ accordingly.
 
-When executing the tutorials or modsim template build commands directly in the repository, the WAVES project root
+When executing the tutorials or modsim template build commands directly in the repository, the |PROJECT| project root
 repository must be put on ``PYTHONPATH``. In personal (*but not shared*) virtual environments, the preferred method is
 to run ``conda develop .`` once from the project root directory. See the `Conda`_ documentation for more information
 about "development" mode installs. For shared environments, the preferred solution is to prefix the following commands
@@ -217,8 +217,8 @@ The continuous integration server also performs a separate style guide check usi
 
    $ scons flake8
 
-WAVES has dedicated target aliases for the unit and system tests. To run the unit tests, activate a conda environment
-and run
+|PROJECT| has dedicated target aliases for the unit and system tests. To run the unit tests, activate a conda
+environment and run
 
 .. code-block::
 
@@ -240,9 +240,9 @@ The full list of continuous integration test commands can be found in the Gitlab
    path/to/local/git/clone/waves/
    $ sed -n '/fast-test/,/tags/p' .gitlab-ci.yml
 
-The WAVES unit and system tests may also be executed from the installation directory. These tests use pytest directly
-and may require non-default pytest options and markers to execute the system tests serially. The full list of CI
-commands may be found in the internal recipe file, ``recipe-internal/meta.yaml``, under the ``test`` keyword. The
+The |PROJECT| unit and system tests may also be executed from the installation directory. These tests use pytest
+directly and may require non-default pytest options and markers to execute the system tests serially. The full list of
+CI commands may be found in the internal recipe file, ``recipe-internal/meta.yaml``, under the ``test`` keyword. The
 following grep command will show the pytest commands and options.
 
 .. code-block::
@@ -271,7 +271,7 @@ Documentation
    :start-after: docs-start-do-not-remove
    :end-before: docs-end-do-not-remove
 
-- Build the `MODSIM-TEMPLATE`_ documentation. The WAVES package must be on ``PYTHONPATH``. For developers, the least
+- Build the `MODSIM-TEMPLATE`_ documentation. The |PROJECT| package must be on ``PYTHONPATH``. For developers, the least
   disruptive solution is a per-command modification of ``PYTHONPATH``.
 
   .. code-block::

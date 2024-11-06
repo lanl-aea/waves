@@ -40,7 +40,7 @@ generated from the `WAVES`_ ``fetch`` subcommand and `MODSIM-TEMPLATE`_.
 Documentation
 =============
 
-* GitHub (pending): https://lanl-aea.github.io/waves/modsim-template/index.html
+* GitHub: https://lanl-aea.github.io/waves/modsim-template/index.html
 * LANL: https://aea.re-pages.lanl.gov/python-projects/waves/modsim-template/
 
 Developers

@@ -85,6 +85,7 @@ project_variables = {
     "project_name": project_name,
     "version": version,
     "author_list": author_list,
+    "author_html": ", ".join(author for author in author_list),
     "author_latex": author_latex,
     "documentation_pdf": f"{latex_project_name}-{version}.pdf",
     "report_pdf": f"{latex_project_name}-{version}-report.pdf",

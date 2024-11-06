@@ -21,7 +21,7 @@ function allLinksClicked() {
     var clickedLinks = JSON.parse(sessionStorage.getItem('clickedLinks')) || [];
     if (clickedLinks.length >= 13) {
         // Select the container element
-        const wyNavContent = document.querySelector('.wy-nav-content');
+        const wyNavContent = document.querySelector('.bd-content');
 
         // Create two waves
         var waveDiv = document.createElement('div');

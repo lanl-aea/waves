@@ -8,6 +8,7 @@ import unittest.mock
 project = "@project_name@"
 VERSION = "@version@"
 project_dir = pathlib.Path(r"@project_dir@").resolve()
+author = "@author_html@"
 author_latex = r"@author_latex@"
 
 # Mock modules unavailable in the Conda environment, e.g. Abaqus Python modules, and large imports not required by
@@ -19,7 +20,7 @@ for mod_name in mock_modules:
 
 release = VERSION
 version = release
-copyright = f"2022-{datetime.date.today().year} Triad National Security, LLC. All Rights Reserved."
+copyright = f"2022-{datetime.date.today().year} Triad National Security, LLC. All Rights Reserved"
 
 # ============================================================================ GENERATE CLI OUTPUT FOR SHELL SCRIPTS ===
 # -- Project Variables -------------------------------------------------------
@@ -35,11 +36,13 @@ def setup(app):
 
 
 # Add any Sphinx extension module names here, as strings.
-extensions = ["sphinx.ext.autodoc",
-              "sphinx.ext.viewcode",
-              "sphinx.ext.extlinks",
-              "sphinxcontrib.bibtex",
-              "sphinxarg.ext"]
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.extlinks",
+    "sphinxcontrib.bibtex",
+    "sphinxarg.ext"
+]
 bibtex_bibfiles = ["references.bib"]
 templates_path = ["_templates"]
 source_suffix = [".rst"]
@@ -47,11 +50,20 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 # -- Options for HTML output -------------------------------------------------
 html_logo = "waves_logo_brandmark_smaller.png"
-html_theme = "sphinx_rtd_theme"
+html_last_updated_fmt = ""
+html_theme = "sphinx_book_theme"
+html_theme_options = {
+    "logo": {
+        "text": release
+    },
+    "article_header_start": "breadcrumbs",
+    "content_footer_items": ["last-updated"],
+}
 html_static_path = ["_static"]
+html_css_files = ["custom.css"]
 
 # -- Options for LaTeX output ---------------------------------------------
-copyright_latex = f"""\\textcopyright\\ Copyright {copyright}
+copyright_latex = f"""\\textcopyright\\ Copyright {copyright}.
 
 Unless otherwise indicated, this information has been authored by an employee or employees of the Triad National
 Security, LLC., operator of the Los Alamos National Laboratory with the U.S. Department of Energy. The U.S. Government

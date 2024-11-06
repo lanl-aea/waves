@@ -36,7 +36,7 @@ jobs:
           miniforge-version: latest
       - name: Conda environment
         shell: bash -el {0}
-        run: conda install 'scons>=4' 'setuptools>=64' 'setuptools_scm>=8' 'sphinx>=7.1' sphinx-argparse 'sphinx-copybutton>=0.5.1' 'sphinx_rtd_theme>=1' sphinxcontrib-bibtex h5netcdf h5py matplotlib-base networkx numpy pyyaml 'salib>=1' 'scipy>=1.7' xarray --yes
+        run: conda install 'scons>=4' 'setuptools>=64' 'setuptools_scm>=8' 'sphinx>=7.1' sphinx-argparse 'sphinx-copybutton>=0.5.1' sphinx-book-theme sphinx-design sphinxcontrib-bibtex h5netcdf h5py matplotlib-base networkx numpy pyyaml 'salib>=1' 'scipy>=1.7' xarray --yes
       - name: Build documentation
         shell: bash -el {0}
         run: repository_root=$(pwd) && mkdir -p ${repository_root}/pages/modsim-template && scons html && cp -r build/docs/html/* ${repository_root}/pages/ && cd waves/modsim_template && PYTHONPATH=${repository_root} scons html && cp -r build/docs/html/* ${repository_root}/pages/modsim-template

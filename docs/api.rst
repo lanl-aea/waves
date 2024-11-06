@@ -1,3 +1,5 @@
+.. _external_api:
+
 ############
 External API
 ############

@@ -8,23 +8,6 @@
 
 .. include:: project_brief.txt
 
-.. only:: html
-
-   .. image:: https://img.shields.io/github/actions/workflow/status/lanl-aea/waves/pages.yml?branch=main&label=GitHub-Pages
-      :target: https://lanl-aea.github.io/waves/
-
-   .. image:: https://img.shields.io/github/v/release/lanl-aea/waves?label=GitHub-Release
-      :target: https://github.com/lanl-aea/waves/releases
-
-   .. image:: https://img.shields.io/conda/vn/conda-forge/waves
-      :target: https://anaconda.org/conda-forge/waves
-
-   .. image:: https://img.shields.io/conda/dn/conda-forge/waves.svg?label=Conda%20downloads
-      :target: https://anaconda.org/conda-forge/waves
-
-   .. image:: https://zenodo.org/badge/591388602.svg
-      :target: https://zenodo.org/badge/latestdoi/591388602
-
 .. raw:: latex
 
    \part{Computational Practices}
@@ -32,6 +15,7 @@
 .. _computational_tools:
 
 .. toctree::
+   :hidden:
    :maxdepth: 1
    :caption: Computational Practices
 
@@ -50,6 +34,7 @@
 .. _user_manual:
 
 .. toctree::
+   :hidden:
    :maxdepth: 1
    :caption: User Manual
 
@@ -69,6 +54,7 @@
    \part{Help and Reference}
 
 .. toctree::
+   :hidden:
    :caption: Help and Reference
    :maxdepth: 1
 
@@ -86,6 +72,7 @@
    \part{Appendices}
 
 .. toctree::
+   :hidden:
    :caption: Appendices
    :maxdepth: 1
 
@@ -98,10 +85,71 @@
 
 .. only:: html
 
-   ******************
-   Indices and tables
-   ******************
+   .. image:: https://img.shields.io/github/actions/workflow/status/lanl-aea/waves/pages.yml?branch=main&label=GitHub-Pages
+      :target: https://lanl-aea.github.io/waves/
 
-   * :ref:`genindex`
-   * :ref:`modindex`
-   * :ref:`search`
+   .. image:: https://img.shields.io/github/v/release/lanl-aea/waves?label=GitHub-Release
+      :target: https://github.com/lanl-aea/waves/releases
+
+   .. image:: https://img.shields.io/conda/vn/conda-forge/waves
+      :target: https://anaconda.org/conda-forge/waves
+
+   .. image:: https://img.shields.io/conda/dn/conda-forge/waves.svg?label=Conda%20downloads
+      :target: https://anaconda.org/conda-forge/waves
+
+   .. image:: https://zenodo.org/badge/591388602.svg
+      :target: https://zenodo.org/badge/latestdoi/591388602
+
+   |
+
+   .. grid:: 1 2 2 2
+      :gutter: 2
+      :margin: 2
+
+      .. grid-item-card:: :octicon:`book` Computational Practices
+         :link: practices_introduction
+         :link-type: ref
+
+         Computional science and engineering practices primer with a recommended practical curriculum
+
+      .. grid-item-card:: :octicon:`light-bulb` Why |PROJECT|?
+         :link: abstract
+         :link-type: ref
+
+         Four paragraph motivation for build systems and |PROJECT| in computational science and engineering
+
+      .. grid-item-card:: :octicon:`download` Installation
+         :link: installation
+         :link-type: ref
+
+         Installation with conda-forge
+
+      .. grid-item-card:: :octicon:`rocket` Quickstart
+         :link: waves_quickstart
+         :link-type: ref
+
+         Explore a minimal working example
+
+      .. grid-item-card:: :octicon:`mortar-board` Tutorials
+         :link: tutorial_introduction
+         :link-type: ref
+
+         Introduction to the full tutorial suite
+
+      .. grid-item-card:: :octicon:`repo-template` Modsim Templates
+         :link: modsim_templates
+         :link-type: ref
+
+         Start from a modsim template project
+
+      .. grid-item-card:: :octicon:`code-square` API
+         :link: external_api
+         :link-type: ref
+
+         Public application program interface (API)
+
+      .. grid-item-card:: :octicon:`command-palette` CLI
+         :link: cli
+         :link-type: ref
+
+         Public command line interface (CLI)
