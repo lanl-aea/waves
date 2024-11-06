@@ -36,7 +36,9 @@ dependencies:
   - setuptools_scm >=8
   - sphinx >=7.1
   - sphinx-argparse
+  - sphinx-book-theme
   - sphinx-copybutton >=0.5.1
+  - sphinx-design
   - sphinx_rtd_theme >=3
   - sphinxcontrib-bibtex
   - twine >=5
