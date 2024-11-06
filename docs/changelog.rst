@@ -5,7 +5,11 @@ Changelog
 #########
 
 *******************
-0.12.1 (unreleased)
+0.12.2 (unreleased)
+*******************
+
+*******************
+0.12.1 (2024-11-06)
 *******************
 
 New Features
@@ -19,6 +23,8 @@ Documentation
   Brindley`_.
 - Add more acronyms to glossary and add copyright years as a range (:merge:`1005`). By `Kyle Brindley`_.
 - Build and host the modsim-template documentation on GitHub-Pages (:issue:`813`, :merge:`1006`). By `Kyle Brindley`_.
+- Update Sphinx HTML theme, landing page contents, and build the modsim-template documentation for GitHub-Pages
+  (:merge:`1007`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
