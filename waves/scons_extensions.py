@@ -1521,7 +1521,7 @@ class AbaqusPseudoBuilder:
     # TODO: allow for import jobs that don't execute Abaqus with oldjob=
     def __call__(
             self, 
-            env: SCons.Envionment.Environment,
+            env: SCons.Environment.Environment,
             job: str,
             inp: str = None,
             user: str = None,
