@@ -3030,7 +3030,7 @@ class AbaqusPseudoBuilder:
             sources.append(user)
             options += f" user={user}"
 
-        # Append user-specified arguments for AbaqusSolver builder
+        # Append user-specified arguments for builder
         if extra_sources:
             sources.extend(extra_sources)
         if extra_targets:
@@ -3038,7 +3038,7 @@ class AbaqusPseudoBuilder:
         if extra_options:
             options += f" {extra_options}"
 
-        return self.builder(target=targets, source=sources, subcommand_options=options, **builder_kwargs)
+        return self.abaqus_builder(target=targets, source=sources, program_options=options, **builder_kwargs)
 
 
 def parameter_study(
