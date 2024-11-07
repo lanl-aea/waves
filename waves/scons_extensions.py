@@ -2899,13 +2899,12 @@ class AbaqusPseudoBuilder:
 
     # TODO: address Explicit-specific restart files: ['abq', 'pac', 'sel']
     # TODO: allow for import jobs that don't execute Abaqus with oldjob=
-    def __call__(self, env, job, inp=None, user=None, default_cpus=1, oldjob=None, write_restart=False, double='both',
+    def __call__(self, env, job, inp=None, user=None, cpus=1, oldjob=None, write_restart=False, double='both',
             extra_sources=list(), extra_targets=list(), extra_options='', **builder_kwargs):
         """SCons Pseudo-Builder for running Abaqus jobs.
 
         This SCons Pseudo-Builder wraps the WAVES Abaqus builders to automatically adjust the Abaqus command, sources list,
-        and target list when specifying restart jobs and user subroutines. It also allows for specification of a default
-        number of CPUs which can be overwritten by the ``--abaqus-cpus`` CLI argument.
+        and target list when specifying restart jobs and user subroutines.
 
         Parameters
         ----------
@@ -2915,7 +2914,7 @@ class AbaqusPseudoBuilder:
             Abaqus input file name. Defaults to <job>.inp.
         user : str, optional
             User subroutine. Default: None.
-        default_cpus : int, optional
+        cpus : int, optional
             CPUs to use for simulation. Is superceded by ``override_cpus`` if provided during object instantiation.
         oldjob : str, optional
             Name of job to restart/import.
@@ -2927,7 +2926,8 @@ class AbaqusPseudoBuilder:
         extra_targets : list, optional
             Additional targets to supply to builder.
         extra_options : list, optional
-            Additional Abaqus options to supply to builder.
+            Additional Abaqus options to supply to builder. Should not include any Abaqus options available as kwargs,
+            e.g. cpus, oldjob, user, input, job.
         **builder_kwargs : kwargs, optional
             Any additional kwargs are passed through to the builder.
 
@@ -2988,9 +2988,6 @@ class AbaqusPseudoBuilder:
 
             env.Abaqus(job='preload', extra_sources=['user_subroutine_input.csv'])
         """
-        OUTPUT_EXTENSIONS = ['com', 'dat', 'msg', 'odb', 'sta']
-        RESTART_EXTENSIONS = ['mdl', 'odb', 'prt', 'res', 'sim', 'stt']
-
         # Initialize with empty arguments for AbaqusSolver builder
         sources = list()
         targets = list()
@@ -3011,19 +3008,19 @@ class AbaqusPseudoBuilder:
         # Include input file as first source
         sources.append(inp)
 
-        targets.extend([f"{job}.{ext}" for ext in OUTPUT_EXTENSIONS])
+        targets.extend([f"{job}.{ext}" for ext in _settings._abaqus_standard_extensions])
 
         # Always allow user to override CPUs with CLI option and exclude CPUs from build signature
-        options += f" $(cpus={self.override_cpus or default_cpus}$)"
+        options += f" $(cpus={self.override_cpus or cpus}$)"
 
         # If restarting a job, add old job restart files to sources
         if oldjob:
-            sources.extend([f"{oldjob}.{ext}" for ext in RESTART_EXTENSIONS])
+            sources.extend([f"{oldjob}.{ext}" for ext in _settings._abaqus_restart_extensions])
             options += f' oldjob={oldjob}'
 
         # If writing restart files, add restart files to targets
         if write_restart:
-            targets.extend([f"{job}.{ext}" for ext in RESTART_EXTENSIONS])
+            targets.extend([f"{job}.{ext}" for ext in _settings._abaqus_restart_extensions])
 
         # If user subroutine is specified, add user subroutine to sources
         if user:
