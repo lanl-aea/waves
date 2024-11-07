@@ -1510,9 +1510,9 @@ class AbaqusPseudoBuilder:
         default.
     """
     def __init__(
-            self,
-            builder: SCons.Builder.Builder,
-            override_cpus: int = None
+        self,
+        builder: SCons.Builder.Builder,
+        override_cpus: int = None,
     ) -> None:
         self.builder = builder
         self.override_cpus = override_cpus
@@ -1520,19 +1520,19 @@ class AbaqusPseudoBuilder:
     # TODO: address Explicit-specific restart files: ['abq', 'pac', 'sel']
     # TODO: allow for import jobs that don't execute Abaqus with oldjob=
     def __call__(
-            self, 
-            env: SCons.Environment.Environment,
-            job: str,
-            inp: str = None,
-            user: str = None,
-            cpus: int = 1,
-            oldjob: str = None,
-            write_restart: bool = False,
-            double: str | None = 'both',
-            extra_sources: list[str] = list(),
-            extra_targets: list[str] = list(),
-            extra_options: str = '',
-            **builder_kwargs
+        self, 
+        env: SCons.Environment.Environment,
+        job: str,
+        inp: str = None,
+        user: str = None,
+        cpus: int = 1,
+        oldjob: str = None,
+        write_restart: bool = False,
+        double: typing.Optional[str] = 'both',
+        extra_sources: list[str] = list(),
+        extra_targets: list[str] = list(),
+        extra_options: str = '',
+        **builder_kwargs,
     ) -> SCons.Node.NodeList:
         """SCons Pseudo-Builder for running Abaqus jobs.
 
@@ -1543,6 +1543,7 @@ class AbaqusPseudoBuilder:
         :param inp: Abaqus input file name. Defaults to ``job``.inp.
         :param user: User subroutine.
         :param cpus: CPUs to use for simulation. Is superceded by ``override_cpus`` if provided during object instantiation.
+            The CPUs option is escaped in the action string, i.e. changing the number of CPUs will not trigger a rebuild.
         :param oldjob: Name of job to restart/import.
         :param write_restart: If True, add restart files to target list. This is required if you want to use these restart files for a restart
             job.
@@ -1579,39 +1580,39 @@ class AbaqusPseudoBuilder:
 
         .. code-block:: python
 
-            env.Abaqus(job='preload')
+            env.Abaqus(job='simulation_1')
 
         The job name can differ from the input file name:
 
         .. code-block:: python
 
-            env.Abaqus(job='assembly_preload', inp='preload.inp')
+            env.Abaqus(job='assembly_simulation_1', inp='simulation_1.inp')
 
         Specifying a user subroutine automatically adds the user subroutine to the source list:
 
         .. code-block:: python
             
-            env.Abaqus(job='preload', user='assembly.f')
+            env.Abaqus(job='simulation_1', user='assembly.f')
 
         If you write restart files, you can add the restart files to the target list with:
 
         .. code-block:: python
             
-            env.Abaqus(job='preload', write_restart=True)
+            env.Abaqus(job='simulation_1', write_restart=True)
 
         This is important when you expect to use the restart files, as SCons will know to check that the required restart
         files exist and are up-to-date:
 
         .. code-block:: python
             
-            env.Abaqus(job='drop', oldjob='preload')
+            env.Abaqus(job='simulation_2', oldjob='simulation_1')
 
-        If your Abaqus job depends on files which aren't detected by the implicit dependency scanners, you can add them to
+        If your Abaqus job depends on files which aren't detected by an implicit dependency scanner, you can add them to
         the source list directly:
 
         .. code-block:: python
 
-            env.Abaqus(job='preload', extra_sources=['user_subroutine_input.csv'])
+            env.Abaqus(job='simulation_1', extra_sources=['user_subroutine_input.csv'])
         """
         # Initialize with empty arguments for AbaqusSolver builder
         sources = list()
