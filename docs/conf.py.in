@@ -107,6 +107,7 @@ html_theme_options = {
     "use_source_button": True,
     "use_repository_button": True,
     "content_footer_items": ["last-updated"],
+    "show_toc_level": 2,
 }
 html_static_path = ['_static']
 html_css_files = ["custom.css"]
