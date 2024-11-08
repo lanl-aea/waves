@@ -9,6 +9,7 @@ SCons Extensions
 .. automodule:: waves.scons_extensions
    :noindex:
    :members:
+   :special-members: __call__
    :private-members:
    :show-inheritance:
 
