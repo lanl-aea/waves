@@ -202,3 +202,7 @@ correlation between the stress output and the height input. This is the result w
 a fixed displacement load and stress is linearly dependent on the applied strain, which is a function of the change in
 displacement and the unloaded height. If we were instead applying a force, we should expect the opposite correlation
 because stress would then depend on the applied load divided by the cross-sectional area.
+
+.. raw:: latex
+
+   \FloatBarrier
