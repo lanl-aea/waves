@@ -195,13 +195,17 @@ input and output space parameter to every other parameter.
 
 .. figure:: tutorial_sensitivity_study_sensitivity_study.png
    :align: center
+   :name: tutorial_sensitivity_analysis_correlation_coefficients
 
-Here we can see both the input and output histograms on the diagonal. The scatter plots show the relationships between
-parameters. We can see very little correlation between the stress output and the width input, and strongly linear
-correlation between the stress output and the height input. This is the result we should expect because we are applying
-a fixed displacement load and stress is linearly dependent on the applied strain, which is a function of the change in
-displacement and the unloaded height. If we were instead applying a force, we should expect the opposite correlation
-because stress would then depend on the applied load divided by the cross-sectional area.
+   Correlation coefficients
+
+In the :ref:`tutorial_sensitivity_analysis_correlation_coefficients` figure we can see both the input and output
+histograms on the diagonal. The scatter plots show the relationships between parameters. We can see very little
+correlation between the stress output and the width input, and strongly linear correlation between the stress output and
+the height input.  This is the result we should expect because we are applying a fixed displacement load and stress is
+linearly dependent on the applied strain, which is a function of the change in displacement and the unloaded height. If
+we were instead applying a force, we should expect the opposite correlation because stress would then depend on the
+applied load divided by the cross-sectional area.
 
 .. raw:: latex
 
