@@ -158,16 +158,13 @@ file. You can inspect the contents of the archive as below.
    build/tutorial_12_archival/parameter_set0/rectangle_geometry.cae
    build/tutorial_12_archival/parameter_set0/rectangle_geometry.jnl
    build/tutorial_12_archival/parameter_set0/rectangle_geometry.stdout
-   build/tutorial_12_archival/parameter_set0/rectangle_geometry.abaqus_v6.env
    build/tutorial_12_archival/parameter_set0/rectangle_partition.cae
    build/tutorial_12_archival/parameter_set0/rectangle_partition.jnl
    build/tutorial_12_archival/parameter_set0/rectangle_partition.stdout
-   build/tutorial_12_archival/parameter_set0/rectangle_partition.abaqus_v6.env
    build/tutorial_12_archival/parameter_set0/rectangle_mesh.inp
    build/tutorial_12_archival/parameter_set0/rectangle_mesh.cae
    build/tutorial_12_archival/parameter_set0/rectangle_mesh.jnl
    build/tutorial_12_archival/parameter_set0/rectangle_mesh.stdout
-   build/tutorial_12_archival/parameter_set0/rectangle_mesh.abaqus_v6.env
    build/tutorial_12_archival/parameter_set0/rectangle_compression.inp.in
    build/tutorial_12_archival/parameter_set0/rectangle_compression.inp
    build/tutorial_12_archival/parameter_set0/assembly.inp

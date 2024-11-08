@@ -154,18 +154,9 @@ Build Targets
    Checking whether abq2020 program exists.../apps/abaqus/Commands/abq2020
    scons: done reading SConscript files.
    scons: Building targets ...
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus -information
-   environment > rectangle_geometry.abaqus_v6.env
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus cae -noGui
-   /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus -information
-   environment > rectangle_partition.abaqus_v6.env
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus cae -noGui
-   /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus -information
-   environment > rectangle_mesh.abaqus_v6.env
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus cae -noGui
-   /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
    scons: done building targets.
 
 The build process, targets, and output files should be identical to that of :ref:`tutorial_partition_mesh`. You
@@ -195,16 +186,13 @@ The contents of the new workflow should be identical to that of :ref:`tutorial_p
     |-- abaqus.rpy
     |-- abaqus.rpy.1
     |-- abaqus.rpy.2
-    |-- rectangle_geometry.abaqus_v6.env
     |-- rectangle_geometry.cae
     |-- rectangle_geometry.jnl
     |-- rectangle_geometry.stdout
-    |-- rectangle_mesh.abaqus_v6.env
     |-- rectangle_mesh.cae
     |-- rectangle_mesh.inp
     |-- rectangle_mesh.jnl
     |-- rectangle_mesh.stdout
-    |-- rectangle_partition.abaqus_v6.env
     |-- rectangle_partition.cae
     |-- rectangle_partition.jnl
     `-- rectangle_partition.stdout
@@ -212,18 +200,15 @@ The contents of the new workflow should be identical to that of :ref:`tutorial_p
     |-- abaqus.rpy
     |-- abaqus.rpy.1
     |-- abaqus.rpy.2
-    |-- rectangle_geometry.abaqus_v6.env
     |-- rectangle_geometry.cae
     |-- rectangle_geometry.jnl
     |-- rectangle_geometry.stdout
-    |-- rectangle_mesh.abaqus_v6.env
     |-- rectangle_mesh.cae
     |-- rectangle_mesh.inp
     |-- rectangle_mesh.jnl
     |-- rectangle_mesh.stdout
-    |-- rectangle_partition.abaqus_v6.env
     |-- rectangle_partition.cae
     |-- rectangle_partition.jnl
     `-- rectangle_partition.stdout
 
-    0 directories, 32 files
+    0 directories, 26 files

@@ -139,21 +139,18 @@ Output Files
    |-- rectangle_compression.prt
    |-- rectangle_compression.sta
    |-- rectangle_compression.stdout
-   |-- rectangle_geometry.abaqus_v6.env
    |-- rectangle_geometry.cae
    |-- rectangle_geometry.jnl
    |-- rectangle_geometry.stdout
-   |-- rectangle_mesh.abaqus_v6.env
    |-- rectangle_mesh.cae
    |-- rectangle_mesh.inp
    |-- rectangle_mesh.jnl
    |-- rectangle_mesh.stdout
-   |-- rectangle_partition.abaqus_v6.env
    |-- rectangle_partition.cae
    |-- rectangle_partition.jnl
    `-- rectangle_partition.stdout
 
-   0 directories, 32 files
+   0 directories, 29 files
 
 **********************
 Workflow Visualization

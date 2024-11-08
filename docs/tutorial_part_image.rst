@@ -158,20 +158,16 @@ Output Files
    ├── rectangle_compression.inp
    ├── rectangle_compression.inp.in
    ├── rectangle_compression.png
-   ├── rectangle_compression.png.abaqus_v6.env
    ├── rectangle_compression.png.stdout
    ├── rectangle_geometry.cae
-   ├── rectangle_geometry.cae.abaqus_v6.env
    ├── rectangle_geometry.cae.stdout
    ├── rectangle_geometry.jnl
    ├── rectangle_mesh.cae
    ├── rectangle_mesh.inp
-   ├── rectangle_mesh.inp.abaqus_v6.env
    ├── rectangle_mesh.inp.stdout
    ├── rectangle_mesh.jnl
    ├── rectangle_partition.cae
-   ├── rectangle_partition.cae.abaqus_v6.env
    ├── rectangle_partition.cae.stdout
    └── rectangle_partition.jnl
 
-   0 directories, 30 files
+   0 directories, 26 files

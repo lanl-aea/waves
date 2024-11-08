@@ -236,21 +236,18 @@ Output Files
    |-- rectangle_compression_DATACHECK.sim
    |-- rectangle_compression_DATACHECK.stdout
    |-- rectangle_compression_DATACHECK.stt
-   |-- rectangle_geometry.abaqus_v6.env
    |-- rectangle_geometry.cae
    |-- rectangle_geometry.jnl
    |-- rectangle_geometry.stdout
-   |-- rectangle_mesh.abaqus_v6.env
    |-- rectangle_mesh.cae
    |-- rectangle_mesh.inp
    |-- rectangle_mesh.jnl
    |-- rectangle_mesh.stdout
-   |-- rectangle_partition.abaqus_v6.env
    |-- rectangle_partition.cae
    |-- rectangle_partition.jnl
    `-- rectangle_partition.stdout
 
-   0 directories, 35 files
+   0 directories, 32 files
    $ tree build/tutorial_11_regression_testing/ -L 1
    build/tutorial_11_regression_testing/
    |-- parameter_set0

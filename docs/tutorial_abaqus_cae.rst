@@ -140,7 +140,6 @@ the name ``beam_tutorial``, so you will see job output in the build directory al
    |-- SConscript
    |-- abaqus.rpy
    |-- beam.cae
-   |-- beam.cae.abaqus_v6.env
    |-- beam.cae.stdout
    |-- beam.jnl
    |-- beamExample.py
@@ -153,7 +152,7 @@ the name ``beam_tutorial``, so you will see job output in the build directory al
    |-- beam_tutorial.prt
    `-- beam_tutorial.sta
 
-   0 directories, 15 files
+   0 directories, 14 files
 
 Take some time to open the CAE file and look for familiar CAE model and job data. Since this model is job ready, there
 is nothing to edit.
@@ -176,7 +175,6 @@ look identical (except for timestamps and job name) to the output produced by th
    $ tree build -P "beam.*"
    build
    |-- beam.cae
-   |-- beam.cae.abaqus_v6.env
    |-- beam.cae.stdout
    |-- beam.com
    |-- beam.dat
@@ -190,7 +188,7 @@ look identical (except for timestamps and job name) to the output produced by th
    |-- beam.prt
    `-- beam.sta
 
-   0 directories, 14 files
+   0 directories, 13 files
 
 To better understand the mixed workflow, open the ``build/beam.cae`` file and edit it with Abaqus CAE. When you've
 finished editing the file, save it, close Abaqus CAE, and re-run the ``scons submit_beam_cae`` command. Observe the
@@ -228,7 +226,6 @@ The full output directory should look like the following
    |-- abaqus.rpy
    |-- abaqus.rpy.1
    |-- beam.cae
-   |-- beam.cae.abaqus_v6.env
    |-- beam.cae.stdout
    |-- beam.com
    |-- beam.dat
@@ -252,4 +249,4 @@ The full output directory should look like the following
    |-- beam_tutorial.sta
    `-- submit_cae.py
 
-   0 directories, 27 files
+   0 directories, 26 files

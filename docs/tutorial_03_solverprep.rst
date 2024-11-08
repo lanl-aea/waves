@@ -186,20 +186,10 @@ Build Targets
    Checking whether abq2023 program exists.../apps/abaqus/Commands/abq2023
    scons: done reading SConscript files.
    scons: Building targets ...
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2023 -information
-   environment > rectangle_geometry.abaqus_v6.env
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2023 cae -noGui
-   /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2023 -information
-   environment > rectangle_partition.abaqus_v6.env
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2023 cae -noGui
-   /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2023 -information
-   environment > rectangle_mesh.abaqus_v6.env
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2023 cae -noGui
-   /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
-   Copy("build/tutorial_03_solverprep/rectangle_compression.inp",
-   "modsim_package/abaqus/rectangle_compression.inp")
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2023 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2023 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2023 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
+   Copy("build/tutorial_03_solverprep/rectangle_compression.inp", "modsim_package/abaqus/rectangle_compression.inp")
    Copy("build/tutorial_03_solverprep/assembly.inp", "modsim_package/abaqus/assembly.inp")
    Copy("build/tutorial_03_solverprep/boundary.inp", "modsim_package/abaqus/boundary.inp")
    Copy("build/tutorial_03_solverprep/field_output.inp", "modsim_package/abaqus/field_output.inp")
@@ -222,7 +212,6 @@ Explore the contents of the ``build`` directory using the ``tree`` command again
     $ tree build/tutorial_01_geometry/ build/tutorial_02_partition_mesh/ build/tutorial_03_solverprep/
     build/tutorial_01_geometry/
     |-- abaqus.rpy
-    |-- rectangle_geometry.abaqus_v6.env
     |-- rectangle_geometry.cae
     |-- rectangle_geometry.jnl
     `-- rectangle_geometry.stdout
@@ -230,16 +219,13 @@ Explore the contents of the ``build`` directory using the ``tree`` command again
     |-- abaqus.rpy
     |-- abaqus.rpy.1
     |-- abaqus.rpy.2
-    |-- rectangle_geometry.abaqus_v6.env
     |-- rectangle_geometry.cae
     |-- rectangle_geometry.jnl
     |-- rectangle_geometry.stdout
-    |-- rectangle_mesh.abaqus_v6.env
     |-- rectangle_mesh.cae
     |-- rectangle_mesh.inp
     |-- rectangle_mesh.jnl
     |-- rectangle_mesh.stdout
-    |-- rectangle_partition.abaqus_v6.env
     |-- rectangle_partition.cae
     |-- rectangle_partition.jnl
     `-- rectangle_partition.stdout
@@ -254,21 +240,18 @@ Explore the contents of the ``build`` directory using the ``tree`` command again
     |-- materials.inp
     |-- parts.inp
     |-- rectangle_compression.inp
-    |-- rectangle_geometry.abaqus_v6.env
     |-- rectangle_geometry.cae
     |-- rectangle_geometry.jnl
     |-- rectangle_geometry.stdout
-    |-- rectangle_mesh.abaqus_v6.env
     |-- rectangle_mesh.cae
     |-- rectangle_mesh.inp
     |-- rectangle_mesh.jnl
     |-- rectangle_mesh.stdout
-    |-- rectangle_partition.abaqus_v6.env
     |-- rectangle_partition.cae
     |-- rectangle_partition.jnl
     `-- rectangle_partition.stdout
 
-    0 directories, 44 files
+    0 directories, 37 files
 
 Inside the build directory are three sub-directories. ``tutorial_01_geometry`` and
 ``tutorial_02_partition_mesh``  remain from the previous two tutorials. The third

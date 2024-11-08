@@ -177,23 +177,10 @@ Build Targets
     Checking whether abq2023 program exists.../apps/abaqus/Commands/abq2023
     scons: done reading SConscript files.
     scons: Building targets ...
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abq2023 -information
-    environment > rectangle_geometry.abaqus_v6.env
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abq2023 cae -noGui
-    /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- --width 1.0 --height 1.0 >
-    rectangle_geometry.stdout 2>&1
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abq2023 -information
-    environment > rectangle_partition.abaqus_v6.env
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abq2023 cae -noGui
-    /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- --width 1.0 --height 1.0 >
-    rectangle_partition.stdout 2>&1
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abq2023 -information
-    environment > rectangle_mesh.abaqus_v6.env
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abq2023 cae -noGui
-    /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- --global-seed 1.0 >
-    rectangle_mesh.stdout 2>&1
-    Copy("build/tutorial_06_include_files/rectangle_compression.inp.in",
-    "modsim_package/abaqus/rectangle_compression.inp.in")
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abq2023 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- --width 1.0 --height 1.0 > rectangle_geometry.stdout 2>&1
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abq2023 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- --width 1.0 --height 1.0 > rectangle_partition.stdout 2>&1
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abq2023 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- --global-seed 1.0 > rectangle_mesh.stdout 2>&1
+    Copy("build/tutorial_06_include_files/rectangle_compression.inp.in", "modsim_package/abaqus/rectangle_compression.inp.in")
     Creating 'build/tutorial_06_include_files/rectangle_compression.inp'
     Copy("build/tutorial_06_include_files/assembly.inp", "modsim_package/abaqus/assembly.inp")
     Copy("build/tutorial_06_include_files/boundary.inp", "modsim_package/abaqus/boundary.inp")
@@ -201,11 +188,8 @@ Build Targets
     Copy("build/tutorial_06_include_files/materials.inp", "modsim_package/abaqus/materials.inp")
     Copy("build/tutorial_06_include_files/parts.inp", "modsim_package/abaqus/parts.inp")
     Copy("build/tutorial_06_include_files/history_output.inp", "modsim_package/abaqus/history_output.inp")
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abq2023 -information
-    environment > rectangle_compression.abaqus_v6.env
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abq2023 -job
-    rectangle_compression -input rectangle_compression -double both -interactive -ask_delete no >
-    rectangle_compression.stdout 2>&1
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abq2023 -information environment > rectangle_compression.abaqus_v6.env
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abq2023 -job rectangle_compression -input rectangle_compression -double both -interactive -ask_delete no > rectangle_compression.stdout 2>&1
     scons: done building targets.
 
 ************
@@ -240,21 +224,18 @@ below. Note the usage of the ``-I`` to reduce clutter in the ``tree`` command ou
     |-- rectangle_compression.prt
     |-- rectangle_compression.sta
     |-- rectangle_compression.stdout
-    |-- rectangle_geometry.abaqus_v6.env
     |-- rectangle_geometry.cae
     |-- rectangle_geometry.jnl
     |-- rectangle_geometry.stdout
-    |-- rectangle_mesh.abaqus_v6.env
     |-- rectangle_mesh.cae
     |-- rectangle_mesh.inp
     |-- rectangle_mesh.jnl
     |-- rectangle_mesh.stdout
-    |-- rectangle_partition.abaqus_v6.env
     |-- rectangle_partition.cae
     |-- rectangle_partition.jnl
     `-- rectangle_partition.stdout
 
-    0 directories, 32 files
+    0 directories, 29 files
 
 The output files for this tutorial are *exactly* the same as those from :ref:`tutorial_parameter_substitution`. As
 was mentioned when modifying the :ref:`tutorials_tutorial_include_files` file, the use of an included Python file

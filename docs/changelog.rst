@@ -8,6 +8,11 @@ Changelog
 0.12.2 (unreleased)
 *******************
 
+Documentation
+=============
+- Update tutorial output file expectations to match the switch from the Abaqus journal builder to the Abaqus journal
+  builder factory (:issue:`817`, :merge:`1011`). By `Kyle Brindley`_.
+
 *******************
 0.12.1 (2024-11-06)
 *******************

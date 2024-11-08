@@ -42,7 +42,7 @@ Directory Structure
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Download and copy the ``tutorial_01_geometry`` file to a new file named ``tutorial_02_partition_mesh`` 
+4. Download and copy the ``tutorial_01_geometry`` file to a new file named ``tutorial_02_partition_mesh``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
@@ -286,16 +286,10 @@ Build Targets
     Checking whether abq2023 program exists.../apps/abaqus/Commands/abq2023
     scons: done reading SConscript files.
     scons: Building targets ...
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2023 -information
-    environment > rectangle_geometry.abaqus_v6.env
     cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2023 cae -noGui
     /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
     cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2023 -information
-    environment > rectangle_partition.abaqus_v6.env
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2023 cae -noGui
     /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2023 -information
-    environment > rectangle_mesh.abaqus_v6.env
     cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2023 cae -noGui
     /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
     scons: done building targets.
@@ -314,7 +308,6 @@ below.
    $ tree build/tutorial_01_geometry/ build/tutorial_02_partition_mesh/
    build/tutorial_01_geometry/
    |-- abaqus.rpy
-   |-- rectangle_geometry.abaqus_v6.env
    |-- rectangle_geometry.cae
    |-- rectangle_geometry.jnl
    `-- rectangle_geometry.stdout
@@ -322,21 +315,18 @@ below.
    |-- abaqus.rpy
    |-- abaqus.rpy.1
    |-- abaqus.rpy.2
-   |-- rectangle_geometry.abaqus_v6.env
    |-- rectangle_geometry.cae
    |-- rectangle_geometry.jnl
    |-- rectangle_geometry.stdout
-   |-- rectangle_mesh.abaqus_v6.env
    |-- rectangle_mesh.cae
    |-- rectangle_mesh.inp
    |-- rectangle_mesh.jnl
    |-- rectangle_mesh.stdout
-   |-- rectangle_partition.abaqus_v6.env
    |-- rectangle_partition.cae
    |-- rectangle_partition.jnl
    `-- rectangle_partition.stdout
 
-   0 directories, 21 files
+   0 directories, 17 files
 
 Examine the contents of the ``build/tutorial_01_geometry`` and a ``build/tutorial_02_partition_mesh`` directories.
 Recall from the note this tutorials_tutorial's :ref:`tutorial_partition_mesh` section that we require the targets

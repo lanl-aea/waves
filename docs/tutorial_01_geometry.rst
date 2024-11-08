@@ -380,8 +380,6 @@ Now that you've created the geometry task in ``tutorial_01_geometry``, this sect
         Checking whether abq2023 program exists.../apps/abaqus/Commands/abq2023
         scons: done reading SConscript files.
         scons: Building targets ...
-        cd /home/roppenheimer/waves-tutorials/build/tutorial_01_geometry && /apps/abaqus/Commands/abq2023 -information
-        environment > rectangle_geometry.abaqus_v6.env
         cd /home/roppenheimer/waves-tutorials/build/tutorial_01_geometry && /apps/abaqus/Commands/abq2023 cae -noGui
         /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
         scons: done building targets.
@@ -406,12 +404,11 @@ at the same time. :ref:`tutorial_partition_mesh` will demonstrate the importance
    $ tree build/tutorial_01_geometry/
    build/tutorial_01_geometry/
    |-- abaqus.rpy
-   |-- rectangle_geometry.abaqus_v6.env
    |-- rectangle_geometry.cae
    |-- rectangle_geometry.jnl
    `-- rectangle_geometry.stdout
 
-   0 directories, 5 files
+   0 directories, 4 files
 
 At this point, the only directory in the ``build`` directory is that pertaining to the
 specific target that was specified to be built. In this case, that is
@@ -420,8 +417,6 @@ specific target that was specified to be built. In this case, that is
 The ``build/tutorial_01_geometry/`` directory should contain the following files:
 
 * ``abaqus.rpy``, the replay file from the ``abaqus cae -nogui`` command
-* ``rectangle_geometry.abaqus_v6.env``, the environment file that allows for
-  reproduction of the Abaqus environment used to build the ``tutorial_01_geometry`` targets
 * ``rectangle_geometry.cae``, an Abaqus CAE file that contains a model named
   ``model_name`` within which is a part named ``part_name``.
 * ``rectangle_geometry.jnl`` and ``rectangle_geometry.stdout``, the journal file
@@ -463,12 +458,12 @@ required source to the produced target. The :ref:`computational_tools` introduct
         \vspace*{\fill}
     \end{landscape}
 
-In this case, the single source file ``rectangle_geometry.py`` is producing several output files which are required
-by the workflow. Notice that only two of these files were specified in our geometry task:
-``rectangle_geometry.cae`` and ``rectangle_geometry.jnl``. The ``rectangle_geometry.stdout`` and
-``rectangle_geometry.abaqus_v6.env`` files are generated as part of the ``AbaqusJournal`` builder and appended
-automatically during task generation. This workflow visualization will become crowded quickly in these tutorials, so
-future visualization commands will show you how to ignore specific file extensions to reduce visual clutter.
+In this case, the single source file ``rectangle_geometry.py`` is producing several output files which are required by
+the workflow. Notice that only two of these files were specified in our geometry task: ``rectangle_geometry.cae`` and
+``rectangle_geometry.jnl``. The ``rectangle_geometry.stdout`` files is generated as part of the ``AbaqusJournal``
+builder and appended automatically during task generation. This workflow visualization will become crowded quickly in
+these tutorials, so future visualization commands will show you how to ignore specific file extensions to reduce visual
+clutter.
 
 This workflow graph would be relatively easy to manage manually for this simple introductory tutorial. However, as the
 core tutorials grow in file count, and especially when we start adding parameter studies, it will become more obvious
