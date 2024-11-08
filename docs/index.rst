@@ -85,20 +85,22 @@
 
 .. only:: html
 
-   .. image:: https://img.shields.io/github/actions/workflow/status/lanl-aea/waves/pages.yml?branch=main&label=GitHub-Pages
+   .. |github-pages| image:: https://img.shields.io/github/actions/workflow/status/lanl-aea/waves/pages.yml?branch=main&label=GitHub-Pages
       :target: https://lanl-aea.github.io/waves/
 
-   .. image:: https://img.shields.io/github/v/release/lanl-aea/waves?label=GitHub-Release
+   .. |github-release| image:: https://img.shields.io/github/v/release/lanl-aea/waves?label=GitHub-Release
       :target: https://github.com/lanl-aea/waves/releases
 
-   .. image:: https://img.shields.io/conda/vn/conda-forge/waves
+   .. |conda-forge version| image:: https://img.shields.io/conda/vn/conda-forge/waves
       :target: https://anaconda.org/conda-forge/waves
 
-   .. image:: https://img.shields.io/conda/dn/conda-forge/waves.svg?label=Conda%20downloads
+   .. |conda-forge downloads| image:: https://img.shields.io/conda/dn/conda-forge/waves.svg?label=Conda%20downloads
       :target: https://anaconda.org/conda-forge/waves
 
-   .. image:: https://zenodo.org/badge/591388602.svg
+   .. |zenodo| image:: https://zenodo.org/badge/591388602.svg
       :target: https://zenodo.org/badge/latestdoi/591388602
+
+   |github-pages| |github-release| |conda-forge version| |conda-forge downloads| |zenodo|
 
    |
 
