@@ -12,6 +12,9 @@ Documentation
 =============
 - Update tutorial output file expectations to match the switch from the Abaqus journal builder to the Abaqus journal
   builder factory (:issue:`817`, :merge:`1011`). By `Kyle Brindley`_.
+- HTML and PDF documentation formatting (:merge:`1012`). By `Kyle Brindley`_.
+- Add missing pytest package to tutorial environment instructions for unit testing tutorial (:merge:`1012`). By `Kyle
+  Brindley`_.
 
 *******************
 0.12.1 (2024-11-06)
