@@ -129,6 +129,15 @@ Workflow Visualization
    /home/roppenheimer/waves-tutorials/waves_quickstart
    $ waves visualize rectangle --output-file waves_quickstart.png
 
+.. raw:: latex
+
+    \begin{landscape}
+        \vspace*{\fill}
+
 .. figure:: waves_quickstart.png
    :align: center
 
+.. raw:: latex
+
+        \vspace*{\fill}
+    \end{landscape}

@@ -116,5 +116,15 @@ command can be used.
    /home/roppenheimer/waves-tutorials/scons_quickstart
    $ waves visualize rectangle --output-file scons_quickstart.png --width=28 --height=6
 
+.. raw:: latex
+
+    \begin{landscape}
+        \vspace*{\fill}
+
 .. figure:: scons_quickstart.png
    :align: center
+
+.. raw:: latex
+
+        \vspace*{\fill}
+    \end{landscape}

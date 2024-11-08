@@ -137,5 +137,15 @@ Workflow Visualization
    /home/roppenheimer/waves-tutorials/multi_action_task
    $ waves visualize rectangle --output-file multi_action_task.png --width=28 --height=6
 
+.. raw:: latex
+
+    \begin{landscape}
+        \vspace*{\fill}
+
 .. figure:: multi_action_task.png
    :align: center
+
+.. raw:: latex
+
+        \vspace*{\fill}
+    \end{landscape}
