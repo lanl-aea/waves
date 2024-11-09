@@ -20,6 +20,7 @@ from waves._settings import _abaqus_environment_extension
 from waves._settings import _abaqus_datacheck_extensions
 from waves._settings import _abaqus_explicit_extensions
 from waves._settings import _abaqus_standard_extensions
+from waves._settings import _abaqus_restart_extensions
 from waves._settings import _abaqus_solver_common_suffixes
 from waves._settings import _sbatch_wrapper_options
 from waves._settings import _stdout_extension
@@ -999,6 +1000,40 @@ def test_abaqus_solver(builder_kwargs, task_kwargs, node_count, action_count, so
     for node in nodes:
         for key, expected_value in expected_kwargs.items():
             assert node.env[key] == expected_value
+
+
+abaqus_pseudobuilder_input = {
+    "all with override": (
+        {"override_cpus": 2},
+        {
+            "job": "sim_2",
+            "inp": "input_2.inp",
+            "user": "user.f",
+            "cpus": 3,
+            "oldjob": "sim_1",
+            "write_restart": True,
+            "double": "constraint",
+            "extra_sources": ["extra.inp"],
+            "extra_targets": ["extra.odb"],
+            "extra_options": "--extra-opt",
+            "kwarg_1": "value_1",
+        },
+        ["job.inp"] + [f"sim_1.{ext}" for ext in _abaqus_restart_extensions],
+        [f"sim_2.{ext}" for ext in (_abaqus_standard_extensions + _abaqus_restart_extensions)],
+        " job=sim_2 double=constraint inp=input_2.inp cpus=2 oldjob=sim_1 user=user.f --extra-opt",
+        {"kwarg_1": "value_1"},
+    ),
+}
+
+
+@pytest.mark.parametrize("class_kwargs, call_kwargs, sources, targets, options, builder_kwargs",
+                         abaqus_solver_input.values(),
+                         ids=abaqus_solver_input.keys())
+def test_abaqus_solver(class_kwargs, call_kwargs):
+    # Mock AbaqusSolver builder
+    mock_builder = unittest.mock.Mock()
+    scons_extensions.AbaqusPseudoBuilder(builder=mock_builder, **class_kwargs)(**call_kwargs)
+    mock_builder.assert_called_once_with(targets=targets, sources=sources, program_options=options, **builder_kwargs)
 
 
 def test_sbatch_abaqus_solver():
