@@ -1512,8 +1512,8 @@ class AbaqusPseudoBuilder:
     .. warning::
         You must use an AbaqusSolver Builder generated from
         :meth:`waves.scons_extensions.abaqus_solver_builder_factory`.
-        Using a "legacy" WAVES AbaqusSolver Builder (i.e. a Builder that does not use the `subcommand_options` kwarg)
-        is not supported.
+        Using the non-builder-factory :meth:`waves.scons_extensions.abaqus_solver` (i.e. a Builder that does not use the
+        ``program_options`` kwarg) is not supported.
     """
     def __init__(
         self,
@@ -1538,7 +1538,7 @@ class AbaqusPseudoBuilder:
         extra_sources: list[str] = list(),
         extra_targets: list[str] = list(),
         extra_options: str = '',
-        **builder_kwargs,
+        **kwargs,
     ) -> SCons.Node.NodeList:
         """SCons Pseudo-Builder for running Abaqus jobs.
 
@@ -1559,7 +1559,7 @@ class AbaqusPseudoBuilder:
         :param extra_targets: Additional targets to supply to builder.
         :param extra_options: Additional Abaqus options to supply to builder. Should not include any Abaqus options
             available as kwargs, e.g. cpus, oldjob, user, input, job.
-        :param builder_kwargs: Any additional kwargs are passed through to the builder.
+        :param kwargs: Any additional kwargs are passed through to the builder.
 
         :returns: All targets associated with Abaqus simulation.
 
@@ -1573,13 +1573,14 @@ class AbaqusPseudoBuilder:
             env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
             env["ABAQUS_PROGRAM"] = env.AddProgram(["abaqus"])
             env.Append(BUILDERS={
-                "AbaqusSolver": waves.scons_extensions.abaqus_solver()
+                "AbaqusSolver": waves.scons_extensions.abaqus_solver(program=env["ABAQUS_PROGRAM"])
             })
             env.AddMethod(
                 waves.scons_extensions.AbaqusPseudoBuilder(
                     builder=env.AbaqusSolver,
                     override_cpus=env.GetOption("solve_cpus")),
-                "Abaqus")
+                "Abaqus"
+            )
 
         To define a simple Abaqus simulation:
 
@@ -1672,7 +1673,7 @@ class AbaqusPseudoBuilder:
         if extra_options:
             options += f" {extra_options}"
 
-        return self.builder(target=targets, source=sources, program_options=options, **builder_kwargs)
+        return self.builder(target=targets, source=sources, program_options=options, **kwargs)
 
 
 @catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
