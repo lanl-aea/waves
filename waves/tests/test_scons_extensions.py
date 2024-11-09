@@ -1003,6 +1003,14 @@ def test_abaqus_solver(builder_kwargs, task_kwargs, node_count, action_count, so
 
 
 abaqus_pseudobuilder_input = {
+    "job": (
+        {},
+        {"job": "sim_1"},
+        ["sim_1.inp"],
+        [f"sim_1{ext}" for ext in _abaqus_standard_extensions],
+        " job=sim_1 double=both $(cpus=1$)",
+        {},
+    ),
     "all with override": (
         {"override_cpus": 2},
         {
@@ -1018,22 +1026,23 @@ abaqus_pseudobuilder_input = {
             "extra_options": "--extra-opt",
             "kwarg_1": "value_1",
         },
-        ["job.inp"] + [f"sim_1.{ext}" for ext in _abaqus_restart_extensions],
-        [f"sim_2.{ext}" for ext in (_abaqus_standard_extensions + _abaqus_restart_extensions)],
-        " job=sim_2 double=constraint inp=input_2.inp cpus=2 oldjob=sim_1 user=user.f --extra-opt",
+        ["input_2.inp"] + [f"sim_1{ext}" for ext in _abaqus_restart_extensions] + ["user.f", "extra.inp"],
+        [f"sim_2{ext}" for ext in (_abaqus_standard_extensions + _abaqus_restart_extensions)] + ["extra.odb"],
+        " job=sim_2 double=constraint input=input_2.inp $(cpus=2$) oldjob=sim_1 user=user.f --extra-opt",
         {"kwarg_1": "value_1"},
     ),
 }
 
 
 @pytest.mark.parametrize("class_kwargs, call_kwargs, sources, targets, options, builder_kwargs",
-                         abaqus_solver_input.values(),
-                         ids=abaqus_solver_input.keys())
-def test_abaqus_solver(class_kwargs, call_kwargs):
-    # Mock AbaqusSolver builder
+                         abaqus_pseudobuilder_input.values(),
+                         ids=abaqus_pseudobuilder_input.keys())
+def test_abaqus_pseudobuilder(class_kwargs, call_kwargs, sources, targets, options, builder_kwargs):
+    # Mock AbaqusSolver builder and env
     mock_builder = unittest.mock.Mock()
-    scons_extensions.AbaqusPseudoBuilder(builder=mock_builder, **class_kwargs)(**call_kwargs)
-    mock_builder.assert_called_once_with(targets=targets, sources=sources, program_options=options, **builder_kwargs)
+    mock_env = unittest.mock.Mock()
+    scons_extensions.AbaqusPseudoBuilder(builder=mock_builder, **class_kwargs)(env=mock_env, **call_kwargs)
+    mock_builder.assert_called_once_with(target=targets, source=sources, program_options=options, **builder_kwargs)
 
 
 def test_sbatch_abaqus_solver():
