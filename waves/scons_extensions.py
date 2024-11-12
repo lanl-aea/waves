@@ -1,5 +1,6 @@
 import re
 import sys
+import copy
 import atexit
 import shutil
 import typing
@@ -1242,14 +1243,15 @@ def _abaqus_solver_emitter(
 
     :return: target, source
     """
+    suffixes_copy = copy.deepcopy(suffixes)
     if "suffixes" in env and env["suffixes"] is not None:
-        suffixes = env["suffixes"]
+        suffixes_copy = copy.deepcopy(env["suffixes"])
     primary_input_file = pathlib.Path(source[0].path)
     if "job_name" not in env or not env["job_name"]:
         env["job_name"] = primary_input_file.stem
-    if isinstance(suffixes, str):
-        suffixes = [suffixes]
-    suffixes.append(_settings._abaqus_environment_extension)
+    if isinstance(suffixes_copy, str):
+        suffixes_copy = [suffixes_copy]
+    suffixes_copy.append(_settings._abaqus_environment_extension)
     build_subdirectory = _build_subdirectory(target)
 
     # Search for a user specified stdout file. Fall back to job name with appended stdout extension
@@ -1258,7 +1260,7 @@ def _abaqus_solver_emitter(
     stdout_target = next((target_file for target_file in string_targets if target_file.endswith(stdout_extension)),
                          constructed_stdout_target)
 
-    job_targets = [str(build_subdirectory / f"{env['job_name']}{suffix}") for suffix in suffixes]
+    job_targets = [str(build_subdirectory / f"{env['job_name']}{suffix}") for suffix in suffixes_copy]
 
     # Get a list of unique targets,  less the stdout target. Preserve the target list order.
     string_targets = string_targets + job_targets
