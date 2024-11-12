@@ -8,6 +8,10 @@ Changelog
 0.12.2 (unreleased)
 *******************
 
+Bug fixes
+=========
+- Do not modify suffixes list in the Abaqus solver emitter (:merge:`1012`). By `Kyle Brindley`_.
+
 Documentation
 =============
 - Update tutorial output file expectations to match the switch from the Abaqus journal builder to the Abaqus journal
