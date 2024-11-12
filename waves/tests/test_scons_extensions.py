@@ -1,5 +1,6 @@
 """Test WAVES SCons builders and support functions"""
 import os
+import copy
 import pathlib
 from contextlib import nullcontext as does_not_raise
 import unittest
@@ -906,6 +907,7 @@ solver_emitter_input = {
                          solver_emitter_input.values(),
                          ids=solver_emitter_input.keys())
 def test_abaqus_solver_emitter(job_name, suffixes, target, source, expected, outcome):
+    copy_of_suffixes = copy.deepcopy(suffixes)
     env = SCons.Environment.Environment()
     env["job_name"] = job_name
     env["suffixes"] = suffixes
@@ -914,6 +916,7 @@ def test_abaqus_solver_emitter(job_name, suffixes, target, source, expected, out
             target, source = scons_extensions._abaqus_solver_emitter(target, source, env)
         finally:
             assert target == expected
+            assert suffixes == copy_of_suffixes
 
 
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
