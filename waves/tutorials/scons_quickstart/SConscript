@@ -1,4 +1,4 @@
-Import('env')
+Import("env")
 
 # Write project builders for re-use in task definitions
 abaqus_journal = Builder(
@@ -13,20 +13,20 @@ abaqus_solver = Builder(
 
 # Add builders and pseudo-builders
 env.Append(BUILDERS={
-    'AbaqusJournal': abaqus_journal,
-    'AbaqusSolver': abaqus_solver
+    "AbaqusJournal": abaqus_journal,
+    "AbaqusSolver": abaqus_solver
 })
 
 # Geometry
 env.AbaqusJournal(
-    target="rectangle_geometry.cae",
-    source="rectangle_geometry.py",
+    target=["rectangle_geometry.cae"],
+    source=["rectangle_geometry.py"],
     abaqus_program=env["ABAQUS_PROGRAM"]
 )
 
 # Partition
 env.AbaqusJournal(
-    target="rectangle_partition.cae",
+    target=["rectangle_partition.cae"],
     source=["rectangle_partition.py", "rectangle_geometry.cae"],
     abaqus_program=env["ABAQUS_PROGRAM"]
 )

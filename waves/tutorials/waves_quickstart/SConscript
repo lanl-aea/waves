@@ -2,15 +2,15 @@ Import("env", "alias", "parameters")
 
 # Geometry
 env.AbaqusJournal(
-    target="rectangle_geometry.cae",
-    source="rectangle_geometry.py",
+    target=["rectangle_geometry.cae"],
+    source=["rectangle_geometry.py"],
     subcommand_options="--width ${width} --height ${height}",
     **parameters,
 )
 
 # Partition
 env.AbaqusJournal(
-    target="rectangle_partition.cae",
+    target=["rectangle_partition.cae"],
     source=["rectangle_partition.py", "rectangle_geometry.cae"],
     subcommand_options="--width ${width} --height ${height}",
     **parameters,
@@ -26,8 +26,8 @@ env.AbaqusJournal(
 
 # Abaqus Solve
 env.AbaqusSolver(
-    target="rectangle_compression.odb",
-    source="rectangle_compression.inp",
+    target=["rectangle_compression.odb"],
+    source=["rectangle_compression.inp"],
     job_name="rectangle_compression",
     abaqus_options="-double both",
     **parameters,
