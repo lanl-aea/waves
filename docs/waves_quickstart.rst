@@ -43,13 +43,9 @@ Directory Structure
       $ pwd
       /home/roppenheimer/waves-tutorials/waves_quickstart
 
-***************
-SConscript File
-***************
-
-For this quickstart, we will not discuss the main SCons configuration file named SConstruct, which contains project
-setup boilerplate. :ref:`tutorialsconstruct` has a more complete discussion about the contents of the
-``SConstruct`` file.
+**********
+SConscript
+**********
 
 The ``SConscript`` file below contains the workflow task definitions. Review the source and target files defining the
 workflow tasks. As discussed in :ref:`build_system`, a task definition also requires an action.  For convenience,
@@ -62,6 +58,21 @@ complete descriptions of the builder actions.
     .. literalinclude:: waves_quickstart_SConscript
        :language: Python
        :lineno-match:
+
+**********
+SConstruct
+**********
+
+For this quickstart, we will not discuss the main SCons configuration file, named ``SConstruct``, in detail.
+:ref:`tutorialsconstruct` has a more complete discussion about the contents of the ``SConstruct`` file.
+
+.. admonition:: waves_quickstart/SConstruct
+
+    .. literalinclude:: waves_quickstart_SConstruct
+       :language: Python
+       :lineno-match:
+       :start-at: # Define parameter studies
+       :end-before: # List all aliases in help message
 
 ****************
 Building targets

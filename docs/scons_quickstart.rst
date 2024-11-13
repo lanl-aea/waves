@@ -34,13 +34,13 @@ Directory Structure
       $ pwd
       /home/roppenheimer/waves-tutorials/scons_quickstart
 
-***************
-SConscript File
-***************
+**********
+SConscript
+**********
 
-For this quickstart, we will not discuss the main SCons configuration file named SConstruct, which contains project
-setup boilerplate. :ref:`tutorialsconstruct` has a more complete discussion about the contents of the
-``SConstruct`` file.
+For this quickstart, we will not discuss the main SCons configuration file, named ``SConstruct``, which contains project
+setup boilerplate. :ref:`tutorialsconstruct` has a more complete discussion about the contents of the ``SConstruct``
+file.
 
 The ``SConscript`` file below contains the workflow task definitions. Review the source and target
 files defining the workflow tasks. As discussed in :ref:`build_system`, a task definition also requires an action.
