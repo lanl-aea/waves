@@ -133,7 +133,7 @@ you to save the visualization file non-interactively. Without this option, you'l
 
    $ pwd
    /home/roppenheimer/waves-tutorials/waves_quickstart
-   $ waves visualize nominal --output-file waves_quickstart.png
+   $ waves visualize nominal --output-file waves_quickstart.png --width=30 --height=6
 
 The workflow visualization should look similar to the image below, which is a representation of the directed graph
 constructed by `SCons`_ from the task definitions. The image starts with the final workflow target on the left, in this
