@@ -157,16 +157,19 @@ locations and methods, depending on the needs of the project.
 Building targets
 ****************
 
-Before you can run the workflow, you may need to edit the SConstruct file contents below to include the absolute path or
-relative executable name for your Abaqus installation.
+.. note::
 
-.. admonition:: waves_quickstart/SConstruct
+   Before you can run the workflow, you may need to edit the SConstruct file contents below to include the absolute path
+   or relative executable name for your Abaqus installation. The ``AddProgram`` method performs an ordered preference
+   search for executables by absolute and relative paths in the system ``PATH``.
 
-    .. literalinclude:: waves_quickstart_SConstruct
-       :language: Python
-       :lineno-match:
-       :start-at: # Find required programs
-       :end-before: # Add WAVES builders
+   .. admonition:: waves_quickstart/SConstruct
+
+       .. literalinclude:: waves_quickstart_SConstruct
+          :language: Python
+          :lineno-match:
+          :start-at: # Find required programs
+          :end-before: # Add WAVES builders
 
 In ``SConstruct``, the workflows were provided aliases matching the study names for more convenient execution. First,
 run the ``nominal`` workflow and observe the task command output as below. The default behavior of `SCons`_ is to report
