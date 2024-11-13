@@ -71,7 +71,7 @@ Building targets
 
    $ pwd
    /home/roppenheimer/waves-tutorials/waves_quickstart
-   $ scons rectangle
+   $ scons nominal
 
 ************
 Output Files
@@ -81,44 +81,44 @@ Output Files
 
    $ pwd
    /home/roppenheimer/waves-tutorials/waves_quickstart
-   $ tree build/
-   build/
-   |-- abaqus_utilities.py
+   $ tree build/nominal
+   build/nominal
+   |-- SConscript
    |-- abaqus.rpy
    |-- abaqus.rpy.1
    |-- abaqus.rpy.2
-   |-- assembly.inp
-   |-- boundary.inp
-   |-- field_output.inp
-   |-- history_output.inp
-   |-- materials.inp
-   |-- parts.inp
+   |-- abaqus_utilities.py
+   |-- abaqus_utilities.pyc
+   |-- post_processing.py
    |-- rectangle_compression.abaqus_v6.env
    |-- rectangle_compression.com
+   |-- rectangle_compression.csv
    |-- rectangle_compression.dat
+   |-- rectangle_compression.h5
    |-- rectangle_compression.inp
+   |-- rectangle_compression.inp.in
    |-- rectangle_compression.msg
    |-- rectangle_compression.odb
    |-- rectangle_compression.prt
    |-- rectangle_compression.sta
    |-- rectangle_compression.stdout
-   |-- rectangle_geometry.abaqus_v6.env
+   |-- rectangle_compression_datasets.h5
    |-- rectangle_geometry.cae
+   |-- rectangle_geometry.cae.stdout
    |-- rectangle_geometry.jnl
    |-- rectangle_geometry.py
-   |-- rectangle_geometry.stdout
-   |-- rectangle_mesh.abaqus_v6.env
    |-- rectangle_mesh.cae
    |-- rectangle_mesh.inp
+   |-- rectangle_mesh.inp.stdout
    |-- rectangle_mesh.jnl
    |-- rectangle_mesh.py
-   |-- rectangle_mesh.stdout
-   |-- rectangle_partition.abaqus_v6.env
    |-- rectangle_partition.cae
+   |-- rectangle_partition.cae.stdout
    |-- rectangle_partition.jnl
    |-- rectangle_partition.py
-   |-- rectangle_partition.stdout
-   `-- SConscript
+   |-- stress_strain.csv
+   |-- stress_strain.pdf
+   `-- stress_strain.pdf.stdout
 
    0 directories, 36 files
 
