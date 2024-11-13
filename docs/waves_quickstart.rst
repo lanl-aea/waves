@@ -53,7 +53,7 @@ Managing digital data and workflows in modern computational science and engineer
 The large number of steps in the workflow and complex web of interactions between data files results in non-intuitive
 dependencies that are difficult to manage by hand. This complexity grows substantially when the workflow includes
 parameter studies. |PROJECT| enables the use of traditional software build systems in computational science and
-engineering workflows with support for common engineering software and parameter study management and compatibility.
+engineering workflows with support for common engineering software and parameter study management.
 
 Build systems construct `directed acyclic graph`_ (DAG) from small, granular task definitions. Each task is defined by
 the developer and subsequently linked by the build system. Tasks are composed of targets, sources, and actions. A target
