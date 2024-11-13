@@ -248,6 +248,7 @@ The output should look similar to the figure below.
 
 .. figure:: tutorial_08_data_extraction.png
    :align: center
+   :width: 100%
 
 .. raw:: latex
 
@@ -271,6 +272,7 @@ The output should look similar to the figure below.
 
 .. figure:: tutorial_08_data_extraction_set0.png
    :align: center
+   :width: 100%
 
 .. raw:: latex
 

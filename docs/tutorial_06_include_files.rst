@@ -266,6 +266,7 @@ The output should look similar to the figure below.
 
 .. figure:: tutorial_06_include_files.png
    :align: center
+   :width: 100%
 
 .. raw:: latex
 

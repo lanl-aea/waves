@@ -362,6 +362,7 @@ The output should look similar to the figure below.
 
 .. figure:: tutorial_02_partition_mesh.png
    :align: center
+   :width: 100%
 
 .. raw:: latex
 

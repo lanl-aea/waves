@@ -321,6 +321,7 @@ The output should look similar to the figure below.
 
 .. figure:: tutorial_04_simulation.png
    :align: center
+   :width: 100%
 
 .. raw:: latex
 

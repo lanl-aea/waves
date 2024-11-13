@@ -195,6 +195,7 @@ input and output space parameter to every other parameter.
 
 .. figure:: tutorial_sensitivity_study_sensitivity_study.png
    :align: center
+   :width: 100%
    :name: tutorial_sensitivity_analysis_correlation_coefficients
 
    Correlation coefficients

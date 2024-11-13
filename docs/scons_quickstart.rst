@@ -123,6 +123,7 @@ command can be used.
 
 .. figure:: scons_quickstart.png
    :align: center
+   :width: 100%
 
 .. raw:: latex
 

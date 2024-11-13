@@ -210,6 +210,7 @@ The output should look similar to the figure below.
 
 .. figure:: tutorial_12_archival.png
    :align: center
+   :width: 100%
 
 .. raw:: latex
 
@@ -240,6 +241,7 @@ The output should look similar to the figure below.
 
 .. figure:: tutorial_12_archival_set0.png
    :align: center
+   :width: 100%
 
 .. raw:: latex
 

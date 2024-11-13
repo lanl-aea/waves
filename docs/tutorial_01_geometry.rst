@@ -452,6 +452,7 @@ required source to the produced target. The :ref:`computational_tools` introduct
 
 .. figure:: tutorial_01_geometry.png
    :align: center
+   :width: 100%
 
 .. raw:: latex
 

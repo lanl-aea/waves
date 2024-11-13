@@ -285,6 +285,7 @@ The output should look similar to the figure below.
 
 .. figure:: tutorial_11_datacheck_set0.png
    :align: center
+   :width: 100%
 
 .. raw:: latex
 

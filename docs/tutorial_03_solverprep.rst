@@ -285,6 +285,7 @@ The output should look similar to the figure below.
 
 .. figure:: tutorial_03_solverprep.png
    :align: center
+   :width: 100%
 
 .. raw:: latex
 

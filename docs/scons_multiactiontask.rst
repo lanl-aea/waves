@@ -144,6 +144,7 @@ Workflow Visualization
 
 .. figure:: multi_action_task.png
    :align: center
+   :width: 100%
 
 .. raw:: latex
 

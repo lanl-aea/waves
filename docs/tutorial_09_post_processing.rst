@@ -206,6 +206,7 @@ legend.
 
 .. figure:: tutorial_09_post_processing_stress_strain_comparison.png
    :align: center
+   :width: 50%
 
 Note that in this example, most of the parameter sets are expected to overlap with differences as a function of the
 geometric parameters. Review the parameter study introduced in :ref:`tutorial_cartesian_product` and the contents
@@ -237,6 +238,7 @@ The output should look similar to the figure below.
 
 .. figure:: tutorial_09_post_processing_set0.png
    :align: center
+   :width: 100%
 
 .. raw:: latex
 

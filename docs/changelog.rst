@@ -23,6 +23,7 @@ Documentation
 - HTML and PDF documentation formatting (:merge:`1012`). By `Kyle Brindley`_.
 - Add missing pytest package to tutorial environment instructions for unit testing tutorial (:merge:`1012`). By `Kyle
   Brindley`_.
+- Make the tutorial visualization images click-to-expand (:merge:`1016`). By `Kyle Brindley`_.
 
 Internal Changes
 ================

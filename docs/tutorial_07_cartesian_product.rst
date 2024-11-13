@@ -371,6 +371,7 @@ The output should look similar to the figure below.
 
 .. figure:: tutorial_07_cartesian_product.png
    :align: center
+   :width: 100%
 
 .. raw:: latex
 
@@ -402,6 +403,7 @@ The output should look similar to the figure below.
 
 .. figure:: tutorial_07_cartesian_product_set0.png
    :align: center
+   :width: 100%
 
 .. raw:: latex
 

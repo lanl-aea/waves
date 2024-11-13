@@ -136,6 +136,7 @@ Workflow Visualization
 
 .. figure:: waves_quickstart.png
    :align: center
+   :width: 100%
 
 .. raw:: latex
 

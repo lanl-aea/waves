@@ -357,6 +357,7 @@ The output should look similar to the figure below.
 
 .. figure:: tutorial_05_parameter_substitution.png
    :align: center
+   :width: 100%
 
 .. raw:: latex
 
