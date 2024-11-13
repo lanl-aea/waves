@@ -8,6 +8,10 @@ Changelog
 0.12.2 (unreleased)
 *******************
 
+New Features
+============
+- Add Abaqus pseudo-builder (:issue:`659`, :merge:`825`). By `Matthew Fister`_.
+
 Bug fixes
 =========
 - Do not modify suffixes list in the Abaqus solver emitter (:merge:`1012`). By `Kyle Brindley`_.
