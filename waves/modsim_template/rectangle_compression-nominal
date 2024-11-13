@@ -44,19 +44,8 @@ artifacts.extend(SConscript(
     exports={"env": env, "parameters": parameters, "workflow_name": workflow_name}
 ))
 
-# Post-processing
-script = modsim_package_abspath / "post_processing.py"
-plot_name = "stress_strain_comparison"
-post_processing_source = ["rectangle_compression_datasets.h5"]
-script_options = "--input-file ${SOURCES[1:].abspath}"
-script_options += " --output-file ${TARGET.file} --x-units mm/mm --y-units MPa"
-workflow.extend(env.PythonScript(
-    target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
-    source=[script] + post_processing_source,
-    subcommand_options=script_options
-))
-
 # Regression test
+plot_name = "stress_strain_comparison"
 script = modsim_package_abspath / "regression.py"
 regression_file = modsim_package_abspath / f"{workflow_name}-{plot_name}.csv"
 current_file = f"{plot_name}.csv"

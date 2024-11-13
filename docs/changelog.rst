@@ -29,6 +29,11 @@ Internal Changes
 - Add Python 3.13 and SCons 4.8 to the Conda build test matrix in the scheduled CI jobs (:issue:`820`, :merge:`1015`).
   By `Kyle Brindley`_.
 
+Enhancements
+============
+- Always perform individual simulation post-processing in modsim templates. Matches modsim template 1 simulation
+  post-processing behavior to modsim template 2 (:merge:`1016`). By `Kyle Brindley`_.
+
 *******************
 0.12.1 (2024-11-06)
 *******************

@@ -24,6 +24,7 @@ modsim_package_abspath = env["modsim_package_abspath"]
 
 # Collect the target nodes to build concise target alias(es)
 artifacts = []
+workflow = []
 datacheck = []
 images = []
 
@@ -82,11 +83,25 @@ artifacts.extend(env.AbaqusExtract(
     source=extract_source_list
 ))
 
+# Post-processing
+script = modsim_package_abspath / "post_processing.py"
+plot_name = "stress_strain_comparison"
+post_processing_source = ["rectangle_compression_datasets.h5"]
+script_options = "--input-file ${SOURCES[1:].abspath}"
+script_options += " --output-file ${TARGET.file} --x-units mm/mm --y-units MPa"
+workflow.extend(env.PythonScript(
+    target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
+    source=[script] + post_processing_source,
+    subcommand_options=script_options
+))
+artifacts.extend(workflow)
+
 # Collector alias based on build directory name
 env.Alias(env["regression_alias"], datacheck)
 env.Alias(env["datacheck_alias"], datacheck)
 env.Alias(f"{workflow_name}-datacheck", datacheck)
 env.Alias(f"{workflow_name}-images", images)
+env.Alias(workflow_name, workflow)
 
 if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
