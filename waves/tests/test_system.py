@@ -74,7 +74,7 @@ require_third_party_tests = [
         [fetch_template, string.Template("scons rectangle ${unconditional_build}")], "tutorials/multi_action_task",
         marks=pytest.mark.skipif(testing_windows and not installed, reason="Windows handles symlinks in repository poorly")
     ),
-    ([fetch_template, string.Template("scons rectangle ${unconditional_build}")], "tutorials/waves_quickstart"),
+    ([fetch_template, string.Template("scons nominal mesh_convergence ${unconditional_build}")], "tutorials/waves_quickstart"),
     ([fetch_template, string.Template("scons rectangle ${unconditional_build}")], "tutorials/tutorial_gmsh"),
     ([fetch_template, string.Template("scons submit_beam_cae ${unconditional_build}")], "tutorials/tutorial_abaqus_cae"),
     ([fetch_template, string.Template("scons . --sconstruct=tutorial_00_SConstruct ${unconditional_build} --print-build-failures")], "--tutorial 0"),
