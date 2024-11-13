@@ -1524,7 +1524,9 @@ class AbaqusPseudoBuilder:
         self.override_cpus = override_cpus
 
     # TODO: address Explicit-specific restart files: ['abq', 'pac', 'sel']
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/821
     # TODO: allow for import jobs that don't execute Abaqus with oldjob=
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/822
     def __call__(
         self,
         env: SCons.Environment.Environment,
