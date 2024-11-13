@@ -1,0 +1,60 @@
+***************************************************************************
+**  Primary units are as follows:
+**
+**  Mass:         Mg (mega-gram)
+**  Length:       mm
+**  Time:         sec
+**
+**  This gives secondary units of:
+**
+**  Force:             Mg/mm*s^2 (same as N)
+**  Stress/Stiffness:  MPa
+**************************************************************************
+*HEADING
+Compressing a rectangle
+**
+*PART, NAME=rectangle
+*INCLUDE, INPUT=rectangle_mesh.inp
+*SOLID SECTION, ELSET=ELEMENTS, MATERIAL=mock
+*END PART
+**
+*ASSEMBLY,NAME=A
+**
+*INSTANCE, NAME=rectangle, PART=rectangle
+ 0.0, 0.0, 0.0
+*END INSTANCE
+**
+*END ASSEMBLY
+**
+*MATERIAL, NAME=mock
+*ELASTIC
+100, .3
+**
+*BOUNDARY,OP=NEW
+A.rectangle.bottom_left, ENCASTRE
+A.rectangle.bottom, 2,2
+**
+*CONSTRAINT CONTROLS, PRINT=YES
+*************************************************************************
+**  STEP-1 LOAD STEP
+*************************************************************************
+*STEP, NLGEOM=NO, INC=100, AMPLITUDE=RAMP
+*STATIC
+.005, 1.00, 0.000001, 0.5
+**
+*BOUNDARY, OP=MOD
+A.rectangle.top,2,2,-0.01
+**
+*MONITOR, DOF=2, NODE=A.rectangle.top_right
+**
+*OUTPUT, HISTORY, FREQUENCY=1
+*node OUTPUT,nset=RECTANGLE.NODES
+U
+**
+*OUTPUT, FIELD, FREQUENCY=3
+*element OUTPUT, elset=RECTANGLE.ELEMENTS, directions=YES
+E, S
+*node OUTPUT, nset=RECTANGLE.NODES
+U
+**
+*END STEP
