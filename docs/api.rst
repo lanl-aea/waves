@@ -15,6 +15,7 @@ SCons Extensions
    .. automodule:: waves.scons_extensions
       :members:
       :show-inheritance:
+      :special-members: __call__
 
 .. only:: latex or man
 
@@ -22,6 +23,7 @@ SCons Extensions
       :noindex:
       :members:
       :show-inheritance:
+      :special-members: __call__
 
 .. _parameter_generator_api:
 
