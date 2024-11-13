@@ -1547,6 +1547,11 @@ class AbaqusPseudoBuilder:
         This SCons Pseudo-Builder wraps the WAVES Abaqus builders to automatically adjust the Abaqus command, sources
         list, and target list when specifying restart jobs and user subroutines.
 
+        .. note::
+            Restart files that are only used by Abaqus/Explicit (i.e. ``.abq``, ``.pac``, and ``.sel``) are not
+            currently added to the source and target lists when specifying ``oldjob`` or ``write_restart``. Use
+            ``extra_sources`` and ``extra_targets`` to manually add them when needed.
+
         :param job: Abaqus job name.
         :param inp: Abaqus input file name. Defaults to ``job``.inp.
         :param user: User subroutine.
