@@ -1,4 +1,4 @@
-Import('env')
+Import("env", "alias")
 
 # Geometry
 env.AbaqusJournal(
@@ -19,16 +19,30 @@ env.AbaqusJournal(
 )
 
 # Abaqus Solve
-target = env.AbaqusSolver(
+env.AbaqusSolver(
     target="rectangle_compression.odb",
     source="rectangle_compression.inp",
     job_name="rectangle_compression",
     abaqus_options="-double both"
 )
 
+# Abaqus Extract
+env.AbaqusExtract(
+    target=["rectangle_compression.h5"],
+    source=["rectangle_compression.odb"]
+)
+
+# Post-processing
+script_options = "--input-file ${SOURCES[1:].abspath} --output-file ${TARGET.file} --x-units mm/mm --y-units MPa"
+target = env.PythonScript(
+    target=["stress_strain.pdf", "stress_strain.csv"],
+    source=["post_processing.py", "rectangle_compression_datasets.h5"],
+    subcommand_options=script_options
+)
+
 # Collector alias named after the model simulation
-env.Alias('rectangle', target)
+env.Alias(alias, target)
 
 if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring 'rectangle' target(s)")
-    Ignore([".", "rectangle"], target)
+    Ignore([".", alias], target)
