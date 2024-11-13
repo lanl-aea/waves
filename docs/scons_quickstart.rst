@@ -71,36 +71,31 @@ Output Files
    /home/roppenheimer/waves-tutorials/scons_quickstart
    $ tree build/
    build/
-   ├── abaqus_utilities.py
-   ├── abaqus.rpy
-   ├── abaqus.rpy.1
-   ├── abaqus.rpy.2
-   ├── assembly.inp
-   ├── boundary.inp
-   ├── field_output.inp
-   ├── history_output.inp
-   ├── materials.inp
-   ├── parts.inp
-   ├── rectangle_compression.com
-   ├── rectangle_compression.dat
-   ├── rectangle_compression.inp
-   ├── rectangle_compression.msg
-   ├── rectangle_compression.odb
-   ├── rectangle_compression.prt
-   ├── rectangle_compression.sta
-   ├── rectangle_geometry.cae
-   ├── rectangle_geometry.jnl
-   ├── rectangle_geometry.py
-   ├── rectangle_mesh.cae
-   ├── rectangle_mesh.inp
-   ├── rectangle_mesh.jnl
-   ├── rectangle_mesh.py
-   ├── rectangle_partition.cae
-   ├── rectangle_partition.jnl
-   ├── rectangle_partition.py
-   └── SConscript
+   |-- SConscript
+   |-- abaqus.rpy
+   |-- abaqus.rpy.1
+   |-- abaqus.rpy.2
+   |-- abaqus_utilities.py
+   |-- abaqus_utilities.pyc
+   |-- rectangle_compression.com
+   |-- rectangle_compression.dat
+   |-- rectangle_compression.inp
+   |-- rectangle_compression.msg
+   |-- rectangle_compression.odb
+   |-- rectangle_compression.prt
+   |-- rectangle_compression.sta
+   |-- rectangle_geometry.cae
+   |-- rectangle_geometry.jnl
+   |-- rectangle_geometry.py
+   |-- rectangle_mesh.cae
+   |-- rectangle_mesh.inp
+   |-- rectangle_mesh.jnl
+   |-- rectangle_mesh.py
+   |-- rectangle_partition.cae
+   |-- rectangle_partition.jnl
+   `-- rectangle_partition.py
 
-   0 directories, 28 files
+   0 directories, 23 files
 
 **********************
 Workflow Visualization
