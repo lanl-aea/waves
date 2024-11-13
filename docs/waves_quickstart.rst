@@ -155,15 +155,178 @@ locations and methods, depending on the needs of the project.
 Building targets
 ****************
 
+Before you can run the workflow, you may need to edit the SConstruct file contents below to include the absolute path or
+relative executable name for your Abaqus installation.
+
+.. admonition:: waves_quickstart/SConstruct
+
+    .. literalinclude:: waves_quickstart_SConstruct
+       :language: Python
+       :lineno-match:
+       :start-at: # Find required programs
+       :end-before: # Add WAVES builders
+
+In ``SConstruct``, the workflows were provided aliases matching the study names for more convenient execution. First,
+run the ``nominal`` workflow and observe the task command output as below. The default behavior of `SCons`_ is to report
+each task's action as it is executed. |PROJECT| builders capture the STDOUT and STDERR into per-task log files to aid in
+troubleshooting and to remove clutter from the terminal output.
+
 .. code-block::
 
    $ pwd
    /home/roppenheimer/waves-tutorials/waves_quickstart
    $ scons nominal
+   scons: Reading SConscript files ...
+   Checking whether '/apps/abaqus/Commands/abq2023' program exists.../apps/abaqus/Commands/abq2023
+   Checking whether '/usr/projects/ea/abaqus/Commands/abq2023' program exists...no
+   Checking whether 'abq2023' program exists...no
+   Checking whether 'abaqus' program exists...no
+   scons: done reading SConscript files.
+   scons: Building targets ...
+   Copy("build/nominal/rectangle_compression.inp.in", "rectangle_compression.inp.in")
+   Creating 'build/nominal/rectangle_compression.inp'
+   cd /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal && /apps/abaqus/Commands/abq2023 cae -noGUI /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal/rectangle_geometry.py -- --width 1.0 --height 1.0 > /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal/rectangle_geometry.cae.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal && /apps/abaqus/Commands/abq2023 cae -noGUI /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal/rectangle_partition.py -- --width 1.0 --height 1.0 > /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal/rectangle_partition.cae.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal && /apps/abaqus/Commands/abq2023 cae -noGUI /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal/rectangle_mesh.py -- --global-seed 1.0 > /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal/rectangle_mesh.inp.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal && /apps/abaqus/Commands/abq2023 -information environment > /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal/rectangle_compression.abaqus_v6.env 2>&1
+   cd /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal && /apps/abaqus/Commands/abq2023 -interactive -ask_delete no -job rectangle_compression -input rectangle_compression -double both > /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal/rectangle_compression.stdout 2>&1
+   _build_odb_extract(["build/nominal/rectangle_compression.h5", "build/nominal/rectangle_compression_datasets.h5", "build/nominal/rectangle_compression.csv"], ["build/nominal/rectangle_compression.odb"])
+   cd /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal && python /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal/post_processing.py --input-file /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal/rectangle_compression_datasets.h5 --output-file stress_strain.pdf --x-units mm/mm --y-units MPa > /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal/stress_strain.pdf.stdout 2>&1
+   scons: done building targets.
+
+You will find the output files in the build directory. The final post-processing image of the uniaxial compression
+stress-strain curve is found in ``stress_strain.pdf``.
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials/waves_quickstart
+   $ ls build/nominal/stress_strain.pdf
+   build/nominal/stress_strain.pdf
+
+.. figure:: waves_quickstart_stress_strain.png
+   :align: center
+   :width: 50%
+
+Before running the parameter study, explore the conditional re-build behavior of the workflow by deleting an
+intermediate output file and re-executing the workflow.
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials/waves_quickstart
+   $ rm build/nominal/rectangle_mesh.inp
+   $ scons nominal
+   scons: Reading SConscript files ...
+   Checking whether '/apps/abaqus/Commands/abq2023' program exists.../apps/abaqus/Commands/abq2023
+   Checking whether '/usr/projects/ea/abaqus/Commands/abq2023' program exists...no
+   Checking whether 'abq2023' program exists...no
+   Checking whether 'abaqus' program exists...no
+   scons: done reading SConscript files.
+   scons: Building targets ...
+   cd /projects/kbrindley/repos/waves/waves/tutorials/waves_quickstart/build/nominal && /apps/abaqus/Commands/abq2023 cae -noGUI /projects/kbrindley/repos/waves/waves/tutorials/waves_quickstart/build/nominal/rectangle_mesh.py -- --global-seed 1.0 > /projects/kbrindley/repos/waves/waves/tutorials/waves_quickstart/build/nominal/rectangle_mesh.inp.stdout 2>&1
+   scons: `nominal' is up to date.
+   scons: done building targets.
+
+You should observe that only the command which produces the orphan mesh ``rectangle_mesh.inp`` file is re-run. You can
+confirm by inspecting the time stamps of files in the build directory before and after file removal and workflow
+execution. You should expect that the geometry and partition tasks do not need to re-execute because their output files
+still exist.  But the tasks after the mesh task did not re-execute, either. This should be somewhat surprising. The
+simulation itself depends on the mesh file, so why didn't the workflow re-execute all tasks from mesh to
+post-processing?
+
+Many software build systems, such as `GNU Make`_ use file system modification time stamps to track DAG state. By default
+the `SCons`_ state machine uses file signatures built from md5 hashes to identify task state. If the contents of the
+``rectangle_mesh.inp`` file do not change, then the md5 signature on re-execution still matches the build state for the
+rest of the downstream tasks, which do not need to rebuild.
+
+This default behavior of `SCons`_ makes it desirable for computational science and engineering workflows where
+downstream tasks may be computationally expensive. The added cost of computing md5 signatures during configuration is
+valuable if it prevents re-execution of a computationally expensive simulation. In actual practice, production
+engineering analysis workflows may include tasks and simulations with wall clock run times of hours to days. By
+comparison, the cost of using md5 signatures instead of time stamps is often negligible.
+
+Now run the mesh convergence study as below. `SCons`_ uses the ``--jobs`` option to control the number of threads used
+in task execution and will run up to 4 tasks simultaneously.
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials/waves_quickstart
+   $ scons mesh_convergence --jobs=4
+   ...
+
+The output is truncated, but should look very similar to the ``nominal`` output above, where the primary difference is
+that each parameter set is nested one directory lower using the parameter set number.
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials/waves_quickstart
+   $ ls build/mesh_convergence/
+   parameter_set0/  parameter_set1/  parameter_set2/  parameter_set3/
+
+These set names are managed by the |PROJECT| parameter study object, which is written to a separate build directory for
+later re-execution. This parameter study file is used in the parameter study object construction to identify previously
+created parameter sets on re-execution.
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials/waves_quickstart
+   (waves-env) [kbrindley@taxing waves_quickstart]$ ls build/parameter_studies/
+   mesh_convergence.h5
+
+Try adding a new global mesh seed in the middle of the existing range. An example might look like the following, where
+the seed ``0.4`` is added between ``0.5`` and ``0.25``.
+
+.. code-block::
+
+   mesh_convergence_parameter_generator = waves.parameter_generators.CartesianProduct(
+        {
+           "width": [1.0],
+           "height": [1.0],
+           "global_seed": [1.0, 0.5, 0.4, 0.25, 0.125],
+           "displacement": [-0.01],
+       },
+       output_file=mesh_convergence_parameter_study_file,
+       previous_parameter_study=mesh_convergence_parameter_study_file
+   )
+
+Then re-run the parameter study. The new parameter set should build under the name ``parameter_set4`` and workflow
+should build only ``parameter_set4`` tasks. The parameter study file should also be updated in the build directory.
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials/waves_quickstart
+   $ scons mesh_convergence --jobs=4
+   $ ls build/mesh_convergence/
+   parameter_set0/  parameter_set1/  parameter_set2/  parameter_set3/ parameter_set4/
+
+If the parameter study naming convention were managed by hand it would likely be necessary to add the new seed to the
+end of the parameter study to guarantee that the new set received a new set number. In practice, parameter studies are
+often defined programmatically as a ``range()`` or vary more than one parameter, which makes it difficult to predict how
+the set numbers may change. It would be tedious and error-prone to re-number the parameter sets such that the
+input/output relationships are consistent. In the best case, mistakes in set re-numbering would result in unnecessary
+re-execution of the previous parameter sets. In the worst case, mistakes could result in silent inconsistencies in
+the input/output relationships and lead to errors in result interpretations.
+
+|PROJECT| first looks for and opens the previous parameter study file saved in the build directory, reads the previous
+set definitions if the file exists, and then merges the previous study definition with the current definition along the
+unique set contents identifier coordinate. Under the hood, this unique identifier is an md5 hash of a string
+representation of the set contents, which is robust between systems with identical machine precision. To avoid long,
+unreadable hashes in build system paths, the unique md5 hashes are tied to the more human readable set numbers seen in
+the mesh convergence build directory.
 
 ************
 Output Files
 ************
+
+An example of the full nominal workflow output files is found below using the ``tree`` command. If ``tree`` is not
+installed on your system, you can use the ``find`` command as ``find build/nominal -type f``. If you run a similar
+command against the mesh convergence build directory you should see the same set of files repeated once per parameter
+set because the workflow definitions are identical for each parameter set.
 
 .. code-block:: bash
 
