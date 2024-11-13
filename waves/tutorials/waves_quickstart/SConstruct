@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import os
+import pathlib
 
 import waves
 
@@ -27,9 +28,10 @@ AddOption(
 # Inherit user's full environment
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
-    build_dir=GetOption("build_dir"),
+    build_dir=pathlib.Path(GetOption("build_dir")),
     unconditional_build=GetOption("unconditional_build")
 )
+env["parameter_study_directory"] = env["build_dir"] / "parameter_studies"
 
 # Always copy (no sym-links) when duplicating
 env.SetOption("duplicate", "copy")
@@ -47,14 +49,47 @@ env["ABAQUS_PROGRAM"] = env.AddProgram([
 
 # Add WAVES builders
 env.Append(BUILDERS={
-    "AbaqusSolver": waves.scons_extensions.abaqus_solver(program=env["ABAQUS_PROGRAM"])
+    "AbaqusSolver": waves.scons_extensions.abaqus_solver(program=env["ABAQUS_PROGRAM"]),
+    "AbaqusExtract": waves.scons_extensions.abaqus_extract(program=env["ABAQUS_PROGRAM"]),
 })
 
 # Abaqus input file implicit dependency scanner
 env.Append(SCANNERS=waves.scons_extensions.abaqus_input_scanner())
 
-# Call SConscript file
-SConscript("SConscript", variant_dir=env["build_dir"], exports={"env": env}, duplicate=True)
+# Define parameter studies
+nominal_parameters = {
+    "width": 1.0,
+    "height": 1.0,
+    "global_seed": 1.0,
+    "displacement": -0.01,
+}
+mesh_convergence_parameter_study_file = env["parameter_study_directory"] / "mesh_convergence.h5"
+mesh_convergence_parameter_generator = waves.parameter_generators.CartesianProduct(
+     {
+        "width": [1.0],
+        "height": [1.0],
+        "global_seed": [1.0, 0.5, 0.25, 0.125],
+        "displacement": [-0.01],
+    },
+    output_file=mesh_convergence_parameter_study_file,
+    previous_parameter_study=mesh_convergence_parameter_study_file
+)
+mesh_convergence_parameter_generator.write()
+
+# Add workflow(s)
+workflow_configurations = [
+    ("nominal", nominal_parameters),
+    ("mesh_convergence", mesh_convergence_parameter_generator),
+]
+for study_name, study_definition in workflow_configurations:
+    env.ParameterStudySConscript(
+        "SConscript",
+        variant_dir=env["build_dir"] / study_name,
+        exports={"env": env, "alias": study_name},
+        study=study_definition,
+        subdirectories=True,
+        duplicate=True,
+    )
 
 # List all aliases in help message.
 # This must come *after* all expected Alias definitions and SConscript files.

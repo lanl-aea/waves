@@ -31,7 +31,7 @@ env = Environment(
 )
 
 # Always copy (no sym-links) when duplicating
-env.SetOption('duplicate', 'copy')
+env.SetOption("duplicate", "copy")
 
 # Empty defaults list to avoid building all simulation targets by default
 env.Default()
@@ -48,5 +48,5 @@ conf.Finish()
 if env["ABAQUS_PROGRAM"]:
     env.PrependENVPath("PATH", pathlib.Path(env["ABAQUS_PROGRAM"]).parent)
 
-# Call SConscript file
-SConscript('SConscript', variant_dir=env['build_dir'], exports={"env": env}, duplicate=True)
+# Add workflow(s)
+SConscript("SConscript", variant_dir=env["build_dir"], exports={"env": env}, duplicate=True)
