@@ -55,7 +55,7 @@ dependencies that are difficult to manage by hand. This complexity grows substan
 parameter studies. |PROJECT| enables the use of traditional software build systems in computational science and
 engineering workflows with support for common engineering software and parameter study management.
 
-Build systems construct a `directed acyclic graph`_ (DAG) from small, granular task definitions. Each task is defined by
+Build systems construct a `directed acyclic graph`_ (DAG) from small, individual task definitions. Each task is defined by
 the developer and subsequently linked by the build system. Tasks are composed of targets, sources, and actions. A target
 is the output of the task. Sources are the required direct-dependency files used by the task and may be files tracked by
 the version control system for the project or files produced by other tasks. Actions are the executable commands that
