@@ -24,6 +24,8 @@ Documentation
 - Add missing pytest package to tutorial environment instructions for unit testing tutorial (:merge:`1012`). By `Kyle
   Brindley`_.
 - Make the tutorial visualization images click-to-expand (:merge:`1016`). By `Kyle Brindley`_.
+- Add a mesh convergence parameter study to the WAVES quickstart and discuss the benefits of using a build system and
+  WAVES for computational science and engineering workflows (:merge:`1019`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
