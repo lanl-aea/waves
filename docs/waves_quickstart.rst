@@ -214,7 +214,9 @@ stress-strain curve is found in ``stress_strain.pdf``.
    :width: 50%
 
 Before running the parameter study, explore the conditional re-build behavior of the workflow by deleting an
-intermediate output file and re-executing the workflow.
+intermediate output file and re-executing the workflow. You should observe that only the command which produces the
+orphan mesh ``rectangle_mesh.inp`` file is re-run. You can confirm by inspecting the time stamps of files in the build
+directory before and after file removal and workflow execution.
 
 .. code-block::
 
@@ -233,12 +235,9 @@ intermediate output file and re-executing the workflow.
    scons: `nominal' is up to date.
    scons: done building targets.
 
-You should observe that only the command which produces the orphan mesh ``rectangle_mesh.inp`` file is re-run. You can
-confirm by inspecting the time stamps of files in the build directory before and after file removal and workflow
-execution. You should expect that the geometry and partition tasks do not need to re-execute because their output files
-still exist.  But the tasks after the mesh task did not re-execute, either. This should be somewhat surprising. The
-simulation itself depends on the mesh file, so why didn't the workflow re-execute all tasks from mesh to
-post-processing?
+You should expect that the geometry and partition tasks do not need to re-execute because their output files still
+exist. But the tasks after the mesh task did not re-execute, either. This should be somewhat surprising. The simulation
+itself depends on the mesh file, so why didn't the workflow re-execute all tasks from mesh to post-processing?
 
 Many software build systems, such as `GNU Make`_ use file system modification time stamps to track DAG state. By default
 the `SCons`_ state machine uses file signatures built from md5 hashes to identify task state. If the contents of the
