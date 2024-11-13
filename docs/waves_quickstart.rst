@@ -47,11 +47,42 @@ Directory Structure
 SConscript
 **********
 
+Managing digital data and workflows in modern computational science and engineering is a difficult and error-prone task.
+The large number of steps in the workflow and complex web of interactions between data files results in non-intuitive
+dependencies that are difficult to manage by hand. This complexity grows substantially when the workflow includes
+parameter studies. |PROJECT| enables the use of traditional software build systems in computational science and
+engineering workflows with support for common engineering software and parameter study management and compatibility.
+
+Build systems construct `directed acyclic graph`_ (DAG) from small, granular task definitions. Each task is defined by
+the developer and subsequently linked by the build system. Tasks are composed of targets, sources, and actions. A target
+is the output of the task. Sources are the required direct-dependency files used by the task and may be files tracked by
+the version control system for the project or files produced by other tasks. Actions are the executable commands that
+produce the target files. In pseudocode, this might look like a dictionary:
+
+.. code-block:: YAML
+
+   task1:
+       target: output1
+       source: source1
+       action: action1 --input source1 --output output1
+
+   task2:
+       target: output2
+       source: output1
+       action: action2 --input output1 --output output2
+
+As the number of discrete tasks increases, and as cross-dependencies grow, an automated tool to construct the build
+order becomes more important. Besides simplifying the process of constructing the workflow DAG, most build systems also
+incorporate a state machine. The build system tracks the execution state of the DAG and will only re-build out-of-date
+portions of the DAG. This is especially valuable when trouble-shooting or expanding a workflow. For instance, when
+adding or modifying the post-processing step, the build system will not re-run simulation tasks that are computationally
+expensive and require significant wall time to solve.
+
 The ``SConscript`` file below contains the workflow task definitions. Review the source and target files defining the
-workflow tasks. As discussed in :ref:`build_system`, a task definition also requires an action.  For convenience,
-|PROJECT| provides builders for common engineering software with pre-defined task actions.  See the
-:meth:`waves.scons_extensions.abaqus_journal_builder_factory` and :meth:`waves.scons_extensions.abaqus_solver` for more
-complete descriptions of the builder actions.
+workflow tasks. As discussed briefly above and in detail in :ref:`build_system`, a task definition also requires an
+action. For convenience, |PROJECT| provides builders for common engineering software with pre-defined task actions.
+See the :meth:`waves.scons_extensions.abaqus_journal_builder_factory` and :meth:`waves.scons_extensions.abaqus_solver`
+for more complete descriptions of the builder actions.
 
 .. admonition:: waves_quickstart/SConscript
 
@@ -66,13 +97,59 @@ SConstruct
 For this quickstart, we will not discuss the main SCons configuration file, named ``SConstruct``, in detail.
 :ref:`tutorialsconstruct` has a more complete discussion about the contents of the ``SConstruct`` file.
 
+One of the primary benefits to |PROJECT| is the ability to robustly integrate the conditional re-building behavior of a
+build system with computational parameter studies. Because most build systems consist of exactly two steps:
+configuration and execution, the full DAG must be fixed at configuration time. To avoid hardcoding the parameter study
+tasks, it is desirable to re-use the existing workflow or task definitions. This could be accomplished with a simple for
+look and naming convention; however, it is common to run a small, scoping parameter study prior to exploring the full
+parameter space.
+
+To avoid out-of-sync errors in parameter set definitions when updating a previously executed parameter study, |PROJECT|
+provides a parameter study generator utility that uniquely identifies parameter sets by contents, assigns a unique index
+to each parameter set, and guarantees that previously executed sets are matched to their unique identifier. When
+expanding or re-executing a parameter study, |PROJECT| enforces set name/content consistency which in turn ensures that
+the build system can correctly identify previous work and only re-build the new or changed sets.
+
+In the configuration snippet below, the workflow parameterization is performed in the root configuration file,
+``SConstruct``. This allows us to re-use the entire workflow file, ``SConscript``, with more than one parameter study.
+First, we define a nominal workflow. Single set studies can be defined as a simple dictionary. This can be useful for
+trouble-shooting the workflow, simulation definition, and simulation convergence prior to running a larger parameter
+study. Second, we define a small mesh convergence study where the only parameter that changes is the mesh global seed.
+
 .. admonition:: waves_quickstart/SConstruct
 
     .. literalinclude:: waves_quickstart_SConstruct
        :language: Python
        :lineno-match:
        :start-at: # Define parameter studies
+       :end-before: # Add workflow(s)
+
+Finally, we call the workflow ``SConscript`` file in a loop where the study names definitions are unpacked into the
+workflow call. The ``ParameterStudySConscript`` method handles the differences between a nominal dictionary parameter
+set and the mesh convergence parameter study object. The ``SConscript`` file has been written to accept the
+``parameters`` variable that will be unpacked by this function.
+
+.. admonition:: waves_quickstart/SConstruct
+
+    .. literalinclude:: waves_quickstart_SConstruct
+       :language: Python
+       :lineno-match:
+       :start-at: # Add workflow(s)
        :end-before: # List all aliases in help message
+
+In this tutorial, the entire workflow is re-run from scratch for each parameter set. This simplifies the parameter study
+construction and enables the geometric parameterization hinted at in the ``width`` and ``height`` parameters. Not all
+workflows require the same level of granularity and re-use. There are resource trade-offs to workflow construction, task
+definition granularity, and computational resources. For instance, if the geometry and partition tasks required
+significant wall time, but are not part of the mesh convergence study, it might be desirable to parameterize within the
+``SConscript`` file where the geometry and partition tasks could be excluded from the parameter study.
+
+|PROJECT| provides several solutions for paramterizing at the level of workflow files, task definitions, or in arbitrary
+locations and methods, depending on the needs of the project.
+
+* workflow files: :meth:`waves.scons_extensions.parameter_study_sconscript`
+* task definitions: :meth:`waves.scons_extensions.parameter_study`
+* anywhere: :meth:`waves.parameter_generators.ParameterGenerator.parameter_study_to_dict`
 
 ****************
 Building targets

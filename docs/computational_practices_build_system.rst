@@ -32,7 +32,7 @@ is not executed programmatically on a regular basis, a manual process will be er
 Build systems are able to construct directed graphs from task definitions. Each task is defined by the developer and
 subsequently linked by the build system. Tasks are composed of targets, sources, and actions. A target is the output of
 the task. Sources are the required direct-dependency files used by the task and may be files tracked by the version
-control system for the project or files produced by other tasks. Actions are the commands to execute to produce the
+control system for the project or files produced by other tasks. Actions are the executable commands that produce the
 target files. In pseudocode, this might look like a dictionary:
 
 .. code-block:: YAML

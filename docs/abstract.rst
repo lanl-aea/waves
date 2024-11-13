@@ -4,9 +4,10 @@
 Why |PROJECT|?
 ##############
 
-Managing digital data and workflows in modern computational engineering is a difficult and error-prone task. The large
-number of steps in the workflow and complex web of interactions between data files results in non-intuitive dependencies
-that are difficult to manage by hand. This complexity grows substantially when the workflow includes parameter studies.
+Managing digital data and workflows in modern computational science and engineering is a difficult and error-prone task.
+The large number of steps in the workflow and complex web of interactions between data files results in non-intuitive
+dependencies that are difficult to manage by hand. This complexity grows substantially when the workflow includes
+parameter studies.
 
 The software engineering community has solved this problem of dependency and interaction management with build system
 software. Build systems are software that read task definitions and automatically construct the interaction diagram.
