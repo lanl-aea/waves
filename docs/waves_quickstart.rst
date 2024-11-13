@@ -4,17 +4,20 @@
 |PROJECT| Quickstart
 ####################
 
-This quickstart will create a minimal, two file project configuration matching the tutorials listed below.
+This quickstart will create a minimal, two file project configuration combining elements of the tutorials listed below.
 
 * :ref:`tutorialsconstruct`
 * :ref:`tutorial_geometry`
 * :ref:`tutorial_partition_mesh`
 * :ref:`tutorial_solverprep`
 * :ref:`tutorial_simulation`
+* :ref:`tutorial_parameter_substitution`
+* :ref:`tutorial_cartesian_product`
+* :ref:`tutorial_post_processing`
 
-These tutorials and this quickstart describe the computational engineering workflow through simulation execution. This
-tutorial will use a different working directory and directory structure than the rest of the tutorials to avoid filename
-clashes.
+These tutorials and this quickstart describe the computational engineering workflow through simulation execution and
+post-processing. This tutorial will use a different working directory and directory structure than the rest of the
+tutorials to avoid filename clashes.
 
 ***********
 Environment
@@ -80,42 +83,42 @@ Output Files
    /home/roppenheimer/waves-tutorials/waves_quickstart
    $ tree build/
    build/
-   ├── abaqus_utilities.py
-   ├── abaqus.rpy
-   ├── abaqus.rpy.1
-   ├── abaqus.rpy.2
-   ├── assembly.inp
-   ├── boundary.inp
-   ├── field_output.inp
-   ├── history_output.inp
-   ├── materials.inp
-   ├── parts.inp
-   ├── rectangle_compression.abaqus_v6.env
-   ├── rectangle_compression.com
-   ├── rectangle_compression.dat
-   ├── rectangle_compression.inp
-   ├── rectangle_compression.msg
-   ├── rectangle_compression.odb
-   ├── rectangle_compression.prt
-   ├── rectangle_compression.sta
-   ├── rectangle_compression.stdout
-   ├── rectangle_geometry.abaqus_v6.env
-   ├── rectangle_geometry.cae
-   ├── rectangle_geometry.jnl
-   ├── rectangle_geometry.py
-   ├── rectangle_geometry.stdout
-   ├── rectangle_mesh.abaqus_v6.env
-   ├── rectangle_mesh.cae
-   ├── rectangle_mesh.inp
-   ├── rectangle_mesh.jnl
-   ├── rectangle_mesh.py
-   ├── rectangle_mesh.stdout
-   ├── rectangle_partition.abaqus_v6.env
-   ├── rectangle_partition.cae
-   ├── rectangle_partition.jnl
-   ├── rectangle_partition.py
-   ├── rectangle_partition.stdout
-   └── SConscript
+   |-- abaqus_utilities.py
+   |-- abaqus.rpy
+   |-- abaqus.rpy.1
+   |-- abaqus.rpy.2
+   |-- assembly.inp
+   |-- boundary.inp
+   |-- field_output.inp
+   |-- history_output.inp
+   |-- materials.inp
+   |-- parts.inp
+   |-- rectangle_compression.abaqus_v6.env
+   |-- rectangle_compression.com
+   |-- rectangle_compression.dat
+   |-- rectangle_compression.inp
+   |-- rectangle_compression.msg
+   |-- rectangle_compression.odb
+   |-- rectangle_compression.prt
+   |-- rectangle_compression.sta
+   |-- rectangle_compression.stdout
+   |-- rectangle_geometry.abaqus_v6.env
+   |-- rectangle_geometry.cae
+   |-- rectangle_geometry.jnl
+   |-- rectangle_geometry.py
+   |-- rectangle_geometry.stdout
+   |-- rectangle_mesh.abaqus_v6.env
+   |-- rectangle_mesh.cae
+   |-- rectangle_mesh.inp
+   |-- rectangle_mesh.jnl
+   |-- rectangle_mesh.py
+   |-- rectangle_mesh.stdout
+   |-- rectangle_partition.abaqus_v6.env
+   |-- rectangle_partition.cae
+   |-- rectangle_partition.jnl
+   |-- rectangle_partition.py
+   |-- rectangle_partition.stdout
+   `-- SConscript
 
    0 directories, 36 files
 
