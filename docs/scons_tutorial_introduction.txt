@@ -3,7 +3,8 @@
    Unlike the :ref:`waves_quickstart`, this tutorial will use native `SCons`_ code without the `WAVES`_ extensions and
    builders. This tutorial is included as an example for using native `SCons`_ techniques when `WAVES`_ does not support
    required third-party software, such as numeric solvers, or for when a modsim project requires unique builder
-   behavior. You can learn more about writing your own `SCons Builders`_ in the `SCons`_ user manual :cite:`scons-user`.
+   behavior. You can learn more about writing your own `SCons Builders`_ in the `SCons`_ user manual :cite:`scons-user`
+   and :ref:`tutorial_writing_builders`.
 
 This quickstart will create a pure `SCons`_, minimal, single file project configuration matching the tutorials listed below.
 
@@ -15,5 +16,5 @@ This quickstart will create a pure `SCons`_, minimal, single file project config
 
 The tutorials above and this quickstart describe the computational engineering workflow through simulation execution.
 This quickstart uses a separate, standalone subdirectory to avoid file name clashes with the full tutorial files. The
-quickstart also uses a flat directory structure to simplify the project configuration. Larger projects, like the modsim
-template, may require a hierarchical directory structure to separate files with identical basenames.
+quickstart also uses a flat directory structure to simplify the project configuration. Larger projects, like the
+:ref:`modsim_templates`, may require a hierarchical directory structure to separate files with identical basenames.

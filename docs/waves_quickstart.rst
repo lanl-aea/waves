@@ -17,7 +17,9 @@ This quickstart will create a minimal, two file project configuration combining 
 
 These tutorials and this quickstart describe the computational engineering workflow through simulation execution and
 post-processing. This tutorial will use a different working directory and directory structure than the rest of the
-tutorials to avoid filename clashes.
+tutorials to avoid filename clashes. The quickstart also uses a flat directory structure to simplify the project
+configuration. Larger projects, like the :ref:`modsim_templates`, may require a hierarchical directory structure to
+separate files with identical basenames.
 
 ***********
 Environment
