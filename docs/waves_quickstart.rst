@@ -235,9 +235,10 @@ directory before and after file removal and workflow execution.
    scons: `nominal' is up to date.
    scons: done building targets.
 
-You should expect that the geometry and partition tasks do not need to re-execute because their output files still
-exist. But the tasks after the mesh task did not re-execute, either. This should be somewhat surprising. The simulation
-itself depends on the mesh file, so why didn't the workflow re-execute all tasks from mesh to post-processing?
+You should expect that the geometry and partition tasks do not need to re-execute because their output files still exist
+and they are upstream of the mesh task. But the tasks after the mesh task did not re-execute, either. This should be
+somewhat surprising. The simulation itself depends on the mesh file, so why didn't the workflow re-execute all tasks
+from mesh to post-processing?
 
 Many software build systems, such as `GNU Make`_ use file system modification time stamps to track DAG state. By default
 the `SCons`_ state machine uses file signatures built from md5 hashes to identify task state. If the contents of the
