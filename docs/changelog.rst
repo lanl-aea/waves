@@ -20,6 +20,11 @@ Documentation
 - Add missing pytest package to tutorial environment instructions for unit testing tutorial (:merge:`1012`). By `Kyle
   Brindley`_.
 
+Internal Changes
+================
+- Add Python 3.13 and SCons 4.8 to the Conda build test matrix in the scheduled CI jobs (:issue:`820`, :merge:`1015`).
+  By `Kyle Brindley`_.
+
 *******************
 0.12.1 (2024-11-06)
 *******************
