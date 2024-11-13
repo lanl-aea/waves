@@ -38,16 +38,10 @@ env.AbaqusJournal(
     abaqus_program=env["ABAQUS_PROGRAM"]
 )
 
-# SolverPrep
+# Abaqus Solve
 abaqus_source_list = [
     "rectangle_compression.inp",
-    "assembly.inp",
-    "boundary.inp",
-    "field_output.inp",
-    "materials.inp",
-    "parts.inp",
     "rectangle_mesh.inp",
-    "history_output.inp"
 ]
 
 solve_targets = [
