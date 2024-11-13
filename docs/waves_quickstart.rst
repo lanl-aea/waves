@@ -102,9 +102,9 @@ For this quickstart, we will not discuss the main SCons configuration file, name
 One of the primary benefits to |PROJECT| is the ability to robustly integrate the conditional re-building behavior of a
 build system with computational parameter studies. Because most build systems consist of exactly two steps:
 configuration and execution, the full DAG must be fixed at configuration time. To avoid hardcoding the parameter study
-tasks, it is desirable to re-use the existing workflow or task definitions. This could be accomplished with a simple for
-look and naming convention; however, it is common to run a small, scoping parameter study prior to exploring the full
-parameter space.
+tasks, it is desirable to re-use the existing workflow or task definitions. This could be accomplished with a simple
+for-loop and naming convention; however, it is common to run a small, scoping parameter study prior to exploring the
+full parameter space which would require careful set re-numbering to preserve previous work.
 
 To avoid out-of-sync errors in parameter set definitions when updating a previously executed parameter study, |PROJECT|
 provides a parameter study generator utility that uniquely identifies parameter sets by contents, assigns a unique index
