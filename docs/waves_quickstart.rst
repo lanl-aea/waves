@@ -127,8 +127,8 @@ study. Second, we define a small mesh convergence study where the only parameter
        :end-before: # Add workflow(s)
 
 Finally, we call the workflow ``SConscript`` file in a loop where the study names and definitions are unpacked into the
-workflow call. The ``ParameterStudySConscript`` method handles the differences between a nominal dictionary parameter
-set and the mesh convergence parameter study object. The ``SConscript`` file has been written to accept the
+workflow call. The ``ParameterStudySConscript`` method handles the differences between a nominal parameter set
+dictionary and the mesh convergence parameter study object. The ``SConscript`` file has been written to accept the
 ``parameters`` variable that will be unpacked by this function.
 
 .. admonition:: waves_quickstart/SConstruct
