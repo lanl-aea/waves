@@ -12,7 +12,7 @@ authors = [
     {name = "Matthew Fister", email = "mwfister@lanl.gov"},
     {name = "Scott Ouellette", email = "souellette@lanl.gov"}
 ]
-description = "WAVES Analysis for Verified Engineering Simulations"
+description = "Computational science and engineering parameteric study workflows"
 readme = "README.rst"
 requires-python = ">=3.9"
 license = {text = "BSD-3-Clause"}

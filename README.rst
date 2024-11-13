@@ -48,7 +48,8 @@ Description
 
 .. project-description-start-do-not-remove
 
-`WAVES`_ (LANL code C23004) is a computational engineering workflow tool that integrates parametric studies with traditional software build systems.
+`WAVES`_ (LANL code C23004) is a computational science and engineering workflow tool that integrates parametric studies
+with traditional software build systems.
 
 In addition to the parametric study Python package and command line utilities, `WAVES`_ also includes `SCons`_ builders
 for common engineering software used by model simulation (modsim) repositories. The tutorial simulations in this project
