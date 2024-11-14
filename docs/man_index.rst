@@ -151,6 +151,7 @@ SCons Extensions
 .. automodule:: waves.scons_extensions
     :members:
     :show-inheritance:
+    :special-members: __call__
 
 ******************
 Python Package API
