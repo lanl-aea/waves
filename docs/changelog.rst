@@ -8,6 +8,10 @@ Changelog
 0.12.3 (unreleased)
 *******************
 
+Internal Changes
+================
+- Add coverage to parameter study subcommand module (:merge:`1025`). By `Kyle Brindley`_.
+
 *******************
 0.12.2 (2024-11-14)
 *******************
