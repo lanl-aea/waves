@@ -127,6 +127,20 @@ sobol_sequence
    :nodefault:
    :path: sobol_sequence
 
+.. _waves_print_study_cli:
+
+*********************
+|PROJECT| Subcommands
+*********************
+***********
+print_study
+***********
+
+.. argparse::
+   :ref: waves._main.get_parser
+   :nodefault:
+   :path: print_study
+
 ******************
 Python Package API
 ******************

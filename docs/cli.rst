@@ -98,6 +98,16 @@ sobol_sequence
    :nodefault:
    :path: sobol_sequence
 
+.. _print_study_cli:
+
+print_study
+-----------
+
+.. argparse::
+   :ref: waves._main.get_parser
+   :nodefault:
+   :path: print_study
+
 .. _odb_extract_cli:
 
 ***********

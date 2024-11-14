@@ -100,6 +100,16 @@ _parameter_study.py
    :private-members:
    :show-inheritance:
 
+***************
+_print_study.py
+***************
+
+.. automodule:: waves._print_study
+   :noindex:
+   :members:
+   :private-members:
+   :show-inheritance:
+
 *************
 _utilities.py
 *************
