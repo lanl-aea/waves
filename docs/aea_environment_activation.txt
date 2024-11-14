@@ -16,7 +16,7 @@ the official use and activation instructions. A minimal activation description i
 
    .. code-block::
 
-      $ module load aea-release
+      $ module load aea-nightly
 
 Local environment
 =================
