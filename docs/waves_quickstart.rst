@@ -231,7 +231,7 @@ files in the build directory before and after file removal and workflow executio
    Checking whether 'abaqus' program exists...no
    scons: done reading SConscript files.
    scons: Building targets ...
-   cd /projects/kbrindley/repos/waves/waves/tutorials/waves_quickstart/build/nominal && /apps/abaqus/Commands/abq2023 cae -noGUI /projects/kbrindley/repos/waves/waves/tutorials/waves_quickstart/build/nominal/rectangle_mesh.py -- --global-seed 1.0 > /projects/kbrindley/repos/waves/waves/tutorials/waves_quickstart/build/nominal/rectangle_mesh.inp.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal && /apps/abaqus/Commands/abq2023 cae -noGUI /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal/rectangle_mesh.py -- --global-seed 1.0 > /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal/rectangle_mesh.inp.stdout 2>&1
    scons: `nominal' is up to date.
    scons: done building targets.
 
@@ -279,7 +279,7 @@ created parameter sets on re-execution.
 
    $ pwd
    /home/roppenheimer/waves-tutorials/waves_quickstart
-   (waves-env) [kbrindley@taxing waves_quickstart]$ ls build/parameter_studies/
+   $ ls build/parameter_studies/
    mesh_convergence.h5
 
 Try adding a new global mesh seed in the middle of the existing range. An example might look like the following, where
