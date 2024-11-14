@@ -10,7 +10,7 @@ Changelog
 
 Internal Changes
 ================
-- Add coverage to parameter study subcommand module unit tests (:merge:`1025`). By `Kyle Brindley`_.
+- Add coverage to internal API unit tests (:merge:`1025`). By `Kyle Brindley`_.
 
 *******************
 0.12.2 (2024-11-14)
