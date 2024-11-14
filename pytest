@@ -17,28 +17,21 @@ if env["unconditional_build"]:
     pytest_command += " --unconditional-build"
 target = ["test_results.xml"]
 
-# TODO: Remove the "program_operations" logic when the race conditions on test_program_operations are fixed
 coverage = ""
-program_operations_coverage = ""
 coverage_command = ""
 if env["coverage_report"]:
-    coverage = "--cov"
-    program_operations_coverage = "--cov --cov-append"
     target.append("coverage.xml")
-    coverage_command = "cd ${package_dir} && coverage xml -o ${TARGETS[1].abspath}"
+    coverage = "--cov --cov-report xml:${TARGETS[1].abspath}"
 
 pytest_node = env.Command(
     target=target,
     source=pytest_source_list,
     action=[
         "${pytest_command} -vvv -m \"not systemtest\" ${coverage}",
-        "${coverage_command}"
     ],
     package_dir=env["package_dir"],
     pytest_command=pytest_command,
     coverage=coverage,
-    program_operations_coverage=program_operations_coverage,
-    coverage_command=coverage_command
 )
 env.Alias("pytest", pytest_node)
 # Always run pytests in place of a complete source list
