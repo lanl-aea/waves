@@ -150,7 +150,9 @@ def get_parser() -> argparse.ArgumentParser:
     subparsers.add_parser(
         "print_study",
         help="Print a parameter study file as a table",
-        description="Open and print a WAVES parameter study file as a table.",
+        description="Open and print a WAVES parameter study file as a table. Does not work with multi-file parameter " \
+                    "study output, e.g. ``--output-file-template`` option. Not intended for piped shell commands. " \
+                    "Output formatting subject to change",
         parents=[_print_study.get_parser()]
     )
 
