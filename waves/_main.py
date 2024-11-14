@@ -14,6 +14,7 @@ from waves import _fetch
 from waves import _visualize
 from waves import _build
 from waves import _parameter_study
+from waves import _print_study
 from waves.exceptions import WAVESError
 
 
@@ -74,6 +75,8 @@ def main() -> None:
                 dry_run=args.dry_run,
                 write_meta=args.write_meta
             )
+        elif args.subcommand == "print_study":
+            _print_study.main(args.PARAMETER_STUDY_FILE)
         else:
             parser.print_help()
     except (WAVESError, RuntimeError) as err:
@@ -143,6 +146,13 @@ def get_parser() -> argparse.ArgumentParser:
             help=f"Create a {subcommand.replace('_', ' ')} parameter study",
             parents=[_parameter_study.get_parser()]
         )
+
+    subparsers.add_parser(
+        "print_study",
+        help="Print a parameter study file as a table",
+        description="Open and print a WAVES parameter study file as a table.",
+        parents=[_print_study.get_parser()]
+    )
 
     return main_parser
 
