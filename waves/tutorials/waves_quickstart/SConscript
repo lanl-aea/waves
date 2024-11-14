@@ -47,7 +47,7 @@ env.AbaqusExtract(
 
 # Post-processing
 target = env.PythonScript(
-    target=["stress_strain.png", "stress_strain.csv"],
+    target=["stress_strain.pdf", "stress_strain.csv"],
     source=["post_processing.py", "rectangle_compression_datasets.h5"],
     subcommand_options="--input-file ${SOURCES[1:].abspath} --output-file ${TARGET.file} --x-units mm/mm --y-units MPa",
 )
