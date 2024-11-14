@@ -1,27 +1,39 @@
 """Test command line utility and associated functions"""
 import pathlib
-from unittest.mock import patch, mock_open
+from unittest.mock import Mock, patch, mock_open
 from contextlib import nullcontext as does_not_raise
 
 import pytest
 
 from waves import _main
 from waves import _settings
+from waves import exceptions
 
 
 def test_main():
+    # docs subcommand
     with patch('sys.argv', ['waves.py', 'docs']), \
          patch("waves._docs.main") as mock_docs:
         _main.main()
-        mock_docs.assert_called()
+        mock_docs.assert_called_once()
 
-    target_string = 'dummy.target'
-    with patch('sys.argv', ['waves.py', 'build', target_string]), \
-         patch("waves._build.main") as mock_build:
+    # docs subcommand, any subcommand that raises a RuntimeError
+    with patch('sys.argv', ['waves.py', 'docs']), \
+         patch("waves._docs.main", side_effect=RuntimeError) as mock_docs, \
+         patch("sys.exit") as mock_exit:
         _main.main()
-        mock_build.assert_called_once()
-        assert mock_build.call_args[0][0] == [target_string]
+        mock_docs.assert_called_once()
+        mock_exit.assert_called_once()
 
+    # docs subcommand, any subcommand that raises a WAVESError
+    with patch('sys.argv', ['waves.py', 'docs']), \
+         patch("waves._docs.main", side_effect=exceptions.WAVESError) as mock_docs, \
+         patch("sys.exit") as mock_exit:
+        _main.main()
+        mock_docs.assert_called_once()
+        mock_exit.assert_called_once()
+
+    # fetch subcommand
     requested_paths = ['dummy.file1', 'dummy.file2']
     requested_paths_args = [pathlib.Path(path) for path in requested_paths]
     with patch('sys.argv', ['waves.py', 'fetch'] + requested_paths), \
@@ -36,6 +48,35 @@ def test_main():
         _main.main()
         mock_recursive_copy.assert_called_once()
         assert mock_recursive_copy.call_args[1]['tutorial'] == tutorial_number
+
+    # visualize subcommand
+    target_string = 'dummy.target'
+    with patch('sys.argv', ['waves.py', 'visualize', target_string]), \
+         patch("waves._visualize.main") as mock_visualize:
+        _main.main()
+        mock_visualize.assert_called_once()
+        assert mock_visualize.call_args[0][0] == [target_string]
+
+    # build subcommand
+    target_string = 'dummy.target'
+    with patch('sys.argv', ['waves.py', 'build', target_string]), \
+         patch("waves._build.main") as mock_build:
+        _main.main()
+        mock_build.assert_called_once()
+        assert mock_build.call_args[0][0] == [target_string]
+
+    # print_study subcommand
+    parameter_study_file = 'dummy.h5'
+    with patch('sys.argv', ['waves.py', 'print_study', parameter_study_file]), \
+         patch("waves._print_study.main") as mock_print_study:
+        _main.main()
+        mock_print_study.assert_called_once()
+        assert mock_print_study.call_args[0][0] == pathlib.Path(parameter_study_file)
+
+    # help
+    with patch('sys.argv', ['waves.py', 'notasubcommand']), \
+         pytest.raises(SystemExit):
+        _main.main()
 
 
 parameter_study_args = {  #               subcommand,         class_name,                   argument,         option,   argument_value
