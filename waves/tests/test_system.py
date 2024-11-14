@@ -147,7 +147,7 @@ require_third_party_tests = [
         [
             fetch_template,
             string.Template("scons . ${unconditional_build} --jobs=4"),
-            string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png")
+            string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png"),
             string.Template("${waves_command} print_study build/parameter_studies/rectangle_compression-mesh_convergence.h5")
         ],
         "modsim_template_2",
