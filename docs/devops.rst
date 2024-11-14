@@ -224,6 +224,21 @@ environment and run
 
    $ scons pytest
 
+XML and HTML coverage reports can be generated with the ``--cov-report`` option, which is passed through as a longer
+``pytest`` option through the SCons pytest tasks. The XML output is used to provide coverage visualization on merge
+requests. The HTML output can be opened with a browser to explore coverage interactively and is uploaded to the
+internally hosted Gitlab-Pages documentation at:
+https://aea.re-pages.lanl.gov/python-projects/waves/coverage/index.html.
+
+.. code-block::
+
+   $ scons pytest --cov-report
+   $ ls build/pytest/coverage.xml build/pytest/coverage/index.html
+   build/pytest/coverage.xml  build/pytest/coverage/index.html
+   $ find build/pytest -name coverage.xml -o -name index.html
+   build/pytest/coverage.xml
+   build/pytest/coverage/index.html
+
 The tutorials and modsim template are run as system tests and require third-party software not available on conda-forge.
 To run the system tests, install the third-party software and make them available in your ``PATH``, activate a conda
 environment and run
