@@ -1,6 +1,7 @@
+import sys
 import pathlib
 from unittest.mock import Mock
-from unittest.mock import patch
+from unittest.mock import patch, call
 from contextlib import nullcontext as does_not_raise
 
 import pytest
@@ -252,9 +253,23 @@ def test_build_copy_tuples(destination, requested_paths_resolved, overwrite,
 
 
 def test_print_list():
-    # TODO: implement stdout tests
-    pass
+    test_list = ["one", "two"]
 
+    # Default arugments
+    with patch("builtins.print") as mock_print:
+        _fetch.print_list(test_list)
+        mock_print.assert_has_calls([
+            call("\tone", file=sys.stdout),
+            call("\ttwo", file=sys.stdout),
+        ])
+
+    nondefault_args = {"prefix": " ", "stream": sys.stderr}
+    with patch("builtins.print") as mock_print:
+        _fetch.print_list(test_list, **nondefault_args)
+        mock_print.assert_has_calls([
+            call(" one", file=sys.stderr),
+            call(" two", file=sys.stderr),
+        ])
 
 @pytest.mark.parametrize("root_directory, source_files, source_tree, destination_tree, tutorial",
                          [(root_directory, source_files, two_file_source_tree, two_file_destination_tree, None),
