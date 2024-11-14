@@ -26,7 +26,7 @@ Documentation
   Brindley`_.
 - Make the tutorial visualization images click-to-expand (:merge:`1016`). By `Kyle Brindley`_.
 - Add a mesh convergence parameter study to the WAVES quickstart and discuss the benefits of using a build system and
-  WAVES for computational science and engineering workflows (:merge:`1019`). By `Kyle Brindley`_.
+  WAVES for computational science and engineering workflows (:merge:`1019`, :merge:`1022`). By `Kyle Brindley`_.
 - Add a quick print utility to the WAVES quickstart tutorial to help show set numbering behaviors (:issue:`1021`). By
   `Kyle Brindley`_.
 
