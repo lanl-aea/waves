@@ -20,8 +20,8 @@ target = ["test_results.xml"]
 coverage = ""
 coverage_command = ""
 if env["coverage_report"]:
-    target.append("coverage.xml")
-    coverage = "--cov --cov-report xml:${TARGETS[1].abspath}"
+    target.extend(["coverage.xml", Dir("./coverage")])
+    coverage = "--cov --cov-report xml:${TARGETS[1].abspath} --cov-report=html:${TARGETS[2].abspath}"
 
 pytest_node = env.Command(
     target=target,
@@ -34,6 +34,7 @@ pytest_node = env.Command(
     coverage=coverage,
 )
 env.Alias("pytest", pytest_node)
+env.Clean("pytest", Dir("./coverage"))
 # Always run pytests in place of a complete source list
 env.AlwaysBuild(pytest_node)
 
