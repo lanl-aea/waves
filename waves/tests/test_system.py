@@ -50,6 +50,7 @@ system_tests = [
     ([string.Template("${waves_command} custom_study --help")], None),
     ([string.Template("${waves_command} latin_hypercube --help")], None),
     ([string.Template("${waves_command} sobol_sequence --help")], None),
+    ([string.Template("${waves_command} print_study --help")], None),
     ([string.Template("${odb_extract_command} --help")], None),
     # Real fetch operations (on tutorials directory)
     ([fetch_template], "tutorials"),
@@ -74,7 +75,7 @@ require_third_party_tests = [
         [fetch_template, string.Template("scons rectangle ${unconditional_build}")], "tutorials/multi_action_task",
         marks=pytest.mark.skipif(testing_windows and not installed, reason="Windows handles symlinks in repository poorly")
     ),
-    ([fetch_template, string.Template("scons nominal mesh_convergence ${unconditional_build}")], "tutorials/waves_quickstart"),
+    ([fetch_template, string.Template("scons nominal mesh_convergence ${unconditional_build}"), string.Template("${waves_command} print_study build/parameter_studies/mesh_convergence.h5")], "tutorials/waves_quickstart"),
     ([fetch_template, string.Template("scons rectangle ${unconditional_build}")], "tutorials/tutorial_gmsh"),
     ([fetch_template, string.Template("scons submit_beam_cae ${unconditional_build}")], "tutorials/tutorial_abaqus_cae"),
     ([fetch_template, string.Template("scons . --sconstruct=tutorial_00_SConstruct ${unconditional_build} --print-build-failures")], "--tutorial 0"),
@@ -133,11 +134,23 @@ require_third_party_tests = [
     ),
     # ModSim templates
     pytest.param(
-        [fetch_template, string.Template("scons . ${unconditional_build} --jobs=4"), string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png")], "modsim_template",
+        [
+            fetch_template,
+            string.Template("scons . ${unconditional_build} --jobs=4"),
+            string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png"),
+            string.Template("${waves_command} print_study build/rectangle_compression-mesh_convergence/mesh_convergence.h5")
+        ],
+        "modsim_template",
         marks=pytest.mark.skipif(testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus")
     ),
     pytest.param(
-        [fetch_template, string.Template("scons . ${unconditional_build} --jobs=4"), string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png")], "modsim_template_2",
+        [
+            fetch_template,
+            string.Template("scons . ${unconditional_build} --jobs=4"),
+            string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png")
+            string.Template("${waves_command} print_study build/parameter_studies/rectangle_compression-mesh_convergence.h5")
+        ],
+        "modsim_template_2",
         marks=pytest.mark.skipif(testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus")
     )
 ]
