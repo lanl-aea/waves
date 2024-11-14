@@ -281,6 +281,13 @@ created parameter sets on re-execution.
    /home/roppenheimer/waves-tutorials/waves_quickstart
    $ ls build/parameter_studies/
    mesh_convergence.h5
+   $ waves print_study build/parameter_studies/mesh_convergence.h5
+                                 parameter_set_hash  width  height  global_seed  displacement
+   parameter_sets
+   parameter_set0  cf0934b22f43400165bd3d34aa61013f    1.0     1.0        1.000         -0.01
+   parameter_set1  ee7d06f97e3dab5010007d57b2a4ee45    1.0     1.0        0.500         -0.01
+   parameter_set2  93de452cc9564a549338e87ad98e5288    1.0     1.0        0.250         -0.01
+   parameter_set3  49e34595c98442a228efd9e9765f61dd    1.0     1.0        0.125         -0.01
 
 Try adding a new global mesh seed in the middle of the existing range. An example might look like the following, where
 the seed ``0.4`` is added between ``0.5`` and ``0.25``.
@@ -308,6 +315,14 @@ should build only ``parameter_set4`` tasks. The parameter study file should also
    $ scons mesh_convergence --jobs=4
    $ ls build/mesh_convergence/
    parameter_set0/  parameter_set1/  parameter_set2/  parameter_set3/ parameter_set4/
+   $ waves print_study build/parameter_studies/mesh_convergence.h5
+                                 parameter_set_hash  width  height  global_seed  displacement
+   parameter_sets
+   parameter_set0  cf0934b22f43400165bd3d34aa61013f    1.0     1.0        1.000         -0.01
+   parameter_set1  ee7d06f97e3dab5010007d57b2a4ee45    1.0     1.0        0.500         -0.01
+   parameter_set2  93de452cc9564a549338e87ad98e5288    1.0     1.0        0.250         -0.01
+   parameter_set3  49e34595c98442a228efd9e9765f61dd    1.0     1.0        0.125         -0.01
+   parameter_set4  4a49100665de0220143675c0d6626c50    1.0     1.0        0.400         -0.01
 
 If the parameter study naming convention were managed by hand it would likely be necessary to add the new seed to the
 end of the parameter study to guarantee that the new set received a new set number. In practice, parameter studies are
