@@ -309,7 +309,7 @@ class TestParameterGenerator:
                 assert mock_private_write.call_args[0][0] == instantiated_arguments[0]
                 # FIXME: Can't do boolean comparisons on xarray.Dataset.GroupBy objects.
                 # Prefer to refactor _write interface over complicated test
-                if isinstance(instantiated_arguments[1], dict):
+                if isinstance(instantiated_arguments[0], dict):
                     assert mock_private_write.call_args[0][1] == instantiated_arguments[1]
                 assert mock_private_write.call_args[0][2] == instantiated_arguments[2]
 
@@ -322,7 +322,7 @@ class TestParameterGenerator:
                 assert mock_private_write.call_args[0][0] == override_arguments[0]
                 # FIXME: Can't do boolean comparisons on xarray.Dataset.GroupBy objects.
                 # Prefer to refactor _write interface over complicated test
-                if isinstance(override_arguments[1], dict):
+                if isinstance(override_arguments[0], dict):
                     assert mock_private_write.call_args[0][1] == override_arguments[1]
                 assert mock_private_write.call_args[0][2] == override_arguments[2]
 
