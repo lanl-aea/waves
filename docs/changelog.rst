@@ -11,6 +11,7 @@ Changelog
 New Features
 ============
 - Add Abaqus pseudo-builder (:issue:`659`, :merge:`825`). By `Matthew Fister`_.
+- Add a simple command line utility to print project managed parameter study files (:merge:`1021`). By `Kyle Brindley`_.
 
 Bug fixes
 =========
