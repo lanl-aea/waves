@@ -23,8 +23,10 @@ def test_print_study():
          patch("builtins.open", mock_open(read_data="")), \
          patch("yaml.safe_load", return_value={}), \
          pytest.raises(RuntimeError):
-        _print_study.main(pathlib.Path("badpath.yaml"))
-        mock_print.assert_not_called()
+        try:
+            _print_study.main(pathlib.Path("badpath.yaml"))
+        finally:
+            mock_print.assert_not_called()
 
     # Test an unexpected YAML exception not associated with trying to read an H5 file
     with patch("pathlib.Path.is_file", return_value=True), \
@@ -32,8 +34,10 @@ def test_print_study():
          patch("builtins.open", mock_open(read_data="")), \
          patch("yaml.safe_load", side_effect=Exception()), \
          pytest.raises(RuntimeError):
-        _print_study.main(pathlib.Path("notayamlfile.h5"))
-        mock_print.assert_not_called()
+        try:
+            _print_study.main(pathlib.Path("notayamlfile.h5"))
+        finally:
+            mock_print.assert_not_called()
 
     # Test the YAML read behavior
     with patch("pathlib.Path.is_file", return_value=True), \
@@ -41,8 +45,10 @@ def test_print_study():
          patch("builtins.open", mock_open(read_data=read_data)), \
          patch("yaml.safe_load", return_value=safe_load), \
          does_not_raise():
-        _print_study.main(pathlib.Path("goodpath.yaml"))
-        mock_print.assert_called_once()
+        try:
+            _print_study.main(pathlib.Path("goodpath.yaml"))
+        finally:
+            mock_print.assert_called_once()
 
     # Test the Xarray read behavior
     with patch("pathlib.Path.is_file", return_value=True), \
@@ -51,5 +57,7 @@ def test_print_study():
          patch("yaml.safe_load", side_effect=UnicodeDecodeError("utf-8", b"", 0, 1, "invalid start byte")), \
          patch("xarray.open_dataset", return_value=study_xarray), \
          does_not_raise():
-        _print_study.main(pathlib.Path("goodpath.h5"))
-        mock_print.assert_called_once()
+        try:
+            _print_study.main(pathlib.Path("goodpath.h5"))
+        finally:
+            mock_print.assert_called_once()
