@@ -17,6 +17,7 @@ def test_print_study():
     table.index.name = _settings._set_coordinate_key
     study_xarray = xarray.Dataset.from_dataframe(table)
 
+    # Test the pathlib file search exception
     with patch("pathlib.Path.is_file", return_value=False), \
          patch("builtins.print") as mock_print, \
          patch("builtins.open", mock_open(read_data="")), \
@@ -25,6 +26,16 @@ def test_print_study():
         _print_study.main(pathlib.Path("badpath.yaml"))
         mock_print.assert_not_called()
 
+    # Test an unexpected YAML exception not associated with trying to read an H5 file
+    with patch("pathlib.Path.is_file", return_value=True), \
+         patch("builtins.print") as mock_print, \
+         patch("builtins.open", mock_open(read_data="")), \
+         patch("yaml.safe_load", side_effect=Exception()), \
+         pytest.raises(RuntimeError):
+        _print_study.main(pathlib.Path("notayamlfile.h5"))
+        mock_print.assert_not_called()
+
+    # Test the YAML read behavior
     with patch("pathlib.Path.is_file", return_value=True), \
          patch("builtins.print") as mock_print, \
          patch("builtins.open", mock_open(read_data=read_data)), \
@@ -33,6 +44,7 @@ def test_print_study():
         _print_study.main(pathlib.Path("goodpath.yaml"))
         mock_print.assert_called_once()
 
+    # Test the Xarray read behavior
     with patch("pathlib.Path.is_file", return_value=True), \
          patch("builtins.print") as mock_print, \
          patch("builtins.open", mock_open(read_data=read_data)), \
