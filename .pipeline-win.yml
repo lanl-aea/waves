@@ -13,6 +13,7 @@ win-fast-test:
     GIT_STRATEGY: clone
   script:
     # Environment creation/setup. Usually a ``before_script``.
+    - $PSVersionTable
     - $conda_installation="C:\ProgramData\anaconda3"
     - $conda_environments="$conda_installation\envs"
     - $prefix=python -c 'import tempfile; print(tempfile.mkdtemp(prefix=r"C:\ProgramData\anaconda3\envs\waves-dev-"))'
@@ -29,7 +30,7 @@ win-fast-test:
     # Cleanup. Usually an ``after_script``
     - conda deactivate
     - conda env remove --prefix $prefix --yes
-    - Remove-Item -Recurse $prefix; $true
+    - if (Test-Path -Path $prefix -PathType Container) {Remove-Item -Recurse $prefix -ErrorAction Continue}
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
     reports:
