@@ -8,15 +8,16 @@ Tutorial Introduction
 Start Options
 *************
 
-Users who want to jump straight to a minimally functional simulation workflow with native `SCons`_ can start with the
-:ref:`scons_quickstart`. The :ref:`waves_quickstart` has the same features but uses the `WAVES`_ extension to `SCons`_.
+The :ref:`waves_quickstart` introduces the core concepts motivating |PROJECT| without diving into the details of implementation.
 
 For a detailed discussion of recommended best practices for `SCons`_  and `MODSIM-TEMPLATE`_ project setup, meta data,
 and features, start with :ref:`tutorialsconstruct`. Most of the ``SContruct`` file introduced in
 :ref:`tutorialsconstruct` is boilerplate code, so users may want to skip straight to the workflow task definitions in
-:ref:`tutorial_geometry`. An optional ``waves fetch`` command is included in :ref:`tutorial_geometry` to help users
-create the content of :ref:`tutorialsconstruct`. The :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand may also be used
-to create a local copy of any tutorial file.
+:ref:`tutorial_geometry`.
+
+An optional ``waves fetch`` command is included in every tutorial to help users start in a focus topic without
+completing previous tutorials. The :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand may also be used to create a local
+copy of any tutorial file.
 
 .. include:: modsim_templates.txt
 
@@ -33,8 +34,6 @@ Quickstart
 ======================== ============================================ ==================================================
 Time to complete (HH:MM) Tutorial                                     Summary
 ------------------------ -------------------------------------------- --------------------------------------------------
-                   00:10 :ref:`scons_quickstart`                      Minimally functional simulation build system
-                                                                      workflow using pure `SCons`_
                    00:30 :ref:`waves_quickstart`                      Minimally functional simulation build system
                                                                       workflow using `SCons`_ and `WAVES`_
 ======================== ============================================ ==================================================
@@ -75,6 +74,8 @@ Supplemental Lessons
 ======================== ============================================ ==================================================
 Time to complete (HH:MM) Tutorial                                     Summary
 ------------------------ -------------------------------------------- --------------------------------------------------
+                   00:10 :ref:`scons_quickstart`                      Minimally functional simulation build system
+                                                                      workflow using pure `SCons`_
                    00:10 :ref:`scons_multiactiontask`                 Execute multiple actions on the same target file
                    00:20 :ref:`tutorial_argparse_types`               Add input verification to workflow parameters
                    00:20 :ref:`tutorial_cubit_abaqus`                 Geometry, partition, and mesh examples with Cubit

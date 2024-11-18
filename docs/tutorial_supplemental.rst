@@ -7,6 +7,7 @@ Supplemental Lessons
 .. toctree::
    :maxdepth: 1
 
+   scons_quickstart
    scons_multiactiontask
    tutorial_argparse_types
    tutorial_cubit_abaqus

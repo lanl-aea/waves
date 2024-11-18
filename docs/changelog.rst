@@ -38,6 +38,8 @@ Documentation
 - Add a quick print utility to the WAVES quickstart tutorial to help show set numbering behaviors (:merge:`1021`,
   :merge:`1023`, :merge:`1024`). By `Kyle Brindley`_.
 - Add HTML coverage report to internally hosted Gitlab-Pages documentation (:merge:`1024`). By `Kyle Brindley`_.
+- Move the pure SCons quickstart tutorial to the supplemental lessons (:issue:`824`, :merge:`1027`). By `Kyle
+  Brindley`_.
 
 Internal Changes
 ================

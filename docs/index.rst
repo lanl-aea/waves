@@ -40,8 +40,8 @@
 
    abstract
    installation
+   waves_quickstart
    tutorial_introduction
-   tutorial_quickstart
    tutorial_core
    tutorial_supplemental
    tutorial_wip

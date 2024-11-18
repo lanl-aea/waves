@@ -1,8 +1,8 @@
 .. _waves_quickstart:
 
-####################
-|PROJECT| Quickstart
-####################
+##########
+Quickstart
+##########
 
 This quickstart will create a minimal, two file project configuration combining elements of the tutorials listed below.
 
@@ -13,6 +13,7 @@ This quickstart will create a minimal, two file project configuration combining 
 * :ref:`tutorial_simulation`
 * :ref:`tutorial_parameter_substitution`
 * :ref:`tutorial_cartesian_product`
+* :ref:`tutorial_data_extraction`
 * :ref:`tutorial_post_processing`
 
 These tutorials and this quickstart describe the computational engineering workflow through simulation execution and
@@ -114,7 +115,7 @@ the build system can correctly identify previous work and only re-build the new 
 
 In the configuration snippet below, the workflow parameterization is performed in the root configuration file,
 ``SConstruct``. This allows us to re-use the entire workflow file, ``SConscript``, with more than one parameter study.
-First, we define a nominal workflow. Single set studies can be defined as a simple dictionary. This can be useful for
+First, we define a nominal workflow. Nominal workflows can be defined as a simple dictionary. This can be useful for
 trouble-shooting the workflow, simulation definition, and simulation convergence prior to running a larger parameter
 study. Second, we define a small mesh convergence study where the only parameter that changes is the mesh global seed.
 
