@@ -11,17 +11,22 @@ Import(["env", "project_substitution_dictionary"])
 # DO NOT 'bootstrap' by importing the current/repository version of WAVES. That's not bootstrapping, it's a bug factory
 import re
 import SCons.Scanner
+
+
 def sphinx_scanner():
     suffixes = [".rst", ".txt"]
     flags = re.MULTILINE
     expression = re.compile(r"^\s*\.\. (?:include|literalinclude|figure|bibliography)::\s*(.+)$", flags)
+
     def suffix_only(node_list):
         return [node for node in node_list if node.path.endswith(tuple(suffixes))]
+
     def regex_scan(node, env, path):
         contents = node.get_text_contents()
         includes = expression.findall(contents)
         includes = [file.strip() for file in includes]
         return includes
+
     custom_scanner = SCons.Scanner.Scanner(function=regex_scan, skeys=suffixes, recursive=suffix_only)
     return custom_scanner
 
@@ -32,7 +37,7 @@ def sphinx_build(program="sphinx-build", options="", builder="html", tags=""):
         program=program,
         options=options,
         builder=builder,
-        tags=tags
+        tags=tags,
     )
     return sphinx_builder
 
@@ -43,27 +48,31 @@ def sphinx_latexpdf(program="sphinx-build", options="", builder="latexpdf", tags
         program=program,
         options=options,
         builder=builder,
-        tags=tags
+        tags=tags,
     )
     return sphinx_latex
+
+
 # ^^^ Sphinx prototypes
 
 
 env.Append(SCANNERS=sphinx_scanner())
-env.Append(BUILDERS={
-    "SphinxBuild": sphinx_build(program=env["sphinx_build"], options="-W"),
-    "SphinxPDF": sphinx_latexpdf(program=env["sphinx_build"], options="-W")
-})
+env.Append(
+    BUILDERS={
+        "SphinxBuild": sphinx_build(program=env["sphinx_build"], options="-W"),
+        "SphinxPDF": sphinx_latexpdf(program=env["sphinx_build"], options="-W"),
+    }
+)
 
 # Perform variable substitution on Sphinx configuration file
 env.Substfile(
     "conf.py.in",
-    SUBST_DICT=project_substitution_dictionary
+    SUBST_DICT=project_substitution_dictionary,
 )
 
 env.Substfile(
     "_static/custom.css.in",
-    SUBST_DICT=project_substitution_dictionary
+    SUBST_DICT=project_substitution_dictionary,
 )
 
 # Copy root directory files into documentation build directory
@@ -71,13 +80,13 @@ copy_files = (
     ("README.txt", "#/README.rst"),
     ("CITATION.bib", "#/CITATION.bib"),
     ("LICENSE.txt", "#/LICENSE.txt"),
-    ("environment.yml", "#/environment.yml")
+    ("environment.yml", "#/environment.yml"),
 )
 for target, source in copy_files:
     Command(
         target=target,
         source=source,
-        action=Copy("$TARGET", "$SOURCE")
+        action=Copy("$TARGET", "$SOURCE"),
     )
 
 # Explicit Sphinx documentation dependency list
@@ -94,7 +103,7 @@ sphinx_configuration_source_list = [
     "favicon.ico",  # Found in conf.py, which is not currently scanned
     "_static/custom.css",
     "_static/custom.js",
-    "_static/wave.svg"
+    "_static/wave.svg",
 ]
 
 documentation_file_list = [
@@ -284,18 +293,20 @@ for file_path in tutorial_files_list:
     Command(
         target=target,
         source=str(file_path),
-        action=Copy("$TARGET", "$SOURCE")
+        action=Copy("$TARGET", "$SOURCE"),
     )
-    copied_file_list.append(target)
+    copied_file_list.append(target),
 source_files = sphinx_configuration_source_list + documentation_file_list + copied_file_list
 
-html_targets = [f"{pathlib.Path(source).with_suffix('.html')}" for source in documentation_file_list if source.endswith(".rst")]
+html_targets = [
+    f"{pathlib.Path(source).with_suffix('.html')}" for source in documentation_file_list if source.endswith(".rst")
+]
 html_directory = "html"
 html_target = [f"{html_directory}/{target}" for target in html_targets]
 html = env.SphinxBuild(
     target=html_target,
     source=source_files,
-    builder="html"
+    builder="html",
 )
 env.Clean(html, [Dir(html_directory)] + documentation_file_list)
 env.Alias(html_directory, html)
@@ -307,7 +318,7 @@ internal = env.SphinxBuild(
     target=internal_target,
     source=source_files,
     builder="html",
-    tags="-t aea"
+    tags="-t aea",
 )
 env.Clean(internal, [Dir(internal_directory)] + documentation_file_list)
 env.Alias(internal_directory, internal)
@@ -317,7 +328,7 @@ latex_directory = "latex"
 latex_target = [str(waves_pdf)]
 latexpdf = env.SphinxPDF(
     target=latex_target,
-    source=source_files
+    source=source_files,
 )
 env.Clean(latexpdf, [Dir(latex_directory)] + documentation_file_list)
 env.Alias("latexpdf", latexpdf)
@@ -326,13 +337,13 @@ man_directory = "man"
 man_target = [f"{man_directory}/waves.1"]
 man_source = [
     "man_index.rst",
-    "ssh_builder_actions_warning.txt"  # Required by ``ssh_builder_actions`` docstring and not found in man_index.rst
+    "ssh_builder_actions_warning.txt",  # Required by ``ssh_builder_actions`` docstring and not found in man_index.rst
 ]
 man = env.SphinxBuild(
     target=man_target,
     source=man_source + sphinx_configuration_source_list,
     builder="man",
-    tags="-t man"
+    tags="-t man",
 )
 env.Clean(man, [Dir(man_directory)] + documentation_file_list)
 env.Alias(man_directory, man)
@@ -342,7 +353,7 @@ epub_cover = "waves_epub_cover.png"
 env.Command(
     target=[f"epub/_static/{epub_cover}"],
     source=[str(waves_pdf)],
-    action=["convert -density 300 ${SOURCE.abspath}[0] ${TARGET.abspath}"]
+    action=["convert -density 300 ${SOURCE.abspath}[0] ${TARGET.abspath}"],
 )
 
 waves_epub = waves_pdf.with_suffix(".epub").name
@@ -351,7 +362,7 @@ epub_target = [f"{epub_directory}/{waves_epub}"]
 epub = env.SphinxBuild(
     target=epub_target,
     source=source_files + [f"epub/_static/{epub_cover}"],
-    builder="epub"
+    builder="epub",
 )
 env.Clean(epub, [Dir(epub_directory)] + documentation_file_list)
 env.Alias(epub_directory, epub)

@@ -1,4 +1,5 @@
 """Python 3 utilities not compatible with Abaqus Python 2"""
+
 import sys
 import typing
 import pathlib
@@ -22,8 +23,9 @@ def combine_data(input_files, group_path, concat_coord):
     :rtype: xarray.DataArray
     """
     paths = [pathlib.Path(input_file).resolve() for input_file in input_files]
-    data_generator = (xarray.open_dataset(path, group=group_path).assign_coords({concat_coord: path.parent.name})
-                      for path in paths)
+    data_generator = (
+        xarray.open_dataset(path, group=group_path).assign_coords({concat_coord: path.parent.name}) for path in paths
+    )
     combined_data = xarray.concat(data_generator, concat_coord)
     combined_data.close()
 
@@ -101,8 +103,10 @@ def csv_files_match(current_csv, expected_csv, index_column="time", sort_columns
     try:
         pandas.testing.assert_frame_equal(current, expected)
     except AssertionError as err:
-        print(f"The CSV regression test failed. Data in expected CSV file and current CSV file do not match.\n{err}",
-              file=sys.stderr)
+        print(
+            f"The CSV regression test failed. Data in expected CSV file and current CSV file do not match.\n{err}",
+            file=sys.stderr,
+        )
         equal = False
     else:
         equal = True
@@ -112,7 +116,7 @@ def csv_files_match(current_csv, expected_csv, index_column="time", sort_columns
 def write_study_definition(
     study_definition: typing.Union[waves.parameter_generators.ParameterGenerator, dict],
     path: pathlib.Path,
-    alias: str
+    alias: str,
 ) -> None:
     """Write parameter study definition files to path
 

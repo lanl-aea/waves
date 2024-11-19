@@ -37,8 +37,10 @@ def self_consistency_checks(merged_study):
 
     :param Union[CartesianProduct, SobolSequence, ScipySampler, SALibSampler] merged_study: Sampler object
     """
-    assert list(merged_study._parameter_set_names.values()) == merged_study.parameter_study[
-        _set_coordinate_key].values.tolist()
+    assert (
+        list(merged_study._parameter_set_names.values())
+        == merged_study.parameter_study[_set_coordinate_key].values.tolist()  # noqa: W503
+    )
     assert merged_study._parameter_set_hashes == merged_study.parameter_study[_hash_coordinate_key].values.tolist()
 
 
@@ -54,13 +56,15 @@ def merge_samplers(sampler_class, first_schema, second_schema, kwargs, sampler=N
 
     :return: original_study, merged_study
     :rtype: (Union[CartesianProduct, SobolSequence, ScipySampler, SALibSampler], Union[CartesianProduct, SobolSequence, ScipySampler, SALibSampler])
-    """
+    """  # noqa: E501
     if sampler:
         original_study = sampler_class(sampler, first_schema, **kwargs)
     else:
         original_study = sampler_class(first_schema, **kwargs)
-    with patch("xarray.open_dataset", return_value=original_study.parameter_study), \
-         patch("pathlib.Path.is_file", return_value=True):
+    with (
+        patch("xarray.open_dataset", return_value=original_study.parameter_study),
+        patch("pathlib.Path.is_file", return_value=True),
+    ):
         if sampler:
             merged_study = sampler_class(sampler, second_schema, previous_parameter_study="dummy_string", **kwargs)
         else:

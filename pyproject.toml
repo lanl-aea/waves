@@ -65,6 +65,11 @@ markers = [
 ]
 addopts = "--ignore='waves/modsim_template/' --ignore='modsim_template/' --ignore='waves/modsim_template_2/' --ignore='modsim_template_2/' --ignore='waves/tutorials/' --ignore='tutorials/' --tb=long --showlocals --failed-first --strict-markers -m 'not systemtest'"
 
+[tool.black]
+target-version = ["py39", "py310", "py311", "py312", "py313"]
+line-length = 120
+include = "SConstruct|SConscript"
+
 [tool.mypy]
 disable_error_code = "import-untyped"
 exclude = [

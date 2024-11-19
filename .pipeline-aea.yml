@@ -24,10 +24,10 @@ aea-fast-test:
   tags:
     - shell-aea
 
-aea-flake8:
+aea-style-guide:
   extends:
     - .linux_before_script
-    - .flake8
+    - .style-guide
   stage: test
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"

@@ -1,5 +1,6 @@
 """Test ParameterGenerator Abstract Base Class
 """
+
 import pathlib
 from unittest.mock import patch, mock_open
 from contextlib import nullcontext as does_not_raise
@@ -19,35 +20,42 @@ class TestParameterGenerator:
     def test_output_file_conflict(self):
         with pytest.raises(MutuallyExclusiveError):
             try:
-                OutputFileConflict = DummyGenerator({}, output_file_template='out@number',
-                                                    output_file='single_output_file')
+                OutputFileConflict = DummyGenerator(
+                    {}, output_file_template="out@number", output_file="single_output_file"
+                )
             finally:
                 pass
 
     def test_output_file_type(self):
         with pytest.raises(ChoicesError):
             try:
-                OutputTypeError = DummyGenerator({}, output_file_type='notsupported')
+                OutputTypeError = DummyGenerator({}, output_file_type="notsupported")
             finally:
                 pass
 
     def test_missing_previous_parameter_study_file(self):
-        with patch("pathlib.Path.is_file", return_value=False), \
-             patch("waves.parameter_generators.ParameterGenerator._merge_parameter_studies") as mock_merge, \
-             pytest.raises(RuntimeError):
+        with (
+            patch("pathlib.Path.is_file", return_value=False),
+            patch("waves.parameter_generators.ParameterGenerator._merge_parameter_studies") as mock_merge,
+            pytest.raises(RuntimeError),
+        ):
             try:
-                MissingPreviousStudy = DummyGenerator({}, previous_parameter_study="doesnotexist.h5",
-                                                      require_previous_parameter_study=True)
+                MissingPreviousStudy = DummyGenerator(
+                    {}, previous_parameter_study="doesnotexist.h5", require_previous_parameter_study=True
+                )
             finally:
                 mock_merge.assert_not_called()
 
-        with patch("pathlib.Path.is_file", return_value=False), \
-             patch("waves.parameter_generators.ParameterGenerator._merge_parameter_studies") as mock_merge, \
-             patch("warnings.warn") as mock_warn, \
-             does_not_raise():
+        with (
+            patch("pathlib.Path.is_file", return_value=False),
+            patch("waves.parameter_generators.ParameterGenerator._merge_parameter_studies") as mock_merge,
+            patch("warnings.warn") as mock_warn,
+            does_not_raise(),
+        ):
             try:
-                MissingPreviousStudy = DummyGenerator({}, previous_parameter_study="doesnotexist.h5",
-                                                      require_previous_parameter_study=False)
+                MissingPreviousStudy = DummyGenerator(
+                    {}, previous_parameter_study="doesnotexist.h5", require_previous_parameter_study=False
+                )
                 mock_merge.assert_not_called()
                 mock_warn.assert_called_once()
             finally:
@@ -59,12 +67,14 @@ class TestParameterGenerator:
             sconsWrite.scons_write([], [], {})
         mock_write.assert_called_once()
 
-    templates = {      #schema, file_template, set_template,          expected
-        'no template':   (    {},        None,         None, ['parameter_set0']),
-        'file template': (    {},       'out',         None,           ['out0']),
-        'file template': (    {},        None,        'out',           ['out0']),
-        'file template': (    {},       'out', 'overridden',           ['out0'])
+    # fmt: off
+    templates = {       # schema, file_template, set_template,          expected
+        "no template":   (    {},        None,         None, ["parameter_set0"]),  # noqa: E241,E201
+        "file template": (    {},       "out",         None,           ["out0"]),  # noqa: E241,E201
+        "file template": (    {},        None,        "out",           ["out0"]),  # noqa: E241,E201
+        "file template": (    {},       "out", "overridden",           ["out0"]),  # noqa: E241,E201
     }
+    # fmt: on
 
     @pytest.mark.parametrize("length", range(1, 20, 5))
     def test_parameter_study_to_dict(self, length):
@@ -77,11 +87,13 @@ class TestParameterGenerator:
         for parameter_set in expected.keys():
             assert expected[parameter_set] == set_samples[parameter_set]
             for parameter in expected[parameter_set].keys():
-                assert type(set_samples[parameter_set][parameter]) == type(expected[parameter_set][parameter])
+                assert type(set_samples[parameter_set][parameter]) == type(expected[parameter_set][parameter])  # fmt:skip # noqa: 721,E501
 
-    @pytest.mark.parametrize('schema, file_template, set_template, expected',
-                                 templates.values(),
-                             ids=templates.keys())
+    @pytest.mark.parametrize(
+        "schema, file_template, set_template, expected",
+        templates.values(),
+        ids=templates.keys(),
+    )
     def test_set_names(self, schema, file_template, set_template, expected):
         """Check the generated parameter set names against template arguments
 
@@ -94,13 +106,16 @@ class TestParameterGenerator:
         if not set_template:
             TemplateGenerator = DummyGenerator(schema, output_file_template=file_template, **kwargs)
         else:
-            TemplateGenerator = DummyGenerator(schema, output_file_template=file_template,
-                                                     set_name_template=set_template, **kwargs)
+            TemplateGenerator = DummyGenerator(
+                schema, output_file_template=file_template, set_name_template=set_template, **kwargs
+            )
         assert list(TemplateGenerator._parameter_set_names.values()) == expected
 
-    @pytest.mark.parametrize('schema, file_template, set_template, expected',
-                                 templates.values(),
-                             ids=templates.keys())
+    @pytest.mark.parametrize(
+        "schema, file_template, set_template, expected",
+        templates.values(),
+        ids=templates.keys(),
+    )
     def test_update_parameter_set_names(self, schema, file_template, set_template, expected):
         """Check the generated and updated parameter set names against template arguments
 
@@ -113,28 +128,33 @@ class TestParameterGenerator:
         if not set_template:
             TemplateGenerator = DummyGenerator(schema, output_file_template=file_template, **kwargs)
         else:
-            TemplateGenerator = DummyGenerator(schema, output_file_template=file_template,
-                                               set_name_template=set_template, **kwargs)
+            TemplateGenerator = DummyGenerator(
+                schema, output_file_template=file_template, set_name_template=set_template, **kwargs
+            )
         assert list(TemplateGenerator._parameter_set_names.values()) == expected
 
         # Test that the update function runs with only a single set. Check that the names don't change.
         TemplateGenerator._update_parameter_set_names()
         assert list(TemplateGenerator._parameter_set_names.values()) == expected
 
-    init_write_stdout = {# schema, template, overwrite, dry_run,         is_file,  sets, stdout_calls
-        'no-template-1': (     {},     None,     False,  False,          [False],    1,            1),
-        'no-template-2': (     {},     None,      True,  False,          [False],    1,            1),
-        'no-template-3': (     {},     None,     False,   True,   [False, False],    2,            1),
-        'no-template-4': (     {},     None,     False,  False,   [ True,  True],    2,            1),
-        'dry_run-1':     (     {},    'out',     False,   True,          [False],    1,            1),
-        'dry_run-2':     (     {},    'out',      True,   True,          [False],    1,            1),
-        'dry_run-3':     (     {},    'out',      True,   True,   [ True, False],    2,            2),
-        'dry_run-4':     (     {},    'out',     False,   True,   [False,  True],    1,            1),
+    # fmt: off
+    init_write_stdout = {# schema, template, overwrite, dry_run,         is_file,  sets, stdout_calls  # noqa: E261
+        "no-template-1": (     {},     None,     False,  False,          [False],    1,            1),  # noqa: E241,E201,E501
+        "no-template-2": (     {},     None,      True,  False,          [False],    1,            1),  # noqa: E241,E201,E501
+        "no-template-3": (     {},     None,     False,   True,   [False, False],    2,            1),  # noqa: E241,E201,E501
+        "no-template-4": (     {},     None,     False,  False,   [ True,  True],    2,            1),  # noqa: E241,E201,E501
+        "dry_run-1":     (     {},    "out",     False,   True,          [False],    1,            1),  # noqa: E241,E201,E501
+        "dry_run-2":     (     {},    "out",      True,   True,          [False],    1,            1),  # noqa: E241,E201,E501
+        "dry_run-3":     (     {},    "out",      True,   True,   [ True, False],    2,            2),  # noqa: E241,E201,E501
+        "dry_run-4":     (     {},    "out",     False,   True,   [False,  True],    1,            1),  # noqa: E241,E201,E501
     }
+    # fmt: on
 
-    @pytest.mark.parametrize('schema, template, overwrite, dry_run, is_file, sets, stdout_calls',
-                                 init_write_stdout.values(),
-                             ids=init_write_stdout.keys())
+    @pytest.mark.parametrize(
+        "schema, template, overwrite, dry_run, is_file, sets, stdout_calls",
+        init_write_stdout.values(),
+        ids=init_write_stdout.keys(),
+    )
     def test_write_to_stdout(self, schema, template, overwrite, dry_run, is_file, sets, stdout_calls):
         """Check for conditions that should result in calls to stdout
 
@@ -155,32 +175,38 @@ class TestParameterGenerator:
                 output_file_type=output_file_type,
                 overwrite=overwrite,
                 dry_run=dry_run,
-                **kwargs
+                **kwargs,
             )
-            with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
-                 patch('builtins.open', mock_open()) as mock_file, \
-                 patch('sys.stdout.write') as stdout_write, \
-                 patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
-                 patch('pathlib.Path.is_file', side_effect=is_file), \
-                 patch('pathlib.Path.mkdir'):
+            with (
+                patch("waves.parameter_generators.ParameterGenerator._write_meta"),
+                patch("builtins.open", mock_open()) as mock_file,
+                patch("sys.stdout.write") as stdout_write,
+                patch("xarray.Dataset.to_netcdf") as xarray_to_netcdf,
+                patch("pathlib.Path.is_file", side_effect=is_file),
+                patch("pathlib.Path.mkdir"),
+            ):
                 WriteParameterGenerator.write()
                 mock_file.assert_not_called()
                 xarray_to_netcdf.assert_not_called()
                 assert stdout_write.call_count == stdout_calls
 
-    init_write_files = {# schema, template, overwrite, dry_run,          is_file, sets, files
-        'template-1':  (      {},    'out',     False,   False,          [False],    1,     1),
-        'template-2':  (      {},    'out',     False,   False,   [False, False],    2,     2),
-        'template-3':  (      {},    'out',     False,   False,   [ True,  True],    2,     0),
-        'template-4':  (      {},    'out',     False,   False,   [ True, False],    2,     1),
-        'overwrite-2': (      {},    'out',      True,   False,   [False, False],    2,     2),
-        'overwrite-3': (      {},    'out',      True,   False,   [ True,  True],    2,     2),
-        'overwrite-4': (      {},    'out',      True,   False,   [ True, False],    2,     2),
+    # fmt: off
+    init_write_files = {# schema, template, overwrite, dry_run,          is_file, sets, files  # noqa: E261,E721
+        "template-1":  (      {},    "out",     False,   False,          [False],    1,     1),  # noqa: E241,E201
+        "template-2":  (      {},    "out",     False,   False,   [False, False],    2,     2),  # noqa: E241,E201
+        "template-3":  (      {},    "out",     False,   False,   [ True,  True],    2,     0),  # noqa: E241,E201
+        "template-4":  (      {},    "out",     False,   False,   [ True, False],    2,     1),  # noqa: E241,E201
+        "overwrite-2": (      {},    "out",      True,   False,   [False, False],    2,     2),  # noqa: E241,E201
+        "overwrite-3": (      {},    "out",      True,   False,   [ True,  True],    2,     2),  # noqa: E241,E201
+        "overwrite-4": (      {},    "out",      True,   False,   [ True, False],    2,     2),  # noqa: E241,E201
     }
+    # fmt: on
 
-    @pytest.mark.parametrize('schema, template, overwrite, dry_run, is_file, sets, files',
-                                 init_write_files.values(),
-                             ids=init_write_files.keys())
+    @pytest.mark.parametrize(
+        "schema, template, overwrite, dry_run, is_file, sets, files",
+        init_write_files.values(),
+        ids=init_write_files.keys(),
+    )
     def test_write_yaml(self, schema, template, overwrite, dry_run, is_file, sets, files):
         """Check for conditions that should result in calls to builtins.open
 
@@ -193,21 +219,31 @@ class TestParameterGenerator:
         :param int files: integer number of files that should be written
         """
         kwargs = {"sets": sets}
-        WriteParameterGenerator = DummyGenerator(schema, output_file_template=template, output_file_type='yaml',
-                                                 overwrite=overwrite, dry_run=dry_run, **kwargs)
-        with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
-             patch('waves.parameter_generators.ParameterGenerator._conditionally_write_yaml') as mock_file, \
-             patch('sys.stdout.write') as stdout_write, \
-             patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
-             patch('pathlib.Path.is_file', side_effect=is_file):
+        WriteParameterGenerator = DummyGenerator(
+            schema,
+            output_file_template=template,
+            output_file_type="yaml",
+            overwrite=overwrite,
+            dry_run=dry_run,
+            **kwargs,
+        )
+        with (
+            patch("waves.parameter_generators.ParameterGenerator._write_meta"),
+            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_yaml") as mock_file,
+            patch("sys.stdout.write") as stdout_write,
+            patch("xarray.Dataset.to_netcdf") as xarray_to_netcdf,
+            patch("pathlib.Path.is_file", side_effect=is_file),
+        ):
             WriteParameterGenerator.write()
             stdout_write.assert_not_called()
             xarray_to_netcdf.assert_not_called()
             assert mock_file.call_count == files
 
-    @pytest.mark.parametrize('schema, template, overwrite, dry_run, is_file, sets, files',
-                                 init_write_files.values(),
-                             ids=init_write_files.keys())
+    @pytest.mark.parametrize(
+        "schema, template, overwrite, dry_run, is_file, sets, files",
+        init_write_files.values(),
+        ids=init_write_files.keys(),
+    )
     def test_write_dataset(self, schema, template, overwrite, dry_run, is_file, sets, files):
         """Check for conditions that should result in calls to ParameterGenerator._write_netcdf
 
@@ -220,31 +256,38 @@ class TestParameterGenerator:
         :param int files: integer number of files that should be written
         """
         kwargs = {"sets": sets}
-        WriteParameterGenerator = DummyGenerator(schema, output_file_template=template, output_file_type='h5',
-                                                 overwrite=overwrite, dry_run=dry_run, **kwargs)
+        WriteParameterGenerator = DummyGenerator(
+            schema, output_file_template=template, output_file_type="h5", overwrite=overwrite, dry_run=dry_run, **kwargs
+        )
 
-        with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
-             patch('builtins.open', mock_open()) as mock_file, \
-             patch('sys.stdout.write') as stdout_write, \
-             patch('waves.parameter_generators.ParameterGenerator._conditionally_write_dataset') as write_netcdf, \
-             patch('pathlib.Path.is_file', side_effect=is_file), \
-             patch('pathlib.Path.mkdir'):
+        with (
+            patch("waves.parameter_generators.ParameterGenerator._write_meta"),
+            patch("builtins.open", mock_open()) as mock_file,
+            patch("sys.stdout.write") as stdout_write,
+            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_dataset") as write_netcdf,
+            patch("pathlib.Path.is_file", side_effect=is_file),
+            patch("pathlib.Path.mkdir"),
+        ):
             WriteParameterGenerator.write()
             mock_file.assert_not_called()
             stdout_write.assert_not_called()
             assert write_netcdf.call_count == files
 
-    init_write_dataset_files = {# equals, is_file, overwrite, expected_call_count
-        'equal-datasets':      (    True,  [True],     False,                   0),
-        'equal-overwrite':     (    True,  [True],      True,                   1),
-        'different-datasets':  (   False,  [True],     False,                   1),
-        'not-file-1':          (    True, [False],     False,                   1),
-        'not-file-2':          (   False, [False],     False,                   1),
+    # fmt: off
+    init_write_dataset_files = {# equals, is_file, overwrite, expected_call_count  # noqa: E261
+        "equal-datasets":      (    True,  [True],     False,                   0),  # noqa: E241,E201
+        "equal-overwrite":     (    True,  [True],      True,                   1),  # noqa: E241,E201
+        "different-datasets":  (   False,  [True],     False,                   1),  # noqa: E241,E201
+        "not-file-1":          (    True, [False],     False,                   1),  # noqa: E241,E201
+        "not-file-2":          (   False, [False],     False,                   1),  # noqa: E241,E201
     }
+    # fmt: on
 
-    @pytest.mark.parametrize('equals, is_file, overwrite, expected_call_count',
-                             init_write_dataset_files.values(),
-                             ids=init_write_dataset_files.keys())
+    @pytest.mark.parametrize(
+        "equals, is_file, overwrite, expected_call_count",
+        init_write_dataset_files.values(),
+        ids=init_write_dataset_files.keys(),
+    )
     def test_conditionally_write_dataset(self, equals, is_file, overwrite, expected_call_count):
         """Check for conditions that should result in calls to xarray.Dataset.to_netcdf
 
@@ -255,16 +298,20 @@ class TestParameterGenerator:
         """
         WriteParameterGenerator = DummyGenerator({}, overwrite=overwrite)
 
-        with patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
-             patch('xarray.open_dataset', mock_open()), \
-             patch('xarray.Dataset.equals', return_value=equals), \
-             patch('pathlib.Path.is_file', side_effect=is_file):
-            WriteParameterGenerator._conditionally_write_dataset(pathlib.Path('dummy_string'), xarray.Dataset())
+        with (
+            patch("xarray.Dataset.to_netcdf") as xarray_to_netcdf,
+            patch("xarray.open_dataset", mock_open()),
+            patch("xarray.Dataset.equals", return_value=equals),
+            patch("pathlib.Path.is_file", side_effect=is_file),
+        ):
+            WriteParameterGenerator._conditionally_write_dataset(pathlib.Path("dummy_string"), xarray.Dataset())
             assert xarray_to_netcdf.call_count == expected_call_count
 
-    @pytest.mark.parametrize('equals, is_file, overwrite, expected_call_count',
-                             init_write_dataset_files.values(),
-                             ids=init_write_dataset_files.keys())
+    @pytest.mark.parametrize(
+        "equals, is_file, overwrite, expected_call_count",
+        init_write_dataset_files.values(),
+        ids=init_write_dataset_files.keys(),
+    )
     def test_conditionally_write_yaml(self, equals, is_file, overwrite, expected_call_count):
         """Check for conditions that should result in writing out to file
 
@@ -274,12 +321,14 @@ class TestParameterGenerator:
         :param int expected_call_count: amount of times that the open.write function should be called
         """
         WriteParameterGenerator = DummyGenerator({}, overwrite=overwrite)
-        existing_dict = {'dummy': 'dict'} if equals else {'smart': 'dict'}
+        existing_dict = {"dummy": "dict"} if equals else {"smart": "dict"}
 
-        with patch('builtins.open', mock_open()) as write_yaml_file, \
-             patch('yaml.safe_load', return_value=existing_dict), \
-             patch('pathlib.Path.is_file', side_effect=is_file):
-            WriteParameterGenerator._conditionally_write_yaml('dummy_string', {'dummy': 'dict'})
+        with (
+            patch("builtins.open", mock_open()) as write_yaml_file,
+            patch("yaml.safe_load", return_value=existing_dict),
+            patch("pathlib.Path.is_file", side_effect=is_file),
+        ):
+            WriteParameterGenerator._conditionally_write_yaml("dummy_string", {"dummy": "dict"})
             assert write_yaml_file.return_value.write.call_count == expected_call_count
 
     def test_write_type_override(self):
@@ -289,21 +338,23 @@ class TestParameterGenerator:
                 "yaml": (
                     WriteParameterGenerator.parameter_study_to_dict(),
                     WriteParameterGenerator.parameter_study_to_dict().items(),
-                    WriteParameterGenerator._conditionally_write_yaml
+                    WriteParameterGenerator._conditionally_write_yaml,
                 ),
                 "h5": (
                     WriteParameterGenerator.parameter_study,
                     WriteParameterGenerator.parameter_study.groupby(_settings._set_coordinate_key),
-                    WriteParameterGenerator._conditionally_write_dataset
-                )
+                    WriteParameterGenerator._conditionally_write_dataset,
+                ),
             }
             instantiated_arguments = private_write_arguments[instantiated_type]
             override_arguments = private_write_arguments[override_type]
 
             # Bare call should try to write YAML.
             # TODO: assert called with the correct objects or continue refactoring _write
-            with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
-                 patch('waves.parameter_generators.ParameterGenerator._write') as mock_private_write:
+            with (
+                patch("waves.parameter_generators.ParameterGenerator._write_meta"),
+                patch("waves.parameter_generators.ParameterGenerator._write") as mock_private_write,
+            ):
                 WriteParameterGenerator.write()
                 mock_private_write.assert_called_once()
                 assert mock_private_write.call_args[0][0] == instantiated_arguments[0]
@@ -315,8 +366,10 @@ class TestParameterGenerator:
 
             # Override should try to write H5.
             # TODO: assert called with the correct objects or continue refactoring _write
-            with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
-                 patch('waves.parameter_generators.ParameterGenerator._write') as mock_private_write:
+            with (
+                patch("waves.parameter_generators.ParameterGenerator._write_meta"),
+                patch("waves.parameter_generators.ParameterGenerator._write") as mock_private_write,
+            ):
                 WriteParameterGenerator.write(output_file_type=override_type)
                 mock_private_write.assert_called_once()
                 assert mock_private_write.call_args[0][0] == override_arguments[0]
@@ -329,58 +382,64 @@ class TestParameterGenerator:
     def test_write_exception(self):
         """Calling a non-supported format string should raise an exception"""
         WriteParameterGenerator = DummyGenerator({})
-        with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
-             patch('waves.parameter_generators.ParameterGenerator._write') as mock_private_write, \
-             pytest.raises(ChoicesError):
+        with (
+            patch("waves.parameter_generators.ParameterGenerator._write_meta"),
+            patch("waves.parameter_generators.ParameterGenerator._write") as mock_private_write,
+            pytest.raises(ChoicesError),
+        ):
             try:
                 WriteParameterGenerator.write(output_file_type="unsupported")
             finally:
                 mock_private_write.assert_not_called()
 
     set_hashes = {
-        'set1': (
+        "set1": (
             ["name1", "name2", "name3"],
-            numpy.array([[1, 10.1, 'a']], dtype=object),
-            ['732411987fea3ae4a1e0bd7ea6a8841a']
+            numpy.array([[1, 10.1, "a"]], dtype=object),
+            ["732411987fea3ae4a1e0bd7ea6a8841a"],
         ),
-        'set1 different parameter order': (
+        "set1 different parameter order": (
             ["name3", "name2", "name1"],
-            numpy.array([['a', 10.1, 1]], dtype=object),
-            ['732411987fea3ae4a1e0bd7ea6a8841a']
+            numpy.array([["a", 10.1, 1]], dtype=object),
+            ["732411987fea3ae4a1e0bd7ea6a8841a"],
         ),
-        'set1 different parameter names': (
+        "set1 different parameter names": (
             ["newname1", "newname2", "newname3"],
-            numpy.array([[1, 10.1, 'a']], dtype=object),
-            ['45458adbaeb9a55dcec2211383c9bd96']
+            numpy.array([[1, 10.1, "a"]], dtype=object),
+            ["45458adbaeb9a55dcec2211383c9bd96"],
         ),
-        'set2': (
+        "set2": (
             ["name1", "name2", "name3"],
-            numpy.array([[1, 10.1, 'a'], [2, 20.2, 'b'], [3, 30.3, 'c']], dtype=object),
-            ['732411987fea3ae4a1e0bd7ea6a8841a',
-             '6dfcf74620c998f3ef7ab4cc9fb2d510',
-             '57af5a35970eb8a1a93c1ed62ff3ff37']
+            numpy.array([[1, 10.1, "a"], [2, 20.2, "b"], [3, 30.3, "c"]], dtype=object),
+            [
+                "732411987fea3ae4a1e0bd7ea6a8841a",
+                "6dfcf74620c998f3ef7ab4cc9fb2d510",
+                "57af5a35970eb8a1a93c1ed62ff3ff37",
+            ],
         ),
         # Set3 hashes should all be different if types are preserved correctly
         "set3: ints": (
             ["number1", "number2"],
             numpy.array([[1, 2]], dtype=object),
-            ['f1c28a9674481e365269ced217197221']
+            ["f1c28a9674481e365269ced217197221"],
         ),
         "set3: floats": (
             ["number1", "number2"],
-            numpy.array([[1., 2.]], dtype=object),
-            ['f94ff85af046704aff100133c958ad1e']
+            numpy.array([[1.0, 2.0]], dtype=object),
+            ["f94ff85af046704aff100133c958ad1e"],
         ),
         "set3: mixed ints and floats": (
             ["number1", "number2"],
-            numpy.array([[1, 2.]], dtype=object),
-            ['3d0f2e8a9a15239b28cee90d331e69e8']
+            numpy.array([[1, 2.0]], dtype=object),
+            ["3d0f2e8a9a15239b28cee90d331e69e8"],
         ),
     }
 
-    @pytest.mark.parametrize('parameter_names, samples, expected_hashes',
-                                 set_hashes.values(),
-                             ids=set_hashes.keys())
+    @pytest.mark.parametrize(
+        "parameter_names, samples, expected_hashes",
+        set_hashes.values(),
+        ids=set_hashes.keys(),
+    )
     def test_create_parameter_set_hashes(self, parameter_names, samples, expected_hashes):
         HashesParameterGenerator = DummyGenerator({})
         HashesParameterGenerator._parameter_names = parameter_names
@@ -390,18 +449,18 @@ class TestParameterGenerator:
 
     def test_create_parameter_set_names(self):
         """Test the parameter set name generation"""
-        SetNamesParameterGenerator = DummyGenerator({}, output_file_template='out')
+        SetNamesParameterGenerator = DummyGenerator({}, output_file_template="out")
         SetNamesParameterGenerator._samples = numpy.array([[1], [2]])
         SetNamesParameterGenerator._create_parameter_set_hashes()
         SetNamesParameterGenerator._create_parameter_set_names()
-        assert list(SetNamesParameterGenerator._parameter_set_names.values()) == ['out0', 'out1']
+        assert list(SetNamesParameterGenerator._parameter_set_names.values()) == ["out0", "out1"]
 
     def test_parameter_study_to_numpy(self):
         """Test the self-consistency of the parameter study dataset construction and deconstruction"""
         # Setup
         DataParameterGenerator = DummyGenerator({})
-        DataParameterGenerator._parameter_names = ['ints', 'floats', 'strings', 'bools']
-        DataParameterGenerator._samples = numpy.array([[1, 10.1, 'a', True], [2, 20.2, 'b', False]], dtype=object)
+        DataParameterGenerator._parameter_names = ["ints", "floats", "strings", "bools"]
+        DataParameterGenerator._samples = numpy.array([[1, 10.1, "a", True], [2, 20.2, "b", False]], dtype=object)
         DataParameterGenerator._create_parameter_set_hashes()
         DataParameterGenerator._create_parameter_set_names()
         DataParameterGenerator._create_parameter_study()
@@ -415,45 +474,49 @@ class TestParameterDistributions:
 
     validate_input = {
         "good schema": (
-            {'num_simulations': 1, 'parameter_1': {'distribution': 'norm', 'kwarg1': 1}},
-            does_not_raise()
+            {"num_simulations": 1, "parameter_1": {"distribution": "norm", "kwarg1": 1}},
+            does_not_raise(),
         ),
         "not a dict": (
-            'not a dict',
-            pytest.raises(SchemaValidationError)
+            "not a dict",
+            pytest.raises(SchemaValidationError),
         ),
         "missing num_simulation": (
             {},
-            pytest.raises(SchemaValidationError)
+            pytest.raises(SchemaValidationError),
         ),
         "num_simulation non-integer": (
-            {'num_simulations': 'not_a_number'},
-            pytest.raises(SchemaValidationError)
+            {"num_simulations": "not_a_number"},
+            pytest.raises(SchemaValidationError),
         ),
         "missing distribution": (
-            {'num_simulations': 1, 'parameter_1': {}},
-            pytest.raises(SchemaValidationError)
+            {"num_simulations": 1, "parameter_1": {}},
+            pytest.raises(SchemaValidationError),
         ),
         "distribution non-string": (
-            {'num_simulations': 1, 'parameter_1': {'distribution': 1}},
-            pytest.raises(SchemaValidationError)
+            {"num_simulations": 1, "parameter_1": {"distribution": 1}},
+            pytest.raises(SchemaValidationError),
         ),
         "distribution bad identifier": (
-            {'num_simulations': 1, 'parameter_1': {'distribution': 'my norm'}},
-            pytest.raises(SchemaValidationError)
+            {"num_simulations": 1, "parameter_1": {"distribution": "my norm"}},
+            pytest.raises(SchemaValidationError),
         ),
         "kwarg bad identifier": (
-            {'num_simulations': 1, 'parameter_1': {'distribution': 'norm', 'kwarg 1': 1}},
-            pytest.raises(SchemaValidationError)
-        )
+            {"num_simulations": 1, "parameter_1": {"distribution": "norm", "kwarg 1": 1}},
+            pytest.raises(SchemaValidationError),
+        ),
     }
 
-    @pytest.mark.parametrize('parameter_schema, outcome',
-                             validate_input.values(),
-                             ids=validate_input.keys())
+    @pytest.mark.parametrize(
+        "parameter_schema, outcome",
+        validate_input.values(),
+        ids=validate_input.keys(),
+    )
     def test_validate(self, parameter_schema, outcome):
-        with patch("waves.parameter_generators._ScipyGenerator._generate_parameter_distributions") as mock_distros, \
-             outcome:
+        with (
+            patch("waves.parameter_generators._ScipyGenerator._generate_parameter_distributions") as mock_distros,
+            outcome,
+        ):
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
                 TestValidate = ParameterDistributions(parameter_schema)
@@ -463,29 +526,35 @@ class TestParameterDistributions:
 
     generate_input = {
         "good schema 5x2": (
-            {'num_simulations': 5,
-             'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1},
-             'parameter_2': {'distribution': 'norm', 'loc': -50, 'scale': 1}},
-            [{"loc":  50, "scale": 1},
-             {"loc": -50, "scale": 1}],
+            {
+                "num_simulations": 5,
+                "parameter_1": {"distribution": "norm", "loc": 50, "scale": 1},
+                "parameter_2": {"distribution": "norm", "loc": -50, "scale": 1},
+            },
+            [{"loc": 50, "scale": 1}, {"loc": -50, "scale": 1}],
         ),
         "good schema 2x1": (
-            {'num_simulations': 2,
-            'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1}},
-            [{"loc":  50, "scale": 1}]
+            {
+                "num_simulations": 2,
+                "parameter_1": {"distribution": "norm", "loc": 50, "scale": 1},
+            },
+            [{"loc": 50, "scale": 1}],
         ),
         "good schema 1x2": (
-            {'num_simulations': 1,
-             'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1},
-             'parameter_2': {'distribution': 'norm', 'loc': -50, 'scale': 1}},
-            [{"loc":  50, "scale": 1},
-             {"loc": -50, "scale": 1}]
-        )
+            {
+                "num_simulations": 1,
+                "parameter_1": {"distribution": "norm", "loc": 50, "scale": 1},
+                "parameter_2": {"distribution": "norm", "loc": -50, "scale": 1},
+            },
+            [{"loc": 50, "scale": 1}, {"loc": -50, "scale": 1}],
+        ),
     }
 
-    @pytest.mark.parametrize("parameter_schema, expected_scipy_kwds",
-                             generate_input.values(),
-                             ids=generate_input.keys())
+    @pytest.mark.parametrize(
+        "parameter_schema, expected_scipy_kwds",
+        generate_input.values(),
+        ids=generate_input.keys(),
+    )
     def test_generate_parameter_distributions(self, parameter_schema, expected_scipy_kwds):
         TestDistributions = ParameterDistributions(parameter_schema)
         assert TestDistributions._parameter_names == list(TestDistributions.parameter_distributions.keys())
@@ -496,14 +565,14 @@ class TestParameterDistributions:
 class DummyGenerator(ParameterGenerator):
 
     def _validate(self):
-        self._parameter_names = ['parameter_1']
+        self._parameter_names = ["parameter_1"]
 
     def _generate(self, sets=1):
         """Generate float samples for all parameters. Value matches parameter set index"""
         parameter_count = len(self._parameter_names)
         self._samples = numpy.ones((sets, parameter_count))
         for row in range(sets):
-            self._samples[row, :] = self._samples[row, :]*row
+            self._samples[row, :] = self._samples[row, :] * row
         super()._generate()
 
 

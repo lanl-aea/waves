@@ -23,7 +23,7 @@ mesh = env.PythonScript(
     target=["box.cub", "box.exo"],
     source=["box.py"],
     subcommand_options="--output-file ${TARGET.abspath} --xlength ${xlength} --ylength ${ylength} --zlength ${zlength}",
-    **simulation_variables
+    **simulation_variables,
 )
 workflow.extend(mesh)
 env.Alias("mesh", mesh)
@@ -35,7 +35,7 @@ remote_target = env.SSHQuinoaSolver(
     source=["flow.lua", "box.exo"],
     charmrun="charmrun",
     inciter="inciter",
-    remote_directory=remote_directory
+    remote_directory=remote_directory,
 )
 env.Alias("quinoa-remote", remote_target)
 
@@ -44,7 +44,7 @@ local_target = envQuinoa.QuinoaSolver(
     target=["local.stdout"],
     source=["flow.lua", "box.exo"],
     charmrun=envQuinoa["charmrun"],
-    inciter=envQuinoa["inciter"]
+    inciter=envQuinoa["inciter"],
 )
 envQuinoa.Alias("quinoa-local", local_target)
 

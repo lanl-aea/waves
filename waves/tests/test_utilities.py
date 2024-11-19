@@ -15,28 +15,30 @@ set_name_substitution = {
         "set0",
         "set_name",
         "/",
-        ["set0/lions.txt", "set0/tigers.txt", "bears.txt"]
+        ["set0/lions.txt", "set0/tigers.txt", "bears.txt"],
     ),
     "different identifier": (
         ["@{identifier}lions.txt", "@{identifier}tigers.txt", "bears.txt"],
         "set1",
         "identifier",
         "/",
-        ["set1/lions.txt", "set1/tigers.txt", "bears.txt"]
+        ["set1/lions.txt", "set1/tigers.txt", "bears.txt"],
     ),
     "remove identifier, no suffix": (
         ["@{identifier}lions.txt", "@{identifier}tigers.txt", "bears.txt"],
         "",
         "identifier",
         "",
-        ["lions.txt", "tigers.txt", "bears.txt"]
+        ["lions.txt", "tigers.txt", "bears.txt"],
     ),
 }
 
 
-@pytest.mark.parametrize("sources, replacement, identifier, suffix, expected",
-                         set_name_substitution.values(),
-                         ids=set_name_substitution.keys())
+@pytest.mark.parametrize(
+    "sources, replacement, identifier, suffix, expected",
+    set_name_substitution.values(),
+    ids=set_name_substitution.keys(),
+)
 def test_set_name_substitution(sources, replacement, identifier, suffix, expected):
     replaced_sources = _utilities.set_name_substitution(sources, replacement, identifier=identifier, suffix=suffix)
     assert replaced_sources == expected
@@ -45,38 +47,40 @@ def test_set_name_substitution(sources, replacement, identifier, suffix, expecte
 quote_spaces_in_path_input = {
     "string, no spaces": (
         "/path/without_space/executable",
-        pathlib.Path("/path/without_space/executable")
+        pathlib.Path("/path/without_space/executable"),
     ),
     "string, spaces": (
         "/path/with space/executable",
-        pathlib.Path("/path/\"with space\"/executable")
+        pathlib.Path('/path/"with space"/executable'),
     ),
     "pathlib, no spaces": (
         pathlib.Path("/path/without_space/executable"),
-        pathlib.Path("/path/without_space/executable")
+        pathlib.Path("/path/without_space/executable"),
     ),
     "pathlib, spaces": (
         pathlib.Path("/path/with space/executable"),
-        pathlib.Path("/path/\"with space\"/executable")
+        pathlib.Path('/path/"with space"/executable'),
     ),
     "space in root": (
         pathlib.Path("/path space/with space/executable"),
-        pathlib.Path("/\"path space\"/\"with space\"/executable")
+        pathlib.Path('/"path space"/"with space"/executable'),
     ),
     "relative path": (
         pathlib.Path("path space/without_space/executable"),
-        pathlib.Path("\"path space\"/without_space/executable")
+        pathlib.Path('"path space"/without_space/executable'),
     ),
     "space in executable": (
         pathlib.Path("path/without_space/executable space"),
-        pathlib.Path("path/without_space/\"executable space\"")
-    )
+        pathlib.Path('path/without_space/"executable space"'),
+    ),
 }
 
 
-@pytest.mark.parametrize("path, expected",
-                         quote_spaces_in_path_input.values(),
-                         ids=quote_spaces_in_path_input.keys())
+@pytest.mark.parametrize(
+    "path, expected",
+    quote_spaces_in_path_input.values(),
+    ids=quote_spaces_in_path_input.keys(),
+)
 def test_quote_spaces_in_path(path, expected):
     assert _utilities._quote_spaces_in_path(path) == expected
 
@@ -93,21 +97,17 @@ def test_search_commands():
 
 
 find_command = {
-    "first": (
-        ["first", "second"], "first", does_not_raise()
-    ),
-    "second": (
-        ["first", "second"], "second", does_not_raise()
-    ),
-    "none": (
-        ["first", "second"], None, pytest.raises(FileNotFoundError)
-    ),
+    "first": (["first", "second"], "first", does_not_raise()),
+    "second": (["first", "second"], "second", does_not_raise()),
+    "none": (["first", "second"], None, pytest.raises(FileNotFoundError)),
 }
 
 
-@pytest.mark.parametrize("options, found, outcome",
-                         find_command.values(),
-                         ids=find_command.keys())
+@pytest.mark.parametrize(
+    "options, found, outcome",
+    find_command.values(),
+    ids=find_command.keys(),
+)
 def test_find_command(options, found, outcome):
     """Test :meth:`waves._utilities.find_command`"""
     with patch("waves._utilities.search_commands", return_value=found), outcome:
@@ -136,9 +136,11 @@ def test_cubit_os_bin():
 def test_find_cubit_bin():
     mock_abspath = pathlib.Path("/mock/path/parent/cubit")
     mock_macos_bin = mock_abspath.parent / "intermediate/MacOS"
-    with patch("waves._utilities.find_command", return_value=str(mock_abspath)), \
-         patch("os.path.realpath", return_value=str(mock_abspath)), \
-         patch("pathlib.Path.rglob", return_value=[mock_macos_bin]) as mock_rglob:
+    with (
+        patch("waves._utilities.find_command", return_value=str(mock_abspath)),
+        patch("os.path.realpath", return_value=str(mock_abspath)),
+        patch("pathlib.Path.rglob", return_value=[mock_macos_bin]) as mock_rglob,
+    ):
         cubit_bin = _utilities.find_cubit_bin(mock_abspath, bin_directory="MacOS")
         mock_rglob.assert_called_once()
     assert cubit_bin == mock_macos_bin
@@ -147,52 +149,67 @@ def test_find_cubit_bin():
 def test_find_cubit_python():
     mock_abspath = pathlib.Path("/mock/path/parent/cubit")
     mock_python = mock_abspath.parent / "bin/python3"
-    with patch("waves._utilities.find_command"), \
-         patch("os.path.realpath", return_value=str(mock_abspath)), \
-         patch("pathlib.Path.rglob", return_value=[mock_python]) as mock_rglob, \
-         patch("pathlib.Path.is_file", return_value=True), \
-         patch("os.access", return_value=True):
+    with (
+        patch("waves._utilities.find_command"),
+        patch("os.path.realpath", return_value=str(mock_abspath)),
+        patch("pathlib.Path.rglob", return_value=[mock_python]) as mock_rglob,
+        patch("pathlib.Path.is_file", return_value=True),
+        patch("os.access", return_value=True),
+    ):
         cubit_python = _utilities.find_cubit_python(mock_abspath)
     assert cubit_python == mock_python
 
 
 def test_tee_subprocess():
     with patch("subprocess.Popen") as mock_popen:
-        _utilities.tee_subprocess(['dummy'])
+        _utilities.tee_subprocess(["dummy"])
     mock_popen.assert_called_once()
 
 
 return_environment = {
     "no newlines": (
-        "command", {}, b"thing1=a\x00thing2=b", {"thing1": "a", "thing2": "b"}
+        "command",
+        {},
+        b"thing1=a\x00thing2=b",
+        {"thing1": "a", "thing2": "b"},
     ),
     "newlines": (
-        "command", {}, b"thing1=a\nnewline\x00thing2=b", {"thing1": "a\nnewline", "thing2": "b"}
+        "command",
+        {},
+        b"thing1=a\nnewline\x00thing2=b",
+        {"thing1": "a\nnewline", "thing2": "b"},
     ),
     "extra leading lines": (
-        "command", {}, b"command output\nwith newlines\nthing1=a\nnewline\x00thing2=b",
-        {"thing1": "a\nnewline", "thing2": "b"}
+        "command",
+        {},
+        b"command output\nwith newlines\nthing1=a\nnewline\x00thing2=b",
+        {"thing1": "a\nnewline", "thing2": "b"},
     ),
     "tcsh": (
-        "command", {"shell": "tcsh"},
-        b"thing1=a\x00thing2=b", {"thing1": "a", "thing2": "b"}
+        "command",
+        {"shell": "tcsh"},
+        b"thing1=a\x00thing2=b",
+        {"thing1": "a", "thing2": "b"},
     ),
     "no defaults": (
         "command",
         {
-         "shell": "different shell",
-         "string_option": "different string option",
-         "separator": "different separator",
-         "environment": "different environment",
+            "shell": "different shell",
+            "string_option": "different string option",
+            "separator": "different separator",
+            "environment": "different environment",
         },
-        b"thing1=a\x00thing2=b", {"thing1": "a", "thing2": "b"}
+        b"thing1=a\x00thing2=b",
+        {"thing1": "a", "thing2": "b"},
     ),
 }
 
 
-@pytest.mark.parametrize("command, kwargs, stdout, expected",
-                         return_environment.values(),
-                         ids=return_environment.keys())
+@pytest.mark.parametrize(
+    "command, kwargs, stdout, expected",
+    return_environment.values(),
+    ids=return_environment.keys(),
+)
 def test_return_environment(command, kwargs, stdout, expected):
     """
     :param bytes stdout: byte string with null delimited shell environment variables
@@ -205,63 +222,53 @@ def test_return_environment(command, kwargs, stdout, expected):
         "environment": "env -0",
     }
     expected_kwargs.update(kwargs)
-    expected_command = \
-        f"{expected_kwargs['shell']} {expected_kwargs['string_option']} "\
+    expected_command = (
+        f"{expected_kwargs['shell']} {expected_kwargs['string_option']} "
         f"\"{command} {expected_kwargs['separator']} {expected_kwargs['environment']}\""
+    )
 
     mock_run_return = subprocess.CompletedProcess(args=command, returncode=0, stdout=stdout)
     with patch("subprocess.run", return_value=mock_run_return) as mock_run:
         environment_dictionary = _utilities.return_environment(command, **kwargs)
 
     assert environment_dictionary == expected
-    mock_run.assert_called_once_with(
-        expected_command, check=True, capture_output=True, shell=True
-    )
+    mock_run.assert_called_once_with(expected_command, check=True, capture_output=True, shell=True)
 
 
 cache_environment = {
-        # kwargs, cache, overwrite_cache, expected, file_exists
-    "no cache": (
-        {}, None, False, {"thing1": "a"}, False
-    ),
-    "cache exists": (
-        {}, "dummy.yaml", False, {"thing1": "a"}, True
-    ),
-    "cache doesn't exist": (
-        {}, "dummy.yaml", False, {"thing1": "a"}, False
-    ),
-    "overwrite cache": (
-        {}, "dummy.yaml", True, {"thing1": "a"}, True
-    ),
-    "don't overwrite cache": (
-        {}, "dummy.yaml", False, {"thing1": "a"}, False
-    ),
-    "shell override": (
-        {"shell": "tcsh"}, None, False, {"thing1": "a"}, False
-    )
+    # kwargs, cache, overwrite_cache, expected, file_exists
+    "no cache": ({}, None, False, {"thing1": "a"}, False),
+    "cache exists": ({}, "dummy.yaml", False, {"thing1": "a"}, True),
+    "cache doesn't exist": ({}, "dummy.yaml", False, {"thing1": "a"}, False),
+    "overwrite cache": ({}, "dummy.yaml", True, {"thing1": "a"}, True),
+    "don't overwrite cache": ({}, "dummy.yaml", False, {"thing1": "a"}, False),
+    "shell override": ({"shell": "tcsh"}, None, False, {"thing1": "a"}, False),
 }
 
 
-
-@pytest.mark.parametrize("kwargs, cache, overwrite_cache, expected, file_exists",
-                         cache_environment.values(),
-                         ids=cache_environment.keys())
+@pytest.mark.parametrize(
+    "kwargs, cache, overwrite_cache, expected, file_exists",
+    cache_environment.values(),
+    ids=cache_environment.keys(),
+)
 def test_cache_environment(kwargs, cache, overwrite_cache, expected, file_exists):
     return_environment_kwargs = {
-        "shell": "bash"
+        "shell": "bash",
     }
     return_environment_kwargs.update(kwargs)
 
-    with patch("waves._utilities.return_environment", return_value=expected) as return_environment, \
-         patch("yaml.safe_load", return_value=expected) as yaml_load, \
-         patch("pathlib.Path.exists", return_value=file_exists), \
-         patch("yaml.safe_dump") as yaml_dump, \
-         patch("builtins.open"):
+    with (
+        patch("waves._utilities.return_environment", return_value=expected) as return_environment,
+        patch("yaml.safe_load", return_value=expected) as yaml_load,
+        patch("pathlib.Path.exists", return_value=file_exists),
+        patch("yaml.safe_dump") as yaml_dump,
+        patch("builtins.open"),
+    ):
         environment_dictionary = _utilities.cache_environment(
             "dummy command",
             cache=cache,
             overwrite_cache=overwrite_cache,
-            **kwargs
+            **kwargs,
         )
         if cache and file_exists and not overwrite_cache:
             yaml_load.assert_called_once()

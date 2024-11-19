@@ -18,22 +18,21 @@ AddOption(
     type="string",
     action="store",
     metavar="DIR",
-    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
+    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')",
 )
 AddOption(
     "--unconditional-build",
     dest="unconditional_build",
     default=False,
     action="store_true",
-    help="Boolean flag to force building of conditionally ignored targets, e.g. if the target's action program is missing" \
-            " and it would normally be ignored. (default: '%default')"
+    help="Boolean flag to force building of conditionally ignored targets. (default: '%default')",
 )
 AddOption(
     "--print-build-failures",
     dest="print_build_failures",
     default=False,
     action="store_true",
-    help="Print task *.stdout target file(s) on build failures. (default: '%default')"
+    help="Print task *.stdout target file(s) on build failures. (default: '%default')",
 )
 
 # Comments used in tutorial code snippets: marker-2
@@ -44,7 +43,7 @@ env = waves.scons_extensions.WAVESEnvironment(
     variant_dir_base=pathlib.Path(GetOption("variant_dir_base")),
     unconditional_build=GetOption("unconditional_build"),
     print_build_failures=GetOption("print_build_failures"),
-    TARFLAGS="-c -j"
+    TARFLAGS="-c -j",
 )
 
 # Conditionally print failed task *.stdout files
@@ -53,18 +52,20 @@ env.PrintBuildFailures(print_stdout=env["print_build_failures"])
 # Comments used in tutorial code snippets: marker-3
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
-env["ABAQUS_PROGRAM"] = env.AddProgram([
-    "/apps/abaqus/Commands/abq2023",
-    "/usr/projects/ea/abaqus/Commands/abq2023",
-    "abq2023",
-    "abaqus"
-])
+env["ABAQUS_PROGRAM"] = env.AddProgram(
+    [
+        "/apps/abaqus/Commands/abq2023",
+        "/usr/projects/ea/abaqus/Commands/abq2023",
+        "abq2023",
+        "abaqus",
+    ]
+)
 
 # Comments used in tutorial code snippets: marker-4
 
 # Set project internal variables and variable substitution dictionaries
-project_name = 'WAVES-TUTORIAL'
-version = '0.1.0'
+project_name = "WAVES-TUTORIAL"
+version = "0.1.0"
 archive_prefix = f"{project_name}-{version}"
 project_configuration = pathlib.Path(inspect.getfile(lambda: None))
 project_dir = project_configuration.parent
@@ -73,15 +74,15 @@ python_source_dir = "modsim_package/python"
 test_source_dir = "modsim_package/python/tests"
 project_variables = {
     "project_configuration": project_configuration,
-    'project_name': project_name,
-    'project_dir': project_dir,
-    'version': version,
-    'abaqus_source_abspath': project_dir / abaqus_source_dir,
-    'python_source_abspath': project_dir / python_source_dir,
-    'test_source_abspath': project_dir / test_source_dir,
-    'regression_alias': 'regression',
-    'datacheck_alias': 'datacheck',
-    'archive_prefix': archive_prefix
+    "project_name": project_name,
+    "project_dir": project_dir,
+    "version": version,
+    "abaqus_source_abspath": project_dir / abaqus_source_dir,
+    "python_source_abspath": project_dir / python_source_dir,
+    "test_source_abspath": project_dir / test_source_dir,
+    "regression_alias": "regression",
+    "datacheck_alias": "datacheck",
+    "archive_prefix": archive_prefix,
 }
 for key, value in project_variables.items():
     env[key] = value
@@ -93,34 +94,36 @@ env.PrependENVPath("PYTHONPATH", project_dir)
 # Comments used in tutorial code snippets: marker-5
 
 # Add builders and pseudo-builders
-env.Append(BUILDERS={
-    'AbaqusSolver': waves.scons_extensions.abaqus_solver(program=env["ABAQUS_PROGRAM"]),
-    'AbaqusExtract': waves.scons_extensions.abaqus_extract(program=env["ABAQUS_PROGRAM"]),
-})
+env.Append(
+    BUILDERS={
+        "AbaqusSolver": waves.scons_extensions.abaqus_solver(program=env["ABAQUS_PROGRAM"]),
+        "AbaqusExtract": waves.scons_extensions.abaqus_extract(program=env["ABAQUS_PROGRAM"]),
+    }
+)
 
 # Comments used in tutorial code snippets: marker-6
 
 # Add simulation targets
 workflow_configurations = [
-    'tutorial_01_geometry',
-    'tutorial_02_partition_mesh',
-    'tutorial_03_solverprep',
-    'tutorial_04_simulation',
-    'tutorial_05_parameter_substitution',
-    'tutorial_06_include_files',
-    'tutorial_07_cartesian_product',
-    'tutorial_08_data_extraction',
-    'tutorial_09_post_processing',
-    'tutorial_11_regression_testing',
-    'tutorial_12_archival',
-    'tutorial_sensitivity_study'
+    "tutorial_01_geometry",
+    "tutorial_02_partition_mesh",
+    "tutorial_03_solverprep",
+    "tutorial_04_simulation",
+    "tutorial_05_parameter_substitution",
+    "tutorial_06_include_files",
+    "tutorial_07_cartesian_product",
+    "tutorial_08_data_extraction",
+    "tutorial_09_post_processing",
+    "tutorial_11_regression_testing",
+    "tutorial_12_archival",
+    "tutorial_sensitivity_study",
 ]
 for workflow in workflow_configurations:
     build_dir = env["variant_dir_base"] / workflow
     SConscript(workflow, variant_dir=build_dir, exports={"env": env}, duplicate=False)
 
 # Add unit test target
-test_workflow = 'unit_testing'
+test_workflow = "unit_testing"
 test_build_dir = env["variant_dir_base"] / test_workflow
 SConscript(test_workflow, variant_dir=test_build_dir, exports={"env": env}, duplicate=False)
 

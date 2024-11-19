@@ -239,7 +239,7 @@ Command-Line Interfaces
         :lineno-match:
         :start-after: marker-1
         :end-before: marker-2
-        :emphasize-lines: 12-14, 17-23, 25-40
+        :emphasize-lines: 12-14, 16-23, 25-61
 
 This portion of ``rectangle_geometry.py`` defines the argument parsing function, ``get_parser()``, which is the
 next step in turning our simple Python script into a small software utility. Command-line interfaces allow for scripts
@@ -337,7 +337,7 @@ projects.
      .. literalinclude:: abaqus_rectangle_geometry.py
          :language: Python
          :linenos:
-         :emphasize-lines: 11-23, 26-37, 58, 62-64, 67, 69-79, 98-102
+         :emphasize-lines: 11-23, 26-38, 62, 66-68, 71, 73-105, 126-130
 
 ***************
 SConstruct File

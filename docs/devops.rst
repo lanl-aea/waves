@@ -211,11 +211,13 @@ software, so the CI tests on this server require the full build as
 
    $ scons regression --unconditional-build
 
-The continuous integration server also performs a separate style guide check using ``flake8`` and associated alias
+The continuous integration server also performs a separate style guide check using ``flake8`` and ``black`` with
+associated aliases.
 
 .. code-block::
 
    $ scons flake8
+   $ scons black
 
 |PROJECT| has dedicated target aliases for the unit and system tests. To run the unit tests, activate a conda
 environment and run

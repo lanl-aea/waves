@@ -38,9 +38,9 @@ def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaq
     if input_file != output_file:
         shutil.copyfile(input_file, output_file)
 
-    cubit.init(['cubit', '-noecho', '-nojournal', '-nographics', '-batch'])
-    cubit.cmd('new')
-    cubit.cmd('reset')
+    cubit.init(["cubit", "-noecho", "-nojournal", "-nographics", "-batch"])
+    cubit.cmd("new")
+    cubit.cmd("reset")
 
     cubit.cmd(f"open '{output_file}'")
 
@@ -69,41 +69,69 @@ def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaq
 def get_parser():
     script_name = pathlib.Path(__file__)
     # Set default parameter values
-    default_input_file = script_name.with_suffix(".cub").name.replace('_mesh', '_partition')
+    default_input_file = script_name.with_suffix(".cub").name.replace("_mesh", "_partition")
     default_output_file = script_name.with_suffix(".cub").name
     default_global_seed = 1.0
     default_element_type = "QUAD"
     default_solver = "abaqus"
 
     prog = f"python {script_name.name} "
-    cli_description = "Mesh the simple rectangle geometry partitioned by ``rectangle_partition.py`` " \
-                      "and write an ``output_file``.cub Cubit model file and ``output_file``.inp orphan mesh file."
+    cli_description = (
+        "Mesh the simple rectangle geometry partitioned by ``rectangle_partition.py`` "
+        "and write an ``output_file``.cub Cubit model file and ``output_file``.inp orphan mesh file."
+    )
     parser = argparse.ArgumentParser(description=cli_description, prog=prog)
-    parser.add_argument('--input-file', type=str, default=default_input_file,
-                        help="The Cubit model file created by ``rectangle_partition.py``. " \
-                             "Will be stripped of the extension and ``.cub`` will be used, e.g. ``input_file``.cub " \
-                             "(default: %(default)s")
-    parser.add_argument('--output-file', type=str, default=default_output_file,
-                        help="The output file for the Cubit model. " \
-                             "Will be stripped of the extension and ``.cub`` will be used, e.g. ``output_file``.cub")
-    parser.add_argument('--global-seed', type=float, default=default_global_seed,
-                        help="The global mesh seed size (default: %(default)s)")
-    parser.add_argument('--element-type', type=str, default=default_element_type,
-                        help="The model element type. Must be a supported Cubit 4 node element type. " \
-                             "(default: %(default)s)")
-    parser.add_argument('--solver', type=str, default=default_solver, choices=["abaqus", "sierra", "adagio"],
-                        help="The target solver for the mesh file. (default: %(default)s)")
+    parser.add_argument(
+        "--input-file",
+        type=str,
+        default=default_input_file,
+        # fmt: off
+        help="The Cubit model file created by ``rectangle_partition.py``. "
+             "Will be stripped of the extension and ``.cub`` will be used, e.g. ``input_file``.cub "
+             "(default: %(default)s",
+        # fmt: on
+    )
+    parser.add_argument(
+        "--output-file",
+        type=str,
+        default=default_output_file,
+        # fmt: off
+        help="The output file for the Cubit model. "
+             "Will be stripped of the extension and ``.cub`` will be used, e.g. ``output_file``.cub",
+        # fmt: on
+    )
+    parser.add_argument(
+        "--global-seed",
+        type=float,
+        default=default_global_seed,
+        help="The global mesh seed size (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--element-type",
+        type=str,
+        default=default_element_type,
+        help="The model element type. Must be a supported Cubit 4 node element type. " "(default: %(default)s)",
+    )
+    parser.add_argument(
+        "--solver",
+        type=str,
+        default=default_solver,
+        choices=["abaqus", "sierra", "adagio"],
+        help="The target solver for the mesh file. (default: %(default)s)",
+    )
 
     return parser
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = get_parser()
     args = parser.parse_args()
-    sys.exit(main(
-        input_file=args.input_file,
-        output_file=args.output_file,
-        global_seed=args.global_seed,
-        element_type=args.element_type,
-        solver=args.solver
-    ))
+    sys.exit(
+        main(
+            input_file=args.input_file,
+            output_file=args.output_file,
+            global_seed=args.global_seed,
+            element_type=args.element_type,
+            solver=args.solver,
+        )
+    )

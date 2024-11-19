@@ -3,6 +3,7 @@
 Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAVESError` to allow the CLI implementation
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
+
 import os
 import sys
 import shutil
@@ -29,35 +30,37 @@ def get_parser() -> argparse.ArgumentParser:
         "FILE",
         nargs="*",
         help=f"modsim template file or directory",
-        type=pathlib.Path
+        type=pathlib.Path,
     )
     parser.add_argument(
         "--destination",
-        help="Destination directory. Unless ``--overwrite`` is specified, conflicting file names in the " \
+        # fmt: off
+        help="Destination directory. Unless ``--overwrite`` is specified, conflicting file names in the "
              "destination will not be copied. (default: PWD)",
+        # fmt: on
         type=pathlib.Path,
-        default=pathlib.Path().cwd()
+        default=pathlib.Path().cwd(),
     )
     parser.add_argument(
         "--tutorial",
         help="Fetch all necessary files for specified tutorial. Appends to the positional FILE requests.",
         type=int,
-        choices=_settings._tutorial_paths.keys()
+        choices=_settings._tutorial_paths.keys(),
     )
     parser.add_argument(
         "--overwrite",
         action="store_true",
-        help="Overwrite any existing files (default: %(default)s)"
+        help="Overwrite any existing files (default: %(default)s)",
     )
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Print the destination tree and exit (default: %(default)s)"
+        help="Print the destination tree and exit (default: %(default)s)",
     )
     parser.add_argument(
         "--print-available",
         action="store_true",
-        help="Print available modsim template files and exit (default: %(default)s)"
+        help="Print available modsim template files and exit (default: %(default)s)",
     )
 
     return parser
@@ -72,7 +75,7 @@ def main(
     tutorial: typing.Optional[_settings._allowable_tutorial_numbers_typing] = None,
     overwrite: bool = False,
     dry_run: bool = False,
-    print_available: bool = False
+    print_available: bool = False,
 ) -> None:
     """Thin wrapper on :meth:`waves.fetch.recursive_copy` to provide subcommand specific behavior and STDOUT/STDERR
 
@@ -100,14 +103,21 @@ def main(
 
     print(f"{_settings._project_name_short} {subcommand}", file=sys.stdout)
     print(f"Destination directory: '{destination}'", file=sys.stdout)
-    recursive_copy(root_directory, relative_paths, destination, requested_paths=requested_paths,
-                   tutorial=tutorial, overwrite=overwrite, dry_run=dry_run,
-                   print_available=print_available)
+    recursive_copy(
+        root_directory,
+        relative_paths,
+        destination,
+        requested_paths=requested_paths,
+        tutorial=tutorial,
+        overwrite=overwrite,
+        dry_run=dry_run,
+        print_available=print_available,
+    )
 
 
 def available_files(
     root_directory: typing.Union[str, pathlib.Path],
-    relative_paths: typing.Iterable[typing.Union[str, pathlib.Path]]
+    relative_paths: typing.Iterable[typing.Union[str, pathlib.Path]],
 ) -> typing.Tuple[typing.List[pathlib.Path], typing.List[typing.Union[str, pathlib.Path]]]:
     """Build a list of files at ``relative_paths`` with respect to the root ``root_directory`` directory
 
@@ -147,7 +157,7 @@ def available_files(
 def build_source_files(
     root_directory: typing.Union[str, pathlib.Path],
     relative_paths: typing.Iterable[typing.Union[str, pathlib.Path]],
-    exclude_patterns: typing.Iterable[str] = _settings._fetch_exclude_patterns
+    exclude_patterns: typing.Iterable[str] = _settings._fetch_exclude_patterns,
 ) -> typing.Tuple[typing.List[pathlib.Path], typing.List[typing.Union[str, pathlib.Path]]]:
     """Wrap :meth:`available_files` and trim list based on exclude patterns
 
@@ -191,7 +201,7 @@ def longest_common_path_prefix(file_list: typing.List[pathlib.Path]) -> pathlib.
 
 def build_destination_files(
     destination: typing.Union[str, pathlib.Path],
-    requested_paths: typing.List[pathlib.Path]
+    requested_paths: typing.List[pathlib.Path],
 ) -> typing.Tuple[typing.List[pathlib.Path], typing.List[pathlib.Path]]:
     """Build destination file paths from the requested paths, truncating the longest possible source prefix path
 
@@ -210,7 +220,7 @@ def build_destination_files(
 def build_copy_tuples(
     destination: typing.Union[str, pathlib.Path],
     requested_paths_resolved: typing.List[pathlib.Path],
-    overwrite: bool = False
+    overwrite: bool = False,
 ) -> typing.List[typing.Tuple[pathlib.Path, pathlib.Path]]:
     """
     :param destination: String or pathlike object for the destination directory
@@ -219,11 +229,16 @@ def build_copy_tuples(
     :returns: requested and destination file path pairs
     """
     destination_files, existing_files = build_destination_files(destination, requested_paths_resolved)
-    copy_tuples = [(requested_path, destination_file) for requested_path, destination_file in
-                   zip(requested_paths_resolved, destination_files)]
+    copy_tuples = [
+        (requested_path, destination_file)
+        for requested_path, destination_file in zip(requested_paths_resolved, destination_files)
+    ]
     if not overwrite and existing_files:
-        copy_tuples = [(requested_path, destination_file) for requested_path, destination_file in
-                       copy_tuples if destination_file not in existing_files]
+        copy_tuples = [
+            (requested_path, destination_file)
+            for requested_path, destination_file in copy_tuples
+            if destination_file not in existing_files
+        ]
     return copy_tuples
 
 
@@ -255,7 +270,7 @@ def print_list(things_to_print: list, prefix: str = "\t", stream=sys.stdout) -> 
 
 def extend_requested_paths(
     requested_paths: typing.List[pathlib.Path],
-    tutorial: _settings._allowable_tutorial_numbers_typing
+    tutorial: _settings._allowable_tutorial_numbers_typing,
 ) -> typing.List[pathlib.Path]:
     """Extend the requested_paths list with the necessary tutorial files.
 
@@ -268,8 +283,10 @@ def extend_requested_paths(
     :raises ChoicesError: If the requested tutorial number doesn't exist
     """
     if tutorial not in _settings._tutorial_paths.keys():
-        raise ChoicesError(f"Requested tutorial number '{tutorial}' does not exist. "
-                           f"Must be one of {_settings._allowable_tutorial_numbers}.")
+        raise ChoicesError(
+            f"Requested tutorial number '{tutorial}' does not exist. "
+            f"Must be one of {_settings._allowable_tutorial_numbers}."
+        )
     else:
         for x in range(0, tutorial + 1):
             requested_paths.extend(_settings._tutorial_paths[x])
@@ -284,7 +301,7 @@ def recursive_copy(
     tutorial: typing.Optional[_settings._allowable_tutorial_numbers_typing] = None,
     overwrite: bool = False,
     dry_run: bool = False,
-    print_available: bool = False
+    print_available: bool = False,
 ) -> None:
     """Recursively copy requested paths from root_directory/relative_paths directories into destination directory using
     the shortest possible shared source prefix.
@@ -316,8 +333,9 @@ def recursive_copy(
 
     # Down select to requested file list
     if len(requested_paths) > 0:
-        requested_paths_resolved, missing_requested_paths = \
-            build_source_files(longest_common_source_path, requested_paths)
+        requested_paths_resolved, missing_requested_paths = build_source_files(
+            longest_common_source_path, requested_paths
+        )
     else:
         requested_paths_resolved = source_files
         missing_requested_paths = []
@@ -328,8 +346,10 @@ def recursive_copy(
     destination = pathlib.Path(destination).resolve()
     copy_tuples = build_copy_tuples(destination, requested_paths_resolved, overwrite=overwrite)
     if len(copy_tuples) != len(requested_paths_resolved):
-        print(f"Found conflicting files in destination '{destination}'. Use '--overwrite' to replace existing files.",
-              file=sys.stderr)
+        print(
+            f"Found conflicting files in destination '{destination}'. Use '--overwrite' to replace existing files.",
+            file=sys.stderr,
+        )
 
     # User I/O
     if dry_run:

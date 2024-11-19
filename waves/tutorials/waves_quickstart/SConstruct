@@ -14,22 +14,21 @@ AddOption(
     type="string",
     action="store",
     metavar="DIR",
-    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
+    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')",
 )
 AddOption(
     "--unconditional-build",
     dest="unconditional_build",
     default=False,
     action="store_true",
-    help="Boolean to force building of conditionally ignored targets, e.g. if the target's action program is missing" \
-            " and it would normally be ignored. (default: '%default')"
+    help="Boolean to force building of conditionally ignored targets. (default: '%default')",
 )
 
 # Inherit user's full environment
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
     build_dir=pathlib.Path(GetOption("build_dir")),
-    unconditional_build=GetOption("unconditional_build")
+    unconditional_build=GetOption("unconditional_build"),
 )
 env["parameter_study_directory"] = env["build_dir"] / "parameter_studies"
 
@@ -40,18 +39,22 @@ env.SetOption("duplicate", "copy")
 env.Default()
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
-env["ABAQUS_PROGRAM"] = env.AddProgram([
-    "/apps/abaqus/Commands/abq2023",
-    "/usr/projects/ea/abaqus/Commands/abq2023",
-    "abq2023",
-    "abaqus"
-])
+env["ABAQUS_PROGRAM"] = env.AddProgram(
+    [
+        "/apps/abaqus/Commands/abq2023",
+        "/usr/projects/ea/abaqus/Commands/abq2023",
+        "abq2023",
+        "abaqus",
+    ]
+)
 
 # Add WAVES builders
-env.Append(BUILDERS={
-    "AbaqusSolver": waves.scons_extensions.abaqus_solver(program=env["ABAQUS_PROGRAM"]),
-    "AbaqusExtract": waves.scons_extensions.abaqus_extract(program=env["ABAQUS_PROGRAM"]),
-})
+env.Append(
+    BUILDERS={
+        "AbaqusSolver": waves.scons_extensions.abaqus_solver(program=env["ABAQUS_PROGRAM"]),
+        "AbaqusExtract": waves.scons_extensions.abaqus_extract(program=env["ABAQUS_PROGRAM"]),
+    }
+)
 
 # Abaqus input file implicit dependency scanner
 env.Append(SCANNERS=waves.scons_extensions.abaqus_input_scanner())
@@ -65,14 +68,14 @@ nominal_parameters = {
 }
 mesh_convergence_parameter_study_file = env["parameter_study_directory"] / "mesh_convergence.h5"
 mesh_convergence_parameter_generator = waves.parameter_generators.CartesianProduct(
-     {
+    {
         "width": [1.0],
         "height": [1.0],
         "global_seed": [1.0, 0.5, 0.25, 0.125],
         "displacement": [-0.01],
     },
     output_file=mesh_convergence_parameter_study_file,
-    previous_parameter_study=mesh_convergence_parameter_study_file
+    previous_parameter_study=mesh_convergence_parameter_study_file,
 )
 mesh_convergence_parameter_generator.write()
 

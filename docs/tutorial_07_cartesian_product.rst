@@ -124,7 +124,7 @@ Step-By-Step SConscript Discussion
       :language: Python
       :lineno-match:
       :end-before: marker-1
-      :emphasize-lines: 18, 21
+      :emphasize-lines: 17, 21
 
 The beginning portion of the ``SConscript`` file consists of a series of straight forward Python package import
 statements. There are, however, two notable lines in the included code above. The first hightlighted line imports the
@@ -142,14 +142,14 @@ dictionary in previous tutorials.
       :lineno-match:
       :start-after: marker-1
       :end-before: marker-2
-      :emphasize-lines: 2-3, 7-10
+      :emphasize-lines: 2-3, 8
 
 The unhighlighted portions of the code snippet above do not present any unique code that has not been previously
 discussed.
 
 The highlighted portions of the code snippet above define some new variables that will get used in various places in
-this tutorial's code. The ``parameter_study_file`` and ``previous_parameter_study`` will allow the parameter generator
-to extend previously executed parameter studies without re-computing existing parameter set output files.
+this tutorial's code. The ``parameter_study_file`` will allow the parameter generator to extend previously executed
+parameter studies without re-computing existing parameter set output files.
 
 .. admonition:: waves-tutorials/tutorial_07_cartesian_product
 
@@ -161,9 +161,9 @@ to extend previously executed parameter studies without re-computing existing pa
 
 The code above generates the parameter study for this tutorial using the
 :meth:`waves.parameter_generators.CartesianProduct` method. The ``parameter_schema`` that was imported in previous code
-is used to define the parameter bounds. The ``parameter_study_file`` and ``previous_parameter_study`` will allow the
-parameter generator to extend previously executed parameter studies without re-computing existing parameter set output
-files on repeat executions of this simulation workflow.
+is used to define the parameter bounds. The ``parameter_study_file`` will allow the parameter generator to extend
+previously executed parameter studies without re-computing existing parameter set output files on repeat executions of
+this simulation workflow.
 
 The ``parameter_generator.parameter_study`` object is an `xarray dataset`_. For more information about the structure of the
 ``parameter_generator`` and ``parameter_study`` objects, see the :meth:`waves.parameter_generators.CartesianProduct`

@@ -141,8 +141,9 @@ def solve_output_files(output_file: pathlib.Path, solve_cpus: int) -> typing.Lis
     if solve_cpus == 1:
         output_files = [output_file]
     else:
-        output_files = [output_file.with_suffix(f"{_output_file_extension}{solve_cpu}") for
-                        solve_cpu in range(solve_cpus)]
+        output_files = [
+            output_file.with_suffix(f"{_output_file_extension}{solve_cpu}") for solve_cpu in range(solve_cpus)
+        ]
     return output_files
 
 
@@ -165,7 +166,7 @@ def solve(configuration: dict) -> None:
 
     with open(log_file, "a+") as log_writer:
         for output in output_files:
-            with open(output, 'w') as output_writer:
+            with open(output, "w") as output_writer:
                 log_writer.write(f"writing: {output}\n")
                 output_writer.write(yaml.safe_dump(configuration))
 
@@ -215,48 +216,59 @@ def get_parser() -> argparse.ArgumentParser:
     """Return the argparse CLI parser"""
     main_parser = argparse.ArgumentParser(description=_cli_description)
     main_parser.add_argument(
-        "-V", "--version",
+        "-V",
+        "--version",
         action="version",
-        version=_project_name_version
+        version=_project_name_version,
     )
 
     subcommand_parser_parent = argparse.ArgumentParser(add_help=False)
-    required_named = subcommand_parser_parent.add_argument_group('required named arguments')
+    required_named = subcommand_parser_parent.add_argument_group("required named arguments")
     required_named.add_argument(
-        "-i", "--input-file", type=pathlib.Path, required=True,
-        help=f"The {_project_name} input file, e.g. ``input_file.yaml``"
+        "-i",
+        "--input-file",
+        type=pathlib.Path,
+        required=True,
+        help=f"The {_project_name} input file, e.g. ``input_file.yaml``",
     )
     subcommand_parser_parent.add_argument(
-        "-o", "--output-file", type=pathlib.Path, default=None, required=False,
-        help=f"The {_project_name} results file. Extension is always replaced with ``{_output_file_extension}``. " \
-             f"If none is provided, uses the pattern ``input_file{_output_file_extension}``"
+        "-o",
+        "--output-file",
+        type=pathlib.Path,
+        default=None,
+        required=False,
+        # fmt: off
+        help=f"The {_project_name} results file. Extension is always replaced with ``{_output_file_extension}``. "
+             f"If none is provided, uses the pattern ``input_file{_output_file_extension}``",
+        # fmt: on
     )
     subcommand_parser_parent.add_argument(
-        "-n", "--solve-cpus", type=positive_nonzero_int, default=_default_solve_cpus, required=False,
-        help=f"The number of threads to use (default: %(default)s)"
+        "-n",
+        "--solve-cpus",
+        type=positive_nonzero_int,
+        default=_default_solve_cpus,
+        required=False,
+        help=f"The number of threads to use (default: %(default)s)",
     )
     subcommand_parser_parent.add_argument(
-        "--overwrite", action="store_true",
-        help=f"Overwrite existing output files (default: %(default)s)"
+        "--overwrite",
+        action="store_true",
+        help="Overwrite existing output files (default: %(default)s)",
     )
 
     subparsers = main_parser.add_subparsers(
         # So args.subcommand will contain the name of the subcommand called
         title="subcommands",
         metavar="{subcommand}",
-        dest="subcommand"
+        dest="subcommand",
     )
 
     subparsers.add_parser(
-        "implicit",
-        help=f"Execute the {_project_name} implicit routine",
-        parents=[subcommand_parser_parent]
+        "implicit", help=f"Execute the {_project_name} implicit routine", parents=[subcommand_parser_parent]
     )
 
     subparsers.add_parser(
-        "explicit",
-        help=f"Execute the {_project_name} explicit routine",
-        parents=[subcommand_parser_parent]
+        "explicit", help=f"Execute the {_project_name} explicit routine", parents=[subcommand_parser_parent]
     )
 
     return main_parser

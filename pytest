@@ -27,7 +27,7 @@ pytest_node = env.Command(
     target=target,
     source=pytest_source_list,
     action=[
-        "${pytest_command} -vvv -m \"not systemtest\" ${coverage}",
+        '${pytest_command} -vvv -m "not systemtest" ${coverage}',
     ],
     package_dir=env["package_dir"],
     pytest_command=pytest_command,
@@ -48,7 +48,7 @@ systemtest_node = env.Command(
     ],
     package_dir=env["package_dir"],
     pytest_command=pytest_command,
-    system_test_directory=build_directory
+    system_test_directory=build_directory,
 )
 env.Alias("systemtest", systemtest_node)
 env.AlwaysBuild(systemtest_node)

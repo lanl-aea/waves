@@ -27,7 +27,7 @@ env.AbaqusJournal(
 # SolverPrep
 env.CopySubstfile(
     ["#/rectangle_compression.inp.in"],
-    substitution_dictionary=env.SubstitutionSyntax(parameters)
+    substitution_dictionary=env.SubstitutionSyntax(parameters),
 )
 
 # Abaqus Solve

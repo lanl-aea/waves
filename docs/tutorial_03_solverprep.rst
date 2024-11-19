@@ -87,21 +87,6 @@ directory. Check the contents of this directory using the ``ls`` command.
 SConscript
 **********
 
-6. Add the highlighted import statement shown below to the ``tutorial_03_solverprep`` file.
-
-.. admonition:: waves-tutorials/tutorial_03_solverprep
-
-    .. literalinclude:: tutorials_tutorial_03_solverprep
-       :language: Python
-       :lineno-match:
-       :emphasize-lines: 15
-       :end-before: marker-1
-
-The first few lines of the ``SConscript`` file should look very familiar with exception to
-the single highlighted line. In this tutorial, we need to import the ``waves`` module, as
-we will require a custom builder that functions differently than the previously used
-:meth:`waves.scons_extensions.abaqus_journal_builder_factory` builder.
-
 .. note::
 
     There is a large section of lines in the ``SConscript`` file that are not included
@@ -110,7 +95,7 @@ we will require a custom builder that functions differently than the previously 
     end of the :ref:`tutorials_tutorial_solverprep` section will demonstrate this
     more clearly.
 
-7. Modify your ``tutorial_03_solverprep`` file by adding the contents shown
+6. Modify your ``tutorial_03_solverprep`` file by adding the contents shown
    below immediately after the code pertaining to ``# Mesh`` from the previous tutorial.
 
 .. admonition:: waves-tutorials/tutorial_03_solverprep
@@ -155,7 +140,7 @@ file from :ref:`tutorial_partition_mesh` is included below to help identify the 
 SConstruct
 **********
 
-8. Add ``tutorial_03_solverprep`` to the ``workflow_configurations`` list in the ``waves-tutorials/SConstruct`` file.
+7. Add ``tutorial_03_solverprep`` to the ``workflow_configurations`` list in the ``waves-tutorials/SConstruct`` file.
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_partition_mesh` is included below to help identify the
 changes made in this tutorial.
@@ -174,7 +159,7 @@ SCons environment class in the ``SConstruct`` file.
 Build Targets
 *************
 
-9. Build the new targets
+8. Build the new targets
 
 .. code-block:: bash
 

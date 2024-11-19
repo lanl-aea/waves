@@ -15,29 +15,35 @@ workflow = []
 # Comment used in tutorial code snippets: marker-1
 
 # Create the job-ready beam example CAE file
-cae_prep.extend(env.Command(
-    target=["beamExample.py"],
-    source=["SConscript"],
-    action=[
-        "cd ${TARGET.dir.abspath} && ${abaqus} fetch job=beamExample",
-        "echo \"mdb.saveAs(pathName='beam.cae')\" >> ${TARGET.abspath}"
-    ],
-    abaqus=env["ABAQUS_PROGRAM"]
-))
+cae_prep.extend(
+    env.Command(
+        target=["beamExample.py"],
+        source=["SConscript"],
+        action=[
+            "cd ${TARGET.dir.abspath} && ${abaqus} fetch job=beamExample",
+            "echo \"mdb.saveAs(pathName='beam.cae')\" >> ${TARGET.abspath}",
+        ],
+        abaqus=env["ABAQUS_PROGRAM"],
+    )
+)
 
-cae_prep.extend(env.AbaqusJournal(
-    target=["beam.cae"],
-    source=["beamExample.py"]
-))
+cae_prep.extend(
+    env.AbaqusJournal(
+        target=["beam.cae"],
+        source=["beamExample.py"],
+    )
+)
 
 # Comment used in tutorial code snippets: marker-2
 
 # Run the tutorial CAE job submission solution
-workflow.extend(env.AbaqusJournal(
-    target=["beam.odb"],
-    source=["submit_cae.py", "beam.cae"],
-    subcommand_options="--input-file ${SOURCES[1].abspath} --job-name beam --model-name Beam"
-))
+workflow.extend(
+    env.AbaqusJournal(
+        target=["beam.odb"],
+        source=["submit_cae.py", "beam.cae"],
+        subcommand_options="--input-file ${SOURCES[1].abspath} --job-name beam --model-name Beam",
+    )
+)
 
 # Comment used in tutorial code snippets: marker-3
 

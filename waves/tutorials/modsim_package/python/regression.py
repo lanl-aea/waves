@@ -34,8 +34,10 @@ def csv_files_match(current_csv, expected_csv, index_column="time", sort_columns
     try:
         pandas.testing.assert_frame_equal(current, expected)
     except AssertionError as err:
-        print(f"The CSV regression test failed. Data in expected CSV file and current CSV file do not match.\n{err}",
-              file=sys.stderr)
+        print(
+            f"The CSV regression test failed. Data in expected CSV file and current CSV file do not match.\n{err}",
+            file=sys.stderr,
+        )
         equal = False
     else:
         equal = True
@@ -45,7 +47,7 @@ def csv_files_match(current_csv, expected_csv, index_column="time", sort_columns
 def main(
     first_file: pathlib.Path,
     second_file: pathlib.Path,
-    output_file: pathlib.Path
+    output_file: pathlib.Path,
 ) -> None:
     """Compare CSV files and return an error code if they differ
 
@@ -57,9 +59,7 @@ def main(
     # CSV regression file comparison
     first_data = pandas.read_csv(first_file)
     second_data = pandas.read_csv(second_file)
-    regression_results.update({
-        "CSV comparison": csv_files_match(first_data, second_data)
-    })
+    regression_results.update({"CSV comparison": csv_files_match(first_data, second_data)})
 
     with open(output_file, "w") as output:
         output.write(yaml.safe_dump(regression_results))
@@ -87,18 +87,18 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "FIRST_FILE",
         type=pathlib.Path,
-        help="First CSV file for comparison"
+        help="First CSV file for comparison",
     )
     parser.add_argument(
         "SECOND_FILE",
         type=pathlib.Path,
-        help="Second CSV file for comparison"
+        help="Second CSV file for comparison",
     )
     parser.add_argument(
         "--output-file",
         type=pathlib.Path,
         default=default_output_file,
-        help="Regression test pass/fail list"
+        help="Regression test pass/fail list",
     )
     return parser
 
@@ -109,5 +109,5 @@ if __name__ == "__main__":
     main(
         args.FIRST_FILE,
         args.SECOND_FILE,
-        args.output_file
+        args.output_file,
     )

@@ -66,13 +66,13 @@ def test_parse_output():
 
 def test_check_regex_exclude():
     """Test the regular expression exclusion of the visualize subcommand"""
-    exclude_regex = 'dummy_name[0-7]+'
+    exclude_regex = "dummy_name[0-7]+"
     # If node name matches the regular expression
-    assert _visualize.check_regex_exclude(exclude_regex, 'dummy_name5', 3, 0, False) == (True, 3)
+    assert _visualize.check_regex_exclude(exclude_regex, "dummy_name5", 3, 0, False) == (True, 3)
     # if node name does not match the regular expression
-    assert _visualize.check_regex_exclude(exclude_regex, 'dummy_name8', 2, 1, False) == (False, 1)
+    assert _visualize.check_regex_exclude(exclude_regex, "dummy_name8", 2, 1, False) == (False, 1)
     # If node name does not match the regular expression but the node was already excluded
-    assert _visualize.check_regex_exclude(exclude_regex, 'dummy_name9', 4, 2, True) == (True, 2)
+    assert _visualize.check_regex_exclude(exclude_regex, "dummy_name9", 4, 2, True) == (True, 2)
 
 
 def test_visualize():
@@ -87,14 +87,18 @@ def test_visualize():
 def test_plot():
     """Check that the expected plot output function is called"""
     figure, axes = matplotlib.pyplot.subplots()
-    with patch("matplotlib.pyplot.show") as mock_show, \
-         patch("matplotlib.figure.Figure.savefig") as mock_savefig:
+    with (
+        patch("matplotlib.pyplot.show") as mock_show,
+        patch("matplotlib.figure.Figure.savefig") as mock_savefig,
+    ):
         _visualize.plot(figure, output_file=None)
     mock_show.assert_called_once()
     mock_savefig.assert_not_called()
 
-    with patch("matplotlib.pyplot.show") as mock_show, \
-         patch("matplotlib.figure.Figure.savefig") as mock_savefig:
+    with (
+        patch("matplotlib.pyplot.show") as mock_show,
+        patch("matplotlib.figure.Figure.savefig") as mock_savefig,
+    ):
         _visualize.plot(figure, output_file=pathlib.Path("dummy.png"))
     mock_savefig.assert_called_once()
     mock_show.assert_not_called()

@@ -20,9 +20,9 @@ def main(output_file, width, height, depth):
     """
     output_file = pathlib.Path(output_file).with_suffix(".cub")
 
-    cubit.init(['cubit', '-noecho', '-nojournal', '-nographics', '-batch'])
-    cubit.cmd('new')
-    cubit.cmd('reset')
+    cubit.init(["cubit", "-noecho", "-nojournal", "-nographics", "-batch"])
+    cubit.cmd("new")
+    cubit.cmd("reset")
 
     cubit.cmd(f"brick x {width} y {height} z {depth}")
     cubit.cmd(f"move volume 1 x {width / 2} y {height / 2} z {depth / 2} include_merged")
@@ -41,25 +41,45 @@ def get_parser():
     prog = f"python {script_name.name} "
     cli_description = "Create a simple cube geometry and write an ``output_file``.cub Cubit model file."
     parser = argparse.ArgumentParser(description=cli_description, prog=prog)
-    parser.add_argument('--output-file', type=str, default=default_output_file,
-                        help="The output file for the Cubit model. " \
-                             "Will be stripped of the extension and ``.cub`` will be used, e.g. ``output_file``.cub " \
-                             "(default: %(default)s")
-    parser.add_argument('--width', type=float, default=default_width,
-                        help="The cube width (X-axis)")
-    parser.add_argument('--height', type=float, default=default_height,
-                        help="The cube height (Y-axis)")
-    parser.add_argument('--depth', type=float, default=default_height,
-                        help="The cube depth (Z-axis)")
+    parser.add_argument(
+        "--output-file",
+        type=str,
+        default=default_output_file,
+        # fmt: off
+        help="The output file for the Cubit model. "
+             "Will be stripped of the extension and ``.cub`` will be used, e.g. ``output_file``.cub "
+             "(default: %(default)s",
+        # fmt: on
+    )
+    parser.add_argument(
+        "--width",
+        type=float,
+        default=default_width,
+        help="The cube width (X-axis)",
+    )
+    parser.add_argument(
+        "--height",
+        type=float,
+        default=default_height,
+        help="The cube height (Y-axis)",
+    )
+    parser.add_argument(
+        "--depth",
+        type=float,
+        default=default_height,
+        help="The cube depth (Z-axis)",
+    )
     return parser
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = get_parser()
     args = parser.parse_args()
-    sys.exit(main(
-        output_file=args.output_file,
-        width=args.width,
-        height=args.height,
-        depth=args.depth
-    ))
+    sys.exit(
+        main(
+            output_file=args.output_file,
+            width=args.width,
+            height=args.height,
+            depth=args.depth,
+        )
+    )

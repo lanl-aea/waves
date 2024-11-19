@@ -1,35 +1,51 @@
-Import('env')
+Import("env")
 
 # Write project builders for re-use in task definitions
 abaqus_journal = Builder(
-    action="cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.abspath} " \
-           "${abaqus_options} -- ${journal_options}"
+    action=[
+        (
+            "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.abspath} ${abaqus_options} "
+            "-- ${journal_options}"
+        )
+    ]
 )
 
 abaqus_solver = Builder(
-    action="cd ${TARGET.dir.abspath} && ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} " \
-           "${abaqus_options} -interactive -ask_delete no"
+    action=[
+        (
+            "cd ${TARGET.dir.abspath} && ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} "
+            "${abaqus_options} -interactive -ask_delete no"
+        )
+    ]
 )
 
 # Add builders and pseudo-builders
-env.Append(BUILDERS={
-    'AbaqusJournal': abaqus_journal,
-    'AbaqusSolver': abaqus_solver
-})
+env.Append(
+    BUILDERS={
+        "AbaqusJournal": abaqus_journal,
+        "AbaqusSolver": abaqus_solver,
+    }
+)
 
 # Geometry, Partition, Mesh
 env.Command(
     target=["rectangle_mesh.cae", "rectangle_mesh.inp"],
     source=["rectangle_geometry.py", "rectangle_partition.py", "rectangle_mesh.py", "abaqus_utilities.py"],
     action=[
-        "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCES[0].abspath} " \
-            "${abaqus_options} -- --output-file ${TARGET.abspath}",
-        "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCES[1].abspath} " \
-            "${abaqus_options} -- --input-file ${TARGET.abspath} --output-file ${TARGET.abspath}",
-        "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCES[2].abspath} " \
+        (
+            "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCES[0].abspath} "
+            "${abaqus_options} -- --output-file ${TARGET.abspath}"
+        ),
+        (
+            "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCES[1].abspath} "
             "${abaqus_options} -- --input-file ${TARGET.abspath} --output-file ${TARGET.abspath}"
+        ),
+        (
+            "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCES[2].abspath} "
+            "${abaqus_options} -- --input-file ${TARGET.abspath} --output-file ${TARGET.abspath}"
+        ),
     ],
-    abaqus_program=env["ABAQUS_PROGRAM"]
+    abaqus_program=env["ABAQUS_PROGRAM"],
 )
 
 # SolverPrep
@@ -41,7 +57,7 @@ abaqus_source_list = [
     "materials.inp",
     "parts.inp",
     "rectangle_mesh.inp",
-    "history_output.inp"
+    "history_output.inp",
 ]
 
 solve_targets = [
@@ -50,7 +66,7 @@ solve_targets = [
     "rectangle_compression.msg",
     "rectangle_compression.com",
     "rectangle_compression.prt",
-    "rectangle_compression.sta"
+    "rectangle_compression.sta",
 ]
 
 target = env.AbaqusSolver(
@@ -58,7 +74,7 @@ target = env.AbaqusSolver(
     source=abaqus_source_list,
     abaqus_program=env["ABAQUS_PROGRAM"],
     job_name="rectangle_compression",
-    abaqus_options="-double both"
+    abaqus_options="-double both",
 )
 
 # Collector alias named after the model simulation

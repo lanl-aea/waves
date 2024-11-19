@@ -6,6 +6,7 @@ Functions that may be used in a CLI implementation should raise ``RuntimeError``
 :class:`waves.exceptions.WAVESError` to allow the CLI implementation to convert stack-trace/exceptions into STDERR
 message and non-zero exit codes.
 """
+
 import os
 import re
 import shutil
@@ -25,6 +26,7 @@ _exclude_from_namespace = set(globals().keys())
 
 class _AtSignTemplate(string.Template):
     """Use the CMake '@' delimiter in a Python 'string.Template' to avoid clashing with bash variable syntax"""
+
     delimiter = _settings._template_delimiter
 
 
@@ -32,7 +34,7 @@ def set_name_substitution(
     source: typing.List[str],
     replacement: str,
     identifier: str = "set_name",
-    suffix: str = "/"
+    suffix: str = "/",
 ) -> typing.List[str]:
     """Replace ``@identifier`` with replacement text in a list of strings
 
@@ -128,8 +130,10 @@ def find_cubit_bin(options: typing.Iterable[str], bin_directory: typing.Optional
     if bin_directory is None:
         bin_directory = cubit_os_bin()
 
-    message = "Could not find a Cubit bin directory. Please ensure the Cubit executable is on PATH or provide an " \
-              "absolute path to the Cubit executable."
+    message = (
+        "Could not find a Cubit bin directory. Please ensure the Cubit executable is on PATH or provide an "
+        "absolute path to the Cubit executable."
+    )
 
     cubit_command = find_command(options)
     cubit_command = os.path.realpath(cubit_command)
@@ -158,8 +162,10 @@ def find_cubit_python(options: typing.Iterable[str], python_command: str = "pyth
 
     :raise FileNotFoundError: If the Cubit command or Cubit Python interpreter is not found
     """
-    message = "Could not find a Cubit Python interpreter. Please ensure the Cubit executable is on PATH or provide " \
-              "an absolute path to the Cubit executable."
+    message = (
+        "Could not find a Cubit Python interpreter. Please ensure the Cubit executable is on PATH or provide "
+        "an absolute path to the Cubit executable."
+    )
 
     cubit_command = find_command(options)
     cubit_command = os.path.realpath(cubit_command)
@@ -183,8 +189,10 @@ def tee_subprocess(command: typing.List[str], **kwargs) -> typing.Tuple[int, str
     from io import StringIO
     import subprocess
 
-    with subprocess.Popen(command, stdout=subprocess.PIPE, bufsize=1, text=True, **kwargs) as process, \
-         StringIO() as stdout_buffer:
+    with (
+        subprocess.Popen(command, stdout=subprocess.PIPE, bufsize=1, text=True, **kwargs) as process,
+        StringIO() as stdout_buffer,
+    ):
         for line in process.stdout:
             print(line, end="")
             stdout_buffer.write(line)
@@ -222,10 +230,10 @@ def return_environment(
     :raises subprocess.CalledProcessError: When the shell command returns a non-zero exit status
     """
     result = subprocess.run(
-        f"{shell} {string_option} \"{command} {separator} {environment}\"",
+        f'{shell} {string_option} "{command} {separator} {environment}"',
         check=True,
         capture_output=True,
-        shell=True
+        shell=True,
     )
     stdout = result.stdout.decode()
     variables = stdout.split("\x00")
@@ -248,7 +256,7 @@ def cache_environment(
     shell: str = "bash",
     cache: typing.Optional[typing.Union[str, pathlib.Path]] = None,
     overwrite_cache: bool = False,
-    verbose: bool = False
+    verbose: bool = False,
 ) -> dict:
     """Retrieve cached environment dictionary or run a shell command to generate environment dictionary
 

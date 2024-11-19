@@ -13,38 +13,38 @@ AddOption(
     type="string",
     action="store",
     metavar="DIR",
-    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
+    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')",
 )
 AddOption(
     "--unconditional-build",
     dest="unconditional_build",
     default=False,
     action="store_true",
-    help="Boolean to force building of conditionally ignored targets, e.g. if the target's action program is missing" \
-            " and it would normally be ignored. (default: '%default')"
+    help="Boolean to force building of conditionally ignored targets. (default: '%default')",
 )
 
 # Inherit user's full environment
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
     build_dir=GetOption("build_dir"),
-    unconditional_build=GetOption("unconditional_build")
+    unconditional_build=GetOption("unconditional_build"),
 )
 
 # Empty defaults list to avoid building all simulation targets by default
 env.Default()
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
-env["ABAQUS_PROGRAM"] = env.AddProgram([
-    "/apps/abaqus/Commands/abq2023",
-    "/usr/projects/ea/abaqus/Commands/abq2023",
-    "abq2023",
-    "abaqus"
-])
+env["ABAQUS_PROGRAM"] = env.AddProgram(
+    [
+        "/apps/abaqus/Commands/abq2023",
+        "/usr/projects/ea/abaqus/Commands/abq2023",
+        "abq2023",
+        "abaqus",
+    ]
+)
 
 # Add WAVES builders
-env.Append(BUILDERS={
-})
+env.Append(BUILDERS={})
 
 # Call SConscript file
 SConscript("SConscript", variant_dir=env["build_dir"], exports={"env": env}, duplicate=True)

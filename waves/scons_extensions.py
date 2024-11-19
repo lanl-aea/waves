@@ -68,21 +68,22 @@ def _print_failed_nodes_stdout() -> None:
         node_path = pathlib.Path(failure.node.abspath)
         stdout_path_options = [
             node_path.parent / f"{node_path}{_settings._stdout_extension}",
-            node_path.with_suffix(_settings._stdout_extension)
+            node_path.with_suffix(_settings._stdout_extension),
         ]
         stdout_path_options = [path.resolve() for path in stdout_path_options]
         try:
             stdout_path = next((path for path in stdout_path_options if path.exists()))
             with open(stdout_path, "r") as stdout_file:
-                print(f"\n{failure.node} failed with STDOUT file '{stdout_path}'\n{stdout_file.read()}",
-                      file=sys.stderr)
+                print(
+                    f"\n{failure.node} failed with STDOUT file '{stdout_path}'\n{stdout_file.read()}", file=sys.stderr
+                )
         except StopIteration:
             print(f"\n{failure.node} failed\n", file=sys.stderr)
 
 
 def print_build_failures(
     env: SCons.Environment.Environment = SCons.Environment.Environment(),
-    print_stdout: bool = True
+    print_stdout: bool = True,
 ) -> None:
     """On exit, query the SCons reported build failures and print the associated node's STDOUT file, if it exists
 
@@ -138,7 +139,7 @@ def action_list_strings(builder: SCons.Builder.Builder) -> typing.List[str]:
 def catenate_builder_actions(
     builder: SCons.Builder.Builder,
     program: str = "",
-    options: str = ""
+    options: str = "",
 ) -> SCons.Builder.Builder:
     """Catenate a builder's arguments and prepend the program and options
 
@@ -154,7 +155,7 @@ def catenate_builder_actions(
     """
     action_list = action_list_strings(builder)
     action = " && ".join(action_list)
-    action = f"{program} {options} \"{action}\""
+    action = f'{program} {options} "{action}"'
     builder.action = SCons.Action.CommandAction(action)
     return builder
 
@@ -173,11 +174,14 @@ def catenate_actions(**outer_kwargs):
        def my_builder():
            return SCons.Builder.Builder(action=["echo $SOURCE > $TARGET", "echo $SOURCE >> $TARGET"])
     """
+
     def intermediate_decorator(function):
         @functools.wraps(function)
         def wrapper(*args, **kwargs):
             return catenate_builder_actions(function(*args, **kwargs), **outer_kwargs)
+
         return wrapper
+
     return intermediate_decorator
 
 
@@ -187,7 +191,7 @@ def ssh_builder_actions(
     remote_directory: str = "",
     rsync_push_options: str = "-rlptv",
     rsync_pull_options: str = "-rlptv",
-    ssh_options: str = ""
+    ssh_options: str = "",
 ) -> SCons.Builder.Builder:
     """Wrap and modify a builder's action list with remote copy operations and SSH commands
 
@@ -326,15 +330,19 @@ def ssh_builder_actions(
     action_list = action_list_strings(builder)
     action_list = [ssh_action_substitutions(action) for action in action_list]
     action_list = [
-        f"{cd_prefix} {action}" if not action.startswith(cd_prefix) and not action.startswith("${action_prefix}")
-        else action for action in action_list
+        (
+            f"{cd_prefix} {action}"
+            if not action.startswith(cd_prefix) and not action.startswith("${action_prefix}")
+            else action
+        )
+        for action in action_list
     ]
     action_list = [f"ssh ${{ssh_options}} ${{remote_server}} '{action}'" for action in action_list]
 
     # Pre/Append SSH wrapper actions
     ssh_actions = [
-        "ssh ${ssh_options} ${remote_server} \"mkdir -p ${remote_directory}\"",
-        "rsync ${rsync_push_options} ${SOURCES.abspath} ${remote_server}:${remote_directory}"
+        'ssh ${ssh_options} ${remote_server} "mkdir -p ${remote_directory}"',
+        "rsync ${rsync_push_options} ${SOURCES.abspath} ${remote_server}:${remote_directory}",
     ]
     ssh_actions.extend(action_list)
     ssh_actions.append("rsync ${rsync_pull_options} ${remote_server}:${remote_directory}/ ${TARGET.dir.abspath}")
@@ -347,13 +355,15 @@ def ssh_builder_actions(
         builder.overrides[key] = ssh_action_substitutions(value)
 
     # Add or override builder keyword arguments with SSH wrapper added keyword arguments
-    builder.overrides.update({
-        "remote_server": remote_server,
-        "remote_directory": remote_directory,
-        "rsync_push_options": rsync_push_options,
-        "rsync_pull_options": rsync_pull_options,
-        "ssh_options": ssh_options
-    })
+    builder.overrides.update(
+        {
+            "remote_server": remote_server,
+            "remote_directory": remote_directory,
+            "rsync_push_options": rsync_push_options,
+            "rsync_pull_options": rsync_pull_options,
+            "ssh_options": ssh_options,
+        }
+    )
 
     return builder
 
@@ -361,7 +371,7 @@ def ssh_builder_actions(
 def project_help_message(
     env: SCons.Environment.Environment = SCons.Environment.Environment(),
     append: bool = True,
-    keep_local: bool = True
+    keep_local: bool = True,
 ) -> None:
     """Add default targets and alias lists to project help message
 
@@ -382,7 +392,7 @@ def project_help_message(
 def default_targets_message(
     env: SCons.Environment.Environment = SCons.Environment.Environment(),
     append: bool = True,
-    keep_local: bool = True
+    keep_local: bool = True,
 ) -> None:
     """Add a default targets list to the project's help message
 
@@ -413,7 +423,7 @@ def default_targets_message(
 def alias_list_message(
     env: SCons.Environment.Environment = SCons.Environment.Environment(),
     append: bool = True,
-    keep_local: bool = True
+    keep_local: bool = True,
 ) -> None:
     """Add the alias list to the project's help message
 
@@ -445,7 +455,7 @@ def substitution_syntax(
     env: SCons.Environment.Environment,
     substitution_dictionary: dict,
     prefix: str = "@",
-    suffix: str = "@"
+    suffix: str = "@",
 ) -> dict:
     """Return a dictionary copy with the pre/suffix added to the key strings
 
@@ -472,7 +482,7 @@ def substitution_syntax(
 
 def check_program(
     env: SCons.Environment.Environment,
-    prog_name: str
+    prog_name: str,
 ) -> str:
     """Replacement for `SCons CheckProg`_ like behavior without an SCons configure object
 
@@ -496,7 +506,7 @@ def check_program(
 
 def append_env_path(
     env: SCons.Environment.Environment,
-    program: str
+    program: str,
 ) -> None:
     """Append SCons contruction environment ``PATH`` with the program's parent directory
 
@@ -526,7 +536,7 @@ def append_env_path(
 
 def find_program(
     env: SCons.Environment.Environment,
-    names: typing.Iterable[str]
+    names: typing.Iterable[str],
 ) -> str:
     """Search for a program from a list of possible program names.
 
@@ -562,7 +572,7 @@ def find_program(
 
 def add_program(
     env: SCons.Environment.Environment,
-    names: typing.Iterable[str]
+    names: typing.Iterable[str],
 ) -> str:
     """Search for a program from a list of possible program names. Add first found to system ``PATH``.
 
@@ -591,7 +601,7 @@ def add_program(
 
 def add_cubit(
     env: SCons.Environment.Environment,
-    names: typing.Iterable[str]
+    names: typing.Iterable[str],
 ) -> str:
     """Modifies environment variables with the paths required to ``import cubit`` in a Python3 environment.
 
@@ -626,7 +636,7 @@ def add_cubit(
 
 def add_cubit_python(
     env: SCons.Environment.Environment,
-    names: typing.Iterable[str]
+    names: typing.Iterable[str],
 ) -> str:
     """Modifies environment variables with the paths required to ``import cubit`` with the Cubit Python interpreter.
 
@@ -663,7 +673,7 @@ def shell_environment(
     command: str,
     shell: str = "bash",
     cache: typing.Optional[str] = None,
-    overwrite_cache: bool = False
+    overwrite_cache: bool = False,
 ) -> SCons.Environment.Environment:
     """Return an SCons shell environment from a cached file or by running a shell command
 
@@ -704,7 +714,7 @@ def shell_environment(
         shell=shell,
         cache=cache,
         overwrite_cache=overwrite_cache,
-        verbose=True
+        verbose=True,
     )
     return SCons.Environment.Environment(ENV=shell_environment)
 
@@ -712,7 +722,7 @@ def shell_environment(
 def construct_action_list(
     actions: typing.Iterable[str],
     prefix: str = "${action_prefix}",
-    suffix: str = ""
+    suffix: str = "",
 ) -> typing.Iterable[str]:
     """Return an action list with a common pre/post-fix
 
@@ -770,7 +780,7 @@ def builder_factory(
     subcommand_options: str = "",
     action_suffix: str = "",
     emitter=None,
-    **kwargs
+    **kwargs,
 ) -> SCons.Builder.Builder:
     """Template builder factory returning a builder with no emitter
 
@@ -821,8 +831,10 @@ def builder_factory(
     :rtype: SCons.Builder.Builder
     """  # noqa: E501
     action = [
-        "${environment} ${action_prefix} ${program} ${program_required} ${program_options} " \
+        (
+            "${environment} ${action_prefix} ${program} ${program_required} ${program_options} "
             "${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
+        ),
     ]
     builder = SCons.Builder.Builder(
         action=action,
@@ -836,7 +848,7 @@ def builder_factory(
         subcommand_required=subcommand_required,
         subcommand_options=subcommand_options,
         action_suffix=action_suffix,
-        **kwargs
+        **kwargs,
     )
     return builder
 
@@ -847,7 +859,7 @@ def first_target_emitter(
     env: SCons.Environment.Environment,
     suffixes: typing.Iterable[str] = [],
     appending_suffixes: typing.Iterable[str] = [],
-    stdout_extension: str = _settings._stdout_extension
+    stdout_extension: str = _settings._stdout_extension,
 ) -> typing.Tuple[list, list]:
     """SCons emitter function that emits new targets based on the first target
 
@@ -878,8 +890,10 @@ def first_target_emitter(
     first_target = pathlib.Path(string_targets[0])
 
     # Search for a user specified stdout file. Fall back to first target with appended stdout extension
-    stdout_target = next((target_file for target_file in string_targets if target_file.endswith(stdout_extension)),
-                         f"{first_target}{stdout_extension}")
+    stdout_target = next(
+        (target_file for target_file in string_targets if target_file.endswith(stdout_extension)),
+        f"{first_target}{stdout_extension}",
+    )
 
     replacing_targets = [str(first_target.with_suffix(suffix)) for suffix in suffixes]
     appending_targets = [f"{first_target}{suffix}" for suffix in appending_suffixes]
@@ -906,7 +920,7 @@ def first_target_builder_factory(
     subcommand_options: str = "",
     action_suffix: str = _settings._redirect_action_suffix,
     emitter=first_target_emitter,
-    **kwargs
+    **kwargs,
 ) -> SCons.Builder.Builder:
     """Template builder factory with WAVES default action behaviors and a task STDOUT file emitter
 
@@ -973,7 +987,7 @@ def first_target_builder_factory(
         subcommand_options=subcommand_options,
         action_suffix=action_suffix,
         emitter=emitter,
-        **kwargs
+        **kwargs,
     )
     return builder
 
@@ -981,7 +995,7 @@ def first_target_builder_factory(
 def _abaqus_journal_emitter(
     target: list,
     source: list,
-    env: SCons.Environment.Environment
+    env: SCons.Environment.Environment,
 ) -> typing.Tuple[list, list]:
     """Appends the abaqus_journal builder target list with the builder managed targets
 
@@ -1008,7 +1022,7 @@ def abaqus_journal(
     required: str = "cae -noGUI ${SOURCE.abspath}",
     action_prefix: str = _settings._cd_action_prefix,
     action_suffix: str = _settings._redirect_action_suffix,
-    environment_suffix: str = _settings._redirect_environment_suffix
+    environment_suffix: str = _settings._redirect_environment_suffix,
 ) -> SCons.Builder.Builder:
     """Construct and return an Abaqus journal file SCons builder
 
@@ -1074,7 +1088,7 @@ def abaqus_journal(
     """  # noqa: E501
     action = [
         "${action_prefix} ${program} -information environment ${environment_suffix}",
-        "${action_prefix} ${program} ${required} ${abaqus_options} -- ${journal_options} ${action_suffix}"
+        "${action_prefix} ${program} ${required} ${abaqus_options} -- ${journal_options} ${action_suffix}",
     ]
     builder = SCons.Builder.Builder(
         action=action,
@@ -1083,7 +1097,7 @@ def abaqus_journal(
         required=required,
         action_prefix=action_prefix,
         action_suffix=action_suffix,
-        environment_suffix=environment_suffix
+        environment_suffix=environment_suffix,
     )
     return builder
 
@@ -1119,7 +1133,7 @@ def abaqus_journal_builder_factory(
     subcommand_options: str = "",
     action_suffix: str = _settings._redirect_action_suffix,
     emitter=first_target_emitter,
-    **kwargs
+    **kwargs,
 ) -> SCons.Builder.Builder:
     """Abaqus journal builder factory
 
@@ -1199,7 +1213,7 @@ def abaqus_journal_builder_factory(
         subcommand_options=subcommand_options,
         action_suffix=action_suffix,
         emitter=emitter,
-        **kwargs
+        **kwargs,
     )
     return builder
 
@@ -1224,7 +1238,7 @@ def _abaqus_solver_emitter(
     source: list,
     env: SCons.Environment.Environment,
     suffixes: typing.Iterable[str] = _settings._abaqus_solver_common_suffixes,
-    stdout_extension: str = _settings._stdout_extension
+    stdout_extension: str = _settings._stdout_extension,
 ) -> typing.Tuple[list, list]:
     """Appends the abaqus_solver builder target list with the builder managed targets
 
@@ -1257,8 +1271,10 @@ def _abaqus_solver_emitter(
     # Search for a user specified stdout file. Fall back to job name with appended stdout extension
     string_targets = [str(target_file) for target_file in target]
     constructed_stdout_target = str(build_subdirectory / f"{env['job_name']}{stdout_extension}")
-    stdout_target = next((target_file for target_file in string_targets if target_file.endswith(stdout_extension)),
-                         constructed_stdout_target)
+    stdout_target = next(
+        (target_file for target_file in string_targets if target_file.endswith(stdout_extension)),
+        constructed_stdout_target,
+    )
 
     job_targets = [str(build_subdirectory / f"{env['job_name']}{suffix}") for suffix in suffixes_copy]
 
@@ -1294,7 +1310,7 @@ def abaqus_solver(
     action_prefix: str = _settings._cd_action_prefix,
     action_suffix: str = _settings._redirect_action_suffix,
     environment_suffix: str = _settings._redirect_environment_suffix,
-    emitter: typing.Literal["standard", "explicit", "datacheck", None] = None
+    emitter: typing.Literal["standard", "explicit", "datacheck", None] = None,
 ) -> SCons.Builder.Builder:
     """Construct and return an Abaqus solver SCons builder
 
@@ -1382,15 +1398,15 @@ def abaqus_solver(
     """  # noqa: E501
     action = [
         "${action_prefix} ${program} -information environment ${environment_suffix}",
-        "${action_prefix} ${program} ${required} ${abaqus_options} ${action_suffix}"
+        "${action_prefix} ${program} ${required} ${abaqus_options} ${action_suffix}",
     ]
     if emitter:
         emitter = emitter.lower()
-    if emitter == 'standard':
+    if emitter == "standard":
         abaqus_emitter = _abaqus_standard_solver_emitter
-    elif emitter == 'explicit':
+    elif emitter == "explicit":
         abaqus_emitter = _abaqus_explicit_solver_emitter
-    elif emitter == 'datacheck':
+    elif emitter == "datacheck":
         abaqus_emitter = _abaqus_datacheck_solver_emitter
     else:
         abaqus_emitter = _abaqus_solver_emitter
@@ -1401,7 +1417,7 @@ def abaqus_solver(
         required=required,
         action_prefix=action_prefix,
         action_suffix=action_suffix,
-        environment_suffix=environment_suffix
+        environment_suffix=environment_suffix,
     )
     return abaqus_solver_builder
 
@@ -1417,7 +1433,7 @@ def abaqus_solver_builder_factory(
     subcommand_options: str = "",
     action_suffix: str = _settings._redirect_action_suffix,
     emitter=first_target_emitter,
-    **kwargs
+    **kwargs,
 ) -> SCons.Builder.Builder:
     """Abaqus solver builder factory
 
@@ -1496,7 +1512,7 @@ def abaqus_solver_builder_factory(
         subcommand_options=subcommand_options,
         action_suffix=action_suffix,
         emitter=emitter,
-        **kwargs
+        **kwargs,
     )
     return builder
 
@@ -1515,6 +1531,7 @@ class AbaqusPseudoBuilder:
         Using the non-builder-factory :meth:`waves.scons_extensions.abaqus_solver` (i.e. a Builder that does not use the
         ``program_options`` kwarg) is not supported.
     """
+
     def __init__(
         self,
         builder: SCons.Builder.Builder,
@@ -1536,10 +1553,10 @@ class AbaqusPseudoBuilder:
         cpus: int = 1,
         oldjob: str = None,
         write_restart: bool = False,
-        double: typing.Optional[str] = 'both',
+        double: typing.Optional[str] = "both",
         extra_sources: list[str] = list(),
         extra_targets: list[str] = list(),
-        extra_options: str = '',
+        extra_options: str = "",
         **kwargs,
     ) -> SCons.Node.NodeList:
         """SCons Pseudo-Builder for running Abaqus jobs.
@@ -1636,20 +1653,20 @@ class AbaqusPseudoBuilder:
         # Initialize with empty arguments for AbaqusSolver builder
         sources = list()
         targets = list()
-        options = ''
+        options = ""
 
         # Specify job name
-        options += f' job={job}'
+        options += f" job={job}"
 
         # Specify "double" option, if requested
         if double:
-            options += f' double={double}'
+            options += f" double={double}"
 
         # Like Abaqus, assume input file is <job>.inp unless otherwise specified
         if inp:
             options += f" input={inp}"
         else:
-            inp = str(pathlib.Path(job).with_suffix('.inp'))
+            inp = str(pathlib.Path(job).with_suffix(".inp"))
         # Include input file as first source
         sources.append(inp)
 
@@ -1661,7 +1678,7 @@ class AbaqusPseudoBuilder:
         # If restarting a job, add old job restart files to sources
         if oldjob:
             sources.extend([f"{oldjob}{ext}" for ext in _settings._abaqus_restart_extensions])
-            options += f' oldjob={oldjob}'
+            options += f" oldjob={oldjob}"
 
         # If writing restart files, add restart files to targets
         if write_restart:
@@ -1723,7 +1740,7 @@ def copy_substfile(
     source_list: list,
     substitution_dictionary: typing.Optional[dict] = None,
     build_subdirectory: str = ".",
-    symlink: bool = False
+    symlink: bool = False,
 ) -> SCons.Node.NodeList:
     """Pseudo-builder to copy source list to build directory and perform template substitutions on ``*.in`` filenames
 
@@ -1775,9 +1792,10 @@ def copy_substfile(
     for source_file in source_list:
         copy_target = build_subdirectory / source_file.name
         target_list += env.Command(
-                target=str(copy_target),
-                source=str(source_file),
-                action=SCons.Defaults.Copy("${TARGET}", "${SOURCE}", symlink))
+            target=str(copy_target),
+            source=str(source_file),
+            action=SCons.Defaults.Copy("${TARGET}", "${SOURCE}", symlink),
+        )
         if source_file.suffix == _settings._scons_substfile_suffix:
             substfile_target = build_subdirectory / source_file.name
             target_list += env.Substfile(str(substfile_target), SUBST_DICT=substitution_dictionary)
@@ -1795,7 +1813,7 @@ def python_builder_factory(
     subcommand_options: str = "",
     action_suffix: str = _settings._redirect_action_suffix,
     emitter=first_target_emitter,
-    **kwargs
+    **kwargs,
 ) -> SCons.Builder.Builder:
     """Python builder factory
 
@@ -1868,7 +1886,7 @@ def python_builder_factory(
         subcommand_options=subcommand_options,
         action_suffix=action_suffix,
         emitter=emitter,
-        **kwargs
+        **kwargs,
     )
     return builder
 
@@ -1891,7 +1909,7 @@ def sbatch_python_builder_factory(*args, **kwargs):
 def _matlab_script_emitter(
     target: list,
     source: list,
-    env: SCons.Environment.Environment
+    env: SCons.Environment.Environment,
 ) -> typing.Tuple[list, list]:
     """Appends the matlab_script builder target list with the builder managed targets
 
@@ -1918,7 +1936,7 @@ def matlab_script(
     program: str = "matlab",
     action_prefix: str = _settings._cd_action_prefix,
     action_suffix: str = _settings._redirect_action_suffix,
-    environment_suffix: str = _settings._redirect_environment_suffix
+    environment_suffix: str = _settings._redirect_environment_suffix,
 ) -> SCons.Builder.Builder:
     """Matlab script SCons builder
 
@@ -1975,15 +1993,19 @@ def matlab_script(
     :return: Matlab script builder
     """  # noqa: E501
     action = [
-        "${action_prefix} ${program} ${matlab_options} -batch " \
-            "\"path(path, '${SOURCE.dir.abspath}'); " \
-            "[fileList, productList] = matlab.codetools.requiredFilesAndProducts('${SOURCE.file}'); " \
-            "disp(cell2table(fileList)); disp(struct2table(productList, 'AsArray', true)); exit;\" " \
-            "${environment_suffix}",
-        "${action_prefix} ${program} ${matlab_options} -batch " \
-            "\"path(path, '${SOURCE.dir.abspath}'); " \
-            "${SOURCE.filebase}(${script_options})\" " \
+        (
+            "${action_prefix} ${program} ${matlab_options} -batch "
+            "\"path(path, '${SOURCE.dir.abspath}'); "
+            "[fileList, productList] = matlab.codetools.requiredFilesAndProducts('${SOURCE.file}'); "
+            "disp(cell2table(fileList)); disp(struct2table(productList, 'AsArray', true)); exit;\" "
+            "${environment_suffix}"
+        ),
+        (
+            "${action_prefix} ${program} ${matlab_options} -batch "
+            "\"path(path, '${SOURCE.dir.abspath}'); "
+            '${SOURCE.filebase}(${script_options})" '
             "${action_suffix}"
+        ),
     ]
     matlab_builder = SCons.Builder.Builder(
         action=action,
@@ -1991,7 +2013,7 @@ def matlab_script(
         program=program,
         action_prefix=action_prefix,
         action_suffix=action_suffix,
-        environment_suffix=environment_suffix
+        environment_suffix=environment_suffix,
     )
     return matlab_builder
 
@@ -2001,7 +2023,7 @@ def conda_environment(
     subcommand: str = "env export",
     required: str = "--file ${TARGET.abspath}",
     options: str = "",
-    action_prefix: str = _settings._cd_action_prefix
+    action_prefix: str = _settings._cd_action_prefix,
 ) -> SCons.Builder.Builder:
     """Create a Conda environment file with ``conda env export``
 
@@ -2060,16 +2082,14 @@ def conda_environment(
     :return: Conda environment builder
     :rtype: SCons.Builder.Builder
     """
-    action = [
-        "${action_prefix} ${program} ${subcommand} ${required} ${options}"
-    ]
+    action = ["${action_prefix} ${program} ${subcommand} ${required} ${options}"]
     conda_environment_builder = SCons.Builder.Builder(
         action=action,
         program=program,
         subcommand=subcommand,
         required=required,
         options=options,
-        action_prefix=action_prefix
+        action_prefix=action_prefix,
     )
     return conda_environment_builder
 
@@ -2077,7 +2097,7 @@ def conda_environment(
 def _abaqus_extract_emitter(
     target: list,
     source: list,
-    env: SCons.Environment.Environment
+    env: SCons.Environment.Environment,
 ) -> typing.Tuple[list, list]:
     """Prepends the abaqus extract builder target H5 file if none is specified. Appends the source[0].csv file unless
     ``delete_report_file`` is ``True``.  Always appends the ``target[0]_datasets.h5`` file.
@@ -2174,14 +2194,15 @@ def abaqus_extract(program: str = "abaqus") -> SCons.Builder.Builder:
             SCons.Action.Action(_build_odb_extract, varlist=["output_type", "odb_report_args", "delete_report_file"])
         ],
         emitter=_abaqus_extract_emitter,
-        program=program)
+        program=program,
+    )
     return abaqus_extract_builder
 
 
 def _build_odb_extract(
     target: list,
     source: list,
-    env: SCons.Environment.Environment
+    env: SCons.Environment.Environment,
 ) -> None:
     """Define the odb_extract action when used as an internal package and not a command line utility
 
@@ -2207,18 +2228,21 @@ def _build_odb_extract(
     for path in files_to_remove:
         path.unlink(missing_ok=True)
 
-    odb_extract.odb_extract([source[0].abspath], target[0].abspath,
-                            output_type=output_type,
-                            odb_report_args=odb_report_args,
-                            abaqus_command=env["program"],
-                            delete_report_file=delete_report_file)
+    odb_extract.odb_extract(
+        [source[0].abspath],
+        target[0].abspath,
+        output_type=output_type,
+        odb_report_args=odb_report_args,
+        abaqus_command=env["program"],
+        delete_report_file=delete_report_file,
+    )
     return None
 
 
 def sbatch(
     program: str = "sbatch",
     required: str = "--wait --output=${TARGETS[-1].abspath}",
-    action_prefix: str = _settings._cd_action_prefix
+    action_prefix: str = _settings._cd_action_prefix,
 ) -> SCons.Builder.Builder:
     """`SLURM`_ `sbatch`_ SCons builder
 
@@ -2268,15 +2292,13 @@ def sbatch(
 
     :return: SLURM sbatch builder
     """
-    action = [
-        "${action_prefix} ${program} ${required} ${sbatch_options} --wrap \"${slurm_job}\""
-    ]
+    action = ['${action_prefix} ${program} ${required} ${sbatch_options} --wrap "${slurm_job}"']
     sbatch_builder = SCons.Builder.Builder(
         action=action,
         emitter=first_target_emitter,
         program=program,
         required=required,
-        action_prefix=action_prefix
+        action_prefix=action_prefix,
     )
     return sbatch_builder
 
@@ -2291,7 +2313,7 @@ def abaqus_input_scanner() -> SCons.Scanner.Scanner:
     :rtype: SCons.Scanner.Scanner
     """
     flags = re.IGNORECASE
-    return _custom_scanner(r'^\*[^*]*,\s*input=(.+)$', ['.inp'], flags)
+    return _custom_scanner(r"^\*[^*]*,\s*input=(.+)$", [".inp"], flags)
 
 
 def sphinx_scanner() -> SCons.Scanner.Scanner:
@@ -2308,11 +2330,15 @@ def sphinx_scanner() -> SCons.Scanner.Scanner:
     :return: Abaqus input file dependency Scanner
     :rtype: SCons.Scanner.Scanner
     """
-    return _custom_scanner(r'^\s*\.\. (?:include|literalinclude|image|figure|bibliography)::\s*(.+)$', ['.rst', '.txt'])
+    return _custom_scanner(r"^\s*\.\. (?:include|literalinclude|image|figure|bibliography)::\s*(.+)$", [".rst", ".txt"])
 
 
-def sphinx_build(program: str = "sphinx-build", options: str = "", builder: str = "html",
-                 tags: str = "") -> SCons.Builder.Builder:
+def sphinx_build(
+    program: str = "sphinx-build",
+    options: str = "",
+    builder: str = "html",
+    tags: str = "",
+) -> SCons.Builder.Builder:
     """Sphinx builder using the ``-b`` specifier
 
     This builder does not have an emitter. It requires at least one target.
@@ -2351,13 +2377,17 @@ def sphinx_build(program: str = "sphinx-build", options: str = "", builder: str 
         program=program,
         options=options,
         builder=builder,
-        tags=tags
+        tags=tags,
     )
     return sphinx_builder
 
 
-def sphinx_latexpdf(program: str = "sphinx-build", options: str = "", builder: str = "latexpdf",
-                    tags: str = "") -> SCons.Builder.Builder:
+def sphinx_latexpdf(
+    program: str = "sphinx-build",
+    options: str = "",
+    builder: str = "latexpdf",
+    tags: str = "",
+) -> SCons.Builder.Builder:
     """Sphinx builder using the ``-M`` specifier. Intended for ``latexpdf`` builds.
 
     This builder does not have an emitter. It requires at least one target.
@@ -2396,7 +2426,7 @@ def sphinx_latexpdf(program: str = "sphinx-build", options: str = "", builder: s
         program=program,
         options=options,
         builder=builder,
-        tags=tags
+        tags=tags,
     )
     return sphinx_latex
 
@@ -2404,7 +2434,7 @@ def sphinx_latexpdf(program: str = "sphinx-build", options: str = "", builder: s
 def _custom_scanner(
     pattern: str,
     suffixes: typing.Iterable[str],
-    flags: typing.Optional[int] = None
+    flags: typing.Optional[int] = None,
 ) -> SCons.Scanner.Scanner:
     """Custom Scons scanner
 
@@ -2465,7 +2495,7 @@ def quinoa_builder_factory(
     subcommand_options: str = "",
     action_suffix: str = _settings._redirect_action_suffix,
     emitter=first_target_emitter,
-    **kwargs
+    **kwargs,
 ) -> SCons.Builder.Builder:
     """Quinoa builder factory
 
@@ -2544,7 +2574,7 @@ def quinoa_builder_factory(
         subcommand_options=subcommand_options,
         action_suffix=action_suffix,
         emitter=emitter,
-        **kwargs
+        **kwargs,
     )
     return builder
 
@@ -2575,7 +2605,7 @@ def calculix_builder_factory(
     subcommand_options: str = "",
     action_suffix: str = _settings._redirect_action_suffix,
     emitter=first_target_emitter,
-    **kwargs
+    **kwargs,
 ) -> SCons.Builder.Builder:
     """CalculiX builder factory.
 
@@ -2667,7 +2697,7 @@ def calculix_builder_factory(
         subcommand_options=subcommand_options,
         action_suffix=action_suffix,
         emitter=emitter,
-        **kwargs
+        **kwargs,
     )
     return builder
 
@@ -2683,7 +2713,7 @@ def fierro_explicit_builder_factory(
     subcommand_options: str = "",
     action_suffix: str = _settings._redirect_action_suffix,
     emitter=first_target_emitter,
-    **kwargs
+    **kwargs,
 ) -> SCons.Builder.Builder:
     """Fierro explicit builder factory.
 
@@ -2769,7 +2799,7 @@ def fierro_explicit_builder_factory(
         subcommand_options=subcommand_options,
         action_suffix=action_suffix,
         emitter=emitter,
-        **kwargs
+        **kwargs,
     )
     return builder
 
@@ -2785,7 +2815,7 @@ def fierro_implicit_builder_factory(
     subcommand_options: str = "",
     action_suffix: str = _settings._redirect_action_suffix,
     emitter=first_target_emitter,
-    **kwargs
+    **kwargs,
 ) -> SCons.Builder.Builder:
     """Fierro implicit builder factory.
 
@@ -2865,7 +2895,7 @@ def fierro_implicit_builder_factory(
         subcommand_options=subcommand_options,
         action_suffix=action_suffix,
         emitter=emitter,
-        **kwargs
+        **kwargs,
     )
     return builder
 
@@ -2881,7 +2911,7 @@ def sierra_builder_factory(
     subcommand_options: str = "",
     action_suffix: str = _settings._redirect_action_suffix,
     emitter=first_target_emitter,
-    **kwargs
+    **kwargs,
 ) -> SCons.Builder.Builder:
     """Sierra builder factory
 
@@ -2946,7 +2976,7 @@ def sierra_builder_factory(
         subcommand_options=subcommand_options,
         action_suffix=action_suffix,
         emitter=emitter,
-        **kwargs
+        **kwargs,
     )
     return builder
 
@@ -2977,7 +3007,7 @@ def ansys_apdl_builder_factory(
     subcommand_options: str = "",
     action_suffix: str = "",
     emitter=first_target_emitter,
-    **kwargs
+    **kwargs,
 ) -> SCons.Builder.Builder:
     """Ansys APDL builder factory.
 
@@ -3069,7 +3099,7 @@ def ansys_apdl_builder_factory(
         subcommand_options=subcommand_options,
         action_suffix=action_suffix,
         emitter=emitter,
-        **kwargs
+        **kwargs,
     )
     return builder
 
@@ -3081,7 +3111,7 @@ def parameter_study(
     source: list,
     *args,
     study=None,
-    **kwargs
+    **kwargs,
 ) -> SCons.Node.NodeList:
     """Parameter study pseudo-builder.
 
@@ -3207,7 +3237,7 @@ def parameter_study_sconscript(
     set_name: str = "",
     parameters: dict = dict(),
     subdirectories: bool = False,
-    **kwargs
+    **kwargs,
 ):
     """Wrap the SCons SConscript call to unpack parameter generators
 
@@ -3297,8 +3327,11 @@ def parameter_study_sconscript(
 
     if not isinstance(exports, dict):
         import warnings
-        message = f"``exports`` keyword argument {exports} *must* be a dictionary of '{{key: value}}' pairs because " \
-                  "this function does not have access to the calling script's namespace."
+
+        message = (
+            f"``exports`` keyword argument {exports} *must* be a dictionary of '{{key: value}}' pairs because "
+            "this function does not have access to the calling script's namespace."
+        )
         raise TypeError(message)
     exports.update({"set_name": set_name, "parameters": parameters})
 
@@ -3310,8 +3343,8 @@ def parameter_study_sconscript(
     def _variant_subdirectory(
         variant_directory: typing.Optional[pathlib.Path],
         subdirectory: str,
-        subdirectories: bool = subdirectories
-        ) -> typing.Union[pathlib.Path, None]:
+        subdirectories: bool = subdirectories,
+    ) -> typing.Union[pathlib.Path, None]:
         """Determine the variant subdirectory
 
         :param variant_directory: The requested root ``variant_dir``
@@ -3358,7 +3391,7 @@ class WAVESEnvironment(SConsEnvironment):
         SIERRA_PROGRAM: str = "sierra",
         ANSYS_PROGRAM: str = "ansys",
         SPHINX_BUILD_PROGRAM: str = "sphinx-build",
-        **kwargs
+        **kwargs,
     ):
         super().__init__(
             *args,
@@ -3372,7 +3405,7 @@ class WAVESEnvironment(SConsEnvironment):
             SIERRA_PROGRAM=SIERRA_PROGRAM,
             ANSYS_PROGRAM=ANSYS_PROGRAM,
             SPHINX_BUILD_PROGRAM=SPHINX_BUILD_PROGRAM,
-            **kwargs
+            **kwargs,
         )
 
     def PrintBuildFailures(self, *args, **kwargs):

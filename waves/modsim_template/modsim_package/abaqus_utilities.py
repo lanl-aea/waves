@@ -1,4 +1,5 @@
 """Abaqus utilities to be re-used in multiple places"""
+
 import os
 import re
 import shutil
@@ -25,11 +26,12 @@ def export_mesh(model_object, part_name, orphan_mesh_file):
     orphan_mesh_file = os.path.splitext(orphan_mesh_file)[0] + ".inp"
     model_object.keywordBlock.synchVersions()
     block = model_object.keywordBlock.sieBlocks
-    block_string = '\n'.join(block)
-    orphan_mesh = re.findall(r".*?\*Part, name=({})$\n(.*?)\*End Part".format(part_name),
-                             block_string, re.DOTALL | re.I | re.M)
+    block_string = "\n".join(block)
+    orphan_mesh = re.findall(
+        r".*?\*Part, name=({})$\n(.*?)\*End Part".format(part_name), block_string, re.DOTALL | re.I | re.M
+    )
     part_definition = orphan_mesh[0]
-    with open(orphan_mesh_file, 'w') as output:
+    with open(orphan_mesh_file, "w") as output:
         output.write(part_definition[1].strip())
 
 
@@ -59,6 +61,7 @@ class AbaqusNamedTemporaryFile:
 
     :param str input_file: The input file to copy before open
     """
+
     def __init__(self, input_file, *args, **kwargs):
         self.temporary_file = tempfile.NamedTemporaryFile(*args, delete=False, **kwargs)
         shutil.copyfile(input_file, self.temporary_file.name)

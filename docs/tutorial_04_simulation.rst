@@ -100,7 +100,6 @@ Running a Datacheck
        :lineno-match:
        :start-after: marker-4
        :end-before: marker-5
-       :emphasize-lines: 4-13
 
 In the changes you just made, the first line of code extracts the file ``name`` from the `Python pathlib`_ objects in
 the ``abaqus_source_list`` (which you defined in the previous tutorial) and removes any trailing ``.in`` extensions from
@@ -116,9 +115,9 @@ the file name, for example:
     <class 'str'> file.extension
 
 In this tutorial, there are no files with ``.in`` extension; this is required when it comes to substituting parameters
-into files which is discussed in the next tutorial,
-:ref:`tutorial_parameter_substitution`. For this tutorial, we only require that the file names be extracted from
-the ``abaqus_source_list``. This tutorial would behave identically if the ``solve_source_list`` was defined as
+into files which is discussed in the next tutorial, :ref:`tutorial_parameter_substitution`. For this tutorial, we only
+require that the file names be extracted from the ``abaqus_source_list``. This tutorial would behave identically if the
+``solve_source_list`` was defined as
 
 .. code-block:: Python
 
@@ -128,12 +127,12 @@ Next, ``{journal_file}.inp`` needs to be appended to the list of simulation sour
 :ref:`tutorial_partition_mesh` that this file is one of the targets that is generated from
 :meth:`waves.scons_extensions.abaqus_journal_builder_factory` builder in the code pertaining to ``# Mesh``.
 
-The first set of highlighted lines will define an optional task called a *datacheck*. You can read the `Abaqus
-Standard/Explicit Execution`_ documentation :cite:`ABAQUS` for more details on running a datacheck. The primary purpose
-for running a datacheck is to verify the input file construction without running a full simulation. While Abaqus can
-continue with an analysis from the datacheck output, doing so modifies the datacheck output files, which has the affect
-of prompting `SCons`_ to always re-build the datacheck target. This task is excluded from the main workflow to avoid
-duplicate preprocessing of the input file. It will be used later in :ref:`tutorial_regression_testing`.
+The highlighted lines will define an optional task called a *datacheck*. You can read the `Abaqus Standard/Explicit
+Execution`_ documentation :cite:`ABAQUS` for more details on running a datacheck. The primary purpose for running a
+datacheck is to verify the input file construction without running a full simulation. While Abaqus can continue with an
+analysis from the datacheck output, doing so modifies the datacheck output files, which has the affect of prompting
+`SCons`_ to always re-build the datacheck target. This task is excluded from the main workflow to avoid duplicate
+preprocessing of the input file. It will be used later in :ref:`tutorial_regression_testing`.
 
 First, the ``job_name`` is resolved from the name of the first source file listed in code pertaining to ``#
 SolverPrep``, in this case ``rectangle_compression``. That name is appended with the ``_DATACHECK`` string to

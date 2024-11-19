@@ -71,26 +71,50 @@ def get_parser():
     default_json_file = None
 
     prog = "abaqus cae -noGui {} --".format(basename)
-    cli_description = "Open an Abaqus CAE model file and submit the job." \
-        "If the job already exists, ignore the model name and update the job options. If the job does not exist, " \
-        "create it using the job attributes passed in from the API/CLI, e.g. ``cpus`` and ``kwargs``. " \
-        "Because Abaqus modifies CAE files on open, a temporary copy of the file is created to avoid constant job " \
+    cli_description = (
+        "Open an Abaqus CAE model file and submit the job."
+        "If the job already exists, ignore the model name and update the job options. If the job does not exist, "
+        "create it using the job attributes passed in from the API/CLI, e.g. ``cpus`` and ``kwargs``. "
+        "Because Abaqus modifies CAE files on open, a temporary copy of the file is created to avoid constant job "
         "rebuilds in build tools like SCons or Make."
+    )
     parser = argparse.ArgumentParser(description=cli_description, prog=prog)
-    parser.add_argument("--input-file", type=str, required=True,
-                        help="The Abaqus CAE model file with extension, e.g. ``input_file.cae``")
-    parser.add_argument("--job-name", type=str, required=True,
-                        help="The name of the Abaqus job")
-    parser.add_argument("--model-name", type=str, default=default_model_name,
-                        help="The name of the Abaqus model (default %(default)s)")
-    parser.add_argument("--cpus", type=int, default=default_cpus,
-                        help="The number of cpus for the Abaqus simulation (default %(default)s)")
-    parser.add_argument("--json-file", type=str, default=default_json_file,
-                        help="A JSON file containing a dictionary of keyword arguments for ``abaqus.mdb.Job`` "
-                             "(default %(default)s)")
-    parser.add_argument("--write-inp", "--write-input", action="store_true",
-                        help="Write an Abaqus ``job.inp`` file and exit without submitting the job "
-                             "(default %(default)s)")
+    parser.add_argument(
+        "--input-file",
+        type=str,
+        required=True,
+        help="The Abaqus CAE model file with extension, e.g. ``input_file.cae``",
+    )
+    parser.add_argument(
+        "--job-name",
+        type=str,
+        required=True,
+        help="The name of the Abaqus job",
+    )
+    parser.add_argument(
+        "--model-name",
+        type=str,
+        default=default_model_name,
+        help="The name of the Abaqus model (default %(default)s)",
+    )
+    parser.add_argument(
+        "--cpus",
+        type=int,
+        default=default_cpus,
+        help="The number of cpus for the Abaqus simulation (default %(default)s)",
+    )
+    parser.add_argument(
+        "--json-file",
+        type=str,
+        default=default_json_file,
+        help="A JSON file containing a dictionary of keyword arguments for ``abaqus.mdb.Job`` " "(default %(default)s)",
+    )
+    parser.add_argument(
+        "--write-inp",
+        "--write-input",
+        action="store_true",
+        help="Write an Abaqus ``job.inp`` file and exit without submitting the job " "(default %(default)s)",
+    )
     return parser
 
 
@@ -102,6 +126,7 @@ class AbaqusNamedTemporaryFile:
 
     :param str input_file: The input file to copy before open
     """
+
     def __init__(self, input_file, *args, **kwargs):
         self.temporary_file = tempfile.NamedTemporaryFile(*args, delete=False, **kwargs)
         shutil.copyfile(input_file, self.temporary_file.name)
@@ -154,11 +179,13 @@ if __name__ == "__main__":
 
     kwargs = return_json_dictionary(args.json_file)
 
-    sys.exit(main(
-        input_file=args.input_file,
-        job_name=args.job_name,
-        model_name=args.model_name,
-        cpus=args.cpus,
-        write_inp=args.write_inp,
-        **kwargs
-   ))
+    sys.exit(
+        main(
+            input_file=args.input_file,
+            job_name=args.job_name,
+            model_name=args.model_name,
+            cpus=args.cpus,
+            write_inp=args.write_inp,
+            **kwargs  # fmt: skip
+        )
+    )

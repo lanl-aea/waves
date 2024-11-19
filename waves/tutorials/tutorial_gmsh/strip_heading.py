@@ -23,22 +23,19 @@ def get_parser():
     cli_description = "Strip the heading keyword from an Abaqus input file."
     parser = argparse.ArgumentParser(description=cli_description, prog=prog)
     parser.add_argument(
-        '--input-file',
+        "--input-file",
         type=pathlib.Path,
-        required=True
+        required=True,
     )
     parser.add_argument(
-        '--output-file',
+        "--output-file",
         type=pathlib.Path,
-        required=True
+        required=True,
     )
     return parser
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = get_parser()
     args = parser.parse_args()
-    main(
-        input_file=args.input_file,
-        output_file=args.output_file
-    )
+    main(input_file=args.input_file, output_file=args.output_file)

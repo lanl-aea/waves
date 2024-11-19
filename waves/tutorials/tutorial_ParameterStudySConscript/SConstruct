@@ -30,9 +30,7 @@ import pathlib
 
 import waves
 
-env = waves.scons_extensions.WAVESEnvironment(
-    ENV=os.environ.copy()
-)
+env = waves.scons_extensions.WAVESEnvironment(ENV=os.environ.copy())
 parameter_study_directory = pathlib.Path("build_parameter_studies")
 
 # =========================================================================================== COMMON BUILD DIRECTORY ===
@@ -53,7 +51,7 @@ for variant_dir in [None, "build"]:
         duplicate=True,
         study=study,
         set_name="no_study",
-        parameters=simulation_variables
+        parameters=simulation_variables,
     )
 
     # Call with a study dictionary
@@ -70,7 +68,7 @@ for variant_dir in [None, "build"]:
         exports={"env": env, "simulation_constants": simulation_constants},
         duplicate=True,
         study=study,
-        set_name="dictionary"
+        set_name="dictionary",
     )
 
     # Call with a study parameter generator
@@ -85,7 +83,7 @@ for variant_dir in [None, "build"]:
         {"workflow": ["thing 1", "thing 2"]},
         set_name_template=f"{study_file.stem}@number",
         output_file=study_file,
-        previous_parameter_study=study_file
+        previous_parameter_study=study_file,
     )
     study.write()
     simulation_variables = {}
@@ -110,7 +108,7 @@ study = waves.parameter_generators.CartesianProduct(
     {"workflow": ["thing 3", "thing 4"]},
     set_name_template=f"{study_file.stem}@number",
     output_file=study_file,
-    previous_parameter_study=study_file
+    previous_parameter_study=study_file,
 )
 study.write()
 simulation_variables = {}
@@ -121,7 +119,7 @@ env.ParameterStudySConscript(
     exports={"env": env, "simulation_constants": simulation_constants},
     duplicate=True,
     study=study,
-    subdirectories=True
+    subdirectories=True,
 )
 
 # ================================================================================== PARAMETER SET BUILD DIRECTORIES ===
@@ -147,7 +145,7 @@ env.ParameterStudySConscript(
     exports={"env": env, "simulation_constants": simulation_constants},
     duplicate=True,
     study=study,
-    subdirectories=True
+    subdirectories=True,
 )
 
 env.ProjectHelp()

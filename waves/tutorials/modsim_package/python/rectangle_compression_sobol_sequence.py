@@ -1,9 +1,11 @@
 """Parameter sets and schemas for the rectangle compression simulation"""
 
 
-def parameter_schema(num_simulations=4,
-                     width={'distribution': 'uniform', 'loc': 0.9, 'scale': 0.2},
-                     height={'distribution': 'uniform', 'loc': 0.9, 'scale': 0.2}):
+def parameter_schema(
+    num_simulations=4,
+    width={"distribution": "uniform", "loc": 0.9, "scale": 0.2},
+    height={"distribution": "uniform", "loc": 0.9, "scale": 0.2},
+):
     """Return WAVES Scipy Sobol parameter schema
 
     :param int num_simulations: Number of samples to generate
@@ -14,8 +16,8 @@ def parameter_schema(num_simulations=4,
     :rtype: dict
     """
     schema = {
-        'num_simulations': num_simulations,
-        'width': width,
-        'height': height
+        "num_simulations": num_simulations,
+        "width": width,
+        "height": height,
     }
     return schema

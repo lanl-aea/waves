@@ -43,9 +43,9 @@ def main(input_file, output_file, width, height):
     if input_file != output_file:
         shutil.copyfile(input_file, output_file)
 
-    cubit.init(['cubit', '-noecho', '-nojournal', '-nographics', '-batch'])
-    cubit.cmd('new')
-    cubit.cmd('reset')
+    cubit.init(["cubit", "-noecho", "-nojournal", "-nographics", "-batch"])
+    cubit.cmd("new")
+    cubit.cmd("reset")
 
     cubit.cmd(f"open '{output_file}'")
 
@@ -82,36 +82,60 @@ def main(input_file, output_file, width, height):
 def get_parser():
     script_name = pathlib.Path(__file__)
     # Set default parameter values
-    default_input_file = script_name.with_suffix(".cub").name.replace('_partition', '_geometry')
+    default_input_file = script_name.with_suffix(".cub").name.replace("_partition", "_geometry")
     default_output_file = script_name.with_suffix(".cub").name
     default_width = 1.0
     default_height = 1.0
 
     prog = f"python {script_name.name} "
-    cli_description = "Partition the simple rectangle geometry created by ``rectangle_geometry.py`` " \
-                      "and write an ``output_file``.cub Cubit model file."
+    cli_description = (
+        "Partition the simple rectangle geometry created by ``rectangle_geometry.py`` "
+        "and write an ``output_file``.cub Cubit model file."
+    )
     parser = argparse.ArgumentParser(description=cli_description, prog=prog)
-    parser.add_argument('--input-file', type=str, default=default_input_file,
-                        help="The Cubit model file created by ``rectangle_geometry.py``. " \
-                             "Will be stripped of the extension and ``.cub`` will be used, e.g. ``input_file``.cub " \
-                             "(default: %(default)s")
-    parser.add_argument('--output-file', type=str, default=default_output_file,
-                        help="The output file for the Cubit model. " \
-                             "Will be stripped of the extension and ``.cub`` will be used, e.g. ``output_file``.cub " \
-                             "(default: %(default)s")
-    parser.add_argument('--width', type=float, default=default_width,
-                        help="The rectangle width")
-    parser.add_argument('--height', type=float, default=default_height,
-                        help="The rectangle height")
+    parser.add_argument(
+        "--input-file",
+        type=str,
+        default=default_input_file,
+        # fmt: off
+        help="The Cubit model file created by ``rectangle_geometry.py``. "
+             "Will be stripped of the extension and ``.cub`` will be used, e.g. ``input_file``.cub "
+             "(default: %(default)s",
+        # fmt: on
+    )
+    parser.add_argument(
+        "--output-file",
+        type=str,
+        default=default_output_file,
+        # fmt: off
+        help="The output file for the Cubit model. "
+             "Will be stripped of the extension and ``.cub`` will be used, e.g. ``output_file``.cub "
+             "(default: %(default)s",
+        # fmt: on
+    )
+    parser.add_argument(
+        "--width",
+        type=float,
+        default=default_width,
+        help="The rectangle width",
+    )
+    parser.add_argument(
+        "--height",
+        type=float,
+        default=default_height,
+        help="The rectangle height",
+    )
     return parser
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = get_parser()
     args = parser.parse_args()
-    sys.exit(main(
-        input_file=args.input_file,
-        output_file=args.output_file,
-        width=args.width,
-        height=args.height
-    ))
+    sys.exit(
+        main(
+            input_file=args.input_file,
+            output_file=args.output_file,
+            width=args.width,
+            height=args.height,
+        )
+    )

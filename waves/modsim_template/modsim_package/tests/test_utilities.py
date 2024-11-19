@@ -62,8 +62,10 @@ def test_save_plot():
     y_var = "time"
     concat_coord = "parameter_sets"
     output_file = "mock.png"
-    with unittest.mock.patch("xarray.Dataset.plot.scatter") as mock_scatter, \
-         unittest.mock.patch("matplotlib.pyplot.savefig") as mock_savefig:
+    with (
+        unittest.mock.patch("xarray.Dataset.plot.scatter") as mock_scatter,
+        unittest.mock.patch("matplotlib.pyplot.savefig") as mock_savefig,
+    ):
         utilities.save_plot(combined_data, x_var, y_var, selection_dict, concat_coord, output_file)
     mock_scatter.assert_called_once_with(x=x_var, y=y_var, hue=concat_coord)
     mock_savefig.assert_called_once_with(output_file)
@@ -87,9 +89,9 @@ def test_save_table():
 
 def test_sort_dataframe():
     data = {
-        'time': [0., 0.5, 1.0],
-        'Column1': [1, 2, 3],
-        'Column2': [4, 5, 6]
+        "time": [0.0, 0.5, 1.0],
+        "Column1": [1, 2, 3],
+        "Column2": [4, 5, 6],
     }
     control = pandas.DataFrame.from_dict(data)
     unsorted_copy = control[["Column2", "Column1", "time"]]
@@ -102,9 +104,9 @@ def test_sort_dataframe():
 
 def test_csv_files_match():
     data = {
-        'time': [0., 0.5, 1.0],
-        'Column1': [1, 2, 3],
-        'Column2': [4, 5, 6]
+        "time": [0.0, 0.5, 1.0],
+        "Column1": [1, 2, 3],
+        "Column2": [4, 5, 6],
     }
     # Control DataFrame
     control = pandas.DataFrame.from_dict(data)
@@ -115,7 +117,7 @@ def test_csv_files_match():
 
     # Different DataFrame
     different_copy = control.copy()
-    different_copy.loc[0, 'Column1'] = 999
+    different_copy.loc[0, "Column1"] = 999
 
     # Assert that the function returns False when the DataFrames differ
     assert utilities.csv_files_match(control, different_copy, sort_columns=["time"]) is False

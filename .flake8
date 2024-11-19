@@ -1,4 +1,6 @@
 [flake8]
-exclude = build,tests
+exclude = build
 select = W,E2,E3,E501,E7
 max-line-length = 120
+per-file-ignores =
+    test_system.py:E501

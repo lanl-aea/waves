@@ -27,7 +27,7 @@ project_variables = {
     "argparse_types_dir": "modsim_package/argparse_types",
     "cubit_dir": "modsim_package/cubit",
     "python_dir": "modsim_package/python",
-    "tests_dir": "modsim_package/python/tests"
+    "tests_dir": "modsim_package/python/tests",
 }
 
 # ============================================================================================= COMMAND LINE OPTIONS ===
@@ -39,30 +39,34 @@ AddOption(
     type="string",
     action="store",
     metavar="DIR",
-    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
+    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')",
 )
 AddOption(
     "--ignore-documentation",
     dest="ignore_documentation",
     default=False,
     action="store_true",
-    help="Boolean to ignore the documentation build, e.g. during Conda package build and testing. Unaffected by the " \
+    # fmt: off
+    help="Boolean to ignore the documentation build, e.g. during Conda package build and testing. Unaffected by the "
          "'--unconditional-build' option. (default: '%default')"
+    # fmt: on
 )
 AddOption(
     "--unconditional-build",
     dest="unconditional_build",
     default=False,
     action="store_true",
-    help="Boolean to force building of conditionally ignored targets, e.g. if the target's action program is missing" \
-            " and it would normally be ignored. (default: '%default')"
+    # fmt: off
+    help="Boolean to force building of conditionally ignored targets, e.g. if the target's action program is missing"
+         " and it would normally be ignored. (default: '%default')"
+    # fmt: on
 )
 AddOption(
     "--cov-report",
     dest="coverage_report",
     default=False,
     action="store_true",
-    help="Boolean to add the coverage report options to the pytest alias (default: '%default')"
+    help="Boolean to add the coverage report options to the pytest alias (default: '%default')",
 )
 
 # ========================================================================================= CONSTRUCTION ENVIRONMENT ===
@@ -72,7 +76,7 @@ env = Environment(
     variant_dir_base=pathlib.Path(GetOption("variant_dir_base")),
     ignore_documentation=GetOption("ignore_documentation"),
     unconditional_build=GetOption("unconditional_build"),
-    coverage_report=GetOption("coverage_report")
+    coverage_report=GetOption("coverage_report"),
 )
 env["ENV"]["PYTHONDONTWRITEBYTECODE"] = 1
 
@@ -97,13 +101,13 @@ if not env["ignore_documentation"]:
     SConscript(
         dirs=documentation_source_dir,
         variant_dir=str(build_dir),
-        exports={"env": env, "project_substitution_dictionary": project_substitution_dictionary}
+        exports={"env": env, "project_substitution_dictionary": project_substitution_dictionary},
     )
 else:
     print(f"The 'ignore_documentation' option was set to 'True'. Skipping documentation SConscript file(s)")
 
 # Add pytests, style checks, and static type checking
-workflow_configurations = ["pytest", "flake8", "mypy"]
+workflow_configurations = ["pytest", "style", "mypy"]
 for workflow in workflow_configurations:
     build_dir = env["variant_dir_base"] / workflow
     SConscript(build_dir.name, variant_dir=build_dir, exports={"env": env}, duplicate=False)
@@ -112,6 +116,7 @@ for workflow in workflow_configurations:
 # Add aliases to help message so users know what build target options are available
 # This must come *after* all expected Alias definitions and SConscript files.
 from SCons.Node.Alias import default_ans
+
 alias_help = "\nTarget Aliases:\n"
 for alias in default_ans:
     alias_help += f"    {alias}\n"

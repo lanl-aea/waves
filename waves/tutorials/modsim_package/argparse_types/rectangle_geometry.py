@@ -32,11 +32,15 @@ def main(output_file, model_name, part_name, width, height):
     sketch.rectangle(point1=(0.0, 0.0), point2=(width, height))
     sketch.unsetPrimaryObject()
 
-    part = abaqus.mdb.models[model_name].Part(name=part_name, dimensionality=abaqusConstants.TWO_D_PLANAR,
-                                              type=abaqusConstants.DEFORMABLE_BODY)
+    part = abaqus.mdb.models[model_name].Part(
+        name=part_name,
+        dimensionality=abaqusConstants.TWO_D_PLANAR,
+        type=abaqusConstants.DEFORMABLE_BODY,
+    )
     part.BaseShell(sketch=sketch)
 
     abaqus.mdb.saveAs(pathName=output_file)
+
 
 # Comment used in tutorial code snippets: marker-1
 
@@ -57,34 +61,57 @@ def get_parser():
     basename_without_extension, extension = os.path.splitext(basename)
     # Construct a part name from the filename less the workflow step suffix
     default_part_name = basename_without_extension
-    suffix = '_geometry'
+    suffix = "_geometry"
     if default_part_name.endswith(suffix):
-        default_part_name = default_part_name[:-len(suffix)]
+        default_part_name = default_part_name[: -len(suffix)]
     # Set default parameter values
-    default_output_file = '{}'.format(basename_without_extension)
+    default_output_file = "{}".format(basename_without_extension)
     default_width = 1.0
     default_height = 1.0
 
     prog = "abaqus cae -noGui {} --".format(basename)
     cli_description = "Create a simple rectangle geometry and write an ``output_file``.cae Abaqus model file."
     parser = argparse.ArgumentParser(description=cli_description, prog=prog)
-    parser.add_argument('--output-file', type=str, default=default_output_file,
-                        help="The output file for the Abaqus model. " \
-                             "Will be stripped of the extension and ``.cae`` will be used, e.g. ``output_file``.cae")
-    parser.add_argument('--model-name', type=str, default=default_part_name,
-                        help="The name of the Abaqus model")
-    parser.add_argument('--part-name', type=str, default=default_part_name,
-                        help="The name of the Abaqus part")
-    parser.add_argument('--width', type=positive_float, default=default_width,
-                        help="The rectangle width. Positive float.")
-    parser.add_argument('--height', type=positive_float, default=default_height,
-                        help="The rectangle height. Positive float.")
+    parser.add_argument(
+        "--output-file",
+        type=str,
+        default=default_output_file,
+        # fmt: off
+        help="The output file for the Abaqus model. "
+             "Will be stripped of the extension and ``.cae`` will be used, e.g. ``output_file``.cae",
+        # fmt: on
+    )
+    parser.add_argument(
+        "--model-name",
+        type=str,
+        default=default_part_name,
+        help="The name of the Abaqus model",
+    )
+    parser.add_argument(
+        "--part-name",
+        type=str,
+        default=default_part_name,
+        help="The name of the Abaqus part",
+    )
+    parser.add_argument(
+        "--width",
+        type=positive_float,
+        default=default_width,
+        help="The rectangle width. Positive float.",
+    )
+    parser.add_argument(
+        "--height",
+        type=positive_float,
+        default=default_height,
+        help="The rectangle height. Positive float.",
+    )
     return parser
+
 
 # Comment used in tutorial code snippets: marker-2
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = get_parser()
     # Abaqus does not strip the CAE options, so we have to skip the unknown options related to the CAE CLI.
     try:
@@ -96,10 +123,12 @@ if __name__ == '__main__':
     if len(possible_typos) > 0:
         raise RuntimeError("Found possible typos in CLI option(s) {}".format(possible_typos))
 
-    sys.exit(main(
-        output_file=args.output_file,
-        model_name=args.model_name,
-        part_name=args.part_name,
-        width=args.width,
-        height=args.height
-    ))
+    sys.exit(
+        main(
+            output_file=args.output_file,
+            model_name=args.model_name,
+            part_name=args.part_name,
+            width=args.width,
+            height=args.height,
+        )
+    )

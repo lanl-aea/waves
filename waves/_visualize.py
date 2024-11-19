@@ -3,6 +3,7 @@
 Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAVESError` to allow the CLI implementation
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
+
 import subprocess
 import argparse
 import pathlib
@@ -30,60 +31,112 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "TARGET",
         nargs="+",
-        help=f"SCons target(s)"
+        help=f"SCons target(s)",
     )
 
-    parser.add_argument("-o", "--output-file", type=pathlib.Path,
-        help="Path to output image file with an extension supported by matplotlib, e.g. 'visualization.svg' " \
-             "(default: %(default)s)")
-    parser.add_argument("--sconstruct", type=pathlib.Path, default=_settings._default_sconstruct,
-        help="Path to SConstruct file (default: %(default)s)")
-    parser.add_argument("--input-file", type=str,
-        help="Path to text file with output from SCons tree command (default: %(default)s)")
+    parser.add_argument(
+        "-o",
+        "--output-file",
+        type=pathlib.Path,
+        # fmt: off
+        help="Path to output image file with an extension supported by matplotlib, e.g. 'visualization.svg' "
+             "(default: %(default)s)",
+        # fmt: on
+    )
+    parser.add_argument(
+        "--sconstruct",
+        type=pathlib.Path,
+        default=_settings._default_sconstruct,
+        help="Path to SConstruct file (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--input-file",
+        type=str,
+        help="Path to text file with output from SCons tree command (default: %(default)s)",
+    )
 
     graph_options = parser.add_argument_group("graph options", "graph options affect plotting and graphml output")
     graph_options.add_argument(
-        "-e", "--exclude-list", nargs="*", default=_settings._visualize_exclude,
-        help="If a node starts or ends with one of these string literals, do not visualize it (default: %(default)s)"
+        "-e",
+        "--exclude-list",
+        nargs="*",
+        default=_settings._visualize_exclude,
+        help="If a node starts or ends with one of these string literals, do not visualize it (default: %(default)s)",
     )
     graph_options.add_argument(
-        "-r", "--exclude-regex", type=str,
-        help="If a node matches this regular expression, do not visualize it (default: %(default)s)"
+        "-r",
+        "--exclude-regex",
+        type=str,
+        help="If a node matches this regular expression, do not visualize it (default: %(default)s)",
     )
     graph_options.add_argument(
-        "-n", "--no-labels", action="store_true",
-        help="Create visualization without labels on the nodes (default: %(default)s)"
+        "-n",
+        "--no-labels",
+        action="store_true",
+        help="Create visualization without labels on the nodes (default: %(default)s)",
     )
     graph_options.add_argument(
-        "-c", "--node-count", action="store_true",
-        help="Add the node count as an node with no edges (default: %(default)s)"
+        "-c",
+        "--node-count",
+        action="store_true",
+        help="Add the node count as an node with no edges (default: %(default)s)",
     )
 
     plot_options = parser.add_argument_group("plot options", "plot options affect the output figure")
-    plot_options.add_argument("--height", type=int, default=_settings._visualize_default_height,
-        help="Height of visualization in inches if being saved to a file (default: %(default)s)")
-    plot_options.add_argument("--width", type=int, default=_settings._visualize_default_width,
-        help="Width of visualization in inches if being saved to a file (default: %(default)s)")
-    plot_options.add_argument("--font-size", type=int, default=_settings._visualize_default_font_size,
-        help="Font size of file names in points (default: %(default)s)")
     plot_options.add_argument(
-        "--node-color", type=str, default=_settings._default_node_color,
-        help="Node face color (default: %(default)s)"
+        "--height",
+        type=int,
+        default=_settings._visualize_default_height,
+        help="Height of visualization in inches if being saved to a file (default: %(default)s)",
     )
     plot_options.add_argument(
-        "--edge-color", type=str, default=_settings._default_edge_color,
-        help="Edge (arrow) color (default: %(default)s)"
+        "--width",
+        type=int,
+        default=_settings._visualize_default_width,
+        help="Width of visualization in inches if being saved to a file (default: %(default)s)",
     )
-    plot_options.add_argument("--vertical", action="store_true",
-        help="Display the graph in a vertical layout (default: %(default)s)")
-    plot_options.add_argument("--transparent", action="store_true",
-        help="Use a transparent background. Requires a format that supports transparency (default: %(default)s)")
+    plot_options.add_argument(
+        "--font-size",
+        type=int,
+        default=_settings._visualize_default_font_size,
+        help="Font size of file names in points (default: %(default)s)",
+    )
+    plot_options.add_argument(
+        "--node-color",
+        type=str,
+        default=_settings._default_node_color,
+        help="Node face color (default: %(default)s)",
+    )
+    plot_options.add_argument(
+        "--edge-color",
+        type=str,
+        default=_settings._default_edge_color,
+        help="Edge (arrow) color (default: %(default)s)",
+    )
+    plot_options.add_argument(
+        "--vertical",
+        action="store_true",
+        help="Display the graph in a vertical layout (default: %(default)s)",
+    )
+    plot_options.add_argument(
+        "--transparent",
+        action="store_true",
+        help="Use a transparent background. Requires a format that supports transparency (default: %(default)s)",
+    )
 
     print_group = parser.add_mutually_exclusive_group()
-    print_group.add_argument("-g", "--print-graphml", dest="print_graphml", action="store_true",
-        help="Print the visualization in graphml format and exit (default: %(default)s)")
-    print_group.add_argument("--print-tree", action="store_true",
-        help="Print the output of the SCons tree command to the screen and exit (default: %(default)s)")
+    print_group.add_argument(
+        "-g",
+        "--print-graphml",
+        dest="print_graphml",
+        action="store_true",
+        help="Print the visualization in graphml format and exit (default: %(default)s)",
+    )
+    print_group.add_argument(
+        "--print-tree",
+        action="store_true",
+        help="Print the output of the SCons tree command to the screen and exit (default: %(default)s)",
+    )
 
     return parser
 
@@ -105,7 +158,7 @@ def main(
     no_labels: bool = False,
     node_count: bool = False,
     transparent: bool = False,
-    input_file: typing.Union[str, pathlib.Path, None] = None
+    input_file: typing.Union[str, pathlib.Path, None] = None,
 ) -> None:
     """Visualize the directed acyclic graph created by a SCons build
 
@@ -186,7 +239,7 @@ def main(
 
 def ancestor_subgraph(
     graph: networkx.DiGraph,
-    nodes: typing.Iterable[str]
+    nodes: typing.Iterable[str],
 ) -> networkx.DiGraph:
     """Return a new directed graph containing nodes and their ancestors
 
@@ -260,7 +313,7 @@ def parse_output(
     exclude_node = False
     exclude_indent = 0
     for line in tree_lines:
-        line_match = re.match(r'^\[(.*)\](.*)\+-(.*)', line)
+        line_match = re.match(r"^\[(.*)\](.*)\+-(.*)", line)
         if line_match:
             status = [_settings._scons_tree_status[_] for _ in line_match.group(1) if _.strip()]
             placement = line_match.group(2)
@@ -274,8 +327,9 @@ def parse_output(
                 if node_name.startswith(exclude) or node_name.endswith(exclude):
                     exclude_node = True
                     exclude_indent = current_indent
-            exclude_node, exclude_indent = check_regex_exclude(exclude_regex, node_name, current_indent,
-                                                               exclude_indent, exclude_node)
+            exclude_node, exclude_indent = check_regex_exclude(
+                exclude_regex, node_name, current_indent, exclude_indent, exclude_node
+            )
             if exclude_node:
                 continue
 
@@ -295,15 +349,21 @@ def parse_output(
     # If SCons tree or input_file is not in the expected format the nodes will be empty
     number_of_nodes = graph.number_of_nodes()
     if number_of_nodes <= 0:
-        raise RuntimeError(f"Unexpected SCons tree format. Use SCons "
-                           f"options '{' '.join(_settings._scons_visualize_arguments)}' or "
-                           f"the ``visualize --print-tree`` option to generate the input file.")
+        raise RuntimeError(
+            f"Unexpected SCons tree format. Use SCons options '{' '.join(_settings._scons_visualize_arguments)}' or "
+            "the ``visualize --print-tree`` option to generate the input file."
+        )
 
     return graph
 
 
-def check_regex_exclude(exclude_regex: str, node_name: str, current_indent: int, exclude_indent: int,
-                        exclude_node: bool = False) -> typing.Tuple[bool, int]:
+def check_regex_exclude(
+    exclude_regex: str,
+    node_name: str,
+    current_indent: int,
+    exclude_indent: int,
+    exclude_node: bool = False,
+) -> typing.Tuple[bool, int]:
     """Excludes node names that match the regular expression
 
     :param str exclude_regex: Regular expression
@@ -354,13 +414,13 @@ def visualize(
     annotations: typing.Dict[str, typing.Any] = dict()
     for node in graph.nodes:
         annotations[node] = axes.annotate(
-            graph.nodes[node]['label'],
+            graph.nodes[node]["label"],
             xy=node_positions[node],
-            xycoords='data',
-            ha='center',
-            va='center',
+            xycoords="data",
+            ha="center",
+            va="center",
             size=font_size,
-            bbox=dict(facecolor=node_color, boxstyle='round')
+            bbox=dict(facecolor=node_color, boxstyle="round"),
         )
 
     for source, target in graph.edges:
@@ -368,19 +428,15 @@ def visualize(
         patchB = annotations[source]
 
         arrowprops = dict(
-            arrowstyle="<-",
-            color=edge_color,
-            connectionstyle='arc3,rad=0.1',
-            patchA=patchA,
-            patchB=patchB
+            arrowstyle="<-", color=edge_color, connectionstyle="arc3,rad=0.1", patchA=patchA, patchB=patchB
         )
         axes.annotate(
             "",
             xy=node_positions[source],
-            xycoords='data',
+            xycoords="data",
             xytext=node_positions[target],
-            textcoords='data',
-            arrowprops=arrowprops
+            textcoords="data",
+            arrowprops=arrowprops,
         )
 
     figure.set_size_inches((width, height))
@@ -391,7 +447,7 @@ def visualize(
 def plot(
     figure: matplotlib.figure.Figure,
     output_file: typing.Optional[pathlib.Path] = None,
-    transparent: bool = False
+    transparent: bool = False,
 ) -> None:
     """Open a matplotlib plot or save to file
 
@@ -405,9 +461,11 @@ def plot(
         suffix = output_file.suffix
         if not suffix or suffix[1:] not in list(figure.canvas.get_supported_filetypes().keys()):
             # If there is no suffix or it's not supported by matplotlib, use svg
-            file_name = file_name.with_suffix('.svg')
-            print(f"WARNING: extension '{suffix}' is not supported by matplotlib. Falling back to '{file_name}'",
-                  file=sys.stderr)
+            file_name = file_name.with_suffix(".svg")
+            print(
+                f"WARNING: extension '{suffix}' is not supported by matplotlib. Falling back to '{file_name}'",
+                file=sys.stderr,
+            )
         figure.savefig(str(file_name), transparent=transparent)
     else:
         matplotlib.pyplot.show()

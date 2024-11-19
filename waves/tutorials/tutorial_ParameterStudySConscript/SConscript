@@ -7,8 +7,8 @@ env.Command(
     action=[
         "echo workflow '${workflow}' > ${TARGET.abspath}",
         "cat ${cat_options} ${SOURCES.abspath} >> ${TARGET.abspath}",
-        "tail ${tail_options} ${TARGET.abspath}"
+        "tail ${tail_options} ${TARGET.abspath}",
     ],
     **parameters,
-    **simulation_constants
+    **simulation_constants,
 )

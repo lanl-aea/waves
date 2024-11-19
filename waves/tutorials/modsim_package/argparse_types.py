@@ -1,4 +1,5 @@
 """Python 2/3 compatible argparse types for input verification"""
+
 import argparse
 
 

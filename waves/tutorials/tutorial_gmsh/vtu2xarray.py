@@ -27,34 +27,42 @@ def main(
     coordinate = ["x", "y", "z"]
     components = ["11", "22", "33", "12", "13", "23"]
     point_numbers = list(range(0, len(results.points)))
-    data_arrays = [xarray.DataArray(
-        data=results.points,
-        dims=["point", "coordinate"],
-        coords={"point": point_numbers, "coordinate": coordinate},
-        name="original_location"
-    )]
+    data_arrays = [
+        xarray.DataArray(
+            data=results.points,
+            dims=["point", "coordinate"],
+            coords={"point": point_numbers, "coordinate": coordinate},
+            name="original_location",
+        )
+    ]
     for key, value in results.point_data.items():
         if len(value.shape) == 1:
-            data_arrays.append(xarray.DataArray(
-                data=value,
-                dims=["point"],
-                coords={"point": point_numbers},
-                name=key
-            ))
+            data_arrays.append(
+                xarray.DataArray(
+                    data=value,
+                    dims=["point"],
+                    coords={"point": point_numbers},
+                    name=key,
+                )
+            )
         elif len(value.shape) == 2 and value.shape[1] == len(components):
-            data_arrays.append(xarray.DataArray(
-                data=value,
-                dims=["point", "component"],
-                coords={"point": point_numbers, "component": components},
-                name=key
-            ))
+            data_arrays.append(
+                xarray.DataArray(
+                    data=value,
+                    dims=["point", "component"],
+                    coords={"point": point_numbers, "component": components},
+                    name=key,
+                )
+            )
         elif len(value.shape) == 2 and value.shape[1] == len(coordinate):
-            data_arrays.append(xarray.DataArray(
-                data=value,
-                dims=["point", "coordinate"],
-                coords={"point": point_numbers, "coordinate": coordinate},
-                name=key
-            ))
+            data_arrays.append(
+                xarray.DataArray(
+                    data=value,
+                    dims=["point", "coordinate"],
+                    coords={"point": point_numbers, "coordinate": coordinate},
+                    name=key,
+                )
+            )
         else:
             raise RuntimeError(f"Do not know how to handle '{key}' data '{value}'")
 
@@ -62,11 +70,13 @@ def main(
     if mesh_file is not None and mesh_file.is_file():
         mesh = meshio.read(mesh_file)
         for key, value in mesh.point_sets.items():
-            data_arrays.append(xarray.DataArray(
-                data=value,
-                dims=[f"{key}_nodes"],
-                name=key
-            ))
+            data_arrays.append(
+                xarray.DataArray(
+                    data=value,
+                    dims=[f"{key}_nodes"],
+                    name=key,
+                )
+            )
 
     data = xarray.merge(data_arrays)
     data.to_netcdf(output_file)
@@ -88,18 +98,18 @@ def get_parser():
         "--input-file",
         type=existing_file,
         required=True,
-        help="VTU input file"
+        help="VTU input file",
     )
     parser.add_argument(
         "--output-file",
         type=pathlib.Path,
         required=True,
-        help="Xarray output file"
+        help="Xarray output file",
     )
     parser.add_argument(
         "--mesh-file",
         type=existing_file,
-        help="CalculiX input file. When provided, try to merge the point/node sets with the results VTU file."
+        help="CalculiX input file. When provided, try to merge the point/node sets with the results VTU file.",
     )
     return parser
 
@@ -110,5 +120,5 @@ if __name__ == "__main__":
     main(
         input_file=args.input_file,
         output_file=args.output_file,
-        mesh_file=args.mesh_file
+        mesh_file=args.mesh_file,
     )

@@ -16,15 +16,14 @@ AddOption(
     type="string",
     action="store",
     metavar="DIR",
-    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
+    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')",
 )
 AddOption(
     "--unconditional-build",
     dest="unconditional_build",
     default=False,
     action="store_true",
-    help="Boolean to force building of conditionally ignored targets, e.g. if the target's action program is missing" \
-            " and it would normally be ignored. (default: '%default')"
+    help="Boolean to force building of conditionally ignored targets. (default: '%default')",
 )
 AddOption(
     "--solve-cpus",
@@ -34,14 +33,14 @@ AddOption(
     type="int",
     action="store",
     metavar="N",
-    help="Run the Abaqus Solve task using N CPUs. (default: '%default')"
+    help="Run the Abaqus Solve task using N CPUs. (default: '%default')",
 )
 AddOption(
     "--print-build-failures",
     dest="print_build_failures",
     default=False,
     action="store_true",
-    help="Print task *.stdout target file(s) on build failures. (default: '%default')"
+    help="Print task *.stdout target file(s) on build failures. (default: '%default')",
 )
 
 # Inherit user's full environment and set project options
@@ -52,7 +51,7 @@ env = waves.scons_extensions.WAVESEnvironment(
     solve_cpus=GetOption("solve_cpus"),
     print_build_failures=GetOption("print_build_failures"),
     TARFLAGS="-c -j",
-    TARSUFFIX=".tar.bz2"
+    TARSUFFIX=".tar.bz2",
 )
 
 # Conditionally print failed task *.stdout files
@@ -72,7 +71,7 @@ author_list = [
     "Thomas Roberts",
     "Sergio Cordova",
     "Matthew Fister",
-    "Scott Ouellette"
+    "Scott Ouellette",
 ]
 author_latex = r" \and ".join(author_list)
 latex_project_name = project_name.replace("_", "-")
@@ -93,7 +92,7 @@ project_variables = {
     "modsim_package_abspath": project_dir / modsim_package_dir,
     "test_source_abspath": project_dir / test_source_dir,
     "datacheck_alias": "datacheck",
-    "regression_alias": "regression"
+    "regression_alias": "regression",
 }
 for key, value in project_variables.items():
     env[key] = value
@@ -104,25 +103,29 @@ env.PrependENVPath("PYTHONPATH", project_dir)
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env["SPHINX_BUILD"] = env.AddProgram(["sphinx-build"])
-env["ABAQUS_PROGRAM"] = env.AddProgram([
-    "/apps/abaqus/Commands/abq2023",
-    "/usr/projects/ea/abaqus/Commands/abq2023",
-    "abq2023",
-    "abaqus"
-])
+env["ABAQUS_PROGRAM"] = env.AddProgram(
+    [
+        "/apps/abaqus/Commands/abq2023",
+        "/usr/projects/ea/abaqus/Commands/abq2023",
+        "abq2023",
+        "abaqus",
+    ]
+)
 
 # Add WAVES builders and scanners
-env.Append(BUILDERS={
-    "AbaqusSolver": waves.scons_extensions.abaqus_solver(program=env["ABAQUS_PROGRAM"]),
-    "AbaqusExtract": waves.scons_extensions.abaqus_extract(program=env["ABAQUS_PROGRAM"]),
-    "CondaEnvironment": waves.scons_extensions.conda_environment(),
-})
+env.Append(
+    BUILDERS={
+        "AbaqusSolver": waves.scons_extensions.abaqus_solver(program=env["ABAQUS_PROGRAM"]),
+        "AbaqusExtract": waves.scons_extensions.abaqus_extract(program=env["ABAQUS_PROGRAM"]),
+        "CondaEnvironment": waves.scons_extensions.conda_environment(),
+    }
+)
 env.Append(SCANNERS=waves.scons_extensions.sphinx_scanner())
 
 # Dump the Conda environment as documentation of as-built target environment
 environment_target = env.CondaEnvironment(
     target=[env["variant_dir_base"] / "environment.yaml"],
-    source=[]
+    source=[],
 )
 env.AlwaysBuild(environment_target)
 env.Alias("environment", environment_target)
@@ -130,7 +133,11 @@ env.Alias("environment", environment_target)
 # Add documentation target(s)
 # Project documentation
 build_dir = env["variant_dir_base"] / documentation_source_dir
-SConscript(documentation_source_dir / "SConscript", variant_dir=build_dir, exports={"env": env, "project_variables": project_variables})
+SConscript(
+    documentation_source_dir / "SConscript",
+    variant_dir=build_dir,
+    exports={"env": env, "project_variables": project_variables},
+)
 
 # Analysis report
 report_dir = pathlib.Path("report")
@@ -139,13 +146,13 @@ SConscript(
     report_dir / "SConscript",
     variant_dir=build_dir,
     exports={"env": env, "project_variables": project_variables},
-    duplicate=True
+    duplicate=True,
 )
 
 # Add simulation targets
 workflow_configurations = [
     "rectangle_compression-nominal",
-    "rectangle_compression-mesh_convergence"
+    "rectangle_compression-mesh_convergence",
 ]
 for workflow in workflow_configurations:
     build_dir = env["variant_dir_base"] / workflow

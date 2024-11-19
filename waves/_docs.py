@@ -3,6 +3,7 @@
 Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAVESError` to allow the CLI implementation
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
+
 import sys
 import pathlib
 import argparse
@@ -21,11 +22,14 @@ def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(add_help=False)
 
     parser.add_argument(
-        "-p", "--print-local-path",
+        "-p",
+        "--print-local-path",
         action="store_true",
-        help="Print the path to the locally installed documentation index file. " \
-             "As an alternative to the docs sub-command, open index.html in a web browser " \
-             "(default: %(default)s)"
+        # fmt: off
+        help="Print the path to the locally installed documentation index file. "
+             "As an alternative to the docs sub-command, open index.html in a web browser "
+             "(default: %(default)s)",
+        # fmt: on
     )
 
     return parser
@@ -47,6 +51,7 @@ def main(documentation_index: pathlib.Path, print_local_path: bool = False) -> N
             raise RuntimeError("Could not find package documentation HTML index file")
     else:
         import webbrowser
+
         webbrowser.open(str(documentation_index))
 
 

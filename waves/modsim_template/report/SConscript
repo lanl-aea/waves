@@ -23,19 +23,25 @@ Import(["env", "project_variables"])
 report = []
 
 # Perform variable substitution on Sphinx configuration file
-report.extend(env.Substfile(
-    "conf.py.in",
-    SUBST_DICT=env.SubstitutionSyntax(project_variables)
-))
+report.extend(
+    env.Substfile(
+        "conf.py.in",
+        SUBST_DICT=env.SubstitutionSyntax(project_variables),
+    )
+)
 
 # Copy project root files required by the documentation
-root_files = [("README.txt", "#/README.rst")]
+root_files = [
+    ("README.txt", "#/README.rst"),
+]
 for target, source in root_files:
-    report.extend(env.Command(
-        target=[target],
-        source=[source],
-        action=Copy("$TARGET", "$SOURCE", False)
-    ))
+    report.extend(
+        env.Command(
+            target=[target],
+            source=[source],
+            action=Copy("$TARGET", "$SOURCE", False),
+        )
+    )
 
 # Copy documentation source files re-used in the report
 documentation_abspath = env["documentation_abspath"]
@@ -59,19 +65,25 @@ report_copy_list = [
 report_copy_list = [pathlib.Path(source_file) for source_file in report_copy_list]
 # Call waves copy_substfile directly as a function instead of a pseudo-builder.  Required to help the Sphinx scanner and
 # SCons find ``build/report/README.txt`` instead of looking for ``docs/README.txt``.
-report.extend(waves.scons_extensions.copy_substfile(
-    Environment(),
-    report_copy_list,
-    substitution_dictionary=env.SubstitutionSyntax(project_variables)
-))
+report.extend(
+    waves.scons_extensions.copy_substfile(
+        Environment(),
+        report_copy_list,
+        substitution_dictionary=env.SubstitutionSyntax(
+            project_variables,
+        ),
+    )
+)
 
 # PDF Report build task
 targets = [f"latex/{project_variables['report_pdf']}"]
 sources = ["index.rst"] + [source_file.name.rstrip(".in") for source_file in report_copy_list]
-report.extend(env.SphinxPDF(
-    target=targets,
-    source=sources,
-))
+report.extend(
+    env.SphinxPDF(
+        target=targets,
+        source=sources,
+    )
+)
 env.Clean(report, [Dir("latex")] + sources)
 env.Alias("report", report)
 env.Alias(env["regression_alias"], report)

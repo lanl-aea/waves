@@ -20,20 +20,20 @@ _sierra_environment_extension = ".env"
 _scons_command = "scons"
 _scons_visualize_arguments = ["-Q", "--tree=status", "-n"]
 _scons_tree_status = {
-    'E': 'exists',
-    'R': 'exists in repository only',
-    'b': 'implicit builder',
-    'B': 'explicit builder',
-    'S': 'side effect',
-    'P': 'precious',
-    'A': 'always build',
-    'C': 'current',
-    'N': 'no clean',
-    'H ': 'no cache'
+    "E": "exists",
+    "R": "exists in repository only",
+    "b": "implicit builder",
+    "B": "explicit builder",
+    "S": "side effect",
+    "P": "precious",
+    "A": "always build",
+    "C": "current",
+    "N": "no clean",
+    "H ": "no cache",
 }
 _scons_substfile_suffix = ".in"
 _stdout_extension = ".stdout"
-_cd_action_prefix = 'cd ${TARGET.dir.abspath} &&'
+_cd_action_prefix = "cd ${TARGET.dir.abspath} &&"
 _redirect_action_suffix = "> ${TARGETS[-1].abspath} 2>&1"
 _redirect_environment_suffix = "> ${TARGETS[-2].abspath} 2>&1"
 
@@ -73,13 +73,14 @@ _parameter_study_subcommands = [
     _cartesian_product_subcommand,
     _custom_study_subcommand,
     _latin_hypercube_subcommand,
-    _sobol_sequence_subcommand
+    _sobol_sequence_subcommand,
 ]
-_parameter_study_description = \
-    "Generates parameter studies in various output formats. Writes parameter study to STDOUT by default. If an " \
-    "output file template is specified, output one file per parameter set. Output file(s) are written if the file " \
-    "doesn't exist and overwritten when the file contents have changed. The overwrite option will always overwrite " \
+_parameter_study_description = (
+    "Generates parameter studies in various output formats. Writes parameter study to STDOUT by default. If an "
+    "output file template is specified, output one file per parameter set. Output file(s) are written if the file "
+    "doesn't exist and overwritten when the file contents have changed. The overwrite option will always overwrite "
     "all files. The dry run option will print a list of files and contents that would have been  written."
+)
 
 # Fetch
 _allowable_tutorial_numbers_typing = typing.Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
@@ -154,15 +155,17 @@ _tutorial_paths = {
         pathlib.Path("tutorials/tutorial_11_regression_testing_SConstruct"),
     ],
     12: [
-        pathlib.Path("tutorials/tutorial_12_archival",),
+        pathlib.Path(
+            "tutorials/tutorial_12_archival",
+        ),
         pathlib.Path("tutorials/tutorial_12_archival_SConstruct"),
-    ]
+    ],
 }
 
 # Visualize
 _default_sconstruct = pathlib.Path("SConstruct")
-_default_node_color = '#5AC7CB'  # Light blue from Waves Logo
-_default_edge_color = '#B7DEBE'  # Light green from Waves Logo
+_default_node_color = "#5AC7CB"  # Light blue from Waves Logo
+_default_edge_color = "#B7DEBE"  # Light green from Waves Logo
 
 # Remove third-party packages from the project namespace
 del pathlib

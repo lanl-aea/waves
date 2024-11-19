@@ -18,22 +18,21 @@ AddOption(
     type="string",
     action="store",
     metavar="DIR",
-    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
+    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')",
 )
 AddOption(
     "--unconditional-build",
     dest="unconditional_build",
     default=False,
     action="store_true",
-    help="Boolean flag to force building of conditionally ignored targets, e.g. if the target's action program is missing" \
-            " and it would normally be ignored. (default: '%default')"
+    help="Boolean flag to force building of conditionally ignored targets. (default: '%default')",
 )
 AddOption(
     "--print-build-failures",
     dest="print_build_failures",
     default=False,
     action="store_true",
-    help="Print task *.stdout target file(s) on build failures. (default: '%default')"
+    help="Print task *.stdout target file(s) on build failures. (default: '%default')",
 )
 
 # Comments used in tutorial code snippets: marker-2
@@ -43,7 +42,7 @@ env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
     variant_dir_base=pathlib.Path(GetOption("variant_dir_base")),
     unconditional_build=GetOption("unconditional_build"),
-    print_build_failures=GetOption("print_build_failures")
+    print_build_failures=GetOption("print_build_failures"),
 )
 
 # Conditionally print failed task *.stdout files
@@ -55,11 +54,13 @@ env.SetOption("duplicate", "copy")
 # Comments used in tutorial code snippets: marker-3
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
-env["CUBIT_PROGRAM"] = env.AddCubit([
-    "/apps/Cubit-16.12/cubit",
-    "/usr/projects/ea/Cubit/Cubit-16.12/cubit",
-    "cubit"
-])
+env["CUBIT_PROGRAM"] = env.AddCubit(
+    [
+        "/apps/Cubit-16.12/cubit",
+        "/usr/projects/ea/Cubit/Cubit-16.12/cubit",
+        "cubit",
+    ]
+)
 env["SBATCH_PROGRAM"] = env.AddProgram(["sbatch"])
 env["user"] = getpass.getuser()
 quinoa_hpc_environment = "module use /usr/projects/ea/Quinoa/modules/modulefiles && module load quinoa"
@@ -68,14 +69,14 @@ quinoa_aea_environment = "module use /projects/aea_compute/modulefiles && module
 # Comments used in tutorial code snippets: marker-4
 
 # Set project internal variables and variable substitution dictionaries
-project_name = 'WAVES-TUTORIAL'
-version = '0.1.0'
+project_name = "WAVES-TUTORIAL"
+version = "0.1.0"
 project_dir = pathlib.Path(Dir(".").abspath)
 project_variables = {
-    'project_name': project_name,
-    'project_dir': project_dir,
-    'version': version,
-    'remote_directory': pathlib.Path(f"/users/{env['user']}/WAVES-TUTORIAL/tutorial_quinoa")
+    "project_name": project_name,
+    "project_dir": project_dir,
+    "version": version,
+    "remote_directory": pathlib.Path(f"/users/{env['user']}/WAVES-TUTORIAL/tutorial_quinoa"),
 }
 for key, value in project_variables.items():
     env[key] = value
@@ -83,12 +84,14 @@ for key, value in project_variables.items():
 # Comments used in tutorial code snippets: marker-5
 
 # Add builders and pseudo-builders
-env.Append(BUILDERS={
-    "SSHQuinoaSolver": waves.scons_extensions.ssh_builder_actions(
-        waves.scons_extensions.sbatch_quinoa_builder_factory(environment=f"{quinoa_hpc_environment} &&"),
-        remote_server="ro-rfe.lanl.gov"
-    )
-})
+env.Append(
+    BUILDERS={
+        "SSHQuinoaSolver": waves.scons_extensions.ssh_builder_actions(
+            waves.scons_extensions.sbatch_quinoa_builder_factory(environment=f"{quinoa_hpc_environment} &&"),
+            remote_server="ro-rfe.lanl.gov",
+        )
+    }
+)
 
 # Source the Quinoa environment and store it separately from the Conda/Cubit environment to avoid PATH interference
 try:  # sstelmo/sstbigbird
@@ -107,14 +110,16 @@ envQuinoa["charmrun"] = envQuinoa.AddProgram(["charmrun"])
 quinoa_builder_factory = waves.scons_extensions.quinoa_builder_factory
 if env["SBATCH_PROGRAM"] is not None:
     quinoa_builder_factory = waves.scons_extensions.sbatch_quinoa_builder_factory
-envQuinoa.Append(BUILDERS={
-    "QuinoaSolver": quinoa_builder_factory(program=envQuinoa["charmrun"], subcommand=envQuinoa["inciter"])
-})
+envQuinoa.Append(
+    BUILDERS={"QuinoaSolver": quinoa_builder_factory(program=envQuinoa["charmrun"], subcommand=envQuinoa["inciter"])}
+)
 
 # Comments used in tutorial code snippets: marker-6
 
 # Add simulation targets
-SConscript("SConscript", variant_dir=env["variant_dir_base"], exports={"env": env, "envQuinoa": envQuinoa}, duplicate=True)
+SConscript(
+    "SConscript", variant_dir=env["variant_dir_base"], exports={"env": env, "envQuinoa": envQuinoa}, duplicate=True
+)
 
 # Comments used in tutorial code snippets: marker-7
 

@@ -16,6 +16,6 @@ exclude package_documentation.py
 exclude .git*
 exclude .pipeline*.yml
 exclude SConstruct
-exclude flake8
+exclude style
 exclude mypy
 exclude pytest

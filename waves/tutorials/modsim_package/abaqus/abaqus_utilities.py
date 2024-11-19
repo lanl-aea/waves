@@ -21,11 +21,12 @@ def export_mesh(model_object, part_name, orphan_mesh_file):
     orphan_mesh_file = os.path.splitext(orphan_mesh_file)[0] + ".inp"
     model_object.keywordBlock.synchVersions()
     block = model_object.keywordBlock.sieBlocks
-    block_string = '\n'.join(block)
-    orphan_mesh = re.findall(r".*?\*Part, name=({})$\n(.*?)\*End Part".format(part_name),
-                             block_string, re.DOTALL | re.I | re.M)
+    block_string = "\n".join(block)
+    orphan_mesh = re.findall(
+        r".*?\*Part, name=({})$\n(.*?)\*End Part".format(part_name), block_string, re.DOTALL | re.I | re.M
+    )
     part_definition = orphan_mesh[0]
-    with open(orphan_mesh_file, 'w') as output:
+    with open(orphan_mesh_file, "w") as output:
         output.write(part_definition[1].strip())
 
 
@@ -45,5 +46,6 @@ def return_abaqus_constant(search):
     else:
         raise ValueError("The abaqusConstants module does not have a matching '{}' object".format(search))
     return attribute
+
 
 # Comment used in tutorial code snippets: marker-1

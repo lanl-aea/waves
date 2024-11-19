@@ -48,29 +48,45 @@ def main(input_file, output_file, model_name, part_name, width, height):
 
     part = abaqus.mdb.models[model_name].parts[part_name]
 
-    vertices = part.vertices.findAt(((0, 0, 0),),)
-    part.Set(vertices=vertices, name='bottom_left')
+    vertices = part.vertices.findAt(
+        ((0, 0, 0),),
+    )
+    part.Set(vertices=vertices, name="bottom_left")
 
-    vertices = part.vertices.findAt(((width, 0, 0),),)
-    part.Set(vertices=vertices, name='bottom_right')
+    vertices = part.vertices.findAt(
+        ((width, 0, 0),),
+    )
+    part.Set(vertices=vertices, name="bottom_right")
 
-    vertices = part.vertices.findAt(((width, height, 0),),)
-    part.Set(vertices=vertices, name='top_right')
+    vertices = part.vertices.findAt(
+        ((width, height, 0),),
+    )
+    part.Set(vertices=vertices, name="top_right")
 
-    vertices = part.vertices.findAt(((0, height, 0),),)
-    part.Set(vertices=vertices, name='top_left')
+    vertices = part.vertices.findAt(
+        ((0, height, 0),),
+    )
+    part.Set(vertices=vertices, name="top_left")
 
-    side1Edges = part.edges.findAt(((0, height / 2., 0),),)
-    part.Set(edges=side1Edges, name='left')
+    side1Edges = part.edges.findAt(
+        ((0, height / 2.0, 0),),
+    )
+    part.Set(edges=side1Edges, name="left")
 
-    side1Edges = part.edges.findAt(((width / 2., height, 0),),)
-    part.Set(edges=side1Edges, name='top')
+    side1Edges = part.edges.findAt(
+        ((width / 2.0, height, 0),),
+    )
+    part.Set(edges=side1Edges, name="top")
 
-    side1Edges = part.edges.findAt(((width, height / 2., 0),),)
-    part.Set(edges=side1Edges, name='right')
+    side1Edges = part.edges.findAt(
+        ((width, height / 2.0, 0),),
+    )
+    part.Set(edges=side1Edges, name="right")
 
-    side1Edges = part.edges.findAt(((width / 2., 0, 0),),)
-    part.Set(edges=side1Edges, name='bottom')
+    side1Edges = part.edges.findAt(
+        ((width / 2.0, 0, 0),),
+    )
+    part.Set(edges=side1Edges, name="bottom")
 
     abaqus.mdb.save()
 
@@ -91,37 +107,67 @@ def get_parser():
     basename_without_extension, extension = os.path.splitext(basename)
     # Construct a part name from the filename less the workflow step
     default_part_name = basename_without_extension
-    suffix = '_partition'
+    suffix = "_partition"
     if default_part_name.endswith(suffix):
-        default_part_name = default_part_name[:-len(suffix)]
+        default_part_name = default_part_name[: -len(suffix)]
     # Set default parameter values
-    default_input_file = '{}_geometry'.format(default_part_name)
-    default_output_file = '{}'.format(basename_without_extension)
+    default_input_file = "{}_geometry".format(default_part_name)
+    default_output_file = "{}".format(basename_without_extension)
     default_width = 1.0
     default_height = 1.0
 
     prog = "abaqus cae -noGui {} --".format(basename)
-    cli_description = "Partition the simple rectangle geometry created by ``rectangle_geometry.py`` " \
-                      "and write an ``output_file``.cae Abaqus model file."
+    cli_description = (
+        "Partition the simple rectangle geometry created by ``rectangle_geometry.py`` "
+        "and write an ``output_file``.cae Abaqus model file."
+    )
     parser = argparse.ArgumentParser(description=cli_description, prog=prog)
-    parser.add_argument('--input-file', type=str, default=default_input_file,
-                        help="The Abaqus model file created by ``rectangle_geometry.py``. " \
-                             "Will be stripped of the extension and ``.cae`` will be used, e.g. ``input_file``.cae")
-    parser.add_argument('--output-file', type=str, default=default_output_file,
-                        help="The output file for the Abaqus model. " \
-                             "Will be stripped of the extension and ``.cae`` will be used, e.g. ``output_file``.cae")
-    parser.add_argument('--model-name', type=str, default=default_part_name,
-                        help="The name of the Abaqus model")
-    parser.add_argument('--part-name', type=str, default=default_part_name,
-                        help="The name of the Abaqus part")
-    parser.add_argument('--width', type=positive_float, default=default_width,
-                        help="The rectangle width. Positive float.")
-    parser.add_argument('--height', type=positive_float, default=default_height,
-                        help="The rectangle height. Positive float.")
+    parser.add_argument(
+        "--input-file",
+        type=str,
+        default=default_input_file,
+        # fmt: off
+        help="The Abaqus model file created by ``rectangle_geometry.py``. "
+             "Will be stripped of the extension and ``.cae`` will be used, e.g. ``input_file``.cae",
+        # fmt: on
+    )
+    parser.add_argument(
+        "--output-file",
+        type=str,
+        default=default_output_file,
+        # fmt: off
+        help="The output file for the Abaqus model. "
+             "Will be stripped of the extension and ``.cae`` will be used, e.g. ``output_file``.cae",
+        # fmt: on
+    )
+    parser.add_argument(
+        "--model-name",
+        type=str,
+        default=default_part_name,
+        help="The name of the Abaqus model",
+    )
+    parser.add_argument(
+        "--part-name",
+        type=str,
+        default=default_part_name,
+        help="The name of the Abaqus part",
+    )
+    parser.add_argument(
+        "--width",
+        type=positive_float,
+        default=default_width,
+        help="The rectangle width. Positive float.",
+    )
+    parser.add_argument(
+        "--height",
+        type=positive_float,
+        default=default_height,
+        help="The rectangle height. Positive float.",
+    )
     return parser
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = get_parser()
     # Abaqus does not strip the CAE options, so we have to skip the unknown options related to the CAE CLI.
     try:
@@ -133,11 +179,13 @@ if __name__ == '__main__':
     if len(possible_typos) > 0:
         raise RuntimeError("Found possible typos in CLI option(s) {}".format(possible_typos))
 
-    sys.exit(main(
-        input_file=args.input_file,
-        output_file=args.output_file,
-        model_name=args.model_name,
-        part_name=args.part_name,
-        width=args.width,
-        height=args.height
-    ))
+    sys.exit(
+        main(
+            input_file=args.input_file,
+            output_file=args.output_file,
+            model_name=args.model_name,
+            part_name=args.part_name,
+            width=args.width,
+            height=args.height,
+        )
+    )

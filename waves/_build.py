@@ -3,6 +3,7 @@
 Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAVESError` to allow the CLI implementation
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
+
 import sys
 import typing
 import pathlib
@@ -25,13 +26,14 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "TARGET",
         nargs="+",
-        help=f"SCons target(s)"
+        help=f"SCons target(s)",
     )
     parser.add_argument(
-        "-m", "--max-iterations",
+        "-m",
+        "--max-iterations",
         type=int,
         default=5,
-        help="Maximum number of SCons command iterations (default: %(default)s)"
+        help="Maximum number of SCons command iterations (default: %(default)s)",
     )
 
     directory_group = parser.add_mutually_exclusive_group()
@@ -39,22 +41,29 @@ def get_parser() -> argparse.ArgumentParser:
         "--working-directory",
         type=str,
         default=None,
-        help=argparse.SUPPRESS
+        help=argparse.SUPPRESS,
     )
     directory_group.add_argument(
-        "-g", "--git-clone-directory",
+        "-g",
+        "--git-clone-directory",
         type=str,
         default=None,
-        help="Perform a full local git clone operation to the specified directory before executing the scons " \
-             "command, ``git clone --no-hardlinks ${PWD} ${GIT_CLONE_DIRECTORY}`` (default: %(default)s)"
+        # fmt: off
+        help="Perform a full local git clone operation to the specified directory before executing the scons "
+             "command, ``git clone --no-hardlinks ${PWD} ${GIT_CLONE_DIRECTORY}`` (default: %(default)s)",
+        # fmt: on
     )
 
     return parser
 
 
-def main(targets: list, scons_args: typing.Optional[list] = None, max_iterations: int = 5,
-         working_directory: typing.Union[str, pathlib.Path, None] = None,
-         git_clone_directory: typing.Union[str, pathlib.Path, None] = None) -> None:
+def main(
+    targets: list,
+    scons_args: typing.Optional[list] = None,
+    max_iterations: int = 5,
+    working_directory: typing.Union[str, pathlib.Path, None] = None,
+    git_clone_directory: typing.Union[str, pathlib.Path, None] = None,
+) -> None:
     """Submit an iterative SCons command
 
     SCons command is re-submitted until SCons reports that the target 'is up to date.' or the iteration count is
@@ -91,10 +100,13 @@ def main(targets: list, scons_args: typing.Optional[list] = None, max_iterations
     while trigger_count < len(targets):
         count += 1
         if count > max_iterations:
-            raise RuntimeError(f"Exceeded maximum iterations '{max_iterations}' before finding '{stop_trigger}' "
-                                "for every target")
-        print(f"\n{_settings._project_name_short.lower()} build iteration {count}: '{' '.join(command)}'\n",
-              file=sys.stdout)
+            raise RuntimeError(
+                f"Exceeded maximum iterations '{max_iterations}' before finding '{stop_trigger}' " "for every target"
+            )
+        print(
+            f"\n{_settings._project_name_short.lower()} build iteration {count}: '{' '.join(command)}'\n",
+            file=sys.stdout,
+        )
         scons_return_code, scons_stdout = _utilities.tee_subprocess(command, cwd=working_directory)
         if scons_return_code != 0:
             raise RuntimeError(f"command '{' '.join(command)}' failed")

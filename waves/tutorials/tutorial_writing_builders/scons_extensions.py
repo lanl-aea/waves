@@ -14,7 +14,7 @@ def solver_builder_factory(
     subcommand_options: str = "",
     action_suffix: str = "> ${TARGETS[-1].abspath} 2>&1",
     emitter=waves.scons_extensions.first_target_emitter,
-    **kwargs
+    **kwargs,
 ) -> SCons.Builder.Builder:
     """
     This builder factory extends :meth:`waves.scons_extensions.first_target_builder_factory`. This builder factory uses
@@ -91,6 +91,6 @@ def solver_builder_factory(
         subcommand_options=subcommand_options,
         action_suffix=action_suffix,
         emitter=emitter,
-        **kwargs
+        **kwargs,
     )
     return builder

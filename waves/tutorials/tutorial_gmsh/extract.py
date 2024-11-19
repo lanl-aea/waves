@@ -33,13 +33,13 @@ def get_parser():
     parser.add_argument(
         "--input-file",
         type=pathlib.Path,
-        required=True
+        required=True,
     )
     parser.add_argument(
         "--output-format",
         type=str,
         choices=["vtu", "vtk"],
-        default=default_output_format
+        default=default_output_format,
     )
     return parser
 
@@ -49,5 +49,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
     main(
         input_file=args.input_file,
-        output_format=args.output_format
+        output_format=args.output_format,
     )

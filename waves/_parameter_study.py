@@ -5,6 +5,7 @@ Thin CLI wrapper around :meth:`waves.parameter_generators` classes
 Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAVESError` to allow the CLI implementation
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
+
 import io
 import sys
 import typing
@@ -28,74 +29,91 @@ def get_parser() -> argparse.ArgumentParser:
     # Required positional option
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument(
-        'INPUT_FILE', nargs='?', default=(None if sys.stdin.isatty() else sys.stdin),
-        help=f"YAML formatted parameter study schema file (default: STDIN)"
+        "INPUT_FILE",
+        nargs="?",
+        default=(None if sys.stdin.isatty() else sys.stdin),
+        help="YAML formatted parameter study schema file (default: STDIN)",
     )
 
     # Mutually exclusive output file options
     output_file_group = parser.add_mutually_exclusive_group()
     output_file_group.add_argument(
-        '-o', '--output-file-template',
+        "-o",
+        "--output-file-template",
         default=_settings._default_output_file_template,
-        dest='OUTPUT_FILE_TEMPLATE',
-        help=f"Output file template. May contain pathseps for an absolute or relative " \
-             f"path template. May contain the ``{_settings._template_placeholder}`` " \
-             f"set number placeholder in the file basename but not in the path. " \
-             f"If the placeholder is not found, it will be " \
-             f"appended to the template string. Output files are overwritten if the "
-             f"content of the file has changed or if ``overwrite`` is True "
-             f"(default: %(default)s)"
+        dest="OUTPUT_FILE_TEMPLATE",
+        # fmt: off
+        help="Output file template. May contain pathseps for an absolute or relative "
+             f"path template. May contain the ``{_settings._template_placeholder}`` "
+             "set number placeholder in the file basename but not in the path. "
+             "If the placeholder is not found, it will be "
+             "appended to the template string. Output files are overwritten if the "
+             "content of the file has changed or if ``overwrite`` is True "
+             "(default: %(default)s)",
+        # fmt: on
     )
     output_file_group.add_argument(
-        '-f', '--output-file',
+        "-f",
+        "--output-file",
         default=_settings._default_output_file,
-        dest='OUTPUT_FILE',
-        help=f"Output file name. May contain pathseps for an absolute or relative path. " \
-              "Output file is overwritten if the content of the file has changed or if " \
-              "``overwrite`` is True (default: %(default)s)"
+        dest="OUTPUT_FILE",
+        # fmt: off
+        help=f"Output file name. May contain pathseps for an absolute or relative path. "
+              "Output file is overwritten if the content of the file has changed or if "
+              "``overwrite`` is True (default: %(default)s)",
+        # fmt: on
     )
 
     # Optional keyword options
     parser.add_argument(
-        '-t', '--output-file-type',
+        "-t",
+        "--output-file-type",
         default=_settings._default_output_file_type_cli,
         choices=_settings._allowable_output_file_types,
-        help="Output file type (default: %(default)s)"
+        help="Output file type (default: %(default)s)",
     )
     parser.add_argument(
-        '-s', '--set-name-template',
+        "-s",
+        "--set-name-template",
         default=_settings._default_set_name_template,
-        dest='SET_NAME_TEMPLATE',
-        help="Parameter set name template. Overridden by ``output_file_template``, " \
-             "if provided (default: %(default)s)"
+        dest="SET_NAME_TEMPLATE",
+        # fmt: off
+        help="Parameter set name template. Overridden by ``output_file_template``, "
+             "if provided (default: %(default)s)",
+        # fmt: on
     )
     parser.add_argument(
-        '-p', '--previous-parameter-study',
+        "-p",
+        "--previous-parameter-study",
         default=_settings._default_previous_parameter_study,
-        dest='PREVIOUS_PARAMETER_STUDY',
-        help="A relative or absolute file path to a previously created parameter study Xarray " \
-             "Dataset (default: %(default)s)"
+        dest="PREVIOUS_PARAMETER_STUDY",
+        # fmt: off
+        help="A relative or absolute file path to a previously created parameter study Xarray "
+             "Dataset (default: %(default)s)",
+        # fmt: on
     )
     parser.add_argument(
-        '--require-previous-parameter-study',
-        action='store_true',
-        help=f"Raise a ``RuntimeError`` if the previous parameter study file is missing (default: %(default)s)"
+        "--require-previous-parameter-study",
+        action="store_true",
+        help="Raise a ``RuntimeError`` if the previous parameter study file is missing (default: %(default)s)",
     )
     parser.add_argument(
-        '--overwrite',
-        action='store_true',
-        help=f"Overwrite existing output files (default: %(default)s)"
+        "--overwrite",
+        action="store_true",
+        help="Overwrite existing output files (default: %(default)s)",
     )
     parser.add_argument(
-        '--dry-run',
-        action='store_true',
-        help=f"Print contents of new parameter study output files to STDOUT and exit " \
-                    f"(default: %(default)s)"
+        "--dry-run",
+        action="store_true",
+        help="Print contents of new parameter study output files to STDOUT and exit (default: %(default)s)",
     )
     parser.add_argument(
-        '--write-meta', action='store_true',
-        help="Write a meta file named 'parameter_study_meta.txt' containing the " \
-             "parameter set file names (default: %(default)s)"
+        "--write-meta",
+        action="store_true",
+        # fmt: off
+        help="Write a meta file named 'parameter_study_meta.txt' containing the parameter set file names "
+             "(default: %(default)s)",
+        # fmt: on
     )
 
     return parser
@@ -134,7 +152,7 @@ def main(
     require_previous_parameter_study: bool = _settings._default_require_previous_parameter_study,
     overwrite: bool = _settings._default_overwrite,
     dry_run: bool = _settings._default_dry_run,
-    write_meta: bool = _settings._default_write_meta
+    write_meta: bool = _settings._default_write_meta,
 ) -> None:
     """Build parameter studies
 
@@ -159,21 +177,20 @@ def main(
         _settings._cartesian_product_subcommand: parameter_generators.CartesianProduct,
         _settings._custom_study_subcommand: parameter_generators.CustomStudy,
         _settings._latin_hypercube_subcommand: parameter_generators.LatinHypercube,
-        _settings._sobol_sequence_subcommand: parameter_generators.SobolSequence
+        _settings._sobol_sequence_subcommand: parameter_generators.SobolSequence,
     }
-    parameter_generator = \
-        available_parameter_generators[subcommand](
-            parameter_schema,
-            output_file_template=output_file_template,
-            output_file=output_file,
-            output_file_type=output_file_type,
-            set_name_template=set_name_template,
-            previous_parameter_study=previous_parameter_study,
-            require_previous_parameter_study=require_previous_parameter_study,
-            overwrite=overwrite,
-            dry_run=dry_run,
-            write_meta=write_meta
-        )
+    parameter_generator = available_parameter_generators[subcommand](
+        parameter_schema,
+        output_file_template=output_file_template,
+        output_file=output_file,
+        output_file_type=output_file_type,
+        set_name_template=set_name_template,
+        previous_parameter_study=previous_parameter_study,
+        require_previous_parameter_study=require_previous_parameter_study,
+        overwrite=overwrite,
+        dry_run=dry_run,
+        write_meta=write_meta,
+    )
 
     # Build the parameter study.
     parameter_generator.write()

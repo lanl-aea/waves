@@ -2,40 +2,48 @@ Import("env")
 
 # Write project builders for re-use in task definitions
 abaqus_journal = Builder(
-    action="cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.abspath} " \
-           "${abaqus_options} -- ${journal_options}"
+    action=[
+        (
+            "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.abspath} ${abaqus_options} "
+            "-- ${journal_options}"
+        )
+    ]
 )
 
 abaqus_solver = Builder(
-    action="cd ${TARGET.dir.abspath} && ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} " \
-           "${abaqus_options} -interactive -ask_delete no"
+    action=[
+        (
+            "cd ${TARGET.dir.abspath} && ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} "
+            "${abaqus_options} -interactive -ask_delete no"
+        )
+    ]
 )
 
 # Add builders and pseudo-builders
-env.Append(BUILDERS={
-    "AbaqusJournal": abaqus_journal,
-    "AbaqusSolver": abaqus_solver
-})
+env.Append(
+    BUILDERS={
+        "AbaqusJournal": abaqus_journal,
+        "AbaqusSolver": abaqus_solver,
+    }
+)
 
 # Geometry
 env.AbaqusJournal(
-    target=["rectangle_geometry.cae"],
-    source=["rectangle_geometry.py"],
-    abaqus_program=env["ABAQUS_PROGRAM"]
+    target=["rectangle_geometry.cae"], source=["rectangle_geometry.py"], abaqus_program=env["ABAQUS_PROGRAM"]
 )
 
 # Partition
 env.AbaqusJournal(
     target=["rectangle_partition.cae"],
     source=["rectangle_partition.py", "rectangle_geometry.cae"],
-    abaqus_program=env["ABAQUS_PROGRAM"]
+    abaqus_program=env["ABAQUS_PROGRAM"],
 )
 
 # Mesh
 env.AbaqusJournal(
     target=["rectangle_mesh.inp", "rectangle_mesh.cae"],
     source=["rectangle_mesh.py", "rectangle_partition.cae", "abaqus_utilities.py"],
-    abaqus_program=env["ABAQUS_PROGRAM"]
+    abaqus_program=env["ABAQUS_PROGRAM"],
 )
 
 # Abaqus Solve
@@ -50,7 +58,7 @@ solve_targets = [
     "rectangle_compression.msg",
     "rectangle_compression.com",
     "rectangle_compression.prt",
-    "rectangle_compression.sta"
+    "rectangle_compression.sta",
 ]
 
 target = env.AbaqusSolver(
@@ -58,7 +66,7 @@ target = env.AbaqusSolver(
     source=abaqus_source_list,
     abaqus_program=env["ABAQUS_PROGRAM"],
     job_name="rectangle_compression",
-    abaqus_options="-double both"
+    abaqus_options="-double both",
 )
 
 # Collector alias named after the model simulation

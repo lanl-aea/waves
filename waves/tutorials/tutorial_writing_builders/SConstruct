@@ -15,7 +15,7 @@ AddOption(
     type="string",
     action="store",
     metavar="DIR",
-    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
+    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')",
 )
 AddOption(
     "--solve-cpus",
@@ -25,7 +25,7 @@ AddOption(
     type="int",
     action="store",
     metavar="N",
-    help="Run the solver task using N CPUs. (default: '%default')"
+    help="Run the solver task using N CPUs. (default: '%default')",
 )
 
 env = waves.scons_extensions.WAVESEnvironment(
@@ -44,17 +44,17 @@ env.Default()
 # Add project builders and scanners
 solver_executable = pathlib.Path("solver.py").resolve()
 env["solver"] = env.AddProgram([solver_executable])
-env.Append(BUILDERS={
-    "Solver": scons_extensions.solver_builder_factory(
-        subcommand_options="$(--solve-cpus=${solve_cpus}$)"
-    )
-})
+env.Append(
+    BUILDERS={
+        "Solver": scons_extensions.solver_builder_factory(subcommand_options="$(--solve-cpus=${solve_cpus}$)"),
+    }
+)
 
 
 # Add simulation targets
 workflow_configurations = [
     "pytest",
-    "implicit_workflow"
+    "implicit_workflow",
 ]
 for workflow in workflow_configurations:
     build_dir = env["variant_dir_base"] / workflow

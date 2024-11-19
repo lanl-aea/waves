@@ -3,6 +3,7 @@
 Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAVESError` to allow the CLI implementation
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
+
 import sys
 import pathlib
 import argparse
@@ -26,7 +27,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "PARAMETER_STUDY_FILE",
         type=pathlib.Path,
-        help=f"Parameter study relative or absolute path"
+        help="Parameter study relative or absolute path",
     )
     return parser
 

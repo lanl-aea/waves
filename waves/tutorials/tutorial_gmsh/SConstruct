@@ -13,22 +13,21 @@ AddOption(
     type="string",
     action="store",
     metavar="DIR",
-    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
+    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')",
 )
 AddOption(
     "--unconditional-build",
     dest="unconditional_build",
     default=False,
     action="store_true",
-    help="Boolean to force building of conditionally ignored targets, e.g. if the target's action program is missing" \
-            " and it would normally be ignored. (default: '%default')"
+    help="Boolean to force building of conditionally ignored targets. (default: '%default')",
 )
 AddOption(
     "--verbose-tasks",
     dest="verbose_tasks",
     default=False,
     action="store_true",
-    help="Boolean to 'tee' output for interactive and verbose task execution. (default: '%default')"
+    help="Boolean to 'tee' output for interactive and verbose task execution. (default: '%default')",
 )
 
 # Inherit user's full environment
@@ -36,7 +35,7 @@ env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
     build_dir=GetOption("build_dir"),
     unconditional_build=GetOption("unconditional_build"),
-    verbose_tasks=GetOption("verbose_tasks")
+    verbose_tasks=GetOption("verbose_tasks"),
 )
 
 # Action suffix
@@ -63,6 +62,7 @@ env.Default()
 env["CCX_PROGRAM"] = env.AddProgram(["ccx"])
 try:
     import ccx2paraview
+
     print("Checking whether 'ccx2paraview' module imports...yes")
     env["ccx2paraview"] = True
 except ImportError:

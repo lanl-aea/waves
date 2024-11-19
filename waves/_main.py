@@ -3,6 +3,7 @@
 Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAVESError` to allow
 :meth:`waves._main.main` to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
+
 import sys
 import pathlib
 import argparse
@@ -33,9 +34,15 @@ def main() -> None:
             root_directory = _settings._modsim_template_directory.parent
             relative_paths = _settings._fetch_subdirectories
             _fetch.main(
-                args.subcommand, root_directory, relative_paths, args.destination,
-                requested_paths=args.FILE, tutorial=args.tutorial, overwrite=args.overwrite,
-                dry_run=args.dry_run, print_available=args.print_available
+                args.subcommand,
+                root_directory,
+                relative_paths,
+                args.destination,
+                requested_paths=args.FILE,
+                tutorial=args.tutorial,
+                overwrite=args.overwrite,
+                dry_run=args.dry_run,
+                print_available=args.print_available,
             )
         elif args.subcommand == "visualize":
             _visualize.main(
@@ -55,16 +62,20 @@ def main() -> None:
                 no_labels=args.no_labels,
                 node_count=args.node_count,
                 transparent=args.transparent,
-                input_file=args.input_file
+                input_file=args.input_file,
             )
         elif args.subcommand == "build":
             _build.main(
-                args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
-                working_directory=args.working_directory, git_clone_directory=args.git_clone_directory
-        )
+                args.TARGET,
+                scons_args=unknown,
+                max_iterations=args.max_iterations,
+                working_directory=args.working_directory,
+                git_clone_directory=args.git_clone_directory,
+            )
         elif args.subcommand in _settings._parameter_study_subcommands:
             _parameter_study.main(
-                args.subcommand, args.INPUT_FILE,
+                args.subcommand,
+                args.INPUT_FILE,
                 output_file_template=args.OUTPUT_FILE_TEMPLATE,
                 output_file=args.OUTPUT_FILE,
                 output_file_type=args.output_file_type,
@@ -73,7 +84,7 @@ def main() -> None:
                 require_previous_parameter_study=args.require_previous_parameter_study,
                 overwrite=args.overwrite,
                 dry_run=args.dry_run,
-                write_meta=args.write_meta
+                write_meta=args.write_meta,
             )
         elif args.subcommand == "print_study":
             _print_study.main(args.PARAMETER_STUDY_FILE)
@@ -88,55 +99,64 @@ def get_parser() -> argparse.ArgumentParser:
 
     :return: parser
     """
-    main_description = \
-        f"Provides a parameter generator, minimal SCons build wrapper, access to locally packaged HTML " \
-         "documentation, and modsim template file generator."
+    main_description = (
+        "Provides a parameter generator, minimal SCons build wrapper, access to locally packaged HTML documentation, "
+        "and modsim template file generator."
+    )
     main_parser = argparse.ArgumentParser(
         description=main_description,
-        prog=_settings._project_name_short.lower())
+        prog=_settings._project_name_short.lower(),
+    )
 
     main_parser.add_argument(
-        "-V", "--version",
+        "-V",
+        "--version",
         action="version",
-        version=f"{_settings._project_name_short.upper()} {__version__}")
+        version=f"{_settings._project_name_short.upper()} {__version__}",
+    )
 
     subparsers = main_parser.add_subparsers(
         # So args.subcommand will contain the name of the subcommand called
         title="subcommands",
         metavar="{subcommand}",
-        dest="subcommand")
+        dest="subcommand",
+    )
 
     subparsers.add_parser(
         "docs",
-         help=f"Open the {_settings._project_name_short.upper()} HTML documentation",
-         description=f"Open the packaged {_settings._project_name_short.upper()} HTML documentation in the  " \
-                      "system default web browser",
-        parents=[_docs.get_parser()]
+        help=f"Open the {_settings._project_name_short.upper()} HTML documentation",
+        # fmt: off
+        description="Open the packaged {_settings._project_name_short.upper()} HTML documentation in the  " \
+                    "system default web browser",
+        # fmt: on
+        parents=[_docs.get_parser()],
     )
 
     subparsers.add_parser(
         "fetch",
         help="Fetch and copy WAVES modsim template files and directories",
-        description="Fetch and copy WAVES modsim template files and directories. If no ``FILE`` is specified, " \
-            "all available files will be created. Directories are recursively copied. ``pathlib.Path`` recursive " \
-            "pattern matching is possible. The source path is truncated to use the shortest common file prefix, " \
-            "e.g. requesting two files ``common/source/file.1`` and ``common/source/file.2`` will create " \
+        # fmt: off
+        description="Fetch and copy WAVES modsim template files and directories. If no ``FILE`` is specified, "
+            "all available files will be created. Directories are recursively copied. ``pathlib.Path`` recursive "
+            "pattern matching is possible. The source path is truncated to use the shortest common file prefix, "
+            "e.g. requesting two files ``common/source/file.1`` and ``common/source/file.2`` will create "
             "``/destination/file.1`` and ``/destination/file.2``, respectively.",
-        parents=[_fetch.get_parser()]
+        # fmt: on
+        parents=[_fetch.get_parser()],
     )
 
     subparsers.add_parser(
         "visualize",
         help="Create an SCons project visualization",
         description="Create a visual representation of the directed acyclic graph used by your SCons project.",
-        parents=[_visualize.get_parser()]
+        parents=[_visualize.get_parser()],
     )
 
     subparsers.add_parser(
         "build",
         help="Thin SCons wrapper",
         description="Thin SCons wrapper to programmatically re-run SCons until all targets are reported up-to-date.",
-        parents=[_build.get_parser()]
+        parents=[_build.get_parser()],
     )
 
     for subcommand in _settings._parameter_study_subcommands:
@@ -144,16 +164,18 @@ def get_parser() -> argparse.ArgumentParser:
             subcommand,
             description=_settings._parameter_study_description,
             help=f"Create a {subcommand.replace('_', ' ')} parameter study",
-            parents=[_parameter_study.get_parser()]
+            parents=[_parameter_study.get_parser()],
         )
 
     subparsers.add_parser(
         "print_study",
         help="Print a parameter study file as a table",
-        description="Open and print a WAVES parameter study file as a table. Does not work with multi-file parameter " \
-                    "study output, e.g. ``--output-file-template`` option. Not intended for piped shell commands. " \
+        # fmt: off
+        description="Open and print a WAVES parameter study file as a table. Does not work with multi-file parameter "
+                    "study output, e.g. ``--output-file-template`` option. Not intended for piped shell commands. "
                     "Output formatting subject to change",
-        parents=[_print_study.get_parser()]
+        # fmt: on
+        parents=[_print_study.get_parser()],
     )
 
     return main_parser

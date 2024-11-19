@@ -18,7 +18,7 @@ def main(
     output_file: pathlib.Path = default_output_file,
     width: float = default_width,
     height: float = default_height,
-    global_seed: float = default_global_seed
+    global_seed: float = default_global_seed,
 ) -> None:
     """Create a simple rectangle geometry.
 
@@ -44,8 +44,9 @@ def main(
     rectangle_group_tag = gmsh.model.addPhysicalGroup(2, [rectangle_tag], name="rectangle")
 
     tolerance = 0.01 * min(width, height)
-    bottom_left = get_entities_at_coordinates((0., 0., 0.), 0)
+    bottom_left = get_entities_at_coordinates((0.0, 0.0, 0.0), 0)
     top_right = get_entities_at_coordinates((width, height, 0.0), 0)
+    # fmt: off
     top = gmsh.model.getEntitiesInBoundingBox(
         0.0    - tolerance,  # noqa: E221 X-min
         height - tolerance,  # noqa: E221 Y-min
@@ -73,6 +74,7 @@ def main(
         0.0    + tolerance,  # noqa: E221 Z-max
         0  # Entity dimension: points
     )
+    # fmt: on
     gmsh.model.addPhysicalGroup(0, tags_from_dimTags(bottom_left), name="bottom_left")
     gmsh.model.addPhysicalGroup(0, tags_from_dimTags(top_right), name="top_right")
     gmsh.model.addPhysicalGroup(0, tags_from_dimTags(top), name="top")
@@ -94,9 +96,7 @@ def main(
     gmsh.finalize()
 
 
-def tags_from_dimTags(
-    dimTags: typing.List[typing.Tuple[int, int]]
-) -> typing.List[int]:
+def tags_from_dimTags(dimTags: typing.List[typing.Tuple[int, int]]) -> typing.List[int]:
     """Return tags from Gmsh entity ``dimTags`` list of tuples
 
     :returns: list of tags
@@ -107,7 +107,7 @@ def tags_from_dimTags(
 def get_entities_at_coordinates(
     coordinates: typing.Tuple[float, float, float],
     dimension: int,
-    tolerance: float = 1.0e-6
+    tolerance: float = 1.0e-6,
 ) -> typing.List[typing.Tuple[int, int]]:
     """Return Gmsh ``dimTags`` of entities of dimension within bounding box determined by coordinates and tolerance
 
@@ -127,29 +127,45 @@ def get_entities_at_coordinates(
 
 
 def get_parser():
-
     prog = f"python {script_name.name} "
     cli_description = "Create a simple rectangle geometry and write an ``output_file``.msh Gmsh model file."
     parser = argparse.ArgumentParser(description=cli_description, prog=prog)
-    parser.add_argument('--output-file', type=pathlib.Path, default=default_output_file,
-                        help="The output file for the Gmsh model. " \
-                             "Extension must match a supported Gmsh file type, .e.g. ``output_file``.msh " \
-                             "(default: %(default)s")
-    parser.add_argument('--width', type=float, default=default_width,
-                        help="The rectangle width")
-    parser.add_argument('--height', type=float, default=default_height,
-                        help="The rectangle height")
-    parser.add_argument('--global-seed', type=float, default=default_global_seed,
-                        help="The global mesh seed size (default: %(default)s)")
+    parser.add_argument(
+        "--output-file",
+        type=pathlib.Path,
+        default=default_output_file,
+        # fmt: off
+        help="The output file for the Gmsh model. Extension must match a supported Gmsh file type, e.g. "
+             "``output_file``.msh (default: %(default)s",
+        # fmt: on
+    )
+    parser.add_argument(
+        "--width",
+        type=float,
+        default=default_width,
+        help="The rectangle width",
+    )
+    parser.add_argument(
+        "--height",
+        type=float,
+        default=default_height,
+        help="The rectangle height",
+    )
+    parser.add_argument(
+        "--global-seed",
+        type=float,
+        default=default_global_seed,
+        help="The global mesh seed size (default: %(default)s)",
+    )
     return parser
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = get_parser()
     args = parser.parse_args()
     main(
         output_file=args.output_file,
         width=args.width,
         height=args.height,
-        global_seed=args.global_seed
+        global_seed=args.global_seed,
     )

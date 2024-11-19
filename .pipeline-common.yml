@@ -79,11 +79,11 @@
         coverage_format: cobertura
         path: build/pytest/coverage.xml
 
-.flake8: &flake8
+.style-guide: &style-guide
   variables:
     GIT_STRATEGY: clone
   script:
-    - scons flake8
+    - scons flake8 black
 
 .conda-build: &conda-build
   variables:
