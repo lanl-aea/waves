@@ -2,6 +2,7 @@ channels:
   - conda-forge
 
 dependencies:
+  - black
   - boa
   - calculix
   - ccx2paraview
