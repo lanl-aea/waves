@@ -351,7 +351,7 @@ class ParameterGenerator(ABC):
         for sample_row in self._samples:
             sorted_contents = sorted(zip(self._parameter_names, sample_row))
             set_catenation = "\n".join(f"{name}:{repr(sample)}" for name, sample in sorted_contents)
-            set_hash = hashlib.md5(set_catenation.encode("utf-8")).hexdigest()
+            set_hash = hashlib.md5(set_catenation.encode("utf-8"), usedforsecurity=False).hexdigest()
             self._parameter_set_hashes.append(set_hash)
 
     def _create_parameter_set_names(self) -> None:
