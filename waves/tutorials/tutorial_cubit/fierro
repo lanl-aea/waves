@@ -19,7 +19,7 @@ Import("env")
 fierro_source_abspath = env["fierro_source_abspath"]
 
 # Simulation variables
-build_directory = pathlib.Path(Dir('.').abspath)
+build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
 model = "cube"
 
@@ -34,27 +34,27 @@ SConscript("cubit", exports={"env": env, "element_type": element_type, "solver":
 env.PythonScript(
     target=[f"{model}_mesh.vtk"],
     source=[fierro_source_abspath / "convert_to_vtk2ascii.py", f"{model}_mesh.g"],
-    subcommand_options="--input-format=exodus ${SOURCES[1].abspath} ${TARGET.abspath}"
+    subcommand_options="--input-format=exodus ${SOURCES[1].abspath} ${TARGET.abspath}",
 )
 
 # SolverPrep
-fierro_source_list = [
-    fierro_source_abspath / "cube_compression.yaml"
-]
+fierro_source_list = [fierro_source_abspath / "cube_compression.yaml"]
 fierro_source_list = [pathlib.Path(source_file) for source_file in fierro_source_list]
 workflow.extend(env.CopySubstfile(fierro_source_list))
 
 # Fierro Solve
 solve_source_list = [source_file.name for source_file in fierro_source_list]
 solve_source_list.append(f"{model}_mesh.vtk")
-workflow.extend(env.FierroImplicit(
-    target=["cube_compression.stdout", "TecplotTO0.dat", "TecplotTO_undeformed0.dat"],
-    source=solve_source_list
-))
+workflow.extend(
+    env.FierroImplicit(
+        target=["cube_compression.stdout", "TecplotTO0.dat", "TecplotTO_undeformed0.dat"],
+        source=solve_source_list,
+    )
+)
 
 # Collector alias based on parent directory name
 env.Alias(workflow_name, workflow)
 
-if not env['unconditional_build'] and not env['FIERRO_IMPLICIT_PROGRAM']:
+if not env["unconditional_build"] and not env["FIERRO_IMPLICIT_PROGRAM"]:
     print(f"Program 'fierro' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
-    Ignore(['.', workflow_name], workflow)
+    Ignore([".", workflow_name], workflow)

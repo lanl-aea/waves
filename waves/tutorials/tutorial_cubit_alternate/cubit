@@ -21,13 +21,13 @@ import pathlib
 import waves
 
 # Inherit the parent construction environment
-Import('env', "envCubit", "element_type", "solver")
+Import("env", "envCubit", "element_type", "solver")
 
 # Set project-wide paths with os-agnostic path separators
 cubit_source_abspath = env["cubit_source_abspath"]
 
 # Simulation variables
-build_directory = pathlib.Path(Dir('.').abspath)
+build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
 
 # Collect the target nodes to build a concise alias for all targets
@@ -38,20 +38,24 @@ model = "rectangle"
 # Geometry
 journal_file = f"{model}_geometry"
 journal_options = ""
-workflow.extend(envCubit.PythonScript(
-    target=[f"{journal_file}.cub"],
-    source=[f"{cubit_source_abspath / journal_file}.py"],
-    subcommand_options=journal_options
-))
+workflow.extend(
+    envCubit.PythonScript(
+        target=[f"{journal_file}.cub"],
+        source=[f"{cubit_source_abspath / journal_file}.py"],
+        subcommand_options=journal_options,
+    )
+)
 
 # Partition
 journal_file = f"{model}_partition"
 journal_options = ""
-workflow.extend(envCubit.PythonScript(
-    target=[f"{journal_file}.cub"],
-    source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_geometry.cub"],
-    subcommand_options=journal_options
-))
+workflow.extend(
+    envCubit.PythonScript(
+        target=[f"{journal_file}.cub"],
+        source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_geometry.cub"],
+        subcommand_options=journal_options,
+    )
+)
 
 # Mesh
 if solver.lower() == "abaqus":
@@ -62,13 +66,15 @@ else:
     raise RuntimeError(f"Unknown solver '{solver}'")
 journal_file = f"{model}_mesh"
 journal_options = "--element-type ${element_type} --solver ${solver}"
-workflow.extend(envCubit.PythonScript(
-    target=[f"{journal_file}.{mesh_extension}", f"{journal_file}.cub"],
-    source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_partition.cub"],
-    subcommand_options=journal_options,
-    element_type=element_type,
-    solver=solver
-))
+workflow.extend(
+    envCubit.PythonScript(
+        target=[f"{journal_file}.{mesh_extension}", f"{journal_file}.cub"],
+        source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_partition.cub"],
+        subcommand_options=journal_options,
+        element_type=element_type,
+        solver=solver,
+    )
+)
 
 
 # Cube 3D
@@ -76,20 +82,24 @@ model = "cube"
 # Geometry
 journal_file = f"{model}_geometry"
 journal_options = ""
-workflow.extend(envCubit.PythonScript(
-    target=[f"{journal_file}.cub"],
-    source=[f"{cubit_source_abspath / journal_file}.py"],
-    subcommand_options=journal_options
-))
+workflow.extend(
+    envCubit.PythonScript(
+        target=[f"{journal_file}.cub"],
+        source=[f"{cubit_source_abspath / journal_file}.py"],
+        subcommand_options=journal_options,
+    )
+)
 
 # Partition
 journal_file = f"{model}_partition"
 journal_options = ""
-workflow.extend(envCubit.PythonScript(
-    target=[f"{journal_file}.cub"],
-    source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_geometry.cub"],
-    subcommand_options=journal_options
-))
+workflow.extend(
+    envCubit.PythonScript(
+        target=[f"{journal_file}.cub"],
+        source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_geometry.cub"],
+        subcommand_options=journal_options,
+    )
+)
 
 # Mesh
 if solver.lower() == "abaqus":
@@ -100,18 +110,22 @@ else:
     raise RuntimeError(f"Unknown solver '{solver}'")
 journal_file = f"{model}_mesh"
 journal_options = "--element-type ${element_type} --solver ${solver}"
-workflow.extend(envCubit.PythonScript(
-    target=[f"{journal_file}.{mesh_extension}", f"{journal_file}.cub"],
-    source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_partition.cub"],
-    subcommand_options=journal_options,
-    element_type=element_type,
-    solver=solver
-))
+workflow.extend(
+    envCubit.PythonScript(
+        target=[f"{journal_file}.{mesh_extension}", f"{journal_file}.cub"],
+        source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_partition.cub"],
+        subcommand_options=journal_options,
+        element_type=element_type,
+        solver=solver,
+    )
+)
 
 # Collector alias based on parent directory name
 envCubit.Alias(f"{workflow_name}_cubit", workflow)
 
-if not env['unconditional_build'] and not envCubit['python']:
-    print("The Cubit Python interpreter was not found in the construction environment. "
-          f"Ignoring '{workflow_name}' target(s)")
-    Ignore(['.', workflow_name], workflow)
+if not env["unconditional_build"] and not envCubit["python"]:
+    print(
+        "The Cubit Python interpreter was not found in the construction environment. "
+        f"Ignoring '{workflow_name}' target(s)"
+    )
+    Ignore([".", workflow_name], workflow)

@@ -6,15 +6,27 @@ Import("env")
 target = env.Command(
     target=["flake8.txt"],
     source=["style"],
-    action=["flake8 --jobs=4 --tee --output-file=${TARGET.abspath}"],
+    action=["flake8 . $$(python find_shebang.py .) --jobs=4 --tee --output-file=${TARGET.abspath}"],
 )
 env.AlwaysBuild(target)
 env.Alias("flake8", target)
 
 target = env.Command(
-    target=["black.txt"],
+    target=["black-check.txt"],
     source=["style"],
-    action=["black SConstruct docs/SConscript pytest style mypy waves/ --check > ${TARGET.abspath} 2>&1"],
+    action=["black . $$(python find_shebang.py .) --check --verbose ${action_suffix}"],
+    action_suffix=env["tee_suffix"],
 )
 env.AlwaysBuild(target)
-env.Alias("black", target)
+env.Alias("black-check", target)
+
+# TODO: Remove custom python script if/when black supports magic file type searches
+# https://github.com/psf/black/issues/491
+target = env.Command(
+    target=["black-format.txt"],
+    source=["style"],
+    action=["black . $$(python find_shebang.py .) ${action_suffix}"],
+    action_suffix=env["tee_suffix"],
+)
+env.AlwaysBuild(target)
+env.Alias("black-format", target)

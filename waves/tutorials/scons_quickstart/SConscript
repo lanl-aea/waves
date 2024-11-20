@@ -29,7 +29,9 @@ env.Append(
 
 # Geometry
 env.AbaqusJournal(
-    target=["rectangle_geometry.cae"], source=["rectangle_geometry.py"], abaqus_program=env["ABAQUS_PROGRAM"]
+    target=["rectangle_geometry.cae"],
+    source=["rectangle_geometry.py"],
+    abaqus_program=env["ABAQUS_PROGRAM"],
 )
 
 # Partition

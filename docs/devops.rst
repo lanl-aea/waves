@@ -216,8 +216,16 @@ associated aliases.
 
 .. code-block::
 
-   $ scons flake8
-   $ scons black
+   $ scons flake8 black-check
+
+If ``black`` reports files that should be formatted, the following alias will format files using the same command line
+options as the check alias. ``black`` can also be run directly, but this may miss files without the ``.py`` extension,
+such as SConstruct and SConscript files. After formatting, the developer must review the changes and commit them to
+their branch.
+
+.. code-block::
+
+   $ scons black-format
 
 |PROJECT| has dedicated target aliases for the unit and system tests. To run the unit tests, activate a conda
 environment and run

@@ -31,64 +31,80 @@ images = []
 workflow = []
 
 # Rectangle part
-artifacts.extend(SConscript(
-    "rectangle",
-    exports={"env": env, "parameters": parameters}
-))
+artifacts.extend(
+    SConscript(
+        "rectangle",
+        exports={"env": env, "parameters": parameters},
+    )
+)
 
 # SolverPrep
-artifacts.extend(env.CopySubstfile(
-    [modsim_package_abspath / "rectangle_compression.inp.in"],
-    substitution_dictionary=env.SubstitutionSyntax(parameters)
-))
+artifacts.extend(
+    env.CopySubstfile(
+        [modsim_package_abspath / "rectangle_compression.inp.in"],
+        substitution_dictionary=env.SubstitutionSyntax(parameters),
+    )
+)
 
 # Part images
-images.extend(env.AbaqusJournal(
-    target=["rectangle_compression.png"],
-    source=["export_abaqus_image.py", "rectangle_compression.inp"],
-    subcommand_options="--input-file ${SOURCES[1].abspath} --output-file ${TARGET.file} "
-                       "--model-name ${model} --part-name ${model}",
-    model="rectangle"
-))
+script_options = (
+    "--input-file ${SOURCES[1].abspath} --output-file ${TARGET.file} --model-name ${model} --part-name ${model}"
+)
+images.extend(
+    env.AbaqusJournal(
+        target=["rectangle_compression.png"],
+        source=["export_abaqus_image.py", "rectangle_compression.inp"],
+        subcommand_options=script_options,
+        model="rectangle",
+    )
+)
 
 # Abaqus Solve
 datacheck_name = "rectangle_compression_DATACHECK"
 datacheck_suffixes = ("023", "mdl", "sim", "stt")
-abaqus_options="-double both"
-datacheck.extend(env.AbaqusSolver(
-    target=[f"{datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
-    source=["rectangle_compression.inp"],
-    job_name=datacheck_name,
-    abaqus_options=f"{abaqus_options} -datacheck"
-))
+abaqus_options = "-double both"
+datacheck.extend(
+    env.AbaqusSolver(
+        target=[f"{datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
+        source=["rectangle_compression.inp"],
+        job_name=datacheck_name,
+        abaqus_options=f"{abaqus_options} -datacheck",
+    )
+)
 
-artifacts.extend(env.AbaqusSolver(
-    target=["rectangle_compression.sta"],
-    source=["rectangle_compression.inp"],
-    job_name="rectangle_compression",
-    abaqus_options="${global_abaqus_options} -cpus $(${solve_cpus}$)",
-    global_abaqus_options=abaqus_options,
-    solve_cpus=env["solve_cpus"]
-))
+artifacts.extend(
+    env.AbaqusSolver(
+        target=["rectangle_compression.sta"],
+        source=["rectangle_compression.inp"],
+        job_name="rectangle_compression",
+        abaqus_options="${global_abaqus_options} -cpus $(${solve_cpus}$)",
+        global_abaqus_options=abaqus_options,
+        solve_cpus=env["solve_cpus"],
+    )
+)
 
 # Abaqus Extract
 extract_source_list = ["rectangle_compression.odb"]
-artifacts.extend(env.AbaqusExtract(
-    target=["rectangle_compression.h5"],
-    source=extract_source_list
-))
+artifacts.extend(
+    env.AbaqusExtract(
+        target=["rectangle_compression.h5"],
+        source=extract_source_list,
+    )
+)
 
 # Post-processing
 plot_name = "stress_strain_comparison"
 post_processing_source = ["rectangle_compression_datasets.h5"]
 script_options = "--input-file ${post_processing_source}"
 script_options += f" --output-file ${{TARGET.file}} --x-units 'mm/mm' --y-units 'MPa'"
-workflow.extend(env.PythonScript(
-    target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
-    source=[modsim_package_abspath / "post_processing.py"] + post_processing_source,
-    subcommand_options=script_options,
-    post_processing_source=post_processing_source
-))
+workflow.extend(
+    env.PythonScript(
+        target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
+        source=[modsim_package_abspath / "post_processing.py"] + post_processing_source,
+        subcommand_options=script_options,
+        post_processing_source=post_processing_source,
+    )
+)
 artifacts.extend(workflow)
 
 # Collector alias(es)

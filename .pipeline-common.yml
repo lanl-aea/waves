@@ -83,7 +83,7 @@
   variables:
     GIT_STRATEGY: clone
   script:
-    - scons flake8 black
+    - scons flake8 black-check
 
 .conda-build: &conda-build
   variables:

@@ -31,11 +31,13 @@ workflow = []
 # Matlab
 matlab_script = matlab_source_abspath / "hello_world.m"
 script_options = f"'{output_name}'"
-workflow.extend(env.MatlabScript(
-    target=[f"{output_name}.txt"],
-    source=[matlab_script],
-    script_options=script_options
-))
+workflow.extend(
+    env.MatlabScript(
+        target=[f"{output_name}.txt"],
+        source=[matlab_script],
+        script_options=script_options,
+    )
+)
 
 # Comment used in tutorial code snippets: marker-3
 

@@ -14,13 +14,13 @@ Requires the following ``SConscript(..., exports={})``
 import pathlib
 
 # Inherit the parent construction environment
-Import('env')
+Import("env")
 
 # Set project-wide paths with os-agnostic path separators
 abaqus_source_abspath = env["abaqus_source_abspath"]
 
 # Simulation variables
-build_directory = pathlib.Path(Dir('.').abspath)
+build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
 model = "rectangle"
 
@@ -33,31 +33,37 @@ datacheck = []
 # Geometry
 journal_file = f"{model}_geometry"
 journal_options = ""
-workflow.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
-    source=[f"{abaqus_source_abspath / journal_file}.py"],
-    subcommand_options=journal_options
-))
+workflow.extend(
+    env.AbaqusJournal(
+        target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
+        source=[f"{abaqus_source_abspath / journal_file}.py"],
+        subcommand_options=journal_options,
+    )
+)
 
 # Comment used in tutorial code snippets: marker-2
 
 # Partition
 journal_file = f"{model}_partition"
 journal_options = ""
-workflow.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
-    source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
-    subcommand_options=journal_options
-))
+workflow.extend(
+    env.AbaqusJournal(
+        target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
+        source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
+        subcommand_options=journal_options,
+    )
+)
 
 # Mesh
 journal_file = f"{model}_mesh"
 journal_options = ""
-workflow.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.inp", f"{journal_file}.cae", f"{journal_file}.jnl"],
-    source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
-    subcommand_options=journal_options
-))
+workflow.extend(
+    env.AbaqusJournal(
+        target=[f"{journal_file}.inp", f"{journal_file}.cae", f"{journal_file}.jnl"],
+        source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
+        subcommand_options=journal_options,
+    )
+)
 
 # Comment used in tutorial code snippets: marker-3
 
@@ -69,7 +75,7 @@ abaqus_source_list = [
     abaqus_source_abspath / "field_output.inp",
     abaqus_source_abspath / "materials.inp",
     abaqus_source_abspath / "parts.inp",
-    abaqus_source_abspath / "history_output.inp"
+    abaqus_source_abspath / "history_output.inp",
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
 workflow.extend(env.CopySubstfile(abaqus_source_list))
@@ -77,29 +83,33 @@ workflow.extend(env.CopySubstfile(abaqus_source_list))
 # Comment used in tutorial code snippets: marker-4
 
 # Abaqus Solve
-solve_source_list = [source_file.name.rstrip('.in') for source_file in abaqus_source_list]
+solve_source_list = [source_file.name.rstrip(".in") for source_file in abaqus_source_list]
 solve_source_list.append([f"{journal_file}.inp"])
 job_name = pathlib.Path(solve_source_list[0]).stem
 datacheck_name = f"{job_name}_DATACHECK"
-datacheck_suffixes = ('023', 'mdl', 'sim', 'stt')
-abaqus_options='-double both'
-datacheck.extend(env.AbaqusSolver(
-    target=[f"{datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
-    source=solve_source_list,
-    job_name=datacheck_name,
-    abaqus_options=f'{abaqus_options} -datacheck'
-))
+datacheck_suffixes = ("023", "mdl", "sim", "stt")
+abaqus_options = "-double both"
+datacheck.extend(
+    env.AbaqusSolver(
+        target=[f"{datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
+        source=solve_source_list,
+        job_name=datacheck_name,
+        abaqus_options=f"{abaqus_options} -datacheck",
+    )
+)
 
 # Comment used in tutorial code snippets: marker-5
 
-workflow.extend(env.AbaqusSolver(
-    target=[f"{job_name}.sta"],
-    source=solve_source_list,
-    job_name=job_name,
-    abaqus_options="${global_abaqus_options} -cpus $(${solve_cpus}$)",
-    global_abaqus_options=abaqus_options,
-    solve_cpus=env["solve_cpus"]
-))
+workflow.extend(
+    env.AbaqusSolver(
+        target=[f"{job_name}.sta"],
+        source=solve_source_list,
+        job_name=job_name,
+        abaqus_options="${global_abaqus_options} -cpus $(${solve_cpus}$)",
+        global_abaqus_options=abaqus_options,
+        solve_cpus=env["solve_cpus"],
+    )
+)
 
 # Comment used in tutorial code snippets: marker-6
 
@@ -107,7 +117,7 @@ workflow.extend(env.AbaqusSolver(
 env.Alias(workflow_name, workflow)
 env.Alias(f"{workflow_name}_datacheck", datacheck)
 
-if not env['unconditional_build'] and not env["ABAQUS_PROGRAM"]:
+if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
-    Ignore(['.', workflow_name], workflow)
-    Ignore(['.', f"{workflow_name}_datacheck"], datacheck)
+    Ignore([".", workflow_name], workflow)
+    Ignore([".", f"{workflow_name}_datacheck"], datacheck)

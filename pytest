@@ -44,7 +44,10 @@ systemtest_node = env.Command(
     target=target,
     source=source,
     action=[
-        "${pytest_command} -v --no-showlocals -m systemtest --tb=short --cache-clear --system-test-dir=${system_test_directory}"
+        (
+            "${pytest_command} -v --no-showlocals -m systemtest --tb=short --cache-clear "
+            "--system-test-dir=${system_test_directory}"
+        ),
     ],
     package_dir=env["package_dir"],
     pytest_command=pytest_command,

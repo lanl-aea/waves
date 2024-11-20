@@ -113,7 +113,11 @@ def test_solver_builder_factory(
     # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"Builder": builder})
-    nodes = env.Builder(target=target, source=["check_builder_factory.in"], **task_kwargs)
+    nodes = env.Builder(
+        target=target,
+        source=["check_builder_factory.in"],
+        **task_kwargs,
+    )
 
     # Test task definition node counts, action(s), and task keyword arguments
     assert len(nodes) == expected_node_count

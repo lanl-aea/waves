@@ -67,6 +67,8 @@ addopts = "--ignore='waves/modsim_template/' --ignore='modsim_template/' --ignor
 
 [tool.black]
 target-version = ["py39", "py310", "py311", "py312", "py313"]
+extend-exclude = ".txt"
+force-exclude = "build*/"
 line-length = 120
 include = "SConstruct|SConscript"
 

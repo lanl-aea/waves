@@ -66,27 +66,31 @@ Import(["env", "simulation_variables", "workflow", "datacheck"])
 abaqus_source_abspath = env["abaqus_source_abspath"]
 
 # Simulation variables
-build_directory = pathlib.Path(Dir('.').abspath)
+build_directory = pathlib.Path(Dir(".").abspath)
 model = "rectangle"
 
 # Geometry
 journal_file = f"{model}_geometry"
 journal_options = "--width ${width} --height ${height}"
-workflow.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
-    source=[f"{abaqus_source_abspath / journal_file}.py"],
-    subcommand_options=journal_options,
-    **simulation_variables
-))
+workflow.extend(
+    env.AbaqusJournal(
+        target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
+        source=[f"{abaqus_source_abspath / journal_file}.py"],
+        subcommand_options=journal_options,
+        **simulation_variables,
+    )
+)
 
 # Partition
 journal_file = f"{model}_partition"
 journal_options = "--width ${width} --height ${height}"
-workflow.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
-    source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
-    subcommand_options=journal_options,
-    **simulation_variables
-))
+workflow.extend(
+    env.AbaqusJournal(
+        target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
+        source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
+        subcommand_options=journal_options,
+        **simulation_variables,
+    )
+)
 
 Return(["workflow", "datacheck"])

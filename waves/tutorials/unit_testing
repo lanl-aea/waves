@@ -12,28 +12,28 @@ Requires the following ``SConscript(..., exports={})``
 import pathlib
 
 # Inherit the parent construction environment
-Import('env')
+Import("env")
 
 # Set project-wide paths with os-agnostic path separators
 test_source_abspath = env["test_source_abspath"]
 
 # Set unit test workflow variables
-build_directory = pathlib.Path(Dir('.').abspath)
+build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
 
 # Unit test target
-test_files = [
-    test_source_abspath / "test_regression.py"
-]
+test_files = [test_source_abspath / "test_regression.py"]
 target = [f"{workflow_name}_results.xml"]
-workflow.extend(env.Command(
-    target=target,
-    source=test_files,
-    action="pytest --junitxml=${TARGETS[0]}"
-))
+workflow.extend(
+    env.Command(
+        target=target,
+        source=test_files,
+        action="pytest --junitxml=${TARGETS[0]}",
+    )
+)
 
 env.Alias(workflow_name, workflow)
-env.Alias(env['regression_alias'], workflow)
+env.Alias(env["regression_alias"], workflow)

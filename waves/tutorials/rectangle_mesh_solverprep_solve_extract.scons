@@ -61,18 +61,20 @@ Import(["env", "simulation_variables", "workflow", "datacheck"])
 abaqus_source_abspath = env["abaqus_source_abspath"]
 
 # Simulation variables
-build_directory = pathlib.Path(Dir('.').abspath)
+build_directory = pathlib.Path(Dir(".").abspath)
 model = "rectangle"
 
 # Mesh
 journal_file = f"{model}_mesh"
 journal_options = "--global-seed ${global_seed}"
-workflow.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.inp", f"{journal_file}.cae", f"{journal_file}.jnl"],
-    source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
-    subcommand_options=journal_options,
-    **simulation_variables
-))
+workflow.extend(
+    env.AbaqusJournal(
+        target=[f"{journal_file}.inp", f"{journal_file}.cae", f"{journal_file}.jnl"],
+        source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
+        subcommand_options=journal_options,
+        **simulation_variables,
+    )
+)
 
 # SolverPrep
 abaqus_source_list = [
@@ -82,40 +84,48 @@ abaqus_source_list = [
     abaqus_source_abspath / "field_output.inp",
     abaqus_source_abspath / "materials.inp",
     abaqus_source_abspath / "parts.inp",
-    abaqus_source_abspath / "history_output.inp"
+    abaqus_source_abspath / "history_output.inp",
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
-workflow.extend(env.CopySubstfile(
-    abaqus_source_list,
-    substitution_dictionary=env.SubstitutionSyntax(simulation_variables)
-))
+workflow.extend(
+    env.CopySubstfile(
+        abaqus_source_list,
+        substitution_dictionary=env.SubstitutionSyntax(simulation_variables),
+    )
+)
 
 # Abaqus Solve
-solve_source_list = [source_file.name.rstrip('.in') for source_file in abaqus_source_list]
+solve_source_list = [source_file.name.rstrip(".in") for source_file in abaqus_source_list]
 solve_source_list.append([f"{journal_file}.inp"])
 job_name = pathlib.Path(solve_source_list[0]).stem
 datacheck_name = f"{job_name}_DATACHECK"
-datacheck_suffixes = ('023', 'mdl', 'sim', 'stt')
-abaqus_options='-double both'
-datacheck.extend(env.AbaqusSolver(
-    target=[f"{datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
-    source=solve_source_list,
-    job_name=datacheck_name,
-    abaqus_options=f'{abaqus_options} -datacheck'
-))
+datacheck_suffixes = ("023", "mdl", "sim", "stt")
+abaqus_options = "-double both"
+datacheck.extend(
+    env.AbaqusSolver(
+        target=[f"{datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
+        source=solve_source_list,
+        job_name=datacheck_name,
+        abaqus_options=f"{abaqus_options} -datacheck",
+    )
+)
 
-workflow.extend(env.AbaqusSolver(
-    target=[f"{job_name}.sta"],
-    source=solve_source_list,
-    job_name=job_name,
-    abaqus_options=abaqus_options
-))
+workflow.extend(
+    env.AbaqusSolver(
+        target=[f"{job_name}.sta"],
+        source=solve_source_list,
+        job_name=job_name,
+        abaqus_options=abaqus_options,
+    )
+)
 
 # Extract Abaqus
 extract_source_list = [f"{job_name}.odb"]
-workflow.extend(env.AbaqusExtract(
-    target=[f"{job_name}.h5"],
-    source=extract_source_list
-))
+workflow.extend(
+    env.AbaqusExtract(
+        target=[f"{job_name}.h5"],
+        source=extract_source_list,
+    )
+)
 
 Return(["workflow", "datacheck"])

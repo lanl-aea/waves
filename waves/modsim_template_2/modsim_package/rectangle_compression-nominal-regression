@@ -20,15 +20,17 @@ workflow = []
 
 # Post-processing
 build_file = pathlib.Path("stress_strain_comparison.csv")
-workflow.extend(env.PythonScript(
-    target=[f"regression.yaml"],
-    source=[
-        env["modsim_package_abspath"] / "regression.py",
-        env["modsim_package_abspath"] / f"{alias}-{build_file.stem}.csv",
-        build_file
-    ],
-    subcommand_options="${SOURCES[1:].abspath}",
-))
+workflow.extend(
+    env.PythonScript(
+        target=[f"regression.yaml"],
+        source=[
+            env["modsim_package_abspath"] / "regression.py",
+            env["modsim_package_abspath"] / f"{alias}-{build_file.stem}.csv",
+            build_file,
+        ],
+        subcommand_options="${SOURCES[1:].abspath}",
+    )
+)
 artifacts.extend(workflow)
 
 # Collector alias(es)

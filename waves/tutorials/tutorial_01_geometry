@@ -13,13 +13,13 @@ Requires the following ``SConscript(..., exports={})``
 import pathlib
 
 # Inherit the parent construction environment
-Import('env')
+Import("env")
 
 # Set project-wide paths with os-agnostic path separators
 abaqus_source_abspath = env["abaqus_source_abspath"]
 
 # Simulation variables
-build_directory = pathlib.Path(Dir('.').abspath)
+build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
 model = "rectangle"
 
@@ -31,17 +31,19 @@ workflow = []
 # Geometry
 journal_file = f"{model}_geometry"
 journal_options = ""
-workflow.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
-    source=[f"{abaqus_source_abspath / journal_file}.py"],
-    subcommand_options=journal_options
-))
+workflow.extend(
+    env.AbaqusJournal(
+        target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
+        source=[f"{abaqus_source_abspath / journal_file}.py"],
+        subcommand_options=journal_options,
+    )
+)
 
 # Comment used in tutorial code snippets: marker-3
 
 # Collector alias based on parent directory name
 env.Alias(workflow_name, workflow)
 
-if not env['unconditional_build'] and not env["ABAQUS_PROGRAM"]:
+if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
-    Ignore(['.', workflow_name], workflow)
+    Ignore([".", workflow_name], workflow)

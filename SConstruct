@@ -2,6 +2,7 @@
 
 import os
 import pathlib
+import platform
 import warnings
 
 import setuptools_scm
@@ -86,6 +87,13 @@ conf = env.Configure()
 for program in required_programs:
     env[program.replace("-", "_")] = conf.CheckProg(program)
 conf.Finish()
+
+# Handle OS-aware tee output
+system = platform.system().lower()
+if system == "windows":  # Assume PowerShell
+    env["tee_suffix"] = "$(| Tee-Object -FilePath ${TARGETS[-1].abspath}$)"
+else:  # *Nix style tee
+    env["tee_suffix"] = "$(2>&1 | tee ${TARGETS[-1].abspath}$)"
 
 # Build variable substitution dictionary
 project_substitution_dictionary = dict()

@@ -133,7 +133,7 @@ this is implemented with the :meth:`waves.scons_extensions.copy_substfile` metho
       :lineno-match:
       :start-after: marker-1
       :end-before: marker-3
-      :emphasize-lines: 7, 11-12, 19, 23-24, 29, 33-34
+      :emphasize-lines: 7, 12-13, 21, 26-27, 33, 38-39
 
 As was previously discussed, we use the key-value pairs of the ``simulation_variables`` dictionary in the arguments we
 pass to the command-line interfaces for ``rectangle_{geometry,partition,mesh}.py``. Using SCons variable
@@ -165,7 +165,7 @@ source file change.
       :lineno-match:
       :start-after: marker-3
       :end-before: marker-4
-      :emphasize-lines: 3, 13-14
+      :emphasize-lines: 3, 14-15
 
 Per the changes you made earlier in this tutorial, the ``abaqus_source_list`` must be updated to reflect the replacement
 of ``rectangle_compression.inp`` with the parameterized ``rectangle_compression.inp.in`` file.
