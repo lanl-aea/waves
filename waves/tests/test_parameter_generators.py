@@ -452,7 +452,10 @@ class TestParameterGenerator:
             assert set_hash == expected_hash
         assert not hasattr(HashesParameterGenerator, "_parameter_set_hashes")
         # Check the function returning a list of set hashes. Should not set the attribute.
-        parameter_set_hashes = parameter_generators._calculate_parameter_set_hashes(HashesParameterGenerator)
+        parameter_set_hashes = parameter_generators._calculate_parameter_set_hashes(
+            HashesParameterGenerator._parameter_names,
+            HashesParameterGenerator._samples
+        )
         assert parameter_set_hashes == expected_hashes
         assert not hasattr(HashesParameterGenerator, "_parameter_set_hashes")
         # Check the function setting the set hashes attribute.
