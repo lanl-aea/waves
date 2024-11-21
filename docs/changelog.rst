@@ -24,6 +24,11 @@ Internal Changes
   https://black.readthedocs.io/en/stable/index.html (:merge:`1028`, :merge:`1030`). By `Kyle Brindley`_.
 - Simplify the pytest commands by always running the XML/HTML coverage (:merge:`1034`). By `Kyle Brindley`_.
 
+Enhancements
+============
+- Verify parameter set hash coordinates when reading user supplied previous parameter study files (:issue:`825`,
+  :merge:`1032`). By `Kyle Brindley`_.
+
 *******************
 0.12.2 (2024-11-14)
 *******************
