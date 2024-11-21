@@ -1214,7 +1214,7 @@ class SALibSampler(ParameterGenerator, ABC):
         super()._generate()
 
 
-def _calculate_parameter_set_hash(parameter_names: typing.List[str], set_samples: typing.List) -> str:
+def _calculate_parameter_set_hash(parameter_names: typing.List[str], set_samples: numpy.ndarray) -> str:
     """Calculate the unique, repeatable parameter set content hash for a single parameter set
 
     :param parameter_names: list of parameter names in matching order with parameter samples
@@ -1226,6 +1226,7 @@ def _calculate_parameter_set_hash(parameter_names: typing.List[str], set_samples
     """
     if len(parameter_names) != len(set_samples):
         raise RuntimeError("Expected length of parameter names to match number of sample values")
+    set_samples = numpy.array(set_samples, dtype=object)
     sorted_contents = sorted(zip(parameter_names, set_samples))
     set_catenation = "\n".join(f"{name}:{repr(sample)}" for name, sample in sorted_contents)
     set_hash = hashlib.md5(set_catenation.encode("utf-8"), usedforsecurity=False).hexdigest()
@@ -1276,7 +1277,7 @@ def _verify_parameter_study(parameter_study: xarray.Dataset):
     file_hashes = [str(set_hash) for set_hash in parameter_study[_hash_coordinate_key].values]
     samples = _parameter_study_to_numpy(parameter_study)
     calculated_hashes = (_calculate_parameter_set_hashes(parameter_names, samples))
-    if file_hashes != calculated_hashes:
+    if set(file_hashes) != set(calculated_hashes):
         raise RuntimeError(
             f"File set hashes not equal to calculated content set hashes: \n{file_hashes}\n{calculated_hashes}"
         )
