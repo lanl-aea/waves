@@ -74,7 +74,7 @@ def test_calculate_parameter_set_hash(parameter_names, samples, expected_hashes)
     set_hashes.values(),
     ids=set_hashes.keys(),
 )
-def test_calculate_parameter_set_hash(parameter_names, samples, expected_hashes):
+def test_calculate_parameter_set_hashes(parameter_names, samples, expected_hashes):
     parameter_set_hashes = parameter_generators._calculate_parameter_set_hashes(
         parameter_names,
         samples,
