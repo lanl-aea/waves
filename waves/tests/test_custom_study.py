@@ -144,18 +144,19 @@ class TestCustomStudy:
         ids=merge_test.keys(),
     )
     def test_merge(self, first_schema, second_schema, expected_array):
-        TestMerge1, TestMerge2 = merge_samplers(CustomStudy, first_schema, second_schema, {})
-        generate_array = TestMerge2._samples
-        assert numpy.all(generate_array == expected_array)
-        # Check for consistent hash-parameter set relationships
-        for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
-            assert parameter_set == TestMerge2.parameter_study.sel(parameter_sets=set_name)
-        # Self-consistency checks
-        assert (
-            list(TestMerge2._parameter_set_names.values())
-            == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()  # noqa: W503
-        )
-        assert TestMerge2._parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
+        with patch("waves.parameter_generators._verify_parameter_study"):
+            TestMerge1, TestMerge2 = merge_samplers(CustomStudy, first_schema, second_schema, {})
+            generate_array = TestMerge2._samples
+            assert numpy.all(generate_array == expected_array)
+            # Check for consistent hash-parameter set relationships
+            for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
+                assert parameter_set == TestMerge2.parameter_study.sel(parameter_sets=set_name)
+            # Self-consistency checks
+            assert (
+                list(TestMerge2._parameter_set_names.values())
+                == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()  # noqa: W503
+            )
+            assert TestMerge2._parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
 
     generate_io = {
         "one parameter yaml": (

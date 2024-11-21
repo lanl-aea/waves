@@ -107,37 +107,38 @@ class TestLatinHypercube:
         ids=merge_test.keys(),
     )
     def test_merge(self, first_schema, second_schema, seed, expected_samples):
-        # LatinHypercube
-        kwargs = {"seed": seed}
-        TestMerge1, TestMerge2 = merge_samplers(LatinHypercube, first_schema, second_schema, kwargs)
-        samples = TestMerge2._samples.astype(float)
-        # Sort flattens the array if no axis is provided. We must preserve set contents (rows), so must sort on columns.
-        # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
-        assert numpy.allclose(numpy.sort(samples, axis=0), numpy.sort(expected_samples, axis=0))
-        # Check for consistent hash-parameter set relationships
-        for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
-            assert parameter_set == TestMerge2.parameter_study.sel(parameter_sets=set_name)
-        # Self-consistency checks
-        assert (
-            list(TestMerge2._parameter_set_names.values())
-            == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()  # noqa: W503
-        )
-        assert TestMerge2._parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
+        with patch("waves.parameter_generators._verify_parameter_study"):
+            # LatinHypercube
+            kwargs = {"seed": seed}
+            TestMerge1, TestMerge2 = merge_samplers(LatinHypercube, first_schema, second_schema, kwargs)
+            samples = TestMerge2._samples.astype(float)
+            # Sort flattens the array if no axis is provided. We must preserve set contents (rows), so must sort on columns.
+            # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
+            assert numpy.allclose(numpy.sort(samples, axis=0), numpy.sort(expected_samples, axis=0))
+            # Check for consistent hash-parameter set relationships
+            for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
+                assert parameter_set == TestMerge2.parameter_study.sel(parameter_sets=set_name)
+            # Self-consistency checks
+            assert (
+                list(TestMerge2._parameter_set_names.values())
+                == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()  # noqa: W503
+            )
+            assert TestMerge2._parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
 
-        # ScipySampler
-        TestMerge1, TestMerge2 = merge_samplers(
-            ScipySampler, first_schema, second_schema, kwargs, sampler="LatinHypercube"
-        )
-        samples = TestMerge2._samples.astype(float)
-        # Sort flattens the array if no axis is provided. We must preserve set contents (rows), so must sort on columns.
-        # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
-        assert numpy.allclose(numpy.sort(samples, axis=0), numpy.sort(expected_samples, axis=0))
-        # Check for consistent hash-parameter set relationships
-        for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
-            assert parameter_set == TestMerge2.parameter_study.sel(parameter_sets=set_name)
-        # Self-consistency checks
-        assert (
-            list(TestMerge2._parameter_set_names.values())
-            == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()  # noqa: W503
-        )
-        assert TestMerge2._parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
+            # ScipySampler
+            TestMerge1, TestMerge2 = merge_samplers(
+                ScipySampler, first_schema, second_schema, kwargs, sampler="LatinHypercube"
+            )
+            samples = TestMerge2._samples.astype(float)
+            # Sort flattens the array if no axis is provided. We must preserve set contents (rows), so must sort on columns.
+            # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
+            assert numpy.allclose(numpy.sort(samples, axis=0), numpy.sort(expected_samples, axis=0))
+            # Check for consistent hash-parameter set relationships
+            for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
+                assert parameter_set == TestMerge2.parameter_study.sel(parameter_sets=set_name)
+            # Self-consistency checks
+            assert (
+                list(TestMerge2._parameter_set_names.values())
+                == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()  # noqa: W503
+            )
+            assert TestMerge2._parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()

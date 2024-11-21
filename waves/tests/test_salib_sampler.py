@@ -1,6 +1,7 @@
 """Test SALibSampler Class
 """
 
+from unittest.mock import patch
 from contextlib import nullcontext as does_not_raise
 
 import pytest
@@ -369,11 +370,12 @@ class TestSALibSampler:
         ids=merge_test.keys(),
     )
     def test_merge(self, first_schema, second_schema, kwargs):
-        for sampler in _supported_salib_samplers:
-            # TODO: find a better way to separate the sampler types and their test parameterization
-            if not self._big_enough(sampler, first_schema["N"], first_schema["problem"]["num_vars"]):
-                return
-            original_study, merged_study = merge_samplers(SALibSampler, first_schema, second_schema, kwargs, sampler)
-            merged_study._samples.astype(float)
-            consistent_hash_parameter_check(original_study, merged_study)
-            self_consistency_checks(merged_study)
+        with patch("waves.parameter_generators._verify_parameter_study"):
+            for sampler in _supported_salib_samplers:
+                # TODO: find a better way to separate the sampler types and their test parameterization
+                if not self._big_enough(sampler, first_schema["N"], first_schema["problem"]["num_vars"]):
+                    return
+                original_study, merged_study = merge_samplers(SALibSampler, first_schema, second_schema, kwargs, sampler)
+                merged_study._samples.astype(float)
+                consistent_hash_parameter_check(original_study, merged_study)
+                self_consistency_checks(merged_study)

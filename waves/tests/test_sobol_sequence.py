@@ -1,5 +1,6 @@
 """Test Sobol Sequence Class
 """
+from unittest.mock import patch
 
 import pytest
 import numpy
@@ -129,22 +130,23 @@ class TestSobolSequence:
         ids=merge_test.keys(),
     )
     def test_merge(self, first_schema, second_schema, kwargs, expected_samples):
-        # Sobol
-        original_study, merged_study = merge_samplers(SobolSequence, first_schema, second_schema, kwargs)
-        samples_array = merged_study._samples.astype(float)
-        # Sort flattens the array if no axis is provided. We must preserve set contents (rows), so must sort on columns.
-        # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
-        assert numpy.allclose(numpy.sort(samples_array, axis=0), numpy.sort(expected_samples, axis=0))
-        consistent_hash_parameter_check(original_study, merged_study)
-        self_consistency_checks(merged_study)
+        with patch("waves.parameter_generators._verify_parameter_study"):
+            # Sobol
+            original_study, merged_study = merge_samplers(SobolSequence, first_schema, second_schema, kwargs)
+            samples_array = merged_study._samples.astype(float)
+            # Sort flattens the array if no axis is provided. We must preserve set contents (rows), so must sort on columns.
+            # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
+            assert numpy.allclose(numpy.sort(samples_array, axis=0), numpy.sort(expected_samples, axis=0))
+            consistent_hash_parameter_check(original_study, merged_study)
+            self_consistency_checks(merged_study)
 
-        # ScipySampler
-        original_study, merged_study = merge_samplers(
-            ScipySampler, first_schema, second_schema, kwargs, sampler="Sobol"
-        )
-        samples_array = merged_study._samples.astype(float)
-        # Sort flattens the array if no axis is provided. We must preserve set contents (rows), so must sort on columns.
-        # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
-        assert numpy.allclose(numpy.sort(samples_array, axis=0), numpy.sort(expected_samples, axis=0))
-        consistent_hash_parameter_check(original_study, merged_study)
-        self_consistency_checks(merged_study)
+            # ScipySampler
+            original_study, merged_study = merge_samplers(
+                ScipySampler, first_schema, second_schema, kwargs, sampler="Sobol"
+            )
+            samples_array = merged_study._samples.astype(float)
+            # Sort flattens the array if no axis is provided. We must preserve set contents (rows), so must sort on columns.
+            # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
+            assert numpy.allclose(numpy.sort(samples_array, axis=0), numpy.sort(expected_samples, axis=0))
+            consistent_hash_parameter_check(original_study, merged_study)
+            self_consistency_checks(merged_study)

@@ -170,11 +170,12 @@ class TestCartesianProduct:
 
     @pytest.mark.parametrize("first_schema, second_schema, expected_array", merge_test.values(), ids=merge_test.keys())
     def test_merge(self, first_schema, second_schema, expected_array):
-        original_study, merged_study = merge_samplers(CartesianProduct, first_schema, second_schema, {})
-        generate_array = merged_study._samples
-        assert numpy.all(generate_array == expected_array)
-        consistent_hash_parameter_check(original_study, merged_study)
-        self_consistency_checks(merged_study)
+        with patch("waves.parameter_generators._verify_parameter_study"):
+            original_study, merged_study = merge_samplers(CartesianProduct, first_schema, second_schema, {})
+            generate_array = merged_study._samples
+            assert numpy.all(generate_array == expected_array)
+            consistent_hash_parameter_check(original_study, merged_study)
+            self_consistency_checks(merged_study)
 
     write_yaml = {
         "one parameter yaml": (

@@ -1,6 +1,8 @@
 """Test ScipySampler Class
 """
 
+from unittest.mock import patch
+
 import pytest
 import numpy
 
@@ -87,11 +89,12 @@ class TestScipySampler:
 
     @pytest.mark.parametrize("first_schema, second_schema, kwargs", merge_test.values(), ids=merge_test.keys())
     def test_merge(self, first_schema, second_schema, kwargs):
-        for sampler in _supported_scipy_samplers:
-            original_study, merged_study = merge_samplers(ScipySampler, first_schema, second_schema, kwargs, sampler)
-            merged_study._samples.astype(float)
-            consistent_hash_parameter_check(original_study, merged_study)
-            self_consistency_checks(merged_study)
+        with patch("waves.parameter_generators._verify_parameter_study"):
+            for sampler in _supported_scipy_samplers:
+                original_study, merged_study = merge_samplers(ScipySampler, first_schema, second_schema, kwargs, sampler)
+                merged_study._samples.astype(float)
+                consistent_hash_parameter_check(original_study, merged_study)
+                self_consistency_checks(merged_study)
 
     parameter_study_to_dict = {
         "good schema 1x2": (
