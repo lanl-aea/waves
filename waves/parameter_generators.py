@@ -22,7 +22,6 @@ import SALib
 from waves import _settings
 from waves import _utilities
 from waves._settings import _hash_coordinate_key
-from waves._settings import _parameter_coordinate_key
 from waves._settings import _set_coordinate_key
 from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
 

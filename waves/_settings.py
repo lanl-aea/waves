@@ -54,7 +54,6 @@ _allowable_output_file_types = typing.get_args(_allowable_output_file_typing)
 _default_output_file_type_api = _allowable_output_file_types[0]
 _default_output_file_type_cli = _allowable_output_file_types[1]
 _hash_coordinate_key = "parameter_set_hash"
-_parameter_coordinate_key = "parameters"
 _set_coordinate_key = "parameter_sets"
 _installed_docs_index = _project_root_abspath / "docs/index.html"
 _modsim_template_directory = _project_root_abspath / "modsim_template"
