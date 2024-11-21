@@ -482,7 +482,7 @@ class ParameterGenerator(ABC):
 
         # Swap dimensions from the set name to the set hash to merge identical sets
         swap_to_hash_index = {_set_coordinate_key: _hash_coordinate_key}
-        previous_parameter_study = xarray.open_dataset(self.previous_parameter_study)
+        previous_parameter_study = _open_parameter_study(self.previous_parameter_study)
         previous_parameter_study = previous_parameter_study.swap_dims(swap_to_hash_index)
         self.parameter_study = self.parameter_study.swap_dims(swap_to_hash_index)
 
@@ -1249,6 +1249,10 @@ def _calculate_parameter_set_hashes(parameter_generator: ParameterGenerator) -> 
         set_hash = _calculate_parameter_set_hash(parameter_generator._parameter_names, sample_row)
         parameter_set_hashes.append(set_hash)
     return parameter_set_hashes
+
+
+def _open_parameter_study(parameter_study: typing.Union[pathlib.Path, str]) -> xarray.Dataset:
+    return xarray.open_dataset(parameter_study)
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace
