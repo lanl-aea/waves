@@ -76,7 +76,7 @@ pages:
     - rm -rf public && mkdir -p public/modsim-template
     # Ensure the ``_version.py`` file is created
     - scons html-internal --clean && scons html-internal --unconditional-build
-    - scons pytest --clean && scons pytest --cov-report
+    - scons pytest --clean && scons pytest
     - cp -r build/docs/html-internal/* public/
     - cp -r build/pytest/coverage public/coverage
     # Build modsim template documentation

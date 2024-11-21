@@ -26,7 +26,7 @@ win-fast-test:
     - conda env create --prefix $prefix --file environment-win.yml --yes
     - conda activate $prefix
     # Tests
-    - scons regression --keep-going --cov-report
+    - scons regression --keep-going
     # Cleanup. Usually an ``after_script``
     - conda deactivate
     - conda env remove --prefix $prefix --yes

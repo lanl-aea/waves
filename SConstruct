@@ -62,13 +62,6 @@ AddOption(
          " and it would normally be ignored. (default: '%default')"
     # fmt: on
 )
-AddOption(
-    "--cov-report",
-    dest="coverage_report",
-    default=False,
-    action="store_true",
-    help="Boolean to add the coverage report options to the pytest alias (default: '%default')",
-)
 
 # ========================================================================================= CONSTRUCTION ENVIRONMENT ===
 # Inherit user's full environment and set project options

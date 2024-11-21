@@ -71,7 +71,7 @@
   variables:
     GIT_STRATEGY: clone
   script:
-    - scons regression --keep-going --unconditional-build --cov-report
+    - scons regression --keep-going --unconditional-build
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
     reports:
