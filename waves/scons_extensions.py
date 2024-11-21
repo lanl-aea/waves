@@ -1597,13 +1597,15 @@ class AbaqusPseudoBuilder:
             env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
             env["ABAQUS_PROGRAM"] = env.AddProgram(["abaqus"])
             env.Append(BUILDERS={
-                "AbaqusSolver": waves.scons_extensions.abaqus_solver(program=env["ABAQUS_PROGRAM"])
+                "AbaqusSolver": waves.scons_extensions.abaqus_solver_builder_factory(
+                    program=env["ABAQUS_PROGRAM"]
+                )
             })
             env.AddMethod(
                 waves.scons_extensions.AbaqusPseudoBuilder(
                     builder=env.AbaqusSolver,
                     override_cpus=env.GetOption("solve_cpus")),
-                "Abaqus"
+                "Abaqus",
             )
 
         To define a simple Abaqus simulation:
