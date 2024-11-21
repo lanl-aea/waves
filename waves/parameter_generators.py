@@ -1265,7 +1265,9 @@ def _verify_parameter_study(parameter_study: xarray.Dataset):
     hash/set content consistency. Implies checking for the hash coordinate key and consistent data variable
     column/parameter names.
 
-    :raises RuntimeError: if any checked attribute of the parameter study is inconsistent with WAVES managed objects
+    :raises RuntimeError: if mandatory coordinate names are missing
+    :raises RuntimeError: if parameter set hash values do not match the calculated hash from set contents (catenated
+        parameter name/values)
     """
     # Check for mandatory coordinate keys
     coordinates = list(parameter_study.coords)
