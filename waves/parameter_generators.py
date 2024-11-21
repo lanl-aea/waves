@@ -1243,11 +1243,7 @@ def _calculate_parameter_set_hashes(parameter_names: typing.List[str], samples: 
 
     :returns: list of parameter set hashes
     """
-    parameter_set_hashes = []
-    for sample_row in samples:
-        set_hash = _calculate_parameter_set_hash(parameter_names, sample_row)
-        parameter_set_hashes.append(set_hash)
-    return parameter_set_hashes
+    return [_calculate_parameter_set_hash(parameter_names, set_samples) for set_samples in samples]
 
 
 def _parameter_study_to_numpy(parameter_study: xarray.Dataset, **kwargs) -> numpy.ndarray:
