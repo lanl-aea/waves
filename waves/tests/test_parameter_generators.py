@@ -75,7 +75,6 @@ def test_calculate_parameter_set_hash(parameter_names, samples, expected_hashes)
                 pass
 
 
-
 @pytest.mark.parametrize(
     "parameter_names, samples, expected_hashes",
     set_hashes.values(),
