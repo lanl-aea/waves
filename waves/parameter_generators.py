@@ -1265,8 +1265,10 @@ def _verify_parameter_study(parameter_study: xarray.Dataset):
     file_hashes = list()
     calculated_hashes = list()
     for set_hash, data_row in parameter_study.groupby(_hash_coordinate_key):
+        # TODO: use a common samples recovery function
+        set_samples = data_row.squeeze().to_array().to_numpy()
         file_hashes.append(set_hash)
-        calculated_hashes.append(_calculate_parameter_set_hash(parameter_names, data_row))
+        calculated_hashes.append(_calculate_parameter_set_hash(parameter_names, set_samples))
     if file_hashes != calculated_hashes:
         raise RuntimeError(
             f"File set hashes not equal to calculated content set hashes: \n{file_hashes}\n{calculated_hashes}"
