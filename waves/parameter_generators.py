@@ -1269,7 +1269,7 @@ def _verify_parameter_study(parameter_study: xarray.Dataset):
         calculated_hashes.append(_calculate_parameter_set_hash(parameter_names, data_row))
     if file_hashes != calculated_hashes:
         raise RuntimeError(
-            f"File set hashes \n{file_hashes}\n not equal to calculated content set hashes \n{calculated_hashes}"
+            f"File set hashes not equal to calculated content set hashes: \n{file_hashes}\n{calculated_hashes}"
         )
 
 
