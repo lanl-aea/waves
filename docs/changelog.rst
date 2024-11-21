@@ -22,6 +22,7 @@ Internal Changes
 - Add coverage to internal API unit tests (:merge:`1025`). By `Kyle Brindley`_.
 - Strong style enforcement and wholesale updates to all Python 2/3 files with the black autoformatting tool:
   https://black.readthedocs.io/en/stable/index.html (:merge:`1028`, :merge:`1030`). By `Kyle Brindley`_.
+- Simplify the pytest commands by always running the XML/HTML coverage (:merge:`1033`). By `Kyle Brindley`_.
 
 *******************
 0.12.2 (2024-11-14)
