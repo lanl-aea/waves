@@ -445,16 +445,16 @@ class TestParameterGenerator:
         HashesParameterGenerator._parameter_names = parameter_names
         HashesParameterGenerator._samples = samples
         del HashesParameterGenerator._parameter_set_hashes
-        assert not hasattr( HashesParameterGenerator, "_parameter_set_hashes")
+        assert not hasattr(HashesParameterGenerator, "_parameter_set_hashes")
         # Check the function that calculates individual set hashes
         for row, expected_hash in zip(samples, expected_hashes):
             set_hash = parameter_generators._calculate_parameter_set_hash(parameter_names, row)
             assert  set_hash == expected_hash
-        assert not hasattr( HashesParameterGenerator, "_parameter_set_hashes")
+        assert not hasattr(HashesParameterGenerator, "_parameter_set_hashes")
         # Check the function returning a list of set hashes. Should not set the attribute.
         parameter_set_hashes = parameter_generators._calculate_parameter_set_hashes(HashesParameterGenerator)
         assert parameter_set_hashes == expected_hashes
-        assert not hasattr( HashesParameterGenerator, "_parameter_set_hashes")
+        assert not hasattr(HashesParameterGenerator, "_parameter_set_hashes")
         # Check the function setting the set hashes attribute.
         HashesParameterGenerator._create_parameter_set_hashes()
         assert HashesParameterGenerator._parameter_set_hashes == expected_hashes
