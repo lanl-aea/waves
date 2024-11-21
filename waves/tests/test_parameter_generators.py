@@ -9,7 +9,7 @@ import pytest
 import numpy
 import xarray
 
-from waves.parameter_generators import ParameterGenerator, _ScipyGenerator, LatinHypercube, SobolSequence
+from waves import parameter_generators
 from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
 from waves import _settings
 
@@ -444,6 +444,18 @@ class TestParameterGenerator:
         HashesParameterGenerator = DummyGenerator({})
         HashesParameterGenerator._parameter_names = parameter_names
         HashesParameterGenerator._samples = samples
+        del HashesParameterGenerator._parameter_set_hashes
+        assert not hasattr( HashesParameterGenerator, "_parameter_set_hashes")
+        # Check the function that calculates individual set hashes
+        for row, expected_hash in zip(samples, expected_hashes):
+            set_hash = parameter_generators._calculate_parameter_set_hash(parameter_names, row)
+            assert  set_hash == expected_hash
+        assert not hasattr( HashesParameterGenerator, "_parameter_set_hashes")
+        # Check the function returning a list of set hashes. Should not set the attribute.
+        parameter_set_hashes = parameter_generators._calculate_parameter_set_hashes(HashesParameterGenerator)
+        assert parameter_set_hashes == expected_hashes
+        assert not hasattr( HashesParameterGenerator, "_parameter_set_hashes")
+        # Check the function setting the set hashes attribute.
         HashesParameterGenerator._create_parameter_set_hashes()
         assert HashesParameterGenerator._parameter_set_hashes == expected_hashes
 
@@ -562,7 +574,7 @@ class TestParameterDistributions:
             assert TestDistributions.parameter_distributions[parameter_name].kwds == expected_kwds
 
 
-class DummyGenerator(ParameterGenerator):
+class DummyGenerator(parameter_generators.ParameterGenerator):
 
     def _validate(self):
         self._parameter_names = ["parameter_1"]
@@ -576,7 +588,7 @@ class DummyGenerator(ParameterGenerator):
         super()._generate()
 
 
-class ParameterDistributions(_ScipyGenerator):
+class ParameterDistributions(parameter_generators._ScipyGenerator):
 
     def _generate(self):
         pass

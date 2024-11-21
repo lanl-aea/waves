@@ -334,38 +334,6 @@ class ParameterGenerator(ABC):
                 for parameter_set_file in parameter_set_files:
                     meta_file.write(f"{parameter_set_file.resolve()}\n")
 
-    def _calculate_parameter_set_hash(parameter_names: typing.List[str], parameter_samples: typing.List) -> str:
-        """Calculate the unique, repeatable parameter set content hash for a single parameter set
-
-        :param parameter_names: list of parameter names in matching order with parameter samples
-        :param parameter_samples: list of parameter sample values in matching order with parameter names
-
-        :returns: unique parameter set hash/identifier
-        """
-        sorted_contents = sorted(zip(parameter_names, parameter_samples))
-        set_catenation = "\n".join(f"{name}:{repr(sample)}" for name, sample in sorted_contents)
-        set_hash = hashlib.md5(set_catenation.encode("utf-8"), usedforsecurity=False).hexdigest()
-        return set_hash
-
-    def _calculate_parameter_set_hashes(parameter_generator: ParameterGenerator) -> typing.List[str]:
-        """Calculate the unique, repeatable parameter set content hashes from a :class:`ParameterGenerator` object with
-        populated ``self._samples`` attribute.
-
-        requires:
-
-        * ``self._samples``: The parameter study samples. Rows are sets. Columns are parameters.
-        * ``self._parameter_names``: parameter names used as columns of parameter study
-
-        :param parameter_generator: A parameter generator object with at least partially complete attributes
-
-        :returns: list of parameter set hashes
-        """
-        parameter_set_hashes = []
-        for sample_row in parameter_generator._samples:
-            set_hash = _calculate_parameter_set_hash(parameter_generator._parameter_names, sample_row)
-            parameter_generator._parameter_set_hashes.append(set_hash)
-        return parameter_set_hashes
-
     def _create_parameter_set_hashes(self) -> None:
         """Construct unique, repeatable parameter set content hashes from ``self._samples``.
 
@@ -1247,6 +1215,40 @@ class SALibSampler(ParameterGenerator, ABC):
         self._samples = sampler.sample(problem, N, **kwargs)
         self._samples = numpy.unique(self._samples, axis=0)
         super()._generate()
+
+
+def _calculate_parameter_set_hash(parameter_names: typing.List[str], parameter_samples: typing.List) -> str:
+    """Calculate the unique, repeatable parameter set content hash for a single parameter set
+
+    :param parameter_names: list of parameter names in matching order with parameter samples
+    :param parameter_samples: list of parameter sample values in matching order with parameter names
+
+    :returns: unique parameter set hash/identifier
+    """
+    sorted_contents = sorted(zip(parameter_names, parameter_samples))
+    set_catenation = "\n".join(f"{name}:{repr(sample)}" for name, sample in sorted_contents)
+    set_hash = hashlib.md5(set_catenation.encode("utf-8"), usedforsecurity=False).hexdigest()
+    return set_hash
+
+
+def _calculate_parameter_set_hashes(parameter_generator: ParameterGenerator) -> typing.List[str]:
+    """Calculate the unique, repeatable parameter set content hashes from a :class:`ParameterGenerator` object with
+    populated ``self._samples`` attribute.
+
+    requires:
+
+    * ``self._samples``: The parameter study samples. Rows are sets. Columns are parameters.
+    * ``self._parameter_names``: parameter names used as columns of parameter study
+
+    :param parameter_generator: A parameter generator object with at least partially complete attributes
+
+    :returns: list of parameter set hashes
+    """
+    parameter_set_hashes = []
+    for sample_row in parameter_generator._samples:
+        set_hash = _calculate_parameter_set_hash(parameter_generator._parameter_names, sample_row)
+        parameter_set_hashes.append(set_hash)
+    return parameter_set_hashes
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace
