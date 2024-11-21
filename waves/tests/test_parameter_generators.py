@@ -115,6 +115,20 @@ def test_verify_parameter_study(parameter_names, samples, expected_hashes):
     with does_not_raise():
         parameter_generators._verify_parameter_study(parameter_study)
 
+    # Delete necessary coordinates
+    no_set_coordinate = parameter_study.drop_vars(_settings._set_coordinate_key)
+    with pytest.raises(RuntimeError):
+        try:
+            parameter_generators._verify_parameter_study(no_set_coordinate)
+        finally:
+            pass
+    no_hash_coordinate = parameter_study.drop_vars(_settings._hash_coordinate_key)
+    with pytest.raises(RuntimeError):
+        try:
+            parameter_generators._verify_parameter_study(no_hash_coordinate)
+        finally:
+            pass
+
     # Force set hashes to be incorrect. Expect to see a RuntimeError.
     bad_hashes = parameter_study.copy(deep=True)
     number_of_hashes = len(bad_hashes[_settings._hash_coordinate_key])

@@ -1267,13 +1267,21 @@ def _verify_parameter_study(parameter_study: xarray.Dataset):
 
     :raises RuntimeError: if any checked attribute of the parameter study is inconsistent with WAVES managed objects
     """
+    # Check for mandatory coordinate keys
+    coordinates = list(parameter_study.coords)
+    if _set_coordinate_key not in coordinates:
+        raise RuntimeError("Parameter study coordinate '{_set_coordinate_key}' missing")
+    if _hash_coordinate_key not in coordinates:
+        raise RuntimeError("Parameter study coordinate '{_hash_coordinate_key}' missing")
+
+    # Check for parameter set hash values against parameter set name/content
     parameter_names = list(parameter_study.keys())
     file_hashes = [str(set_hash) for set_hash in parameter_study[_hash_coordinate_key].values]
     samples = _parameter_study_to_numpy(parameter_study)
-    calculated_hashes = (_calculate_parameter_set_hashes(parameter_names, samples))
+    calculated_hashes = _calculate_parameter_set_hashes(parameter_names, samples)
     if set(file_hashes) != set(calculated_hashes):
         raise RuntimeError(
-            f"File set hashes not equal to calculated content set hashes: \n{file_hashes}\n{calculated_hashes}"
+            f"Paramerer study set hashes not equal to calculated set hashes: \n{file_hashes}\n{calculated_hashes}"
         )
 
 
