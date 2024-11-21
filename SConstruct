@@ -70,7 +70,6 @@ env = Environment(
     variant_dir_base=pathlib.Path(GetOption("variant_dir_base")),
     ignore_documentation=GetOption("ignore_documentation"),
     unconditional_build=GetOption("unconditional_build"),
-    coverage_report=GetOption("coverage_report"),
 )
 env["ENV"]["PYTHONDONTWRITEBYTECODE"] = 1
 
