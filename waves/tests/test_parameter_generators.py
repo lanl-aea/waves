@@ -556,9 +556,14 @@ class TestParameterGenerator:
         DataParameterGenerator._create_parameter_set_hashes()
         DataParameterGenerator._create_parameter_set_names()
         DataParameterGenerator._create_parameter_study()
-        # Test
+        # Test class method
         returned_samples = DataParameterGenerator._parameter_study_to_numpy()
         assert numpy.all(returned_samples == DataParameterGenerator._samples)
+        # Test module function
+        returned_samples = parameter_generators._parameter_study_to_numpy(
+            DataParameterGenerator.parameter_study,
+            dtype=object,
+        )
 
 
 class TestParameterDistributions:
