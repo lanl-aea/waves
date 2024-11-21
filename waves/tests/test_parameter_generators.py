@@ -577,8 +577,7 @@ class TestParameterGenerator:
         assert numpy.all(returned_samples == DataParameterGenerator._samples)
         # Test module function
         returned_samples = parameter_generators._parameter_study_to_numpy(
-            DataParameterGenerator.parameter_study,
-            dtype=object,
+            DataParameterGenerator.parameter_study
         )
 
 

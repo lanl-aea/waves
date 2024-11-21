@@ -436,7 +436,7 @@ class ParameterGenerator(ABC):
 
         :return: data
         """
-        return _parameter_study_to_numpy(self.parameter_study, dtype=object)
+        return _parameter_study_to_numpy(self.parameter_study)
 
     def parameter_study_to_dict(self) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
         """Return parameter study as a dictionary
@@ -1246,18 +1246,17 @@ def _calculate_parameter_set_hashes(parameter_names: typing.List[str], samples: 
     return [_calculate_parameter_set_hash(parameter_names, set_samples) for set_samples in samples]
 
 
-def _parameter_study_to_numpy(parameter_study: xarray.Dataset, **kwargs) -> numpy.ndarray:
+def _parameter_study_to_numpy(parameter_study: xarray.Dataset) -> numpy.ndarray:
     """Return the parameter study data as a 2D numpy array
 
     :param parameter_study: A :class:`ParameterGenerator` parameter study Xarray Dataset
-    :param kwargs: Pass through to numpy array
 
     :return: data
     """
     data = []
     for set_hash, data_row in parameter_study.groupby(_hash_coordinate_key):
         data.append(data_row.squeeze().to_array().to_numpy())
-    return numpy.array(data, **kwargs)
+    return numpy.array(data, dtype=object)
 
 
 def _verify_parameter_study(parameter_study: xarray.Dataset):
