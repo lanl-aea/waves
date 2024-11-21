@@ -1272,9 +1272,9 @@ def _verify_parameter_study(parameter_study: xarray.Dataset):
     # Check for mandatory coordinate keys
     coordinates = list(parameter_study.coords)
     if _set_coordinate_key not in coordinates:
-        raise RuntimeError("Parameter study coordinate '{_set_coordinate_key}' missing")
+        raise RuntimeError(f"Parameter study coordinate '{_set_coordinate_key}' missing")
     if _hash_coordinate_key not in coordinates:
-        raise RuntimeError("Parameter study coordinate '{_hash_coordinate_key}' missing")
+        raise RuntimeError(f"Parameter study coordinate '{_hash_coordinate_key}' missing")
 
     # Check for parameter set hash values against parameter set name/content
     parameter_names = list(parameter_study.keys())
