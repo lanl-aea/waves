@@ -436,10 +436,7 @@ class ParameterGenerator(ABC):
 
         :return: data
         """
-        data = []
-        for set_hash, data_row in self.parameter_study.groupby(_hash_coordinate_key):
-            data.append(data_row.squeeze().to_array().to_numpy())
-        return numpy.array(data, dtype=object)
+        return _parameter_study_to_numpy(self.parameter_study, dtype=object)
 
     def parameter_study_to_dict(self) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
         """Return parameter study as a dictionary
@@ -1252,6 +1249,20 @@ def _calculate_parameter_set_hashes(parameter_names: typing.List[str], samples: 
     return parameter_set_hashes
 
 
+def _parameter_study_to_numpy(parameter_study: xarray.Dataset, **kwargs) -> numpy.ndarray:
+    """Return the parameter study data as a 2D numpy array
+
+    :param parameter_study: A :class:`ParameterGenerator` parameter study Xarray Dataset
+    :param kwargs: Pass through to numpy array
+
+    :return: data
+    """
+    data = []
+    for set_hash, data_row in parameter_study.groupby(_hash_coordinate_key):
+        data.append(data_row.squeeze().to_array().to_numpy())
+    return numpy.array(data, **kwargs)
+
+
 def _verify_parameter_study(parameter_study: xarray.Dataset):
     """Verify then contents of a parameter study
 
@@ -1262,13 +1273,9 @@ def _verify_parameter_study(parameter_study: xarray.Dataset):
     :raises RuntimeError: if any checked attribute of the parameter study is inconsistent with WAVES managed objects
     """
     parameter_names = list(parameter_study.keys())
-    file_hashes = list()
-    calculated_hashes = list()
-    for set_hash, data_row in parameter_study.groupby(_hash_coordinate_key):
-        # TODO: use a common samples recovery function
-        set_samples = data_row.squeeze().to_array().to_numpy()
-        file_hashes.append(set_hash)
-        calculated_hashes.append(_calculate_parameter_set_hash(parameter_names, set_samples))
+    file_hashes = [str(set_hash) for set_hash in parameter_study[_hash_coordinate_key].values]
+    samples = _parameter_study_to_numpy(parameter_study)
+    calculated_hashes = (_calculate_parameter_set_hashes(parameter_names, samples))
     if file_hashes != calculated_hashes:
         raise RuntimeError(
             f"File set hashes not equal to calculated content set hashes: \n{file_hashes}\n{calculated_hashes}"
