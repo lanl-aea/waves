@@ -8,6 +8,10 @@ Changelog
 0.12.3 (unreleased)
 *******************
 
+Bug fixes
+=========
+- Use Abaqus solver builder factory in Abaqus Pseudo-builder docstring example (:merge:`1033`). By `Matthew Fister`_.
+
 Documentation
 =============
 - Move the pure SCons quickstart tutorial to the supplemental lessons (:issue:`824`, :merge:`1027`). By `Kyle
