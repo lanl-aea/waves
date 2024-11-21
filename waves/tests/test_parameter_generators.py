@@ -82,6 +82,34 @@ def test_calculate_parameter_set_hashes(parameter_names, samples, expected_hashe
     assert parameter_set_hashes == expected_hashes
 
 
+@pytest.mark.parametrize(
+    "parameter_names, samples, expected_hashes",
+    set_hashes.values(),
+    ids=set_hashes.keys(),
+)
+def test_verify_parameter_study(parameter_names, samples, expected_hashes):
+    # Borrow setup from class test. See :meth:`test_create_parameter_set_hashes`
+    HashesParameterGenerator = DummyGenerator({})
+    HashesParameterGenerator._parameter_names = parameter_names
+    HashesParameterGenerator._samples = samples
+    HashesParameterGenerator._create_parameter_set_hashes()
+    assert HashesParameterGenerator._parameter_set_hashes == expected_hashes
+    parameter_study = HashesParameterGenerator.parameter_study
+
+    with does_not_raise():
+        parameter_generators._verify_parameter_study(parameter_study)
+
+    # Force set hashes to be incorrect. Expect to see a RuntimeError.
+    bad_hashes = parameter_study.copy(deep=True)
+    number_of_hashes = len(bad_hashes[_settings._hash_coordinate_key])
+    bad_hashes[_settings._hash_coordinate_key] = [''] * number_of_hashes
+    with pytest.raises(RuntimeError):
+        try:
+            parameter_generators._verify_parameter_study(bad_hashes)
+        finally:
+            pass
+
+
 def test_open_parameter_study():
     mock_file = "dummy.h5"
     with (
