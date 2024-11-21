@@ -45,9 +45,19 @@ set_hashes = {
         numpy.array([[1, 2]], dtype=object),
         ["f1c28a9674481e365269ced217197221"],
     ),
+    "set3: ints without dtype=object": (
+        ["number1", "number2"],
+        numpy.array([[1, 2]]),
+        ["f1c28a9674481e365269ced217197221"],
+    ),
     "set3: floats": (
         ["number1", "number2"],
         numpy.array([[1.0, 2.0]], dtype=object),
+        ["f94ff85af046704aff100133c958ad1e"],
+    ),
+    "set3: floats without dtype=object": (
+        ["number1", "number2"],
+        numpy.array([[1.0, 2.0]]),
         ["f94ff85af046704aff100133c958ad1e"],
     ),
     "set3: mixed ints and floats": (
