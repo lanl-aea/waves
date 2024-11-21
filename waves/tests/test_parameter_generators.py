@@ -449,7 +449,7 @@ class TestParameterGenerator:
         # Check the function that calculates individual set hashes
         for row, expected_hash in zip(samples, expected_hashes):
             set_hash = parameter_generators._calculate_parameter_set_hash(parameter_names, row)
-            assert  set_hash == expected_hash
+            assert set_hash == expected_hash
         assert not hasattr(HashesParameterGenerator, "_parameter_set_hashes")
         # Check the function returning a list of set hashes. Should not set the attribute.
         parameter_set_hashes = parameter_generators._calculate_parameter_set_hashes(HashesParameterGenerator)
