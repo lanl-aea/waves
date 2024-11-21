@@ -82,6 +82,42 @@ def test_calculate_parameter_set_hash(parameter_names, samples, expected_hashes)
     assert parameter_set_hashes == expected_hashes
 
 
+def test_open_parameter_study():
+    mock_file = "dummy.h5"
+    with (
+        patch("pathlib.Path.is_file", return_value=True),
+        patch("xarray.open_dataset") as mock_open_dataset,
+        patch("waves.parameter_generators._verify_parameter_study"),
+        does_not_raise(),
+    ):
+        parameter_generators._open_parameter_study(mock_file)
+        mock_open_dataset.assert_called_once_with(mock_file)
+
+    # Test missing file failure
+    with (
+        patch("pathlib.Path.is_file", return_value=False),
+        patch("xarray.open_dataset") as mock_open_dataset,
+        patch("waves.parameter_generators._verify_parameter_study"),
+        pytest.raises(RuntimeError),
+    ):
+        try:
+            parameter_generators._open_parameter_study(mock_file)
+        finally:
+            mock_open_dataset.assert_not_called()
+
+    # Test verification failure
+    with (
+        patch("pathlib.Path.is_file", return_value=True),
+        patch("xarray.open_dataset") as mock_open_dataset,
+        patch("waves.parameter_generators._verify_parameter_study", side_effect=RuntimeError),
+        pytest.raises(RuntimeError),
+    ):
+        try:
+            parameter_generators._open_parameter_study(mock_file)
+        finally:
+            mock_open_dataset.assert_called_once_with(mock_file)
+
+
 class TestParameterGenerator:
     """Class for testing ABC ParameterGenerator"""
 

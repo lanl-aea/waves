@@ -1277,8 +1277,15 @@ def _open_parameter_study(parameter_study_file: typing.Union[pathlib.Path, str])
     """Return a :meth:`ParameterGenerator.parameter_study` xarray Dataset after verifying contents
 
     :param parameter_study_file: Xarray parameter study file to open
+
+    :raises RuntimeError: if file path is not found or is not a file
+    :raises RuntimeError: if parameter study verification raises a RuntimeError
     """
+    path = pathlib.Path(parameter_study_file)
+    if not path.is_file():
+        raise RuntimeError("File '{parameter_study_file}' is not a file")
     parameter_study = xarray.open_dataset(parameter_study_file)
+
     try:
         _verify_parameter_study(parameter_study)
     except RuntimeError as err:
