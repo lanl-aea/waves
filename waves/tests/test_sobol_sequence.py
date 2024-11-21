@@ -134,7 +134,8 @@ class TestSobolSequence:
             # Sobol
             original_study, merged_study = merge_samplers(SobolSequence, first_schema, second_schema, kwargs)
             samples_array = merged_study._samples.astype(float)
-            # Sort flattens the array if no axis is provided. We must preserve set contents (rows), so must sort on columns.
+            # Sort flattens the array if no axis is provided.
+            # We must preserve set contents (rows), so must sort on columns.
             # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
             assert numpy.allclose(numpy.sort(samples_array, axis=0), numpy.sort(expected_samples, axis=0))
             consistent_hash_parameter_check(original_study, merged_study)
@@ -145,7 +146,8 @@ class TestSobolSequence:
                 ScipySampler, first_schema, second_schema, kwargs, sampler="Sobol"
             )
             samples_array = merged_study._samples.astype(float)
-            # Sort flattens the array if no axis is provided. We must preserve set contents (rows), so must sort on columns.
+            # Sort flattens the array if no axis is provided.
+            # We must preserve set contents (rows), so must sort on columns.
             # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
             assert numpy.allclose(numpy.sort(samples_array, axis=0), numpy.sort(expected_samples, axis=0))
             consistent_hash_parameter_check(original_study, merged_study)

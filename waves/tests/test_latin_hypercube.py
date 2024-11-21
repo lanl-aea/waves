@@ -112,7 +112,8 @@ class TestLatinHypercube:
             kwargs = {"seed": seed}
             TestMerge1, TestMerge2 = merge_samplers(LatinHypercube, first_schema, second_schema, kwargs)
             samples = TestMerge2._samples.astype(float)
-            # Sort flattens the array if no axis is provided. We must preserve set contents (rows), so must sort on columns.
+            # Sort flattens the array if no axis is provided.
+            # We must preserve set contents (rows), so must sort on columns.
             # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
             assert numpy.allclose(numpy.sort(samples, axis=0), numpy.sort(expected_samples, axis=0))
             # Check for consistent hash-parameter set relationships
@@ -130,7 +131,8 @@ class TestLatinHypercube:
                 ScipySampler, first_schema, second_schema, kwargs, sampler="LatinHypercube"
             )
             samples = TestMerge2._samples.astype(float)
-            # Sort flattens the array if no axis is provided. We must preserve set contents (rows), so must sort on columns.
+            # Sort flattens the array if no axis is provided.
+            # We must preserve set contents (rows), so must sort on columns.
             # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
             assert numpy.allclose(numpy.sort(samples, axis=0), numpy.sort(expected_samples, axis=0))
             # Check for consistent hash-parameter set relationships
