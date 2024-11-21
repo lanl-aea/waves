@@ -1554,8 +1554,8 @@ class AbaqusPseudoBuilder:
         oldjob: str = None,
         write_restart: bool = False,
         double: typing.Optional[str] = "both",
-        extra_sources: list[str] = list(),
-        extra_targets: list[str] = list(),
+        extra_sources: typing.List[str] = list(),
+        extra_targets: typing.List[str] = list(),
         extra_options: str = "",
         **kwargs,
     ) -> SCons.Node.NodeList:
