@@ -14,6 +14,74 @@ from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidat
 from waves import _settings
 
 
+set_hashes = {
+    "set1": (
+        ["name1", "name2", "name3"],
+        numpy.array([[1, 10.1, "a"]], dtype=object),
+        ["732411987fea3ae4a1e0bd7ea6a8841a"],
+    ),
+    "set1 different parameter order": (
+        ["name3", "name2", "name1"],
+        numpy.array([["a", 10.1, 1]], dtype=object),
+        ["732411987fea3ae4a1e0bd7ea6a8841a"],
+    ),
+    "set1 different parameter names": (
+        ["newname1", "newname2", "newname3"],
+        numpy.array([[1, 10.1, "a"]], dtype=object),
+        ["45458adbaeb9a55dcec2211383c9bd96"],
+    ),
+    "set2": (
+        ["name1", "name2", "name3"],
+        numpy.array([[1, 10.1, "a"], [2, 20.2, "b"], [3, 30.3, "c"]], dtype=object),
+        [
+            "732411987fea3ae4a1e0bd7ea6a8841a",
+            "6dfcf74620c998f3ef7ab4cc9fb2d510",
+            "57af5a35970eb8a1a93c1ed62ff3ff37",
+        ],
+    ),
+    # Set3 hashes should all be different if types are preserved correctly
+    "set3: ints": (
+        ["number1", "number2"],
+        numpy.array([[1, 2]], dtype=object),
+        ["f1c28a9674481e365269ced217197221"],
+    ),
+    "set3: floats": (
+        ["number1", "number2"],
+        numpy.array([[1.0, 2.0]], dtype=object),
+        ["f94ff85af046704aff100133c958ad1e"],
+    ),
+    "set3: mixed ints and floats": (
+        ["number1", "number2"],
+        numpy.array([[1, 2.0]], dtype=object),
+        ["3d0f2e8a9a15239b28cee90d331e69e8"],
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "parameter_names, samples, expected_hashes",
+    set_hashes.values(),
+    ids=set_hashes.keys(),
+)
+def test_calculate_parameter_set_hash(parameter_names, samples, expected_hashes):
+    for row, expected_hash in zip(samples, expected_hashes):
+        set_hash = parameter_generators._calculate_parameter_set_hash(parameter_names, row)
+        assert set_hash == expected_hash
+
+
+@pytest.mark.parametrize(
+    "parameter_names, samples, expected_hashes",
+    set_hashes.values(),
+    ids=set_hashes.keys(),
+)
+def test_calculate_parameter_set_hash(parameter_names, samples, expected_hashes):
+    parameter_set_hashes = parameter_generators._calculate_parameter_set_hashes(
+        parameter_names,
+        samples,
+    )
+    assert parameter_set_hashes == expected_hashes
+
+
 class TestParameterGenerator:
     """Class for testing ABC ParameterGenerator"""
 
@@ -392,49 +460,6 @@ class TestParameterGenerator:
             finally:
                 mock_private_write.assert_not_called()
 
-    set_hashes = {
-        "set1": (
-            ["name1", "name2", "name3"],
-            numpy.array([[1, 10.1, "a"]], dtype=object),
-            ["732411987fea3ae4a1e0bd7ea6a8841a"],
-        ),
-        "set1 different parameter order": (
-            ["name3", "name2", "name1"],
-            numpy.array([["a", 10.1, 1]], dtype=object),
-            ["732411987fea3ae4a1e0bd7ea6a8841a"],
-        ),
-        "set1 different parameter names": (
-            ["newname1", "newname2", "newname3"],
-            numpy.array([[1, 10.1, "a"]], dtype=object),
-            ["45458adbaeb9a55dcec2211383c9bd96"],
-        ),
-        "set2": (
-            ["name1", "name2", "name3"],
-            numpy.array([[1, 10.1, "a"], [2, 20.2, "b"], [3, 30.3, "c"]], dtype=object),
-            [
-                "732411987fea3ae4a1e0bd7ea6a8841a",
-                "6dfcf74620c998f3ef7ab4cc9fb2d510",
-                "57af5a35970eb8a1a93c1ed62ff3ff37",
-            ],
-        ),
-        # Set3 hashes should all be different if types are preserved correctly
-        "set3: ints": (
-            ["number1", "number2"],
-            numpy.array([[1, 2]], dtype=object),
-            ["f1c28a9674481e365269ced217197221"],
-        ),
-        "set3: floats": (
-            ["number1", "number2"],
-            numpy.array([[1.0, 2.0]], dtype=object),
-            ["f94ff85af046704aff100133c958ad1e"],
-        ),
-        "set3: mixed ints and floats": (
-            ["number1", "number2"],
-            numpy.array([[1, 2.0]], dtype=object),
-            ["3d0f2e8a9a15239b28cee90d331e69e8"],
-        ),
-    }
-
     @pytest.mark.parametrize(
         "parameter_names, samples, expected_hashes",
         set_hashes.values(),
@@ -445,18 +470,6 @@ class TestParameterGenerator:
         HashesParameterGenerator._parameter_names = parameter_names
         HashesParameterGenerator._samples = samples
         del HashesParameterGenerator._parameter_set_hashes
-        assert not hasattr(HashesParameterGenerator, "_parameter_set_hashes")
-        # Check the function that calculates individual set hashes
-        for row, expected_hash in zip(samples, expected_hashes):
-            set_hash = parameter_generators._calculate_parameter_set_hash(parameter_names, row)
-            assert set_hash == expected_hash
-        assert not hasattr(HashesParameterGenerator, "_parameter_set_hashes")
-        # Check the function returning a list of set hashes. Should not set the attribute.
-        parameter_set_hashes = parameter_generators._calculate_parameter_set_hashes(
-            HashesParameterGenerator._parameter_names,
-            HashesParameterGenerator._samples
-        )
-        assert parameter_set_hashes == expected_hashes
         assert not hasattr(HashesParameterGenerator, "_parameter_set_hashes")
         # Check the function setting the set hashes attribute.
         HashesParameterGenerator._create_parameter_set_hashes()
