@@ -68,6 +68,13 @@ def test_calculate_parameter_set_hash(parameter_names, samples, expected_hashes)
         set_hash = parameter_generators._calculate_parameter_set_hash(parameter_names, row)
         assert set_hash == expected_hash
 
+        with pytest.raises(RuntimeError):
+            try:
+                set_hash = parameter_generators._calculate_parameter_set_hash([], row)
+            finally:
+                pass
+
+
 
 @pytest.mark.parametrize(
     "parameter_names, samples, expected_hashes",
