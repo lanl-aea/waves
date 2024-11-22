@@ -1278,7 +1278,7 @@ def _verify_parameter_study(parameter_study: xarray.Dataset):
         raise RuntimeError(f"Parameter study coordinate '{_hash_coordinate_key}' missing")
 
     # Check for the assigned dimensions
-    if not _set_coordinate_key in parameter_study.dims:
+    if _set_coordinate_key not in parameter_study.dims:
         raise RuntimeError(f"Parameter study missing dimension '{_set_coordinate_key}'")
     keys = list(parameter_study.keys()) + [_hash_coordinate_key]
     for key in keys:
