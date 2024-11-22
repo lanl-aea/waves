@@ -27,7 +27,7 @@ Internal Changes
 Enhancements
 ============
 - Verify parameter set hash coordinates when reading user supplied previous parameter study files (:issue:`825`,
-  :merge:`1032`, :merge:`1033`). By `Kyle Brindley`_.
+  :merge:`1032`, :merge:`1035`). By `Kyle Brindley`_.
 
 *******************
 0.12.2 (2024-11-14)
