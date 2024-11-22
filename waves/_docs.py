@@ -52,7 +52,12 @@ def main(documentation_index: pathlib.Path, print_local_path: bool = False) -> N
     else:
         import webbrowser
 
-        webbrowser.open(str(documentation_index))
+        success = webbrowser.open(str(documentation_index))
+        if not success:
+            raise RuntimeError(
+                "Could not open a web browser. Is your system default browser set? Are you working over SSH? "
+                "Try running ``waves docs --print-local-path`` and opening the reported path directly."
+            )
 
 
 # Limit help() and 'from module import *' behavior to the module's public API
