@@ -1,1 +1,1 @@
-../recipe-internal/bld.bat
+../recipe/bld.bat
