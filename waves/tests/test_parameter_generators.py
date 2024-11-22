@@ -123,12 +123,18 @@ def test_verify_parameter_study(parameter_names, samples, expected_hashes):
     with pytest.raises(RuntimeError, match=f"coordinate '{_settings._hash_coordinate_key}' missing"):
         parameter_generators._verify_parameter_study(no_hash_coordinate)
 
-    # Change coordinate name
+    # Check dimension name
     wrong_coordinate_name = parameter_study.swap_dims(
         dims_dict={_settings._set_coordinate_key: _settings._hash_coordinate_key}
     )
-    with pytest.raises(RuntimeError, match=f"missing dimension '{_settings._set_coordinate_key}'"):
+    with pytest.raises(RuntimeError, match=f"Parameter study missing dimension '{_settings._set_coordinate_key}'"):
         parameter_generators._verify_parameter_study(wrong_coordinate_name)
+    bad_data_dimension = parameter_study.copy(deep=True)
+    bad_data_dimension["bad_data"] = xarray.DataArray(
+        [0], dims=["bad_dimension"], coords={"bad_dimension": [0.]}
+    )
+    with pytest.raises(RuntimeError, match=f"'bad_data' missing dimension '{_settings._set_coordinate_key}'"):
+        parameter_generators._verify_parameter_study(bad_data_dimension)
 
     # Force set hashes to be incorrect. Expect to see a RuntimeError.
     bad_hashes = parameter_study.copy(deep=True)
