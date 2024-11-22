@@ -124,9 +124,9 @@ def get_parser() -> argparse.ArgumentParser:
 
     subparsers.add_parser(
         "docs",
-        help=f"Open the {_settings._project_name_short.upper()} HTML documentation",
+        help=f"fOpen the {_settings._project_name_short.upper()} HTML documentation",
         # fmt: off
-        description="Open the packaged {_settings._project_name_short.upper()} HTML documentation in the  " \
+        description=f"Open the packaged {_settings._project_name_short.upper()} HTML documentation in the  " \
                     "system default web browser",
         # fmt: on
         parents=[_docs.get_parser()],
