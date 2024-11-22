@@ -1292,7 +1292,7 @@ def _verify_parameter_study(parameter_study: xarray.Dataset):
     calculated_hashes = _calculate_parameter_set_hashes(parameter_names, samples)
     if set(file_hashes) != set(calculated_hashes):
         raise RuntimeError(
-            f"Paramerer study set hashes not equal to calculated set hashes: \n{file_hashes}\n{calculated_hashes}"
+            f"Parameter study set hashes not equal to calculated set hashes: \n{file_hashes}\n{calculated_hashes}"
         )
 
 
