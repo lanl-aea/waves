@@ -1265,9 +1265,10 @@ def _verify_parameter_study(parameter_study: xarray.Dataset):
     hash/set content consistency. Implies checking for the hash coordinate key and consistent data variable
     column/parameter names.
 
-    :raises RuntimeError: if mandatory coordinate names are missing
-    :raises RuntimeError: if parameter set hash values do not match the calculated hash from set contents (catenated
-        parameter name/values)
+    :raises RuntimeError: if mandatory coordinate names are missing: ``parameter_sets``, ``parameter_set_hash``
+    :raises RuntimeError: if data variables and ``parameter_set_hash`` do not have the ``parameter_sets`` dimension
+    :raises RuntimeError: if parameter set hash values do not match the calculated hash from
+        :meth:`_calculate_parameter_set_hash`.
     """
     # Check for mandatory coordinate keys
     coordinates = list(parameter_study.coords)
@@ -1275,6 +1276,14 @@ def _verify_parameter_study(parameter_study: xarray.Dataset):
         raise RuntimeError(f"Parameter study coordinate '{_set_coordinate_key}' missing")
     if _hash_coordinate_key not in coordinates:
         raise RuntimeError(f"Parameter study coordinate '{_hash_coordinate_key}' missing")
+
+    # Check for the assigned dimensions
+    if not _set_coordinate_key in parameter_study.dims:
+        raise RuntimeError(f"Parameter study missing dimension '{_set_coordinate_key}'")
+    keys = list(parameter_study.keys()) + [_hash_coordinate_key]
+    for key in keys:
+        if _set_coordinate_key not in parameter_study[key].dims:
+            raise RuntimeError(f"Parameter study key '{key}' missing dimension '{_set_coordinate_key}'")
 
     # Check for parameter set hash values against parameter set name/content
     parameter_names = list(parameter_study.keys())

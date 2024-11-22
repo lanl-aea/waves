@@ -117,27 +117,27 @@ def test_verify_parameter_study(parameter_names, samples, expected_hashes):
 
     # Delete necessary coordinates
     no_set_coordinate = parameter_study.drop_vars(_settings._set_coordinate_key)
-    with pytest.raises(RuntimeError):
-        try:
-            parameter_generators._verify_parameter_study(no_set_coordinate)
-        finally:
-            pass
+    with pytest.raises(RuntimeError, match=f"coordinate '{_settings._set_coordinate_key}' missing"):
+        parameter_generators._verify_parameter_study(no_set_coordinate)
     no_hash_coordinate = parameter_study.drop_vars(_settings._hash_coordinate_key)
-    with pytest.raises(RuntimeError):
-        try:
-            parameter_generators._verify_parameter_study(no_hash_coordinate)
-        finally:
-            pass
+    with pytest.raises(RuntimeError, match=f"coordinate '{_settings._hash_coordinate_key}' missing"):
+        parameter_generators._verify_parameter_study(no_hash_coordinate)
+
+    # Change coordinate name
+    wrong_coordinate_name = parameter_study.swap_dims(
+        dims_dict={_settings._set_coordinate_key: _settings._hash_coordinate_key}
+    )
+    with pytest.raises(RuntimeError, match=f"missing dimension '{_settings._set_coordinate_key}'"):
+        parameter_generators._verify_parameter_study(wrong_coordinate_name)
 
     # Force set hashes to be incorrect. Expect to see a RuntimeError.
     bad_hashes = parameter_study.copy(deep=True)
     number_of_hashes = len(bad_hashes[_settings._hash_coordinate_key])
-    bad_hashes[_settings._hash_coordinate_key] = [''] * number_of_hashes
-    with pytest.raises(RuntimeError):
-        try:
-            parameter_generators._verify_parameter_study(bad_hashes)
-        finally:
-            pass
+    bad_hashes[_settings._hash_coordinate_key] = xarray.DataArray(
+        [''] * number_of_hashes, dims=[_settings._set_coordinate_key]
+    )
+    with pytest.raises(RuntimeError, match="set hashes not equal to calculated set hashes"):
+        parameter_generators._verify_parameter_study(bad_hashes)
 
 
 def test_open_parameter_study():
