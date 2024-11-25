@@ -26,7 +26,7 @@ pytest_node = env.Command(
     ],
     package_dir=env["package_dir"],
     pytest_command=pytest_command,
-    coverage="--cov --cov-report xml:${TARGETS[0].abspath} --cov-report=html:${TARGETS[1].abspath}"
+    coverage="--cov --cov-report=term --cov-report=xml:${TARGETS[0].abspath} --cov-report=html:${TARGETS[1].abspath}"
 )
 env.Alias("pytest", pytest_node)
 env.Clean("pytest", Dir("./coverage"))
