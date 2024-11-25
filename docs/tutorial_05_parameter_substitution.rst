@@ -330,11 +330,9 @@ file as the source and the ``rectangle_compression.inp`` file was the target. Th
 parameter key ``@displacement@`` with the parameter value ``-1.0``, and then generated the target with this information
 in the text, as shown above.
 
-It is also worth noting that that there are 50 files in the ``build/tutorial_05_parameter_substitution`` directory
-compared to the 43 files from :ref:`tutorial_simulation`. Other than the addition of the
-``rectangle_compression.inp.in`` file, the difference is the addition of the files with ``.par``, ``.pes``, and
-``.pmg`` extension. See the `Abaqus File Extension Definitions`_ documentation :cite:`ABAQUS` for more information
-about the information that these files provide.
+It is also worth noting that that there are 29 files in the ``build/tutorial_05_parameter_substitution`` directory
+compared to the 28 files from :ref:`tutorial_simulation` with the addition of the
+``rectangle_compression.inp.in`` file.
 
 **********************
 Workflow Visualization
