@@ -40,9 +40,9 @@ conf = env.Configure()
 env["ABAQUS_PROGRAM"] = conf.CheckProg(
     env.Detect(
         [
-            "/apps/abaqus/Commands/abq2023",
-            "/usr/projects/ea/abaqus/Commands/abq2023",
-            "abq2023",
+            "/apps/abaqus/Commands/abq2024",
+            "/usr/projects/ea/abaqus/Commands/abq2024",
+            "abq2024",
             "abaqus",
         ]
     )

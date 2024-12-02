@@ -119,8 +119,8 @@ Build Targets
    /path/to/waves-tutorials/tutorial_cubit
    $ scons sierra
    scons: Reading SConscript files ...
-   Checking whether /apps/abaqus/Commands/abq2023 program exists.../apps/abaqus/Commands/abq2023
-   Checking whether abq2023 program exists...no
+   Checking whether /apps/abaqus/Commands/abq2024 program exists.../apps/abaqus/Commands/abq2024
+   Checking whether abq2024 program exists...no
    Checking whether /apps/Cubit-16.12/cubit program exists.../apps/Cubit-16.12/cubit
    Checking whether cubit program exists...no
    Checking whether sierra program exists.../projects/sierra/sierra5121/install/tools/sntools/engine/sierra

@@ -167,13 +167,13 @@ Build Targets
    /home/roppenheimer/waves-tutorials
    $ scons tutorial_03_solverprep
    scons: Reading SConscript files ...
-   Checking whether /apps/abaqus/Commands/abq2023 program exists.../apps/abaqus/Commands/abq2023
-   Checking whether abq2023 program exists.../apps/abaqus/Commands/abq2023
+   Checking whether /apps/abaqus/Commands/abq2024 program exists.../apps/abaqus/Commands/abq2024
+   Checking whether abq2024 program exists.../apps/abaqus/Commands/abq2024
    scons: done reading SConscript files.
    scons: Building targets ...
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2023 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2023 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2023 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
    Copy("build/tutorial_03_solverprep/rectangle_compression.inp", "modsim_package/abaqus/rectangle_compression.inp")
    Copy("build/tutorial_03_solverprep/assembly.inp", "modsim_package/abaqus/assembly.inp")
    Copy("build/tutorial_03_solverprep/boundary.inp", "modsim_package/abaqus/boundary.inp")

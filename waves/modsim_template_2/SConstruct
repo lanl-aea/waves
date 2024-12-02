@@ -107,9 +107,9 @@ import modsim_package.utilities
 env["SPHINX_BUILD"] = env.AddProgram(["sphinx-build"])
 env["ABAQUS_PROGRAM"] = env.AddProgram(
     [
-        "/apps/abaqus/Commands/abq2023",
-        "/usr/projects/ea/abaqus/Commands/abq2023",
-        "abq2023",
+        "/apps/abaqus/Commands/abq2024",
+        "/usr/projects/ea/abaqus/Commands/abq2024",
+        "abq2024",
         "abaqus",
     ]
 )

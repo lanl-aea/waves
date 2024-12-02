@@ -149,7 +149,7 @@ Build Targets
    /path/to/waves-tutorials
    $ scons tutorial_argparse_types
    scons: Reading SConscript files ...
-   Checking whether abq2023 program exists.../apps/abaqus/Commands/abq2023
+   Checking whether abq2024 program exists.../apps/abaqus/Commands/abq2024
    Checking whether abq2021 program exists.../apps/abaqus/Commands/abq2021
    Checking whether abq2020 program exists.../apps/abaqus/Commands/abq2020
    scons: done reading SConscript files.
