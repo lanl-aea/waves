@@ -21,8 +21,6 @@ win-fast-test:
     - echo $conda_environments
     - echo $prefix
     - (& "$conda_installation\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | ?{$_} | Invoke-Expression
-    - conda config --set proxy_servers.http http://proxyout.lanl.gov:8080
-    - conda config --set proxy_servers.https http://proxyout.lanl.gov:8080
     - conda env create --prefix $prefix --file environment-win.yml --yes
     - conda activate $prefix
     # Tests

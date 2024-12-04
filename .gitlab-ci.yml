@@ -69,10 +69,6 @@ conda-build-matrix:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   script:
-    # Set the LANL internal proxies
-    - export ALL_PROXY="proxyout.lanl.gov:8080"
-    - export HTTP_PROXY="http://$ALL_PROXY"
-    - export HTTPS_PROXY=$HTTP_PROXY
     # Override default permissions. Set group to rx with no write permissions.
     - umask 0022
     - mkdir ${conda_artifacts_directory}
