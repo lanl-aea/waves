@@ -21,6 +21,7 @@
 .. _`CMake`: https://cmake.org/cmake/help/latest/
 .. _`CalculiX`: http://www.dhondt.de/
 .. _`Cartesian Product`: https://en.wikipedia.org/wiki/Cartesian_product
+.. _`Charm++`: https://charmplusplus.org/
 .. _`CheckProg`: https://scons.org/doc/production/HTML/scons-user/ch21s07.html
 .. _`Confluence`: https://www.atlassian.com/software/confluence
 .. _`Cubit`: https://cubit.sandia.gov/public/documentation.html
@@ -48,6 +49,7 @@
 .. _`Material Models members`: https://re-git.lanl.gov/groups/aea/material-models/-/group_members
 .. _`Material Models`: https://re-git.lanl.gov/aea/material-models
 .. _`meshio`: https://github.com/nschloe/meshio
+.. _`MPI`: https://www.mpi-forum.org/
 .. _`pandas`: https://pandas.pydata.org/
 .. _`PEP-257`: https://peps.python.org/pep-0257/
 .. _`PEP-287`: https://peps.python.org/pep-0287/

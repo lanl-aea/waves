@@ -15,6 +15,7 @@ References
 * `Fierro`_ documentation :cite:`fierro,fierro-docs`
 * `meshio`_ :cite:`meshio`
 * `vtk`_ :cite:`vtk`
+* `MPI`_ :cite:`mpi-forum`
 
 ***********
 Environment

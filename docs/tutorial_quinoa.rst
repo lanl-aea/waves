@@ -29,6 +29,7 @@ References
 * `Cubit`_: Python Interface :cite:`cubit`
 * `Cubit`_: Importing Cubit into Python :cite:`cubit`
 * `Quinoa`_: Quinoa documentation :cite:`quinoa,quinoa-docs`
+* `Charm++`_ :cite:`charmplusplus`
 
 ***********
 Environment
