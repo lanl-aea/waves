@@ -7,7 +7,6 @@ Import("env")
 
 build_directory = pathlib.Path(Dir(".").abspath)
 
-# Limit list of source files to allow Conda build-test to test off the installed package
 pytest_source_list = [
     "pyproject.toml",
 ]
@@ -24,9 +23,8 @@ pytest_node = env.Command(
     action=[
         '${pytest_command} -vvv -m "not systemtest" ${coverage}',
     ],
-    package_dir=env["package_dir"],
     pytest_command=pytest_command,
-    coverage="--cov --cov-report=term --cov-report=xml:${TARGETS[0].abspath} --cov-report=html:${TARGETS[1].abspath}"
+    coverage="--cov --cov-report=term --cov-report=xml:${TARGETS[0].abspath} --cov-report=html:${TARGETS[1].abspath}",
 )
 env.Alias("pytest", pytest_node)
 env.Clean("pytest", Dir("./coverage"))
@@ -34,7 +32,7 @@ env.Clean("pytest", Dir("./coverage"))
 env.AlwaysBuild(pytest_node)
 
 # System tests
-source = pytest_source_list + [str(pathlib.Path("waves/tests/test_system.py"))]
+source = pytest_source_list + [env["package_dir"] / "tests/test_system.py"]
 systemtest_node = env.Command(
     target=["systemtest_results.xml"],
     source=source,
@@ -44,7 +42,6 @@ systemtest_node = env.Command(
             "--system-test-dir=${system_test_directory} --junitxml=${TARGETS[0].abspath}"
         ),
     ],
-    package_dir=env["package_dir"],
     pytest_command=pytest_command,
     system_test_directory=build_directory,
 )
