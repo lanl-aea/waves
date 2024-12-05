@@ -15,6 +15,7 @@ Documentation
 Internal Changes
 ================
 - Use Abaqus 2024 in tutorials and system tests (:issue:`826`, :merge:`1040`). By `Kyle Brindley`_.
+- More inclusive black autoformatting configuration (:merge:`1045`). By `Kyle Brindley`_.
 
 *******************
 0.12.3 (2024-12-02)
