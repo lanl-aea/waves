@@ -3113,6 +3113,7 @@ def parameter_study(
     source: list,
     *args,
     study=None,
+    subdirectories: bool = False,
     **kwargs,
 ) -> SCons.Node.NodeList:
     """Parameter study pseudo-builder.
@@ -3181,7 +3182,8 @@ def parameter_study(
            target=["@{set_name}job.inp"],
            source=["journal.py"],
            journal_options="--input=${SOURCE.abspath} --output=${TARGET.abspath} --option ${parameter_one}"
-           study=study
+           study=study,
+           subdirectories=True,
        )
 
        env.ParameterStudy(
@@ -3189,7 +3191,8 @@ def parameter_study(
            target=["job.odb"],
            source=["@{set_name}job.inp"],
            job="job",
-           study=study
+           study=study,
+           subdirectories=True,
        )
 
     :param env: An SCons construction environment to use when defining the targets.
@@ -3199,6 +3202,8 @@ def parameter_study(
     :param args: All other positional arguments are passed through to the builder directly
     :param study: Parameter generator or dictionary parameter set to provide to the builder. Parameter generators are
         unpacked with set name directory prefixes. Dictionaries are unpacked as keyword arguments.
+    :param subdirectories: Switch to use parameter generator ``study`` set names as subdirectories. Ignored when
+        ``study`` is not a parameter generator.
     :param kwargs: all other keyword arguments are passed through to the builder directly
 
     :return: SCons NodeList of target nodes
@@ -3213,12 +3218,16 @@ def parameter_study(
     if isinstance(source, (str, pathlib.Path)):
         source = [source]
 
+    if subdirectories:
+        suffix = "/"
+    else:
+        suffix = "_"
+
     return_targets = list()
     if isinstance(study, parameter_generators.ParameterGenerator):
         for set_name, parameters in study.parameter_study_to_dict().items():
-            subdirectory = pathlib.Path(set_name)
-            set_sources = _utilities.set_name_substitution(source, set_name)
-            set_targets = [subdirectory / node for node in target]
+            set_sources = _utilities.set_name_substitution(source, set_name, suffix=suffix)
+            set_targets = [pathlib.Path(f"{set_name}{suffix}{node}") for node in target]
             return_targets.extend(builder(target=set_targets, source=set_sources, *args, **kwargs, **parameters))
     # Is it better to accept a dictionary of nominal variables or to add a "Nominal" parameter generator?
     elif isinstance(study, dict):
@@ -3316,7 +3325,7 @@ def parameter_study_sconscript(
     :param parameters: Parameters dictionary to use when not provided a ``study``.  Overriden by ``study`` when
         ``study`` is a parameter generator or a dictionary.
     :param kwargs: All other keyword arguments are passed through to the SConscript call directly
-    :param subdirectories: Switch to use a parameter generator ``study`` set names as subdirectories. Ignored when
+    :param subdirectories: Switch to use parameter generator ``study`` set names as subdirectories. Ignored when
         ``study`` is not a parameter generator.
 
     :returns: SConscript ``Export()`` variables. When called with a parameter generator study, the ``Export()``
