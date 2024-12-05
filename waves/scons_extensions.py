@@ -2278,7 +2278,7 @@ def sbatch(
     .. code-block::
        :caption: SLURM sbatch builder action default expansion
 
-       cd ${TARGET.dir.abspath} && sbatch --wait --output=${TARGETS[-1].abspath} ${sbatch_options} --wrap ${slurm_job}
+       cd ${TARGET.dir.abspath} && sbatch --wait --output=${TARGETS[-1].abspath} ${sbatch_options} --wrap "${slurm_job}"
 
     .. code-block::
        :caption: SConstruct
