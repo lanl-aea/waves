@@ -8,6 +8,10 @@ Changelog
 0.12.4 (unreleased)
 *******************
 
+Documentation
+=============
+- Add MPI and Charm++ references (:issue:`679`, :merge:`1044`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Use Abaqus 2024 in tutorials and system tests (:issue:`826`, :merge:`1040`). By `Kyle Brindley`_.
