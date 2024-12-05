@@ -3133,8 +3133,9 @@ def parameter_study(
     * In all other cases, the task is passed through unchanged to the builder and the study variable is ignored.
 
     When chaining parameter study tasks, sources belonging to the parameter study can be prefixed by the template
-    ``@{set_name}source.ext``. If the task uses a parameter study, the set name directory prefix will be added, e.g.
-    ``parameter_set0/source.ext``. If the task is not part of a parameter study, the set name will be removed from the
+    ``@{set_name}source.ext``. If the task uses a parameter study, the set name directory prefix will be added to match
+    the target path modifications, e.g.  ``parameter_set0_source.ext`` or ``parameter_set0/source.ext`` depending on the
+    ``subdirectories`` boolean. If the task is not part of a parameter study, the set name will be removed from the
     source, e.g. ``source.ext``. The ``@`` symbol is used as the delimiter to reduce with clashes in shell variable
     syntax and SCons substitution syntax.
 
@@ -3198,7 +3199,8 @@ def parameter_study(
     :param env: An SCons construction environment to use when defining the targets.
     :param builder: The builder to parameterize
     :param target: The list of task target files. Will be prepended with a set name directory if a parameter generator
-        ``study`` is provided, e.g. ``parameter_set0/target.ext``.
+        ``study`` is provided, e.g. ``parameter_set0_target.ext`` or ``parameter_set0/target.ext`` depending on if the
+        ``subdirectories`` switch is False (default) or True, respectively.
     :param args: All other positional arguments are passed through to the builder directly
     :param study: Parameter generator or dictionary parameter set to provide to the builder. Parameter generators are
         unpacked with set name directory prefixes. Dictionaries are unpacked as keyword arguments.
