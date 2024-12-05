@@ -354,6 +354,10 @@ require_third_party_tests = [
         "tutorials/tutorial_ParameterStudySConscript",
         marks=pytest.mark.skipif(testing_windows, reason="Windows CI server doesn't like the cat command"),
     ),
+    pytest.param(
+        [fetch_template, "scons . --jobs=4"],
+        "tutorials/tutorial_ParameterStudy",
+    ),
     # ModSim templates
     pytest.param(
         [
