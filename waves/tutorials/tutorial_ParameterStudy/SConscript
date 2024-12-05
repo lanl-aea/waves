@@ -1,0 +1,24 @@
+import waves
+
+
+Import("env", "study", "subdirectories")
+
+targets = []
+targets.extend(
+    env.ParameterStudy(
+        env.TestBuilder,
+        target=["target1.txt"],
+        source=["source1.txt"],
+        study=study,
+        subdirectories=subdirectories,
+    )
+)
+targets.extend(
+    env.ParameterStudy(
+        env.TestBuilder,
+        target=["target2.txt"],
+        source=["@{set_name}target1.txt"],
+        study=study,
+        subdirectories=subdirectories,
+    )
+)

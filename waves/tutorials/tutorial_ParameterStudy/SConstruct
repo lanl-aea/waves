@@ -1,0 +1,36 @@
+import os
+
+import waves
+
+
+env = waves.scons_extensions.WAVESEnvironment(
+    ENV=os.environ.copy(),
+)
+test_builder = Builder(
+    action=[
+        "echo $SOURCES.abspath > $TARGET.abspath",
+        "echo 'parameter one: $parameter_one' >> $TARGET.abspath"
+    ]
+)
+env.Append(BUILDERS={"TestBuilder": test_builder})
+
+generator = waves.parameter_generators.CartesianProduct(
+    {"parameter_one": [0, 1]}
+)
+
+workflows = (
+    # build_directory, study, subdirectories
+    ("build_set_subdirectories", generator, True),
+    ("build_set_prefixes", generator, False),
+    ("build_nominal", {"parameter_one": "nominal"}, False),
+)
+
+for build_directory, study, subdirectories in workflows:
+    SConscript(
+        "SConscript",
+        variant_dir=build_directory,
+        exports={"env": env, "study": study, "subdirectories": subdirectories},
+        duplicate=True,
+    )
+
+env.ProjectHelp()
