@@ -130,9 +130,7 @@ def test_verify_parameter_study(parameter_names, samples, expected_hashes):
     with pytest.raises(RuntimeError, match=f"Parameter study missing dimension '{_settings._set_coordinate_key}'"):
         parameter_generators._verify_parameter_study(wrong_coordinate_name)
     bad_data_dimension = parameter_study.copy(deep=True)
-    bad_data_dimension["bad_data"] = xarray.DataArray(
-        [0], dims=["bad_dimension"], coords={"bad_dimension": [0.]}
-    )
+    bad_data_dimension["bad_data"] = xarray.DataArray([0], dims=["bad_dimension"], coords={"bad_dimension": [0.0]})
     with pytest.raises(RuntimeError, match=f"'bad_data' missing dimension '{_settings._set_coordinate_key}'"):
         parameter_generators._verify_parameter_study(bad_data_dimension)
 
@@ -140,7 +138,7 @@ def test_verify_parameter_study(parameter_names, samples, expected_hashes):
     bad_hashes = parameter_study.copy(deep=True)
     number_of_hashes = len(bad_hashes[_settings._hash_coordinate_key])
     bad_hashes[_settings._hash_coordinate_key] = xarray.DataArray(
-        [''] * number_of_hashes, dims=[_settings._set_coordinate_key]
+        [""] * number_of_hashes, dims=[_settings._set_coordinate_key]
     )
     with pytest.raises(RuntimeError, match="set hashes not equal to calculated set hashes"):
         parameter_generators._verify_parameter_study(bad_hashes)
@@ -596,9 +594,7 @@ class TestParameterGenerator:
         returned_samples = DataParameterGenerator._parameter_study_to_numpy()
         assert numpy.all(returned_samples == DataParameterGenerator._samples)
         # Test module function
-        returned_samples = parameter_generators._parameter_study_to_numpy(
-            DataParameterGenerator.parameter_study
-        )
+        returned_samples = parameter_generators._parameter_study_to_numpy(DataParameterGenerator.parameter_study)
 
 
 class TestParameterDistributions:

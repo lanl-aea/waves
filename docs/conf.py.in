@@ -8,18 +8,18 @@ import unittest.mock
 sys.dont_write_bytecode = True
 
 # -- Project information -----------------------------------------------------
-project_dir = pathlib.Path(r'@project_dir@').resolve()
-tutorials_dir = pathlib.Path(r'@tutorials_dir@')
-tutorial_writing_builders_dir = pathlib.Path(r'@tutorials_dir@') / "tutorial_writing_builders"
+project_dir = pathlib.Path(r"@project_dir@").resolve()
+tutorials_dir = pathlib.Path(r"@tutorials_dir@")
+tutorial_writing_builders_dir = pathlib.Path(r"@tutorials_dir@") / "tutorial_writing_builders"
 
 # Name, Group, Email
 author_contact = [
-    ('Kyle Brindley', '<kbrindley@lanl.gov>'),
-    ('Prabhu S. Khalsa', '<pkhalsa@lanl.gov>'),
-    ('Thomas Roberts', '<tproberts@lanl.gov>'),
-    ('Sergio Cordova', '<sergioc@lanl.gov>'),
-    ('Matthew Fister', '<mwfister@lanl.gov>'),
-    ('Scott Ouellette', '<souellette@lanl.gov>')
+    ("Kyle Brindley", "<kbrindley@lanl.gov>"),
+    ("Prabhu S. Khalsa", "<pkhalsa@lanl.gov>"),
+    ("Thomas Roberts", "<tproberts@lanl.gov>"),
+    ("Sergio Cordova", "<sergioc@lanl.gov>"),
+    ("Matthew Fister", "<mwfister@lanl.gov>"),
+    ("Scott Ouellette", "<souellette@lanl.gov>"),
 ]
 author = ", ".join(author for author, email in author_contact[:-1])
 author += f", and {author_contact[-1][0]}"
@@ -34,8 +34,23 @@ sys.path.insert(0, str(tutorial_writing_builders_dir))
 
 # Mock modules unavailable in the Conda development environment, e.g. Abaqus Python modules, and large imports not
 # required by the documentation build, e.g. cubit.
-mock_modules = ['abaqus', 'abaqusConstants', 'mesh', 'cubit', 'SALib', 'scipy', 'scipy.stats', 'xarray', 'pyyaml',
-                'h5py', 'networkx', 'numpy', 'matplotlib', 'matplotlib.pyplot', 'pandas']
+mock_modules = [
+    "abaqus",
+    "abaqusConstants",
+    "mesh",
+    "cubit",
+    "SALib",
+    "scipy",
+    "scipy.stats",
+    "xarray",
+    "pyyaml",
+    "h5py",
+    "networkx",
+    "numpy",
+    "matplotlib",
+    "matplotlib.pyplot",
+    "pandas",
+]
 for mod_name in mock_modules:
     sys.modules[mod_name] = unittest.mock.Mock()
 
@@ -47,29 +62,33 @@ release = "@version@"
 version = release
 copyright = f"2022-{datetime.date.today().year} Triad National Security, LLC. All Rights Reserved"
 
-#============================================================================================== SPHINX CONFIGURATION ===
+# ============================================================================================== SPHINX CONFIGURATION ===
 # Suppress warnings that can't be fixed
 suppress_warnings = ["epub.unknown_project_files", "epub.duplicated_toc_entry"]
 
 maximum_signature_line_length = 120
 
 # -- Project Variables -------------------------------------------------------
-rst_prolog = f'.. |copyright| replace:: © Copyright {copyright}.\n' \
-             f'.. |project| replace:: {_project_name_short}\n' \
-             f'.. |version| replace:: {version}\n' \
-              '.. include:: targets.txt'
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
-if tags.has('man'):
-    master_doc='man_index'
+rst_prolog = (
+    f".. |copyright| replace:: © Copyright {copyright}.\n"
+    f".. |project| replace:: {_project_name_short}\n"
+    f".. |version| replace:: {version}\n"
+    ".. include:: targets.txt"
+)
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+if tags.has("man"):
+    master_doc = "man_index"
     include_patterns = [f"{master_doc}.rst"]
 else:
-    master_doc = 'index'
-    exclude_patterns.append('man_*.rst')
+    master_doc = "index"
+    exclude_patterns.append("man_*.rst")
+
 
 # Add custom style sheet to make the html docs wider
 def setup(app):
-    app.add_css_file('custom.css')
-    app.add_js_file('custom.js')
+    app.add_css_file("custom.css")
+    app.add_js_file("custom.js")
+
 
 # Add any Sphinx extension module names here, as strings.
 extensions = [
@@ -79,28 +98,26 @@ extensions = [
     "sphinx_copybutton",
     "sphinxcontrib.bibtex",
     "sphinxarg.ext",
-    "sphinx_design"
+    "sphinx_design",
 ]
-bibtex_bibfiles = ['references.bib', 'CITATION.bib']
+bibtex_bibfiles = ["references.bib", "CITATION.bib"]
 
 # Links to PRs, Jira issues.
 extlinks = {
-     "merge": ("https://re-git.lanl.gov/aea/python-projects/waves/-/merge_requests/%s", "MERGE-%s"),
-     "issue": ("https://re-git.lanl.gov/aea/python-projects/waves/-/issues/%s", "ISSUE-%s"),
+    "merge": ("https://re-git.lanl.gov/aea/python-projects/waves/-/merge_requests/%s", "MERGE-%s"),
+    "issue": ("https://re-git.lanl.gov/aea/python-projects/waves/-/issues/%s", "ISSUE-%s"),
 }
 
-templates_path = ['_templates']
-source_suffix = ['.rst']
+templates_path = ["_templates"]
+source_suffix = [".rst"]
 
 # -- Options for HTML output -------------------------------------------------
 html_favicon = "favicon.ico"
-html_logo = '_static/waves_logo_brandmark_smaller.png'
+html_logo = "_static/waves_logo_brandmark_smaller.png"
 html_last_updated_fmt = ""
-html_theme = 'sphinx_book_theme'
+html_theme = "sphinx_book_theme"
 html_theme_options = {
-    "logo": {
-        "text": release
-    },
+    "logo": {"text": release},
     "article_header_start": "breadcrumbs",
     "repository_url": "https://github.com/lanl-aea/waves",
     "path_to_docs": "docs",
@@ -109,11 +126,11 @@ html_theme_options = {
     "content_footer_items": ["last-updated"],
     "show_toc_level": 2,
 }
-html_static_path = ['_static']
+html_static_path = ["_static"]
 html_css_files = ["custom.css"]
 
 # -- Options for LaTeX output ---------------------------------------------
-latex_logo = 'waves_logo_primary_large_crop.png'
+latex_logo = "waves_logo_primary_large_crop.png"
 latex_basename = str(pathlib.Path("@documentation_pdf@").with_suffix(".tex"))
 copyright_latex = f"""\\textcopyright\\ Copyright {copyright}.
 
@@ -156,18 +173,15 @@ maketitle = f"""
 """
 
 latex_elements = {
-    'preamble': preamble,
-    'maketitle': maketitle
+    "preamble": preamble,
+    "maketitle": maketitle,
 }
 latex_documents = [
-    (master_doc, latex_basename, _project_name.upper(), author_latex, 'manual'),
+    (master_doc, latex_basename, _project_name.upper(), author_latex, "manual"),
 ]
 
 # -- Options for manual page output ---------------------------------------
-man_pages = [
-    (master_doc, project.lower(), _project_name,
-     [author_manpage], 1)
-]
+man_pages = [(master_doc, project.lower(), _project_name, [author_manpage], 1)]
 
 # Copy button settings
 copybutton_prompt_text = r">>> |> |\.\.\. |\$ |\+(?!\+)"

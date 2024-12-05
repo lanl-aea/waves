@@ -15,7 +15,7 @@ def pytest_addoption(parser):
         "--unconditional-build",
         action="store_true",
         default=False,
-        help="pass unconditional build option to sytem tests",
+        help="pass unconditional build option to system tests",
     )
 
 

@@ -1,4 +1,5 @@
 """OS agnostic search for files with a specified shebang"""
+
 # TODO: Remove custom python script if/when black supports magic file type searches
 # https://github.com/psf/black/issues/491
 
