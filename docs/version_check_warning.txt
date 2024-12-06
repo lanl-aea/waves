@@ -1,9 +1,9 @@
 .. warning::
 
-   STOP! Before continuing check that the documentation version matches your installed package version.
+   STOP! Before continuing, check that the documentation version matches your installed package version.
 
    1. You can find the documentation version in the upper-left corner of the webpage.
    2. You can find the installed |PROJECT| version with ``waves --version``.
 
-   You can launch identically matched documentation with the :ref:`waves_cli`
+   If they don't match, you can launch identically matched documentation with the :ref:`waves_cli`
    :ref:`waves_docs_cli` subcommand as ``waves docs``.
