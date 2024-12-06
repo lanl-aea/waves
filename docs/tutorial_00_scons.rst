@@ -48,6 +48,11 @@ configuration files use `Python`_ as a fully featured scripting language. This c
 familiarity of the engineering community with `Python`_ as a programming language, but also because the parameter
 generation utility can be integrated more closely with the build system, :ref:`parameter_generator_api`.
 
+This tutorial will build out an initial SConstruct file (SCons project configuration file). First a code snippet will
+be introduced followed by a description of what that snippet does. After sufficient code is added to the file, it can
+be executed with the 'scons' command. Later tutorials will continue to expand the SConstruct file as well as other
+SCons project configuration files.
+
 ***************************
 SCons Project Configuration
 ***************************
@@ -86,9 +91,11 @@ package.
 The `SCons command-line build options`_ are specific to the project configuration that you are currently creating.
 `SCons`_ projects may add or remove command-line options to aid in build behavior control. The most relevant option to
 modsim projects will be ``--build-dir``, which allows project developers to change the build directory location from the
-command-line without modifying the ``SConstruct`` file source code. For example, the first ``scons`` call will create
-the default build directory named ``build`` and the second ``scons`` call will create a build directory named
-``non_default_build``.
+command-line without modifying the ``SConstruct`` file source code. For example, once there is sufficient functionality
+in the the ``SConstruct`` file, a call to ``scons`` would create the default build directory named ``build`` and a call
+to ``scons --build-dir=non_default_build`` would create a build directory named ``non_default_build``. A preview of
+these commands is shown below. The current ``SConstruct`` file does not yet contain this functionality, but we
+have just added the command line options for utilizing this functionality when it is added later in the tutorials.
 
 .. warning::
 
@@ -100,7 +107,11 @@ the default build directory named ``build`` and the second ``scons`` call will c
 .. code-block::
 
    $ scons
+   $ ls
+   build SConstruct
    $ scons --build-dir=non_default_build
+   $ ls
+   build non_default_build SConstruct
 
 The ``--unconditional-build`` option is mostly useful for :ref:`testing` and continuous integration. It is used in the
 tutorial workflows to force a workflow to execute, even if the required programs are not found. This is useful for
@@ -252,8 +263,9 @@ name. :ref:`tutorial_geometry` will introduce the first target alias, which will
 message displayed by the ``scons -h`` command option.
 
 We previously added the ``ProjectHelp`` method to the construction environment using
-:class:`waves.scons_extensions.WAVESEnvironment`. This method points to which wraps two common calls to `SCons Help`_
-that will append the following to the project help message accessed by ``scons -h``:
+:class:`waves.scons_extensions.WAVESEnvironment`. This points to :meth:`waves.scons_extensions.project_help_message`
+which wraps two common calls to `SCons Help`_ that will append the following to the project help message accessed by
+``scons -h``:
 
 * the command-line build options
 * the default target list
@@ -266,7 +278,7 @@ line in your project configuration.
 .. note::
 
    The project help message uses the conventional lowercase help option, ``-h``. Most bash commands use this option to
-   display the command's help message corresponding the software options. Due to this behavior, the `SCons`_ command
+   display the command's help message corresponding to the software options. Due to this behavior, the `SCons`_ command
    options are displayed with the unconventional capitalized option, ``-H``, as ``scons -H``. The `WAVES tutorials`_ and
    documentation will not discuss the full range of `SCons`_ command options, so modsim developers are encouraged to
    read the `SCons`_ usage summary and `SCons manpage`_ to learn more about available build control options.
