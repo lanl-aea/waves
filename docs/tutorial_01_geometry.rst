@@ -77,7 +77,7 @@ Directory Structure
 SConscript File
 ***************
 
-The ``SConscript`` file defines the sources, actions, and targets. Sources are files that exist in the source
+An ``SConscript`` file defines sources, actions, and targets. Sources are files that exist in the source
 repository, such as Abaqus journal files. Actions define how to process source files, for example executing the Abaqus
 command. Targets are the output artifacts created by the action, such as an Abaqus model file. It is also worth noting
 that the ``SConscript`` file naming convention is case sensitive. In this tutorial, we will build the geometry for a
@@ -100,16 +100,16 @@ highlighted line imports the ``env`` variable (``Import('env')``), which is a va
 in ``waves-tutorials/SConstruct`` file. The ``env`` variable defines project settings,
 and is imported so settings variables are not hard-coded more than once.
 
-The next set of highlighted lines sets operating system agnostic paths by utilizing
-`Python pathlib`_ objects. These Pathlib objects absolute or relative paths on any
-operating system to source files using variables defined in the
+The highlighted line sets an operating system agnostic path by utilizing a
+`Python pathlib`_ object. Pathlib objects are absolute or relative paths on any
+operating system used to source files using variables defined in the
 ``waves-tutorials/SConstruct`` file. This method of path definition allows for
 path-strings to be hard-coded only once, and then used as variables everywhere else in
 the code. For example, the variable ``abaqus_source_abspath`` is used in source
 definitions to point at the absolute path to the directory where the Abaqus journal files
 exist.
 
-7. Continue editing the file ``tutorial_01_geometry`` using contents below.
+7. Continue editing the file ``tutorial_01_geometry`` using the contents below.
 
 .. admonition:: waves-tutorials/tutorial_01_geometry
 
@@ -120,7 +120,7 @@ exist.
          :end-before: marker-3
 
 First, the ``workflow`` variable is assigned to an empty list. Eventually, ``workflow``
-will become a list of targets to build. Every time we instruct SCons to build a target(s),
+will become a list of targets to build. Every time we instruct SCons to build a target or targets,
 we will ``extend`` this list and finally create an alias that matches the parent
 directory name. The alias thus represents the list of targets specified in the
 ``SConscript`` file.
@@ -139,7 +139,7 @@ as discussed in :ref:`tutorialsconstruct`. For more information about the behavi
 API. The ``target`` list specifies the files created by the :meth:`waves.scons_extensions.abaqus_journal_builder_factory` task's action, which
 is defined in the :ref:`waves_scons_api` API.
 
-8. Continue editing the file ``tutorial_01_geometry`` using contents below.
+8. Continue editing the file ``tutorial_01_geometry`` using the contents below.
 
 .. admonition:: waves-tutorials/tutorial_01_geometry
 
@@ -151,7 +151,7 @@ is defined in the :ref:`waves_scons_api` API.
 First, we create an alias for the workflow that was extended previously to match the name of the current file, which
 will double as the build directory name: ``tutorial_01_geometry``.
 
-The final lines of code in the ``SConscript`` file allow SCons to skip building a target
+The final lines of code in this ``SConscript`` file allow SCons to skip building a target
 sequence if the Abaqus executable is not found.
 
 *******************
