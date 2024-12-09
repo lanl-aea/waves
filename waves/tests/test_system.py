@@ -419,15 +419,10 @@ require_third_party_system_tests = [
         "tutorials",
         marks=[pytest.mark.require_third_party],
     ),
-    # TODO: Write a Windows friendly "cat" like command
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/802
     pytest.param(
         [fetch_template, "scons . --jobs=4"],
         "tutorials/tutorial_ParameterStudySConscript",
-        marks=[
-            pytest.mark.require_third_party,
-            pytest.mark.skipif(testing_windows, reason="Windows CI server doesn't like the cat command"),
-        ]
+        marks=[pytest.mark.require_third_part],
     ),
     pytest.param(
         [fetch_template, "scons . --jobs=4"],
