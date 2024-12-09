@@ -1,4 +1,5 @@
 import os
+import re
 import shlex
 import string
 import typing
@@ -11,6 +12,7 @@ from importlib.metadata import version, PackageNotFoundError
 import pytest
 
 from waves import _settings
+from waves import _utilities
 from common import platform_check
 
 
@@ -487,10 +489,8 @@ def test_system(
     :param commands: list of command strings for the system test
     :param fetch_options: the fetch arguments for replacement in string templates
     """
-    # Attempt to construct a valid directory prefix from the test ID string printed by pytest
-    # Works best if there is only one test function in this module so there are no duplicate ids
     test_id = request.node.callspec.id
-    test_prefix = f"{test_id}." if test_id.isidentifier() else None
+    test_prefix = _utilities.create_valid_identifier(test_id)
 
     if system_test_directory is not None:
         system_test_directory.mkdir(parents=True, exist_ok=True)
