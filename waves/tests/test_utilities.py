@@ -279,3 +279,21 @@ def test_cache_environment(kwargs, cache, overwrite_cache, expected, file_exists
         if cache:
             yaml_dump.assert_called_once()
     assert environment_dictionary == expected
+
+
+create_valid_identifier = {
+    "leading digit": ("1word", "_1word"),
+    "leading space": (" word", "_word"),
+    "replace slashes and spaces": ("w o /rd", "w_o__rd"),
+    "replace special characters": ("w%o @rd", "w_o__rd"),
+}
+
+
+@pytest.mark.parametrize(
+    "identifier, expected",
+    create_valid_identifier.values(),
+    ids=create_valid_identifier.keys()
+)
+def test_create_valid_identifier(identifier, expected) -> None:
+    returned = _utilities.create_valid_identifier(identifier)
+    assert returned == expected

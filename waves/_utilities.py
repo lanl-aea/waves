@@ -8,6 +8,7 @@ message and non-zero exit codes.
 """
 
 import os
+import re
 import shutil
 import string
 import typing
@@ -304,6 +305,14 @@ def cache_environment(
             yaml.safe_dump(environment, cache_file)
 
     return environment
+
+
+def create_valid_identifier(identifier: str) -> None:
+    """Create a valid Python identifier from an arbitray string by replacing invalid characters with underscores
+
+    :param identifier: String to convert to valid Python identifier
+    """
+    return re.sub(r"\W|^(?=\d)", "_", identifier)
 
 
 # Limit help() and 'from module import *' behavior to the module's public API
