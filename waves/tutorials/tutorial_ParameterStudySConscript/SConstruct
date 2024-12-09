@@ -11,7 +11,7 @@ Constains an example of using parameter set names as build subdirectories and as
    ./build_parameter_studies/build_study.h5
    ./build_parameter_studies/study.h5
    ./build_parameter_studies/subdir_study.h5
-   $ find . -name "cat*.txt"
+   $ find . -name "echo*.txt"
    ./echo_no_study.txt
    ./build_with_subdirs/subdir_study0/echo_subdir_study0.txt
    ./build_with_subdirs/subdir_study1/echo_subdir_study1.txt
