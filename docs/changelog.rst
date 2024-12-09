@@ -10,9 +10,10 @@ Changelog
 
 Documentation
 =============
-- Add clarifying language to quickstart tutorial (:issue:`832`, :merge:`1057`). By `Prabhu Khalsa`_.
-- Fix grammatical errors and add clarifying language to tutorial 01 (:issue:`829`, :merge:`1049`). By `Prabhu Khalsa`_.
 - Fix grammatical errors and add clarifying language to tutorial 00 (:issue:`828`, :merge:`1047`). By `Prabhu Khalsa`_.
+- Fix grammatical errors and add clarifying language to tutorial 01 (:issue:`829`, :merge:`1049`). By `Prabhu Khalsa`_.
+Fix grammatical errors and add clarifying language to tutorial 02 (:issue:`830`, :merge:`1052`). By `Prabhu Khalsa`_.
+- Add clarifying language to quickstart tutorial (:issue:`832`, :merge:`1057`). By `Prabhu Khalsa`_.
 - Add MPI and Charm++ references (:issue:`679`, :merge:`1044`). By `Kyle Brindley`_.
 
 Internal Changes
