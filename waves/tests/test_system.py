@@ -75,7 +75,7 @@ system_tests = [
     ),
 ]
 
-require_third_party_tests = [
+require_third_party_system_tests = [
     # Tutorials
     ([fetch_template, string.Template("scons rectangle ${unconditional_build}")], "tutorials/scons_quickstart"),
     pytest.param(
@@ -458,7 +458,7 @@ require_third_party_tests = [
 
 
 @pytest.mark.systemtest
-@pytest.mark.parametrize("commands, fetch_options", system_tests)
+@pytest.mark.parametrize("commands, fetch_options", system_tests + require_third_party_system_tests)
 def test_system(
     system_test_directory,
     unconditional_build,
@@ -503,16 +503,3 @@ def test_system(
                 command = command.substitute(template_substitution)
             command = shlex.split(command, posix=not testing_windows)
             subprocess.check_output(command, env=env, cwd=temp_directory, text=True)
-
-
-@pytest.mark.systemtest
-@pytest.mark.require_third_party
-@pytest.mark.parametrize("commands, fetch_options", require_third_party_tests)
-def test_system_requiring_third_party_software(
-    system_test_directory,
-    unconditional_build,
-    commands: typing.Iterable[str],
-    fetch_options: typing.Optional[str],
-) -> None:
-    """Pass through wrapper of :meth:`test_system` to allow variations in bulk pytest markers"""
-    test_system(system_test_directory, unconditional_build, commands, fetch_options)
