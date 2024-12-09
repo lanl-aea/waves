@@ -68,12 +68,12 @@ system_tests = [
             testing_windows, reason="System test fails on Windows when run with pytest, but succeeds when run manually."
         ),
     ),
+    pytest.param(
+        [string.Template("${waves_command} docs --print-local-path")],
+        None,
+        marks=[pytest.mark.skipif(not installed, reason="The HTML docs path only exists in the as-installed package")],
+    ),
 ]
-if installed:
-    system_tests.append(
-        # The HTML docs path doesn't exist in the repository. Can only system test from an installed package.
-        ([string.Template("${waves_command} docs --print-local-path")], None),
-    )
 
 require_third_party_tests = [
     # Tutorials
