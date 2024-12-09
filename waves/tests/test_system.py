@@ -1,5 +1,8 @@
 """System test wrapper for executing shell commands with pytest results reporting
 
+Test are constructed as a list of strings or string templates to run as shell commands. Success is defined as a shell 0
+return code.
+
 All tests should be marked ``pytest.mark.systemtest`` (handled in the test function markers).
 
 All tests that require a third-party software unavailable on conda-forge should be marked as
