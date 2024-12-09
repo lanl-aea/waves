@@ -52,7 +52,7 @@ Directory Structure
    $ ls tutorial_writing_builders
    SConstruct implicit.yaml implicit_workflow scons_extensions.py solver test_scons_extensions.py
 
-5. Make the ``solver.py`` file executable. In a linux shell, use the command
+5. (Linux and MacOS only) Make the ``solver.py`` file executable. In a shell, use the command
 
    $ chmod +x solver.py
 
