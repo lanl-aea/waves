@@ -220,17 +220,17 @@ is opened using the ``model_name`` variable as the model's name, a rectangle is 
 ``height``, and the Abaqus CAE model is saved with the name ``output_file``. One notable difference between the `Abaqus
 Scripting`_ documentation :cite:`ABAQUS` of Abaqus journal files is the use of the `PEP-8`_ style guide for package
 imports.  Here, we order the imports according to the `PEP-8`_ style and avoid bulk imports to the file's namespace from
-Abaqus Python packages. It is also worth noting that Abaqus journal files use the the Abaqus Python 2.7 environment
-*not* the SCons Python 3 environment. See the `Abaqus Python Environment`_ documentation :cite:`ABAQUS` for more
-information on the Abaqus Python 2.7 environment.
+Abaqus Python packages. It is also worth noting that Abaqus journal files use the the Abaqus Python environment *not*
+the SCons Python environment. See the `Abaqus Python Environment`_ documentation :cite:`ABAQUS` for more information
+on the Abaqus Python environment, noting that prior to Abaqus 2024 Python 2.7 is used, with Python 3 support being
+introduced in Abaqus 2024.
 
 .. _tutorial_geometry_waves_command_line_interfaces:
 
 Command-Line Interfaces
 =======================
 10. In the ``modsim_package/abaqus`` directory, continue editing the file called ``rectangle_geometry.py``
-    using the contents below which contains the ``get_parser()`` function. Note that
-    missing line numbers may be ignored.
+    using the contents below containing the ``get_parser()`` function. Note that missing line numbers may be ignored.
 
 .. admonition:: waves-tutorial/modsim_package/abaqus/rectangle_geometry.py
 
@@ -249,10 +249,10 @@ documentation. An example of this is the :ref:`waves_tutorial_cli` for :ref:`aba
 See the `Argparse tutorial`_ for an introduction to the ``argparse`` module.
 
 The first highlighted portion of the ``get_parser()`` function defines variables based on the name of the script. While
-this method of determining the file name is non-standard for Python 3, the Abaqus Python environment necessitates this
-syntax. This code will become common boilerplate code included in every Abaqus journal file created in the tutorials. It
-is valuable to the behavior of these example journal files, but may not be required for all journal files depending on
-their designed behavior.
+this method of determining the file name is non-standard for Python 3, the Abaqus Python 2.7 environment necessitates
+this syntax. This code will become common boilerplate code included in every Abaqus journal file created in the
+tutorials. It is valuable to the behavior of these example journal files, but may not be required for all journal files
+depending on their designed behavior.
 
 The code that follows uses the name of the script to define some variables. This code
 assumes that the ``part_name`` variable will be equal to the name of the script and will
@@ -381,7 +381,7 @@ Now that you've created the geometry task in ``tutorial_01_geometry``, this sect
         scons: done reading SConscript files.
         scons: Building targets ...
         cd /home/roppenheimer/waves-tutorials/build/tutorial_01_geometry && /apps/abaqus/Commands/abq2024 cae -noGui
-        /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
+        /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.cae.stdout 2>&1
         scons: done building targets.
 
 The default build directory name is ``build`` and located in the same parent directory as
@@ -405,8 +405,8 @@ at the same time. :ref:`tutorial_partition_mesh` will demonstrate the importance
    build/tutorial_01_geometry/
    |-- abaqus.rpy
    |-- rectangle_geometry.cae
-   |-- rectangle_geometry.jnl
-   `-- rectangle_geometry.stdout
+   |-- rectangle_geometry.cae.stdout
+   `-- rectangle_geometry.jnl
 
    0 directories, 4 files
 
@@ -419,7 +419,7 @@ The ``build/tutorial_01_geometry/`` directory should contain the following files
 * ``abaqus.rpy``, the replay file from the ``abaqus cae -nogui`` command
 * ``rectangle_geometry.cae``, an Abaqus CAE file that contains a model named
   ``model_name`` within which is a part named ``part_name``.
-* ``rectangle_geometry.jnl`` and ``rectangle_geometry.stdout``, the journal file
+* ``rectangle_geometry.jnl`` and ``rectangle_geometry.cae.stdout``, the journal file
   that records all of the commands executed by Abaqaus and the log file that will contain
   any errors recorded by Abaqus.
 
@@ -461,7 +461,7 @@ required source to the produced target. The :ref:`computational_tools` introduct
 
 In this case, the single source file ``rectangle_geometry.py`` is producing several output files which are required by
 the workflow. Notice that only two of these files were specified in our geometry task: ``rectangle_geometry.cae`` and
-``rectangle_geometry.jnl``. The ``rectangle_geometry.stdout`` files is generated as part of the ``AbaqusJournal``
+``rectangle_geometry.jnl``. The ``rectangle_geometry.cae.stdout`` files is generated as part of the ``AbaqusJournal``
 builder and appended automatically during task generation. This workflow visualization will become crowded quickly in
 these tutorials, so future visualization commands will show you how to ignore specific file extensions to reduce visual
 clutter.
