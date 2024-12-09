@@ -97,7 +97,7 @@ system_tests = [
         "tutorials/tutorial_ParameterStudy",
     ),
     pytest.param(
-        [fetch_template, "chmod +x solver.py", "scons ."],
+        [fetch_template, "scons ."],
         "tutorials/tutorial_writing_builders",
         marks=[pytest.mark.require_third_party],
     ),
