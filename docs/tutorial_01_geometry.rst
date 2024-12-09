@@ -101,7 +101,7 @@ in ``waves-tutorials/SConstruct`` file. The ``env`` variable defines project set
 and is imported so settings variables are not hard-coded more than once.
 
 The highlighted line sets an operating system agnostic path by utilizing a
-`Python pathlib`_ object. Pathlib objects are absolute or relative paths on any
+`Python pathlib`_ object. This Pathlib object can be an absolute or relative path on any
 operating system used to source files using variables defined in the
 ``waves-tutorials/SConstruct`` file. This method of path definition allows for
 path-strings to be hard-coded only once, and then used as variables everywhere else in
