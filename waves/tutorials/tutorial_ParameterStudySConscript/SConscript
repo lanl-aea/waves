@@ -1,14 +1,12 @@
 #! /usr/bin/env python
-Import("env", "set_name", "parameters", "simulation_constants")
+Import("env", "set_name", "parameters")
 
 env.Command(
-    target=[f"cat_{set_name}.txt"],
+    target=[f"echo_{set_name}.txt"],
     source=["one.txt", "two.txt"],
     action=[
         "echo workflow '${workflow}' > ${TARGET.abspath}",
-        "cat ${cat_options} ${SOURCES.abspath} >> ${TARGET.abspath}",
-        "tail ${tail_options} ${TARGET.abspath}",
+        "echo ${SOURCES.abspath} >> ${TARGET.abspath}",
     ],
     **parameters,
-    **simulation_constants,
 )
