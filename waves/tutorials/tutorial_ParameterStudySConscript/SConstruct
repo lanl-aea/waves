@@ -5,6 +5,7 @@ Contains examples of calling SConscript without a study, with a study dictionary
 Constains an example of using parameter set names as build subdirectories and as direct variant directories.
 
 .. code-block::
+   :caption: bash
 
    $ scons .
    $ find . -name "*.h5"
@@ -24,6 +25,13 @@ Constains an example of using parameter set names as build subdirectories and as
    ./build/echo_dictionary.txt
    ./build_study1/echo_build_study1.txt
    ./echo_dictionary.txt
+
+.. code-block::
+   :caption: pwsh
+
+   $ scons .
+   $ Get-ChildItem -Recurse -Filter "*.h5"
+   $ Get-ChildItem -Recurse -Filter "echo*.txt"
 """
 import os
 import pathlib
