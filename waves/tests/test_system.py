@@ -1,3 +1,13 @@
+"""System test wrapper for executing shell commands with pytest results reporting
+
+All tests should be marked ``pytest.mark.systemtest`` (handled in the test function markers).
+
+All tests that require a third-party software unavailable on conda-forge should be marked as
+``pytest.mark.require_third_party``.
+
+All tests should use string template substitution instead of f-strings, if possible. See :meth:`test_system` for
+available substitutions.
+"""
 import os
 import re
 import shlex
@@ -468,7 +478,10 @@ def test_system(
     commands: typing.Iterable[str],
     fetch_options: typing.Optional[str],
 ) -> None:
-    """Run shell commands as system tests in a temporary directory
+    """Run shell commands as system tests in a temporary directory.
+
+    Test directory name is constructed from test ID string, with character replacements to create a valid Python
+    identifier as a conservative estimate of a valid directory name. Failed tests persist on disk.
 
     Iterates on the command strings in the commands list. Performs string template substitution using keys:
 
@@ -476,6 +489,8 @@ def test_system(
     * ``odb_extract_command``: module namespace variable selected to match installation status
     * ``fetch_options``: test API variable
     * ``temp_directory``: temporary directory created one per test with ``tempfile``
+    * ``unconditional_build``: pass through CLI argument string for the tutorial/system test SConstruct option of the
+        same name
 
     Accepts a custom pytest CLI option to re-direct the temporary system test root directory away from ``$TMPDIR`` as
 
