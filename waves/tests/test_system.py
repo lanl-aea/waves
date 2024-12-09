@@ -491,6 +491,7 @@ def test_system(
     """
     test_id = request.node.callspec.id
     test_prefix = _utilities.create_valid_identifier(test_id)
+    test_prefix = f"{test_prefix}."
 
     if system_test_directory is not None:
         system_test_directory.mkdir(parents=True, exist_ok=True)
