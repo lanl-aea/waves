@@ -19,6 +19,7 @@ Internal Changes
 - Persistent system test directories for failed tests (:issue:`827`, :merge:`1050`). By `Kyle Brindley`_.
 - Enable Windows system tests for the ParameterStudySConcript feature (:issue:`802`, :merge:`1051`). By `Kyle
   Brindley`_.
+- Enable Windows system test for the writing builders tutorial (:issue:`803`, :merge:`1054`). By `Kyle Brindley`_.
 
 Enhancements
 ============

@@ -96,6 +96,11 @@ system_tests = [
         [fetch_template, "scons . --jobs=4"],
         "tutorials/tutorial_ParameterStudy",
     ),
+    pytest.param(
+        [fetch_template, "chmod +x solver.py", "scons ."],
+        "tutorials/tutorial_writing_builders",
+        marks=[pytest.mark.require_third_part],
+    ),
 ]
 
 require_third_party_system_tests = [
@@ -376,16 +381,6 @@ require_third_party_system_tests = [
         ],
         "--tutorial 12",
         marks=[pytest.mark.require_third_party],
-    ),
-    # TODO: Windows compatible writing builders tutorial
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/803
-    pytest.param(
-        [fetch_template, "chmod +x solver.py", "scons ."],
-        "tutorials/tutorial_writing_builders",
-        marks=[
-            pytest.mark.require_third_party,
-            pytest.mark.skipif(testing_windows, reason="Tutorial not yet Windows compatible"),
-        ]
     ),
     pytest.param(
         [

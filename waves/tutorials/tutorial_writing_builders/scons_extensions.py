@@ -40,7 +40,7 @@ def solver_builder_factory(
     .. code-block::
        :caption: action string default expansion
 
-       ${environment} cd ${TARGET.dir.abspath} && solver ${program_required} ${program_optional} implicit --input-file ${SOURCE.abspath} --output-file ${TARGETS[0].abspath} ${subcommand_options} > ${TARGETS[-1].abspath} 2>&1
+       ${environment} cd ${TARGET.dir.abspath} && solver.py ${program_required} ${program_optional} implicit --input-file ${SOURCE.abspath} --output-file ${TARGETS[0].abspath} ${subcommand_options} > ${TARGETS[-1].abspath} 2>&1
 
     .. code-block::
        :caption: SConstruct
