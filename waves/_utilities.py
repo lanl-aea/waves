@@ -8,7 +8,6 @@ message and non-zero exit codes.
 """
 
 import os
-import re
 import shutil
 import string
 import typing
