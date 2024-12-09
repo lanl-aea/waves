@@ -69,9 +69,6 @@ system_tests = [
     ([string.Template("${odb_extract_command} --help")], None),
     # Real fetch operations (on tutorials directory)
     ([fetch_template], "tutorials"),
-    # Real visualize operations (on modsim template)
-    # TODO: Fix the Windows execution of this system test
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/796
     pytest.param(
         [
             fetch_template,
@@ -79,9 +76,7 @@ system_tests = [
             string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png"),
         ],
         "modsim_template",
-        marks=pytest.mark.skipif(
-            testing_windows, reason="System test fails on Windows when run with pytest, but succeeds when run manually."
-        ),
+        id="modsim_template_visualize_operations"
     ),
     pytest.param(
         [string.Template("${waves_command} docs --print-local-path")],

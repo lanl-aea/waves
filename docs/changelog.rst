@@ -20,6 +20,7 @@ Internal Changes
 - Enable Windows system tests for the ParameterStudySConcript feature (:issue:`802`, :merge:`1051`). By `Kyle
   Brindley`_.
 - Enable Windows system test for the writing builders tutorial (:issue:`803`, :merge:`1054`). By `Kyle Brindley`_.
+- Enable Windows system test for visualize subcommand (:issue:`796`, :merge:`1055`). By `Kyle Brindley`_.
 
 Enhancements
 ============
