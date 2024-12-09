@@ -528,6 +528,6 @@ def test_system(
             command = shlex.split(command, posix=not testing_windows)
             subprocess.check_output(command, env=env, cwd=temp_path, text=True)
     except Exception as err:
-        raise Exception
+        raise err
     else:
         temp_directory.cleanup()
