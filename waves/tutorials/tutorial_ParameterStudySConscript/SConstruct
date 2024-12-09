@@ -8,21 +8,21 @@ Constains an example of using parameter set names as build subdirectories and as
 
    $ scons .
    $ find . -name "*.h5"
-   ./build_parameter_studies/build_hat_study.h5
-   ./build_parameter_studies/hat_study.h5
-   ./build_parameter_studies/subdir_hat_study.h5
+   ./build_parameter_studies/build_study.h5
+   ./build_parameter_studies/study.h5
+   ./build_parameter_studies/subdir_study.h5
    $ find . -name "cat*.txt"
    ./echo_no_study.txt
-   ./build_with_subdirs/subdir_hat_study0/echo_subdir_hat_study0.txt
-   ./build_with_subdirs/subdir_hat_study1/echo_subdir_hat_study1.txt
-   ./echo_hat_study1.txt
-   ./echo_hat_study0.txt
-   ./build_hat_study0/echo_build_hat_study0.txt
+   ./build_with_subdirs/subdir_study0/echo_subdir_study0.txt
+   ./build_with_subdirs/subdir_study1/echo_subdir_study1.txt
+   ./echo_study1.txt
+   ./echo_study0.txt
+   ./build_study0/echo_build_study0.txt
    ./build/echo_no_study.txt
-   ./build/echo_hat_study1.txt
-   ./build/echo_hat_study0.txt
+   ./build/echo_study1.txt
+   ./build/echo_study0.txt
    ./build/echo_dictionary.txt
-   ./build_hat_study1/echo_build_hat_study1.txt
+   ./build_study1/echo_build_study1.txt
    ./echo_dictionary.txt
 """
 import os
@@ -72,11 +72,11 @@ for variant_dir in [None, "build"]:
     # Call with a study parameter generator
     #
     # Produces
-    # ./echo_hat_study0.txt
-    # ./echo_hat_study1.txt
-    # ./build/echo_hat_study0.txt
-    # ./build/echo_hat_study1.txt
-    study_file = parameter_study_directory / "hat_study.h5"
+    # ./echo_study0.txt
+    # ./echo_study1.txt
+    # ./build/echo_study0.txt
+    # ./build/echo_study1.txt
+    study_file = parameter_study_directory / "study.h5"
     study = waves.parameter_generators.CartesianProduct(
         {"workflow": ["thing 1", "thing 2"]},
         set_name_template=f"{study_file.stem}@number",
@@ -98,9 +98,9 @@ for variant_dir in [None, "build"]:
 # SConscript file this way, you would remove the ``set_name`` variable in the target file name construction.
 #
 # Produces
-# ./build_with_subdirs/subdir_hat_study0/echo_subdir_hat_study0.txt
-# ./build_with_subdirs/subdir_hat_study1/echo_subdir_hat_study1.txt
-study_file = parameter_study_directory / "subdir_hat_study.h5"
+# ./build_with_subdirs/subdir_study0/echo_subdir_study0.txt
+# ./build_with_subdirs/subdir_study1/echo_subdir_study1.txt
+study_file = parameter_study_directory / "subdir_study.h5"
 study = waves.parameter_generators.CartesianProduct(
     {"workflow": ["thing 3", "thing 4"]},
     set_name_template=f"{study_file.stem}@number",
@@ -123,9 +123,9 @@ env.ParameterStudySConscript(
 # the SConscript file this way, you would remove the ``set_name`` variable in the target file name construction.
 #
 # Produces
-# ./build_hat_study0/echo_build_hat_study0.txt
-# ./build_hat_study1/echo_build_hat_study1.txt
-study_file = parameter_study_directory / "build_hat_study.h5"
+# ./build_study0/echo_build_study0.txt
+# ./build_study1/echo_build_study1.txt
+study_file = parameter_study_directory / "build_study.h5"
 study = waves.parameter_generators.CartesianProduct(
     {"workflow": ["thing 5", "thing 6"]},
     set_name_template=f"{study_file.stem}@number",
