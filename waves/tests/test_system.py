@@ -99,7 +99,7 @@ system_tests = [
     pytest.param(
         [fetch_template, "chmod +x solver.py", "scons ."],
         "tutorials/tutorial_writing_builders",
-        marks=[pytest.mark.require_third_part],
+        marks=[pytest.mark.require_third_party],
     ),
 ]
 
