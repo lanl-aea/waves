@@ -88,6 +88,14 @@ system_tests = [
         None,
         marks=[pytest.mark.skipif(not installed, reason="The HTML docs path only exists in the as-installed package")],
     ),
+    pytest.param(
+        [fetch_template, "scons . --jobs=4"],
+        "tutorials/tutorial_ParameterStudySConscript",
+    ),
+    pytest.param(
+        [fetch_template, "scons . --jobs=4"],
+        "tutorials/tutorial_ParameterStudy",
+    ),
 ]
 
 require_third_party_system_tests = [
@@ -417,16 +425,6 @@ require_third_party_system_tests = [
             ),
         ],
         "tutorials",
-        marks=[pytest.mark.require_third_party],
-    ),
-    pytest.param(
-        [fetch_template, "scons . --jobs=4"],
-        "tutorials/tutorial_ParameterStudySConscript",
-        marks=[pytest.mark.require_third_part],
-    ),
-    pytest.param(
-        [fetch_template, "scons . --jobs=4"],
-        "tutorials/tutorial_ParameterStudy",
         marks=[pytest.mark.require_third_party],
     ),
     # ModSim templates
