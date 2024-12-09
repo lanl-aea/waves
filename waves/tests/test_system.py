@@ -490,7 +490,7 @@ def test_system(
     # Attempt to construct a valid directory prefix from the test ID string printed by pytest
     # Works best if there is only one test function in this module so there are no duplicate ids
     test_id = request.node.callspec.id
-    test_prefix = f"{test_id}." if " " not in test_id else None
+    test_prefix = f"{test_id}." if test_id.isidentifier() else None
 
     if system_test_directory is not None:
         system_test_directory.mkdir(parents=True, exist_ok=True)
@@ -506,7 +506,7 @@ def test_system(
         "waves_command": waves_command,
         "odb_extract_command": odb_extract_command,
         "fetch_options": fetch_options,
-        "temp_directory": temp_directory,
+        "temp_directory": temp_path,
         "unconditional_build": "--unconditional-build" if unconditional_build else "",
     }
     try:
