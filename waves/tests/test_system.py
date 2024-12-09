@@ -99,7 +99,6 @@ system_tests = [
     pytest.param(
         [fetch_template, "scons ."],
         "tutorials/tutorial_writing_builders",
-        marks=[pytest.mark.require_third_party],
     ),
 ]
 
