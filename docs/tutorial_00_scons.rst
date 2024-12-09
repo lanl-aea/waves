@@ -48,10 +48,10 @@ configuration files use `Python`_ as a fully featured scripting language. This c
 familiarity of the engineering community with `Python`_ as a programming language, but also because the parameter
 generation utility can be integrated more closely with the build system, :ref:`parameter_generator_api`.
 
-This tutorial will build out an initial SConstruct file (SCons project configuration file). First a code snippet will
+This tutorial will build out the project configuration file, named SConstruct by default. First a code snippet will
 be introduced followed by a description of what that snippet does. After sufficient code is added to the file, it can
-be executed with the 'scons' command. Later tutorials will continue to expand the SConstruct file as well as other
-SCons project configuration files.
+be executed with the ``scons`` command. Later tutorials will continue to expand the SConstruct file and add workflow
+configuration files.
 
 ***************************
 SCons Project Configuration
@@ -91,11 +91,11 @@ package.
 The `SCons command-line build options`_ are specific to the project configuration that you are currently creating.
 `SCons`_ projects may add or remove command-line options to aid in build behavior control. The most relevant option to
 modsim projects will be ``--build-dir``, which allows project developers to change the build directory location from the
-command-line without modifying the ``SConstruct`` file source code. For example, once there is sufficient functionality
+command-line without modifying the ``SConstruct`` file source code. For example, when there are workflow tasks defined
 in the the ``SConstruct`` file, a call to ``scons`` would create the default build directory named ``build`` and a call
-to ``scons --build-dir=non_default_build`` would create a build directory named ``non_default_build``. A preview of
-these commands is shown below. The current ``SConstruct`` file does not yet contain this functionality, but we
-have just added the command line options for utilizing this functionality when it is added later in the tutorials.
+to ``scons --build-dir=non_default_build`` would create a build directory named ``non_default_build``. The current
+SConstruct file will not produce these directories yet because there are no workflow tasks defined. The demonstration
+below shows how the build directory option will behave when workflow tasks are defined.
 
 .. warning::
 
