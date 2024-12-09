@@ -462,6 +462,7 @@ require_third_party_system_tests = [
 def test_system(
     system_test_directory,
     unconditional_build,
+    request,
     commands: typing.Iterable[str],
     fetch_options: typing.Optional[str],
 ) -> None:
@@ -481,6 +482,7 @@ def test_system(
        pytest --system-test-dir=/my/systemtest/output
 
     :param system_test_directory: custom pytest decorator defined in conftest.py
+    :param unconditional_build: custom pytest decorator defined in conftest.py
     :param request: pytest decorator with test case meta data
     :param commands: list of command strings for the system test
     :param fetch_options: the fetch arguments for replacement in string templates
