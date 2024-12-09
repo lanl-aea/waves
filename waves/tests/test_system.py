@@ -81,24 +81,39 @@ require_third_party_tests = [
     pytest.param(
         [fetch_template, string.Template("scons rectangle ${unconditional_build}")],
         "tutorials/multi_action_task",
-        marks=pytest.mark.skipif(
-            testing_windows and not installed, reason="Windows handles symlinks in repository poorly"
-        ),
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.skipif(
+                testing_windows and not installed, reason="Windows handles symlinks in repository poorly"
+            )
+        ]
     ),
-    (
+    pytest.param(
         [
             fetch_template,
             string.Template("scons nominal mesh_convergence ${unconditional_build}"),
             string.Template("${waves_command} print_study build/parameter_studies/mesh_convergence.h5"),
         ],
         "tutorials/waves_quickstart",
+        marks=[pytest.mark.require_third_party],
     ),
-    ([fetch_template, string.Template("scons rectangle ${unconditional_build}")], "tutorials/tutorial_gmsh"),
-    (
-        [fetch_template, string.Template("scons submit_beam_cae ${unconditional_build}")],
+    pytest.param(
+        [
+            fetch_template,
+            string.Template("scons rectangle ${unconditional_build}")
+        ],
+        "tutorials/tutorial_gmsh",
+        marks=[pytest.mark.require_third_party],
+    ),
+    pytest.param(
+        [
+            fetch_template,
+            string.Template("scons submit_beam_cae ${unconditional_build}")
+        ],
         "tutorials/tutorial_abaqus_cae",
+        marks=[pytest.mark.require_third_party],
     ),
-    (
+    pytest.param(
         [
             fetch_template,
             string.Template(
@@ -106,8 +121,9 @@ require_third_party_tests = [
             ),
         ],
         "--tutorial 0",
+        marks=[pytest.mark.require_third_party],
     ),
-    (
+    pytest.param(
         [
             fetch_template,
             string.Template(
@@ -115,13 +131,17 @@ require_third_party_tests = [
             ),
         ],
         "--tutorial 1",
+        marks=[pytest.mark.require_third_party],
     ),
     pytest.param(
         [fetch_template, "scons tutorial_matlab --sconstruct=tutorial_matlab_SConstruct"],
         "tutorials",
-        marks=pytest.mark.skip("Too few licenses to reliably pass"),
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.skip("Too few licenses to reliably pass"),
+        ]
     ),
-    (
+    pytest.param(
         [
             fetch_template,
             string.Template(
@@ -129,8 +149,9 @@ require_third_party_tests = [
             ),
         ],
         "--tutorial 2",
+        marks=[pytest.mark.require_third_party],
     ),
-    (
+    pytest.param(
         [
             fetch_template,
             string.Template(
@@ -138,8 +159,9 @@ require_third_party_tests = [
             ),
         ],
         "tutorials",
+        marks=[pytest.mark.require_third_party],
     ),
-    (
+    pytest.param(
         [
             fetch_template,
             string.Template(
@@ -147,8 +169,9 @@ require_third_party_tests = [
             ),
         ],
         "--tutorial 3",
+        marks=[pytest.mark.require_third_party],
     ),
-    (
+    pytest.param(
         [
             fetch_template,
             string.Template(
@@ -156,26 +179,37 @@ require_third_party_tests = [
             ),
         ],
         "--tutorial 4",
+        marks=[pytest.mark.require_third_party],
     ),
     pytest.param(
         [fetch_template, string.Template("scons . ${unconditional_build} --print-build-failures")],
         "tutorials/tutorial_cubit",
-        marks=pytest.mark.skipif(
-            testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
-        ),
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.skipif(
+                testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
+            ),
+        ]
     ),
     pytest.param(
         [fetch_template, string.Template("scons . ${unconditional_build} --print-build-failures")],
         "tutorials/tutorial_cubit_alternate",
-        marks=pytest.mark.skipif(
-            testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
-        ),
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.skipif(
+                testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
+            ),
+        ]
     ),
-    (
-        [fetch_template, string.Template("scons quinoa-local ${unconditional_build} --print-build-failures")],
+    pytest.param(
+        [
+            fetch_template,
+            string.Template("scons quinoa-local ${unconditional_build} --print-build-failures")
+        ],
         "tutorials/tutorial_quinoa",
+        marks=[pytest.mark.require_third_party],
     ),
-    (
+    pytest.param(
         [
             fetch_template,
             string.Template(
@@ -183,6 +217,7 @@ require_third_party_tests = [
             ),
         ],
         "tutorials",
+        marks=[pytest.mark.require_third_party],
     ),
     # TODO: Figure out how to authenticate the institutional account without expanding the user credential exposure to
     # AEA Gitlab group members. Until then, the SSH remote execution can't be integration/regression tested.
@@ -194,9 +229,12 @@ require_third_party_tests = [
             ),
         ],
         "tutorials",
-        marks=pytest.mark.skip("Can't reliably authenticate to the remote server"),
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.skip("Can't reliably authenticate to the remote server"),
+        ]
     ),
-    (
+    pytest.param(
         [
             fetch_template,
             string.Template(
@@ -204,8 +242,9 @@ require_third_party_tests = [
             ),
         ],
         "tutorials",
+        marks=[pytest.mark.require_third_party],
     ),
-    (
+    pytest.param(
         [
             fetch_template,
             string.Template(
@@ -213,8 +252,9 @@ require_third_party_tests = [
             ),
         ],
         "--tutorial 5",
+        marks=[pytest.mark.require_third_party],
     ),
-    (
+    pytest.param(
         [
             fetch_template,
             string.Template(
@@ -222,8 +262,9 @@ require_third_party_tests = [
             ),
         ],
         "--tutorial 6",
+        marks=[pytest.mark.require_third_party],
     ),
-    (
+    pytest.param(
         [
             fetch_template,
             string.Template(
@@ -231,8 +272,9 @@ require_third_party_tests = [
             ),
         ],
         "--tutorial 7",
+        marks=[pytest.mark.require_third_party],
     ),
-    (
+    pytest.param(
         [
             fetch_template,
             string.Template(
@@ -240,8 +282,9 @@ require_third_party_tests = [
             ),
         ],
         "tutorials",
+        marks=[pytest.mark.require_third_party],
     ),
-    (
+    pytest.param(
         [
             fetch_template,
             string.Template(
@@ -249,8 +292,9 @@ require_third_party_tests = [
             ),
         ],
         "tutorials",
+        marks=[pytest.mark.require_third_party],
     ),
-    (
+    pytest.param(
         [
             fetch_template,
             string.Template(
@@ -258,8 +302,9 @@ require_third_party_tests = [
             ),
         ],
         "--tutorial 8",
+        marks=[pytest.mark.require_third_party],
     ),
-    (
+    pytest.param(
         [
             fetch_template,
             string.Template(
@@ -267,8 +312,9 @@ require_third_party_tests = [
             ),
         ],
         "--tutorial 9",
+        marks=[pytest.mark.require_third_party],
     ),
-    (
+    pytest.param(
         [
             fetch_template,
             string.Template(
@@ -276,8 +322,9 @@ require_third_party_tests = [
             ),
         ],
         "--tutorial 10",
+        marks=[pytest.mark.require_third_party],
     ),
-    (
+    pytest.param(
         [
             fetch_template,
             string.Template(
@@ -285,8 +332,9 @@ require_third_party_tests = [
             ),
         ],
         "tutorials",
+        marks=[pytest.mark.require_third_party],
     ),
-    (
+    pytest.param(
         [
             fetch_template,
             string.Template(
@@ -294,8 +342,9 @@ require_third_party_tests = [
             ),
         ],
         "--tutorial 11",
+        marks=[pytest.mark.require_third_party],
     ),
-    (
+    pytest.param(
         [
             fetch_template,
             string.Template(
@@ -303,15 +352,19 @@ require_third_party_tests = [
             ),
         ],
         "--tutorial 12",
+        marks=[pytest.mark.require_third_party],
     ),
     # TODO: Windows compatible writing builders tutorial
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/803
     pytest.param(
         [fetch_template, "chmod +x solver.py", "scons ."],
         "tutorials/tutorial_writing_builders",
-        marks=pytest.mark.skipif(testing_windows, reason="Tutorial not yet Windows compatible"),
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.skipif(testing_windows, reason="Tutorial not yet Windows compatible"),
+        ]
     ),
-    (
+    pytest.param(
         [
             fetch_template,
             string.Template(
@@ -319,8 +372,9 @@ require_third_party_tests = [
             ),
         ],
         "tutorials",
+        marks=[pytest.mark.require_third_party],
     ),
-    (
+    pytest.param(
         [
             fetch_template,
             string.Template(
@@ -328,8 +382,9 @@ require_third_party_tests = [
             ),
         ],
         "tutorials",
+        marks=[pytest.mark.require_third_party],
     ),
-    (
+    pytest.param(
         [
             fetch_template,
             string.Template(
@@ -337,8 +392,9 @@ require_third_party_tests = [
             ),
         ],
         "tutorials",
+        marks=[pytest.mark.require_third_party],
     ),
-    (
+    pytest.param(
         [
             fetch_template,
             string.Template(
@@ -346,17 +402,22 @@ require_third_party_tests = [
             ),
         ],
         "tutorials",
+        marks=[pytest.mark.require_third_party],
     ),
     # TODO: Write a Windows friendly "cat" like command
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/802
     pytest.param(
         [fetch_template, "scons . --jobs=4"],
         "tutorials/tutorial_ParameterStudySConscript",
-        marks=pytest.mark.skipif(testing_windows, reason="Windows CI server doesn't like the cat command"),
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.skipif(testing_windows, reason="Windows CI server doesn't like the cat command"),
+        ]
     ),
     pytest.param(
         [fetch_template, "scons . --jobs=4"],
         "tutorials/tutorial_ParameterStudy",
+        marks=[pytest.mark.require_third_party],
     ),
     # ModSim templates
     pytest.param(
@@ -369,9 +430,12 @@ require_third_party_tests = [
             ),
         ],
         "modsim_template",
-        marks=pytest.mark.skipif(
-            testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus"
-        ),
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.skipif(
+                testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus"
+            ),
+        ]
     ),
     pytest.param(
         [
@@ -383,9 +447,12 @@ require_third_party_tests = [
             ),
         ],
         "modsim_template_2",
-        marks=pytest.mark.skipif(
-            testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus"
-        ),
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.skipif(
+                testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus"
+            ),
+        ]
     ),
 ]
 
