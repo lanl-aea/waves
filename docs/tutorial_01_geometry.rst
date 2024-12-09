@@ -101,7 +101,7 @@ in ``waves-tutorials/SConstruct`` file. The ``env`` variable defines project set
 and is imported so settings variables are not hard-coded more than once.
 
 The highlighted line sets an operating system agnostic path by utilizing a
-`Python pathlib`_ object. This Pathlib object can be an absolute or relative path on any
+`Python pathlib`_ object. This pathlib object can be an absolute or relative path on any
 operating system used to source files using variables defined in the
 ``waves-tutorials/SConstruct`` file. This method of path definition allows for
 path-strings to be hard-coded only once, and then used as variables everywhere else in
@@ -125,8 +125,8 @@ we will ``extend`` this list and finally create an alias that matches the parent
 directory name. The alias thus represents the list of targets specified in the
 ``SConscript`` file.
 
-The final block of code instructs SCons on how to build the target, an Abaqus CAE
-file whose name is constructed using the ``journal_file`` variable. The ``journal_file``
+The final block of code instructs SCons on how to build the targets, an Abaqus CAE file and an Abaqus journal
+file whose names are constructed using the ``journal_file`` variable. The ``journal_file``
 variable exists solely to minimize hard-coded duplication of the string
 ``'rectangle_geometry'``. ``journal_options`` allows for parameters to be passed as
 command-line arguments to the journal file. Using the journal file's command-line
@@ -220,10 +220,10 @@ is opened using the ``model_name`` variable as the model's name, a rectangle is 
 ``height``, and the Abaqus CAE model is saved with the name ``output_file``. One notable difference between the `Abaqus
 Scripting`_ documentation :cite:`ABAQUS` of Abaqus journal files is the use of the `PEP-8`_ style guide for package
 imports.  Here, we order the imports according to the `PEP-8`_ style and avoid bulk imports to the file's namespace from
-Abaqus Python packages. It is also worth noting that Abaqus journal files use the the Abaqus Python environment *not*
+Abaqus Python packages. It is also worth noting that Abaqus journal files use the Abaqus Python environment *not*
 the SCons Python environment. See the `Abaqus Python Environment`_ documentation :cite:`ABAQUS` for more information
-on the Abaqus Python environment, noting that prior to Abaqus 2024 Python 2.7 is used, with Python 3 support being
-introduced in Abaqus 2024.
+on the Abaqus Python environment, noting that prior to Abaqus 2024, Abaqus shipped with Python 2.7 instead of Python 3.
+The tutorials in this project supply journal files compatible with both Python 2.7 and Python 3.
 
 .. _tutorial_geometry_waves_command_line_interfaces:
 
