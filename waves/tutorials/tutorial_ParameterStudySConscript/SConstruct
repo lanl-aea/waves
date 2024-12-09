@@ -29,9 +29,9 @@ Constains an example of using parameter set names as build subdirectories and as
 .. code-block::
    :caption: pwsh
 
-   $ scons .
-   $ Get-ChildItem -Recurse -Filter "*.h5"
-   $ Get-ChildItem -Recurse -Filter "echo*.txt"
+   PS > scons .
+   PS > Get-ChildItem -Recurse -Filter "*.h5"
+   PS > Get-ChildItem -Recurse -Filter "echo*.txt"
 """
 import os
 import pathlib
