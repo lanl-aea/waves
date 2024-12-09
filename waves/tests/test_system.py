@@ -480,9 +480,16 @@ def test_system(
 
        pytest --system-test-dir=/my/systemtest/output
 
+    :param system_test_directory: custom pytest decorator defined in conftest.py
+    :param request: pytest decorator with test case meta data
     :param commands: list of command strings for the system test
     :param fetch_options: the fetch arguments for replacement in string templates
     """
+    # Attempt to construct a valid directory prefix from the test ID string printed by pytest
+    # Works best if there is only one test function in this module so there are no duplicate ids
+    test_id = request.node.callspec.id
+    test_prefix = f"{test_id}." if " " not in test_id else None
+
     if system_test_directory is not None:
         system_test_directory.mkdir(parents=True, exist_ok=True)
 
@@ -490,16 +497,23 @@ def test_system(
     temporary_directory_arguments = inspect.getfullargspec(tempfile.TemporaryDirectory).args
     if "ignore_cleanup_errors" in temporary_directory_arguments and system_test_directory is not None:
         kwargs.update({"ignore_cleanup_errors": True})
-    with tempfile.TemporaryDirectory(dir=system_test_directory, **kwargs) as temp_directory:
-        template_substitution = {
-            "waves_command": waves_command,
-            "odb_extract_command": odb_extract_command,
-            "fetch_options": fetch_options,
-            "temp_directory": temp_directory,
-            "unconditional_build": "--unconditional-build" if unconditional_build else "",
-        }
+    temp_directory = tempfile.TemporaryDirectory(dir=system_test_directory, prefix=test_prefix, **kwargs)
+    temp_path = pathlib.Path(temp_directory.name)
+    temp_path.mkdir(parents=True, exist_ok=True)
+    template_substitution = {
+        "waves_command": waves_command,
+        "odb_extract_command": odb_extract_command,
+        "fetch_options": fetch_options,
+        "temp_directory": temp_directory,
+        "unconditional_build": "--unconditional-build" if unconditional_build else "",
+    }
+    try:
         for command in commands:
             if isinstance(command, string.Template):
                 command = command.substitute(template_substitution)
             command = shlex.split(command, posix=not testing_windows)
-            subprocess.check_output(command, env=env, cwd=temp_directory, text=True)
+            subprocess.check_output(command, env=env, cwd=temp_path, text=True)
+    except Exception as err:
+        raise Exception
+    else:
+        temp_directory.cleanup()
