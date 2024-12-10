@@ -111,7 +111,7 @@ arguments which will use the ``rectangle_partition.cae`` file as the input model
 to the :ref:`waves_tutorial_cli` to become familiar with the command-line arguments available for the journal files in
 this tutorial.
 
-The ``target`` list increases again as well, with the addition of a third target.
+The ``target`` list increases again with the addition of a third target.
 You should now be familiar with the behavior that generates the ``rectangle_mesh.cae`` and ``rectangle_mesh.jnl``
 targets. The new target is the ``rectangle_mesh.inp`` file. This file is called an *orphan mesh* file. When the
 :meth:`waves.scons_extensions.abaqus_journal_builder_factory` builder acts on the ``rectangle_mesh.py`` file, our three
@@ -325,11 +325,11 @@ below.
    0 directories, 17 files
 
 Examine the contents of the ``build/tutorial_01_geometry`` and a ``build/tutorial_02_partition_mesh`` directories.
-Recall from the note this tutorial's :ref:`tutorial_partition_mesh` section that we require the targets
+Recall from the earlier note that we require the targets
 from the code pertaining to :ref:`tutorial_geometry` to build the targets for this tutorial. There is an important
-distinction to be made here. This tutorial is **NOT** utilizing the outputs from :ref:`tutorial_geometry`'s
+distinction to be made here. This tutorial is **NOT** using the outputs from :ref:`tutorial_geometry`'s
 :ref:`tutorial_geometry_waves_build_targets` section when we executed the ``$ scons tutorial_01_geometry`` command. This
-tutorial is utilizing the outputs generated from executing the same code, but from our new
+tutorial is using the outputs generated from executing the same code, but from our new
 ``tutorial_02_partition_mesh`` file. For this reason, we see the same outputs from the
 ``build/tutorial_01_geometry`` directory in the ``build/tutorial_02_partition_mesh`` directory (along with other
 :ref:`tutorial_partition_mesh` output files).
