@@ -169,9 +169,9 @@ Build Targets
    Checking whether abq2024 program exists.../apps/abaqus/Commands/abq2024
    scons: done reading SConscript files.
    scons: Building targets ...
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.cae.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- > rectangle_partition.cae.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.inp.stdout 2>&1
    Copy("build/tutorial_03_solverprep/rectangle_compression.inp", "modsim_package/abaqus/rectangle_compression.inp")
    Copy("build/tutorial_03_solverprep/assembly.inp", "modsim_package/abaqus/assembly.inp")
    Copy("build/tutorial_03_solverprep/boundary.inp", "modsim_package/abaqus/boundary.inp")
@@ -196,22 +196,22 @@ Explore the contents of the ``build`` directory using the ``tree`` command again
     build/tutorial_01_geometry/
     |-- abaqus.rpy
     |-- rectangle_geometry.cae
-    |-- rectangle_geometry.jnl
-    `-- rectangle_geometry.stdout
+    |-- rectangle_geometry.cae.stdout
+    `-- rectangle_geometry.jnl
     build/tutorial_02_partition_mesh/
     |-- abaqus.rpy
     |-- abaqus.rpy.1
     |-- abaqus.rpy.2
     |-- rectangle_geometry.cae
+    |-- rectangle_geometry.cae.stdout
     |-- rectangle_geometry.jnl
-    |-- rectangle_geometry.stdout
     |-- rectangle_mesh.cae
     |-- rectangle_mesh.inp
+    |-- rectangle_mesh.inp.stdout
     |-- rectangle_mesh.jnl
-    |-- rectangle_mesh.stdout
     |-- rectangle_partition.cae
-    |-- rectangle_partition.jnl
-    `-- rectangle_partition.stdout
+    |-- rectangle_partition.cae.stdout
+    `-- rectangle_partition.jnl
     build/tutorial_03_solverprep/
     |-- abaqus.rpy
     |-- abaqus.rpy.1
@@ -224,15 +224,15 @@ Explore the contents of the ``build`` directory using the ``tree`` command again
     |-- parts.inp
     |-- rectangle_compression.inp
     |-- rectangle_geometry.cae
+    |-- rectangle_geometry.cae.stdout
     |-- rectangle_geometry.jnl
-    |-- rectangle_geometry.stdout
     |-- rectangle_mesh.cae
     |-- rectangle_mesh.inp
+    |-- rectangle_mesh.inp.stdout
     |-- rectangle_mesh.jnl
-    |-- rectangle_mesh.stdout
     |-- rectangle_partition.cae
-    |-- rectangle_partition.jnl
-    `-- rectangle_partition.stdout
+    |-- rectangle_partition.cae.stdout
+    `-- rectangle_partition.jnl
 
     0 directories, 37 files
 
