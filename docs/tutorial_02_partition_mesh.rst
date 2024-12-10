@@ -42,8 +42,8 @@ Directory Structure
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Download and copy the ``tutorial_01_geometry`` file to a new file named ``tutorial_02_partition_mesh``
-   with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
+4. Fetch the ``tutorial_01_geometry`` file and create a new file named ``tutorial_02_partition_mesh``
+   using the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
