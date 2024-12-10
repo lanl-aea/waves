@@ -149,9 +149,6 @@ changes made in this tutorial.
       :language: Python
       :diff: tutorials_tutorial_02_partition_mesh_SConstruct
 
-Note that while an `SCons Pseudo-Builder`_ is accessed with the same syntax as a normal builder in the ``SConscript``
-file, it was added to the construction environment as the overloaded :class:`waves.scons_extensions.WAVESEnvironment`
-SCons environment class in the ``SConstruct`` file.
 
 *************
 Build Targets
