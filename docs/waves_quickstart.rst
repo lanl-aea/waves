@@ -175,7 +175,8 @@ Building targets
 In ``SConstruct``, the workflows were provided aliases matching the study names for more convenient execution. First,
 run the ``nominal`` workflow and observe the task command output as below. The default behavior of `SCons`_ is to report
 each task's action as it is executed. |PROJECT| builders capture the STDOUT and STDERR into per-task log files to aid in
-troubleshooting and to remove clutter from the terminal output.
+troubleshooting and to remove clutter from the terminal output. On first execution you may see a warning message as a
+previous parameter study is being requested which will only exist on subsequent executions.
 
 .. code-block::
 
@@ -187,6 +188,8 @@ troubleshooting and to remove clutter from the terminal output.
    Checking whether '/usr/projects/ea/abaqus/Commands/abq2024' program exists...no
    Checking whether 'abq2024' program exists...no
    Checking whether 'abaqus' program exists...no
+   /projects/roppenheimer/waves-tutorial-env/lib/python3.12/site-packages/waves/parameter_generators.py:113: UserWarning: Previous parameter study file 'build/parameter_studies/mesh_convergence.h5' does not exist.
+   warnings.warn(message)
    scons: done reading SConscript files.
    scons: Building targets ...
    Copy("build/nominal/rectangle_compression.inp.in", "rectangle_compression.inp.in")
@@ -290,8 +293,8 @@ created parameter sets on re-execution.
    parameter_set2  93de452cc9564a549338e87ad98e5288    1.0     1.0        0.250         -0.01
    parameter_set3  49e34595c98442a228efd9e9765f61dd    1.0     1.0        0.125         -0.01
 
-Try adding a new global mesh seed in the middle of the existing range. An example might look like the following, where
-the seed ``0.4`` is added between ``0.5`` and ``0.25``.
+Try adding a new global mesh seed in the middle of the existing range in the ``SConstruct`` file. An example might look
+like the following, where the seed ``0.4`` is added between ``0.5`` and ``0.25``.
 
 .. code-block::
 
