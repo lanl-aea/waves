@@ -188,8 +188,6 @@ previous parameter study is being requested which will only exist on subsequent 
    Checking whether '/usr/projects/ea/abaqus/Commands/abq2024' program exists...no
    Checking whether 'abq2024' program exists...no
    Checking whether 'abaqus' program exists...no
-   /projects/roppenheimer/waves-tutorial-env/lib/python3.12/site-packages/waves/parameter_generators.py:113: UserWarning: Previous parameter study file 'build/parameter_studies/mesh_convergence.h5' does not exist.
-   warnings.warn(message)
    scons: done reading SConscript files.
    scons: Building targets ...
    Copy("build/nominal/rectangle_compression.inp.in", "rectangle_compression.inp.in")
@@ -293,10 +291,11 @@ created parameter sets on re-execution.
    parameter_set2  93de452cc9564a549338e87ad98e5288    1.0     1.0        0.250         -0.01
    parameter_set3  49e34595c98442a228efd9e9765f61dd    1.0     1.0        0.125         -0.01
 
-Try adding a new global mesh seed in the middle of the existing range in the ``SConstruct`` file. An example might look
+Try adding a new global mesh seed in the middle of the existing range. An example might look
 like the following, where the seed ``0.4`` is added between ``0.5`` and ``0.25``.
 
 .. code-block::
+   :caption: SConstruct
 
    mesh_convergence_parameter_generator = waves.parameter_generators.CartesianProduct(
         {
