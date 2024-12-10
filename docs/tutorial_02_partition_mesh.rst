@@ -78,7 +78,7 @@ In the code pertaining to ``# Partition``, we will again pass an empty string fo
 re-open the discussion of using the journal file's command-line interface via the ``journal_options`` variable in
 :ref:`tutorial_parameter_substitution`. Next, the ``workflow`` list is extended once again to include the action
 to use the :meth:`waves.scons_extensions.abaqus_journal_builder_factory` builder. The ``target`` list specifies the
-files created by the :meth:`waves.scons_extensions.abaqus_journal_builder_factory` task's action, and the ``source``
+files created by the :meth:`waves.scons_extensions.abaqus_journal_builder_factory` builder's action, and the ``source``
 list specifies on which files to act in order to produce the targets.
 
 Keen readers will note that this source-target definition is different from that in :ref:`tutorial_geometry`.
@@ -111,7 +111,7 @@ arguments which will use the ``rectangle_partition.cae`` file as the input model
 to the :ref:`waves_tutorial_cli` to become familiar with the command-line arguments available for the journal files in
 this tutorial.
 
-The ``target`` list increases again with the addition of a third target.
+The mesh task produces more than one output file, so the ``target`` list has changed size.
 You should now be familiar with the behavior that generates the ``rectangle_mesh.cae`` and ``rectangle_mesh.jnl``
 targets. The new target is the ``rectangle_mesh.inp`` file. This file is called an *orphan mesh* file. When the
 :meth:`waves.scons_extensions.abaqus_journal_builder_factory` builder acts on the ``rectangle_mesh.py`` file, our three
@@ -325,9 +325,9 @@ below.
    0 directories, 17 files
 
 Examine the contents of the ``build/tutorial_01_geometry`` and a ``build/tutorial_02_partition_mesh`` directories.
-Recall from the earlier note that we require the targets
-from the code pertaining to :ref:`tutorial_geometry` to build the targets for this tutorial. There is an important
-distinction to be made here. This tutorial is **NOT** using the outputs from :ref:`tutorial_geometry`'s
+Recall from the earlier note that we require the geometry target introduced in :ref:`tutorial_geometry` to build the
+partition and mesh targets. There is an important distinction to be made here. This tutorial is **NOT** using the
+outputs from :ref:`tutorial_geometry`'s
 :ref:`tutorial_geometry_waves_build_targets` section when we executed the ``$ scons tutorial_01_geometry`` command. This
 tutorial is using the outputs generated from executing the same code, but from our new
 ``tutorial_02_partition_mesh`` file. For this reason, we see the same outputs from the
