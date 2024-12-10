@@ -117,7 +117,7 @@ data handling operations.
 While the post-processing approach outlined in this tutorial gives users a starting point for performing all forms of
 parameter studies (sensitivity, perturbation, uncertainty propagation, etc) the choice of input sampling tools,
 parameter sampling ranges and distributions, and analysis tools is highly dependent on the needs of the project and the
-characteristics of the input space and numerica solvers. Modsim project owners are encouraged to read the sampling and
+characteristics of the input space and numerical solvers. Modsim project owners are encouraged to read the sampling and
 analysis documentation closely and seek advice from statistics and uncertainty experts in building and interpreting
 their parameter studies.
 
