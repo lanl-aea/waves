@@ -74,12 +74,10 @@ directory. Check the contents of this directory using the ``ls`` command.
     $ pwd
     /home/roppenheimer/waves-tutorials
     $ ls modsim_package/abaqus
-    abaqus_utilities.py  parts.inp
-    assembly.inp                 rectangle_compression.inp
-    boundary.inp                 rectangle_geometry.py
-    field_output.inp             rectangle_mesh.py
-    history_output.inp           rectangle_partition.py
-    materials.inp
+    abaqus_utilities.py  history_output.inp  rectangle_compression.inp
+    assembly.inp         __init__.py         rectangle_geometry.py
+    boundary.inp         materials.inp       rectangle_mesh.py
+    field_output.inp     parts.inp           rectangle_partition.py
 
 .. _tutorials_tutorial_solverprep:
 
@@ -95,8 +93,8 @@ SConscript
     end of the :ref:`tutorials_tutorial_solverprep` section will demonstrate this
     more clearly.
 
-6. Modify your ``tutorial_03_solverprep`` file by adding the contents shown
-   below immediately after the code pertaining to ``# Mesh`` from the previous tutorial.
+6. Modify your ``tutorial_03_solverprep`` file by adding the contents shown below immediately after the code
+   pertaining to ``# Mesh`` from the previous tutorial, and above the ``# Collector alias`` code.
 
 .. admonition:: waves-tutorials/tutorial_03_solverprep
 
