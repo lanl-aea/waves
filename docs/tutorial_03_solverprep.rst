@@ -39,7 +39,7 @@ Directory Structure
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Download and copy the ``tutorial_02_partition_mesh`` file to a new file named ``tutorial_03_solverprep``
+4. Fetch the ``tutorial_02_partition_mesh`` file and create a new file named ``tutorial_03_solverprep``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
@@ -54,7 +54,7 @@ Directory Structure
 Solver Input Files
 ******************
 
-5. Download and copy the `WAVES tutorials abaqus source files`_ into your existing ``modsim_package/abaqus`` sub-directory
+5. Fetch the `WAVES tutorials abaqus source files`_ into your existing ``modsim_package/abaqus`` sub-directory
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
@@ -138,7 +138,7 @@ file from :ref:`tutorial_partition_mesh` is included below to help identify the 
 SConstruct
 **********
 
-7. Add ``tutorial_03_solverprep`` to the ``workflow_configurations`` list in the ``waves-tutorials/SConstruct`` file.
+7. Add ``tutorial_03_solverprep`` to the ``workflow_configurations`` list in the ``SConstruct`` file.
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_partition_mesh` is included below to help identify the
 changes made in this tutorial.
