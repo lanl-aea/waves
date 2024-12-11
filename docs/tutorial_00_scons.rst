@@ -90,12 +90,15 @@ package.
 
 The `SCons command-line build options`_ are specific to the project configuration that you are currently creating.
 `SCons`_ projects may add or remove command-line options to aid in build behavior control. The most relevant option to
-modsim projects will be ``--build-dir``, which allows project developers to change the build directory location from the
-command-line without modifying the ``SConstruct`` file source code. For example, when there are workflow tasks defined
-in the the ``SConstruct`` file, a call to ``scons`` would create the default build directory named ``build`` and a call
-to ``scons --build-dir=non_default_build`` would create a build directory named ``non_default_build``. The current
-SConstruct file will not produce these directories yet because there are no workflow tasks defined. The demonstration
-below shows how the build directory option will behave when workflow tasks are defined.
+modsim projects will be ``--build-dir`` and ``--abaqus-command``, which allow project developers to change the build
+directory location and Abaqus executable path from the command-line without modifying the ``SConstruct`` file source
+code.
+
+For example, when there are workflow tasks defined in the the ``SConstruct`` file, a call to ``scons`` would create the
+default build directory named ``build`` and a call to ``scons --build-dir=non_default_build`` would create a build
+directory named ``non_default_build``. The current SConstruct file will not produce these directories yet because there
+are no workflow tasks defined. The demonstration below shows how the build directory option will behave when workflow
+tasks are defined.
 
 .. warning::
 
@@ -112,6 +115,14 @@ below shows how the build directory option will behave when workflow tasks are d
    $ scons --build-dir=non_default_build
    $ ls
    build non_default_build SConstruct
+
+The ``--abaqus-command`` option will be useful if the tutorial files struggle to find your Abaqus installation. You can
+also edit the ``default_abaqus_commands`` list to include your Abaqus installation to avoid having to provide it on the
+command line every time you call ``scons``.
+
+.. code-block::
+
+   $ scons --abaqus-command=/path/to/installed/abaqus
 
 The ``--unconditional-build`` option is mostly useful for :ref:`testing` and continuous integration. It is used in the
 tutorial workflows to force a workflow to execute, even if the required programs are not found. This is useful for
