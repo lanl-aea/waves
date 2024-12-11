@@ -125,8 +125,14 @@ for program in required_programs:
 
 # Find tutorial/system test third-party software
 # TODO: separate Abaqus/Cubit construction environments for system testing
-env["abaqus"] = next((shutil.which(command, path=env["ENV"]["PATH"]) for command in env["abaqus_commands"]), "abaqus")
-env["cubit"] = next((shutil.which(command, path=env["ENV"]["PATH"]) for command in env["cubit_commands"]), "cubit")
+env["abaqus"] = next(
+    (shutil.which(command, path=env["ENV"]["PATH"]) for command in env["abaqus_commands"] if command is not None),
+    "abaqus",
+)
+env["cubit"] = next(
+    (shutil.which(command, path=env["ENV"]["PATH"]) for command in env["cubit_commands"] if command is not None),
+    "cubit",
+)
 
 # Build variable substitution dictionary
 project_substitution_dictionary = dict()
@@ -161,6 +167,8 @@ from SCons.Node.Alias import default_ans
 alias_help = "\nTarget Aliases:\n"
 for alias in default_ans:
     alias_help += f"    {alias}\n"
+alias_help += f"\nabaqus-command={env['abaqus']}"
+alias_help += f"\ncubit-command={env['cubit']}\n"
 try:
     Help(alias_help, append=True, keep_local=True)
 except TypeError as err:
