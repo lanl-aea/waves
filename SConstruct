@@ -107,6 +107,9 @@ env["abaqus_commands"] = env["abaqus_commands"] if env["abaqus_commands"] is not
 env["cubit_commands"] = env["cubit_commands"] if env["cubit_commands"] is not None else default_cubit_commands
 env["ENV"]["PYTHONDONTWRITEBYTECODE"] = 1
 
+# Empty defaults list to avoid building all simulation targets by default
+env.Default()
+
 # Handle OS-aware tee output
 system = platform.system().lower()
 if system == "windows":  # Assume PowerShell
