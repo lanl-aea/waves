@@ -139,7 +139,7 @@ require_third_party_system_tests = [
         [
             fetch_template,
             string.Template(
-                "scons . --sconstruct=tutorial_00_SConstruct ${unconditional_build} --print-build-failures"
+                "scons . --sconstruct=tutorial_00_SConstruct ${unconditional_build} --print-build-failures --abaqus-command=${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 0",
