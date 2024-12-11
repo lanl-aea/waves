@@ -459,6 +459,8 @@ require_third_party_system_tests = [
 def test_system(
     system_test_directory,
     unconditional_build,
+    abaqus_command,
+    cubit_command,
     request,
     commands: typing.Iterable[str],
     fetch_options: typing.Optional[str],
@@ -476,15 +478,20 @@ def test_system(
     * ``temp_directory``: temporary directory created one per test with ``tempfile``
     * ``unconditional_build``: pass through CLI argument string for the tutorial/system test SConstruct option of the
         same name
+    * ``abaqus_command``: pass through CLI argument string for tutorial/system test SConstruct option of the same name
+    * ``cubit_command``: pass through CLI argument string for tutorial/system test SConstruct option of the same name
 
-    Accepts a custom pytest CLI option to re-direct the temporary system test root directory away from ``$TMPDIR`` as
+    Accepts custom pytest CLI options to re-direct the temporary system test root directory away from ``$TMPDIR`` and
+    specify third-party software executables as
 
     .. code-block::
 
-       pytest --system-test-dir=/my/systemtest/output
+       pytest --system-test-dir=/my/systemtest/output --abaqus-command /my/system/abaqus --cubit-command /my/system/cubit
 
     :param system_test_directory: custom pytest decorator defined in conftest.py
     :param unconditional_build: custom pytest decorator defined in conftest.py
+    :param abaqus_command: string absolute path to Abaqus executable
+    :param cubit_command: string absolute path to Cubit executable
     :param request: pytest decorator with test case meta data
     :param commands: list of command strings for the system test
     :param fetch_options: the fetch arguments for replacement in string templates
@@ -509,6 +516,8 @@ def test_system(
         "fetch_options": fetch_options,
         "temp_directory": temp_path,
         "unconditional_build": "--unconditional-build" if unconditional_build else "",
+        "abaqus_command": abaqus_command,
+        "cubit_command": cubit_command,
     }
     try:
         for command in commands:
