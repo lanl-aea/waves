@@ -58,9 +58,31 @@ AddOption(
     default=False,
     action="store_true",
     # fmt: off
-    help="Boolean to force building of conditionally ignored targets, e.g. if the target's action program is missing"
-         " and it would normally be ignored. (default: '%default')"
+    help="Boolean to force building of conditionally ignored targets, e.g. if the target's action program is missing "
+         "and it would normally be ignored. (default: '%default')"
     # fmt: on
+)
+# Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
+default_abaqus_command = "/apps/abaqus/Commands/abq2024"
+AddOption(
+    "--abaqus-command",
+    dest="abaqus_command",
+    nargs=1,
+    type="string",
+    action="append",
+    metavar="COMMAND",
+    help=f"Override for the Abaqus command. Repeat to specify more than one (default: '[{default_abaqus_command}]')",
+)
+# Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
+default_cubit_command = "/apps/Cubit-16.16/cubit"
+AddOption(
+    "--cubit-command",
+    dest="cubit_command",
+    nargs=1,
+    type="string",
+    action="append",
+    metavar="COMMAND",
+    help=f"Override for the Cubit command. Repeat to specify more than one (default: '[{default_cubit_command}]')",
 )
 
 # ========================================================================================= CONSTRUCTION ENVIRONMENT ===
@@ -70,7 +92,12 @@ env = Environment(
     variant_dir_base=pathlib.Path(GetOption("variant_dir_base")),
     ignore_documentation=GetOption("ignore_documentation"),
     unconditional_build=GetOption("unconditional_build"),
+    abaqus_command=GetOption("abaqus_command"),
+    cubit_command=GetOption("cubit_command"),
 )
+# Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
+env["abaqus_command"] = env["abaqus_command"] if env["abaqus_command"] is not None else [default_abaqus_command]
+env["cubit_command"] = env["cubit_command"] if env["cubit_command"] is not None else [default_cubit_command]
 env["ENV"]["PYTHONDONTWRITEBYTECODE"] = 1
 
 # Find required programs for conditional target ignoring
