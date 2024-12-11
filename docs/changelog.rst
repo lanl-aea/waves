@@ -25,6 +25,7 @@ Internal Changes
   Brindley`_.
 - Enable Windows system test for the writing builders tutorial (:issue:`803`, :merge:`1054`). By `Kyle Brindley`_.
 - Enable Windows system test for visualize subcommand (:issue:`796`, :merge:`1055`). By `Kyle Brindley`_.
+- More robust modulefile decision in Quinoa tutorial (:issue:`836`, :merge:`1062`). By `Kyle Brindley`_.
 
 Enhancements
 ============
