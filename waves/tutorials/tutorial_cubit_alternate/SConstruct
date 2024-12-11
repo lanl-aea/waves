@@ -51,6 +51,20 @@ AddOption(
     metavar="COMMAND",
     help=f"Override for the Abaqus command. Repeat to specify more than one (default: {default_abaqus_commands})",
 )
+default_cubit_commands = [
+    "/apps/Cubit-16.12/cubit",
+    "/usr/projects/ea/Cubit/Cubit-16.12/cubit",
+    "cubit",
+]
+AddOption(
+    "--cubit-command",
+    dest="cubit_command",
+    nargs=1,
+    type="string",
+    action="append",
+    metavar="COMMAND",
+    help=f"Override for the Cubit command. Repeat to specify more than one (default: {default_cubit_commands})",
+)
 
 # Comments used in tutorial code snippets: marker-2
 
@@ -61,6 +75,7 @@ env = waves.scons_extensions.WAVESEnvironment(
     unconditional_build=GetOption("unconditional_build"),
     print_build_failures=GetOption("print_build_failures"),
     abaqus_commands=GetOption("abaqus_command"),
+    cubit_commands=GetOption("cubit_command"),
 )
 
 # Conditionally print failed task *.stdout files
@@ -78,7 +93,8 @@ env["FIERRO_IMPLICIT_PROGRAM"] = env.AddProgram(["fierro-parallel-implicit"])
 # parent Python 3 environment's PYTHONPATH
 envCubit = Environment(ENV=os.environ.copy())
 envCubit["python"] = waves.scons_extensions.add_cubit_python(
-    envCubit, ["/apps/Cubit-16.12/cubit", "/usr/projects/ea/Cubit/Cubit-16.12/cubit", "cubit"]
+    envCubit,
+    env["cubit_commands"] if env["cubit_commands"] is not None else default_cubit_commands
 )
 
 
@@ -155,7 +171,7 @@ for workflow in workflow_configurations:
     SConscript(
         workflow,
         variant_dir=build_dir,
-        exports={"env": env, "envCubit": envCubit, "envSierra": envSierra},
+        exports={"env": env, "envSierra": envSierra, "envCubit": envCubit},
         duplicate=False,
     )
 

@@ -210,7 +210,7 @@ require_third_party_system_tests = [
     pytest.param(
         [
             fetch_template,
-            string.Template("scons . ${unconditional_build} --print-build-failures --abaqus-command=${abaqus_command}")
+            string.Template("scons . ${unconditional_build} --print-build-failures --abaqus-command=${abaqus_command} --cubit-command=${cubit_command}")  # noqa: E501
         ],
         "tutorials/tutorial_cubit",
         marks=[
@@ -223,7 +223,7 @@ require_third_party_system_tests = [
     pytest.param(
         [
             fetch_template,
-            string.Template("scons . ${unconditional_build} --print-build-failures --abaqus-command=${abaqus_command}")
+            string.Template("scons . ${unconditional_build} --print-build-failures --abaqus-command=${abaqus_command} --cubit-command=${cubit_command}")  # noqa: E501
         ],
         "tutorials/tutorial_cubit_alternate",
         marks=[
@@ -236,7 +236,7 @@ require_third_party_system_tests = [
     pytest.param(
         [
             fetch_template,
-            string.Template("scons quinoa-local ${unconditional_build} --print-build-failures")
+            string.Template("scons quinoa-local ${unconditional_build} --print-build-failures --cubit-command=${cubit_command}")  # noqa: E501
         ],
         "tutorials/tutorial_quinoa",
         marks=[pytest.mark.require_third_party],
