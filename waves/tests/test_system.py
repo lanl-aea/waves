@@ -73,7 +73,7 @@ system_tests = [
         [
             fetch_template,
             "scons -h",
-            string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png"),
+            string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png --abaqus-command=${abaqus_command}"),  # noqa: E501
         ],
         "modsim_template",
         id="modsim_template_visualize_operations"
@@ -420,8 +420,8 @@ require_third_party_system_tests = [
     pytest.param(
         [
             fetch_template,
-            string.Template("scons . ${unconditional_build} --jobs=4"),
-            string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png"),
+            string.Template("scons . ${unconditional_build} --jobs=4 --abaqus-command=${abaqus_command}"),
+            string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png --abaqus-command=${abaqus_command}"),  # noqa: E501
             string.Template(
                 "${waves_command} print_study build/rectangle_compression-mesh_convergence/mesh_convergence.h5"
             ),
@@ -437,8 +437,8 @@ require_third_party_system_tests = [
     pytest.param(
         [
             fetch_template,
-            string.Template("scons . ${unconditional_build} --jobs=4"),
-            string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png"),
+            string.Template("scons . ${unconditional_build} --jobs=4 --abaqus-command=${abaqus_command}"),
+            string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png --abaqus-command=${abaqus_command}"),  # noqa: E501
             string.Template(
                 "${waves_command} print_study build/parameter_studies/rectangle_compression-mesh_convergence.h5"
             ),

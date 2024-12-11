@@ -42,6 +42,22 @@ AddOption(
     action="store_true",
     help="Print task *.stdout target file(s) on build failures. (default: '%default')",
 )
+# Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
+default_abaqus_commands =  [
+    "/apps/abaqus/Commands/abq2024",
+    "/usr/projects/ea/abaqus/Commands/abq2024",
+    "abq2024",
+    "abaqus",
+]
+AddOption(
+    "--abaqus-command",
+    dest="abaqus_command",
+    nargs=1,
+    type="string",
+    action="append",
+    metavar="COMMAND",
+    help=f"Override for the Abaqus command. Repeat to specify more than one (default: {default_abaqus_commands})",
+)
 
 # Inherit user's full environment and set project options
 env = waves.scons_extensions.WAVESEnvironment(
@@ -50,6 +66,7 @@ env = waves.scons_extensions.WAVESEnvironment(
     unconditional_build=GetOption("unconditional_build"),
     solve_cpus=GetOption("solve_cpus"),
     print_build_failures=GetOption("print_build_failures"),
+    abaqus_commands=GetOption("abaqus_command"),
     TARFLAGS="-c -j",
     TARSUFFIX=".tar.bz2",
 )
@@ -104,12 +121,7 @@ env.PrependENVPath("PYTHONPATH", project_dir)
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env["SPHINX_BUILD"] = env.AddProgram(["sphinx-build"])
 env["ABAQUS_PROGRAM"] = env.AddProgram(
-    [
-        "/apps/abaqus/Commands/abq2024",
-        "/usr/projects/ea/abaqus/Commands/abq2024",
-        "abq2024",
-        "abaqus",
-    ]
+    env["abaqus_commands"] if env["abaqus_commands"] is not None else default_abaqus_commands
 )
 
 # Add WAVES builders and scanners

@@ -66,8 +66,9 @@ env.PrintBuildFailures(print_stdout=env["print_build_failures"])
 # Comments used in tutorial code snippets: marker-3
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
-abaqus_commands = env["abaqus_commands"] if env["abaqus_commands"] is not None else default_abaqus_commands
-env["ABAQUS_PROGRAM"] = env.AddProgram(abaqus_commands)
+env["ABAQUS_PROGRAM"] = env.AddProgram(
+    env["abaqus_commands"] if env["abaqus_commands"] is not None else default_abaqus_commands
+)
 
 # Comments used in tutorial code snippets: marker-4
 
