@@ -17,6 +17,20 @@ def pytest_addoption(parser):
         default=False,
         help="pass unconditional build option to system tests",
     )
+    parser.addoption(
+        "--abaqus-command",
+        action="store",
+        type=pathlib.Path,
+        default=None,
+        help="Abaqus command for system test CLI pass through",
+    )
+    parser.addoption(
+        "--cubit-command",
+        action="store",
+        type=pathlib.Path,
+        default=None,
+        help="Cubit command for system test CLI pass through",
+    )
 
 
 @pytest.fixture
@@ -27,3 +41,13 @@ def system_test_directory(request):
 @pytest.fixture
 def unconditional_build(request):
     return request.config.getoption("--unconditional-build")
+
+
+@pytest.fixture
+def abaqus_command(request):
+    return request.config.getoption("--abaqus-command")
+
+
+@pytest.fixture
+def cubit_command(request):
+    return request.config.getoption("--cubit-command")
