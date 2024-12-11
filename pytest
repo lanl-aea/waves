@@ -22,7 +22,7 @@ pytest_node = env.Command(
     source=pytest_source_list,
     action=[
         (
-            "${pytest_command} -vvv -m 'not systemtest' --cov --cov-report=term "
+            '${pytest_command} -vvv -m "not systemtest" --cov --cov-report=term '
             "--cov-report=xml:${TARGETS[0].abspath} --cov-report=html:${TARGETS[1].abspath}"
         )
     ],
