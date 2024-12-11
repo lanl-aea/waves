@@ -98,6 +98,7 @@ Running a Datacheck
     .. literalinclude:: tutorials_tutorial_04_simulation
        :language: Python
        :lineno-match:
+       :emphasize-lines: 5-6
        :start-after: marker-4
        :end-before: marker-5
 
@@ -198,11 +199,11 @@ tutorial. Note the addition of a separate datacheck alias, which will be used in
 SConstruct
 **********
 
-9. Make the following additions to the ``waves-tutorials/SConstruct`` file using the ``diff`` against the
+9. Make the following additions to the ``SConstruct`` file using the ``diff`` against the
    ``SConstruct`` file from the last tutorial:
 
-   * Add the ``AbaqusSolver`` key-value pair to the ``BUILDERS`` dictionary in the code beneath ``# Add custom
-     builders``
+   * Add the ``AbaqusSolver`` key-value pair to the ``BUILDERS`` dictionary in the code beneath ``# Add builders and
+     pseudo-builders``
    * Add ``tutorial_04_simulation`` to the ``workflow_configurations`` list
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_solverprep` is included below to help identify the
@@ -276,15 +277,15 @@ below.
     |-- rectangle_compression.sta
     |-- rectangle_compression.stdout
     |-- rectangle_geometry.cae
+    |-- rectangle_geometry.cae.stdout
     |-- rectangle_geometry.jnl
-    |-- rectangle_geometry.stdout
     |-- rectangle_mesh.cae
     |-- rectangle_mesh.inp
+    |-- rectangle_mesh.inp.stdout
     |-- rectangle_mesh.jnl
-    |-- rectangle_mesh.stdout
     |-- rectangle_partition.cae
-    |-- rectangle_partition.jnl
-    `-- rectangle_partition.stdout
+    |-- rectangle_partition.cae.stdout
+    `-- rectangle_partition.jnl
 
     0 directories, 28 files
 
