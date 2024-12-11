@@ -4,6 +4,8 @@
     - aea_compute_path="/projects/aea_compute"
     - scratch_path="/scratch/${USER}"
     - ci_environment_path="${aea_compute_path}"
+    - abaqus_command="/apps/abaqus/Commands/abq2024"
+    - cubit_command="/apps/Cubit-16.16/cubit"
     - hostname=$(hostname -f)
     # Handle HPC specific configuration
     - |
@@ -11,6 +13,8 @@
            aea_compute_path="/usr/projects/ea/aea_compute";
            scratch_path="/lustre/roscratch1/${USER}";
            ci_environment_path=${scratch_path};
+           abaqus_command="/usr/projects/ea/abaqus/Commands/abq2024"
+           cubit_command="/usr/projects/ea/Cubit/Cubit-16.16/cubit"
            export HTTPS_PROXY="proxyout.lanl.gov:8080"
        fi
     - echo ${aea_compute_path}
@@ -65,7 +69,7 @@
   variables:
     GIT_STRATEGY: clone
   script:
-    - scons regression --keep-going --unconditional-build
+    - scons regression --keep-going --unconditional-build --abaqus-command=${abaqus_command} --cubit-command=${cubit_command}
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
     reports:
