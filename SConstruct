@@ -64,7 +64,10 @@ AddOption(
     # fmt: on
 )
 # Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
-default_abaqus_command = "/apps/abaqus/Commands/abq2024"
+default_abaqus_commands = [
+    "/apps/abaqus/Commands/abq2024",
+    "/usr/projects/ea/abaqus/Commands/abq2024",
+]
 AddOption(
     "--abaqus-command",
     dest="abaqus_command",
@@ -72,10 +75,13 @@ AddOption(
     type="string",
     action="append",
     metavar="COMMAND",
-    help=f"Override for the Abaqus command. Repeat to specify more than one (default: '[{default_abaqus_command}]')",
+    help=f"Override for the Abaqus command. Repeat to specify more than one (default: {default_abaqus_commands})",
 )
 # Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
-default_cubit_command = "/apps/Cubit-16.16/cubit"
+default_cubit_commands = [
+    "/apps/Cubit-16.16/cubit",
+    "/usr/projects/ea/Cubit/Cubit-16.12/cubit",
+]
 AddOption(
     "--cubit-command",
     dest="cubit_command",
@@ -83,7 +89,7 @@ AddOption(
     type="string",
     action="append",
     metavar="COMMAND",
-    help=f"Override for the Cubit command. Repeat to specify more than one (default: '[{default_cubit_command}]')",
+    help=f"Override for the Cubit command. Repeat to specify more than one (default: {default_cubit_commands})",
 )
 
 # ========================================================================================= CONSTRUCTION ENVIRONMENT ===
@@ -93,12 +99,12 @@ env = Environment(
     variant_dir_base=pathlib.Path(GetOption("variant_dir_base")),
     ignore_documentation=GetOption("ignore_documentation"),
     unconditional_build=GetOption("unconditional_build"),
-    abaqus_command=GetOption("abaqus_command"),
-    cubit_command=GetOption("cubit_command"),
+    abaqus_commands=GetOption("abaqus_command"),
+    cubit_commands=GetOption("cubit_command"),
 )
 # Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
-env["abaqus_command"] = env["abaqus_command"] if env["abaqus_command"] is not None else [default_abaqus_command]
-env["cubit_command"] = env["cubit_command"] if env["cubit_command"] is not None else [default_cubit_command]
+env["abaqus_commands"] = env["abaqus_commands"] if env["abaqus_commands"] is not None else default_abaqus_commands
+env["cubit_commands"] = env["cubit_commands"] if env["cubit_commands"] is not None else default_cubit_commands
 env["ENV"]["PYTHONDONTWRITEBYTECODE"] = 1
 
 # Handle OS-aware tee output
@@ -116,8 +122,8 @@ for program in required_programs:
 
 # Find tutorial/system test third-party software
 # TODO: separate Abaqus/Cubit construction environments for system testing
-env["abaqus"] = shutil.which(env["abaqus_command"][0], path=env["ENV"]["PATH"])
-env["cubit"] = shutil.which(env["cubit_command"][0], path=env["ENV"]["PATH"])
+env["abaqus"] = next((shutil.which(command, path=env["ENV"]["PATH"]) for command in env["abaqus_commands"]), "abaqus")
+env["cubit"] = next((shutil.which(command, path=env["ENV"]["PATH"]) for command in env["cubit_commands"]), "cubit")
 
 # Build variable substitution dictionary
 project_substitution_dictionary = dict()
