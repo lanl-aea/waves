@@ -101,7 +101,7 @@ require_third_party_system_tests = [
     # Tutorials
     pytest.param(
         [fetch_template, string.Template("scons rectangle ${unconditional_build} --abaqus-command=${abaqus_command}")],
-        "tutorials/scons_quickstart"
+        "tutorials/scons_quickstart",
         marks=[pytest.mark.require_third_party],
     ),
     pytest.param(
