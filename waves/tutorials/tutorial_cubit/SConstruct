@@ -161,7 +161,7 @@ for workflow in workflow_configurations:
         workflow,
         variant_dir=build_dir,
         exports={"env": env, "envSierra": envSierra},
-        duplicate=False
+        duplicate=False,
     )
 
 # Comments used in tutorial code snippets: marker-7

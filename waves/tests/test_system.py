@@ -11,6 +11,7 @@ All tests that require a third-party software unavailable on conda-forge should 
 All tests should use string template substitution instead of f-strings, if possible. See :meth:`test_system` for
 available substitutions.
 """
+
 import os
 import re
 import shlex
@@ -76,7 +77,7 @@ system_tests = [
             string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png"),
         ],
         "modsim_template",
-        id="modsim_template_visualize_operations"
+        id="modsim_template_visualize_operations",
     ),
     pytest.param(
         [string.Template("${waves_command} docs --print-local-path")],
@@ -111,8 +112,8 @@ require_third_party_system_tests = [
             pytest.mark.require_third_party,
             pytest.mark.skipif(
                 testing_windows and not installed, reason="Windows handles symlinks in repository poorly"
-            )
-        ]
+            ),
+        ],
     ),
     pytest.param(
         [
@@ -124,17 +125,14 @@ require_third_party_system_tests = [
         marks=[pytest.mark.require_third_party],
     ),
     pytest.param(
-        [
-            fetch_template,
-            string.Template("scons rectangle ${unconditional_build}")
-        ],
+        [fetch_template, string.Template("scons rectangle ${unconditional_build}")],
         "tutorials/tutorial_gmsh",
         marks=[pytest.mark.require_third_party],
     ),
     pytest.param(
         [
             fetch_template,
-            string.Template("scons submit_beam_cae ${unconditional_build} --abaqus-command=${abaqus_command}")
+            string.Template("scons submit_beam_cae ${unconditional_build} --abaqus-command=${abaqus_command}"),
         ],
         "tutorials/tutorial_abaqus_cae",
         marks=[pytest.mark.require_third_party],
@@ -165,7 +163,7 @@ require_third_party_system_tests = [
         marks=[
             pytest.mark.require_third_party,
             pytest.mark.skip("Too few licenses to reliably pass"),
-        ]
+        ],
     ),
     pytest.param(
         [
@@ -210,7 +208,9 @@ require_third_party_system_tests = [
     pytest.param(
         [
             fetch_template,
-            string.Template("scons . ${unconditional_build} --print-build-failures --abaqus-command=${abaqus_command} --cubit-command=${cubit_command}")  # noqa: E501
+            string.Template(
+                "scons . ${unconditional_build} --print-build-failures --abaqus-command=${abaqus_command} --cubit-command=${cubit_command}"  # noqa: E501
+            ),
         ],
         "tutorials/tutorial_cubit",
         marks=[
@@ -218,12 +218,14 @@ require_third_party_system_tests = [
             pytest.mark.skipif(
                 testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
             ),
-        ]
+        ],
     ),
     pytest.param(
         [
             fetch_template,
-            string.Template("scons . ${unconditional_build} --print-build-failures --abaqus-command=${abaqus_command} --cubit-command=${cubit_command}")  # noqa: E501
+            string.Template(
+                "scons . ${unconditional_build} --print-build-failures --abaqus-command=${abaqus_command} --cubit-command=${cubit_command}"  # noqa: E501
+            ),
         ],
         "tutorials/tutorial_cubit_alternate",
         marks=[
@@ -231,12 +233,14 @@ require_third_party_system_tests = [
             pytest.mark.skipif(
                 testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
             ),
-        ]
+        ],
     ),
     pytest.param(
         [
             fetch_template,
-            string.Template("scons quinoa-local ${unconditional_build} --print-build-failures --cubit-command=${cubit_command}")  # noqa: E501
+            string.Template(
+                "scons quinoa-local ${unconditional_build} --print-build-failures --cubit-command=${cubit_command}"  # noqa: E501
+            ),
         ],
         "tutorials/tutorial_quinoa",
         marks=[pytest.mark.require_third_party],
@@ -264,7 +268,7 @@ require_third_party_system_tests = [
         marks=[
             pytest.mark.require_third_party,
             pytest.mark.skip("Can't reliably authenticate to the remote server"),
-        ]
+        ],
     ),
     pytest.param(
         [
@@ -431,7 +435,9 @@ require_third_party_system_tests = [
         [
             fetch_template,
             string.Template("scons . ${unconditional_build} --jobs=4 --abaqus-command=${abaqus_command}"),
-            string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png --abaqus-command=${abaqus_command}"),  # noqa: E501
+            string.Template(
+                "${waves_command} visualize rectangle_compression-nominal --output-file nominal.png --abaqus-command=${abaqus_command}"  # noqa: E501
+            ),
             string.Template(
                 "${waves_command} print_study build/rectangle_compression-mesh_convergence/mesh_convergence.h5"
             ),
@@ -442,13 +448,15 @@ require_third_party_system_tests = [
             pytest.mark.skipif(
                 testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus"
             ),
-        ]
+        ],
     ),
     pytest.param(
         [
             fetch_template,
             string.Template("scons . ${unconditional_build} --jobs=4 --abaqus-command=${abaqus_command}"),
-            string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png --abaqus-command=${abaqus_command}"),  # noqa: E501
+            string.Template(
+                "${waves_command} visualize rectangle_compression-nominal --output-file nominal.png --abaqus-command=${abaqus_command}"  # noqa: E501
+            ),
             string.Template(
                 "${waves_command} print_study build/parameter_studies/rectangle_compression-mesh_convergence.h5"
             ),
@@ -459,7 +467,7 @@ require_third_party_system_tests = [
             pytest.mark.skipif(
                 testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus"
             ),
-        ]
+        ],
     ),
 ]
 

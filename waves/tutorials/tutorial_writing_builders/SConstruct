@@ -57,8 +57,7 @@ if env["solver"] is None:
 env.Append(
     BUILDERS={
         "Solver": scons_extensions.solver_builder_factory(
-            program=env["solver"],
-            subcommand_options="$(--solve-cpus=${solve_cpus}$)"
+            program=env["solver"], subcommand_options="$(--solve-cpus=${solve_cpus}$)"
         ),
     }
 )

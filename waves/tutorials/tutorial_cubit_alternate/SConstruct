@@ -94,7 +94,7 @@ env["FIERRO_IMPLICIT_PROGRAM"] = env.AddProgram(["fierro-parallel-implicit"])
 envCubit = Environment(ENV=os.environ.copy())
 envCubit["python"] = waves.scons_extensions.add_cubit_python(
     envCubit,
-    env["cubit_commands"] if env["cubit_commands"] is not None else default_cubit_commands
+    env["cubit_commands"] if env["cubit_commands"] is not None else default_cubit_commands,
 )
 
 

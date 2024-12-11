@@ -7,7 +7,10 @@ env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
 )
 test_builder = Builder(
-    action=["echo $SOURCES.abspath > $TARGET.abspath", "echo 'parameter one: $parameter_one' >> $TARGET.abspath",]
+    action=[
+        "echo $SOURCES.abspath > $TARGET.abspath",
+        "echo 'parameter one: $parameter_one' >> $TARGET.abspath",
+    ]
 )
 env.Append(BUILDERS={"TestBuilder": test_builder})
 

@@ -55,9 +55,7 @@ env.Default()
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 conf = env.Configure()
 env["ABAQUS_PROGRAM"] = conf.CheckProg(
-    env.Detect(
-        env["abaqus_commands"] if env["abaqus_commands"] is not None else default_abaqus_commands
-    )
+    env.Detect(env["abaqus_commands"] if env["abaqus_commands"] is not None else default_abaqus_commands)
 )
 conf.Finish()
 if env["ABAQUS_PROGRAM"]:

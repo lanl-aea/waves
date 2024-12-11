@@ -292,7 +292,7 @@ create_valid_identifier = {
 @pytest.mark.parametrize(
     "identifier, expected",
     create_valid_identifier.values(),
-    ids=create_valid_identifier.keys()
+    ids=create_valid_identifier.keys(),
 )
 def test_create_valid_identifier(identifier, expected) -> None:
     returned = _utilities.create_valid_identifier(identifier)
