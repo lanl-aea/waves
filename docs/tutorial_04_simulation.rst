@@ -38,7 +38,7 @@ Directory Structure
         $ waves fetch --overwrite --tutorial 3 && mv tutorial_03_solverprep_SConstruct SConstruct
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Download and copy the ``tutorial_03_solverprep`` file to a new file named ``tutorial_04_simulation``
+4. Fetch the ``tutorial_03_solverprep`` file and create a new file named ``tutorial_04_simulation``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
