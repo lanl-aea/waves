@@ -45,6 +45,7 @@ env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
     build_dir=pathlib.Path(GetOption("build_dir")),
     unconditional_build=GetOption("unconditional_build"),
+    abaqus_commands=GetOption("abaqus_command"),
 )
 env["parameter_study_directory"] = env["build_dir"] / "parameter_studies"
 
@@ -56,12 +57,7 @@ env.Default()
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env["ABAQUS_PROGRAM"] = env.AddProgram(
-    [
-        "/apps/abaqus/Commands/abq2024",
-        "/usr/projects/ea/abaqus/Commands/abq2024",
-        "abq2024",
-        "abaqus",
-    ]
+    env["abaqus_commands"] if env["abaqus_commands"] is not None else default_abaqus_commands
 )
 
 # Add WAVES builders

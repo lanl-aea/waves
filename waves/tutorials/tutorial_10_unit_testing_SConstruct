@@ -58,6 +58,7 @@ env = waves.scons_extensions.WAVESEnvironment(
     variant_dir_base=pathlib.Path(GetOption("variant_dir_base")),
     unconditional_build=GetOption("unconditional_build"),
     print_build_failures=GetOption("print_build_failures"),
+    abaqus_commands=GetOption("abaqus_command"),
 )
 
 # Conditionally print failed task *.stdout files
@@ -67,12 +68,7 @@ env.PrintBuildFailures(print_stdout=env["print_build_failures"])
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env["ABAQUS_PROGRAM"] = env.AddProgram(
-    [
-        "/apps/abaqus/Commands/abq2024",
-        "/usr/projects/ea/abaqus/Commands/abq2024",
-        "abq2024",
-        "abaqus",
-    ]
+    env["abaqus_commands"] if env["abaqus_commands"] is not None else default_abaqus_commands
 )
 
 # Comments used in tutorial code snippets: marker-4

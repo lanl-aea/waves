@@ -43,6 +43,7 @@ env = Environment(
     ENV=os.environ.copy(),
     build_dir=GetOption("build_dir"),
     unconditional_build=GetOption("unconditional_build"),
+    abaqus_commands=GetOption("abaqus_command"),
 )
 
 # Always copy (no sym-links) when duplicating
@@ -55,12 +56,7 @@ env.Default()
 conf = env.Configure()
 env["ABAQUS_PROGRAM"] = conf.CheckProg(
     env.Detect(
-        [
-            "/apps/abaqus/Commands/abq2024",
-            "/usr/projects/ea/abaqus/Commands/abq2024",
-            "abq2024",
-            "abaqus",
-        ]
+        env["abaqus_commands"] if env["abaqus_commands"] is not None else default_abaqus_commands
     )
 )
 conf.Finish()
