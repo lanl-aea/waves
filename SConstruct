@@ -116,6 +116,8 @@ for program in required_programs:
 
 # Find tutorial/system test third-party software
 # TODO: separate Abaqus/Cubit construction environments for system testing
+env["abaqus"] = shutil.which(env["abaqus_command"][0], path=env["ENV"]["PATH"])
+env["cubit"] = shutil.which(env["cubit_command"][0], path=env["ENV"]["PATH"])
 
 # Build variable substitution dictionary
 project_substitution_dictionary = dict()
