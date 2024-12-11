@@ -65,14 +65,12 @@ env["SBATCH_PROGRAM"] = env.AddProgram(["sbatch"])
 env["user"] = getpass.getuser()
 
 # Try a preference ordered list of project server-specific environment modulefiles
-quinoa_aea_modulefile = pathlib.Path("/projects/aea_compute/modulefiles/aea-quinoa")
 quinoa_hpc_modulefile = pathlib.Path("/usr/projects/ea/Quinoa/modules/modulefiles/quinoa")
-if quinoa_aea_modulefile.exists():
-    quinoa_modulefile = quinoa_aea_modulefile
-elif quinoa_hpc_modulefile.exists():
-    quinoa_modulefile = quinoa_hpc_modulefile
-else:
-    quinoa_modulefile = None
+quinoa_modulefile_options = [
+    pathlib.Path("/projects/aea_compute/modulefiles/aea-quinoa"),
+    quinoa_hpc_modulefile,
+]
+quinoa_modulefile = next((path for path in quinoa_modulefile_options if path.exists()), None)
 
 # Comments used in tutorial code snippets: marker-4
 
