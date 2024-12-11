@@ -103,13 +103,14 @@ require_third_party_system_tests = [
     pytest.param(
         [fetch_template, string.Template("scons rectangle ${unconditional_build} --abaqus-command=${abaqus_command}")],
         "tutorials/scons_quickstart",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     pytest.param(
         [fetch_template, string.Template("scons rectangle ${unconditional_build} --abaqus-command=${abaqus_command}")],
         "tutorials/multi_action_task",
         marks=[
             pytest.mark.require_third_party,
+            pytest.mark.abaqus,
             pytest.mark.skipif(
                 testing_windows and not installed, reason="Windows handles symlinks in repository poorly"
             ),
@@ -122,12 +123,12 @@ require_third_party_system_tests = [
             string.Template("${waves_command} print_study build/parameter_studies/mesh_convergence.h5"),
         ],
         "tutorials/waves_quickstart",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     pytest.param(
         [fetch_template, string.Template("scons rectangle ${unconditional_build}")],
         "tutorials/tutorial_gmsh",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.gmsh, pytest.mark.calculix],
     ),
     pytest.param(
         [
@@ -135,7 +136,7 @@ require_third_party_system_tests = [
             string.Template("scons submit_beam_cae ${unconditional_build} --abaqus-command=${abaqus_command}"),
         ],
         "tutorials/tutorial_abaqus_cae",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     pytest.param(
         [
@@ -155,13 +156,14 @@ require_third_party_system_tests = [
             ),
         ],
         "--tutorial 1",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     pytest.param(
         [fetch_template, "scons tutorial_matlab --sconstruct=tutorial_matlab_SConstruct"],
         "tutorials",
         marks=[
             pytest.mark.require_third_party,
+            pytest.mark.matlab,
             pytest.mark.skip("Too few licenses to reliably pass"),
         ],
     ),
@@ -173,7 +175,7 @@ require_third_party_system_tests = [
             ),
         ],
         "--tutorial 2",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     pytest.param(
         [
@@ -183,7 +185,7 @@ require_third_party_system_tests = [
             ),
         ],
         "tutorials",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     pytest.param(
         [
@@ -193,7 +195,7 @@ require_third_party_system_tests = [
             ),
         ],
         "--tutorial 3",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     pytest.param(
         [
@@ -203,7 +205,7 @@ require_third_party_system_tests = [
             ),
         ],
         "--tutorial 4",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     pytest.param(
         [
@@ -215,6 +217,10 @@ require_third_party_system_tests = [
         "tutorials/tutorial_cubit",
         marks=[
             pytest.mark.require_third_party,
+            pytest.mark.abaqus,
+            pytest.mark.cubit,
+            pytest.mark.fierro,
+            pytest.mark.sierra,
             pytest.mark.skipif(
                 testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
             ),
@@ -230,6 +236,10 @@ require_third_party_system_tests = [
         "tutorials/tutorial_cubit_alternate",
         marks=[
             pytest.mark.require_third_party,
+            pytest.mark.abaqus,
+            pytest.mark.cubit,
+            pytest.mark.fierro,
+            pytest.mark.sierra,
             pytest.mark.skipif(
                 testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
             ),
@@ -243,7 +253,7 @@ require_third_party_system_tests = [
             ),
         ],
         "tutorials/tutorial_quinoa",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.cubit, pytest.mark.quinoa],
     ),
     pytest.param(
         [
@@ -253,7 +263,7 @@ require_third_party_system_tests = [
             ),
         ],
         "tutorials",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     # TODO: Figure out how to authenticate the institutional account without expanding the user credential exposure to
     # AEA Gitlab group members. Until then, the SSH remote execution can't be integration/regression tested.
@@ -267,6 +277,7 @@ require_third_party_system_tests = [
         "tutorials",
         marks=[
             pytest.mark.require_third_party,
+            pytest.mark.abaqus,
             pytest.mark.skip("Can't reliably authenticate to the remote server"),
         ],
     ),
@@ -278,7 +289,7 @@ require_third_party_system_tests = [
             ),
         ],
         "tutorials",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     pytest.param(
         [
@@ -288,7 +299,7 @@ require_third_party_system_tests = [
             ),
         ],
         "--tutorial 5",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     pytest.param(
         [
@@ -298,7 +309,7 @@ require_third_party_system_tests = [
             ),
         ],
         "--tutorial 6",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     pytest.param(
         [
@@ -308,7 +319,7 @@ require_third_party_system_tests = [
             ),
         ],
         "--tutorial 7",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     pytest.param(
         [
@@ -318,7 +329,7 @@ require_third_party_system_tests = [
             ),
         ],
         "tutorials",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     pytest.param(
         [
@@ -328,7 +339,7 @@ require_third_party_system_tests = [
             ),
         ],
         "tutorials",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     pytest.param(
         [
@@ -338,7 +349,7 @@ require_third_party_system_tests = [
             ),
         ],
         "--tutorial 8",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     pytest.param(
         [
@@ -348,7 +359,7 @@ require_third_party_system_tests = [
             ),
         ],
         "--tutorial 9",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     pytest.param(
         [
@@ -358,7 +369,7 @@ require_third_party_system_tests = [
             ),
         ],
         "--tutorial 10",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     pytest.param(
         [
@@ -368,7 +379,7 @@ require_third_party_system_tests = [
             ),
         ],
         "tutorials",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     pytest.param(
         [
@@ -378,7 +389,7 @@ require_third_party_system_tests = [
             ),
         ],
         "--tutorial 11",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     pytest.param(
         [
@@ -388,7 +399,7 @@ require_third_party_system_tests = [
             ),
         ],
         "--tutorial 12",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     pytest.param(
         [
@@ -398,7 +409,7 @@ require_third_party_system_tests = [
             ),
         ],
         "tutorials",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     pytest.param(
         [
@@ -408,7 +419,7 @@ require_third_party_system_tests = [
             ),
         ],
         "tutorials",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     pytest.param(
         [
@@ -418,7 +429,7 @@ require_third_party_system_tests = [
             ),
         ],
         "tutorials",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     pytest.param(
         [
@@ -428,7 +439,7 @@ require_third_party_system_tests = [
             ),
         ],
         "tutorials",
-        marks=[pytest.mark.require_third_party],
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     # ModSim templates
     pytest.param(
@@ -445,6 +456,7 @@ require_third_party_system_tests = [
         "modsim_template",
         marks=[
             pytest.mark.require_third_party,
+            pytest.mark.abaqus,
             pytest.mark.skipif(
                 testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus"
             ),
@@ -464,6 +476,7 @@ require_third_party_system_tests = [
         "modsim_template_2",
         marks=[
             pytest.mark.require_third_party,
+            pytest.mark.abaqus,
             pytest.mark.skipif(
                 testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus"
             ),

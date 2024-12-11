@@ -62,6 +62,14 @@ write_to = "waves/_version.py"
 markers = [
     "systemtest: marks system tests, e.g. the tutorials",
     "require_third_party: marks system tests that require third-party software command line calls",
+    "abaqus: tests requiring the Abaqus executable",
+    "calculix: tests requiring the CalculiX executable",
+    "cubit: tests requiring the Cubit executable",
+    "fierro: tests requiring the Fierro executable",
+    "gmsh: tests requiring the Gmsh executable",
+    "matlab: tests requiring the Matlab executable",
+    "quinoa: tests requiring the Quinoa executable",
+    "sierra: tests requiring the Sierra executable",
 ]
 addopts = "--ignore='waves/modsim_template/' --ignore='modsim_template/' --ignore='waves/modsim_template_2/' --ignore='modsim_template_2/' --ignore='waves/tutorials/' --ignore='tutorials/' --tb=long --showlocals --failed-first --strict-markers -m 'not systemtest'"
 
