@@ -33,7 +33,7 @@ AddOption(
     help="Print task *.stdout target file(s) on build failures. (default: '%default')",
 )
 # Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
-default_abaqus_commands =  [
+default_abaqus_commands = [
     "/apps/abaqus/Commands/abq2024",
     "/usr/projects/ea/abaqus/Commands/abq2024",
     "abq2024",
