@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import os
+import shutil
 import pathlib
 import platform
 import warnings
@@ -100,19 +101,21 @@ env["abaqus_command"] = env["abaqus_command"] if env["abaqus_command"] is not No
 env["cubit_command"] = env["cubit_command"] if env["cubit_command"] is not None else [default_cubit_command]
 env["ENV"]["PYTHONDONTWRITEBYTECODE"] = 1
 
-# Find required programs for conditional target ignoring
-required_programs = ["sphinx-build", "latexmk"]
-conf = env.Configure()
-for program in required_programs:
-    env[program.replace("-", "_")] = conf.CheckProg(program)
-conf.Finish()
-
 # Handle OS-aware tee output
 system = platform.system().lower()
 if system == "windows":  # Assume PowerShell
     env["tee_suffix"] = "$(| Tee-Object -FilePath ${TARGETS[-1].abspath}$)"
 else:  # *Nix style tee
     env["tee_suffix"] = "$(2>&1 | tee ${TARGETS[-1].abspath}$)"
+
+# Find required programs for conditional target ignoring
+required_programs = ["sphinx-build", "latexmk"]
+for program in required_programs:
+    absolute_path = env[program.replace("-", "_")] = shutil.which(program, path=env["ENV"]["PATH"])
+    print(f"Checking whether '{program}' program exists...{absolute_path}")
+
+# Find tutorial/system test third-party software
+# TODO: separate Abaqus/Cubit construction environments for system testing
 
 # Build variable substitution dictionary
 project_substitution_dictionary = dict()
