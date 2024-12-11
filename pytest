@@ -21,10 +21,12 @@ pytest_node = env.Command(
     target=["coverage.xml", Dir("./coverage")],
     source=pytest_source_list,
     action=[
-        '${pytest_command} -vvv -m "not systemtest" ${coverage}',
+        (
+            "${pytest_command} -vvv -m 'not systemtest' --cov --cov-report=term "
+            "--cov-report=xml:${TARGETS[0].abspath} --cov-report=html:${TARGETS[1].abspath}"
+        )
     ],
     pytest_command=pytest_command,
-    coverage="--cov --cov-report=term --cov-report=xml:${TARGETS[0].abspath} --cov-report=html:${TARGETS[1].abspath}",
 )
 env.Alias("pytest", pytest_node)
 env.Clean("pytest", Dir("./coverage"))
