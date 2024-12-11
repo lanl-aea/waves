@@ -19,6 +19,8 @@ aea:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  variables:
+    PARENT_CI_PIPELINE_SOURCE: $CI_PIPELINE_SOURCE
 
 hpc:
   stage: child-pipelines
@@ -28,6 +30,8 @@ hpc:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  variables:
+    PARENT_CI_PIPELINE_SOURCE: $CI_PIPELINE_SOURCE
 
 win:
   stage: child-pipelines
