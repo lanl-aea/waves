@@ -63,8 +63,16 @@ env["CUBIT_PROGRAM"] = env.AddCubit(
 )
 env["SBATCH_PROGRAM"] = env.AddProgram(["sbatch"])
 env["user"] = getpass.getuser()
-quinoa_hpc_environment = "module use /usr/projects/ea/Quinoa/modules/modulefiles && module load quinoa"
-quinoa_aea_environment = "module use /projects/aea_compute/modulefiles && module load aea-quinoa"
+
+# Try a preference ordered list of project server-specific environment modulefiles
+quinoa_aea_modulefile = pathlib.Path("/projects/aea_compute/modulefiles/aea-quinoa")
+quinoa_hpc_modulefile = pathlib.Path("/usr/projects/ea/Quinoa/modules/modulefiles/quinoa")
+if quinoa_aea_modulefile.exists():
+    quinoa_modulefile = quinoa_aea_modulefile
+elif quinoa_hpc_modulefile.exists():
+    quinoa_modulefile = quinoa_hpc_modulefile
+else:
+    quinoa_modulefile = None
 
 # Comments used in tutorial code snippets: marker-4
 
@@ -87,20 +95,21 @@ for key, value in project_variables.items():
 env.Append(
     BUILDERS={
         "SSHQuinoaSolver": waves.scons_extensions.ssh_builder_actions(
-            waves.scons_extensions.sbatch_quinoa_builder_factory(environment=f"{quinoa_hpc_environment} &&"),
+            waves.scons_extensions.sbatch_quinoa_builder_factory(
+                environment=f"module use {quinoa_hpc_modulefile.parent} && module load {quinoa_hpc_modulefile.name} &&"
+            ),
             remote_server="ro-rfe.lanl.gov",
         )
     }
 )
 
 # Source the Quinoa environment and store it separately from the Conda/Cubit environment to avoid PATH interference
-try:  # sstelmo/sstbigbird
-    envQuinoa = waves.scons_extensions.shell_environment(quinoa_aea_environment)
-except subprocess.CalledProcessError:  # HPC
-    try:
-        envQuinoa = waves.scons_extensions.shell_environment(quinoa_hpc_environment)
-    except subprocess.CalledProcessError:  # Give up
-        envQuinoa = Environment()
+if quinoa_modulefile:
+    envQuinoa = waves.scons_extensions.shell_environment(
+        f"module use {quinoa_modulefile.parent} && module load {quinoa_modulefile.name}"
+    )
+else:
+    envQuinoa = Environment()
 envQuinoa.AddMethod(waves.scons_extensions.add_program, "AddProgram")
 envQuinoa["inciter"] = envQuinoa.AddProgram(["inciter"])
 envQuinoa["charmrun"] = envQuinoa.AddProgram(["charmrun"])
