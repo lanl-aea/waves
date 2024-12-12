@@ -1,8 +1,9 @@
+include: ".pipeline-common.yml"
+
 stages:
   - environment
   - test
-
-include: ".pipeline-common.yml"
+  - deploy
 
 aea-environment:
   extends:
@@ -20,7 +21,8 @@ aea-fast-test:
     - .fast-test
   stage: test
   rules:
-    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
+    - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
+    - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
   tags:
     - shell-aea
 
@@ -30,7 +32,8 @@ aea-style-guide:
     - .style-guide
   stage: test
   rules:
-    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
+    - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
+    - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
   tags:
     - shell-aea
 
@@ -53,12 +56,102 @@ aea-conda-build-external:
     GIT_STRATEGY: clone
   dependencies: []
   rules:
-    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
+    - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
+    - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
   script:
     # Override default permissions. Set group to rx with no write permissions.
     - umask 0022
     - mkdir ${conda_artifacts_directory}
     - VERSION=$(python -m setuptools_scm) conda mambabuild recipe --channel fierromechanics --channel conda-forge --no-anaconda-upload --croot ${croot}/recipe-external --output-folder ${conda_artifacts_directory}
     - conda build purge --croot ${croot}/recipe-external
+  tags:
+    - shell-aea
+
+aea-conda-build-matrix:
+  extends:
+    - .linux_before_script
+  timeout: 4h
+  stage: scheduled
+  variables:
+    GIT_STRATEGY: clone
+  dependencies: []
+  rules:
+    - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
+  script:
+    # Override default permissions. Set group to rx with no write permissions.
+    - umask 0022
+    - mkdir ${conda_artifacts_directory}
+    - pytest recipe-matrix/matrix.py -v --no-showlocals --tb=short
+    - conda build purge --croot ${croot}/recipe-matrix
+  tags:
+    - shell-aea
+
+# https://re-git.lanl.gov/aea/developer-operations/aea-conda
+aea-conda-deploy:
+  stage: deploy
+  rules:
+    - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - if: $PARENT_CI_COMMIT_BRANCH == "main"
+  variables:
+    PARENT_CI_PROJECT_PATH: $CI_PROJECT_PATH
+    PARENT_CI_COMMIT_BRANCH: $PARENT_CI_COMMIT_BRANCH
+    AEA_CONDA_PACKAGE_JOB: conda-build
+    AEA_CONDA_PACKAGE_ARTIFACTS: conda-bld/noarch/waves-*-*.tar.bz2
+  trigger:
+    project: aea/developer-operations/aea-conda
+    branch: main
+    strategy: depend
+
+pypi-deploy:
+  extends:
+    - .linux_before_script
+  stage: deploy
+  variables:
+    GIT_STRATEGY: clone
+  dependencies: []
+  rules:
+    - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - if: $PARENT_CI_COMMIT_BRANCH == "main"
+  script:
+    # Only deploy to Gitlab PyPI registry for clean version tags
+    - if [[ -z $(git tag --points-at HEAD) ]]; then exit 0; fi
+    - scons html-internal man --unconditional-build
+    - cp -r build/docs/html-internal waves/docs
+    - cp build/docs/man/*.1 waves/docs
+    - python -m build
+    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
+  tags:
+    - shell-aea
+
+# It MUST be called pages
+pages:
+  extends:
+    - .linux_before_script
+  stage: deploy
+  variables:
+    GIT_STRATEGY: clone
+  dependencies: []
+  rules:
+    - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - if: $PARENT_CI_COMMIT_BRANCH == "main"
+  script:
+    - project_root=$PWD
+    - rm -rf public && mkdir -p public/modsim-template
+    # Ensure the ``_version.py`` file is created
+    - scons html-internal --clean && scons html-internal --unconditional-build
+    - scons pytest --clean && scons pytest
+    - cp -r build/docs/html-internal/* public/
+    - cp -r build/pytest/coverage public/coverage
+    # Build modsim template documentation
+    - cd waves/modsim_template
+    - PYTHONPATH=${project_root} scons html
+    - cp -r build/docs/html/* ${project_root}/public/modsim-template
+  artifacts:
+    paths:
+      # It MUST be called public
+      - public
   tags:
     - shell-aea

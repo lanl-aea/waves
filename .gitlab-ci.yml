@@ -8,7 +8,6 @@ include: ".pipeline-common.yml"
 
 stages:
   - child-pipelines
-  - scheduled
 
 aea:
   stage: child-pipelines
@@ -19,8 +18,10 @@ aea:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
   variables:
     PARENT_CI_PIPELINE_SOURCE: $CI_PIPELINE_SOURCE
+    PARENT_CI_COMMIT_BRANCH: $CI_COMMIT_BRANCH
 
 hpc:
   stage: child-pipelines
@@ -32,6 +33,7 @@ hpc:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   variables:
     PARENT_CI_PIPELINE_SOURCE: $CI_PIPELINE_SOURCE
+    PARENT_CI_COMMIT_BRANCH: $CI_COMMIT_BRANCH
 
 win:
   stage: child-pipelines
@@ -41,6 +43,9 @@ win:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  variables:
+    PARENT_CI_PIPELINE_SOURCE: $CI_PIPELINE_SOURCE
+    PARENT_CI_COMMIT_BRANCH: $CI_COMMIT_BRANCH
 
 mac:
   stage: child-pipelines
@@ -50,33 +55,6 @@ mac:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-
-deploy:
-  stage: child-pipelines
-  trigger:
-    include:
-      - local: .pipeline-deploy.yml
-    strategy: depend
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - if: $CI_COMMIT_BRANCH == "main"
-
-conda-build-matrix:
-  extends:
-    - .linux_before_script
-  timeout: 4h
-  stage: scheduled
   variables:
-    GIT_STRATEGY: clone
-  dependencies: []
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-  script:
-    # Override default permissions. Set group to rx with no write permissions.
-    - umask 0022
-    - mkdir ${conda_artifacts_directory}
-    - pytest recipe-matrix/matrix.py -v --no-showlocals --tb=short
-    - conda build purge --croot ${croot}/recipe-matrix
-  tags:
-    - shell-aea
+    PARENT_CI_PIPELINE_SOURCE: $CI_PIPELINE_SOURCE
+    PARENT_CI_COMMIT_BRANCH: $CI_COMMIT_BRANCH
