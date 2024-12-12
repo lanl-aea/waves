@@ -143,6 +143,7 @@ def get_parser() -> argparse.ArgumentParser:
 
 def main(
     targets: typing.List[str],
+    scons_args: typing.Optional[list] = None,
     sconstruct: pathlib.Path = _settings._default_sconstruct,
     output_file: typing.Optional[pathlib.Path] = None,
     height: int = _settings._visualize_default_height,
@@ -167,6 +168,7 @@ def main(
     as well.
 
     :param targets: Strings specifying SCons targets
+    :param scons_args: list of SCons arguments
     :param sconstruct: Path to an SConstruct file or parent directory
     :param output_file: File for saving the visualization
     :param height: Height of visualization if being saved to a file
@@ -182,6 +184,9 @@ def main(
     :param transparent: Use a transparent background
     :param input_file: Path to text file storing output from SCons tree command
     """
+    if not scons_args:
+        scons_args = []
+
     # Source file handling
     sconstruct = pathlib.Path(sconstruct).resolve()
     if not sconstruct.is_file():
@@ -199,6 +204,7 @@ def main(
             tree_output = input_file.read_text()
     else:
         scons_command = [_settings._scons_command] + targets + [f"--sconstruct={sconstruct.name}"]
+        scons_command.extend(scons_args)
         scons_command.extend(_settings._scons_visualize_arguments)
         scons_stdout = subprocess.check_output(scons_command, cwd=sconstruct.parent)
         tree_output = scons_stdout.decode("utf-8")

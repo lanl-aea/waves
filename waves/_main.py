@@ -47,6 +47,7 @@ def main() -> None:
         elif args.subcommand == "visualize":
             _visualize.main(
                 args.TARGET,
+                scons_args=unknown,
                 sconstruct=args.sconstruct,
                 output_file=args.output_file,
                 height=args.height,

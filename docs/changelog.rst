@@ -33,6 +33,8 @@ Enhancements
 ============
 - Enable single directory, prefixed targets in the per-task parameter study pseudo-builder (:issue:`682`,
   :merge:`1046`). By `Kyle Brindley`_.
+- Enable project-specific command line configuration controls when creating workflow visualizations with the visualize
+  subcommand (:issue:`837`, :merge:`1065`). By `Kyle Brindley`_.
 
 *******************
 0.12.3 (2024-12-02)
