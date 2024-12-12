@@ -71,7 +71,7 @@ aea-conda-build-matrix:
   extends:
     - .linux_before_script
   timeout: 4h
-  stage: scheduled
+  stage: test
   variables:
     GIT_STRATEGY: clone
   dependencies: []
