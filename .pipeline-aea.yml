@@ -94,7 +94,7 @@ aea-conda-deploy:
   variables:
     PARENT_CI_PROJECT_PATH: $CI_PROJECT_PATH
     PARENT_CI_COMMIT_BRANCH: $PARENT_CI_COMMIT_BRANCH
-    AEA_CONDA_PACKAGE_JOB: conda-build
+    AEA_CONDA_PACKAGE_JOB: aea-conda-build
     AEA_CONDA_PACKAGE_ARTIFACTS: conda-bld/noarch/waves-*-*.tar.bz2
   trigger:
     project: aea/developer-operations/aea-conda
