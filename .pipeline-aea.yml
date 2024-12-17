@@ -73,7 +73,6 @@ aea-conda-build-matrix:
   variables:
     GIT_STRATEGY: clone
   timeout: 4h
-  dependencies: []
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
   script:
@@ -108,7 +107,6 @@ pypi-deploy:
   stage: deploy
   variables:
     GIT_STRATEGY: clone
-  dependencies: []
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
       when: never
@@ -131,7 +129,6 @@ pages:
   stage: deploy
   variables:
     GIT_STRATEGY: clone
-  dependencies: []
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
       when: never
