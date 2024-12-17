@@ -94,10 +94,24 @@
   script:
     # Override default permissions. Set group to rx with no write permissions.
     - umask 0022
+    - recipe_directory="recipe-internal"
+    - croot_job="${croot}/${recipe_directory}"
     - mkdir ${conda_artifacts_directory}
-    - VERSION=$(python -m setuptools_scm) conda mambabuild recipe-internal --channel fierromechanics --channel conda-forge --no-anaconda-upload --croot ${croot}/recipe-internal --output-folder ${conda_artifacts_directory}
-    - conda build purge --croot ${croot}/recipe-internal
+    - VERSION=$(python -m setuptools_scm) conda mambabuild recipe-internal --channel fierromechanics --channel conda-forge --no-anaconda-upload --croot ${croot_job} --output-folder ${conda_artifacts_directory}
+    - conda build purge --croot ${croot_job}
   artifacts:
     expire_in: '2 hrs'
     paths:
       - conda-bld/noarch/waves-*-*.tar.bz2
+
+.conda-build-external: &conda-build-external
+  variables:
+    GIT_STRATEGY: clone
+  script:
+    # Override default permissions. Set group to rx with no write permissions.
+    - umask 0022
+    - recipe_directory="recipe"
+    - croot_job="${croot}/${recipe_directory}"
+    - mkdir ${conda_artifacts_directory}
+    - VERSION=$(python -m setuptools_scm) conda mambabuild recipe --channel fierromechanics --channel conda-forge --no-anaconda-upload --croot ${croot_job} --output-folder ${conda_artifacts_directory}
+    - conda build purge --croot ${croot_job}

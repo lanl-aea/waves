@@ -51,19 +51,12 @@ aea-conda-build:
 aea-conda-build-external:
   extends:
     - .linux_before_script
+    - .conda-build-external
   stage: test
-  variables:
-    GIT_STRATEGY: clone
   dependencies: []
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
-  script:
-    # Override default permissions. Set group to rx with no write permissions.
-    - umask 0022
-    - mkdir ${conda_artifacts_directory}
-    - VERSION=$(python -m setuptools_scm) conda mambabuild recipe --channel fierromechanics --channel conda-forge --no-anaconda-upload --croot ${croot}/recipe-external --output-folder ${conda_artifacts_directory}
-    - conda build purge --croot ${croot}/recipe-external
   tags:
     - shell-aea
 
