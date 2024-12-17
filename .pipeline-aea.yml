@@ -38,33 +38,40 @@ aea-style-guide:
     - shell-aea
 
 aea-conda-build:
+  variables:
+    GIT_STRATEGY: clone
   extends:
     - .linux_before_script
-    - .conda-build
   stage: test
   variables:
+    GIT_STRATEGY: clone
     RECIPE_DIRECTORY: "recipe-internal"
   dependencies: []
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
-  tags:
-    - shell-aea
+  script:
+    - RECIPE_DIRECTORY="recipe-internal"
+    - !reference [.conda-build, script]
   artifacts:
     expire_in: '2 hrs'
     paths:
       - conda-bld/noarch/waves-*-*.tar.bz2
+  tags:
+    - shell-aea
 
 aea-conda-build-external:
   extends:
     - .linux_before_script
-    - .conda-build
   stage: test
   variables:
-    RECIPE_DIRECTORY: "recipe"
+    GIT_STRATEGY: clone
   dependencies: []
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
+  script:
+    - RECIPE_DIRECTORY="recipe"
+    - !reference [.conda-build, script]
   tags:
     - shell-aea
 
