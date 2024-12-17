@@ -43,3 +43,27 @@ win-fast-test:
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
   tags:
     - powershell-aea
+
+win-conda-build-external:
+  stage: test
+  variables:
+    GIT_STRATEGY: clone
+    recipe_directory: "recipe"
+  rules:
+    - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
+    - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
+  script:
+    # Job variables
+    - Write-Output $croot
+    - Write-Output $recipe_directory
+    - Write-Output $conda_artifacts_directory
+    - $croot_recipe="$croot\$recipe_directory"
+    - Write-Output $croot_recipe
+    - if ([string]::IsNullOrEmpty($croot)) { exit 1 }
+    - if ([string]::IsNullOrEmpty($recipe_directory)) { exit 1 }
+    - if ([string]::IsNullOrEmpty($conda_artifacts_directory)) { exit 1 }
+    - if ([string]::IsNullOrEmpty($croot_recipe)) { exit 1 }
+    # Job commands
+  tags:
+    - macos
+    - pn2301275
