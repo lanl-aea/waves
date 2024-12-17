@@ -8,6 +8,7 @@ before_script:
   - conda_installation="${HOME}/anaconda3"
   - conda_environments="${conda_installation}/envs"
   - prefix=$(mktemp --directory --tmpdir=${conda_environments} waves-dev-XXXXXX)
+  - echo ${prefix} > prefix.txt
   - conda_artifacts_directory="conda-bld"
   - echo ${conda_installation}
   - echo ${conda_environments}
@@ -27,8 +28,7 @@ before_script:
   - if [[ -z ${croot} ]]; then exit 1; fi
 
 after_script:
-  - conda deactivate
-  - conda env remove --prefix ${prefix} --yes
+  - prefix=$(cat prefix.txt)
   - rm -r ${prefix} || true
 
 mac-fast-test:
