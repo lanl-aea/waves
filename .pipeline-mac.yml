@@ -29,6 +29,8 @@ before_script:
 
 after_script:
   - prefix=$(cat prefix.txt)
+  - echo ${prefix}
+  - if [[ -z ${prefix} ]]; then exit 1; fi
   - rm -r ${prefix} || true
 
 mac-fast-test:
