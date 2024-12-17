@@ -3,6 +3,37 @@ stages:
 
 include: ".pipeline-common.yml"
 
+before_script:
+  - $PSVersionTable
+  # Common job variables
+  - $conda_installation="C:\ProgramData\anaconda3"
+  - $conda_environments="$conda_installation\envs"
+  - $prefix=python -c 'import tempfile; print(tempfile.mkdtemp(prefix=r"C:\ProgramData\anaconda3\envs\waves-dev-"))'
+  - Set-Content -Path prefix.txt -Value $prefix
+  - $conda_artifacts_directory="conda-bld"
+  - Write-Output $conda_installation
+  - Write-Output $conda_environments
+  - Write-Output $prefix
+  - Write-Output $conda_artifacts_directory
+  - if (!(Test-Path -Path $conda_installation -PathType Container)) { exit 1 }
+  - if (!(Test-Path -Path $conda_environments -PathType Container)) { exit 1 }
+  - if ([string]::IsNullOrEmpty($prefix)) { exit 1 }
+  - if ([string]::IsNullOrEmpty($conda_artifacts_directory)) { exit 1 }
+  # Environment creation
+  - (& "$conda_installation\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | ?{$_} | Invoke-Expression
+  - conda env create --prefix $prefix --file environment-win.yml --yes
+  - conda activate $prefix
+  # Common job variables
+  - $croot=$CONDA_PREFIX/$conda_artifacts_directory
+  - Write-Output $croot
+  - if ([string]::IsNullOrEmpty($croot)) { exit 1 }
+
+after_script:
+  - $prefix=Get-Content -Path prefix.txt
+  - Write-Output $prefix
+  - if ([string]::IsNullOrEmpty($prefix)) { exit 1 }
+  - if (Test-Path -Path $prefix -PathType Container) {Remove-Item -Recurse $prefix -ErrorAction Continue}
+
 win-fast-test:
   stage: test
   rules:
@@ -12,23 +43,7 @@ win-fast-test:
   variables:
     GIT_STRATEGY: clone
   script:
-    # Environment creation/setup. Usually a ``before_script``.
-    - $PSVersionTable
-    - $conda_installation="C:\ProgramData\anaconda3"
-    - $conda_environments="$conda_installation\envs"
-    - $prefix=python -c 'import tempfile; print(tempfile.mkdtemp(prefix=r"C:\ProgramData\anaconda3\envs\waves-dev-"))'
-    - echo $conda_installation
-    - echo $conda_environments
-    - echo $prefix
-    - (& "$conda_installation\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | ?{$_} | Invoke-Expression
-    - conda env create --prefix $prefix --file environment-win.yml --yes
-    - conda activate $prefix
-    # Tests
     - scons regression --keep-going
-    # Cleanup. Usually an ``after_script``
-    - conda deactivate
-    - conda env remove --prefix $prefix --yes
-    - if (Test-Path -Path $prefix -PathType Container) {Remove-Item -Recurse $prefix -ErrorAction Continue}
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
     reports:
