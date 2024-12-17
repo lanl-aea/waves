@@ -30,6 +30,7 @@ Internal Changes
 - More robust modulefile decision in Quinoa tutorial (:issue:`836`, :merge:`1062`). By `Kyle Brindley`_.
 - Enable pass-through testing of specific Abaqus and Cubit executable paths. Test at least one older version of each
   during scheduled regression CI pipelines (:merge:`1063`). By `Kyle Brindley`_.
+- Test the external conda recipe on MacOS during normal CI pipelines (:issue:`801`, :merge:`1067`). By `Kyle Brindley`_.
 
 Enhancements
 ============
