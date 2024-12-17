@@ -37,9 +37,8 @@ after_script:
 win-fast-test:
   stage: test
   rules:
-    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
-  tags:
-    - powershell-aea
+    - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
+    - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
   variables:
     GIT_STRATEGY: clone
   script:
@@ -50,3 +49,5 @@ win-fast-test:
       coverage_report:
         coverage_format: cobertura
         path: build/pytest/coverage.xml
+  tags:
+    - powershell-aea
