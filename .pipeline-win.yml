@@ -24,7 +24,7 @@ before_script:
   - conda env create --prefix $prefix --file environment-win.yml --yes
   - conda activate $prefix
   # Common job variables
-  - $croot="$CONDA_PREFIX\$conda_artifacts_directory"
+  - $croot="$Env:CONDA_PREFIX\$conda_artifacts_directory"
   - Write-Output $croot
   - if ([string]::IsNullOrEmpty($croot)) { exit 1 }
 
