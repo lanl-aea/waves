@@ -103,6 +103,18 @@
         coverage_format: cobertura
         path: build/pytest/coverage.xml
 
+.fast-test-no-third-party: &fast-test-no-third-party
+  variables:
+    GIT_STRATEGY: clone
+  script:
+    - scons regression --keep-going
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: build/pytest/coverage.xml
+
 .style-guide: &style-guide
   variables:
     GIT_STRATEGY: clone

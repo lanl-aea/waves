@@ -35,19 +35,11 @@ after_script:
   - if (Test-Path -Path $prefix -PathType Container) {Remove-Item -Recurse $prefix -ErrorAction Continue}
 
 win-fast-test:
+  extends:
+    - .fast-test-no-third-party
   stage: test
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
-  variables:
-    GIT_STRATEGY: clone
-  script:
-    - scons regression --keep-going
-  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
-  artifacts:
-    reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: build/pytest/coverage.xml
   tags:
     - powershell-aea
