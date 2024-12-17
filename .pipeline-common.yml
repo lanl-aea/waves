@@ -89,6 +89,9 @@
     - scons flake8 black-check
 
 .conda-build: &conda-build
+  variables:
+    GIT_STRATEGY: clone
+  dependencies: []
   script:
     # Override default permissions. Set group to rx with no write permissions.
     - umask 0022
