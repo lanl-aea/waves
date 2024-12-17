@@ -110,13 +110,13 @@
   script:
     # Job variables
     - echo ${croot}
-    - echo ${RECIPE_DIRECTORY}
+    - echo ${recipe_directory}
     - echo ${conda_artifacts_directory}
-    - croot_recipe="${croot}/${RECIPE_DIRECTORY}"
+    - croot_recipe="${croot}/${recipe_directory}"
     - echo ${croot_recipe}
     # Job commands
     # Override default permissions. Set group to rx with no write permissions.
     - umask 0022
     - mkdir ${conda_artifacts_directory}
-    - VERSION=$(python -m setuptools_scm) conda mambabuild ${RECIPE_DIRECTORY} --channel fierromechanics --channel conda-forge --no-anaconda-upload --croot ${croot_recipe} --output-folder ${conda_artifacts_directory}
+    - VERSION=$(python -m setuptools_scm) conda mambabuild ${recipe_directory} --channel fierromechanics --channel conda-forge --no-anaconda-upload --croot ${croot_recipe} --output-folder ${conda_artifacts_directory}
     - conda build purge --croot ${croot_recipe}
