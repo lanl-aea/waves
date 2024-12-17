@@ -65,7 +65,7 @@ win-conda-build-external:
     - if ([string]::IsNullOrEmpty($croot_recipe)) { exit 1 }
     # Job commands
     - New-Item -Name $conda_artifacts_directory -ItemType "directory"
-    - $VERSION=python -m setuptools_scm
+    - $Env:VERSION=python -m setuptools_scm
     - conda mambabuild $recipe_directory --channel fierromechanics --channel conda-forge --no-anaconda-upload --croot $croot_recipe --output-folder $conda_artifacts_directory
     - conda build purge --croot $croot_recipe
   tags:
