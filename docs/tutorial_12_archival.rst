@@ -22,7 +22,7 @@ git, git tags, and a `setuptools_scm`_ version number is outside the scope of th
 References
 **********
 
-* `SCons`_ Tar builder :cite:`scons-man`
+* `SCons Tar`_ builder :cite:`scons-man`
 * `GNU tar`_ documentation :cite:`gnu-tar`
 
 ***********

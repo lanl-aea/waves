@@ -164,13 +164,7 @@ for workflow in workflow_configurations:
 # This must come *after* all expected Alias definitions and SConscript files.
 from SCons.Node.Alias import default_ans
 
-alias_help = "\nOption Values:\n"
-alias_help += f"    build-dir={env['variant_dir_base']}\n"
-alias_help += f"    ignore-documentation={env['ignore_documentation']}\n"
-alias_help += f"    unconditional-build={env['unconditional_build']}\n"
-alias_help += f"    abaqus-command={env['abaqus']}\n"
-alias_help += f"    cubit-command={env['cubit']}\n"
-alias_help += "\nTarget Aliases:\n"
+alias_help = "\nTarget Aliases:\n"
 for alias in default_ans:
     alias_help += f"    {alias}\n"
 try:

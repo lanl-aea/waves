@@ -108,6 +108,7 @@
 .. _`SCons SConscript`: https://scons.org/doc/production/HTML/scons-user/ch14.html
 .. _`SCons Special Variables`: https://scons.org/doc/production/HTML/scons-man.html#special_variables
 .. _`SCons Variable Substitution`: https://scons.org/doc/production/HTML/scons-man.html#variable_substitution
+.. _`SCons Tar`: https://scons.org/doc/production/HTML/scons-man.html#b-Tar
 .. _`setuptools_scm`: https://setuptools-scm.readthedocs.io/en/latest/
 .. _`Software Carpentry`: https://software-carpentry.org/
 .. _`Software Carpentry: Python Novice`: https://swcarpentry.github.io/python-novice-inflammation/
