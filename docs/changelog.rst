@@ -39,6 +39,8 @@ Internal Changes
 - Test the external conda recipe on Windows during normal CI pipelines (:issue:`797`, :merge:`1068`). By `Kyle Brindley`_.
 - Remove the incompatible Python 3.13, SCons 4.6 environment in the matrixed recipe build test (:issue:`840`,
   :merge:`1071`). By `Kyle Brindley`_.
+- Skip Sierra system tests wahen using incompatible Python version 3.13 or newer (issue:`843`, :merge:`1073`). By `Kyle
+  Brindley`_.
 
 Enhancements
 ============

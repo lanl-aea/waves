@@ -239,6 +239,8 @@ require_third_party_system_tests = [
             pytest.mark.require_third_party,
             pytest.mark.cubit,
             pytest.mark.sierra,
+            # Remove sierra python version skip when ci server has a sierra vesrion compatible with python 3.13
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/844
             pytest.mark.skipif(
                 python_313_or_above, reason="Sierra verison on CI server is incompatible with Python 3.13"
             ),
@@ -277,6 +279,8 @@ require_third_party_system_tests = [
             pytest.mark.require_third_party,
             pytest.mark.cubit,
             pytest.mark.sierra,
+            # Remove sierra python version skip when ci server has a sierra vesrion compatible with python 3.13
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/844
             pytest.mark.skipif(
                 python_313_or_above, reason="Sierra verison on CI server is incompatible with Python 3.13"
             ),
