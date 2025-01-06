@@ -14,6 +14,7 @@ available substitutions.
 
 import os
 import re
+import sys
 import shlex
 import string
 import typing
@@ -31,6 +32,7 @@ from common import platform_check
 
 
 testing_windows, root_fs, testing_macos = platform_check()
+python_313_or_above = sys.version_info >= (3, 13)
 
 tutorial_directory = _settings._tutorials_directory
 env = os.environ.copy()
@@ -211,7 +213,7 @@ require_third_party_system_tests = [
         [
             fetch_template,
             string.Template(
-                "scons . ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
+                "scons abaqus fierro ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
             ),
         ],
         "tutorials/tutorial_cubit",
@@ -220,7 +222,6 @@ require_third_party_system_tests = [
             pytest.mark.abaqus,
             pytest.mark.cubit,
             pytest.mark.fierro,
-            pytest.mark.sierra,
             pytest.mark.skipif(
                 testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
             ),
@@ -230,7 +231,27 @@ require_third_party_system_tests = [
         [
             fetch_template,
             string.Template(
-                "scons . ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
+                "scons sierra ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
+            ),
+        ],
+        "tutorials/tutorial_cubit",
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.cubit,
+            pytest.mark.sierra,
+            pytest.mark.skipif(
+                python_313_or_above, reason="Sierra verison on CI server is incompatible with Python 3.13"
+            ),
+            pytest.mark.skipif(
+                testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
+            ),
+        ],
+    ),
+    pytest.param(
+        [
+            fetch_template,
+            string.Template(
+                "scons abaqus fierro ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
             ),
         ],
         "tutorials/tutorial_cubit_alternate",
@@ -239,7 +260,26 @@ require_third_party_system_tests = [
             pytest.mark.abaqus,
             pytest.mark.cubit,
             pytest.mark.fierro,
+            pytest.mark.skipif(
+                testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
+            ),
+        ],
+    ),
+    pytest.param(
+        [
+            fetch_template,
+            string.Template(
+                "scons sierra ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
+            ),
+        ],
+        "tutorials/tutorial_cubit_alternate",
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.cubit,
             pytest.mark.sierra,
+            pytest.mark.skipif(
+                python_313_or_above, reason="Sierra verison on CI server is incompatible with Python 3.13"
+            ),
             pytest.mark.skipif(
                 testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
             ),
