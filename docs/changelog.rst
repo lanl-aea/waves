@@ -8,6 +8,11 @@ Changelog
 0.12.4 (unreleased)
 *******************
 
+Bug fixes
+=========
+- Add missing CalculiX command variable to WAVES construction environment (:issue:`842`, :merge:`1072`). By `Kyle
+  Brindley`_.
+
 Documentation
 =============
 - Fix grammatical errors and add clarifying language to tutorial 00 (:issue:`828`, :merge:`1047`). By `Prabhu Khalsa`_.
