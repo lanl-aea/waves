@@ -22,6 +22,7 @@ command_template = string.Template(
 python_versions = ["3.9", "3.10", "3.11", "3.12", "3.13"]
 scons_versions = ["4.6", "4.7", "4.8"]
 conda_build_test_matrix = list(itertools.product(python_versions, scons_versions))
+conda_build_test_matrix.remove(("3.13", "4.6"))  # SCons 4.6 not available for Python 3.13
 
 
 @pytest.mark.parametrize("PYTHON_VERSION, SCONS_VERSION", conda_build_test_matrix)

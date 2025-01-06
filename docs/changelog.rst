@@ -32,6 +32,8 @@ Internal Changes
   during scheduled regression CI pipelines (:merge:`1063`). By `Kyle Brindley`_.
 - Test the external conda recipe on MacOS during normal CI pipelines (:issue:`801`, :merge:`1067`). By `Kyle Brindley`_.
 - Test the external conda recipe on Windows during normal CI pipelines (:issue:`797`, :merge:`1068`). By `Kyle Brindley`_.
+- Remove the incompatible Python 3.13, SCons 4.6 environment in the matrixed recipe build test (:issue:`840`,
+  :merge:`1071`). By `Kyle Brindley`_.
 
 Enhancements
 ============
