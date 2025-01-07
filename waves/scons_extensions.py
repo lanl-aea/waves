@@ -7,12 +7,14 @@ import typing
 import pathlib
 import functools
 
-import SCons.Defaults
-import SCons.Builder
-import SCons.Environment
 import SCons.Node
-import SCons.Scanner
 import SCons.Script
+import SCons.Builder
+import SCons.Scanner
+import SCons.Defaults
+import SCons.Environment
+from SCons.Script import DEFAULT_TARGETS
+from SCons.Node.Alias import default_ans
 from SCons.Script.SConscript import SConsEnvironment
 
 from waves import _settings
@@ -442,13 +444,54 @@ def alias_list_message(
         overwritten if ``env.Help`` has not been previously called.
     :param keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     """
-    alias_help = "\nTarget Aliases:\n"
-    for alias in SCons.Node.Alias.default_ans:
-        alias_help += f"    {alias}\n"
+    alias_help = add_content(default_ans, message="\nTarget Aliases:\n")
     try:
         SConsEnvironment.Help(env, alias_help, append=append, keep_local=keep_local)
     except TypeError:
         SConsEnvironment.Help(env, alias_help, append=append)
+
+
+def alias(
+    env: SCons.Environment.Environment,
+    workflow_name: str = "",
+    workflow: list = None,
+    message: str = "",
+    help_content: dict = dict()
+):
+    """Add alias to environment and keep track of target metadata.
+
+    :param env: The SCons construction environment object to modify.
+    :param workflow_name: String representing the name of the alias
+    :param workflow: List of SCons tasks to link to the alias
+    :param message: String representing metadata of the alias
+    :param help_content: Mutable dictionary used to keep track of all alias's metadata
+    """
+    if not env:
+        return help_content
+    nodes = env.Alias(workflow_name, workflow)
+    new_help_content = {str(node): message for node in nodes}
+    help_content.update(new_help_content)
+    return help_content
+    
+
+def add_content(nodes: SCons.Node, help_content: dict = None, message=""):
+    """Append a help message for all nodes using provided help content if
+    available.
+
+    :param nodes: SCons node objects, e.g. targets and aliases
+
+    :returns: appended help message
+    :rtype: str
+    """
+    if not help_content:
+        help_content = alias(None)
+    keys = [str(node) for node in nodes]
+    for key in keys:
+        if key in help_content.keys():
+            message += f"    {key}: {help_content[key]}\n"
+        else:
+            message += f"    {key}\n"
+    return message
 
 
 def substitution_syntax(
