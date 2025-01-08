@@ -452,11 +452,12 @@ def alias_list_message(
 
 
 def alias(
-    env: SCons.Environment.Environment,
+    env: SCons.Environment.Environment = None,
     workflow_name: str = "",
     workflow: list = None,
     message: str = "",
-    help_content: dict = dict()
+    help_content: dict = dict(),
+    retreive: bool = False
 ):
     """Add alias to environment and keep track of target metadata.
 
@@ -465,14 +466,15 @@ def alias(
     :param workflow: List of SCons tasks to link to the alias
     :param message: String representing metadata of the alias
     :param help_content: Mutable dictionary used to keep track of all alias's metadata
+    :param retreive: Return help_content
     """
-    if not env:
+    if retreive:
         return help_content
-    nodes = env.Alias(workflow_name, workflow)
-    new_help_content = {str(node): message for node in nodes}
-    help_content.update(new_help_content)
-    return help_content
-    
+    if env:
+        nodes = env.Alias(workflow_name, workflow)
+        new_help_content = {str(node): message for node in nodes}
+        help_content.update(new_help_content)
+
 
 def add_content(nodes: SCons.Node, help_content: dict = None, message=""):
     """Append a help message for all nodes using provided help content if
@@ -484,7 +486,7 @@ def add_content(nodes: SCons.Node, help_content: dict = None, message=""):
     :rtype: str
     """
     if not help_content:
-        help_content = alias(None)
+        help_content = alias(retreive=True)
     keys = [str(node) for node in nodes]
     for key in keys:
         if key in help_content.keys():
