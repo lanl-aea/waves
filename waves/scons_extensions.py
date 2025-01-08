@@ -468,7 +468,7 @@ def alias(
     :param help_content: Mutable dictionary used to keep track of all alias's metadata
     :param retrieve: Return help_content
     """
-    if retreive:
+    if retrieve:
         return help_content
     if env:
         nodes = env.Alias(workflow_name, workflow)
