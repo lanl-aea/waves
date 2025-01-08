@@ -451,7 +451,7 @@ def alias_list_message(
         SConsEnvironment.Help(env, alias_help, append=append)
 
 
-def alias(
+def project_alias(
     env: SCons.Environment.Environment = None,
     workflow_name: str = "",
     workflow: list = None,
@@ -486,7 +486,7 @@ def add_content(nodes: SCons.Node, help_content: dict = None, message=""):
     :rtype: str
     """
     if not help_content:
-        help_content = alias(retrieve=True)
+        help_content = project_alias(retrieve=True)
     keys = [str(node) for node in nodes]
     for key in keys:
         if key in help_content.keys():
