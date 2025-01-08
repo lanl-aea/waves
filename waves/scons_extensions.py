@@ -457,7 +457,7 @@ def alias(
     workflow: list = None,
     message: str = "",
     help_content: dict = dict(),
-    retreive: bool = False
+    retrieve: bool = False
 ):
     """Add alias to environment and keep track of target metadata.
 
@@ -466,7 +466,7 @@ def alias(
     :param workflow: List of SCons tasks to link to the alias
     :param message: String representing metadata of the alias
     :param help_content: Mutable dictionary used to keep track of all alias's metadata
-    :param retreive: Return help_content
+    :param retrieve: Return help_content
     """
     if retreive:
         return help_content
@@ -486,7 +486,7 @@ def add_content(nodes: SCons.Node, help_content: dict = None, message=""):
     :rtype: str
     """
     if not help_content:
-        help_content = alias(retreive=True)
+        help_content = alias(retrieve=True)
     keys = [str(node) for node in nodes]
     for key in keys:
         if key in help_content.keys():
