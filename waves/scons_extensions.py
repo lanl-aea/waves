@@ -444,7 +444,7 @@ def alias_list_message(
         overwritten if ``env.Help`` has not been previously called.
     :param keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     """
-    alias_help = add_content(default_ans, message="\nTarget Aliases:\n")
+    alias_help = project_help_descriptions(default_ans, message="\nTarget Aliases:\n")
     try:
         SConsEnvironment.Help(env, alias_help, append=append, keep_local=keep_local)
     except TypeError:
@@ -474,7 +474,7 @@ def project_alias(
     return help_content
 
 
-def add_content(nodes: SCons.Node.NodeList, target_description: typing.Optional[dict] = None, message=""):
+def project_help_descriptions(nodes: SCons.Node.NodeList, target_description: typing.Optional[dict] = None, message=""):
     """Append a help message for all nodes using provided help content if
     available.
 
