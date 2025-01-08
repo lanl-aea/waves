@@ -13,7 +13,6 @@ import SCons.Builder
 import SCons.Scanner
 import SCons.Defaults
 import SCons.Environment
-from SCons.Script import DEFAULT_TARGETS
 from SCons.Node.Alias import default_ans
 from SCons.Script.SConscript import SConsEnvironment
 
