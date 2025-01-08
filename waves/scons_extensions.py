@@ -474,7 +474,7 @@ def project_alias(
     return help_content
 
 
-def add_content(nodes: SCons.Node, help_content: dict = None, message=""):
+def add_content(nodes: SCons.Node.NodeList, help_content: dict = None, message=""):
     """Append a help message for all nodes using provided help content if
     available.
 
