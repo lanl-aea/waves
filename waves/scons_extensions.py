@@ -453,27 +453,25 @@ def alias_list_message(
 
 def project_alias(
     env: SCons.Environment.Environment = None,
-    workflow_name: str = "",
-    workflow: list = None,
-    message: str = "",
+    *args,
+    description: str = "",
     help_content: dict = dict(),
-    retrieve: bool = False
-):
-    """Add alias to environment and keep track of target metadata.
+    **kwargs
+) -> dict:
+    """wrapper around the SCons Alias method. Keeps track of alias metadata.
 
     :param env: The SCons construction environment object to modify.
-    :param workflow_name: String representing the name of the alias
-    :param workflow: List of SCons tasks to link to the alias
-    :param message: String representing metadata of the alias
+    :param description: String representing metadata of the alias
     :param help_content: Mutable dictionary used to keep track of all alias's metadata
-    :param retrieve: Return help_content
+
+    :returns: alias metadata dictionary
+    :rtype: dict
     """
-    if retrieve:
-        return help_content
-    if env:
-        nodes = env.Alias(workflow_name, workflow)
-        new_help_content = {str(node): message for node in nodes}
+    if len(args) >= 1 and args[0] is not None:
+        nodes = env.Alias(*args, **kwargs)
+        new_help_content = {str(node): description for node in nodes}
         help_content.update(new_help_content)
+    return help_content
 
 
 def add_content(nodes: SCons.Node, help_content: dict = None, message=""):
@@ -486,7 +484,7 @@ def add_content(nodes: SCons.Node, help_content: dict = None, message=""):
     :rtype: str
     """
     if not help_content:
-        help_content = project_alias(retrieve=True)
+        help_content = project_alias()
     keys = [str(node) for node in nodes]
     for key in keys:
         if key in help_content.keys():
