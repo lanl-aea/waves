@@ -455,14 +455,14 @@ def project_alias(
     env: SCons.Environment.Environment = None,
     *args,
     description: str = "",
-    help_content: dict = dict(),
+    target_descriptions: dict = dict(),
     **kwargs
 ) -> dict:
     """wrapper around the SCons Alias method. Keeps track of alias metadata.
 
     :param env: The SCons construction environment object to modify.
     :param description: String representing metadata of the alias
-    :param help_content: Mutable dictionary used to keep track of all alias's metadata
+    :param target_descriptions: Mutable dictionary used to keep track of all alias's metadata
 
     :returns: alias metadata dictionary
     :rtype: dict
@@ -470,8 +470,8 @@ def project_alias(
     if len(args) >= 1 and args[0] is not None:
         nodes = env.Alias(*args, **kwargs)
         new_help_content = {str(node): description for node in nodes}
-        help_content.update(new_help_content)
-    return help_content
+        target_descriptions.update(new_help_content)
+    return target_descriptions
 
 
 def project_help_descriptions(nodes: SCons.Node.NodeList, target_description: typing.Optional[dict] = None, message=""):
