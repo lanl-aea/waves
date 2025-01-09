@@ -8,6 +8,11 @@ Changelog
 0.12.5 (unreleased)
 *******************
 
+Internal Changes
+================
+- Match the Conda build recipes more closely to the conda-forge waves-feedstock for easier downstream/upstream diffs
+  (:merge:`1078`). By `Kyle Brindley`_.
+
 *******************
 0.12.4 (2025-01-08)
 *******************

@@ -110,7 +110,7 @@ CI configuration file. The current command may be found as
 
 .. code-block::
 
-   $ sed -n '/output_folder=/,/VERSION/p' .gitlab-ci.yml
+   $ sed -n '/output_folder=/,/VERSION/p' .gitlab-ci.yml .pipeline*.yml
    ...
 
 .. code-block::
