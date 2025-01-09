@@ -374,6 +374,7 @@ def project_help_message(
     env: SCons.Environment.Environment = SCons.Environment.Environment(),
     append: bool = True,
     keep_local: bool = True,
+    target_descriptions: typing.Optional[dict] = None,
 ) -> None:
     """Add default targets and alias lists to project help message
 
@@ -386,15 +387,17 @@ def project_help_message(
     :param append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
         overwritten if ``env.Help`` has not been previously called.
     :param keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
+    :param target_descriptions: dictionary containing target metadata.
     """
-    default_targets_message(env=env, append=append, keep_local=keep_local)
-    alias_list_message(env=env, append=append, keep_local=keep_local)
+    default_targets_message(env=env, append=append, keep_local=keep_local, target_descriptions=target_descriptions)
+    alias_list_message(env=env, append=append, keep_local=keep_local, target_descriptions=target_descriptions)
 
 
 def default_targets_message(
     env: SCons.Environment.Environment = SCons.Environment.Environment(),
     append: bool = True,
     keep_local: bool = True,
+    target_descriptions: typing.Optional[dict] = None,
 ) -> None:
     """Add a default targets list to the project's help message
 
@@ -412,8 +415,10 @@ def default_targets_message(
     :param append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
         overwritten if ``env.Help`` has not been previously called.
     :param keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
+    :param target_descriptions: dictionary containing target metadata.
     """
-    default_targets_help = project_help_descriptions(DEFAULT_TARGETS, message="\nDefault Targets:\n")
+    default_targets_help = project_help_descriptions(DEFAULT_TARGETS, message="\nDefault Targets:\n", 
+                                                     target_descriptions=target_descriptions)
     try:
         SConsEnvironment.Help(env, default_targets_help, append=append, keep_local=keep_local)
     except TypeError as err:
@@ -424,6 +429,7 @@ def alias_list_message(
     env: SCons.Environment.Environment = SCons.Environment.Environment(),
     append: bool = True,
     keep_local: bool = True,
+    target_descriptions: typing.Optional[dict] = None,
 ) -> None:
     """Add the alias list to the project's help message
 
@@ -441,8 +447,10 @@ def alias_list_message(
     :param append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
         overwritten if ``env.Help`` has not been previously called.
     :param keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
+    :param target_descriptions: dictionary containing target metadata.
     """
-    alias_help = project_help_descriptions(default_ans, message="\nTarget Aliases:\n")
+    alias_help = project_help_descriptions(default_ans, message="\nTarget Aliases:\n",
+                                           target_descriptions=target_descriptions)
     try:
         SConsEnvironment.Help(env, alias_help, append=append, keep_local=keep_local)
     except TypeError:
@@ -487,12 +495,14 @@ def project_help_descriptions(
     :returns: appended help message
     :rtype: str
     """
+    alias_descriptions = project_alias()
     if not target_descriptions:
-        target_descriptions = project_alias()
+        target_descriptions = {}
+    descriptions = {**alias_descriptions, **target_descriptions}
     keys = [str(node) for node in nodes]
     for key in keys:
-        if key in target_descriptions.keys():
-            message += f"    {key}: {target_descriptions[key]}\n"
+        if key in descriptions.keys():
+            message += f"    {key}: {descriptions[key]}\n"
         else:
             message += f"    {key}\n"
     return message
