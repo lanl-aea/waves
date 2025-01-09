@@ -485,7 +485,7 @@ def project_alias(
 def project_help_descriptions(
     nodes: SCons.Node.NodeList, target_descriptions: typing.Optional[dict] = None, message=""
 ) -> str:
-    """Append a help message for all nodes using provided help content if available.
+    """Append a help message for all nodes using provided target descriptions if available.
 
     :param nodes: SCons node objects, e.g. targets and aliases.
     :param target_descriptions: dictionary containing description of targets. Will use project_alias() return value
