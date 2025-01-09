@@ -3535,6 +3535,13 @@ class WAVESEnvironment(SConsEnvironment):
         When using this environment method, do not provide the first ``env`` argument
         """
         return project_help_message(self, *args, **kwargs)
+    
+    def ProjectAlias(self, *args, **kwargs):
+        """Construction environment method from :meth:`waves.scons_extensions.project_help`
+
+        When using this environment method, do not provide the first ``env`` argument
+        """
+        return project_alias(self, *args, **kwargs)
 
     def SubstitutionSyntax(self, *args, **kwargs):
         """Construction environment method from :meth:`waves.scons_extensions.substitution_syntax`
