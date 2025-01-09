@@ -19,6 +19,8 @@ before_script:
   - if (!(Test-Path -Path $conda_environments -PathType Container)) { exit 1 }
   - if ([string]::IsNullOrEmpty($prefix)) { exit 1 }
   - if ([string]::IsNullOrEmpty($conda_artifacts_directory)) { exit 1 }
+  # Random perturbation in Conda command to stop pipeline environment conflicts
+  - python -c 'import time, random; time.sleep(random.uniform(0., 10.))'
   # Environment creation
   - (& "$conda_installation\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | ?{$_} | Invoke-Expression
   - conda env create --prefix $prefix --file environment-win.yml --yes
