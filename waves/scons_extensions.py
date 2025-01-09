@@ -474,7 +474,7 @@ def project_alias(
 
 def project_help_descriptions(
     nodes: SCons.Node.NodeList,
-    target_description: typing.Optional[dict] = None,
+    target_descriptions: typing.Optional[dict] = None,
     message=""
 ) -> str:
     """Append a help message for all nodes using provided help content if available.
@@ -487,12 +487,12 @@ def project_help_descriptions(
     :returns: appended help message
     :rtype: str
     """
-    if not target_description:
+    if not target_descriptions:
         target_description = project_alias()
     keys = [str(node) for node in nodes]
     for key in keys:
-        if key in target_description.keys():
-            message += f"    {key}: {target_description[key]}\n"
+        if key in target_descriptions.keys():
+            message += f"    {key}: {target_descriptions[key]}\n"
         else:
             message += f"    {key}\n"
     return message
