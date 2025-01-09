@@ -417,8 +417,9 @@ def default_targets_message(
     :param keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     :param target_descriptions: dictionary containing target metadata.
     """
-    default_targets_help = project_help_descriptions(DEFAULT_TARGETS, message="\nDefault Targets:\n", 
-                                                     target_descriptions=target_descriptions)
+    default_targets_help = project_help_descriptions(
+        DEFAULT_TARGETS, message="\nDefault Targets:\n", target_descriptions=target_descriptions
+    )
     try:
         SConsEnvironment.Help(env, default_targets_help, append=append, keep_local=keep_local)
     except TypeError as err:
@@ -449,8 +450,9 @@ def alias_list_message(
     :param keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     :param target_descriptions: dictionary containing target metadata.
     """
-    alias_help = project_help_descriptions(default_ans, message="\nTarget Aliases:\n",
-                                           target_descriptions=target_descriptions)
+    alias_help = project_help_descriptions(
+        default_ans, message="\nTarget Aliases:\n", target_descriptions=target_descriptions
+    )
     try:
         SConsEnvironment.Help(env, alias_help, append=append, keep_local=keep_local)
     except TypeError:
@@ -462,7 +464,7 @@ def project_alias(
     *args,
     description: str = "",
     target_descriptions: dict = dict(),
-    **kwargs
+    **kwargs,
 ) -> dict:
     """Wrapper around the `SCons Alias`_ method. Appends and returns target descriptions dictionary.
 
@@ -481,9 +483,7 @@ def project_alias(
 
 
 def project_help_descriptions(
-    nodes: SCons.Node.NodeList,
-    target_descriptions: typing.Optional[dict] = None,
-    message=""
+    nodes: SCons.Node.NodeList, target_descriptions: typing.Optional[dict] = None, message=""
 ) -> str:
     """Append a help message for all nodes using provided help content if available.
 
@@ -3535,7 +3535,7 @@ class WAVESEnvironment(SConsEnvironment):
         When using this environment method, do not provide the first ``env`` argument
         """
         return project_help_message(self, *args, **kwargs)
-    
+
     def ProjectAlias(self, *args, **kwargs):
         """Construction environment method from :meth:`waves.scons_extensions.project_help`
 
