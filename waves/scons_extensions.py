@@ -13,6 +13,7 @@ import SCons.Builder
 import SCons.Scanner
 import SCons.Defaults
 import SCons.Environment
+from SCons.Script import DEFAULT_TARGETS
 from SCons.Node.Alias import default_ans
 from SCons.Script.SConscript import SConsEnvironment
 
@@ -412,9 +413,7 @@ def default_targets_message(
         overwritten if ``env.Help`` has not been previously called.
     :param keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     """
-    default_targets_help = "\nDefault Targets:\n"
-    for target in SCons.Script.DEFAULT_TARGETS:
-        default_targets_help += f"    {str(target)}\n"
+    default_targets_help = project_help_descriptions(DEFAULT_TARGETS, message="\nDefault Targets:\n")
     try:
         SConsEnvironment.Help(env, default_targets_help, append=append, keep_local=keep_local)
     except TypeError as err:
