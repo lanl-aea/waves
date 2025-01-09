@@ -480,7 +480,7 @@ def project_help_descriptions(
     """Append a help message for all nodes using provided help content if available.
 
     :param nodes: SCons node objects, e.g. targets and aliases.
-    :param target_description: dictionary containing description of targets. Will use project_alias() return value
+    :param target_descriptions: dictionary containing description of targets. Will use project_alias() return value
         if not specified.
     :param message: current help message.
 
@@ -488,7 +488,7 @@ def project_help_descriptions(
     :rtype: str
     """
     if not target_descriptions:
-        target_description = project_alias()
+        target_descriptions = project_alias()
     keys = [str(node) for node in nodes]
     for key in keys:
         if key in target_descriptions.keys():
