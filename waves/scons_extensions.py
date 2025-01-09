@@ -456,7 +456,7 @@ def project_alias(
     target_descriptions: dict = dict(),
     **kwargs
 ) -> dict:
-    """Wrapper around the SCons Alias method. Appends and returns target descriptions dictionary.
+    """Wrapper around the `SCons Alias`_ method. Appends and returns target descriptions dictionary.
 
     :param env: The SCons construction environment object to modify.
     :param description: String representing metadata of the alias
