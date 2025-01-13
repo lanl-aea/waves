@@ -36,9 +36,9 @@ def set_name_substitution(
     identifier: str = "set_name",
     suffix: str = "/",
 ) -> typing.Union[typing.List[str], typing.List[pathlib.Path], str, pathlib.Path]:
-    """Replace ``@identifier`` with replacement text in a list of strings
+    """Replace ``@identifier`` with replacement text in a list of strings and pathlib Path objects
 
-    If the original is not a string or an iterable of strings, return without modification.
+    If the original is not a string, Path, or an iterable of strings and Paths, return without modification.
 
     :param original: List of strings
     :param replacement: substitution string for the identifier

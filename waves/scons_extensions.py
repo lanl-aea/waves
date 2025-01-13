@@ -3126,7 +3126,7 @@ def parameter_study(
     make nominal workflow definitions directly re-usable in parameter studies.
 
     * If the study is a WAVES parameter generator object, loop over the parameter sets and replace ``@{set_name}`` in
-      any ``*args`` and ``**kwargs`` that are strings or lists of strings.
+      any ``*args`` and ``**kwargs`` that are strings, paths, or lists of strings and paths.
     * If the study is a ``dict()``, unpack the dictionary as keyword arguments directly into the builder.
     * In all other cases, the task is passed through unchanged to the builder and the study variable is ignored.
 
