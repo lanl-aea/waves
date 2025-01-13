@@ -2150,7 +2150,7 @@ def test_parameter_study(node_count, action_count, args, kwargs, study, expected
     )
 
     check_action_string(nodes, node_count, action_count, expected_string)
-    assert [str(node) for node in nodes] == expected_targets
+    assert [pathlib.Path(str(node)) for node in nodes] == [pathlib.Path(node) for node in expected_targets]
 
 
 cartesian_product = parameter_generators.CartesianProduct(
