@@ -2069,7 +2069,7 @@ python_script_input = {
     "pass through: target string": (2, 1, (), {"target": "@{set_name}file2.out"}, None, ["file2.out", "file2.out.stdout"]),
     "pass through: target pathlib": (2, 1, (), {"target": pathlib.Path("file3.out")}, None, ["file3.out", "file3.out.stdout"]),
     "pass through: dictionary": (2, 1, (), {"target": ["@{set_name}file4.out"]}, {"parameter_one": 1}, ["file4.out", "file4.out.stdout"]),
-    "study: two sets": (
+    "study prefixes: two sets": (
         4,
         1,
         (),
@@ -2080,6 +2080,19 @@ python_script_input = {
             "parameter_set0_file5.out.stdout",
             "parameter_set1_file5.out",
             "parameter_set1_file5.out.stdout",
+        ],
+    ),
+    "study subdirectories: two sets": (
+        4,
+        1,
+        (),
+        {"target": ["@{set_name}file5.out"], "subdirectories": True},
+        parameter_generators.CartesianProduct({"one": [1, 2]}),
+        [
+            "parameter_set0/file5.out",
+            "parameter_set0/file5.out.stdout",
+            "parameter_set1/file5.out",
+            "parameter_set1/file5.out.stdout",
         ],
     ),
 }
