@@ -657,13 +657,13 @@ class CartesianProduct(ParameterGenerator):
        >>> parameter_generator = waves.parameter_generators.CartesianProduct(parameter_schema)
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:             (set_hash: 4)
+       Dimensions:       (set_hash: 4)
        Coordinates:
-           set_hash  (set_hash) <U32 'de3cb3eaecb767ff63973820b2...
+           set_hash      (set_hash) <U32 'de3cb3eaecb767ff63973820b2...
          * set_name      (set_hash) <U14 'parameter_set0' ... 'param...
        Data variables:
-           parameter_1         (set_hash) object 1 1 2 2
-           parameter_2         (set_hash) object 'a' 'b' 'a' 'b'
+           parameter_1   (set_hash) object 1 1 2 2
+           parameter_2   (set_hash) object 'a' 'b' 'a' 'b'
     """
 
     def _validate(self) -> None:
@@ -751,13 +751,13 @@ class LatinHypercube(_ScipyGenerator):
        >>> parameter_generator = waves.parameter_generators.LatinHypercube(parameter_schema)
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:             (set_hash: 4)
+       Dimensions:       (set_hash: 4)
        Coordinates:
-           set_hash  (set_hash) <U32 '1e8219dae27faa5388328e225a...
+           set_hash      (set_hash) <U32 '1e8219dae27faa5388328e225a...
          * set_name      (set_hash) <U14 'parameter_set0' ... 'param...
        Data variables:
-           parameter_1         (set_hash) float64 0.125 ... 51.15
-           parameter_2         (set_hash) float64 0.625 ... 30.97
+           parameter_1   (set_hash) float64 0.125 ... 51.15
+           parameter_2   (set_hash) float64 0.625 ... 30.97
     """
 
     def __init__(self, *args, **kwargs) -> None:
@@ -824,14 +824,14 @@ class CustomStudy(ParameterGenerator):
        >>> parameter_generator = waves.parameter_generators.CustomStudy(parameter_schema)
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:             (set_hash: 2)
+       Dimensions:       (set_hash: 2)
        Coordinates:
-           set_hash  (set_hash) <U32 '50ba1a2716e42f8c4fcc34a90a...
+           set_hash      (set_hash) <U32 '50ba1a2716e42f8c4fcc34a90a...
         *  set_name      (set_hash) <U14 'parameter_set0' 'parameter...
        Data variables:
-           height              (set_hash) object 1.0 2.0
-           prefix              (set_hash) object 'a' 'b'
-           index               (set_hash) object 5 6
+           height        (set_hash) object 1.0 2.0
+           prefix        (set_hash) object 'a' 'b'
+           index         (set_hash) object 5 6
     """
 
     def _validate(self) -> None:
@@ -929,13 +929,13 @@ class SobolSequence(_ScipyGenerator):
        >>> parameter_generator = waves.parameter_generators.SobolSequence(parameter_schema)
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:             (set_name: 4)
+       Dimensions:       (set_name: 4)
        Coordinates:
-           set_hash  (set_name) <U32 'c1fa74da12c0991379d1df6541c421...
+           set_hash      (set_name) <U32 'c1fa74da12c0991379d1df6541c421...
          * set_name      (set_name) <U14 'parameter_set0' ... 'parameter...
        Data variables:
-           parameter_1         (set_name) float64 0.0 0.5 ... 7.5 2.5
-           parameter_2         (set_name) float64 0.0 0.5 ... 4.25
+           parameter_1   (set_name) float64 0.0 0.5 ... 7.5 2.5
+           parameter_2   (set_name) float64 0.0 0.5 ... 4.25
     """
 
     def __init__(self, *args, **kwargs) -> None:
@@ -1022,13 +1022,13 @@ class ScipySampler(_ScipyGenerator):
        >>> parameter_generator = waves.parameter_generators.ScipySampler("LatinHypercube", parameter_schema)
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:             (set_hash: 4)
+       Dimensions:       (set_hash: 4)
        Coordinates:
-           set_hash  (set_hash) <U32 '1e8219dae27faa5388328e225a...
+           set_hash      (set_hash) <U32 '1e8219dae27faa5388328e225a...
          * set_name      (set_hash) <U14 'parameter_set0' ... 'param...
        Data variables:
-           parameter_1         (set_hash) float64 0.125 ... 51.15
-           parameter_2         (set_hash) float64 0.625 ... 30.97
+           parameter_1   (set_hash) float64 0.125 ... 51.15
+           parameter_2   (set_hash) float64 0.625 ... 30.97
     """
 
     def __init__(self, sampler_class, *args, **kwargs) -> None:
@@ -1124,14 +1124,14 @@ class SALibSampler(ParameterGenerator, ABC):
        >>> parameter_generator = waves.parameter_generators.SALibSampler("sobol", parameter_schema)
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:             (set_name: 32)
+       Dimensions:       (set_name: 32)
        Coordinates:
-           set_hash  (set_name) <U32 'e0cb1990f9d70070eaf5638101dcaf...
+           set_hash      (set_name) <U32 'e0cb1990f9d70070eaf5638101dcaf...
          * set_name      (set_name) <U15 'parameter_set0' ... 'parameter...
        Data variables:
-           parameter_1         (set_name) float64 -0.2029 ... 0.187
-           parameter_2         (set_name) float64 -0.801 ... 0.6682
-           parameter_3         (set_name) float64 0.4287 ... -2.871
+           parameter_1   (set_name) float64 -0.2029 ... 0.187
+           parameter_2   (set_name) float64 -0.801 ... 0.6682
+           parameter_3   (set_name) float64 0.4287 ... -2.871
     """
 
     def __init__(self, sampler_class, *args, **kwargs) -> None:
