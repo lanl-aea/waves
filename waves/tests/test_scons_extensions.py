@@ -2065,10 +2065,38 @@ def test_sphinx_latexpdf():
 # target per set.
 python_script_input = {
     "pass through: no study": (2, 1, (), {"target": ["@{set_name}file1.out"]}, None, ["file1.out", "file1.out.stdout"]),
-    "pass through: no study, positional targets": (2, 1, (["@{set_name}file1.out"],), {}, None, ["file1.out", "file1.out.stdout"]),
-    "pass through: target string": (2, 1, (), {"target": "@{set_name}file2.out"}, None, ["file2.out", "file2.out.stdout"]),
-    "pass through: target pathlib": (2, 1, (), {"target": pathlib.Path("file3.out")}, None, ["file3.out", "file3.out.stdout"]),
-    "pass through: dictionary": (2, 1, (), {"target": ["@{set_name}file4.out"]}, {"parameter_one": 1}, ["file4.out", "file4.out.stdout"]),
+    "pass through: no study, positional targets": (
+        2,
+        1,
+        (["@{set_name}file1.out"],),
+        {},
+        None,
+        ["file1.out", "file1.out.stdout"],
+    ),
+    "pass through: target string": (
+        2,
+        1,
+        (),
+        {"target": "@{set_name}file2.out"},
+        None,
+        ["file2.out", "file2.out.stdout"],
+    ),
+    "pass through: target pathlib": (
+        2,
+        1,
+        (),
+        {"target": pathlib.Path("file3.out")},
+        None,
+        ["file3.out", "file3.out.stdout"],
+    ),
+    "pass through: dictionary": (
+        2,
+        1,
+        (),
+        {"target": ["@{set_name}file4.out"]},
+        {"parameter_one": 1},
+        ["file4.out", "file4.out.stdout"],
+    ),
     "study prefixes: two sets": (
         4,
         1,
