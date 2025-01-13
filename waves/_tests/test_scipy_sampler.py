@@ -52,11 +52,11 @@ class TestScipySampler:
             samples_array = TestGenerate._samples
             # Verify that the parameter set name creation method was called
             expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
-            assert list(TestGenerate._parameter_set_names.values()) == expected_set_names
+            assert list(TestGenerate._set_names.values()) == expected_set_names
             # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
             expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
-            parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
-            assert numpy.all(parameter_set_names == expected_set_names)
+            set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
+            assert numpy.all(set_names == expected_set_names)
 
     merge_test = {
         "new sets": (

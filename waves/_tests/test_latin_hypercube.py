@@ -72,11 +72,11 @@ class TestLatinHypercube:
             assert numpy.allclose(samples_array, expected_samples)
             # Verify that the parameter set name creation method was called
             expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
-            assert list(TestGenerate._parameter_set_names.values()) == expected_set_names
+            assert list(TestGenerate._set_names.values()) == expected_set_names
             # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
             expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
-            parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
-            assert numpy.all(parameter_set_names == expected_set_names)
+            set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
+            assert numpy.all(set_names == expected_set_names)
 
     merge_test = {
         "increase simulations": (
@@ -121,7 +121,7 @@ class TestLatinHypercube:
                 assert parameter_set == TestMerge2.parameter_study.sel(set_name=set_name)
             # Self-consistency checks
             assert (
-                list(TestMerge2._parameter_set_names.values())
+                list(TestMerge2._set_names.values())
                 == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()  # noqa: W503
             )
             assert TestMerge2._set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
@@ -140,7 +140,7 @@ class TestLatinHypercube:
                 assert parameter_set == TestMerge2.parameter_study.sel(set_name=set_name)
             # Self-consistency checks
             assert (
-                list(TestMerge2._parameter_set_names.values())
+                list(TestMerge2._set_names.values())
                 == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()  # noqa: W503
             )
             assert TestMerge2._set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()

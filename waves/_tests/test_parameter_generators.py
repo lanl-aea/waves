@@ -275,14 +275,14 @@ class TestParameterGenerator:
             TemplateGenerator = DummyGenerator(
                 schema, output_file_template=file_template, set_name_template=set_template, **kwargs
             )
-        assert list(TemplateGenerator._parameter_set_names.values()) == expected
+        assert list(TemplateGenerator._set_names.values()) == expected
 
     @pytest.mark.parametrize(
         "schema, file_template, set_template, expected",
         templates.values(),
         ids=templates.keys(),
     )
-    def test_update_parameter_set_names(self, schema, file_template, set_template, expected):
+    def test_update_set_names(self, schema, file_template, set_template, expected):
         """Check the generated and updated parameter set names against template arguments
 
         :param str schema: placeholder string standing in for the schema read from an input file
@@ -297,11 +297,11 @@ class TestParameterGenerator:
             TemplateGenerator = DummyGenerator(
                 schema, output_file_template=file_template, set_name_template=set_template, **kwargs
             )
-        assert list(TemplateGenerator._parameter_set_names.values()) == expected
+        assert list(TemplateGenerator._set_names.values()) == expected
 
         # Test that the update function runs with only a single set. Check that the names don't change.
-        TemplateGenerator._update_parameter_set_names()
-        assert list(TemplateGenerator._parameter_set_names.values()) == expected
+        TemplateGenerator._update_set_names()
+        assert list(TemplateGenerator._set_names.values()) == expected
 
     # fmt: off
     init_write_stdout = {# schema, template, overwrite, dry_run,         is_file,  sets, stdout_calls  # noqa: E261
@@ -573,13 +573,13 @@ class TestParameterGenerator:
         HashesParameterGenerator._create_set_hashes()
         assert HashesParameterGenerator._set_hashes == expected_hashes
 
-    def test_create_parameter_set_names(self):
+    def test_create_set_names(self):
         """Test the parameter set name generation"""
         SetNamesParameterGenerator = DummyGenerator({}, output_file_template="out")
         SetNamesParameterGenerator._samples = numpy.array([[1], [2]])
         SetNamesParameterGenerator._create_set_hashes()
-        SetNamesParameterGenerator._create_parameter_set_names()
-        assert list(SetNamesParameterGenerator._parameter_set_names.values()) == ["out0", "out1"]
+        SetNamesParameterGenerator._create_set_names()
+        assert list(SetNamesParameterGenerator._set_names.values()) == ["out0", "out1"]
 
     def test_parameter_study_to_numpy(self):
         """Test the self-consistency of the parameter study dataset construction and deconstruction"""
@@ -588,7 +588,7 @@ class TestParameterGenerator:
         DataParameterGenerator._parameter_names = ["ints", "floats", "strings", "bools"]
         DataParameterGenerator._samples = numpy.array([[1, 10.1, "a", True], [2, 20.2, "b", False]], dtype=object)
         DataParameterGenerator._create_set_hashes()
-        DataParameterGenerator._create_parameter_set_names()
+        DataParameterGenerator._create_set_names()
         DataParameterGenerator._create_parameter_study()
         # Test class method
         returned_samples = DataParameterGenerator._parameter_study_to_numpy()

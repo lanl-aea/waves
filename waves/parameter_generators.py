@@ -163,8 +163,8 @@ class ParameterGenerator(ABC):
             ``numpy.array(..., dtype=object)`` should be used to preserve the original Python types.
         * ``self._set_hashes``: list of parameter set content hashes created by calling
           ``self._create_set_hashes`` after populating the ``self._samples`` parameter study values.
-        * ``self._parameter_set_names``: Dictionary mapping parameter set hash to parameter set name strings created by
-            calling ``self._create_parameter_set_names`` after populating ``self._set_hashes``.
+        * ``self._set_names``: Dictionary mapping parameter set hash to parameter set name strings created by
+            calling ``self._create_set_names`` after populating ``self._set_hashes``.
         * ``self.parameter_study``: The Xarray Dataset parameter study object, created by calling
           ``self._create_parameter_study()`` after defining ``self._samples``.
 
@@ -181,7 +181,7 @@ class ParameterGenerator(ABC):
            super()._generate()
         """
         self._create_set_hashes()
-        self._create_parameter_set_names()
+        self._create_set_names()
         self._create_parameter_study()
         if self.previous_parameter_study is not None and self.previous_parameter_study.is_file():
             self._merge_parameter_studies()
@@ -349,10 +349,10 @@ class ParameterGenerator(ABC):
         """
         self._set_hashes = _calculate_set_hashes(self._parameter_names, self._samples)
 
-    def _create_parameter_set_names(self) -> None:
+    def _create_set_names(self) -> None:
         """Construct parameter set names from the set name template and number of parameter sets in ``self._samples``
 
-        Creates the class attribute ``self._parameter_set_names`` required to populate the ``_generate()`` method's
+        Creates the class attribute ``self._set_names`` required to populate the ``_generate()`` method's
         parameter study Xarray dataset object.
 
         requires:
@@ -361,47 +361,47 @@ class ParameterGenerator(ABC):
 
         creates attribute:
 
-        * ``self._parameter_set_names``: Dictionary mapping parameter set hash to parameter set name
+        * ``self._set_names``: Dictionary mapping parameter set hash to parameter set name
         """
-        self._parameter_set_names = {}
+        self._set_names = {}
         for number, set_hash in enumerate(self._set_hashes):
             template = self.set_name_template
-            self._parameter_set_names[set_hash] = template.substitute({"number": number})
+            self._set_names[set_hash] = template.substitute({"number": number})
 
-    def _update_parameter_set_names(self) -> None:
+    def _update_set_names(self) -> None:
         """Update the parameter set names after a parameter study dataset merge operation.
 
         Resets attributes:
 
         * ``self.parameter_study``
-        * ``self._parameter_set_names``
+        * ``self._set_names``
         """
-        self._create_parameter_set_names()
-        new_set_names = set(self._parameter_set_names.values()) - set(
+        self._create_set_names()
+        new_set_names = set(self._set_names.values()) - set(
             self.parameter_study.coords[_set_coordinate_key].values
         )
         null_set_names = self.parameter_study.coords[_set_coordinate_key].isnull()
         if any(null_set_names):
             self.parameter_study.coords[_set_coordinate_key][null_set_names] = list(new_set_names)
-        self._parameter_set_names = self.parameter_study[_set_coordinate_key].to_series().to_dict()
+        self._set_names = self.parameter_study[_set_coordinate_key].to_series().to_dict()
 
-    def _create_parameter_set_names_array(self) -> xarray.DataArray:
+    def _create_set_names_array(self) -> xarray.DataArray:
         """Create an Xarray DataArray with the parameter set names using parameter set hashes as the coordinate
 
-        :return: parameter_set_names_array
+        :return: set_names_array
         """
         return xarray.DataArray(
-            list(self._parameter_set_names.values()),
-            coords=[list(self._parameter_set_names.keys())],
+            list(self._set_names.values()),
+            coords=[list(self._set_names.keys())],
             dims=[_hash_coordinate_key],
             name=_set_coordinate_key,
         )
 
-    def _merge_parameter_set_names_array(self) -> None:
+    def _merge_set_names_array(self) -> None:
         """Merge the parameter set names array into the parameter study dataset as a non-index coordinate"""
-        parameter_set_names_array = self._create_parameter_set_names_array()
+        set_names_array = self._create_set_names_array()
         self.parameter_study = xarray.merge(
-            [self.parameter_study.reset_coords(), parameter_set_names_array]
+            [self.parameter_study.reset_coords(), set_names_array]
         ).set_coords(_set_coordinate_key)
 
     def _create_parameter_study(self) -> None:
@@ -427,7 +427,7 @@ class ParameterGenerator(ABC):
             for name, values in zip(self._parameter_names, self._samples.T)
         ]
         self.parameter_study = xarray.merge(sample_arrays)
-        self._merge_parameter_set_names_array()
+        self._merge_set_names_array()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
     def _parameter_study_to_numpy(self) -> numpy.ndarray:
@@ -469,7 +469,7 @@ class ParameterGenerator(ABC):
         * ``self.parameter_study``
         * ``self._samples``
         * ``self._set_hashes``
-        * ``self._parameter_set_names``
+        * ``self._set_names``
 
         :raises RuntimeError: If the ``self.parameter_study`` attribute is None
         """
@@ -493,7 +493,7 @@ class ParameterGenerator(ABC):
 
         # Recalculate attributes with lengths matching the number of parameter sets
         self._set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
-        self._update_parameter_set_names()
+        self._update_set_names()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
 
