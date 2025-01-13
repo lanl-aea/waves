@@ -47,6 +47,12 @@ set_name_substitution = {
         {"identifier": "identifier", "suffix": ""},
         ["lions.txt"],
     ),
+    "dictionary": (
+        {"key": "value"},
+        "set0",
+        {},
+        {"key": "value"},
+    ),
 }
 
 
