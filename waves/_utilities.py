@@ -31,11 +31,11 @@ class _AtSignTemplate(string.Template):
 
 
 def set_name_substitution(
-    original: typing.Union[typing.Iterable[str], typing.Iterable[pathlib.Path], str, pathlib.Path],
+    original: typing.Union[typing.Iterable[typing.Union[str, pathlib.Path]], str, pathlib.Path],
     replacement: str,
     identifier: str = "set_name",
     suffix: str = "/",
-) -> typing.Union[typing.List[str], typing.List[pathlib.Path], str, pathlib.Path]:
+) -> typing.Union[typing.List[typing.Union[str, pathlib.Path]], str, pathlib.Path]:
     """Replace ``@identifier`` with replacement text in a list of strings and pathlib Path objects
 
     If the original is not a string, Path, or an iterable of strings and Paths, return without modification.
