@@ -41,7 +41,7 @@ def self_consistency_checks(merged_study):
         list(merged_study._parameter_set_names.values())
         == merged_study.parameter_study[_set_coordinate_key].values.tolist()  # noqa: W503
     )
-    assert merged_study._parameter_set_hashes == merged_study.parameter_study[_hash_coordinate_key].values.tolist()
+    assert merged_study._set_hashes == merged_study.parameter_study[_hash_coordinate_key].values.tolist()
 
 
 def merge_samplers(sampler_class, first_schema, second_schema, kwargs, sampler=None):

@@ -161,10 +161,10 @@ class ParameterGenerator(ABC):
         * ``self._samples``: The parameter study samples. A 2D numpy array in the shape (number of parameter sets,
             number of parameters). If it's possible that the samples may be of mixed type,
             ``numpy.array(..., dtype=object)`` should be used to preserve the original Python types.
-        * ``self._parameter_set_hashes``: list of parameter set content hashes created by calling
-          ``self._create_parameter_set_hashes`` after populating the ``self._samples`` parameter study values.
+        * ``self._set_hashes``: list of parameter set content hashes created by calling
+          ``self._create_set_hashes`` after populating the ``self._samples`` parameter study values.
         * ``self._parameter_set_names``: Dictionary mapping parameter set hash to parameter set name strings created by
-            calling ``self._create_parameter_set_names`` after populating ``self._parameter_set_hashes``.
+            calling ``self._create_parameter_set_names`` after populating ``self._set_hashes``.
         * ``self.parameter_study``: The Xarray Dataset parameter study object, created by calling
           ``self._create_parameter_study()`` after defining ``self._samples``.
 
@@ -180,7 +180,7 @@ class ParameterGenerator(ABC):
            # Work performed by common ABC methods
            super()._generate()
         """
-        self._create_parameter_set_hashes()
+        self._create_set_hashes()
         self._create_parameter_set_names()
         self._create_parameter_study()
         if self.previous_parameter_study is not None and self.previous_parameter_study.is_file():
@@ -333,7 +333,7 @@ class ParameterGenerator(ABC):
                 for parameter_set_file in parameter_set_files:
                     meta_file.write(f"{parameter_set_file.resolve()}\n")
 
-    def _create_parameter_set_hashes(self) -> None:
+    def _create_set_hashes(self) -> None:
         """Construct unique, repeatable parameter set content hashes from ``self._samples``.
 
         Creates an md5 hash from the concatenated string representation of parameter ``name:value`` associations.
@@ -345,9 +345,9 @@ class ParameterGenerator(ABC):
 
         creates attribute:
 
-        * ``self._parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
+        * ``self._set_hashes``: parameter set content hashes identifying rows of parameter study
         """
-        self._parameter_set_hashes = _calculate_parameter_set_hashes(self._parameter_names, self._samples)
+        self._set_hashes = _calculate_set_hashes(self._parameter_names, self._samples)
 
     def _create_parameter_set_names(self) -> None:
         """Construct parameter set names from the set name template and number of parameter sets in ``self._samples``
@@ -357,14 +357,14 @@ class ParameterGenerator(ABC):
 
         requires:
 
-        * ``self._parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
+        * ``self._set_hashes``: parameter set content hashes identifying rows of parameter study
 
         creates attribute:
 
         * ``self._parameter_set_names``: Dictionary mapping parameter set hash to parameter set name
         """
         self._parameter_set_names = {}
-        for number, set_hash in enumerate(self._parameter_set_hashes):
+        for number, set_hash in enumerate(self._set_hashes):
             template = self.set_name_template
             self._parameter_set_names[set_hash] = template.substitute({"number": number})
 
@@ -409,7 +409,7 @@ class ParameterGenerator(ABC):
 
         requires:
 
-        * ``self._parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
+        * ``self._set_hashes``: parameter set content hashes identifying rows of parameter study
         * ``self._parameter_names``: parameter names used as columns of parameter study
         * ``self._samples``: The parameter study samples. Rows are sets. Columns are parameters.
 
@@ -422,7 +422,7 @@ class ParameterGenerator(ABC):
                 list(values),
                 name=name,
                 dims=[_hash_coordinate_key],
-                coords={_hash_coordinate_key: self._parameter_set_hashes},
+                coords={_hash_coordinate_key: self._set_hashes},
             )
             for name, values in zip(self._parameter_names, self._samples.T)
         ]
@@ -468,7 +468,7 @@ class ParameterGenerator(ABC):
 
         * ``self.parameter_study``
         * ``self._samples``
-        * ``self._parameter_set_hashes``
+        * ``self._set_hashes``
         * ``self._parameter_set_names``
 
         :raises RuntimeError: If the ``self.parameter_study`` attribute is None
@@ -492,7 +492,7 @@ class ParameterGenerator(ABC):
         self._samples = self._parameter_study_to_numpy()
 
         # Recalculate attributes with lengths matching the number of parameter sets
-        self._parameter_set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
+        self._set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
         self._update_parameter_set_names()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
@@ -1213,7 +1213,7 @@ class SALibSampler(ParameterGenerator, ABC):
         super()._generate()
 
 
-def _calculate_parameter_set_hash(parameter_names: typing.List[str], set_samples: numpy.ndarray) -> str:
+def _calculate_set_hash(parameter_names: typing.List[str], set_samples: numpy.ndarray) -> str:
     """Calculate the unique, repeatable parameter set content hash for a single parameter set
 
     :param parameter_names: list of parameter names in matching order with parameter samples
@@ -1232,7 +1232,7 @@ def _calculate_parameter_set_hash(parameter_names: typing.List[str], set_samples
     return set_hash
 
 
-def _calculate_parameter_set_hashes(parameter_names: typing.List[str], samples: numpy.ndarray) -> typing.List[str]:
+def _calculate_set_hashes(parameter_names: typing.List[str], samples: numpy.ndarray) -> typing.List[str]:
     """Calculate the unique, repeatable parameter set content hashes from a :class:`ParameterGenerator` object with
     populated ``self._samples`` attribute.
 
@@ -1242,7 +1242,7 @@ def _calculate_parameter_set_hashes(parameter_names: typing.List[str], samples: 
 
     :returns: list of parameter set hashes
     """
-    return [_calculate_parameter_set_hash(parameter_names, set_samples) for set_samples in samples]
+    return [_calculate_set_hash(parameter_names, set_samples) for set_samples in samples]
 
 
 def _parameter_study_to_numpy(parameter_study: xarray.Dataset) -> numpy.ndarray:
@@ -1268,7 +1268,7 @@ def _verify_parameter_study(parameter_study: xarray.Dataset):
     :raises RuntimeError: if mandatory coordinate names are missing: ``set_name``, ``set_hash``
     :raises RuntimeError: if data variables and ``set_hash`` do not have the ``set_name`` dimension
     :raises RuntimeError: if parameter set hash values do not match the calculated hash from
-        :meth:`_calculate_parameter_set_hash`.
+        :meth:`_calculate_set_hash`.
     """
     # Check for mandatory coordinate keys
     coordinates = list(parameter_study.coords)
@@ -1289,7 +1289,7 @@ def _verify_parameter_study(parameter_study: xarray.Dataset):
     parameter_names = list(parameter_study.keys())
     file_hashes = [str(set_hash) for set_hash in parameter_study[_hash_coordinate_key].values]
     samples = _parameter_study_to_numpy(parameter_study)
-    calculated_hashes = _calculate_parameter_set_hashes(parameter_names, samples)
+    calculated_hashes = _calculate_set_hashes(parameter_names, samples)
     if set(file_hashes) != set(calculated_hashes):
         raise RuntimeError(
             f"Parameter study set hashes not equal to calculated set hashes: \n{file_hashes}\n{calculated_hashes}"

@@ -156,7 +156,7 @@ class TestCustomStudy:
                 list(TestMerge2._parameter_set_names.values())
                 == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()  # noqa: W503
             )
-            assert TestMerge2._parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
+            assert TestMerge2._set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
 
     generate_io = {
         "one parameter yaml": (

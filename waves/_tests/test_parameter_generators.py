@@ -73,14 +73,14 @@ set_hashes = {
     set_hashes.values(),
     ids=set_hashes.keys(),
 )
-def test_calculate_parameter_set_hash(parameter_names, samples, expected_hashes):
+def test_calculate_set_hash(parameter_names, samples, expected_hashes):
     for row, expected_hash in zip(samples, expected_hashes):
-        set_hash = parameter_generators._calculate_parameter_set_hash(parameter_names, row)
+        set_hash = parameter_generators._calculate_set_hash(parameter_names, row)
         assert set_hash == expected_hash
 
         with pytest.raises(RuntimeError):
             try:
-                set_hash = parameter_generators._calculate_parameter_set_hash([], row)
+                set_hash = parameter_generators._calculate_set_hash([], row)
             finally:
                 pass
 
@@ -90,12 +90,12 @@ def test_calculate_parameter_set_hash(parameter_names, samples, expected_hashes)
     set_hashes.values(),
     ids=set_hashes.keys(),
 )
-def test_calculate_parameter_set_hashes(parameter_names, samples, expected_hashes):
-    parameter_set_hashes = parameter_generators._calculate_parameter_set_hashes(
+def test_calculate_set_hashes(parameter_names, samples, expected_hashes):
+    set_hashes = parameter_generators._calculate_set_hashes(
         parameter_names,
         samples,
     )
-    assert parameter_set_hashes == expected_hashes
+    assert set_hashes == expected_hashes
 
 
 @pytest.mark.parametrize(
@@ -104,12 +104,12 @@ def test_calculate_parameter_set_hashes(parameter_names, samples, expected_hashe
     ids=set_hashes.keys(),
 )
 def test_verify_parameter_study(parameter_names, samples, expected_hashes):
-    # Borrow setup from class test. See :meth:`test_create_parameter_set_hashes`
+    # Borrow setup from class test. See :meth:`test_create_set_hashes`
     HashesParameterGenerator = DummyGenerator({})
     HashesParameterGenerator._parameter_names = parameter_names
     HashesParameterGenerator._samples = samples
-    HashesParameterGenerator._create_parameter_set_hashes()
-    assert HashesParameterGenerator._parameter_set_hashes == expected_hashes
+    HashesParameterGenerator._create_set_hashes()
+    assert HashesParameterGenerator._set_hashes == expected_hashes
     parameter_study = HashesParameterGenerator.parameter_study
 
     with does_not_raise():
@@ -563,21 +563,21 @@ class TestParameterGenerator:
         set_hashes.values(),
         ids=set_hashes.keys(),
     )
-    def test_create_parameter_set_hashes(self, parameter_names, samples, expected_hashes):
+    def test_create_set_hashes(self, parameter_names, samples, expected_hashes):
         HashesParameterGenerator = DummyGenerator({})
         HashesParameterGenerator._parameter_names = parameter_names
         HashesParameterGenerator._samples = samples
-        del HashesParameterGenerator._parameter_set_hashes
-        assert not hasattr(HashesParameterGenerator, "_parameter_set_hashes")
+        del HashesParameterGenerator._set_hashes
+        assert not hasattr(HashesParameterGenerator, "_set_hashes")
         # Check the function setting the set hashes attribute.
-        HashesParameterGenerator._create_parameter_set_hashes()
-        assert HashesParameterGenerator._parameter_set_hashes == expected_hashes
+        HashesParameterGenerator._create_set_hashes()
+        assert HashesParameterGenerator._set_hashes == expected_hashes
 
     def test_create_parameter_set_names(self):
         """Test the parameter set name generation"""
         SetNamesParameterGenerator = DummyGenerator({}, output_file_template="out")
         SetNamesParameterGenerator._samples = numpy.array([[1], [2]])
-        SetNamesParameterGenerator._create_parameter_set_hashes()
+        SetNamesParameterGenerator._create_set_hashes()
         SetNamesParameterGenerator._create_parameter_set_names()
         assert list(SetNamesParameterGenerator._parameter_set_names.values()) == ["out0", "out1"]
 
@@ -587,7 +587,7 @@ class TestParameterGenerator:
         DataParameterGenerator = DummyGenerator({})
         DataParameterGenerator._parameter_names = ["ints", "floats", "strings", "bools"]
         DataParameterGenerator._samples = numpy.array([[1, 10.1, "a", True], [2, 20.2, "b", False]], dtype=object)
-        DataParameterGenerator._create_parameter_set_hashes()
+        DataParameterGenerator._create_set_hashes()
         DataParameterGenerator._create_parameter_set_names()
         DataParameterGenerator._create_parameter_study()
         # Test class method
