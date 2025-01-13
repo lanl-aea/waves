@@ -17,6 +17,18 @@ set_name_substitution = {
         {},
         ["set0/lions.txt", "set0/tigers.txt", "bears.txt"],
     ),
+    "default behavior: tuple": (
+        ("@{set_name}lions.txt", "@{set_name}tigers.txt", "bears.txt"),
+        "set0",
+        {},
+        ["set0/lions.txt", "set0/tigers.txt", "bears.txt"],
+    ),
+    "default behavior: set": (
+        {"@{set_name}lions.txt", "@{set_name}tigers.txt", "bears.txt"},
+        "set0",
+        {},
+        ["set0/lions.txt", "set0/tigers.txt", "bears.txt"],
+    ),
     "default behavior: list of pathlib.Path": (
         [pathlib.Path("@{set_name}lions.txt"), pathlib.Path("@{set_name}tigers.txt"), pathlib.Path("bears.txt")],
         "set0",
@@ -77,8 +89,11 @@ def test_set_name_substitution(sources, replacement, kwargs, expected):
     default_kwargs = {"identifier": "set_name", "suffix": "/"}
     call_kwargs = copy.deepcopy(default_kwargs)
     call_kwargs.update(kwargs)
-    replaced_sources = _utilities.set_name_substitution(sources, replacement, **call_kwargs)
-    assert replaced_sources == expected
+    modified = _utilities.set_name_substitution(sources, replacement, **call_kwargs)
+    if isinstance(expected, (str, pathlib.Path)):
+        assert modified == expected
+    else:
+        assert sorted(modified) == sorted(expected)
 
 
 quote_spaces_in_path_input = {
