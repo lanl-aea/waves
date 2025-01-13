@@ -2064,20 +2064,31 @@ def test_sphinx_latexpdf():
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
 # target per set.
 python_script_input = {
-    "pass through: no study": (2, 1, ["file1.out"], None),
-    "pass through: target string": (2, 1, "file1.out", None),
-    "pass through: target pathlib": (2, 1, pathlib.Path("file1.out"), None),
-    "pass through: dictionary": (2, 1, ["file2.out"], {"parameter_one": 1}),
-    "study: two sets": (4, 1, ["file3.out"], parameter_generators.CartesianProduct({"one": [1, 2]})),
+    "pass through: no study": (2, 1, ["@{set_name}file1.out"], None, ["file1.out", "file1.out.stdout"]),
+    "pass through: target string": (2, 1, "@{set_name}file2.out", None, ["file2.out", "file2.out.stdout"]),
+    "pass through: target pathlib": (2, 1, pathlib.Path("file3.out"), None, ["file3.out", "file3.out.stdout"]),
+    "pass through: dictionary": (2, 1, ["@{set_name}file4.out"], {"parameter_one": 1}, ["file4.out", "file4.out.stdout"]),
+    "study: two sets": (
+        4,
+        1,
+        ["@{set_name}file5.out"],
+        parameter_generators.CartesianProduct({"one": [1, 2]}),
+        [
+            "parameter_set0_file5.out",
+            "parameter_set0_file5.out.stdout",
+            "parameter_set1_file5.out",
+            "parameter_set1_file5.out.stdout",
+        ],
+    ),
 }
 
 
 @pytest.mark.parametrize(
-    "node_count, action_count, target, study",
+    "node_count, action_count, target, study, expected_targets",
     python_script_input.values(),
     ids=python_script_input.keys(),
 )
-def test_parameter_study(node_count, action_count, target, study):
+def test_parameter_study(node_count, action_count, target, study, expected_targets):
     expected_string = (
         "${environment} ${action_prefix} ${program} ${program_required} ${program_options} "
         "${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
@@ -2095,6 +2106,7 @@ def test_parameter_study(node_count, action_count, target, study):
     )
 
     check_action_string(nodes, node_count, action_count, expected_string)
+    assert [str(node) for node in nodes] == expected_targets
 
 
 cartesian_product = parameter_generators.CartesianProduct(
