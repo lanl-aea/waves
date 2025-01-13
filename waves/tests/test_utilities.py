@@ -35,6 +35,12 @@ set_name_substitution = {
         {},
         [pathlib.Path("set0/lions.txt"), pathlib.Path("set0/tigers.txt"), pathlib.Path("bears.txt")],
     ),
+    "default behavior: list of mixed str and pathlib.Path": (
+        ["@{set_name}lions.txt", pathlib.Path("@{set_name}tigers.txt"), pathlib.Path("bears.txt")],
+        "set0",
+        {},
+        ["set0/lions.txt", pathlib.Path("set0/tigers.txt"), pathlib.Path("bears.txt")],
+    ),
     "different identifier": (
         ["@{identifier}lions.txt", "@{identifier}tigers.txt", "bears.txt"],
         "set1",
@@ -81,19 +87,19 @@ set_name_substitution = {
 
 
 @pytest.mark.parametrize(
-    "sources, replacement, kwargs, expected",
+    "original, replacement, kwargs, expected",
     set_name_substitution.values(),
     ids=set_name_substitution.keys(),
 )
-def test_set_name_substitution(sources, replacement, kwargs, expected):
+def test_set_name_substitution(original, replacement, kwargs, expected):
     default_kwargs = {"identifier": "set_name", "suffix": "/"}
     call_kwargs = copy.deepcopy(default_kwargs)
     call_kwargs.update(kwargs)
-    modified = _utilities.set_name_substitution(sources, replacement, **call_kwargs)
+    modified = _utilities.set_name_substitution(original, replacement, **call_kwargs)
     if isinstance(expected, (str, pathlib.Path)):
         assert modified == expected
     else:
-        assert sorted(modified) == sorted(expected)
+        assert modified == expected
 
 
 quote_spaces_in_path_input = {

@@ -52,10 +52,14 @@ def set_name_substitution(
         return _AtSignTemplate(original).safe_substitute(mapping)
     elif isinstance(original, pathlib.Path):
         return pathlib.Path(_AtSignTemplate(str(original)).safe_substitute(mapping))
-    elif isinstance(original, (list, set, tuple)) and all(isinstance(item, str) for item in original):
-        return [_AtSignTemplate(node).safe_substitute(mapping) for node in original]
-    elif isinstance(original, (list, set, tuple)) and all(isinstance(item, pathlib.Path) for item in original):
-        return [pathlib.Path(_AtSignTemplate(str(node)).safe_substitute(mapping)) for node in original]
+    elif isinstance(original, (list, set, tuple)) and all(isinstance(item, (str, pathlib.Path)) for item in original):
+        modified = list()
+        for node in original:
+            try:
+                modified.append(_AtSignTemplate(node).safe_substitute(mapping))
+            except TypeError:
+                modified.append(pathlib.Path(_AtSignTemplate(str(node)).safe_substitute(mapping)))
+        return modified
     else:
         return original
 
