@@ -3196,12 +3196,14 @@ def parameter_study(
 
     :param env: An SCons construction environment to use when defining the targets.
     :param builder: The builder to parameterize
-    :param args: All other positional arguments are passed through to the builder directly
+    :param args: All other positional arguments are passed through to the builder after ``@{set_name}`` string
+        substitutions
     :param study: Parameter generator or dictionary parameter set to provide to the builder. Parameter generators are
         unpacked with set name directory prefixes. Dictionaries are unpacked as keyword arguments.
     :param subdirectories: Switch to use parameter generator ``study`` set names as subdirectories. Ignored when
         ``study`` is not a parameter generator.
-    :param kwargs: all other keyword arguments are passed through to the builder directly
+    :param kwargs: all other keyword arguments are passed through to the builder after ``@{set_name}`` string
+        substitutions
 
     :return: SCons NodeList of target nodes
     """  # noqa: E501
@@ -3220,17 +3222,17 @@ def parameter_study(
                 _utilities.set_name_substitution(positional, set_name, suffix=suffix) for positional in args
             )
             modified_kwargs = {
-                key: _utilities.set_name_substitution(value, set_name, suffix=suffix) for key, value in kwargs
+                key: _utilities.set_name_substitution(value, set_name, suffix=suffix) for key, value in kwargs.items()
             }
             return_targets.extend(builder(*modified_args, **modified_kwargs, **parameters))
     # Is it better to accept a dictionary of nominal variables or to add a "Nominal" parameter generator?
     elif isinstance(study, dict):
         modified_args = (_utilities.set_name_substitution(positional, "", suffix="") for positional in args)
-        modified_kwargs = {key: _utilities.set_name_substitution(value, "", suffix="") for key, value in kwargs}
+        modified_kwargs = {key: _utilities.set_name_substitution(value, "", suffix="") for key, value in kwargs.items()}
         return_targets.extend(builder(*modified_args, **modified_kwargs, **study))
     else:
         modified_args = (_utilities.set_name_substitution(positional, "", suffix="") for positional in args)
-        modified_kwargs = {key: _utilities.set_name_substitution(value, "", suffix="") for key, value in kwargs}
+        modified_kwargs = {key: _utilities.set_name_substitution(value, "", suffix="") for key, value in kwargs.items()}
         return_targets.extend(builder(*modified_args, **modified_kwargs))
     return return_targets
 
