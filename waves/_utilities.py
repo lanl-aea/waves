@@ -35,7 +35,7 @@ def set_name_substitution(
     replacement: str,
     identifier: str = "set_name",
     suffix: str = "/",
-) -> typing.List[str]:
+) -> typing.Union[typing.List[str], str]:
     """Replace ``@identifier`` with replacement text in a list of strings
 
     If the original is not a string or an iterable of strings, return without modification.
@@ -45,11 +45,11 @@ def set_name_substitution(
     :param identifier: template identifier to replace, e.g. ``@identifier`` becomes ``replacement``
     :param suffix: to insert after the replacement text
 
-    :returns: list of strings with identifier replacements
+    :returns: string or list of strings with identifier replacements
     """
     mapping = {identifier: f"{replacement}{suffix}"}
     if isinstance(original, str):
-        return [_AtSignTemplate(original).safe_substitute(mapping)]
+        return _AtSignTemplate(original).safe_substitute(mapping)
     elif isinstance(original, (list, set, tuple)) and all(isinstance(item, str) for item in original):
         return [_AtSignTemplate(node).safe_substitute(mapping) for node in original]
     else:

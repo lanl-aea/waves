@@ -33,19 +33,19 @@ set_name_substitution = {
         "@{set_name}lions.txt",
         "set0",
         {},
-        ["set0/lions.txt"],
+        "set0/lions.txt",
     ),
     "scalar string, different identifier": (
         "@{identifier}lions.txt",
         "set1",
         {"identifier": "identifier"},
-        ["set1/lions.txt"],
+        "set1/lions.txt",
     ),
     "scalar string, remove identifier, no suffix": (
         "@{identifier}lions.txt",
         "",
         {"identifier": "identifier", "suffix": ""},
-        ["lions.txt"],
+        "lions.txt",
     ),
     "dictionary": (
         {"key": "value"},
