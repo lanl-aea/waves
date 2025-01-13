@@ -31,20 +31,29 @@ class _AtSignTemplate(string.Template):
 
 
 def set_name_substitution(
-    source: typing.List[str],
+    original: typing.Union[typing.Iterable[str], str],
     replacement: str,
     identifier: str = "set_name",
     suffix: str = "/",
 ) -> typing.List[str]:
     """Replace ``@identifier`` with replacement text in a list of strings
 
-    :param source: List of strings
+    If the original is not a string or an iterable of strings, return without modification.
+
+    :param original: List of strings
     :param replacement: substitution string for the identifier
     :param identifier: template identifier to replace, e.g. ``@identifier`` becomes ``replacement``
     :param suffix: to insert after the replacement text
+
+    :returns: list of strings with identifier replacements
     """
     mapping = {identifier: f"{replacement}{suffix}"}
-    return [_AtSignTemplate(node).safe_substitute(mapping) for node in source]
+    if isinstance(original, str):
+        return [_AtSignTemplate(original).safe_substitute(mapping)]
+    elif isinstance(original, (list, set, tuple)) and all(isinstance(item, str) for item in original):
+        return [_AtSignTemplate(node).safe_substitute(mapping) for node in original]
+    else:
+        return original
 
 
 def _quote_spaces_in_path(path: typing.Union[str, pathlib.Path]) -> pathlib.Path:

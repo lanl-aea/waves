@@ -11,7 +11,7 @@ from waves import _utilities
 
 
 set_name_substitution = {
-    "default identifier": (
+    "default behavior": (
         ["@{set_name}lions.txt", "@{set_name}tigers.txt", "bears.txt"],
         "set0",
         {},
@@ -28,6 +28,24 @@ set_name_substitution = {
         "",
         {"identifier": "identifier", "suffix": ""},
         ["lions.txt", "tigers.txt", "bears.txt"],
+    ),
+    "scalar string, default behavior": (
+        "@{set_name}lions.txt",
+        "set0",
+        {},
+        ["set0/lions.txt"],
+    ),
+    "scalar string, different identifier": (
+        "@{identifier}lions.txt",
+        "set1",
+        {"identifier": "identifier"},
+        ["set1/lions.txt"],
+    ),
+    "scalar string, remove identifier, no suffix": (
+        "@{identifier}lions.txt",
+        "",
+        {"identifier": "identifier", "suffix": ""},
+        ["lions.txt"],
     ),
 }
 
