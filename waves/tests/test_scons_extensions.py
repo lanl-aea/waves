@@ -2073,11 +2073,11 @@ python_script_input = {
 
 
 @pytest.mark.parametrize(
-    "node_count, action_count, target_list, study",
+    "node_count, action_count, target, study",
     python_script_input.values(),
     ids=python_script_input.keys(),
 )
-def test_parameter_study(node_count, action_count, target_list, study):
+def test_parameter_study(node_count, action_count, target, study):
     expected_string = (
         "${environment} ${action_prefix} ${program} ${program_required} ${program_options} "
         "${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
@@ -2088,7 +2088,7 @@ def test_parameter_study(node_count, action_count, target_list, study):
     env.AddMethod(scons_extensions.parameter_study, "ParameterStudy")
     nodes = env.ParameterStudy(
         env.PythonScript,
-        target=target_list,
+        target=target,
         source=["python_script.py"],
         script_options="",
         study=study,
