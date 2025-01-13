@@ -48,6 +48,7 @@ def set_name_substitution(
     :returns: string or list of strings with identifier replacements
     """
     mapping = {identifier: f"{replacement}{suffix}"}
+    # TODO: handle pathlib.Path objects
     if isinstance(original, str):
         return _AtSignTemplate(original).safe_substitute(mapping)
     elif isinstance(original, (list, set, tuple)) and all(isinstance(item, str) for item in original):
