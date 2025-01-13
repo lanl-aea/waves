@@ -13,6 +13,11 @@ Internal Changes
 - Match the Conda build recipes more closely to the conda-forge waves-feedstock for easier downstream/upstream diffs
   (:merge:`1078`). By `Kyle Brindley`_.
 
+Enhancements
+============
+- Perform more complete argument substitutions in the task parameter study pseudo-builder (:issue:`852`, :merge:`1080`).
+  By `Kyle Brindley`.
+
 *******************
 0.12.4 (2025-01-08)
 *******************
