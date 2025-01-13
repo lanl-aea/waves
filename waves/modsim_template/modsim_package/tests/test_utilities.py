@@ -23,12 +23,12 @@ def test_combine_data():
         coords={"space": [0], "time": [0, 1, 2]},
     )
     expected = xarray.Dataset(
-        {"variable_name": (("parameter_sets", "space", "time"), numpy.array([[[1, 2, 3]], [[4, 5, 6]]]))},
-        coords={"space": [0], "time": [0, 1, 2], "parameter_sets": ["parameter_set0", "parameter_set1"]},
+        {"variable_name": (("set_name", "space", "time"), numpy.array([[[1, 2, 3]], [[4, 5, 6]]]))},
+        coords={"space": [0], "time": [0, 1, 2], "set_name": ["parameter_set0", "parameter_set1"]},
     )
     xarray_side_effect = [dataset1, dataset2]
     with unittest.mock.patch("xarray.open_dataset", side_effect=xarray_side_effect):
-        combined_data = utilities.combine_data(input_files, "/", "parameter_sets")
+        combined_data = utilities.combine_data(input_files, "/", "set_name")
     assert combined_data.equals(expected)
 
 
@@ -41,8 +41,8 @@ def test_merge_parameter_study():
         {"parameter_1": [1, 2], "parameter_2": [3, 4]}
     ).parameter_study
     combined_data = xarray.Dataset(
-        {"variable_name": (("parameter_sets", "space", "time"), numpy.array([[[1, 2, 3]], [[4, 5, 6]]]))},
-        coords={"space": [0], "time": [0, 1, 2], "parameter_sets": ["parameter_set0", "parameter_set1"]},
+        {"variable_name": (("set_name", "space", "time"), numpy.array([[[1, 2, 3]], [[4, 5, 6]]]))},
+        coords={"space": [0], "time": [0, 1, 2], "set_name": ["parameter_set0", "parameter_set1"]},
     )
     with unittest.mock.patch("xarray.open_dataset", return_value=parameter_study):
         combined_data = utilities.merge_parameter_study("/mock/path/parameter_study.h5", combined_data)
@@ -54,13 +54,13 @@ def test_save_plot():
     Test that the function arguments are unpacked into the correct I/O calls
     """
     combined_data = xarray.Dataset(
-        {"variable_name": (("parameter_sets", "space", "time"), numpy.array([[[1, 2, 3]], [[4, 5, 6]]]))},
-        coords={"space": [0], "time": [0, 1, 2], "parameter_sets": ["parameter_set0", "parameter_set1"]},
+        {"variable_name": (("set_name", "space", "time"), numpy.array([[[1, 2, 3]], [[4, 5, 6]]]))},
+        coords={"space": [0], "time": [0, 1, 2], "set_name": ["parameter_set0", "parameter_set1"]},
     )
     selection_dict = {"space": 0, "time": 2}
     x_var = "space"
     y_var = "time"
-    concat_coord = "parameter_sets"
+    concat_coord = "set_name"
     output_file = "mock.png"
     with (
         unittest.mock.patch("xarray.Dataset.plot.scatter") as mock_scatter,
@@ -77,8 +77,8 @@ def test_save_table():
     Test that the function arguments are unpacked into the correct I/O calls
     """
     combined_data = xarray.Dataset(
-        {"variable_name": (("parameter_sets", "space", "time"), numpy.array([[[1, 2, 3]], [[4, 5, 6]]]))},
-        coords={"space": [0], "time": [0, 1, 2], "parameter_sets": ["parameter_set0", "parameter_set1"]},
+        {"variable_name": (("set_name", "space", "time"), numpy.array([[[1, 2, 3]], [[4, 5, 6]]]))},
+        coords={"space": [0], "time": [0, 1, 2], "set_name": ["parameter_set0", "parameter_set1"]},
     )
     selection_dict = {"space": 0, "time": 2}
     output_file = "mock.csv"

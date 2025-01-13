@@ -150,7 +150,7 @@ class TestCustomStudy:
             assert numpy.all(generate_array == expected_array)
             # Check for consistent hash-parameter set relationships
             for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
-                assert parameter_set == TestMerge2.parameter_study.sel(parameter_sets=set_name)
+                assert parameter_set == TestMerge2.parameter_study.sel(set_name=set_name)
             # Self-consistency checks
             assert (
                 list(TestMerge2._parameter_set_names.values())

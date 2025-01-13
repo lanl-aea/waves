@@ -660,7 +660,7 @@ class CartesianProduct(ParameterGenerator):
        Dimensions:             (parameter_set_hash: 4)
        Coordinates:
            parameter_set_hash  (parameter_set_hash) <U32 'de3cb3eaecb767ff63973820b2...
-         * parameter_sets      (parameter_set_hash) <U14 'parameter_set0' ... 'param...
+         * set_name      (parameter_set_hash) <U14 'parameter_set0' ... 'param...
        Data variables:
            parameter_1         (parameter_set_hash) object 1 1 2 2
            parameter_2         (parameter_set_hash) object 'a' 'b' 'a' 'b'
@@ -754,7 +754,7 @@ class LatinHypercube(_ScipyGenerator):
        Dimensions:             (parameter_set_hash: 4)
        Coordinates:
            parameter_set_hash  (parameter_set_hash) <U32 '1e8219dae27faa5388328e225a...
-         * parameter_sets      (parameter_set_hash) <U14 'parameter_set0' ... 'param...
+         * set_name      (parameter_set_hash) <U14 'parameter_set0' ... 'param...
        Data variables:
            parameter_1         (parameter_set_hash) float64 0.125 ... 51.15
            parameter_2         (parameter_set_hash) float64 0.625 ... 30.97
@@ -827,7 +827,7 @@ class CustomStudy(ParameterGenerator):
        Dimensions:             (parameter_set_hash: 2)
        Coordinates:
            parameter_set_hash  (parameter_set_hash) <U32 '50ba1a2716e42f8c4fcc34a90a...
-        *  parameter_sets      (parameter_set_hash) <U14 'parameter_set0' 'parameter...
+        *  set_name      (parameter_set_hash) <U14 'parameter_set0' 'parameter...
        Data variables:
            height              (parameter_set_hash) object 1.0 2.0
            prefix              (parameter_set_hash) object 'a' 'b'
@@ -929,13 +929,13 @@ class SobolSequence(_ScipyGenerator):
        >>> parameter_generator = waves.parameter_generators.SobolSequence(parameter_schema)
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:             (parameter_sets: 4)
+       Dimensions:             (set_name: 4)
        Coordinates:
-           parameter_set_hash  (parameter_sets) <U32 'c1fa74da12c0991379d1df6541c421...
-         * parameter_sets      (parameter_sets) <U14 'parameter_set0' ... 'parameter...
+           parameter_set_hash  (set_name) <U32 'c1fa74da12c0991379d1df6541c421...
+         * set_name      (set_name) <U14 'parameter_set0' ... 'parameter...
        Data variables:
-           parameter_1         (parameter_sets) float64 0.0 0.5 ... 7.5 2.5
-           parameter_2         (parameter_sets) float64 0.0 0.5 ... 4.25
+           parameter_1         (set_name) float64 0.0 0.5 ... 7.5 2.5
+           parameter_2         (set_name) float64 0.0 0.5 ... 4.25
     """
 
     def __init__(self, *args, **kwargs) -> None:
@@ -1025,7 +1025,7 @@ class ScipySampler(_ScipyGenerator):
        Dimensions:             (parameter_set_hash: 4)
        Coordinates:
            parameter_set_hash  (parameter_set_hash) <U32 '1e8219dae27faa5388328e225a...
-         * parameter_sets      (parameter_set_hash) <U14 'parameter_set0' ... 'param...
+         * set_name      (parameter_set_hash) <U14 'parameter_set0' ... 'param...
        Data variables:
            parameter_1         (parameter_set_hash) float64 0.125 ... 51.15
            parameter_2         (parameter_set_hash) float64 0.625 ... 30.97
@@ -1124,14 +1124,14 @@ class SALibSampler(ParameterGenerator, ABC):
        >>> parameter_generator = waves.parameter_generators.SALibSampler("sobol", parameter_schema)
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:             (parameter_sets: 32)
+       Dimensions:             (set_name: 32)
        Coordinates:
-           parameter_set_hash  (parameter_sets) <U32 'e0cb1990f9d70070eaf5638101dcaf...
-         * parameter_sets      (parameter_sets) <U15 'parameter_set0' ... 'parameter...
+           parameter_set_hash  (set_name) <U32 'e0cb1990f9d70070eaf5638101dcaf...
+         * set_name      (set_name) <U15 'parameter_set0' ... 'parameter...
        Data variables:
-           parameter_1         (parameter_sets) float64 -0.2029 ... 0.187
-           parameter_2         (parameter_sets) float64 -0.801 ... 0.6682
-           parameter_3         (parameter_sets) float64 0.4287 ... -2.871
+           parameter_1         (set_name) float64 -0.2029 ... 0.187
+           parameter_2         (set_name) float64 -0.801 ... 0.6682
+           parameter_3         (set_name) float64 0.4287 ... -2.871
     """
 
     def __init__(self, sampler_class, *args, **kwargs) -> None:
@@ -1265,8 +1265,8 @@ def _verify_parameter_study(parameter_study: xarray.Dataset):
     hash/set content consistency. Implies checking for the hash coordinate key and consistent data variable
     column/parameter names.
 
-    :raises RuntimeError: if mandatory coordinate names are missing: ``parameter_sets``, ``parameter_set_hash``
-    :raises RuntimeError: if data variables and ``parameter_set_hash`` do not have the ``parameter_sets`` dimension
+    :raises RuntimeError: if mandatory coordinate names are missing: ``set_name``, ``parameter_set_hash``
+    :raises RuntimeError: if data variables and ``parameter_set_hash`` do not have the ``set_name`` dimension
     :raises RuntimeError: if parameter set hash values do not match the calculated hash from
         :meth:`_calculate_parameter_set_hash`.
     """
