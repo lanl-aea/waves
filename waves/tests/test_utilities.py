@@ -1,3 +1,4 @@
+import copy
 import pathlib
 import subprocess
 from unittest.mock import patch
@@ -13,34 +14,34 @@ set_name_substitution = {
     "default identifier": (
         ["@{set_name}lions.txt", "@{set_name}tigers.txt", "bears.txt"],
         "set0",
-        "set_name",
-        "/",
+        {},
         ["set0/lions.txt", "set0/tigers.txt", "bears.txt"],
     ),
     "different identifier": (
         ["@{identifier}lions.txt", "@{identifier}tigers.txt", "bears.txt"],
         "set1",
-        "identifier",
-        "/",
+        {"identifier": "identifier"},
         ["set1/lions.txt", "set1/tigers.txt", "bears.txt"],
     ),
     "remove identifier, no suffix": (
         ["@{identifier}lions.txt", "@{identifier}tigers.txt", "bears.txt"],
         "",
-        "identifier",
-        "",
+        {"identifier": "identifier", "suffix": ""},
         ["lions.txt", "tigers.txt", "bears.txt"],
     ),
 }
 
 
 @pytest.mark.parametrize(
-    "sources, replacement, identifier, suffix, expected",
+    "sources, replacement, kwargs, expected",
     set_name_substitution.values(),
     ids=set_name_substitution.keys(),
 )
-def test_set_name_substitution(sources, replacement, identifier, suffix, expected):
-    replaced_sources = _utilities.set_name_substitution(sources, replacement, identifier=identifier, suffix=suffix)
+def test_set_name_substitution(sources, replacement, kwargs, expected):
+    default_kwargs = {"identifier": "set_name", "suffix": "/"}
+    call_kwargs = copy.deepcopy(default_kwargs)
+    call_kwargs.update(kwargs)
+    replaced_sources = _utilities.set_name_substitution(sources, replacement, **call_kwargs)
     assert replaced_sources == expected
 
 
