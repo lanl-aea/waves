@@ -2085,7 +2085,7 @@ python_script_input = {
         2,
         1,
         (),
-        {"target": pathlib.Path("file3.out")},
+        {"target": pathlib.Path("@{set_name}file3.out")},
         None,
         ["file3.out", "file3.out.stdout"],
     ),

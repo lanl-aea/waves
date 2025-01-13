@@ -17,6 +17,12 @@ set_name_substitution = {
         {},
         ["set0/lions.txt", "set0/tigers.txt", "bears.txt"],
     ),
+    "default behavior: list of pathlib.Path": (
+        [pathlib.Path("@{set_name}lions.txt"), pathlib.Path("@{set_name}tigers.txt"), pathlib.Path("bears.txt")],
+        "set0",
+        {},
+        [pathlib.Path("set0/lions.txt"), pathlib.Path("set0/tigers.txt"), pathlib.Path("bears.txt")],
+    ),
     "different identifier": (
         ["@{identifier}lions.txt", "@{identifier}tigers.txt", "bears.txt"],
         "set1",
@@ -34,6 +40,12 @@ set_name_substitution = {
         "set0",
         {},
         "set0/lions.txt",
+    ),
+    "scalar pathlib.Path, default behavior": (
+        pathlib.Path("@{set_name}lions.txt"),
+        "set0",
+        {},
+        pathlib.Path("set0/lions.txt"),
     ),
     "scalar string, different identifier": (
         "@{identifier}lions.txt",

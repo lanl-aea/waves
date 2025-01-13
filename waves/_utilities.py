@@ -31,11 +31,11 @@ class _AtSignTemplate(string.Template):
 
 
 def set_name_substitution(
-    original: typing.Union[typing.Iterable[str], str],
+    original: typing.Union[typing.Iterable[str], typing.Iterable[pathlib.Path], str, pathlib.Path],
     replacement: str,
     identifier: str = "set_name",
     suffix: str = "/",
-) -> typing.Union[typing.List[str], str]:
+) -> typing.Union[typing.List[str], typing.List[pathlib.Path], str, pathlib.Path]:
     """Replace ``@identifier`` with replacement text in a list of strings
 
     If the original is not a string or an iterable of strings, return without modification.
@@ -48,11 +48,14 @@ def set_name_substitution(
     :returns: string or list of strings with identifier replacements
     """
     mapping = {identifier: f"{replacement}{suffix}"}
-    # TODO: handle pathlib.Path objects
     if isinstance(original, str):
         return _AtSignTemplate(original).safe_substitute(mapping)
+    elif isinstance(original, pathlib.Path):
+        return pathlib.Path(_AtSignTemplate(str(original)).safe_substitute(mapping))
     elif isinstance(original, (list, set, tuple)) and all(isinstance(item, str) for item in original):
         return [_AtSignTemplate(node).safe_substitute(mapping) for node in original]
+    elif isinstance(original, (list, set, tuple)) and all(isinstance(item, pathlib.Path) for item in original):
+        return [pathlib.Path(_AtSignTemplate(str(node)).safe_substitute(mapping)) for node in original]
     else:
         return original
 
