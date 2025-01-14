@@ -117,8 +117,8 @@ class TestLatinHypercube:
             # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
             assert numpy.allclose(numpy.sort(samples, axis=0), numpy.sort(expected_samples, axis=0))
             # Check for consistent hash-parameter set relationships
-            for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
-                assert parameter_set == TestMerge2.parameter_study.sel(set_name=set_name)
+            for set_name, parameters in TestMerge1.parameter_study.groupby(_set_coordinate_key):
+                assert parameters == TestMerge2.parameter_study.sel(set_name=set_name)
             # Self-consistency checks
             assert (
                 list(TestMerge2._set_names.values())
@@ -136,8 +136,8 @@ class TestLatinHypercube:
             # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
             assert numpy.allclose(numpy.sort(samples, axis=0), numpy.sort(expected_samples, axis=0))
             # Check for consistent hash-parameter set relationships
-            for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
-                assert parameter_set == TestMerge2.parameter_study.sel(set_name=set_name)
+            for set_name, parameters in TestMerge1.parameter_study.groupby(_set_coordinate_key):
+                assert parameters == TestMerge2.parameter_study.sel(set_name=set_name)
             # Self-consistency checks
             assert (
                 list(TestMerge2._set_names.values())
