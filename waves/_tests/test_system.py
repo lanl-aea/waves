@@ -84,9 +84,6 @@ system_tests = [
             string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png"),
         ],
         "modsim_template",
-        marks=pytest.mark.skipif(
-            testing_windows and not installed, reason="Windows handles symlinks in repository poorly"
-        ),
         id="modsim_template_visualize_operations",
     ),
     pytest.param(
@@ -106,6 +103,9 @@ system_tests = [
             string.Template("scons html ${unconditional_build} --jobs=4 ${abaqus_command}"),
         ],
         "modsim_template_2",
+        marks=pytest.mark.skipif(
+            testing_windows and not installed, reason="Windows handles symlinks in repository poorly"
+        ),
         id="modsim_template_2_scons_html",
     ),
     pytest.param(
