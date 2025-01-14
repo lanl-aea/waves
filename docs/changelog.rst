@@ -17,6 +17,8 @@ Enhancements
 ============
 - Perform more complete argument substitutions in the task parameter study pseudo-builder (:issue:`852`, :merge:`1080`).
   By `Kyle Brindley`.
+- Limit package mocks to those strictly necessary in modsim template documentation builds. Should minimize documentation
+  build errors when users expand package requirements (:issue:`847`, :merge:`1082`). By `Kyle Brindley`_.
 
 *******************
 0.12.4 (2025-01-08)
