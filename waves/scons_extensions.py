@@ -482,7 +482,9 @@ def project_alias(
 
 
 def project_help_descriptions(
-    nodes: SCons.Node.NodeList, target_descriptions: typing.Optional[dict] = None, message=""
+    nodes: SCons.Node.NodeList,
+    target_descriptions: typing.Optional[dict] = None,
+    message=""
 ) -> str:
     """Append a help message for all nodes using provided target descriptions if available.
 
