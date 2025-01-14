@@ -3245,10 +3245,10 @@ def parameter_study_sconscript(
     env: SCons.Environment.Environment,
     *args,
     variant_dir=None,
-    exports: dict = dict(),
+    exports: typing.Optional[dict] = None,
     study=None,
     set_name: str = "",
-    parameters: dict = dict(),
+    parameters: typing.Optional[dict] = None,
     subdirectories: bool = False,
     **kwargs,
 ):
@@ -3335,6 +3335,11 @@ def parameter_study_sconscript(
 
     :raises TypeError: if ``exports`` is not a dictionary
     """
+    if exports is None:
+        exports = dict()
+    if parameters is None:
+        parameters = dict()
+
     # Avoid importing parameter generator module (heavy) unless necessary
     from waves import parameter_generators
 
