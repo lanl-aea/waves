@@ -473,7 +473,6 @@ def project_alias(
     :param target_descriptions: Mutable dictionary used to keep track of all alias's metadata
 
     :returns: alias metadata dictionary
-    :rtype: dict
     """
     if len(args) >= 1 and args[0] is not None:
         nodes = env.Alias(*args, **kwargs)
@@ -493,7 +492,6 @@ def project_help_descriptions(
     :param message: current help message.
 
     :returns: appended help message
-    :rtype: str
     """
     alias_descriptions = project_alias()
     if not target_descriptions:
