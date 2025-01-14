@@ -38,7 +38,7 @@ Directory Structure
    /home/roppenheimer/waves-tutorials
    $ waves fetch --destination tutorial_writing_builders tutorials/tutorial_writing_builders
    $ ls tutorial_writing_builders
-   SConstruct implicit.yaml implicit_workflow scons_extensions.py solver test_scons_extensions.py
+   SConstruct implicit.yaml implicit_workflow pyproject.toml scons_extensions.py solver test_scons_extensions.py
 
 4. Make the new ``tutorial_writing_builders`` directory the current working directory
 
@@ -50,7 +50,7 @@ Directory Structure
    $ pwd
    /home/roppenheimer/waves-tutorials/tutorial_writing_builders
    $ ls tutorial_writing_builders
-   SConstruct implicit.yaml implicit_workflow scons_extensions.py solver test_scons_extensions.py
+   SConstruct implicit.yaml implicit_workflow pyproject.toml scons_extensions.py solver test_scons_extensions.py
 
 5. (Linux and MacOS only) Make the ``solver.py`` file executable. In a shell, use the command
 
