@@ -60,7 +60,7 @@ test:
     - pandas
     - paraview
     - pip
-    - pytest
+    - pytest>=6
     - pytest-xdist
     - python-gmsh
     - pyyaml

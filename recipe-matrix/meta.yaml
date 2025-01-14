@@ -54,7 +54,7 @@ test:
     # Force a Python variant package test
     - python {{ python }}
     - pip
-    - pytest
+    - pytest>=6
     - pytest-xdist
   imports:
     - waves

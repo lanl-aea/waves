@@ -48,7 +48,7 @@ requirements:
 test:
   requires:
     - pip
-    - pytest
+    - pytest>=6
     - pytest-xdist
   imports:
     - waves
