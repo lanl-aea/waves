@@ -1,4 +1,1 @@
-[project]
-dynamic = ["version"]
-
-[tool.setuptools_scm]
+[tool.pytest.ini_options]
