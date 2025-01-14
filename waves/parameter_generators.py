@@ -269,15 +269,15 @@ class ParameterGenerator(ABC):
                 sys.stdout.write(output_text)
         # If output file template is provided, writing to parameter set files
         else:
-            for parameter_set_file, parameters in parameter_study_iterator:
-                parameter_set_path = pathlib.Path(parameter_set_file)
+            for set_file, parameters in parameter_study_iterator:
+                set_path = pathlib.Path(set_file)
                 text = yaml.safe_dump(parameters) if isinstance(parameters, dict) else f"{parameters}\n"
-                if self.overwrite or not parameter_set_path.is_file():
+                if self.overwrite or not set_path.is_file():
                     # If dry run is specified, print the files that would have been written to stdout
                     if self.dry_run:
-                        sys.stdout.write(f"{parameter_set_path.resolve()}\n{text}")
+                        sys.stdout.write(f"{set_path.resolve()}\n{text}")
                     else:
-                        conditional_write_function(parameter_set_path, parameters)
+                        conditional_write_function(set_path, parameters)
 
     def _conditionally_write_dataset(
         self,
@@ -325,7 +325,7 @@ class ParameterGenerator(ABC):
         The parameter study meta file is always overwritten. It should *NOT* be used to determine if the parameter study
         target or dependee is out-of-date. Parameter study file paths are written as absolute paths.
         """
-        parameter_set_files = [
+        set_files = [
             pathlib.Path(set_name) for set_name in self.parameter_study.coords[_set_coordinate_key].values
         ]
         # Always overwrite the meta data file to ensure that *all* parameter file names are included.
@@ -333,8 +333,8 @@ class ParameterGenerator(ABC):
             if self.output_file:
                 meta_file.write(f"{self.output_file.resolve()}\n")
             else:
-                for parameter_set_file in parameter_set_files:
-                    meta_file.write(f"{parameter_set_file.resolve()}\n")
+                for set_file in set_files:
+                    meta_file.write(f"{set_file.resolve()}\n")
 
     def _create_set_hashes(self) -> None:
         """Construct unique, repeatable parameter set content hashes from ``self._samples``.
