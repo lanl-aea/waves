@@ -1223,7 +1223,7 @@ class SALibSampler(ParameterGenerator, ABC):
         if self.sampler_class == "morris" and parameter_count < 2:
             raise SchemaValidationError("The SALib Morris sampler requires at least two parameters")
 
-    def _sampler_overrides(self, override_kwargs: dict = None) -> dict:
+    def _sampler_overrides(self, override_kwargs: typing.Optional[dict] = None) -> dict:
         """Provide sampler specific kwarg override dictionaries
 
         * sobol produces duplicate parameter sets for two parameters when ``calc_second_order`` is ``True``. Override
