@@ -266,15 +266,15 @@ class ParameterGenerator(ABC):
                 sys.stdout.write(output_text)
         # If output file template is provided, writing to parameter set files
         else:
-            for parameter_set_file, parameter_set in parameter_study_iterator:
+            for parameter_set_file, parameters in parameter_study_iterator:
                 parameter_set_path = pathlib.Path(parameter_set_file)
-                text = yaml.safe_dump(parameter_set) if isinstance(parameter_set, dict) else f"{parameter_set}\n"
+                text = yaml.safe_dump(parameters) if isinstance(parameters, dict) else f"{parameters}\n"
                 if self.overwrite or not parameter_set_path.is_file():
                     # If dry run is specified, print the files that would have been written to stdout
                     if self.dry_run:
                         sys.stdout.write(f"{parameter_set_path.resolve()}\n{text}")
                     else:
-                        conditional_write_function(parameter_set_path, parameter_set)
+                        conditional_write_function(parameter_set_path, parameters)
 
     def _conditionally_write_dataset(
         self,
