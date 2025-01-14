@@ -526,6 +526,9 @@ require_third_party_system_tests = [
             pytest.mark.skipif(
                 testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus"
             ),
+            pytest.mark.skipif(
+                testing_windows and not installed, reason="Windows handles symlinks in repository poorly"
+            ),
         ],
     ),
     pytest.param(
@@ -545,6 +548,9 @@ require_third_party_system_tests = [
             pytest.mark.abaqus,
             pytest.mark.skipif(
                 testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus"
+            ),
+            pytest.mark.skipif(
+                testing_windows and not installed, reason="Windows handles symlinks in repository poorly"
             ),
         ],
     ),
