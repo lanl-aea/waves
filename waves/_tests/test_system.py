@@ -92,9 +92,6 @@ system_tests = [
             string.Template("scons html ${unconditional_build} --jobs=4 ${abaqus_command}"),
         ],
         "modsim_template",
-        # TODO: Fix the conda-test/installed package system tests for template documentation builds
-        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/854
-        marks=[pytest.mark.skipif(installed, reason="The template(s) html build does not work from package directory")],
         id="modsim_template_scons_html",
     ),
     pytest.param(
@@ -103,9 +100,6 @@ system_tests = [
             string.Template("scons html ${unconditional_build} --jobs=4 ${abaqus_command}"),
         ],
         "modsim_template_2",
-        # TODO: Fix the conda-test/installed package system tests for template documentation builds
-        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/854
-        marks=[pytest.mark.skipif(installed, reason="The template(s) html build does not work from package directory")],
         id="modsim_template_2_scons_html",
     ),
     pytest.param(
@@ -526,9 +520,6 @@ require_third_party_system_tests = [
             pytest.mark.skipif(
                 testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus"
             ),
-            # TODO: Fix the conda-test/installed package system tests for template documentation builds
-            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/854
-            pytest.mark.skipif(installed, reason="The template(s) html build does not work from package directory"),
         ],
     ),
     pytest.param(
@@ -549,9 +540,6 @@ require_third_party_system_tests = [
             pytest.mark.skipif(
                 testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus"
             ),
-            # TODO: Fix the conda-test/installed package system tests for template documentation builds
-            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/854
-            pytest.mark.skipif(installed, reason="The template(s) html build does not work from package directory"),
         ],
     ),
 ]
