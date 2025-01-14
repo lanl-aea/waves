@@ -18,7 +18,6 @@ _matlab_environment_extension = ".matlab.env"
 _sbatch_wrapper_options = "--wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap"
 _sierra_environment_extension = ".env"
 _scons_command = "scons"
-_scons_visualize_arguments = ["-Q", "--tree=status", "-n"]
 _scons_tree_status = {
     "E": "exists",
     "R": "exists in repository only",
@@ -158,6 +157,7 @@ _tutorial_paths = {
 }
 
 # Visualize
+_scons_visualize_arguments = ["-Q", "--tree=status", "-n"]
 _visualize_exclude = ["/usr/bin"]
 _visualize_default_height = 12
 _visualize_default_width = 36
