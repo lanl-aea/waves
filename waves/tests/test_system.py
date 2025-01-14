@@ -70,7 +70,12 @@ system_tests = [
     ([string.Template("${waves_command} sobol_sequence --help")], None),
     ([string.Template("${waves_command} print_study --help")], None),
     ([string.Template("${odb_extract_command} --help")], None),
-    # Real fetch operations (on tutorials directory)
+    pytest.param(
+        [string.Template("${waves_command} docs --print-local-path")],
+        None,
+        marks=[pytest.mark.skipif(not installed, reason="The HTML docs path only exists in the as-installed package")],
+    ),
+    # Real fetch operations and file I/O
     ([fetch_template], "tutorials"),
     pytest.param(
         [
@@ -82,9 +87,20 @@ system_tests = [
         id="modsim_template_visualize_operations",
     ),
     pytest.param(
-        [string.Template("${waves_command} docs --print-local-path")],
-        None,
-        marks=[pytest.mark.skipif(not installed, reason="The HTML docs path only exists in the as-installed package")],
+        [
+            fetch_template,
+            string.Template("scons html ${unconditional_build} --jobs=4 ${abaqus_command}"),
+        ],
+        "modsim_template",
+        id="modsim_template_scons_html",
+    ),
+    pytest.param(
+        [
+            fetch_template,
+            string.Template("scons html ${unconditional_build} --jobs=4 ${abaqus_command}"),
+        ],
+        "modsim_template_2",
+        id="modsim_template_2_scons_html",
     ),
     pytest.param(
         [fetch_template, "scons . --jobs=4"],
