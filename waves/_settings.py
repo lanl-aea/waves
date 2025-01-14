@@ -60,10 +60,6 @@ _modsim_template_directory = _project_root_abspath / "modsim_template"
 _tutorials_directory = _project_root_abspath / "tutorials"
 _supported_scipy_samplers = ["Sobol", "Halton", "LatinHypercube", "PoissonDisk"]
 _supported_salib_samplers = ["latin", "fast_sampler", "sobol", "finite_diff", "morris"]
-_visualize_exclude = ["/usr/bin"]
-_visualize_default_height = 12
-_visualize_default_width = 36
-_visualize_default_font_size = 10
 _cartesian_product_subcommand = "cartesian_product"
 _custom_study_subcommand = "custom_study"
 _latin_hypercube_subcommand = "latin_hypercube"
@@ -162,6 +158,10 @@ _tutorial_paths = {
 }
 
 # Visualize
+_visualize_exclude = ["/usr/bin"]
+_visualize_default_height = 12
+_visualize_default_width = 36
+_visualize_default_font_size = 10
 _default_sconstruct = pathlib.Path("SConstruct")
 _default_node_color = "#5AC7CB"  # Light blue from Waves Logo
 _default_edge_color = "#B7DEBE"  # Light green from Waves Logo
