@@ -3530,14 +3530,14 @@ class WAVESEnvironment(SConsEnvironment):
         return copy_substfile(self, *args, **kwargs)
 
     def ProjectHelp(self, *args, **kwargs):
-        """Construction environment method from :meth:`waves.scons_extensions.project_help`
+        """Construction environment method from :meth:`waves.scons_extensions.project_help_message`
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return project_help_message(self, *args, **kwargs)
 
     def ProjectAlias(self, *args, **kwargs):
-        """Construction environment method from :meth:`waves.scons_extensions.project_help`
+        """Construction environment method from :meth:`waves.scons_extensions.project_alias`
 
         When using this environment method, do not provide the first ``env`` argument
         """
