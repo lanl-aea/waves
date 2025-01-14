@@ -5,6 +5,7 @@ dependencies:
   - matplotlib
   - pandas
   - pyyaml
+  - pytest
   - scons >=4.6
   - sphinx >=7.1
   - sphinx-argparse
