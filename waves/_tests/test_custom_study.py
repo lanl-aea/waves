@@ -10,7 +10,7 @@ import numpy
 from waves.parameter_generators import CustomStudy
 from waves._settings import _hash_coordinate_key, _set_coordinate_key
 from waves.exceptions import SchemaValidationError
-from common import merge_samplers
+from waves._tests.common import merge_samplers
 
 
 class TestCustomStudy:

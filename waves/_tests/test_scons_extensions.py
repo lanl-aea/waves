@@ -25,7 +25,7 @@ from waves._settings import _abaqus_restart_extensions
 from waves._settings import _abaqus_solver_common_suffixes
 from waves._settings import _sbatch_wrapper_options
 from waves._settings import _stdout_extension
-from common import platform_check
+from waves._tests.common import platform_check
 
 
 # Test setup and helper functions

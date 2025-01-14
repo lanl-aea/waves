@@ -8,7 +8,7 @@ import numpy
 
 from waves.parameter_generators import SobolSequence, ScipySampler
 from waves._settings import _set_coordinate_key
-from common import consistent_hash_parameter_check, self_consistency_checks, merge_samplers
+from waves._tests.common import consistent_hash_parameter_check, self_consistency_checks, merge_samplers
 
 
 class TestSobolSequence:

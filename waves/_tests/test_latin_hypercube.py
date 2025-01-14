@@ -8,7 +8,7 @@ import numpy
 
 from waves.parameter_generators import LatinHypercube, ScipySampler
 from waves._settings import _hash_coordinate_key, _set_coordinate_key
-from common import merge_samplers
+from waves._tests.common import merge_samplers
 
 
 class TestLatinHypercube:

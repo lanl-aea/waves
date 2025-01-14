@@ -9,7 +9,7 @@ import pytest
 from waves import _fetch
 from waves import _settings
 from waves.exceptions import ChoicesError
-from common import platform_check
+from waves._tests.common import platform_check
 
 
 testing_windows, root_fs, testing_macos = platform_check()
