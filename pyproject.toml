@@ -71,7 +71,7 @@ markers = [
     "quinoa: tests requiring the Quinoa executable",
     "sierra: tests requiring the Sierra executable",
 ]
-addopts = "--ignore='waves/modsim_template/' --ignore='modsim_template/' --ignore='waves/modsim_template_2/' --ignore='modsim_template_2/' --ignore='waves/tutorials/' --ignore='tutorials/' --tb=long --showlocals --failed-first --strict-markers -m 'not systemtest'"
+addopts = "--ignore='waves/modsim_template/' --ignore='modsim_template/' --ignore='waves/modsim_template_2/' --ignore='modsim_template_2/' --ignore='waves/tutorials/' --ignore='tutorials/' --tb=long --showlocals --failed-first --strict-markers -m 'not systemtest' --import-mode=importlib"
 
 [tool.black]
 target-version = ["py39", "py310", "py311", "py312", "py313"]
