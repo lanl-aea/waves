@@ -1233,7 +1233,7 @@ class SALibSampler(ParameterGenerator, ABC):
 
         :return: override kwarg dictionary
         """
-        if dict is None:
+        if override_kwargs is None:
             dict = {}
         parameter_count = len(self._parameter_names)
         if self.sampler_class == "sobol" and parameter_count == 2:
