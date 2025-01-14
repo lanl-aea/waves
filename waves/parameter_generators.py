@@ -28,6 +28,9 @@ from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidat
 
 _exclude_from_namespace = set(globals().keys())
 
+HASH_COORDINATE_KEY = _hash_coordinate_key
+SET_COORDINATE_KEY = _set_coordinate_key
+
 
 class ParameterGenerator(ABC):
     """Abstract base class for parameter study generators

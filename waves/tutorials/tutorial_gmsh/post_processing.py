@@ -9,6 +9,7 @@ import argparse
 import pandas
 import xarray
 import matplotlib.pyplot
+from waves.parameter_generators import SET_COORDINATE_KEY
 
 default_selection_dict = {
     "component": "22",
@@ -105,7 +106,7 @@ def main(
     """
     output_file = pathlib.Path(output_file)
     output_csv = output_file.with_suffix(".csv")
-    concat_coord = "set_name"
+    concat_coord = SET_COORDINATE_KEY
 
     # Build single dataset along the "set_name" dimension
     combined_data = combine_data(input_files, group_path, concat_coord)

@@ -12,6 +12,7 @@ import matplotlib.pyplot
 import numpy
 import seaborn
 import SALib.analyze.delta
+from waves.parameter_generators import SET_COORDINATE_KEY
 
 from modsim_package.python.rectangle_compression_sensitivity_study import parameter_schema
 
@@ -81,7 +82,7 @@ def main(input_files, output_file, group_path, selection_dict, parameter_study_f
     output_file = pathlib.Path(output_file)
     output_csv = output_file.with_suffix(".csv")
     output_yaml = output_file.with_suffix(".yaml")
-    concat_coord = "set_name"
+    concat_coord = SET_COORDINATE_KEY
 
     # Build single dataset along the "set_name" dimension
     combined_data = combine_data(input_files, group_path, concat_coord)

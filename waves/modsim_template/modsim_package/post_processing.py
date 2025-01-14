@@ -7,6 +7,7 @@ import pathlib
 import argparse
 
 import pandas
+from waves.parameter_generators import SET_COORDINATE_KEY
 
 import modsim_package.utilities
 
@@ -55,7 +56,7 @@ def main(
     output_csv = output_file.with_suffix(".csv")
     if csv_regression_file:
         csv_regression_file = pathlib.Path(csv_regression_file)
-    concat_coord = "set_name"
+    concat_coord = SET_COORDINATE_KEY
 
     # Build single dataset along the "set_name" dimension
     combined_data = modsim_package.utilities.combine_data(input_files, group_path, concat_coord)
