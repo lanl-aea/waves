@@ -23,6 +23,9 @@ from waves import _settings
 from waves import _utilities
 from waves._settings import _hash_coordinate_key
 from waves._settings import _set_coordinate_key
+# VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+from waves._settings import _deprecated_set_coordinate_key
+# ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
 
 
@@ -432,6 +435,18 @@ class ParameterGenerator(ABC):
         self.parameter_study = xarray.merge(sample_arrays)
         self._merge_set_names_array()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
+        # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+        self._create_deprecated_set_coordinate_key()
+        # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
+
+    # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+    def _create_deprecated_set_coordinate_key(self) -> None:
+        """Creates a duplicate of the set coordinate key under the deprecated key name"""
+        self.parameter_study = self.parameter_study.expand_dims(
+            dim={_deprecated_set_coordinate_key: self.parameter_study[_set_coordinate_key].values},
+            create_index_for_new_dim=False,
+        )
+    # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 
     def _parameter_study_to_numpy(self) -> numpy.ndarray:
         """Return the parameter study data as a 2D numpy array
@@ -482,6 +497,12 @@ class ParameterGenerator(ABC):
         # Swap dimensions from the set name to the set hash to merge identical sets
         swap_to_hash_index = {_set_coordinate_key: _hash_coordinate_key}
         previous_parameter_study = _open_parameter_study(self.previous_parameter_study)
+        # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+        if not _set_coordinate_key in previous_parameter_study.coords:
+            previous_parameter_study = previous_parameter_study.rename({_deprecated_set_coordinate_key: _set_coordinate_key})
+        previous_parameter_study = previous_parameter_study.drop_vars(_deprecated_set_coordinate_key, errors="ignore")
+        self.parameter_study = self.parameter_study.drop_vars(_deprecated_set_coordinate_key, errors="ignore")
+        # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
         previous_parameter_study = previous_parameter_study.swap_dims(swap_to_hash_index)
         self.parameter_study = self.parameter_study.swap_dims(swap_to_hash_index)
 
@@ -498,6 +519,10 @@ class ParameterGenerator(ABC):
         self._set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
         self._update_set_names()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
+
+        # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+        self._create_deprecated_set_coordinate_key()
+        # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 
 
 class _ScipyGenerator(ParameterGenerator, ABC):
