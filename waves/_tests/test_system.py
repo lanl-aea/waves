@@ -93,7 +93,7 @@ system_tests = [
         ],
         "modsim_template",
         marks=pytest.mark.skipif(
-            testing_windows and not installed, reason="Windows handles symlinks in repository poorly"
+            testing_windows, reason="Windows handles symlinks in repository poorly"
         ),
         id="modsim_template_scons_html",
     ),
@@ -104,7 +104,7 @@ system_tests = [
         ],
         "modsim_template_2",
         marks=pytest.mark.skipif(
-            testing_windows and not installed, reason="Windows handles symlinks in repository poorly"
+            testing_windows, reason="Windows handles symlinks in repository poorly"
         ),
         id="modsim_template_2_scons_html",
     ),
@@ -136,7 +136,7 @@ require_third_party_system_tests = [
             pytest.mark.require_third_party,
             pytest.mark.abaqus,
             pytest.mark.skipif(
-                testing_windows and not installed, reason="Windows handles symlinks in repository poorly"
+                testing_windows, reason="Windows handles symlinks in repository poorly"
             ),
         ],
     ),
@@ -527,7 +527,7 @@ require_third_party_system_tests = [
                 testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus"
             ),
             pytest.mark.skipif(
-                testing_windows and not installed, reason="Windows handles symlinks in repository poorly"
+                testing_windows, reason="Windows handles symlinks in repository poorly"
             ),
         ],
     ),
@@ -550,7 +550,7 @@ require_third_party_system_tests = [
                 testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus"
             ),
             pytest.mark.skipif(
-                testing_windows and not installed, reason="Windows handles symlinks in repository poorly"
+                testing_windows, reason="Windows handles symlinks in repository poorly"
             ),
         ],
     ),
