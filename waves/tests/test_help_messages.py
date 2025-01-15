@@ -104,8 +104,8 @@ def test_project_help_message():
         patch("waves.scons_extensions.alias_list_message") as mock_alias,
     ):
         scons_extensions.project_help_message()
-        mock_targets.assert_called_once_with(env=ANY, append=True, keep_local=True)
-        mock_alias.assert_called_once_with(env=ANY, append=True, keep_local=True)
+        mock_targets.assert_called_once_with(env=ANY, append=True, keep_local=True, target_descriptions=None)
+        mock_alias.assert_called_once_with(env=ANY, append=True, keep_local=True, target_descriptions=None)
 
     # Pass non-default kwargs
     env = SCons.Environment.Environment()
@@ -114,8 +114,8 @@ def test_project_help_message():
         patch("waves.scons_extensions.alias_list_message") as mock_alias,
     ):
         scons_extensions.project_help_message(env=env, append=False, keep_local=False)
-        mock_targets.assert_called_once_with(env=env, append=False, keep_local=False)
-        mock_alias.assert_called_once_with(env=env, append=False, keep_local=False)
+        mock_targets.assert_called_once_with(env=env, append=False, keep_local=False, target_descriptions=None)
+        mock_alias.assert_called_once_with(env=env, append=False, keep_local=False, target_descriptions=None)
 
     # Test the Method style interface
     env.AddMethod(scons_extensions.project_help_message, "ProjectHelp")
@@ -124,5 +124,5 @@ def test_project_help_message():
         patch("waves.scons_extensions.alias_list_message") as mock_alias,
     ):
         env.ProjectHelp()
-        mock_targets.assert_called_once_with(env=env, append=True, keep_local=True)
-        mock_alias.assert_called_once_with(env=env, append=True, keep_local=True)
+        mock_targets.assert_called_once_with(env=env, append=True, keep_local=True, target_descriptions=None)
+        mock_alias.assert_called_once_with(env=env, append=True, keep_local=True, target_descriptions=None)
