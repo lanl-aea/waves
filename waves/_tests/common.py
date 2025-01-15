@@ -29,7 +29,7 @@ def consistent_hash_parameter_check(original_study, merged_study):
     :param Union[CartesianProduct, SobolSequence, ScipySampler, SALibSampler] merged_study: Merged sampler object
     """
     for set_name, parameters in original_study.parameter_study.groupby(_set_coordinate_key):
-        assert parameters == merged_study.parameter_study.sel(set_name=set_name)
+        assert parameters == merged_study.parameter_study.sel({_set_coordinate_key: set_name})
 
 
 def self_consistency_checks(merged_study):
