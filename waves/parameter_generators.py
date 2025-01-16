@@ -442,7 +442,7 @@ class ParameterGenerator(ABC):
     # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
     def _create_deprecated_set_coordinate_key(self) -> None:
         """Creates a duplicate of the set coordinate key under the deprecated key name"""
-        self.parameter_study = self.parameter_study.merge(
+        self.parameter_study = self.parameter_study.assign_coords(
             {_deprecated_set_coordinate_key: self.parameter_study[_set_coordinate_key]},
         )
     # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
