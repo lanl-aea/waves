@@ -204,6 +204,7 @@ class TestParameterGenerator:
             patch("pathlib.Path.is_file", return_value=False),
             patch("waves.parameter_generators.ParameterGenerator._merge_parameter_studies") as mock_merge,
             # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
             patch("waves.parameter_generators.ParameterGenerator._create_deprecated_set_coordinate_key"),
             # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
             pytest.raises(RuntimeError),
@@ -219,6 +220,7 @@ class TestParameterGenerator:
             patch("pathlib.Path.is_file", return_value=False),
             patch("waves.parameter_generators.ParameterGenerator._merge_parameter_studies") as mock_merge,
             # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
             patch("waves.parameter_generators.ParameterGenerator._create_deprecated_set_coordinate_key"),
             # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
             patch("warnings.warn") as mock_warn,
@@ -284,6 +286,7 @@ class TestParameterGenerator:
         assert list(TemplateGenerator._set_names.values()) == expected
         assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
         # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
         assert list(TemplateGenerator.parameter_study[_settings._deprecated_set_coordinate_key].values) == expected
         # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 
@@ -310,6 +313,7 @@ class TestParameterGenerator:
         assert list(TemplateGenerator._set_names.values()) == expected
         assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
         # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
         assert list(TemplateGenerator.parameter_study[_settings._deprecated_set_coordinate_key].values) == expected
         # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 
@@ -318,6 +322,7 @@ class TestParameterGenerator:
         assert list(TemplateGenerator._set_names.values()) == expected
         assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
         # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
         assert list(TemplateGenerator.parameter_study[_settings._deprecated_set_coordinate_key].values) == expected
         # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 

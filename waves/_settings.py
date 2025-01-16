@@ -55,6 +55,7 @@ _default_output_file_type_cli = _allowable_output_file_types[1]
 _hash_coordinate_key = "set_hash"
 _set_coordinate_key = "set_name"
 # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
 _deprecated_set_coordinate_key = "parameter_sets"
 # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 _installed_docs_index = _project_root_abspath / "docs/index.html"

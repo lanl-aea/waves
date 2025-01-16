@@ -25,6 +25,7 @@ from waves._settings import _hash_coordinate_key
 from waves._settings import _set_coordinate_key
 
 # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
 from waves._settings import _deprecated_set_coordinate_key
 
 # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
@@ -437,10 +438,12 @@ class ParameterGenerator(ABC):
         self._merge_set_names_array()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
         # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
         self._create_deprecated_set_coordinate_key()
         # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 
     # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
     def _create_deprecated_set_coordinate_key(self) -> None:
         """Creates a duplicate of the set coordinate key under the deprecated key name"""
         warnings.warn(
@@ -505,6 +508,7 @@ class ParameterGenerator(ABC):
         swap_to_hash_index = {_set_coordinate_key: _hash_coordinate_key}
         previous_parameter_study = _open_parameter_study(self.previous_parameter_study)
         # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
         if _set_coordinate_key not in previous_parameter_study.coords:
             previous_parameter_study = previous_parameter_study.rename(
                 {_deprecated_set_coordinate_key: _set_coordinate_key}
@@ -530,6 +534,7 @@ class ParameterGenerator(ABC):
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
         # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
         self._create_deprecated_set_coordinate_key()
         # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 
