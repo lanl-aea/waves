@@ -148,3 +148,29 @@ def test_project_alias(env, alias, source, message, expected):
         mock_alias.assert_called_once()
     else:
         mock_alias.assert_not_called()
+
+
+project_help_descriptions = {
+    "No Descriptions": (
+        ['dummy_alias', 'dummy_alias2'], {}, {}, ''),
+    "Existing Descriptions": (
+        ['dummy_alias', 'dummy_alias2'], {'dummy_alias': 'dummy_description'}, {}, 'dummy_alias: dummy_description'),
+    "Target Descriptions": (
+        ['dummy_alias', 'dummy_alias2'], {}, {'dummy_alias': 'dummy_description'}, 'dummy_alias: dummy_description'),
+    "Both Descriptions": (
+        ['dummy_alias', 'dummy_alias2'], {'dummy_alias': 'dummy_description2'}, {'dummy_alias': 'dummy_description2'},
+        'dummy_alias: dummy_description2'),
+}
+
+
+@pytest.mark.parametrize(
+    "nodes, existing_descriptions, target_descriptions, expected",
+    project_help_descriptions.values(),
+    ids=project_help_descriptions.keys(),
+)
+def test_project_help_descriptions(nodes, existing_descriptions, target_descriptions, expected):
+    with patch("waves.scons_extensions.project_alias", return_value=existing_descriptions) as mock_project_alias:
+        message = scons_extensions.project_help_descriptions(nodes, target_descriptions=target_descriptions)
+        assert expected in message
+        assert len(nodes) == len(message.splitlines())
+        mock_project_alias.assert_called_once()
