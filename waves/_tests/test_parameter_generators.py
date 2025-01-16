@@ -203,6 +203,9 @@ class TestParameterGenerator:
         with (
             patch("pathlib.Path.is_file", return_value=False),
             patch("waves.parameter_generators.ParameterGenerator._merge_parameter_studies") as mock_merge,
+            # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+            patch("waves.parameter_generators.ParameterGenerator._create_deprecated_set_coordinate_key"),
+            # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
             pytest.raises(RuntimeError),
         ):
             try:
@@ -215,6 +218,9 @@ class TestParameterGenerator:
         with (
             patch("pathlib.Path.is_file", return_value=False),
             patch("waves.parameter_generators.ParameterGenerator._merge_parameter_studies") as mock_merge,
+            # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+            patch("waves.parameter_generators.ParameterGenerator._create_deprecated_set_coordinate_key"),
+            # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
             patch("warnings.warn") as mock_warn,
             does_not_raise(),
         ):

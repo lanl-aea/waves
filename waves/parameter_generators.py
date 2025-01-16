@@ -440,6 +440,12 @@ class ParameterGenerator(ABC):
     # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
     def _create_deprecated_set_coordinate_key(self) -> None:
         """Creates a duplicate of the set coordinate key under the deprecated key name"""
+        warnings.warn(
+            f"The parameter study set name coordinate has been renamed '{_set_coordinate_key}'. "
+            f"The older name '{_deprecated_set_coordinate_key}' will be removed in v1. "
+            f"Please update uses of the set coordinate name from '{_deprecated_set_coordinate_key}' to "
+            f"'{_set_coordinate_key}' or use the new 'waves.parameter_generators.SET_COORDINATE_KEY' constant."
+        )
         self.parameter_study = self.parameter_study.assign_coords(
             {_deprecated_set_coordinate_key: self.parameter_study[_set_coordinate_key]},
         )
