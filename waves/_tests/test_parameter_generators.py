@@ -276,6 +276,10 @@ class TestParameterGenerator:
                 schema, output_file_template=file_template, set_name_template=set_template, **kwargs
             )
         assert list(TemplateGenerator._set_names.values()) == expected
+        assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
+        # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+        assert list(TemplateGenerator.parameter_study[_settings._deprecated_set_coordinate_key].values) == expected
+        # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 
     @pytest.mark.parametrize(
         "schema, file_template, set_template, expected",
@@ -298,10 +302,18 @@ class TestParameterGenerator:
                 schema, output_file_template=file_template, set_name_template=set_template, **kwargs
             )
         assert list(TemplateGenerator._set_names.values()) == expected
+        assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
+        # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+        assert list(TemplateGenerator.parameter_study[_settings._deprecated_set_coordinate_key].values) == expected
+        # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 
         # Test that the update function runs with only a single set. Check that the names don't change.
         TemplateGenerator._update_set_names()
         assert list(TemplateGenerator._set_names.values()) == expected
+        assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
+        # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+        assert list(TemplateGenerator.parameter_study[_settings._deprecated_set_coordinate_key].values) == expected
+        # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 
     # fmt: off
     init_write_stdout = {# schema, template, overwrite, dry_run,         is_file,  sets, stdout_calls  # noqa: E261
