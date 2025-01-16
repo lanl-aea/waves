@@ -502,7 +502,7 @@ class ParameterGenerator(ABC):
         swap_to_hash_index = {_set_coordinate_key: _hash_coordinate_key}
         previous_parameter_study = _open_parameter_study(self.previous_parameter_study)
         # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
-        if not _set_coordinate_key in previous_parameter_study.coords:
+        if _set_coordinate_key not in previous_parameter_study.coords:
             previous_parameter_study = previous_parameter_study.rename(
                 {_deprecated_set_coordinate_key: _set_coordinate_key}
             )
