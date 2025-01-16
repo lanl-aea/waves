@@ -1,5 +1,6 @@
 import copy
 import pathlib
+import warnings
 import subprocess
 from unittest.mock import patch
 from contextlib import nullcontext as does_not_raise
@@ -357,3 +358,14 @@ create_valid_identifier = {
 def test_create_valid_identifier(identifier, expected) -> None:
     returned = _utilities.create_valid_identifier(identifier)
     assert returned == expected
+
+
+def test_warn_only_once():
+
+    def test_warning():
+        warnings.warn("test warning")
+
+    with warnings.catch_warnings(record=True) as warning_output:
+        test_warning()
+        test_warning()
+        assert len(warning_output) == 1

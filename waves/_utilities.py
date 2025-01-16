@@ -14,6 +14,7 @@ import string
 import typing
 import pathlib
 import platform
+import warnings
 import subprocess
 
 import yaml
@@ -330,6 +331,27 @@ def create_valid_identifier(identifier: str) -> None:
     :param identifier: String to convert to valid Python identifier
     """
     return re.sub(r"\W|^(?=\d)", "_", identifier)
+
+
+def warn_only_once(function):
+    """Decorator to suppress warnings raised by successive function calls
+
+    :param function: The function to wrap
+
+    :returns: function wrapped in the warning suppression logic
+    """
+    function.already_warned = False
+
+    def wrapper(*args, **kwargs):
+        """Wrapper logic for the function warning suppression
+
+        :param args: all positional arguments passed through to wrapped function
+        :param kwargs: all keyword arguments passed through to wrapped function
+        """
+        with warnings.catch_warnings(record=function.already_warned):
+            function.already_warned = True
+            return function(*args, **kwargs)
+    return wrapper
 
 
 # Limit help() and 'from module import *' behavior to the module's public API

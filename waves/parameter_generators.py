@@ -444,6 +444,7 @@ class ParameterGenerator(ABC):
 
     # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
+    @_utilities.warn_only_once
     def _create_deprecated_set_coordinate_key(self) -> None:
         """Creates a duplicate of the set coordinate key under the deprecated key name"""
         warnings.warn(
