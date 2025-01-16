@@ -126,3 +126,20 @@ def test_project_help_message():
         env.ProjectHelp()
         mock_targets.assert_called_once_with(env=env, append=True, keep_local=True, target_descriptions=None)
         mock_alias.assert_called_once_with(env=env, append=True, keep_local=True, target_descriptions=None)
+
+
+project_aliases = {
+    "First Alias": (SCons.Environment.Environment(), "dummy_alias", [], "dummy_hint", 1),
+    "Second Alias": (SCons.Environment.Environment(), "dummy_alias2", [], "dummy_hint2", 2),
+    "None": (None, None, None, None, 2),
+}
+
+
+@pytest.mark.parametrize(
+    "env, alias, source, message, expected",
+    project_aliases.values(),
+    ids=project_aliases.keys(),
+)
+def test_project_alias(env, alias, source, message, expected):
+    target_descriptions = scons_extensions.project_alias(env, alias, source, description=message)
+    assert len(target_descriptions) == expected
