@@ -81,9 +81,7 @@ class TestCustomStudy:
         generate_array = TestGenerate._samples
         assert numpy.all(generate_array == expected_array)
         # Verify that the parameter set name creation method was called
-        assert list(TestGenerate._set_names.values()) == [
-            f"parameter_set{num}" for num in range(len(expected_array))
-        ]
+        assert list(TestGenerate._set_names.values()) == [f"parameter_set{num}" for num in range(len(expected_array))]
         # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
         expected_set_names = [f"parameter_set{num}" for num in range(len(expected_array))]
         set_names = list(TestGenerate.parameter_study[_set_coordinate_key])

@@ -92,9 +92,7 @@ system_tests = [
             string.Template("scons html ${unconditional_build} --jobs=4 ${abaqus_command}"),
         ],
         "modsim_template",
-        marks=pytest.mark.skipif(
-            testing_windows, reason="Windows handles symlinks in repository poorly"
-        ),
+        marks=pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
         id="modsim_template_scons_html",
     ),
     pytest.param(
@@ -103,9 +101,7 @@ system_tests = [
             string.Template("scons html ${unconditional_build} --jobs=4 ${abaqus_command}"),
         ],
         "modsim_template_2",
-        marks=pytest.mark.skipif(
-            testing_windows, reason="Windows handles symlinks in repository poorly"
-        ),
+        marks=pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
         id="modsim_template_2_scons_html",
     ),
     pytest.param(
@@ -135,9 +131,7 @@ require_third_party_system_tests = [
         marks=[
             pytest.mark.require_third_party,
             pytest.mark.abaqus,
-            pytest.mark.skipif(
-                testing_windows, reason="Windows handles symlinks in repository poorly"
-            ),
+            pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
         ],
     ),
     pytest.param(
@@ -526,9 +520,7 @@ require_third_party_system_tests = [
             pytest.mark.skipif(
                 testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus"
             ),
-            pytest.mark.skipif(
-                testing_windows, reason="Windows handles symlinks in repository poorly"
-            ),
+            pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
         ],
     ),
     pytest.param(
@@ -549,9 +541,7 @@ require_third_party_system_tests = [
             pytest.mark.skipif(
                 testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus"
             ),
-            pytest.mark.skipif(
-                testing_windows, reason="Windows handles symlinks in repository poorly"
-            ),
+            pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
         ],
     ),
 ]

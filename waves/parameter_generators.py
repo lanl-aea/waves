@@ -23,8 +23,10 @@ from waves import _settings
 from waves import _utilities
 from waves._settings import _hash_coordinate_key
 from waves._settings import _set_coordinate_key
+
 # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
 from waves._settings import _deprecated_set_coordinate_key
+
 # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
 
@@ -328,9 +330,7 @@ class ParameterGenerator(ABC):
         The parameter study meta file is always overwritten. It should *NOT* be used to determine if the parameter study
         target or dependee is out-of-date. Parameter study file paths are written as absolute paths.
         """
-        set_files = [
-            pathlib.Path(set_name) for set_name in self.parameter_study.coords[_set_coordinate_key].values
-        ]
+        set_files = [pathlib.Path(set_name) for set_name in self.parameter_study.coords[_set_coordinate_key].values]
         # Always overwrite the meta data file to ensure that *all* parameter file names are included.
         with open(self.parameter_study_meta_file, "w") as meta_file:
             if self.output_file:
@@ -383,9 +383,7 @@ class ParameterGenerator(ABC):
         * ``self._set_names``
         """
         self._create_set_names()
-        new_set_names = set(self._set_names.values()) - set(
-            self.parameter_study.coords[_set_coordinate_key].values
-        )
+        new_set_names = set(self._set_names.values()) - set(self.parameter_study.coords[_set_coordinate_key].values)
         null_set_names = self.parameter_study.coords[_set_coordinate_key].isnull()
         if any(null_set_names):
             self.parameter_study.coords[_set_coordinate_key][null_set_names] = list(new_set_names)
@@ -406,9 +404,9 @@ class ParameterGenerator(ABC):
     def _merge_set_names_array(self) -> None:
         """Merge the parameter set names array into the parameter study dataset as a non-index coordinate"""
         set_names_array = self._create_set_names_array()
-        self.parameter_study = xarray.merge(
-            [self.parameter_study.reset_coords(), set_names_array]
-        ).set_coords(_set_coordinate_key)
+        self.parameter_study = xarray.merge([self.parameter_study.reset_coords(), set_names_array]).set_coords(
+            _set_coordinate_key
+        )
 
     def _create_parameter_study(self) -> None:
         """Create the standard structure for the parameter study dataset
@@ -445,6 +443,7 @@ class ParameterGenerator(ABC):
         self.parameter_study = self.parameter_study.assign_coords(
             {_deprecated_set_coordinate_key: self.parameter_study[_set_coordinate_key]},
         )
+
     # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 
     def _parameter_study_to_numpy(self) -> numpy.ndarray:
@@ -498,7 +497,9 @@ class ParameterGenerator(ABC):
         previous_parameter_study = _open_parameter_study(self.previous_parameter_study)
         # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
         if not _set_coordinate_key in previous_parameter_study.coords:
-            previous_parameter_study = previous_parameter_study.rename({_deprecated_set_coordinate_key: _set_coordinate_key})
+            previous_parameter_study = previous_parameter_study.rename(
+                {_deprecated_set_coordinate_key: _set_coordinate_key}
+            )
         previous_parameter_study = previous_parameter_study.drop_vars(_deprecated_set_coordinate_key, errors="ignore")
         self.parameter_study = self.parameter_study.drop_vars(_deprecated_set_coordinate_key, errors="ignore")
         # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^

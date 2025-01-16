@@ -38,9 +38,7 @@ def test_merge_parameter_study():
 
     Sign-of-life test that a real parameter study object merges correctly with a representative Dataset
     """
-    parameter_study = CartesianProduct(
-        {"parameter_1": [1, 2], "parameter_2": [3, 4]}
-    ).parameter_study
+    parameter_study = CartesianProduct({"parameter_1": [1, 2], "parameter_2": [3, 4]}).parameter_study
     combined_data = xarray.Dataset(
         {"variable_name": ((SET_COORDINATE_KEY, "space", "time"), numpy.array([[[1, 2, 3]], [[4, 5, 6]]]))},
         coords={"space": [0], "time": [0, 1, 2], SET_COORDINATE_KEY: ["parameter_set0", "parameter_set1"]},
