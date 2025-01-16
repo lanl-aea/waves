@@ -141,5 +141,10 @@ project_aliases = {
     ids=project_aliases.keys(),
 )
 def test_project_alias(env, alias, source, message, expected):
-    target_descriptions = scons_extensions.project_alias(env, alias, source, description=message)
-    assert len(target_descriptions) == expected
+    with patch("SCons.Environment.Base.Alias", return_value=[alias]) as mock_alias:
+        target_descriptions = scons_extensions.project_alias(env, alias, source, description=message)
+        assert len(target_descriptions) == expected
+    if env:
+        mock_alias.assert_called_once()
+    else:
+        mock_alias.assert_not_called()
