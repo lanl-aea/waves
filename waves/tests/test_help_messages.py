@@ -151,15 +151,25 @@ def test_project_alias(env, alias, source, message, expected):
 
 
 project_help_descriptions = {
-    "No Descriptions": (
-        ['dummy_alias', 'dummy_alias2'], {}, {}, ''),
+    "No Descriptions": (["dummy_alias", "dummy_alias2"], {}, {}, ""),
     "Existing Descriptions": (
-        ['dummy_alias', 'dummy_alias2'], {'dummy_alias': 'dummy_description'}, {}, 'dummy_alias: dummy_description'),
+        ["dummy_alias", "dummy_alias2"],
+        {"dummy_alias": "dummy_description"},
+        {},
+        "dummy_alias: dummy_description",
+    ),
     "Target Descriptions": (
-        ['dummy_alias', 'dummy_alias2'], {}, {'dummy_alias': 'dummy_description'}, 'dummy_alias: dummy_description'),
+        ["dummy_alias", "dummy_alias2"],
+        {},
+        {"dummy_alias": "dummy_description"},
+        "dummy_alias: dummy_description",
+    ),
     "Both Descriptions": (
-        ['dummy_alias', 'dummy_alias2'], {'dummy_alias': 'dummy_description2'}, {'dummy_alias': 'dummy_description2'},
-        'dummy_alias: dummy_description2'),
+        ["dummy_alias", "dummy_alias2"],
+        {"dummy_alias": "dummy_description2"},
+        {"dummy_alias": "dummy_description2"},
+        "dummy_alias: dummy_description2",
+    ),
 }
 
 
