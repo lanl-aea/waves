@@ -26,6 +26,7 @@ from waves._settings import _set_coordinate_key
 
 # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
+from waves._settings import _deprecated_hash_coordinate_key
 from waves._settings import _deprecated_set_coordinate_key
 
 # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
@@ -510,10 +511,6 @@ class ParameterGenerator(ABC):
         previous_parameter_study = _open_parameter_study(self.previous_parameter_study)
         # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
         # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
-        if _set_coordinate_key not in previous_parameter_study.coords:
-            previous_parameter_study = previous_parameter_study.rename(
-                {_deprecated_set_coordinate_key: _set_coordinate_key}
-            )
         previous_parameter_study = previous_parameter_study.drop_vars(_deprecated_set_coordinate_key, errors="ignore")
         self.parameter_study = self.parameter_study.drop_vars(_deprecated_set_coordinate_key, errors="ignore")
         # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
@@ -1339,6 +1336,19 @@ def _verify_parameter_study(parameter_study: xarray.Dataset):
         )
 
 
+# VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
+def _convert_parameter_study(parameter_study: xarray.Dataset) -> xarray.Dataset:
+    """Convert <0.12.5 parmaeter study datasets into 0.12.5+ parameter study datasets"""
+    if _set_coordinate_key not in parameter_study.coords:
+        parameter_study = parameter_study.rename({_deprecated_set_coordinate_key: _set_coordinate_key})
+    if _hash_coordinate_key not in parameter_study.coords:
+        parameter_study = parameter_study.rename({_deprecated_hash_coordinate_key: _hash_coordinate_key})
+    return parameter_study
+
+# ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
+
+
 def _open_parameter_study(parameter_study_file: typing.Union[pathlib.Path, str]) -> xarray.Dataset:
     """Return a :meth:`ParameterGenerator.parameter_study` xarray Dataset after verifying contents
 
@@ -1351,6 +1361,11 @@ def _open_parameter_study(parameter_study_file: typing.Union[pathlib.Path, str])
     if not path.is_file():
         raise RuntimeError("File '{parameter_study_file}' is not a file")
     parameter_study = xarray.open_dataset(parameter_study_file)
+
+    # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
+    parameter_study = _convert_parameter_study(parameter_study)
+    # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 
     try:
         _verify_parameter_study(parameter_study)
