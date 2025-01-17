@@ -62,7 +62,7 @@ def test_print_study():
         patch("builtins.print") as mock_print,
         patch("builtins.open", mock_open(read_data=read_data)),
         patch("yaml.safe_load", side_effect=UnicodeDecodeError("utf-8", b"", 0, 1, "invalid start byte")),
-        patch("xarray.open_dataset", return_value=study_xarray),
+        patch("waves.parameter_generators._open_parameter_study", return_value=study_xarray),
         does_not_raise(),
     ):
         try:
