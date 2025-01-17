@@ -16,7 +16,7 @@ Internal Changes
   consistency across the internal naming convention, external API, and tutorial examples. Preserves the older coordinate
   with a user deprecation warning for the transition period and provides a new
   ``waves.parameter_generatores.SET_COORDINATE_KEY`` constant to help users to minimize hardcoded key names in the
-  future (:merge:`1085`). By `Kyle Brindley`_.
+  future (:merge:`1085`, :merge:`1086`). By `Kyle Brindley`_.
 
 Enhancements
 ============
