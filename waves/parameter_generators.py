@@ -162,6 +162,23 @@ class ParameterGenerator(ABC):
         """
         pass
 
+    # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
+    @_utilities.warn_only_once
+    def _create_deprecated_set_coordinate_key(self) -> None:
+        """Creates a duplicate of the set coordinate key under the deprecated key name"""
+        warnings.warn(
+            f"The parameter study set name coordinate has been renamed '{_set_coordinate_key}'. "
+            f"The older name '{_deprecated_set_coordinate_key}' will be removed in v1. "
+            f"Please update uses of the set coordinate name from '{_deprecated_set_coordinate_key}' to "
+            f"'{_set_coordinate_key}' or use the new 'waves.parameter_generators.SET_COORDINATE_KEY' constant."
+        )
+        self.parameter_study = self.parameter_study.assign_coords(
+            {_deprecated_set_coordinate_key: self.parameter_study[_set_coordinate_key]},
+        )
+
+    # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
+
     @abstractmethod
     def _generate(self, **kwargs) -> None:
         """Generate the parameter study definition
@@ -198,6 +215,11 @@ class ParameterGenerator(ABC):
         self._create_parameter_study()
         if self.previous_parameter_study is not None and self.previous_parameter_study.is_file():
             self._merge_parameter_studies()
+
+        # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
+        self._create_deprecated_set_coordinate_key()
+        # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 
     def write(
         self,
@@ -438,27 +460,6 @@ class ParameterGenerator(ABC):
         self.parameter_study = xarray.merge(sample_arrays)
         self._merge_set_names_array()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
-        # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
-        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
-        self._create_deprecated_set_coordinate_key()
-        # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
-
-    # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
-    @_utilities.warn_only_once
-    def _create_deprecated_set_coordinate_key(self) -> None:
-        """Creates a duplicate of the set coordinate key under the deprecated key name"""
-        warnings.warn(
-            f"The parameter study set name coordinate has been renamed '{_set_coordinate_key}'. "
-            f"The older name '{_deprecated_set_coordinate_key}' will be removed in v1. "
-            f"Please update uses of the set coordinate name from '{_deprecated_set_coordinate_key}' to "
-            f"'{_set_coordinate_key}' or use the new 'waves.parameter_generators.SET_COORDINATE_KEY' constant."
-        )
-        self.parameter_study = self.parameter_study.assign_coords(
-            {_deprecated_set_coordinate_key: self.parameter_study[_set_coordinate_key]},
-        )
-
-    # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 
     def _parameter_study_to_numpy(self) -> numpy.ndarray:
         """Return the parameter study data as a 2D numpy array
@@ -530,11 +531,6 @@ class ParameterGenerator(ABC):
         self._set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
         self._update_set_names()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
-
-        # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
-        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
-        self._create_deprecated_set_coordinate_key()
-        # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 
 
 class _ScipyGenerator(ParameterGenerator, ABC):
