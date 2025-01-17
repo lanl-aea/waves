@@ -518,11 +518,29 @@ class ParameterGenerator(ABC):
         previous_parameter_study = previous_parameter_study.swap_dims(swap_to_hash_index)
         self.parameter_study = self.parameter_study.swap_dims(swap_to_hash_index)
 
+        # Record original types
+        previous_parameter_study_types = {
+            key: previous_parameter_study[key].dtype for key in previous_parameter_study.keys()
+        }
+        parameter_study_types = {
+            key: self.parameter_study[key].dtype for key in self.parameter_study.keys()
+        }
+        coerce_types = copy.deepcopy(parameter_study_types)
+        coerce_types.update(previous_parameter_study_types)
+
         # Favor the set names of the prior study. Leaves new set names as NaN.
         self.parameter_study = xarray.merge(
             [previous_parameter_study, self.parameter_study.drop_vars(_set_coordinate_key)]
         )
         previous_parameter_study.close()
+
+        # Coerce types to their original type
+        for key, old_dtype in coerce_types.items():
+            new_dtype = self.parameter_study[key].dtype
+            if  new_dtype != old_dtype:
+                raise RuntimeError(
+                    f"Type change for '{key}' from '{old_dtype}' to '{new_dtype}' during parameter study merge"
+                )
 
         # Recover parameter study numpy array(s) to match merged study
         self._samples = self._parameter_study_to_numpy()
