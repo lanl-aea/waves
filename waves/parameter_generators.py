@@ -1344,6 +1344,7 @@ def _convert_parameter_study(parameter_study: xarray.Dataset) -> xarray.Dataset:
         parameter_study = parameter_study.rename({_deprecated_hash_coordinate_key: _hash_coordinate_key})
     return parameter_study
 
+
 # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 
 

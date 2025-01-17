@@ -351,6 +351,7 @@ def warn_only_once(function):
         with warnings.catch_warnings(record=function.already_warned):
             function.already_warned = True
             return function(*args, **kwargs)
+
     return wrapper
 
 
