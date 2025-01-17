@@ -47,7 +47,9 @@ def main(parameter_study_file: pathlib.Path) -> None:
             table = pandas.DataFrame(study).T
             table.index.name = _settings._set_coordinate_key
     except UnicodeDecodeError as err:
-        study = xarray.open_dataset(parameter_study_file)
+        from waves.parameter_generators import _open_parameter_study
+
+        study = _open_parameter_study(parameter_study_file)
         table = study.to_pandas()
     except Exception as err:
         raise RuntimeError(f"'{parameter_study_file}' failed to open with: '{err}'")
