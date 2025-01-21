@@ -8,6 +8,12 @@ Changelog
 0.12.5 (unreleased)
 *******************
 
+Bug fixes
+=========
+- Fix integer type handling when merging parameter studies. Xarray merge type casts to float for comparisons during
+  merge operations. Cast all data back to original types after merging parameter studies (:issue:`856`, :merge:`1088`).
+  By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Match the Conda build recipes more closely to the conda-forge waves-feedstock for easier downstream/upstream diffs
