@@ -154,6 +154,7 @@ class TestCustomStudy:
             TestMerge1, TestMerge2 = merge_samplers(CustomStudy, first_schema, second_schema, {})
             generate_array = TestMerge2._samples
             assert numpy.all(generate_array == expected_array)
+            # Check for type preservation
             for key in TestMerge2.parameter_study.keys():
                 assert TestMerge2.parameter_study[key].dtype == expected_types[key]
             # Check for consistent hash-parameter set relationships
