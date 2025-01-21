@@ -62,24 +62,28 @@ class TestCustomStudy:
 
     generate_io = {
         "one_parameter": (
-            {"parameter_names": ["a"], "parameter_samples": numpy.array([[1], [2.0]], dtype=object)},
-            numpy.array([[1], [2.0]], dtype=object),
+            {"parameter_names": ["a"], "parameter_samples": numpy.array([[1], [2]], dtype=object)},
+            numpy.array([[1], [2]], dtype=object),
+            {"a": numpy.int64},
         ),
         "two_parameter": (
-            {"parameter_names": ["a", "b"], "parameter_samples": numpy.array([[1, 2.0], [3, 4.5]], dtype=object)},
-            numpy.array([[1, 2.0], [3, 4.5]], dtype=object),
+            {"parameter_names": ["a", "b"], "parameter_samples": numpy.array([[1, 10.], [2, 20.]], dtype=object)},
+            numpy.array([[1, 10.], [2, 20.]], dtype=object),
+            {"a": numpy.int64, "b": numpy.float64},
         ),
     }
 
     @pytest.mark.parametrize(
-        "parameter_schema, expected_array",
+        "parameter_schema, expected_array, expected_types",
         generate_io.values(),
         ids=generate_io.keys(),
     )
-    def test_generate(self, parameter_schema, expected_array):
+    def test_generate(self, parameter_schema, expected_array, expected_types):
         TestGenerate = CustomStudy(parameter_schema)
         generate_array = TestGenerate._samples
         assert numpy.all(generate_array == expected_array)
+        for key in TestGenerate.parameter_study.keys():
+            assert TestGenerate.parameter_study[key].dtype == expected_types[key]
         # Verify that the parameter set name creation method was called
         assert list(TestGenerate._set_names.values()) == [f"parameter_set{num}" for num in range(len(expected_array))]
         # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
@@ -93,12 +97,14 @@ class TestCustomStudy:
             {"parameter_names": ["ints"], "parameter_samples": numpy.array([[1]], dtype=object)},
             # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
             numpy.array([[1]], dtype=object),
+            {"ints": numpy.int64},
         ),
         "single set and new set": (
             {"parameter_names": ["ints"], "parameter_samples": numpy.array([[1]], dtype=object)},
             {"parameter_names": ["ints"], "parameter_samples": numpy.array([[2]], dtype=object)},
             # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
             numpy.array([[1], [2]], dtype=object),
+            {"ints": numpy.int64},
         ),
         "new set": (
             {
@@ -118,6 +124,7 @@ class TestCustomStudy:
                 ],
                 dtype=object,
             ),
+            {"ints": numpy.int64, "floats": numpy.float64, "strings": numpy.dtype("U1")},
         ),
         "unchanged sets": (
             {
@@ -133,19 +140,22 @@ class TestCustomStudy:
                 [[1, 10.1, "a"], [2, 20.2, "b"]],
                 dtype=object,
             ),
+            {"ints": numpy.int64, "floats": numpy.float64, "strings": numpy.dtype("U1")},
         ),
     }
 
     @pytest.mark.parametrize(
-        "first_schema, second_schema, expected_array",
+        "first_schema, second_schema, expected_array, expected_types",
         merge_test.values(),
         ids=merge_test.keys(),
     )
-    def test_merge(self, first_schema, second_schema, expected_array):
+    def test_merge(self, first_schema, second_schema, expected_array, expected_types):
         with patch("waves.parameter_generators._verify_parameter_study"):
             TestMerge1, TestMerge2 = merge_samplers(CustomStudy, first_schema, second_schema, {})
             generate_array = TestMerge2._samples
             assert numpy.all(generate_array == expected_array)
+            for key in TestMerge2.parameter_study.keys():
+                assert TestMerge2.parameter_study[key].dtype == expected_types[key]
             # Check for consistent hash-parameter set relationships
             for set_name, parameters in TestMerge1.parameter_study.groupby(_set_coordinate_key):
                 assert parameters == TestMerge2.parameter_study.sel({_set_coordinate_key: set_name})
