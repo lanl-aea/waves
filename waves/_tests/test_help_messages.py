@@ -123,8 +123,7 @@ def test_project_help_message():
         patch("waves.scons_extensions.alias_list_message") as mock_alias,
     ):
         descriptions = {"somekey": "somevalue"}
-        scons_extensions.project_help_message(env=env, append=False, keep_local=False,
-                                              target_descriptions=descriptions)
+        scons_extensions.project_help_message(env=env, append=False, keep_local=False, target_descriptions=descriptions)
         mock_targets.assert_called_once_with(env=env, append=False, keep_local=False, target_descriptions=descriptions)
         mock_alias.assert_called_once_with(env=env, append=False, keep_local=False, target_descriptions=descriptions)
 
@@ -150,10 +149,20 @@ def test_project_help_message():
 
 
 project_aliases = {
-    "First Alias": (SCons.Environment.Environment(), ["dummy_alias"], {"SomeKey": "SomeValue"}, "dummy_hint",
-                    {"dummy_alias": "dummy_hint"}),
-    "Second Alias": (SCons.Environment.Environment(), ["dummy_alias2"], {}, "dummy_hint2",
-                     {"dummy_alias": "dummy_hint", "dummy_alias2": "dummy_hint2"}),
+    "First Alias": (
+        SCons.Environment.Environment(),
+        ["dummy_alias"],
+        {"SomeKey": "SomeValue"},
+        "dummy_hint",
+        {"dummy_alias": "dummy_hint"},
+    ),
+    "Second Alias": (
+        SCons.Environment.Environment(),
+        ["dummy_alias2"],
+        {},
+        "dummy_hint2",
+        {"dummy_alias": "dummy_hint", "dummy_alias2": "dummy_hint2"},
+    ),
     "None": (None, [], {}, None, {"dummy_alias": "dummy_hint", "dummy_alias2": "dummy_hint2"}),
 }
 
