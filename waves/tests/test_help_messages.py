@@ -150,9 +150,10 @@ def test_project_help_message():
 
 
 project_aliases = {
-    "First Alias": (SCons.Environment.Environment(), "dummy_alias", [], "dummy_hint", 1),
-    "Second Alias": (SCons.Environment.Environment(), "dummy_alias2", [], "dummy_hint2", 2),
-    "None": (None, None, None, None, 2),
+    "First Alias": (SCons.Environment.Environment(), "dummy_alias", [], "dummy_hint", {"dummy_alias": "dummy_hint"}),
+    "Second Alias": (SCons.Environment.Environment(), "dummy_alias2", [], "dummy_hint2", 
+                     {"dummy_alias": "dummy_hint", "dummy_alias2": "dummy_hint2"}),
+    "None": (None, None, None, None, {"dummy_alias": "dummy_hint", "dummy_alias2": "dummy_hint2"}),
 }
 
 
@@ -164,7 +165,7 @@ project_aliases = {
 def test_project_alias(env, alias, source, message, expected):
     with patch("SCons.Environment.Base.Alias", return_value=[alias]) as mock_alias:
         target_descriptions = scons_extensions.project_alias(env, alias, source, description=message)
-        assert len(target_descriptions) == expected
+        assert target_descriptions == expected
     if env:
         mock_alias.assert_called_once()
     else:
