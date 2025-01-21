@@ -150,24 +150,25 @@ def test_project_help_message():
 
 
 project_aliases = {
-    "First Alias": (SCons.Environment.Environment(), "dummy_alias", [], "dummy_hint", {"dummy_alias": "dummy_hint"}),
-    "Second Alias": (SCons.Environment.Environment(), "dummy_alias2", [], "dummy_hint2", 
+    "First Alias": (SCons.Environment.Environment(), ["dummy_alias"], {"SomeKey": "SomeValue"}, "dummy_hint",
+                    {"dummy_alias": "dummy_hint"}),
+    "Second Alias": (SCons.Environment.Environment(), ["dummy_alias2"], {}, "dummy_hint2",
                      {"dummy_alias": "dummy_hint", "dummy_alias2": "dummy_hint2"}),
-    "None": (None, None, None, None, {"dummy_alias": "dummy_hint", "dummy_alias2": "dummy_hint2"}),
+    "None": (None, [], {}, None, {"dummy_alias": "dummy_hint", "dummy_alias2": "dummy_hint2"}),
 }
 
 
 @pytest.mark.parametrize(
-    "env, alias, source, message, expected",
+    "env, args, kwargs, description, expected",
     project_aliases.values(),
     ids=project_aliases.keys(),
 )
-def test_project_alias(env, alias, source, message, expected):
-    with patch("SCons.Environment.Base.Alias", return_value=[alias]) as mock_alias:
-        target_descriptions = scons_extensions.project_alias(env, alias, source, description=message)
+def test_project_alias(env, args, kwargs, description, expected):
+    with patch("SCons.Environment.Base.Alias", return_value=args) as mock_alias:
+        target_descriptions = scons_extensions.project_alias(env, *args, description=description, **kwargs)
         assert target_descriptions == expected
     if env:
-        mock_alias.assert_called_once()
+        mock_alias.assert_called_once_with(*args, **kwargs)
     else:
         mock_alias.assert_not_called()
 
