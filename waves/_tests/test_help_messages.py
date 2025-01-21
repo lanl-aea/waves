@@ -137,7 +137,7 @@ def test_project_help_message():
         env.ProjectHelp()
         mock_targets.assert_called_once_with(env=env, append=True, keep_local=True, target_descriptions=None)
         mock_alias.assert_called_once_with(env=env, append=True, keep_local=True, target_descriptions=None)
-    
+
     # Test the Method style interface, non-default target_descriptions
     with (
         patch("waves.scons_extensions.default_targets_message") as mock_targets,
