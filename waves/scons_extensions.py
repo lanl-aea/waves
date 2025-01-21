@@ -472,12 +472,12 @@ def project_alias(
     :param target_descriptions: Mutable dictionary used to keep track of all alias's metadata.
     :param kwargs: All other keyword arguments are passed to the `SCons Alias`_ method.
 
-    :returns: alias metadata dictionary
+    :returns: target descriptions dictionary
     """
     if len(args) >= 1 and args[0] is not None:
         nodes = env.Alias(*args, **kwargs)
-        new_help_content = {str(node): description for node in nodes}
-        target_descriptions.update(new_help_content)
+        new_target_descriptions = {str(node): description for node in nodes}
+        target_descriptions.update(new_target_descriptions)
     return target_descriptions
 
 
