@@ -467,8 +467,10 @@ def project_alias(
     """Wrapper around the `SCons Alias`_ method. Appends and returns target descriptions dictionary.
 
     :param env: The SCons construction environment object to modify.
-    :param description: String representing metadata of the alias
-    :param target_descriptions: Mutable dictionary used to keep track of all alias's metadata
+    :param args: All other positional arguments are passed to the `SCons Alias`_ method.
+    :param description: String representing metadata of the alias.
+    :param target_descriptions: Mutable dictionary used to keep track of all alias's metadata.
+    :param kwargs: All other keyword arguments are passed to the `SCons Alias`_ method.
 
     :returns: alias metadata dictionary
     """
