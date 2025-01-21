@@ -494,7 +494,7 @@ def project_help_descriptions(
     :returns: appended help message
     """
     alias_descriptions = project_alias()
-    if not target_descriptions:
+    if target_descriptions is None:
         target_descriptions = {}
     descriptions = {**alias_descriptions, **target_descriptions}
     keys = [str(node) for node in nodes]
