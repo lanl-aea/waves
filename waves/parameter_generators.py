@@ -537,10 +537,8 @@ class ParameterGenerator(ABC):
         # Coerce types to their original type
         for key, old_dtype in coerce_types.items():
             new_dtype = self.parameter_study[key].dtype
-            if  new_dtype != old_dtype:
-                raise RuntimeError(
-                    f"Type change for '{key}' from '{old_dtype}' to '{new_dtype}' during parameter study merge"
-                )
+            if new_dtype != old_dtype:
+                self.parameter_study[key] = self.parameter_study[key].astype(old_dtype)
 
         # Recover parameter study numpy array(s) to match merged study
         self._samples = self._parameter_study_to_numpy()
@@ -1313,7 +1311,7 @@ def _parameter_study_to_numpy(parameter_study: xarray.Dataset) -> numpy.ndarray:
 
 
 def _verify_parameter_study(parameter_study: xarray.Dataset):
-    """Verify then contents of a parameter study
+    """Verify the contents of a parameter study
 
     Intended to verify parameter studies read from user supplied files. Currently the only check implemented in the set
     hash/set content consistency. Implies checking for the hash coordinate key and consistent data variable
