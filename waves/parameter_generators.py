@@ -502,7 +502,7 @@ class ParameterGenerator(ABC):
         * ``self._set_hashes``
         * ``self._set_names``
 
-        :raises RuntimeError: If the ``self.parameter_study`` attribute is None
+        :raises RuntimeError: If the ``self.previous_parameter_study`` attribute is None
         """
         if self.previous_parameter_study is None:
             raise RuntimeError("Called without a previous parameter study")
@@ -518,6 +518,7 @@ class ParameterGenerator(ABC):
         previous_parameter_study = previous_parameter_study.swap_dims(swap_to_hash_index)
         self.parameter_study = self.parameter_study.swap_dims(swap_to_hash_index)
 
+        # TODO: Move to a dedicated ``_verify_parameter_study_types`` function.
         # Verify type equality and record types prior to merge.
         previous_parameter_study_types = {
             key: previous_parameter_study[key].dtype for key in previous_parameter_study.keys()
