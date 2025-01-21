@@ -518,13 +518,22 @@ class ParameterGenerator(ABC):
         previous_parameter_study = previous_parameter_study.swap_dims(swap_to_hash_index)
         self.parameter_study = self.parameter_study.swap_dims(swap_to_hash_index)
 
-        # Record original types
+        # Verify type equality and record types prior to merge.
         previous_parameter_study_types = {
             key: previous_parameter_study[key].dtype for key in previous_parameter_study.keys()
         }
         parameter_study_types = {
             key: self.parameter_study[key].dtype for key in self.parameter_study.keys()
         }
+        matching_keys = set(previous_parameter_study_types.keys()) & set(parameter_study_types.keys())
+        for key in matching_keys:
+            previous_type = previous_parameter_study_types[key]
+            current_type = parameter_study_types[key]
+            if current_type != previous_type:
+                raise RuntimeError(
+                    f"Different types for '{key}' in parameter study '{current_type}' and "
+                    f"{self.previous_parameter_study} '{previous_type}'."
+                )
         coerce_types = copy.deepcopy(parameter_study_types)
         coerce_types.update(previous_parameter_study_types)
 
@@ -534,7 +543,8 @@ class ParameterGenerator(ABC):
         )
         previous_parameter_study.close()
 
-        # Coerce types to their original type
+        # Coerce types back to their original type.
+        # Particularly necessary for ints, which are coerced to float by xarray.merge
         for key, old_dtype in coerce_types.items():
             new_dtype = self.parameter_study[key].dtype
             if new_dtype != old_dtype:
