@@ -518,25 +518,8 @@ class ParameterGenerator(ABC):
         previous_parameter_study = previous_parameter_study.swap_dims(swap_to_hash_index)
         self.parameter_study = self.parameter_study.swap_dims(swap_to_hash_index)
 
-        # TODO: Move to a dedicated ``_verify_parameter_study_types`` function.
         # Verify type equality and record types prior to merge.
-        previous_parameter_study_types = {
-            key: previous_parameter_study[key].dtype for key in previous_parameter_study.keys()
-        }
-        parameter_study_types = {
-            key: self.parameter_study[key].dtype for key in self.parameter_study.keys()
-        }
-        matching_keys = set(previous_parameter_study_types.keys()) & set(parameter_study_types.keys())
-        for key in matching_keys:
-            previous_type = previous_parameter_study_types[key]
-            current_type = parameter_study_types[key]
-            if current_type != previous_type:
-                raise RuntimeError(
-                    f"Different types for '{key}' in parameter study '{current_type}' and "
-                    f"{self.previous_parameter_study} '{previous_type}'."
-                )
-        coerce_types = copy.deepcopy(parameter_study_types)
-        coerce_types.update(previous_parameter_study_types)
+        coerce_types = _return_dataset_types(self.parameter_study, previous_parameter_study)
 
         # Favor the set names of the prior study. Leaves new set names as NaN.
         self.parameter_study = xarray.merge(
@@ -1359,6 +1342,24 @@ def _verify_parameter_study(parameter_study: xarray.Dataset):
             f"file:          {file_hashes}\n"
             f"calculated:    {calculated_hashes}"
         )
+
+
+def _return_dataset_types(dataset_1, dataset_2) -> dict:
+    """Return the union of data variables ``{name: dtype}``
+
+    :raises RuntimeError: if data variables with matching names have different types
+    """
+    # TODO: Accept an arbitrarily long list of positional arguments
+    types_1 = {key: dataset_1[key].dtype for key in dataset_1.keys()}
+    types_2 = {key: dataset_2[key].dtype for key in dataset_2.keys()}
+    matching_keys = set(types_1.keys()) & set(types_2.keys())
+    for key in matching_keys:
+        type_1 = types_1[key]
+        type_2 = types_2[key]
+        if type_1 != type_2:
+            raise RuntimeError(f"Different types for '{key}': '{type_1}' and '{type_2}'")
+    types_1.update(types_2)
+    return types_1
 
 
 # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
