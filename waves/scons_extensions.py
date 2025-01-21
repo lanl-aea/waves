@@ -13,8 +13,6 @@ import SCons.Builder
 import SCons.Scanner
 import SCons.Defaults
 import SCons.Environment
-from SCons.Script import DEFAULT_TARGETS
-from SCons.Node.Alias import default_ans
 from SCons.Script.SConscript import SConsEnvironment
 
 from waves import _settings
@@ -418,7 +416,7 @@ def default_targets_message(
     :param target_descriptions: dictionary containing target metadata.
     """
     default_targets_help = project_help_descriptions(
-        DEFAULT_TARGETS, message="\nDefault Targets:\n", target_descriptions=target_descriptions
+        SCons.Script.DEFAULT_TARGETS, message="\nDefault Targets:\n", target_descriptions=target_descriptions
     )
     try:
         SConsEnvironment.Help(env, default_targets_help, append=append, keep_local=keep_local)
@@ -451,7 +449,7 @@ def alias_list_message(
     :param target_descriptions: dictionary containing target metadata.
     """
     alias_help = project_help_descriptions(
-        default_ans, message="\nTarget Aliases:\n", target_descriptions=target_descriptions
+        SCons.Node.Alias.default_ans, message="\nTarget Aliases:\n", target_descriptions=target_descriptions
     )
     try:
         SConsEnvironment.Help(env, alias_help, append=append, keep_local=keep_local)
