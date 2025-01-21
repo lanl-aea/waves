@@ -174,24 +174,24 @@ def test_project_alias(env, args, kwargs, description, expected):
 
 
 project_help_descriptions = {
-    "No Descriptions": (["dummy_alias", "dummy_alias2"], {}, {}, ""),
+    "No Descriptions": (["dummy_alias", "dummy_alias2"], {}, {}, "    dummy_alias\n    dummy_alias2\n"),
     "Existing Descriptions": (
         ["dummy_alias", "dummy_alias2"],
         {"dummy_alias": "dummy_description"},
         {},
-        "dummy_alias: dummy_description",
+        "    dummy_alias: dummy_description\n    dummy_alias2\n",
     ),
     "Target Descriptions": (
         ["dummy_alias", "dummy_alias2"],
         {},
         {"dummy_alias": "dummy_description"},
-        "dummy_alias: dummy_description",
+        "    dummy_alias: dummy_description\n    dummy_alias2\n",
     ),
     "Both Descriptions": (
         ["dummy_alias", "dummy_alias2"],
+        {"dummy_alias": "dummy_description"},
         {"dummy_alias": "dummy_description2"},
-        {"dummy_alias": "dummy_description2"},
-        "dummy_alias: dummy_description2",
+        "    dummy_alias: dummy_description2\n    dummy_alias2\n",
     ),
 }
 
@@ -204,6 +204,5 @@ project_help_descriptions = {
 def test_project_help_descriptions(nodes, existing_descriptions, target_descriptions, expected):
     with patch("waves.scons_extensions.project_alias", return_value=existing_descriptions) as mock_project_alias:
         message = scons_extensions.project_help_descriptions(nodes, target_descriptions=target_descriptions)
-        assert expected in message
-        assert len(nodes) == len(message.splitlines())
+        assert message == expected
         mock_project_alias.assert_called_once()
