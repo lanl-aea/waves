@@ -284,8 +284,8 @@ created parameter sets on re-execution.
    $ ls build/parameter_studies/
    mesh_convergence.h5
    $ waves print_study build/parameter_studies/mesh_convergence.h5
-                                 parameter_set_hash  width  height  global_seed  displacement
-   parameter_sets
+                                           set_hash  width  height  global_seed  displacement
+   set_name
    parameter_set0  cf0934b22f43400165bd3d34aa61013f    1.0     1.0        1.000         -0.01
    parameter_set1  ee7d06f97e3dab5010007d57b2a4ee45    1.0     1.0        0.500         -0.01
    parameter_set2  93de452cc9564a549338e87ad98e5288    1.0     1.0        0.250         -0.01
@@ -319,8 +319,8 @@ should build only ``parameter_set4`` tasks. The parameter study file should also
    $ ls build/mesh_convergence/
    parameter_set0/  parameter_set1/  parameter_set2/  parameter_set3/ parameter_set4/
    $ waves print_study build/parameter_studies/mesh_convergence.h5
-                                 parameter_set_hash  width  height  global_seed  displacement
-   parameter_sets
+                                           set_hash  width  height  global_seed  displacement
+   set_name
    parameter_set0  cf0934b22f43400165bd3d34aa61013f    1.0     1.0        1.000         -0.01
    parameter_set1  ee7d06f97e3dab5010007d57b2a4ee45    1.0     1.0        0.500         -0.01
    parameter_set2  93de452cc9564a549338e87ad98e5288    1.0     1.0        0.250         -0.01

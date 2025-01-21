@@ -73,14 +73,14 @@ set_hashes = {
     set_hashes.values(),
     ids=set_hashes.keys(),
 )
-def test_calculate_parameter_set_hash(parameter_names, samples, expected_hashes):
+def test_calculate_set_hash(parameter_names, samples, expected_hashes):
     for row, expected_hash in zip(samples, expected_hashes):
-        set_hash = parameter_generators._calculate_parameter_set_hash(parameter_names, row)
+        set_hash = parameter_generators._calculate_set_hash(parameter_names, row)
         assert set_hash == expected_hash
 
         with pytest.raises(RuntimeError):
             try:
-                set_hash = parameter_generators._calculate_parameter_set_hash([], row)
+                set_hash = parameter_generators._calculate_set_hash([], row)
             finally:
                 pass
 
@@ -90,12 +90,12 @@ def test_calculate_parameter_set_hash(parameter_names, samples, expected_hashes)
     set_hashes.values(),
     ids=set_hashes.keys(),
 )
-def test_calculate_parameter_set_hashes(parameter_names, samples, expected_hashes):
-    parameter_set_hashes = parameter_generators._calculate_parameter_set_hashes(
+def test_calculate_set_hashes(parameter_names, samples, expected_hashes):
+    set_hashes = parameter_generators._calculate_set_hashes(
         parameter_names,
         samples,
     )
-    assert parameter_set_hashes == expected_hashes
+    assert set_hashes == expected_hashes
 
 
 @pytest.mark.parametrize(
@@ -104,12 +104,12 @@ def test_calculate_parameter_set_hashes(parameter_names, samples, expected_hashe
     ids=set_hashes.keys(),
 )
 def test_verify_parameter_study(parameter_names, samples, expected_hashes):
-    # Borrow setup from class test. See :meth:`test_create_parameter_set_hashes`
+    # Borrow setup from class test. See :meth:`test_create_set_hashes`
     HashesParameterGenerator = DummyGenerator({})
     HashesParameterGenerator._parameter_names = parameter_names
     HashesParameterGenerator._samples = samples
-    HashesParameterGenerator._create_parameter_set_hashes()
-    assert HashesParameterGenerator._parameter_set_hashes == expected_hashes
+    HashesParameterGenerator._create_set_hashes()
+    assert HashesParameterGenerator._set_hashes == expected_hashes
     parameter_study = HashesParameterGenerator.parameter_study
 
     with does_not_raise():
@@ -203,6 +203,10 @@ class TestParameterGenerator:
         with (
             patch("pathlib.Path.is_file", return_value=False),
             patch("waves.parameter_generators.ParameterGenerator._merge_parameter_studies") as mock_merge,
+            # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
+            patch("waves.parameter_generators.ParameterGenerator._create_deprecated_set_coordinate_key"),
+            # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
             pytest.raises(RuntimeError),
         ):
             try:
@@ -215,6 +219,10 @@ class TestParameterGenerator:
         with (
             patch("pathlib.Path.is_file", return_value=False),
             patch("waves.parameter_generators.ParameterGenerator._merge_parameter_studies") as mock_merge,
+            # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
+            patch("waves.parameter_generators.ParameterGenerator._create_deprecated_set_coordinate_key"),
+            # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
             patch("warnings.warn") as mock_warn,
             does_not_raise(),
         ):
@@ -250,10 +258,10 @@ class TestParameterGenerator:
         set_samples = sconsIterator.parameter_study_to_dict()
         assert set_samples == expected
         assert all(isinstance(key, str) for key in set_samples.keys())
-        for parameter_set in expected.keys():
-            assert expected[parameter_set] == set_samples[parameter_set]
-            for parameter in expected[parameter_set].keys():
-                assert type(set_samples[parameter_set][parameter]) == type(expected[parameter_set][parameter])  # fmt:skip # noqa: 721,E501
+        for set_name in expected.keys():
+            assert expected[set_name] == set_samples[set_name]
+            for parameter in expected[set_name].keys():
+                assert type(set_samples[set_name][parameter]) == type(expected[set_name][parameter])  # fmt:skip # noqa: 721,E501
 
     @pytest.mark.parametrize(
         "schema, file_template, set_template, expected",
@@ -275,14 +283,19 @@ class TestParameterGenerator:
             TemplateGenerator = DummyGenerator(
                 schema, output_file_template=file_template, set_name_template=set_template, **kwargs
             )
-        assert list(TemplateGenerator._parameter_set_names.values()) == expected
+        assert list(TemplateGenerator._set_names.values()) == expected
+        assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
+        # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
+        assert list(TemplateGenerator.parameter_study[_settings._deprecated_set_coordinate_key].values) == expected
+        # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 
     @pytest.mark.parametrize(
         "schema, file_template, set_template, expected",
         templates.values(),
         ids=templates.keys(),
     )
-    def test_update_parameter_set_names(self, schema, file_template, set_template, expected):
+    def test_update_set_names(self, schema, file_template, set_template, expected):
         """Check the generated and updated parameter set names against template arguments
 
         :param str schema: placeholder string standing in for the schema read from an input file
@@ -297,11 +310,21 @@ class TestParameterGenerator:
             TemplateGenerator = DummyGenerator(
                 schema, output_file_template=file_template, set_name_template=set_template, **kwargs
             )
-        assert list(TemplateGenerator._parameter_set_names.values()) == expected
+        assert list(TemplateGenerator._set_names.values()) == expected
+        assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
+        # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
+        assert list(TemplateGenerator.parameter_study[_settings._deprecated_set_coordinate_key].values) == expected
+        # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 
         # Test that the update function runs with only a single set. Check that the names don't change.
-        TemplateGenerator._update_parameter_set_names()
-        assert list(TemplateGenerator._parameter_set_names.values()) == expected
+        TemplateGenerator._update_set_names()
+        assert list(TemplateGenerator._set_names.values()) == expected
+        assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
+        # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
+        assert list(TemplateGenerator.parameter_study[_settings._deprecated_set_coordinate_key].values) == expected
+        # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 
     # fmt: off
     init_write_stdout = {# schema, template, overwrite, dry_run,         is_file,  sets, stdout_calls  # noqa: E261
@@ -563,23 +586,23 @@ class TestParameterGenerator:
         set_hashes.values(),
         ids=set_hashes.keys(),
     )
-    def test_create_parameter_set_hashes(self, parameter_names, samples, expected_hashes):
+    def test_create_set_hashes(self, parameter_names, samples, expected_hashes):
         HashesParameterGenerator = DummyGenerator({})
         HashesParameterGenerator._parameter_names = parameter_names
         HashesParameterGenerator._samples = samples
-        del HashesParameterGenerator._parameter_set_hashes
-        assert not hasattr(HashesParameterGenerator, "_parameter_set_hashes")
+        del HashesParameterGenerator._set_hashes
+        assert not hasattr(HashesParameterGenerator, "_set_hashes")
         # Check the function setting the set hashes attribute.
-        HashesParameterGenerator._create_parameter_set_hashes()
-        assert HashesParameterGenerator._parameter_set_hashes == expected_hashes
+        HashesParameterGenerator._create_set_hashes()
+        assert HashesParameterGenerator._set_hashes == expected_hashes
 
-    def test_create_parameter_set_names(self):
+    def test_create_set_names(self):
         """Test the parameter set name generation"""
         SetNamesParameterGenerator = DummyGenerator({}, output_file_template="out")
         SetNamesParameterGenerator._samples = numpy.array([[1], [2]])
-        SetNamesParameterGenerator._create_parameter_set_hashes()
-        SetNamesParameterGenerator._create_parameter_set_names()
-        assert list(SetNamesParameterGenerator._parameter_set_names.values()) == ["out0", "out1"]
+        SetNamesParameterGenerator._create_set_hashes()
+        SetNamesParameterGenerator._create_set_names()
+        assert list(SetNamesParameterGenerator._set_names.values()) == ["out0", "out1"]
 
     def test_parameter_study_to_numpy(self):
         """Test the self-consistency of the parameter study dataset construction and deconstruction"""
@@ -587,8 +610,8 @@ class TestParameterGenerator:
         DataParameterGenerator = DummyGenerator({})
         DataParameterGenerator._parameter_names = ["ints", "floats", "strings", "bools"]
         DataParameterGenerator._samples = numpy.array([[1, 10.1, "a", True], [2, 20.2, "b", False]], dtype=object)
-        DataParameterGenerator._create_parameter_set_hashes()
-        DataParameterGenerator._create_parameter_set_names()
+        DataParameterGenerator._create_set_hashes()
+        DataParameterGenerator._create_set_names()
         DataParameterGenerator._create_parameter_study()
         # Test class method
         returned_samples = DataParameterGenerator._parameter_study_to_numpy()

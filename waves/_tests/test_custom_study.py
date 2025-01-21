@@ -10,7 +10,7 @@ import numpy
 from waves.parameter_generators import CustomStudy
 from waves._settings import _hash_coordinate_key, _set_coordinate_key
 from waves.exceptions import SchemaValidationError
-from common import merge_samplers
+from waves._tests.common import merge_samplers
 
 
 class TestCustomStudy:
@@ -81,13 +81,11 @@ class TestCustomStudy:
         generate_array = TestGenerate._samples
         assert numpy.all(generate_array == expected_array)
         # Verify that the parameter set name creation method was called
-        assert list(TestGenerate._parameter_set_names.values()) == [
-            f"parameter_set{num}" for num in range(len(expected_array))
-        ]
+        assert list(TestGenerate._set_names.values()) == [f"parameter_set{num}" for num in range(len(expected_array))]
         # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
         expected_set_names = [f"parameter_set{num}" for num in range(len(expected_array))]
-        parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
-        assert numpy.all(parameter_set_names == expected_set_names)
+        set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
+        assert numpy.all(set_names == expected_set_names)
 
     merge_test = {
         "single set unchanged": (
@@ -149,14 +147,14 @@ class TestCustomStudy:
             generate_array = TestMerge2._samples
             assert numpy.all(generate_array == expected_array)
             # Check for consistent hash-parameter set relationships
-            for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
-                assert parameter_set == TestMerge2.parameter_study.sel(parameter_sets=set_name)
+            for set_name, parameters in TestMerge1.parameter_study.groupby(_set_coordinate_key):
+                assert parameters == TestMerge2.parameter_study.sel({_set_coordinate_key: set_name})
             # Self-consistency checks
             assert (
-                list(TestMerge2._parameter_set_names.values())
+                list(TestMerge2._set_names.values())
                 == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()  # noqa: W503
             )
-            assert TestMerge2._parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
+            assert TestMerge2._set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
 
     generate_io = {
         "one parameter yaml": (

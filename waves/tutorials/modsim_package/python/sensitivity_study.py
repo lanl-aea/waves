@@ -12,6 +12,7 @@ import matplotlib.pyplot
 import numpy
 import seaborn
 import SALib.analyze.delta
+from waves.parameter_generators import SET_COORDINATE_KEY
 
 from modsim_package.python.rectangle_compression_sensitivity_study import parameter_schema
 
@@ -64,7 +65,7 @@ def merge_parameter_study(parameter_study_file, combined_data):
 
 
 def main(input_files, output_file, group_path, selection_dict, parameter_study_file=None):
-    """Catenate ``input_files`` datasets along the ``parameter_sets`` dimension and plot selected data.
+    """Catenate ``input_files`` datasets along the ``set_name`` dimension and plot selected data.
 
     Merges the parameter study results datasets with the parameter study definition dataset, where the parameter study
     dataset file is assumed to be written by a WAVES parameter generator.
@@ -81,9 +82,9 @@ def main(input_files, output_file, group_path, selection_dict, parameter_study_f
     output_file = pathlib.Path(output_file)
     output_csv = output_file.with_suffix(".csv")
     output_yaml = output_file.with_suffix(".yaml")
-    concat_coord = "parameter_sets"
+    concat_coord = SET_COORDINATE_KEY
 
-    # Build single dataset along the "parameter_sets" dimension
+    # Build single dataset along the "set_name" dimension
     combined_data = combine_data(input_files, group_path, concat_coord)
 
     # Merge WAVES parameter study if provided

@@ -9,6 +9,7 @@ import argparse
 import pandas
 import xarray
 import matplotlib.pyplot
+from waves.parameter_generators import SET_COORDINATE_KEY
 
 default_selection_dict = {
     "E values": "E22",
@@ -95,7 +96,7 @@ def main(
     selection_dict,
     parameter_study_file=None,
 ):
-    """Catenate ``input_files`` datasets along the ``parameter_sets`` dimension and plot selected data.
+    """Catenate ``input_files`` datasets along the ``set_name`` dimension and plot selected data.
 
     Optionally merges the parameter study results datasets with the parameter study definition dataset, where the
     parameter study dataset file is assumed to be written by a WAVES parameter generator.
@@ -115,9 +116,9 @@ def main(
     """
     output_file = pathlib.Path(output_file)
     output_csv = output_file.with_suffix(".csv")
-    concat_coord = "parameter_sets"
+    concat_coord = SET_COORDINATE_KEY
 
-    # Build single dataset along the "parameter_sets" dimension
+    # Build single dataset along the "set_name" dimension
     combined_data = combine_data(input_files, group_path, concat_coord)
 
     # Open and merge WAVES parameter study if provided

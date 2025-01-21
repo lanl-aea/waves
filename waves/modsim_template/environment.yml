@@ -5,10 +5,11 @@ dependencies:
   - matplotlib
   - pandas
   - pyyaml
+  - pytest
   - scons >=4.6
   - sphinx >=7.1
   - sphinx-argparse
-  - sphinx_book_theme
+  - sphinx-book-theme
   - sphinxcontrib-bibtex
   - waves
   - xarray

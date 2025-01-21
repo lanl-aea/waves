@@ -25,7 +25,7 @@ from waves._settings import _abaqus_restart_extensions
 from waves._settings import _abaqus_solver_common_suffixes
 from waves._settings import _sbatch_wrapper_options
 from waves._settings import _stdout_extension
-from common import platform_check
+from waves._tests.common import platform_check
 
 
 # Test setup and helper functions
@@ -2064,20 +2064,74 @@ def test_sphinx_latexpdf():
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
 # target per set.
 python_script_input = {
-    "pass through: no study": (2, 1, ["file1.out"], None),
-    "pass through: target string": (2, 1, "file1.out", None),
-    "pass through: target pathlib": (2, 1, pathlib.Path("file1.out"), None),
-    "pass through: dictionary": (2, 1, ["file2.out"], {"parameter_one": 1}),
-    "study: two sets": (4, 1, ["file3.out"], parameter_generators.CartesianProduct({"one": [1, 2]})),
+    "pass through: no study": (2, 1, (), {"target": ["@{set_name}file1.out"]}, None, ["file1.out", "file1.out.stdout"]),
+    "pass through: no study, positional targets": (
+        2,
+        1,
+        (["@{set_name}file1.out"],),
+        {},
+        None,
+        ["file1.out", "file1.out.stdout"],
+    ),
+    "pass through: target string": (
+        2,
+        1,
+        (),
+        {"target": "@{set_name}file2.out"},
+        None,
+        ["file2.out", "file2.out.stdout"],
+    ),
+    "pass through: target pathlib": (
+        2,
+        1,
+        (),
+        {"target": pathlib.Path("@{set_name}file3.out")},
+        None,
+        ["file3.out", "file3.out.stdout"],
+    ),
+    "pass through: dictionary": (
+        2,
+        1,
+        (),
+        {"target": ["@{set_name}file4.out"]},
+        {"parameter_one": 1},
+        ["file4.out", "file4.out.stdout"],
+    ),
+    "study prefixes: two sets": (
+        4,
+        1,
+        (),
+        {"target": ["@{set_name}file5.out"]},
+        parameter_generators.CartesianProduct({"one": [1, 2]}),
+        [
+            "parameter_set0_file5.out",
+            "parameter_set0_file5.out.stdout",
+            "parameter_set1_file5.out",
+            "parameter_set1_file5.out.stdout",
+        ],
+    ),
+    "study subdirectories: two sets": (
+        4,
+        1,
+        (),
+        {"target": ["@{set_name}file5.out"], "subdirectories": True},
+        parameter_generators.CartesianProduct({"one": [1, 2]}),
+        [
+            "parameter_set0/file5.out",
+            "parameter_set0/file5.out.stdout",
+            "parameter_set1/file5.out",
+            "parameter_set1/file5.out.stdout",
+        ],
+    ),
 }
 
 
 @pytest.mark.parametrize(
-    "node_count, action_count, target_list, study",
+    "node_count, action_count, args, kwargs, study, expected_targets",
     python_script_input.values(),
     ids=python_script_input.keys(),
 )
-def test_parameter_study(node_count, action_count, target_list, study):
+def test_parameter_study(node_count, action_count, args, kwargs, study, expected_targets):
     expected_string = (
         "${environment} ${action_prefix} ${program} ${program_required} ${program_options} "
         "${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
@@ -2088,13 +2142,15 @@ def test_parameter_study(node_count, action_count, target_list, study):
     env.AddMethod(scons_extensions.parameter_study, "ParameterStudy")
     nodes = env.ParameterStudy(
         env.PythonScript,
-        target=target_list,
+        *args,
         source=["python_script.py"],
         script_options="",
         study=study,
+        **kwargs,
     )
 
     check_action_string(nodes, node_count, action_count, expected_string)
+    assert [pathlib.Path(str(node)) for node in nodes] == [pathlib.Path(node) for node in expected_targets]
 
 
 cartesian_product = parameter_generators.CartesianProduct(

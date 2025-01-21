@@ -12,6 +12,8 @@ Requires the following ``SConscript(..., exports={})``
 """
 import pathlib
 
+from waves.parameter_generators import SET_COORDINATE_KEY
+
 # Inherit the parent construction environment
 Import("env", "alias", "parameter_generator")
 
@@ -24,7 +26,7 @@ plot_name = "stress_strain_comparison"
 parameter_study_file = parameter_generator.output_file
 post_processing_source = [
     pathlib.Path(set_name) / "rectangle_compression_datasets.h5"
-    for set_name in parameter_generator.parameter_study.parameter_sets.values
+    for set_name in parameter_generator.parameter_study[SET_COORDINATE_KEY].values
 ]
 script_options = "--input-file ${post_processing_source}"
 script_options += " --output-file ${TARGET.file} --x-units 'mm/mm' --y-units 'MPa'"

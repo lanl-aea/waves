@@ -10,7 +10,7 @@ import numpy
 from waves.parameter_generators import SALibSampler
 from waves._settings import _set_coordinate_key, _supported_salib_samplers
 from waves.exceptions import SchemaValidationError
-from common import consistent_hash_parameter_check, self_consistency_checks, merge_samplers
+from waves._tests.common import consistent_hash_parameter_check, self_consistency_checks, merge_samplers
 
 
 class TestSALibSampler:
@@ -242,10 +242,10 @@ class TestSALibSampler:
                     sampler, parameter_schema["N"], parameter_schema["problem"]["num_vars"]
                 )
                 assert samples_array.shape[0] == len(expected_set_names)
-                assert list(TestGenerate._parameter_set_names.values()) == expected_set_names
+                assert list(TestGenerate._set_names.values()) == expected_set_names
                 # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
-                parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
-                assert numpy.all(parameter_set_names == expected_set_names)
+                set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
+                assert numpy.all(set_names == expected_set_names)
 
     merge_test = {
         "new sets, 5(8)x2": (

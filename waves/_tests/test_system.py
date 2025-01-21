@@ -28,7 +28,7 @@ import pytest
 
 from waves import _settings
 from waves import _utilities
-from common import platform_check
+from waves._tests.common import platform_check
 
 
 testing_windows, root_fs, testing_macos = platform_check()
@@ -70,7 +70,12 @@ system_tests = [
     ([string.Template("${waves_command} sobol_sequence --help")], None),
     ([string.Template("${waves_command} print_study --help")], None),
     ([string.Template("${odb_extract_command} --help")], None),
-    # Real fetch operations (on tutorials directory)
+    pytest.param(
+        [string.Template("${waves_command} docs --print-local-path")],
+        None,
+        marks=[pytest.mark.skipif(not installed, reason="The HTML docs path only exists in the as-installed package")],
+    ),
+    # Real fetch operations and file I/O
     ([fetch_template], "tutorials"),
     pytest.param(
         [
@@ -82,9 +87,22 @@ system_tests = [
         id="modsim_template_visualize_operations",
     ),
     pytest.param(
-        [string.Template("${waves_command} docs --print-local-path")],
-        None,
-        marks=[pytest.mark.skipif(not installed, reason="The HTML docs path only exists in the as-installed package")],
+        [
+            fetch_template,
+            string.Template("scons html ${unconditional_build} --jobs=4 ${abaqus_command}"),
+        ],
+        "modsim_template",
+        marks=pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
+        id="modsim_template_scons_html",
+    ),
+    pytest.param(
+        [
+            fetch_template,
+            string.Template("scons html ${unconditional_build} --jobs=4 ${abaqus_command}"),
+        ],
+        "modsim_template_2",
+        marks=pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
+        id="modsim_template_2_scons_html",
     ),
     pytest.param(
         [fetch_template, "scons . --jobs=4"],
@@ -113,9 +131,7 @@ require_third_party_system_tests = [
         marks=[
             pytest.mark.require_third_party,
             pytest.mark.abaqus,
-            pytest.mark.skipif(
-                testing_windows and not installed, reason="Windows handles symlinks in repository poorly"
-            ),
+            pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
         ],
     ),
     pytest.param(
@@ -504,6 +520,7 @@ require_third_party_system_tests = [
             pytest.mark.skipif(
                 testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus"
             ),
+            pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
         ],
     ),
     pytest.param(
@@ -524,6 +541,7 @@ require_third_party_system_tests = [
             pytest.mark.skipif(
                 testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus"
             ),
+            pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
         ],
     ),
 ]

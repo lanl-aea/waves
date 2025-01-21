@@ -5,7 +5,28 @@ Changelog
 #########
 
 *******************
-0.12.4 (unreleased)
+0.12.5 (unreleased)
+*******************
+
+Internal Changes
+================
+- Match the Conda build recipes more closely to the conda-forge waves-feedstock for easier downstream/upstream diffs
+  (:merge:`1078`). By `Kyle Brindley`_.
+- Re-name the set coordinate name of parameter study Xarray Datasets from ``parameter_sets`` to ``set_name`` for better
+  consistency across the internal naming convention, external API, and tutorial examples. Preserves the older coordinate
+  with a user deprecation warning for the transition period and provides a new
+  ``waves.parameter_generatores.SET_COORDINATE_KEY`` constant to help users to minimize hardcoded key names in the
+  future (:merge:`1085`, :merge:`1086`). By `Kyle Brindley`_.
+
+Enhancements
+============
+- Perform more complete argument substitutions in the task parameter study pseudo-builder (:issue:`852`, :merge:`1080`).
+  By `Kyle Brindley`.
+- Limit package mocks to those strictly necessary in modsim template documentation builds. Should minimize documentation
+  build errors when users expand package requirements (:issue:`847`, :merge:`1082`). By `Kyle Brindley`_.
+
+*******************
+0.12.4 (2025-01-08)
 *******************
 
 Bug fixes

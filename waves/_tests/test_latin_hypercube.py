@@ -8,7 +8,7 @@ import numpy
 
 from waves.parameter_generators import LatinHypercube, ScipySampler
 from waves._settings import _hash_coordinate_key, _set_coordinate_key
-from common import merge_samplers
+from waves._tests.common import merge_samplers
 
 
 class TestLatinHypercube:
@@ -72,11 +72,11 @@ class TestLatinHypercube:
             assert numpy.allclose(samples_array, expected_samples)
             # Verify that the parameter set name creation method was called
             expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
-            assert list(TestGenerate._parameter_set_names.values()) == expected_set_names
+            assert list(TestGenerate._set_names.values()) == expected_set_names
             # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
             expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
-            parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
-            assert numpy.all(parameter_set_names == expected_set_names)
+            set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
+            assert numpy.all(set_names == expected_set_names)
 
     merge_test = {
         "increase simulations": (
@@ -117,14 +117,14 @@ class TestLatinHypercube:
             # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
             assert numpy.allclose(numpy.sort(samples, axis=0), numpy.sort(expected_samples, axis=0))
             # Check for consistent hash-parameter set relationships
-            for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
-                assert parameter_set == TestMerge2.parameter_study.sel(parameter_sets=set_name)
+            for set_name, parameters in TestMerge1.parameter_study.groupby(_set_coordinate_key):
+                assert parameters == TestMerge2.parameter_study.sel({_set_coordinate_key: set_name})
             # Self-consistency checks
             assert (
-                list(TestMerge2._parameter_set_names.values())
+                list(TestMerge2._set_names.values())
                 == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()  # noqa: W503
             )
-            assert TestMerge2._parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
+            assert TestMerge2._set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
 
             # ScipySampler
             TestMerge1, TestMerge2 = merge_samplers(
@@ -136,11 +136,11 @@ class TestLatinHypercube:
             # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
             assert numpy.allclose(numpy.sort(samples, axis=0), numpy.sort(expected_samples, axis=0))
             # Check for consistent hash-parameter set relationships
-            for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
-                assert parameter_set == TestMerge2.parameter_study.sel(parameter_sets=set_name)
+            for set_name, parameters in TestMerge1.parameter_study.groupby(_set_coordinate_key):
+                assert parameters == TestMerge2.parameter_study.sel(set_name=set_name)
             # Self-consistency checks
             assert (
-                list(TestMerge2._parameter_set_names.values())
+                list(TestMerge2._set_names.values())
                 == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()  # noqa: W503
             )
-            assert TestMerge2._parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
+            assert TestMerge2._set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()

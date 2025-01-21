@@ -14,6 +14,7 @@ import string
 import typing
 import pathlib
 import platform
+import warnings
 import subprocess
 
 import yaml
@@ -31,20 +32,37 @@ class _AtSignTemplate(string.Template):
 
 
 def set_name_substitution(
-    source: typing.List[str],
+    original: typing.Union[typing.Iterable[typing.Union[str, pathlib.Path]], str, pathlib.Path],
     replacement: str,
     identifier: str = "set_name",
     suffix: str = "/",
-) -> typing.List[str]:
-    """Replace ``@identifier`` with replacement text in a list of strings
+) -> typing.Union[typing.List[typing.Union[str, pathlib.Path]], str, pathlib.Path]:
+    """Replace ``@identifier`` with replacement text in a list of strings and pathlib Path objects
 
-    :param source: List of strings
+    If the original is not a string, Path, or an iterable of strings and Paths, return without modification.
+
+    :param original: List of strings
     :param replacement: substitution string for the identifier
     :param identifier: template identifier to replace, e.g. ``@identifier`` becomes ``replacement``
     :param suffix: to insert after the replacement text
+
+    :returns: string or list of strings with identifier replacements
     """
     mapping = {identifier: f"{replacement}{suffix}"}
-    return [_AtSignTemplate(node).safe_substitute(mapping) for node in source]
+    if isinstance(original, str):
+        return _AtSignTemplate(original).safe_substitute(mapping)
+    elif isinstance(original, pathlib.Path):
+        return pathlib.Path(_AtSignTemplate(str(original)).safe_substitute(mapping))
+    elif isinstance(original, (list, set, tuple)) and all(isinstance(item, (str, pathlib.Path)) for item in original):
+        modified = list()
+        for node in original:
+            try:
+                modified.append(_AtSignTemplate(node).safe_substitute(mapping))
+            except TypeError:
+                modified.append(pathlib.Path(_AtSignTemplate(str(node)).safe_substitute(mapping)))
+        return modified
+    else:
+        return original
 
 
 def _quote_spaces_in_path(path: typing.Union[str, pathlib.Path]) -> pathlib.Path:
@@ -313,6 +331,28 @@ def create_valid_identifier(identifier: str) -> None:
     :param identifier: String to convert to valid Python identifier
     """
     return re.sub(r"\W|^(?=\d)", "_", identifier)
+
+
+def warn_only_once(function):
+    """Decorator to suppress warnings raised by successive function calls
+
+    :param function: The function to wrap
+
+    :returns: function wrapped in the warning suppression logic
+    """
+    function.already_warned = False
+
+    def wrapper(*args, **kwargs):
+        """Wrapper logic for the function warning suppression
+
+        :param args: all positional arguments passed through to wrapped function
+        :param kwargs: all keyword arguments passed through to wrapped function
+        """
+        with warnings.catch_warnings(record=function.already_warned):
+            function.already_warned = True
+            return function(*args, **kwargs)
+
+    return wrapper
 
 
 # Limit help() and 'from module import *' behavior to the module's public API

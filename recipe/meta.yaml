@@ -1,18 +1,10 @@
-package:
-  name: waves
-  # TODO: Figure out how to use pyproject.toml and a Conda build Jinja template
-  version: {{ VERSION }}
+{% set name = "waves" %}
+{% set version = VERSION %}
 
-about:
-  home: https://github.com/lanl-aea/waves
-  license: BSD-3-Clause
-  license_file: LICENSE.txt
-  summary: 'Computational science and engineering parameteric study workflows'
-  description: |
-    WAVES (LANL code C23004) is a computational science and engineering workflow tool that integrates parametric studies
-    with traditional software build systems.
-  doc_url: https://lanl-aea.github.io/waves/index.html
-  dev_url: https://github.com/lanl-aea/waves
+package:
+  name: {{ name|lower }}
+  # TODO: Figure out how to use pyproject.toml and a Conda build Jinja template
+  version: {{ version }}
 
 source:
   path: '..'
@@ -21,7 +13,7 @@ build:
   noarch: python
   number: 0
   script_env:
-    - SETUPTOOLS_SCM_PRETEND_VERSION={{ VERSION }}
+    - SETUPTOOLS_SCM_PRETEND_VERSION={{ version }}
   entry_points:
     - odb_extract = waves._abaqus.odb_extract:main
     - waves = waves._main:main
@@ -56,7 +48,18 @@ requirements:
 test:
   requires:
     - pip
-    - pytest
+    - pytest>=6
     - pytest-xdist
   imports:
     - waves
+
+about:
+  home: https://github.com/lanl-aea/waves
+  license: BSD-3-Clause
+  license_file: LICENSE.txt
+  summary: 'Computational science and engineering parameteric study workflows'
+  description: |
+    WAVES (LANL code C23004) is a computational science and engineering workflow tool that integrates parametric studies
+    with traditional software build systems.
+  doc_url: https://lanl-aea.github.io/waves/index.html
+  dev_url: https://github.com/lanl-aea/waves

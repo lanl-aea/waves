@@ -7,7 +7,7 @@ import pandas
 import yaml
 
 
-def sort_dataframe(dataframe, index_column="time", sort_columns=["time", "parameter_sets"]):
+def sort_dataframe(dataframe, index_column="time", sort_columns=["time", "set_name"]):
     """Return a sorted dataframe and set an index
 
     1. sort columns by column name
@@ -20,7 +20,7 @@ def sort_dataframe(dataframe, index_column="time", sort_columns=["time", "parame
     return dataframe.reindex(sorted(dataframe.columns), axis=1).sort_values(sort_columns).set_index(index_column)
 
 
-def csv_files_match(current_csv, expected_csv, index_column="time", sort_columns=["time", "parameter_sets"]):
+def csv_files_match(current_csv, expected_csv, index_column="time", sort_columns=["time", "set_name"]):
     """Compare two pandas DataFrame objects and determine if they match.
 
     :param pandas.DataFrame current_csv: Current CSV data of generated plot.

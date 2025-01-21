@@ -18,7 +18,6 @@ _matlab_environment_extension = ".matlab.env"
 _sbatch_wrapper_options = "--wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap"
 _sierra_environment_extension = ".env"
 _scons_command = "scons"
-_scons_visualize_arguments = ["-Q", "--tree=status", "-n"]
 _scons_tree_status = {
     "E": "exists",
     "R": "exists in repository only",
@@ -53,17 +52,18 @@ _allowable_output_file_typing = typing.Literal["h5", "yaml"]
 _allowable_output_file_types = typing.get_args(_allowable_output_file_typing)
 _default_output_file_type_api = _allowable_output_file_types[0]
 _default_output_file_type_cli = _allowable_output_file_types[1]
-_hash_coordinate_key = "parameter_set_hash"
-_set_coordinate_key = "parameter_sets"
+_hash_coordinate_key = "set_hash"
+_set_coordinate_key = "set_name"
+# VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
+_deprecated_hash_coordinate_key = "parameter_set_hash"
+_deprecated_set_coordinate_key = "parameter_sets"
+# ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 _installed_docs_index = _project_root_abspath / "docs/index.html"
 _modsim_template_directory = _project_root_abspath / "modsim_template"
 _tutorials_directory = _project_root_abspath / "tutorials"
 _supported_scipy_samplers = ["Sobol", "Halton", "LatinHypercube", "PoissonDisk"]
 _supported_salib_samplers = ["latin", "fast_sampler", "sobol", "finite_diff", "morris"]
-_visualize_exclude = ["/usr/bin"]
-_visualize_default_height = 12
-_visualize_default_width = 36
-_visualize_default_font_size = 10
 _cartesian_product_subcommand = "cartesian_product"
 _custom_study_subcommand = "custom_study"
 _latin_hypercube_subcommand = "latin_hypercube"
@@ -162,6 +162,11 @@ _tutorial_paths = {
 }
 
 # Visualize
+_scons_visualize_arguments = ["-Q", "--tree=status", "-n"]
+_visualize_exclude = ["/usr/bin"]
+_visualize_default_height = 12
+_visualize_default_width = 36
+_visualize_default_font_size = 10
 _default_sconstruct = pathlib.Path("SConstruct")
 _default_node_color = "#5AC7CB"  # Light blue from Waves Logo
 _default_edge_color = "#B7DEBE"  # Light green from Waves Logo

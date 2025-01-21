@@ -28,8 +28,8 @@ def consistent_hash_parameter_check(original_study, merged_study):
     :param Union[CartesianProduct, SobolSequence, ScipySampler, SALibSampler] original_study: Original sampler object
     :param Union[CartesianProduct, SobolSequence, ScipySampler, SALibSampler] merged_study: Merged sampler object
     """
-    for set_name, parameter_set in original_study.parameter_study.groupby(_set_coordinate_key):
-        assert parameter_set == merged_study.parameter_study.sel(parameter_sets=set_name)
+    for set_name, parameters in original_study.parameter_study.groupby(_set_coordinate_key):
+        assert parameters == merged_study.parameter_study.sel({_set_coordinate_key: set_name})
 
 
 def self_consistency_checks(merged_study):
@@ -38,10 +38,10 @@ def self_consistency_checks(merged_study):
     :param Union[CartesianProduct, SobolSequence, ScipySampler, SALibSampler] merged_study: Sampler object
     """
     assert (
-        list(merged_study._parameter_set_names.values())
+        list(merged_study._set_names.values())
         == merged_study.parameter_study[_set_coordinate_key].values.tolist()  # noqa: W503
     )
-    assert merged_study._parameter_set_hashes == merged_study.parameter_study[_hash_coordinate_key].values.tolist()
+    assert merged_study._set_hashes == merged_study.parameter_study[_hash_coordinate_key].values.tolist()
 
 
 def merge_samplers(sampler_class, first_schema, second_schema, kwargs, sampler=None):

@@ -1,4 +1,6 @@
+import copy
 import pathlib
+import warnings
 import subprocess
 from unittest.mock import patch
 from contextlib import nullcontext as does_not_raise
@@ -10,38 +12,97 @@ from waves import _utilities
 
 
 set_name_substitution = {
-    "default identifier": (
+    "default behavior": (
         ["@{set_name}lions.txt", "@{set_name}tigers.txt", "bears.txt"],
         "set0",
-        "set_name",
-        "/",
+        {},
         ["set0/lions.txt", "set0/tigers.txt", "bears.txt"],
+    ),
+    "default behavior: tuple": (
+        ("@{set_name}lions.txt", "@{set_name}tigers.txt", "bears.txt"),
+        "set0",
+        {},
+        ["set0/lions.txt", "set0/tigers.txt", "bears.txt"],
+    ),
+    "default behavior: set": (
+        {"@{set_name}lions.txt", "@{set_name}tigers.txt", "bears.txt"},
+        "set0",
+        {},
+        ["set0/lions.txt", "set0/tigers.txt", "bears.txt"],
+    ),
+    "default behavior: list of pathlib.Path": (
+        [pathlib.Path("@{set_name}lions.txt"), pathlib.Path("@{set_name}tigers.txt"), pathlib.Path("bears.txt")],
+        "set0",
+        {},
+        [pathlib.Path("set0/lions.txt"), pathlib.Path("set0/tigers.txt"), pathlib.Path("bears.txt")],
+    ),
+    "default behavior: list of mixed str and pathlib.Path": (
+        ["@{set_name}lions.txt", pathlib.Path("@{set_name}tigers.txt"), pathlib.Path("bears.txt")],
+        "set0",
+        {},
+        ["set0/lions.txt", pathlib.Path("set0/tigers.txt"), pathlib.Path("bears.txt")],
     ),
     "different identifier": (
         ["@{identifier}lions.txt", "@{identifier}tigers.txt", "bears.txt"],
         "set1",
-        "identifier",
-        "/",
+        {"identifier": "identifier"},
         ["set1/lions.txt", "set1/tigers.txt", "bears.txt"],
     ),
     "remove identifier, no suffix": (
         ["@{identifier}lions.txt", "@{identifier}tigers.txt", "bears.txt"],
         "",
-        "identifier",
-        "",
+        {"identifier": "identifier", "suffix": ""},
         ["lions.txt", "tigers.txt", "bears.txt"],
+    ),
+    "scalar string, default behavior": (
+        "@{set_name}lions.txt",
+        "set0",
+        {},
+        "set0/lions.txt",
+    ),
+    "scalar pathlib.Path, default behavior": (
+        pathlib.Path("@{set_name}lions.txt"),
+        "set0",
+        {},
+        pathlib.Path("set0/lions.txt"),
+    ),
+    "scalar string, different identifier": (
+        "@{identifier}lions.txt",
+        "set1",
+        {"identifier": "identifier"},
+        "set1/lions.txt",
+    ),
+    "scalar string, remove identifier, no suffix": (
+        "@{identifier}lions.txt",
+        "",
+        {"identifier": "identifier", "suffix": ""},
+        "lions.txt",
+    ),
+    "dictionary": (
+        {"key": "value"},
+        "set0",
+        {},
+        {"key": "value"},
     ),
 }
 
 
 @pytest.mark.parametrize(
-    "sources, replacement, identifier, suffix, expected",
+    "original, replacement, kwargs, expected",
     set_name_substitution.values(),
     ids=set_name_substitution.keys(),
 )
-def test_set_name_substitution(sources, replacement, identifier, suffix, expected):
-    replaced_sources = _utilities.set_name_substitution(sources, replacement, identifier=identifier, suffix=suffix)
-    assert replaced_sources == expected
+def test_set_name_substitution(original, replacement, kwargs, expected):
+    default_kwargs = {"identifier": "set_name", "suffix": "/"}
+    call_kwargs = copy.deepcopy(default_kwargs)
+    call_kwargs.update(kwargs)
+    modified = _utilities.set_name_substitution(original, replacement, **call_kwargs)
+    if isinstance(expected, (str, pathlib.Path)):
+        assert modified == expected
+    elif all(isinstance(item, str) for item in expected) or all(isinstance(item, pathlib.Path) for item in expected):
+        assert sorted(modified) == sorted(expected)
+    else:
+        assert modified == expected
 
 
 quote_spaces_in_path_input = {
@@ -297,3 +358,14 @@ create_valid_identifier = {
 def test_create_valid_identifier(identifier, expected) -> None:
     returned = _utilities.create_valid_identifier(identifier)
     assert returned == expected
+
+
+def test_warn_only_once():
+
+    def test_warning():
+        warnings.warn("test warning")
+
+    with warnings.catch_warnings(record=True) as warning_output:
+        test_warning()
+        test_warning()
+        assert len(warning_output) == 1

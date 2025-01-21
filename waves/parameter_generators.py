@@ -23,10 +23,23 @@ from waves import _settings
 from waves import _utilities
 from waves._settings import _hash_coordinate_key
 from waves._settings import _set_coordinate_key
+
+# VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
+from waves._settings import _deprecated_hash_coordinate_key
+from waves._settings import _deprecated_set_coordinate_key
+
+# ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
 
 
 _exclude_from_namespace = set(globals().keys())
+
+#: The set name coordinate used in WAVES parameter study Xarray Datasets"""
+SET_COORDINATE_KEY = _set_coordinate_key
+
+#: The set hash coordinate used in WAVES parameter study Xarray Datasets
+HASH_COORDINATE_KEY = _hash_coordinate_key
 
 
 class ParameterGenerator(ABC):
@@ -149,6 +162,23 @@ class ParameterGenerator(ABC):
         """
         pass
 
+    # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
+    @_utilities.warn_only_once
+    def _create_deprecated_set_coordinate_key(self) -> None:
+        """Creates a duplicate of the set coordinate key under the deprecated key name"""
+        warnings.warn(
+            f"The parameter study set name coordinate has been renamed '{_set_coordinate_key}'. "
+            f"The older name '{_deprecated_set_coordinate_key}' will be removed in v1. "
+            f"Please update uses of the set coordinate name from '{_deprecated_set_coordinate_key}' to "
+            f"'{_set_coordinate_key}' or use the new 'waves.parameter_generators.SET_COORDINATE_KEY' constant."
+        )
+        self.parameter_study = self.parameter_study.assign_coords(
+            {_deprecated_set_coordinate_key: self.parameter_study[_set_coordinate_key]},
+        )
+
+    # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
+
     @abstractmethod
     def _generate(self, **kwargs) -> None:
         """Generate the parameter study definition
@@ -161,10 +191,10 @@ class ParameterGenerator(ABC):
         * ``self._samples``: The parameter study samples. A 2D numpy array in the shape (number of parameter sets,
             number of parameters). If it's possible that the samples may be of mixed type,
             ``numpy.array(..., dtype=object)`` should be used to preserve the original Python types.
-        * ``self._parameter_set_hashes``: list of parameter set content hashes created by calling
-          ``self._create_parameter_set_hashes`` after populating the ``self._samples`` parameter study values.
-        * ``self._parameter_set_names``: Dictionary mapping parameter set hash to parameter set name strings created by
-            calling ``self._create_parameter_set_names`` after populating ``self._parameter_set_hashes``.
+        * ``self._set_hashes``: list of parameter set content hashes created by calling
+          ``self._create_set_hashes`` after populating the ``self._samples`` parameter study values.
+        * ``self._set_names``: Dictionary mapping parameter set hash to parameter set name strings created by
+            calling ``self._create_set_names`` after populating ``self._set_hashes``.
         * ``self.parameter_study``: The Xarray Dataset parameter study object, created by calling
           ``self._create_parameter_study()`` after defining ``self._samples``.
 
@@ -180,11 +210,16 @@ class ParameterGenerator(ABC):
            # Work performed by common ABC methods
            super()._generate()
         """
-        self._create_parameter_set_hashes()
-        self._create_parameter_set_names()
+        self._create_set_hashes()
+        self._create_set_names()
         self._create_parameter_study()
         if self.previous_parameter_study is not None and self.previous_parameter_study.is_file():
             self._merge_parameter_studies()
+
+        # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
+        self._create_deprecated_set_coordinate_key()
+        # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 
     def write(
         self,
@@ -266,15 +301,15 @@ class ParameterGenerator(ABC):
                 sys.stdout.write(output_text)
         # If output file template is provided, writing to parameter set files
         else:
-            for parameter_set_file, parameter_set in parameter_study_iterator:
-                parameter_set_path = pathlib.Path(parameter_set_file)
-                text = yaml.safe_dump(parameter_set) if isinstance(parameter_set, dict) else f"{parameter_set}\n"
-                if self.overwrite or not parameter_set_path.is_file():
+            for set_file, parameters in parameter_study_iterator:
+                set_path = pathlib.Path(set_file)
+                text = yaml.safe_dump(parameters) if isinstance(parameters, dict) else f"{parameters}\n"
+                if self.overwrite or not set_path.is_file():
                     # If dry run is specified, print the files that would have been written to stdout
                     if self.dry_run:
-                        sys.stdout.write(f"{parameter_set_path.resolve()}\n{text}")
+                        sys.stdout.write(f"{set_path.resolve()}\n{text}")
                     else:
-                        conditional_write_function(parameter_set_path, parameter_set)
+                        conditional_write_function(set_path, parameters)
 
     def _conditionally_write_dataset(
         self,
@@ -322,18 +357,16 @@ class ParameterGenerator(ABC):
         The parameter study meta file is always overwritten. It should *NOT* be used to determine if the parameter study
         target or dependee is out-of-date. Parameter study file paths are written as absolute paths.
         """
-        parameter_set_files = [
-            pathlib.Path(set_name) for set_name in self.parameter_study.coords[_set_coordinate_key].values
-        ]
+        set_files = [pathlib.Path(set_name) for set_name in self.parameter_study.coords[_set_coordinate_key].values]
         # Always overwrite the meta data file to ensure that *all* parameter file names are included.
         with open(self.parameter_study_meta_file, "w") as meta_file:
             if self.output_file:
                 meta_file.write(f"{self.output_file.resolve()}\n")
             else:
-                for parameter_set_file in parameter_set_files:
-                    meta_file.write(f"{parameter_set_file.resolve()}\n")
+                for set_file in set_files:
+                    meta_file.write(f"{set_file.resolve()}\n")
 
-    def _create_parameter_set_hashes(self) -> None:
+    def _create_set_hashes(self) -> None:
         """Construct unique, repeatable parameter set content hashes from ``self._samples``.
 
         Creates an md5 hash from the concatenated string representation of parameter ``name:value`` associations.
@@ -345,71 +378,69 @@ class ParameterGenerator(ABC):
 
         creates attribute:
 
-        * ``self._parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
+        * ``self._set_hashes``: parameter set content hashes identifying rows of parameter study
         """
-        self._parameter_set_hashes = _calculate_parameter_set_hashes(self._parameter_names, self._samples)
+        self._set_hashes = _calculate_set_hashes(self._parameter_names, self._samples)
 
-    def _create_parameter_set_names(self) -> None:
+    def _create_set_names(self) -> None:
         """Construct parameter set names from the set name template and number of parameter sets in ``self._samples``
 
-        Creates the class attribute ``self._parameter_set_names`` required to populate the ``_generate()`` method's
+        Creates the class attribute ``self._set_names`` required to populate the ``_generate()`` method's
         parameter study Xarray dataset object.
 
         requires:
 
-        * ``self._parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
+        * ``self._set_hashes``: parameter set content hashes identifying rows of parameter study
 
         creates attribute:
 
-        * ``self._parameter_set_names``: Dictionary mapping parameter set hash to parameter set name
+        * ``self._set_names``: Dictionary mapping parameter set hash to parameter set name
         """
-        self._parameter_set_names = {}
-        for number, set_hash in enumerate(self._parameter_set_hashes):
+        self._set_names = {}
+        for number, set_hash in enumerate(self._set_hashes):
             template = self.set_name_template
-            self._parameter_set_names[set_hash] = template.substitute({"number": number})
+            self._set_names[set_hash] = template.substitute({"number": number})
 
-    def _update_parameter_set_names(self) -> None:
+    def _update_set_names(self) -> None:
         """Update the parameter set names after a parameter study dataset merge operation.
 
         Resets attributes:
 
         * ``self.parameter_study``
-        * ``self._parameter_set_names``
+        * ``self._set_names``
         """
-        self._create_parameter_set_names()
-        new_set_names = set(self._parameter_set_names.values()) - set(
-            self.parameter_study.coords[_set_coordinate_key].values
-        )
+        self._create_set_names()
+        new_set_names = set(self._set_names.values()) - set(self.parameter_study.coords[_set_coordinate_key].values)
         null_set_names = self.parameter_study.coords[_set_coordinate_key].isnull()
         if any(null_set_names):
             self.parameter_study.coords[_set_coordinate_key][null_set_names] = list(new_set_names)
-        self._parameter_set_names = self.parameter_study[_set_coordinate_key].to_series().to_dict()
+        self._set_names = self.parameter_study[_set_coordinate_key].to_series().to_dict()
 
-    def _create_parameter_set_names_array(self) -> xarray.DataArray:
+    def _create_set_names_array(self) -> xarray.DataArray:
         """Create an Xarray DataArray with the parameter set names using parameter set hashes as the coordinate
 
-        :return: parameter_set_names_array
+        :return: set_names_array
         """
         return xarray.DataArray(
-            list(self._parameter_set_names.values()),
-            coords=[list(self._parameter_set_names.keys())],
+            list(self._set_names.values()),
+            coords=[list(self._set_names.keys())],
             dims=[_hash_coordinate_key],
             name=_set_coordinate_key,
         )
 
-    def _merge_parameter_set_names_array(self) -> None:
+    def _merge_set_names_array(self) -> None:
         """Merge the parameter set names array into the parameter study dataset as a non-index coordinate"""
-        parameter_set_names_array = self._create_parameter_set_names_array()
-        self.parameter_study = xarray.merge(
-            [self.parameter_study.reset_coords(), parameter_set_names_array]
-        ).set_coords(_set_coordinate_key)
+        set_names_array = self._create_set_names_array()
+        self.parameter_study = xarray.merge([self.parameter_study.reset_coords(), set_names_array]).set_coords(
+            _set_coordinate_key
+        )
 
     def _create_parameter_study(self) -> None:
         """Create the standard structure for the parameter study dataset
 
         requires:
 
-        * ``self._parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
+        * ``self._set_hashes``: parameter set content hashes identifying rows of parameter study
         * ``self._parameter_names``: parameter names used as columns of parameter study
         * ``self._samples``: The parameter study samples. Rows are sets. Columns are parameters.
 
@@ -422,12 +453,12 @@ class ParameterGenerator(ABC):
                 list(values),
                 name=name,
                 dims=[_hash_coordinate_key],
-                coords={_hash_coordinate_key: self._parameter_set_hashes},
+                coords={_hash_coordinate_key: self._set_hashes},
             )
             for name, values in zip(self._parameter_names, self._samples.T)
         ]
         self.parameter_study = xarray.merge(sample_arrays)
-        self._merge_parameter_set_names_array()
+        self._merge_set_names_array()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
     def _parameter_study_to_numpy(self) -> numpy.ndarray:
@@ -455,8 +486,8 @@ class ParameterGenerator(ABC):
         :return: parameter study sets and samples as a dictionary: {set_name: {parameter: value}, ...}
         """
         parameter_study_dictionary = {}
-        for set_name, parameter_set in self.parameter_study.groupby(_set_coordinate_key):
-            parameter_dict = {key: array.values.item() for key, array in parameter_set.items()}
+        for set_name, parameters in self.parameter_study.groupby(_set_coordinate_key):
+            parameter_dict = {key: array.values.item() for key, array in parameters.items()}
             parameter_study_dictionary[str(set_name)] = parameter_dict
         return parameter_study_dictionary
 
@@ -468,8 +499,8 @@ class ParameterGenerator(ABC):
 
         * ``self.parameter_study``
         * ``self._samples``
-        * ``self._parameter_set_hashes``
-        * ``self._parameter_set_names``
+        * ``self._set_hashes``
+        * ``self._set_names``
 
         :raises RuntimeError: If the ``self.parameter_study`` attribute is None
         """
@@ -479,6 +510,11 @@ class ParameterGenerator(ABC):
         # Swap dimensions from the set name to the set hash to merge identical sets
         swap_to_hash_index = {_set_coordinate_key: _hash_coordinate_key}
         previous_parameter_study = _open_parameter_study(self.previous_parameter_study)
+        # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
+        previous_parameter_study = previous_parameter_study.drop_vars(_deprecated_set_coordinate_key, errors="ignore")
+        self.parameter_study = self.parameter_study.drop_vars(_deprecated_set_coordinate_key, errors="ignore")
+        # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
         previous_parameter_study = previous_parameter_study.swap_dims(swap_to_hash_index)
         self.parameter_study = self.parameter_study.swap_dims(swap_to_hash_index)
 
@@ -492,8 +528,8 @@ class ParameterGenerator(ABC):
         self._samples = self._parameter_study_to_numpy()
 
         # Recalculate attributes with lengths matching the number of parameter sets
-        self._parameter_set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
-        self._update_parameter_set_names()
+        self._set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
+        self._update_set_names()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
 
@@ -657,13 +693,13 @@ class CartesianProduct(ParameterGenerator):
        >>> parameter_generator = waves.parameter_generators.CartesianProduct(parameter_schema)
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:             (parameter_set_hash: 4)
+       Dimensions:       (set_hash: 4)
        Coordinates:
-           parameter_set_hash  (parameter_set_hash) <U32 'de3cb3eaecb767ff63973820b2...
-         * parameter_sets      (parameter_set_hash) <U14 'parameter_set0' ... 'param...
+           set_hash      (set_hash) <U32 'de3cb3eaecb767ff63973820b2...
+         * set_name      (set_hash) <U14 'parameter_set0' ... 'param...
        Data variables:
-           parameter_1         (parameter_set_hash) object 1 1 2 2
-           parameter_2         (parameter_set_hash) object 'a' 'b' 'a' 'b'
+           parameter_1   (set_hash) object 1 1 2 2
+           parameter_2   (set_hash) object 'a' 'b' 'a' 'b'
     """
 
     def _validate(self) -> None:
@@ -751,13 +787,13 @@ class LatinHypercube(_ScipyGenerator):
        >>> parameter_generator = waves.parameter_generators.LatinHypercube(parameter_schema)
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:             (parameter_set_hash: 4)
+       Dimensions:       (set_hash: 4)
        Coordinates:
-           parameter_set_hash  (parameter_set_hash) <U32 '1e8219dae27faa5388328e225a...
-         * parameter_sets      (parameter_set_hash) <U14 'parameter_set0' ... 'param...
+           set_hash      (set_hash) <U32 '1e8219dae27faa5388328e225a...
+         * set_name      (set_hash) <U14 'parameter_set0' ... 'param...
        Data variables:
-           parameter_1         (parameter_set_hash) float64 0.125 ... 51.15
-           parameter_2         (parameter_set_hash) float64 0.625 ... 30.97
+           parameter_1   (set_hash) float64 0.125 ... 51.15
+           parameter_2   (set_hash) float64 0.625 ... 30.97
     """
 
     def __init__(self, *args, **kwargs) -> None:
@@ -824,14 +860,14 @@ class CustomStudy(ParameterGenerator):
        >>> parameter_generator = waves.parameter_generators.CustomStudy(parameter_schema)
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:             (parameter_set_hash: 2)
+       Dimensions:       (set_hash: 2)
        Coordinates:
-           parameter_set_hash  (parameter_set_hash) <U32 '50ba1a2716e42f8c4fcc34a90a...
-        *  parameter_sets      (parameter_set_hash) <U14 'parameter_set0' 'parameter...
+           set_hash      (set_hash) <U32 '50ba1a2716e42f8c4fcc34a90a...
+         * set_name      (set_hash) <U14 'parameter_set0' 'parameter...
        Data variables:
-           height              (parameter_set_hash) object 1.0 2.0
-           prefix              (parameter_set_hash) object 'a' 'b'
-           index               (parameter_set_hash) object 5 6
+           height        (set_hash) object 1.0 2.0
+           prefix        (set_hash) object 'a' 'b'
+           index         (set_hash) object 5 6
     """
 
     def _validate(self) -> None:
@@ -929,13 +965,13 @@ class SobolSequence(_ScipyGenerator):
        >>> parameter_generator = waves.parameter_generators.SobolSequence(parameter_schema)
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:             (parameter_sets: 4)
+       Dimensions:       (set_name: 4)
        Coordinates:
-           parameter_set_hash  (parameter_sets) <U32 'c1fa74da12c0991379d1df6541c421...
-         * parameter_sets      (parameter_sets) <U14 'parameter_set0' ... 'parameter...
+           set_hash      (set_name) <U32 'c1fa74da12c0991379d1df6541c421...
+         * set_name      (set_name) <U14 'parameter_set0' ... 'parameter...
        Data variables:
-           parameter_1         (parameter_sets) float64 0.0 0.5 ... 7.5 2.5
-           parameter_2         (parameter_sets) float64 0.0 0.5 ... 4.25
+           parameter_1   (set_name) float64 0.0 0.5 ... 7.5 2.5
+           parameter_2   (set_name) float64 0.0 0.5 ... 4.25
     """
 
     def __init__(self, *args, **kwargs) -> None:
@@ -1022,13 +1058,13 @@ class ScipySampler(_ScipyGenerator):
        >>> parameter_generator = waves.parameter_generators.ScipySampler("LatinHypercube", parameter_schema)
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:             (parameter_set_hash: 4)
+       Dimensions:       (set_hash: 4)
        Coordinates:
-           parameter_set_hash  (parameter_set_hash) <U32 '1e8219dae27faa5388328e225a...
-         * parameter_sets      (parameter_set_hash) <U14 'parameter_set0' ... 'param...
+           set_hash      (set_hash) <U32 '1e8219dae27faa5388328e225a...
+         * set_name      (set_hash) <U14 'parameter_set0' ... 'param...
        Data variables:
-           parameter_1         (parameter_set_hash) float64 0.125 ... 51.15
-           parameter_2         (parameter_set_hash) float64 0.625 ... 30.97
+           parameter_1   (set_hash) float64 0.125 ... 51.15
+           parameter_2   (set_hash) float64 0.625 ... 30.97
     """
 
     def __init__(self, sampler_class, *args, **kwargs) -> None:
@@ -1124,14 +1160,14 @@ class SALibSampler(ParameterGenerator, ABC):
        >>> parameter_generator = waves.parameter_generators.SALibSampler("sobol", parameter_schema)
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:             (parameter_sets: 32)
+       Dimensions:       (set_name: 32)
        Coordinates:
-           parameter_set_hash  (parameter_sets) <U32 'e0cb1990f9d70070eaf5638101dcaf...
-         * parameter_sets      (parameter_sets) <U15 'parameter_set0' ... 'parameter...
+           set_hash      (set_name) <U32 'e0cb1990f9d70070eaf5638101dcaf...
+         * set_name      (set_name) <U15 'parameter_set0' ... 'parameter...
        Data variables:
-           parameter_1         (parameter_sets) float64 -0.2029 ... 0.187
-           parameter_2         (parameter_sets) float64 -0.801 ... 0.6682
-           parameter_3         (parameter_sets) float64 0.4287 ... -2.871
+           parameter_1   (set_name) float64 -0.2029 ... 0.187
+           parameter_2   (set_name) float64 -0.801 ... 0.6682
+           parameter_3   (set_name) float64 0.4287 ... -2.871
     """
 
     def __init__(self, sampler_class, *args, **kwargs) -> None:
@@ -1213,7 +1249,7 @@ class SALibSampler(ParameterGenerator, ABC):
         super()._generate()
 
 
-def _calculate_parameter_set_hash(parameter_names: typing.List[str], set_samples: numpy.ndarray) -> str:
+def _calculate_set_hash(parameter_names: typing.List[str], set_samples: numpy.ndarray) -> str:
     """Calculate the unique, repeatable parameter set content hash for a single parameter set
 
     :param parameter_names: list of parameter names in matching order with parameter samples
@@ -1232,7 +1268,7 @@ def _calculate_parameter_set_hash(parameter_names: typing.List[str], set_samples
     return set_hash
 
 
-def _calculate_parameter_set_hashes(parameter_names: typing.List[str], samples: numpy.ndarray) -> typing.List[str]:
+def _calculate_set_hashes(parameter_names: typing.List[str], samples: numpy.ndarray) -> typing.List[str]:
     """Calculate the unique, repeatable parameter set content hashes from a :class:`ParameterGenerator` object with
     populated ``self._samples`` attribute.
 
@@ -1242,7 +1278,7 @@ def _calculate_parameter_set_hashes(parameter_names: typing.List[str], samples: 
 
     :returns: list of parameter set hashes
     """
-    return [_calculate_parameter_set_hash(parameter_names, set_samples) for set_samples in samples]
+    return [_calculate_set_hash(parameter_names, set_samples) for set_samples in samples]
 
 
 def _parameter_study_to_numpy(parameter_study: xarray.Dataset) -> numpy.ndarray:
@@ -1265,10 +1301,10 @@ def _verify_parameter_study(parameter_study: xarray.Dataset):
     hash/set content consistency. Implies checking for the hash coordinate key and consistent data variable
     column/parameter names.
 
-    :raises RuntimeError: if mandatory coordinate names are missing: ``parameter_sets``, ``parameter_set_hash``
-    :raises RuntimeError: if data variables and ``parameter_set_hash`` do not have the ``parameter_sets`` dimension
+    :raises RuntimeError: if mandatory coordinate names are missing: ``set_name``, ``set_hash``
+    :raises RuntimeError: if data variables and ``set_hash`` do not have the ``set_name`` dimension
     :raises RuntimeError: if parameter set hash values do not match the calculated hash from
-        :meth:`_calculate_parameter_set_hash`.
+        :meth:`_calculate_set_hash`.
     """
     # Check for mandatory coordinate keys
     coordinates = list(parameter_study.coords)
@@ -1289,11 +1325,27 @@ def _verify_parameter_study(parameter_study: xarray.Dataset):
     parameter_names = list(parameter_study.keys())
     file_hashes = [str(set_hash) for set_hash in parameter_study[_hash_coordinate_key].values]
     samples = _parameter_study_to_numpy(parameter_study)
-    calculated_hashes = _calculate_parameter_set_hashes(parameter_names, samples)
+    calculated_hashes = _calculate_set_hashes(parameter_names, samples)
     if set(file_hashes) != set(calculated_hashes):
         raise RuntimeError(
-            f"Parameter study set hashes not equal to calculated set hashes: \n{file_hashes}\n{calculated_hashes}"
+            f"Parameter study set hashes not equal to calculated set hashes: \n"
+            f"file:          {file_hashes}\n"
+            f"calculated:    {calculated_hashes}"
         )
+
+
+# VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
+def _convert_parameter_study(parameter_study: xarray.Dataset) -> xarray.Dataset:
+    """Convert <0.12.5 parmaeter study datasets into 0.12.5+ parameter study datasets"""
+    if _set_coordinate_key not in parameter_study.coords:
+        parameter_study = parameter_study.rename({_deprecated_set_coordinate_key: _set_coordinate_key})
+    if _hash_coordinate_key not in parameter_study.coords:
+        parameter_study = parameter_study.rename({_deprecated_hash_coordinate_key: _hash_coordinate_key})
+    return parameter_study
+
+
+# ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 
 
 def _open_parameter_study(parameter_study_file: typing.Union[pathlib.Path, str]) -> xarray.Dataset:
@@ -1308,6 +1360,11 @@ def _open_parameter_study(parameter_study_file: typing.Union[pathlib.Path, str])
     if not path.is_file():
         raise RuntimeError("File '{parameter_study_file}' is not a file")
     parameter_study = xarray.open_dataset(parameter_study_file)
+
+    # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
+    parameter_study = _convert_parameter_study(parameter_study)
+    # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 
     try:
         _verify_parameter_study(parameter_study)

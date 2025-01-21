@@ -3167,8 +3167,6 @@ def ansys_apdl_builder_factory(
 def parameter_study(
     env: SCons.Environment.Environment,
     builder: SCons.Builder.Builder,
-    target: list,
-    source: list,
     *args,
     study=None,
     subdirectories: bool = False,
@@ -3182,17 +3180,17 @@ def parameter_study(
        change without notice until this warning is removed.
 
     `SCons Pseudo-Builder`_ aids in task construction for WAVES parameter studies with any SCons builder. Works with
-    WAVES parameter generators module or parameter dictionaries to reduce parameter study task definition boilerplate and
+    WAVES parameter generators or parameter dictionaries to reduce parameter study task definition boilerplate and
     make nominal workflow definitions directly re-usable in parameter studies.
 
-    * If the study is a WAVES parameter generator object, loop over the parameter sets and prepend the set names to the
-      task target list.
-    * If the study is a ``dict()``, unpack the dictionary as keyword arguments to the builder.
+    * If the study is a WAVES parameter generator object, loop over the parameter sets and replace ``@{set_name}`` in
+      any ``*args`` and ``**kwargs`` that are strings, paths, or lists of strings and paths.
+    * If the study is a ``dict()``, unpack the dictionary as keyword arguments directly into the builder.
     * In all other cases, the task is passed through unchanged to the builder and the study variable is ignored.
 
-    When chaining parameter study tasks, sources belonging to the parameter study can be prefixed by the template
-    ``@{set_name}source.ext``. If the task uses a parameter study, the set name directory prefix will be added to match
-    the target path modifications, e.g.  ``parameter_set0_source.ext`` or ``parameter_set0/source.ext`` depending on the
+    When chaining parameter study tasks, arguments belonging to the parameter study can be prefixed by the template
+    ``@{set_name}source.ext``. If the task uses a parameter study, the set name prefix will be replaced to match
+    the task path modifications, e.g.  ``parameter_set0_source.ext`` or ``parameter_set0/source.ext`` depending on the
     ``subdirectories`` boolean. If the task is not part of a parameter study, the set name will be removed from the
     source, e.g. ``source.ext``. The ``@`` symbol is used as the delimiter to reduce with clashes in shell variable
     syntax and SCons substitution syntax.
@@ -3247,7 +3245,7 @@ def parameter_study(
 
        env.ParameterStudy(
            env.AbaqusSolver,
-           target=["job.odb"],
+           target=["@{set_name}job.odb"],
            source=["@{set_name}job.inp"],
            job="job",
            study=study,
@@ -3256,27 +3254,19 @@ def parameter_study(
 
     :param env: An SCons construction environment to use when defining the targets.
     :param builder: The builder to parameterize
-    :param target: The list of task target files. Will be prepended with a set name directory if a parameter generator
-        ``study`` is provided, e.g. ``parameter_set0_target.ext`` or ``parameter_set0/target.ext`` depending on if the
-        ``subdirectories`` switch is False (default) or True, respectively.
-    :param args: All other positional arguments are passed through to the builder directly
+    :param args: All other positional arguments are passed through to the builder after ``@{set_name}`` string
+        substitutions
     :param study: Parameter generator or dictionary parameter set to provide to the builder. Parameter generators are
         unpacked with set name directory prefixes. Dictionaries are unpacked as keyword arguments.
     :param subdirectories: Switch to use parameter generator ``study`` set names as subdirectories. Ignored when
         ``study`` is not a parameter generator.
-    :param kwargs: all other keyword arguments are passed through to the builder directly
+    :param kwargs: all other keyword arguments are passed through to the builder after ``@{set_name}`` string
+        substitutions
 
     :return: SCons NodeList of target nodes
     """  # noqa: E501
     # Avoid importing parameter generator module (heavy) unless necessary
     from waves import parameter_generators
-
-    # SCons accepts strings or a list, so we should too
-    # TODO: Look for a better solution and update all WAVES "isnotiterable and isnot string-like" checks
-    if isinstance(target, (str, pathlib.Path)):
-        target = [target]
-    if isinstance(source, (str, pathlib.Path)):
-        source = [source]
 
     if subdirectories:
         suffix = "/"
@@ -3286,16 +3276,22 @@ def parameter_study(
     return_targets = list()
     if isinstance(study, parameter_generators.ParameterGenerator):
         for set_name, parameters in study.parameter_study_to_dict().items():
-            set_sources = _utilities.set_name_substitution(source, set_name, suffix=suffix)
-            set_targets = [pathlib.Path(f"{set_name}{suffix}{node}") for node in target]
-            return_targets.extend(builder(target=set_targets, source=set_sources, *args, **kwargs, **parameters))
+            modified_args = (
+                _utilities.set_name_substitution(positional, set_name, suffix=suffix) for positional in args
+            )
+            modified_kwargs = {
+                key: _utilities.set_name_substitution(value, set_name, suffix=suffix) for key, value in kwargs.items()
+            }
+            return_targets.extend(builder(*modified_args, **modified_kwargs, **parameters))
     # Is it better to accept a dictionary of nominal variables or to add a "Nominal" parameter generator?
     elif isinstance(study, dict):
-        set_sources = _utilities.set_name_substitution(source, "", suffix="")
-        return_targets.extend(builder(target=target, source=set_sources, *args, **kwargs, **study))
+        modified_args = (_utilities.set_name_substitution(positional, "", suffix="") for positional in args)
+        modified_kwargs = {key: _utilities.set_name_substitution(value, "", suffix="") for key, value in kwargs.items()}
+        return_targets.extend(builder(*modified_args, **modified_kwargs, **study))
     else:
-        set_sources = _utilities.set_name_substitution(source, "", suffix="")
-        return_targets.extend(builder(target=target, source=set_sources, *args, **kwargs))
+        modified_args = (_utilities.set_name_substitution(positional, "", suffix="") for positional in args)
+        modified_kwargs = {key: _utilities.set_name_substitution(value, "", suffix="") for key, value in kwargs.items()}
+        return_targets.extend(builder(*modified_args, **modified_kwargs))
     return return_targets
 
 

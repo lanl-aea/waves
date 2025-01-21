@@ -10,7 +10,7 @@ import numpy
 from waves.parameter_generators import CartesianProduct
 from waves._settings import _set_coordinate_key
 from waves.exceptions import SchemaValidationError
-from common import consistent_hash_parameter_check, self_consistency_checks, merge_samplers
+from waves._tests.common import consistent_hash_parameter_check, self_consistency_checks, merge_samplers
 
 
 class TestCartesianProduct:
@@ -93,13 +93,11 @@ class TestCartesianProduct:
         generate_array = TestGenerate._samples
         assert numpy.all(generate_array == expected_array)
         # Verify that the parameter set name creation method was called
-        assert list(TestGenerate._parameter_set_names.values()) == [
-            f"parameter_set{num}" for num in range(len(expected_array))
-        ]
+        assert list(TestGenerate._set_names.values()) == [f"parameter_set{num}" for num in range(len(expected_array))]
         # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
         expected_set_names = [f"parameter_set{num}" for num in range(len(expected_array))]
-        parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
-        assert numpy.all(parameter_set_names == expected_set_names)
+        set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
+        assert numpy.all(set_names == expected_set_names)
 
     merge_test = {
         "single set unchanged": (
@@ -324,9 +322,9 @@ class TestCartesianProduct:
         returned_dictionary = TestParameterStudyDict.parameter_study_to_dict()
         assert expected_dictionary.keys() == returned_dictionary.keys()
         assert all(isinstance(key, str) for key in returned_dictionary.keys())
-        for parameter_set in expected_dictionary.keys():
-            assert expected_dictionary[parameter_set] == returned_dictionary[parameter_set]
-            for parameter in expected_dictionary[parameter_set]:
-                assert type(expected_dictionary[parameter_set][parameter]) == type(  # noqa: 721
-                    returned_dictionary[parameter_set][parameter]
+        for set_name in expected_dictionary.keys():
+            assert expected_dictionary[set_name] == returned_dictionary[set_name]
+            for parameter in expected_dictionary[set_name]:
+                assert type(expected_dictionary[set_name][parameter]) == type(  # noqa: 721
+                    returned_dictionary[set_name][parameter]
                 )
