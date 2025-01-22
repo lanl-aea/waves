@@ -150,34 +150,34 @@ def test_project_help_message():
 
 project_aliases = {
     "First Alias": (
-        SCons.Environment.Environment(),
-        ["dummy_alias"],
-        {"SomeKey": "SomeValue"},
-        "dummy_hint",
+        [SCons.Environment.Environment(), "dummy_alias"],
+        {"description": "dummy_hint"},
+        [SCons.Environment.Environment(), "dummy_alias"],
         {"dummy_alias": "dummy_hint"},
+        True
     ),
     "Second Alias": (
-        SCons.Environment.Environment(),
-        ["dummy_alias2"],
-        {},
-        "dummy_hint2",
+        [SCons.Environment.Environment(), "dummy_alias2"],
+        {"description": "dummy_hint2"},
+        [SCons.Environment.Environment(), "dummy_alias"],
         {"dummy_alias": "dummy_hint", "dummy_alias2": "dummy_hint2"},
+        True
     ),
-    "None": (None, [], {}, None, {"dummy_alias": "dummy_hint", "dummy_alias2": "dummy_hint2"}),
+    "None": ([None, None], {}, None, {"dummy_alias": "dummy_hint", "dummy_alias2": "dummy_hint2"}, False),
 }
 
 
 @pytest.mark.parametrize(
-    "env, args, kwargs, description, expected",
+    "args, kwargs, expected_alias_args, expected_description, expect_called",
     project_aliases.values(),
     ids=project_aliases.keys(),
 )
-def test_project_alias(env, args, kwargs, description, expected):
-    with patch("SCons.Environment.Base.Alias", return_value=args) as mock_alias:
-        target_descriptions = scons_extensions.project_alias(env, *args, description=description, **kwargs)
-        assert target_descriptions == expected
-    if env:
-        mock_alias.assert_called_once_with(*args, **kwargs)
+def test_project_alias(args, kwargs, expected_alias_args, expected_description, expect_called):
+    with patch("SCons.Environment.Base.Alias", return_value=args[1:]) as mock_alias:
+        target_descriptions = scons_extensions.project_alias(*args, **kwargs)
+        assert target_descriptions == expected_description
+    if expect_called:
+        mock_alias.assert_called_once_with(*expected_alias_args, **kwargs)
     else:
         mock_alias.assert_not_called()
 
