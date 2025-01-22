@@ -154,14 +154,14 @@ project_aliases = {
         {"description": "dummy_hint"},
         [SCons.Environment.Environment(), "dummy_alias"],
         {"dummy_alias": "dummy_hint"},
-        True
+        True,
     ),
     "Second Alias": (
         [SCons.Environment.Environment(), "dummy_alias2"],
         {"description": "dummy_hint2"},
         [SCons.Environment.Environment(), "dummy_alias"],
         {"dummy_alias": "dummy_hint", "dummy_alias2": "dummy_hint2"},
-        True
+        True,
     ),
     "None": ([None, None], {}, None, {"dummy_alias": "dummy_hint", "dummy_alias2": "dummy_hint2"}, False),
 }
