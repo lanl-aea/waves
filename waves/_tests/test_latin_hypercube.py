@@ -14,7 +14,6 @@ from waves._tests.common import merge_samplers
 class TestLatinHypercube:
     """Class for testing LatinHypercube parameter study generator class"""
 
-    generate_input_interface = "parameter_schema, seed, expected_samples, expected_scipy_kwds"
     generate_input = {
         "good schema 5x2": (
             {
@@ -56,7 +55,7 @@ class TestLatinHypercube:
     }
 
     @pytest.mark.parametrize(
-        generate_input_interface,
+        "parameter_schema, seed, expected_samples, expected_scipy_kwds",
         generate_input.values(),
         ids=generate_input.keys(),
     )
@@ -70,6 +69,9 @@ class TestLatinHypercube:
         for TestGenerate in generator_classes:
             samples_array = TestGenerate._samples
             assert numpy.allclose(samples_array, expected_samples)
+            # Check for type preservation
+            for key in TestGenerate.parameter_study.keys():
+                assert TestGenerate.parameter_study[key].dtype == numpy.float64
             # Verify that the parameter set name creation method was called
             expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
             assert list(TestGenerate._set_names.values()) == expected_set_names
@@ -116,6 +118,9 @@ class TestLatinHypercube:
             # We must preserve set contents (rows), so must sort on columns.
             # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
             assert numpy.allclose(numpy.sort(samples, axis=0), numpy.sort(expected_samples, axis=0))
+            # Check for type preservation
+            for key in TestMerge2.parameter_study.keys():
+                assert TestMerge2.parameter_study[key].dtype == numpy.float64
             # Check for consistent hash-parameter set relationships
             for set_name, parameters in TestMerge1.parameter_study.groupby(_set_coordinate_key):
                 assert parameters == TestMerge2.parameter_study.sel({_set_coordinate_key: set_name})

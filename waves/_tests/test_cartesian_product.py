@@ -56,6 +56,7 @@ class TestCartesianProduct:
         "one_parameter": (
             {"parameter_1": [1, 2]},
             numpy.array([[1], [2]]),
+            {"parameter_1": numpy.int64},
         ),
         "two_parameter": (
             {"parameter_1": [1, 2], "parameter_2": ["a", "b"]},
@@ -68,6 +69,7 @@ class TestCartesianProduct:
                 ],
                 dtype=object,
             ),
+            {"parameter_1": numpy.int64, "parameter_2": numpy.dtype("U1")},
         ),
         "ints and floats": (
             {"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]},
@@ -80,18 +82,21 @@ class TestCartesianProduct:
                 ],
                 dtype=object,
             ),
+            {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
         ),
     }
 
     @pytest.mark.parametrize(
-        "parameter_schema, expected_array",
+        "parameter_schema, expected_array, expected_types",
         generate_io.values(),
         ids=generate_io.keys(),
     )
-    def test_generate(self, parameter_schema, expected_array):
+    def test_generate(self, parameter_schema, expected_array, expected_types):
         TestGenerate = CartesianProduct(parameter_schema)
         generate_array = TestGenerate._samples
         assert numpy.all(generate_array == expected_array)
+        for key in TestGenerate.parameter_study.keys():
+            assert TestGenerate.parameter_study[key].dtype == expected_types[key]
         # Verify that the parameter set name creation method was called
         assert list(TestGenerate._set_names.values()) == [f"parameter_set{num}" for num in range(len(expected_array))]
         # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
@@ -105,12 +110,14 @@ class TestCartesianProduct:
             {"parameter_1": [1]},
             # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
             numpy.array([[1]], dtype=object),
+            {"parameter_1": numpy.int64},
         ),
         "single set and new set": (
             {"parameter_1": [1]},
             {"parameter_1": [2]},
             # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
             numpy.array([[2], [1]], dtype=object),
+            {"parameter_1": numpy.int64},
         ),
         "new set": (
             {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": ["a"]},
@@ -125,6 +132,7 @@ class TestCartesianProduct:
                 ],
                 dtype=object,
             ),
+            {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.dtype("U1")},
         ),
         "new set: bools": (
             {"parameter_1": [1, 2], "parameter_2": [True], "parameter_3": ["a"]},
@@ -139,6 +147,7 @@ class TestCartesianProduct:
                 ],
                 dtype=object,
             ),
+            {"parameter_1": numpy.int64, "parameter_2": bool, "parameter_3": numpy.dtype("U1")},
         ),
         "unchanged sets": (
             {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": ["a"]},
@@ -151,6 +160,7 @@ class TestCartesianProduct:
                 ],
                 dtype=object,
             ),
+            {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.dtype("U1")},
         ),
         "unchanged sets: bools": (
             {"parameter_1": [1, 2], "parameter_2": [True], "parameter_3": ["a"]},
@@ -163,15 +173,22 @@ class TestCartesianProduct:
                 ],
                 dtype=object,
             ),
+            {"parameter_1": numpy.int64, "parameter_2": bool, "parameter_3": numpy.dtype("U1")},
         ),
     }
 
-    @pytest.mark.parametrize("first_schema, second_schema, expected_array", merge_test.values(), ids=merge_test.keys())
-    def test_merge(self, first_schema, second_schema, expected_array):
+    @pytest.mark.parametrize(
+        "first_schema, second_schema, expected_array, expected_types",
+        merge_test.values(),
+        ids=merge_test.keys()
+    )
+    def test_merge(self, first_schema, second_schema, expected_array, expected_types):
         with patch("waves.parameter_generators._verify_parameter_study"):
             original_study, merged_study = merge_samplers(CartesianProduct, first_schema, second_schema, {})
             generate_array = merged_study._samples
             assert numpy.all(generate_array == expected_array)
+            for key in merged_study.parameter_study.keys():
+                assert merged_study.parameter_study[key].dtype == expected_types[key]
             consistent_hash_parameter_check(original_study, merged_study)
             self_consistency_checks(merged_study)
 

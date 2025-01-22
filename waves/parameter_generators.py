@@ -502,7 +502,7 @@ class ParameterGenerator(ABC):
         * ``self._set_hashes``
         * ``self._set_names``
 
-        :raises RuntimeError: If the ``self.parameter_study`` attribute is None
+        :raises RuntimeError: If the ``self.previous_parameter_study`` attribute is None
         """
         if self.previous_parameter_study is None:
             raise RuntimeError("Called without a previous parameter study")
@@ -518,11 +518,21 @@ class ParameterGenerator(ABC):
         previous_parameter_study = previous_parameter_study.swap_dims(swap_to_hash_index)
         self.parameter_study = self.parameter_study.swap_dims(swap_to_hash_index)
 
+        # Verify type equality and record types prior to merge.
+        coerce_types = _return_dataset_types(self.parameter_study, previous_parameter_study)
+
         # Favor the set names of the prior study. Leaves new set names as NaN.
         self.parameter_study = xarray.merge(
             [previous_parameter_study, self.parameter_study.drop_vars(_set_coordinate_key)]
         )
         previous_parameter_study.close()
+
+        # Coerce types back to their original type.
+        # Particularly necessary for ints, which are coerced to float by xarray.merge
+        for key, old_dtype in coerce_types.items():
+            new_dtype = self.parameter_study[key].dtype
+            if new_dtype != old_dtype:
+                self.parameter_study[key] = self.parameter_study[key].astype(old_dtype)
 
         # Recover parameter study numpy array(s) to match merged study
         self._samples = self._parameter_study_to_numpy()
@@ -1295,7 +1305,7 @@ def _parameter_study_to_numpy(parameter_study: xarray.Dataset) -> numpy.ndarray:
 
 
 def _verify_parameter_study(parameter_study: xarray.Dataset):
-    """Verify then contents of a parameter study
+    """Verify the contents of a parameter study
 
     Intended to verify parameter studies read from user supplied files. Currently the only check implemented in the set
     hash/set content consistency. Implies checking for the hash coordinate key and consistent data variable
@@ -1332,6 +1342,24 @@ def _verify_parameter_study(parameter_study: xarray.Dataset):
             f"file:          {file_hashes}\n"
             f"calculated:    {calculated_hashes}"
         )
+
+
+def _return_dataset_types(dataset_1, dataset_2) -> dict:
+    """Return the union of data variables ``{name: dtype}``
+
+    :raises RuntimeError: if data variables with matching names have different types
+    """
+    # TODO: Accept an arbitrarily long list of positional arguments
+    types_1 = {key: dataset_1[key].dtype for key in dataset_1.keys()}
+    types_2 = {key: dataset_2[key].dtype for key in dataset_2.keys()}
+    matching_keys = set(types_1.keys()) & set(types_2.keys())
+    for key in matching_keys:
+        type_1 = types_1[key]
+        type_2 = types_2[key]
+        if type_1 != type_2:
+            raise RuntimeError(f"Different types for '{key}': '{type_1}' and '{type_2}'")
+    types_1.update(types_2)
+    return types_1
 
 
 # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV

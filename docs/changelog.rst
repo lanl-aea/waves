@@ -8,6 +8,12 @@ Changelog
 0.12.5 (unreleased)
 *******************
 
+Bug fixes
+=========
+- Fix integer type handling when merging parameter studies. Xarray merge type casts to float for comparisons during
+  merge operations. Cast all data back to original types after merging parameter studies (:issue:`856`, :merge:`1088`).
+  By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Match the Conda build recipes more closely to the conda-forge waves-feedstock for easier downstream/upstream diffs
@@ -17,6 +23,7 @@ Internal Changes
   with a user deprecation warning for the transition period and provides a new
   ``waves.parameter_generatores.SET_COORDINATE_KEY`` constant to help users to minimize hardcoded key names in the
   future (:merge:`1085`, :merge:`1086`). By `Kyle Brindley`_.
+- Remove proxyout from the HPC configuration (:issue:`849`, :merge:`1083`). By `Chris Johnson`_.
 
 Enhancements
 ============

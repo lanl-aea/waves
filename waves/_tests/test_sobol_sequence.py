@@ -65,6 +65,9 @@ class TestSobolSequence:
         for TestGenerate in generator_classes:
             samples_array = TestGenerate._samples
             assert numpy.allclose(samples_array, expected_samples)
+            # Check for type preservation
+            for key in TestGenerate.parameter_study.keys():
+                assert TestGenerate.parameter_study[key].dtype == numpy.float64
             # Verify that the parameter set name creation method was called
             expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
             assert list(TestGenerate._set_names.values()) == expected_set_names
@@ -139,6 +142,9 @@ class TestSobolSequence:
             # We must preserve set contents (rows), so must sort on columns.
             # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
             assert numpy.allclose(numpy.sort(samples_array, axis=0), numpy.sort(expected_samples, axis=0))
+            # Check for type preservation
+            for key in merged_study.parameter_study.keys():
+                assert merged_study.parameter_study[key].dtype == numpy.float64
             consistent_hash_parameter_check(original_study, merged_study)
             self_consistency_checks(merged_study)
 
@@ -151,5 +157,8 @@ class TestSobolSequence:
             # We must preserve set contents (rows), so must sort on columns.
             # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
             assert numpy.allclose(numpy.sort(samples_array, axis=0), numpy.sort(expected_samples, axis=0))
+            # Check for type preservation
+            for key in merged_study.parameter_study.keys():
+                assert merged_study.parameter_study[key].dtype == numpy.float64
             consistent_hash_parameter_check(original_study, merged_study)
             self_consistency_checks(merged_study)
