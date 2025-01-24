@@ -162,10 +162,10 @@ project_aliases = {
         {"description": "dummy_hint2", "expected2": "kwarg"},
         ["dummy_alias2"],
         {"expected2": "kwarg"},
-        {"dummy_alias": "dummy_hint", "dummy_alias2": "dummy_hint2"},
+        {"dummy_alias2": "dummy_hint2"},
         True,
     ),
-    "None": ([None, None], {}, None, {}, {"dummy_alias": "dummy_hint", "dummy_alias2": "dummy_hint2"}, False),
+    "None": ([None, None], {}, None, {}, {}, False),
 }
 
 
@@ -176,7 +176,7 @@ project_aliases = {
 )
 def test_project_alias(args, kwargs, expected_alias_args, expected_kwargs, expected_description, expect_called):
     with patch("SCons.Environment.Base.Alias", return_value=args[1:]) as mock_alias:
-        target_descriptions = scons_extensions.project_alias(*args, **kwargs)
+        target_descriptions = scons_extensions.project_alias(*args, **kwargs, target_descriptions={})
         assert target_descriptions == expected_description
     if expect_called:
         mock_alias.assert_called_once_with(*expected_alias_args, **expected_kwargs)
@@ -199,10 +199,10 @@ project_help_descriptions = {
         "    dummy_alias: dummy_description\n    dummy_alias2\n",
     ),
     "Both Descriptions": (
-        ["dummy_alias", "dummy_alias2"],
+        ["dummy_alias"],
         {"dummy_alias": "dummy_description"},
         {"dummy_alias": "dummy_description2"},
-        "    dummy_alias: dummy_description2\n    dummy_alias2\n",
+        "    dummy_alias: dummy_description2\n",
     ),
 }
 
