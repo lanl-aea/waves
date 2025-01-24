@@ -24,6 +24,7 @@ Internal Changes
   ``waves.parameter_generatores.SET_COORDINATE_KEY`` constant to help users to minimize hardcoded key names in the
   future (:merge:`1085`, :merge:`1086`). By `Kyle Brindley`_.
 - Remove proxyout from the HPC configuration (:issue:`849`, :merge:`1083`). By `Chris Johnson`_.
+- Updated tags for powershell runner (:issue:`858`, :merge:`1091`). By `Sergio Cordova`_.
 
 Enhancements
 ============
