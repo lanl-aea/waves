@@ -44,7 +44,8 @@ win-fast-test:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
   tags:
-    - powershell-aea
+    - powershell
+    - aea
 
 win-conda-build-external:
   stage: test
@@ -71,4 +72,5 @@ win-conda-build-external:
     - conda mambabuild $recipe_directory --channel fierromechanics --channel conda-forge --no-anaconda-upload --croot $croot_recipe --output-folder $conda_artifacts_directory
     - conda build purge --croot $croot_recipe
   tags:
-    - powershell-aea
+    - powershell
+    - aea
