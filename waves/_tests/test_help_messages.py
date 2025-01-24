@@ -184,6 +184,30 @@ def test_project_alias(args, kwargs, expected_alias_args, expected_kwargs, expec
         mock_alias.assert_not_called()
 
 
+def test_project_alias_order_dependence():
+    dependent_aliases = [
+        (
+            [SCons.Environment.Environment(), "dummy_alias"],
+            {"description": "dummy_hint"},
+            {"dummy_alias": "dummy_hint"},
+        ),
+        (
+            [SCons.Environment.Environment(), "dummy_alias2"],
+            {"description": "dummy_hint2"},
+            {"dummy_alias": "dummy_hint", "dummy_alias2": "dummy_hint2"},
+        ),
+        (
+            [SCons.Environment.Environment(), "dummy_alias3"],
+            {"description": "dummy_hint3"},
+            {"dummy_alias": "dummy_hint", "dummy_alias2": "dummy_hint2", "dummy_alias3": "dummy_hint3"},
+        ),
+    ]
+    for args, kwargs, expected_description in dependent_aliases:
+        with patch("SCons.Environment.Base.Alias", return_value=args[1:]):
+            target_descriptions = scons_extensions.project_alias(*args, **kwargs)
+            assert target_descriptions == expected_description
+
+
 project_help_descriptions = {
     "No Descriptions": (["dummy_alias", "dummy_alias2"], {}, {}, "    dummy_alias\n    dummy_alias2\n"),
     "Existing Descriptions": (
