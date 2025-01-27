@@ -3485,7 +3485,7 @@ class WAVESEnvironment(SConsEnvironment):
 
         When using this environment pseudo-builder, do not provide the first ``env`` argument
         """
-        return parameter_study(self, *args, **kwargs)
+        return parameter_study_task(self, *args, **kwargs)
 
     def ParameterStudySConscript(self, *args, **kwargs):
         """Construction environment method from :meth:`waves.scons_extensions.parameter_study_sconscript`
