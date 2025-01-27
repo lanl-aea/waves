@@ -20,7 +20,7 @@ before_script:
   - if ([string]::IsNullOrEmpty($prefix)) { exit 1 }
   - if ([string]::IsNullOrEmpty($conda_artifacts_directory)) { exit 1 }
   # Environment creation
-  - $env:CONDA_PKGS_DIRS=Join-Path -Path (Get-Location) -ChildPath "conda\pkgs"
+  - $env:CONDA_PKGS_DIRS=Join-Path -Path (Get-Location) -ChildPath "conda\pkgs-$CI_RUNNER_ID"
   - (& "$conda_installation\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | ?{$_} | Invoke-Expression
   - conda info
   - conda env create --prefix $prefix --file environment-win.yml --yes

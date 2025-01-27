@@ -19,7 +19,7 @@ before_script:
   - if [[ -z ${prefix} ]]; then exit 1; fi
   - if [[ -z ${conda_artifacts_directory} ]]; then exit 1; fi
   # Environment creation
-  - export CONDA_PKGS_DIRS=$PWD/conda/pkgs
+  - export CONDA_PKGS_DIRS="$HOME/conda/pkgs-${CI_RUNNER_ID}"
   - source ${conda_installation}/etc/profile.d/conda.sh
   - conda info
   - conda env create --prefix ${prefix} --file environment.yml --yes
