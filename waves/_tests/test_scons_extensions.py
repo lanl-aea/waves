@@ -2140,7 +2140,7 @@ def test_parameter_study(node_count, action_count, args, kwargs, study, expected
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"PythonScript": scons_extensions.python_builder_factory()})
     env.AddMethod(scons_extensions.parameter_study_task, "ParameterStudyTask")
-    nodes = env.ParameterStudy(
+    nodes = env.ParameterStudyTask(
         env.PythonScript,
         *args,
         source=["python_script.py"],
@@ -2302,7 +2302,7 @@ waves_environment_methods = {
     "CopySubstfile": ("CopySubstfile", "copy_substfile"),
     "ProjectHelp": ("ProjectHelp", "project_help_message"),
     "SubstitutionSyntax": ("SubstitutionSyntax", "substitution_syntax"),
-    "ParameterStudy": ("ParameterStudy", "parameter_study"),
+    "ParameterStudyTask": ("ParameterStudyTask", "parameter_study_task"),
     "ParameterStudySConscript": ("ParameterStudySConscript", "parameter_study_sconscript"),
 }
 
