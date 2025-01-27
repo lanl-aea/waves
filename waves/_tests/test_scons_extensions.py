@@ -2301,6 +2301,7 @@ waves_environment_methods = {
     "AddCubitPython": ("AddCubitPython", "add_cubit_python"),
     "CopySubstfile": ("CopySubstfile", "copy_substfile"),
     "ProjectHelp": ("ProjectHelp", "project_help_message"),
+    "ProjectAlias": ("ProjectAlias", "project_alias"),
     "SubstitutionSyntax": ("SubstitutionSyntax", "substitution_syntax"),
     "ParameterStudy": ("ParameterStudy", "parameter_study"),
     "ParameterStudySConscript": ("ParameterStudySConscript", "parameter_study_sconscript"),
