@@ -5,7 +5,7 @@ Import("env", "study", "subdirectories")
 
 targets = []
 targets.extend(
-    env.ParameterStudy(
+    env.ParameterStudyTask(
         env.TestBuilder,
         target=["@{set_name}target1.txt"],
         source=["source1.txt"],
@@ -14,7 +14,7 @@ targets.extend(
     )
 )
 targets.extend(
-    env.ParameterStudy(
+    env.ParameterStudyTask(
         env.TestBuilder,
         target=["@{set_name}target2.txt"],
         source=["@{set_name}target1.txt"],
