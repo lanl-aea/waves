@@ -3110,7 +3110,7 @@ def ansys_apdl_builder_factory(
     return builder
 
 
-def parameter_study(
+def parameter_study_task(
     env: SCons.Environment.Environment,
     builder: SCons.Builder.Builder,
     *args,
@@ -3159,7 +3159,7 @@ def parameter_study(
            "AbaqusJournal": waves.scons_extensions.abaqus_journal(),
            "AbaqusSolver": waves.scons_extensions.abaqus_solver()
        })
-       env.AddMethod(waves.scons_extensions.parameter_study, "ParameterStudy")
+       env.AddMethod(waves.scons_extensions.parameter_study_task, "ParameterStudyTask")
 
        parameter_study_file = pathlib.Path("parameter_study.h5")
        parameter_generator = waves.parameter_generators.CartesianProduct(
@@ -3490,8 +3490,8 @@ class WAVESEnvironment(SConsEnvironment):
         """
         return substitution_syntax(self, *args, **kwargs)
 
-    def ParameterStudy(self, *args, **kwargs):
-        """Construction environment pseudo-builder from :meth:`waves.scons_extensions.parameter_study`
+    def ParameterStudyTask(self, *args, **kwargs):
+        """Construction environment pseudo-builder from :meth:`waves.scons_extensions.parameter_study_task`
 
         When using this environment pseudo-builder, do not provide the first ``env`` argument
         """
