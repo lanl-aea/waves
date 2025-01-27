@@ -3248,7 +3248,6 @@ def parameter_study_sconscript(
     exports: typing.Optional[dict] = None,
     study=None,
     set_name: str = "",
-    parameters: typing.Optional[dict] = None,
     subdirectories: bool = False,
     **kwargs,
 ):
@@ -3259,15 +3258,17 @@ def parameter_study_sconscript(
        Experimental solution to improved parameter study SConscript re-use. The function name and interface are subject
        to change without notice until this warning is removed.
 
-    Always overrides the exports with the ``export_dictionary`` keys and appends ``set_name`` and ``parameters``
-    variables. When ``study`` is a dictionary or parameter generator, the ``parameters`` are overridden. When ``study``
-    is a parameter generator, the ``set_name`` is overridden.
+    Always overrides the exports with ``set_name`` and ``parameters`` keys. When ``study`` is a dictionary or parameter
+    generator, the ``parameters`` are overridden. When ``study`` is a parameter generator, the ``set_name`` is
+    overridden.
 
     * If the study is a WAVES parameter generator object, call SConscript once per ``set_name`` and ``parameters`` in
-      the genrator's parameter study dictionary.
+      the generator's parameter study dictionary.
     * If the study is a ``dict``, call SConscript with the study as ``parameters`` and use the ``set_name`` from the
       method API.
-    * In all other cases, the SConscript call is given the ``set_name`` and ``parameters`` from the method API.
+    * In all other cases, the SConscript call is given the ``set_name`` from the method API and an empty ``parameters``
+      dictionary.
+
 
     .. code-block::
        :caption: SConstruct
@@ -3319,13 +3320,11 @@ def parameter_study_sconscript(
         method, e.g. ``env.ParameterStudySConscript``.
     :param args: All positional arguments are passed through to the SConscript call directly
     :param variant_dir: The SConscript API variant directory argument
-    :param exports: Dictionary of key: value pairs for the ``exports`` variables. *Must* use the dictionary style
+    :param exports: Dictionary of ``{key: value}`` pairs for the ``exports`` variables. *Must* use the dictionary style
         because the calling script's namespace is not available to the function namespace.
     :param study: Parameter generator or dictionary simulation parameters
     :param set_name: Set name to use when not provided a ``study``. Overridden by the ``study`` set names when ``study``
         is a parameter generator.
-    :param parameters: Parameters dictionary to use when not provided a ``study``.  Overriden by ``study`` when
-        ``study`` is a parameter generator or a dictionary.
     :param kwargs: All other keyword arguments are passed through to the SConscript call directly
     :param subdirectories: Switch to use parameter generator ``study`` set names as subdirectories. Ignored when
         ``study`` is not a parameter generator.
@@ -3351,7 +3350,7 @@ def parameter_study_sconscript(
             "this function does not have access to the calling script's namespace."
         )
         raise TypeError(message)
-    exports.update({"set_name": set_name, "parameters": parameters})
+    exports.update({"set_name": set_name, "parameters": dict()})
 
     sconscript_output = list()
 
