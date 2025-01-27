@@ -5,7 +5,11 @@ Changelog
 #########
 
 *******************
-0.12.5 (unreleased)
+0.12.6 (unreleased)
+*******************
+
+*******************
+0.12.5 (2025-01-27)
 *******************
 
 Bug fixes
@@ -24,11 +28,12 @@ Internal Changes
   ``waves.parameter_generatores.SET_COORDINATE_KEY`` constant to help users to minimize hardcoded key names in the
   future (:merge:`1085`, :merge:`1086`). By `Kyle Brindley`_.
 - Remove proxyout from the HPC configuration (:issue:`849`, :merge:`1083`). By `Chris Johnson`_.
+- Updated tags for powershell runner (:issue:`858`, :merge:`1091`). By `Sergio Cordova`_.
 
 Enhancements
 ============
 - Perform more complete argument substitutions in the task parameter study pseudo-builder (:issue:`852`, :merge:`1080`).
-  By `Kyle Brindley`.
+  By `Kyle Brindley`_.
 - Limit package mocks to those strictly necessary in modsim template documentation builds. Should minimize documentation
   build errors when users expand package requirements (:issue:`847`, :merge:`1082`). By `Kyle Brindley`_.
 

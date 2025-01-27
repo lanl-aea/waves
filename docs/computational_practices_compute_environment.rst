@@ -55,7 +55,7 @@ commercial software in a virtual environment.
 
 Most :ref:`build_system` software offer solutions to executable path management separately from the activated virtual
 environment and allow mixed use of software discovered on ``PATH`` and specified by absolute path. In the `SCons`_
-builder system, users are encouraged to explicitly specify software without relying on ``PATH`` to avoid ambiguous
+build system, users are encouraged to explicitly specify software without relying on ``PATH`` to avoid ambiguous
 system-configuration requirements. Another benefit of the explicit `SCons construction environment`_ is the ability to
 define tasks with mutually incompatible execution environments. For instance, if one portion of the workflow requires a
 numeric solver with dependencies that are incompatible with the post-processing task, `SCons`_ can configure both tasks
