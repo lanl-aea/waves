@@ -39,7 +39,9 @@ after_script:
   - $prefix=Get-Content -Path prefix.txt
   - $conda_pkgs_dirs=Get-Content -Path conda_pkgs_dirs.txt
   - Write-Output $prefix
+  - Write-Output $conda_pkgs_dirs
   - if ([string]::IsNullOrEmpty($prefix)) { exit 1 }
+  - if ([string]::IsNullOrEmpty($conda_pkgs_dirs)) { exit 1 }
   - if (Test-Path -Path $prefix -PathType Container) {Remove-Item -Recurse $prefix -ErrorAction Continue}
   - if (Test-Path -Path $conda_pkgs_dirs -PathType Container) {Remove-Item -Recurse $conda_pkgs_dirs -ErrorAction Continue}
 

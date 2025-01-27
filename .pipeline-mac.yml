@@ -38,7 +38,9 @@ after_script:
   - prefix=$(cat prefix.txt)
   - conda_pkgs_dirs=$(cat conda_pkgs_dirs.txt)
   - echo ${prefix}
+  - echo ${conda_pkgs_dirs}
   - if [[ -z ${prefix} ]]; then exit 1; fi
+  - if [[ -z ${conda_pkgs_dirs} ]]; then exit 1; fi
   - rm -r ${prefix} || true
   - rm -r ${conda_pkgs_dirs} || true
 
