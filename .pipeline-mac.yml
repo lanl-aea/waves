@@ -21,6 +21,7 @@ before_script:
   # Environment creation
   - export CONDA_PKGS_DIRS=$PWD/conda/pkgs
   - source ${conda_installation}/etc/profile.d/conda.sh
+  - conda info
   - conda env create --prefix ${prefix} --file environment.yml --yes
   - conda activate ${prefix}
   # Common job variables
