@@ -8,9 +8,10 @@ before_script:
   - conda_installation="${HOME}/anaconda3"
   - conda_environments="${conda_installation}/envs"
   - prefix=$(mktemp --directory --tmpdir=${conda_environments} waves-dev-XXXXXX)
-  - prefix_basename="${prefix##*/}"
-  - conda_pkgs_dirs=${HOME}/conda/pkgs-${prefix_basename}
   - echo ${prefix} > prefix.txt
+  - prefix_basename="${prefix##*/}"
+  - conda_pkgs_dirs="${conda_installation}/pkgs-${prefix_basename}"
+  - echo ${conda_pkgs_dirs} > conda_pkgs_dirs.txt
   - conda_artifacts_directory="conda-bld"
   - echo ${conda_installation}
   - echo ${conda_environments}
@@ -35,6 +36,7 @@ before_script:
 
 after_script:
   - prefix=$(cat prefix.txt)
+  - conda_pkgs_dirs=$(cat conda_pkgs_dirs.txt)
   - echo ${prefix}
   - if [[ -z ${prefix} ]]; then exit 1; fi
   - rm -r ${prefix} || true
