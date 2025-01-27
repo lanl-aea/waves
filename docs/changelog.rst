@@ -8,6 +8,10 @@ Changelog
 0.12.6 (unreleased)
 *******************
 
+New Features
+============
+- Add help message descriptions (:issue:`838`, :merge:`1076`). By `Sergio Cordova`_.
+
 *******************
 0.12.5 (2025-01-27)
 *******************
@@ -81,7 +85,6 @@ Enhancements
   :merge:`1046`). By `Kyle Brindley`_.
 - Enable project-specific command line configuration controls when creating workflow visualizations with the visualize
   subcommand (:issue:`837`, :merge:`1065`). By `Kyle Brindley`_.
-- Add help message descriptions (:issue:`838`, :merge:`1076`). By `Sergio Cordova`_.
 
 *******************
 0.12.3 (2024-12-02)
