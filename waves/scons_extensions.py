@@ -3120,11 +3120,6 @@ def parameter_study_task(
 ) -> SCons.Node.NodeList:
     """Parameter study pseudo-builder.
 
-    .. warning::
-
-       Experimental solution to improved parameter study task re-use. The function name and interface are subject to
-       change without notice until this warning is removed.
-
     `SCons Pseudo-Builder`_ aids in task construction for WAVES parameter studies with any SCons builder. Works with
     WAVES parameter generators or parameter dictionaries to reduce parameter study task definition boilerplate and
     make nominal workflow definitions directly re-usable in parameter studies.
@@ -3253,14 +3248,9 @@ def parameter_study_sconscript(
 ):
     """Wrap the SCons SConscript call to unpack parameter generators
 
-    .. warning::
-
-       Experimental solution to improved parameter study SConscript re-use. The function name and interface are subject
-       to change without notice until this warning is removed.
-
-    Always overrides the exports with ``set_name`` and ``parameters`` keys. When ``study`` is a dictionary or parameter
-    generator, the ``parameters`` are overridden. When ``study`` is a parameter generator, the ``set_name`` is
-    overridden.
+    Always overrides the ``exports`` dictionary with ``set_name`` and ``parameters`` keys. When ``study`` is a
+    dictionary or parameter generator, the ``parameters`` are overridden. When ``study`` is a parameter generator, the
+    ``set_name`` is overridden.
 
     * If the study is a WAVES parameter generator object, call SConscript once per ``set_name`` and ``parameters`` in
       the generator's parameter study dictionary.
