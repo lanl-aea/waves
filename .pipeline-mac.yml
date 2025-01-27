@@ -38,6 +38,7 @@ after_script:
   - echo ${prefix}
   - if [[ -z ${prefix} ]]; then exit 1; fi
   - rm -r ${prefix} || true
+  - rm -r ${conda_pkgs_dirs} || true
 
 mac-fast-test:
   extends:

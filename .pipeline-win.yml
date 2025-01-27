@@ -39,6 +39,7 @@ after_script:
   - Write-Output $prefix
   - if ([string]::IsNullOrEmpty($prefix)) { exit 1 }
   - if (Test-Path -Path $prefix -PathType Container) {Remove-Item -Recurse $prefix -ErrorAction Continue}
+  - if (Test-Path -Path $conda_pkgs_dirs -PathType Container) {Remove-Item -Recurse $conda_pkgs_dirs -ErrorAction Continue}
 
 win-fast-test:
   extends:
