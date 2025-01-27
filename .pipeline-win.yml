@@ -9,18 +9,22 @@ before_script:
   - $conda_installation="C:\ProgramData\anaconda3"
   - $conda_environments="$conda_installation\envs"
   - $prefix=python -c 'import tempfile; print(tempfile.mkdtemp(prefix=r"C:\ProgramData\anaconda3\envs\waves-dev-"))'
+  - $prefix_basename=Split-Path -Path $prefix -Leaf
+  - $conda_pkgs_dirs=Join-Path -Path "$HOME" -ChildPath "conda\pkgs-$prefix_basename"
   - Set-Content -Path prefix.txt -Value $prefix
   - $conda_artifacts_directory="conda-bld"
   - Write-Output $conda_installation
   - Write-Output $conda_environments
   - Write-Output $prefix
+  - Write-Output $prefix_basename
+  - Write-Output $conda_pkgs_dirs
   - Write-Output $conda_artifacts_directory
   - if (!(Test-Path -Path $conda_installation -PathType Container)) { exit 1 }
   - if (!(Test-Path -Path $conda_environments -PathType Container)) { exit 1 }
   - if ([string]::IsNullOrEmpty($prefix)) { exit 1 }
   - if ([string]::IsNullOrEmpty($conda_artifacts_directory)) { exit 1 }
   # Environment creation
-  - $env:CONDA_PKGS_DIRS=Join-Path -Path (Get-Location) -ChildPath "conda\pkgs-$CI_RUNNER_ID"
+  - $env:CONDA_PKGS_DIRS=$conda_pkgs_dirs
   - (& "$conda_installation\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | ?{$_} | Invoke-Expression
   - conda info
   - conda env create --prefix $prefix --file environment-win.yml --yes
