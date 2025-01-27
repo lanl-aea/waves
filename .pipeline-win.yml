@@ -11,7 +11,7 @@ before_script:
   - $prefix=python -c 'import tempfile; print(tempfile.mkdtemp(prefix=r"C:\ProgramData\anaconda3\envs\waves-dev-"))'
   - Set-Content -Path prefix.txt -Value $prefix
   - $prefix_basename=Split-Path -Path $prefix -Leaf
-  - $conda_pkgs_dirs=$conda_installation\pkgs-$prefix_basename"
+  - $conda_pkgs_dirs="$conda_installation\pkgs-$prefix_basename"
   - Set-Content -Path conda_pkgs_dirs.txt -Value $conda_pkgs_dirs
   - $conda_artifacts_directory="conda-bld"
   - Write-Output $conda_installation
