@@ -3326,8 +3326,6 @@ def parameter_study_sconscript(
     """
     if exports is None:
         exports = dict()
-    if parameters is None:
-        parameters = dict()
 
     # Avoid importing parameter generator module (heavy) unless necessary
     from waves import parameter_generators
