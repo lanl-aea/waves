@@ -1539,7 +1539,7 @@ class AbaqusPseudoBuilder:
     def __init__(
         self,
         builder: SCons.Builder.Builder,
-        override_cpus: int = None,
+        override_cpus: typing.Optional[int] = None,
     ) -> None:
         self.builder = builder
         self.override_cpus = override_cpus
@@ -1552,12 +1552,12 @@ class AbaqusPseudoBuilder:
         self,
         env: SCons.Environment.Environment,
         job: str,
-        inp: str = None,
-        user: str = None,
+        inp: typing.Optional[str] = None,
+        user: typing.Optional[str] = None,
         cpus: int = 1,
-        oldjob: str = None,
+        oldjob: typing.Optional[str] = None,
         write_restart: bool = False,
-        double: typing.Optional[str] = "both",
+        double: str = "both",
         extra_sources: typing.List[str] = list(),
         extra_targets: typing.List[str] = list(),
         extra_options: str = "",
