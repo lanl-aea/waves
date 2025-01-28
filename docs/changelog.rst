@@ -10,7 +10,14 @@ Changelog
 
 New Features
 ============
+- Release the parameter study task/SConscript wrapper pseudo-builders as fully supported features (:merge:`1095`). By
+  `Kyle Brindley`_.
 - Add help message descriptions (:issue:`838`, :merge:`1076`). By `Sergio Cordova`_.
+
+Internal Changes
+================
+- Replace optional mutable default arguments with None types (:issue:`850`, :merge:`1084`). By `Chris Johnson`_ and
+  `Kyle Brindley`_.
 
 *******************
 0.12.5 (2025-01-27)

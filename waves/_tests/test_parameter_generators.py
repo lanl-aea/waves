@@ -153,24 +153,24 @@ return_dataset_types_cases = {
     ),
     "different parameters": (
         parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
-        parameter_generators.CartesianProduct({"parameter_2": [10.]}).parameter_study,
+        parameter_generators.CartesianProduct({"parameter_2": [10.0]}).parameter_study,
         {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
         does_not_raise(),
     ),
     "extra parameters in second dataset": (
         parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
-        parameter_generators.CartesianProduct({"parameter_1": [1], "parameter_2": [10.]}).parameter_study,
+        parameter_generators.CartesianProduct({"parameter_1": [1], "parameter_2": [10.0]}).parameter_study,
         {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
         does_not_raise(),
     ),
     "extra parameters in both datasets": (
-        parameter_generators.CartesianProduct({"parameter_1": [1], "parameter_3": ['a']}).parameter_study,
-        parameter_generators.CartesianProduct({"parameter_1": [1], "parameter_2": [10.]}).parameter_study,
+        parameter_generators.CartesianProduct({"parameter_1": [1], "parameter_3": ["a"]}).parameter_study,
+        parameter_generators.CartesianProduct({"parameter_1": [1], "parameter_2": [10.0]}).parameter_study,
         {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.dtype("U1")},
         does_not_raise(),
     ),
     "extra parameters bools": (
-        parameter_generators.CartesianProduct({"parameter_1": [1], "parameter_3": ['a']}).parameter_study,
+        parameter_generators.CartesianProduct({"parameter_1": [1], "parameter_3": ["a"]}).parameter_study,
         parameter_generators.CartesianProduct({"parameter_1": [1], "parameter_2": [True]}).parameter_study,
         {"parameter_1": numpy.int64, "parameter_2": bool, "parameter_3": numpy.dtype("U1")},
         does_not_raise(),
@@ -183,7 +183,7 @@ return_dataset_types_cases = {
     ),
     "inconsistent types: int/str": (
         parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
-        parameter_generators.CartesianProduct({"parameter_1": ['a']}).parameter_study,
+        parameter_generators.CartesianProduct({"parameter_1": ["a"]}).parameter_study,
         {"parameter_1": numpy.int64},
         pytest.raises(RuntimeError),
     ),

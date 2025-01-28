@@ -917,8 +917,8 @@ def first_target_emitter(
     target: list,
     source: list,
     env: SCons.Environment.Environment,
-    suffixes: typing.Iterable[str] = [],
-    appending_suffixes: typing.Iterable[str] = [],
+    suffixes: typing.Optional[typing.Iterable[str]] = None,
+    appending_suffixes: typing.Optional[typing.Iterable[str]] = None,
     stdout_extension: str = _settings._stdout_extension,
 ) -> typing.Tuple[list, list]:
     """SCons emitter function that emits new targets based on the first target
@@ -946,6 +946,10 @@ def first_target_emitter(
 
     :return: target, source
     """
+    if suffixes is None:
+        suffixes = []
+    if appending_suffixes is None:
+        appending_suffixes = []
     string_targets = [str(target_file) for target_file in target]
     first_target = pathlib.Path(string_targets[0])
 
@@ -1595,7 +1599,7 @@ class AbaqusPseudoBuilder:
     def __init__(
         self,
         builder: SCons.Builder.Builder,
-        override_cpus: int = None,
+        override_cpus: typing.Optional[int] = None,
     ) -> None:
         self.builder = builder
         self.override_cpus = override_cpus
@@ -1608,14 +1612,14 @@ class AbaqusPseudoBuilder:
         self,
         env: SCons.Environment.Environment,
         job: str,
-        inp: str = None,
-        user: str = None,
+        inp: typing.Optional[str] = None,
+        user: typing.Optional[str] = None,
         cpus: int = 1,
-        oldjob: str = None,
+        oldjob: typing.Optional[str] = None,
         write_restart: bool = False,
-        double: typing.Optional[str] = "both",
-        extra_sources: typing.List[str] = list(),
-        extra_targets: typing.List[str] = list(),
+        double: str = "both",
+        extra_sources: typing.Optional[typing.List[str]] = None,
+        extra_targets: typing.Optional[typing.List[str]] = None,
         extra_options: str = "",
         **kwargs,
     ) -> SCons.Node.NodeList:
@@ -1752,9 +1756,9 @@ class AbaqusPseudoBuilder:
             options += f" user={user}"
 
         # Append user-specified arguments for builder
-        if extra_sources:
+        if extra_sources is not None:
             sources.extend(extra_sources)
-        if extra_targets:
+        if extra_targets is not None:
             targets.extend(extra_targets)
         if extra_options:
             options += f" {extra_options}"
@@ -3166,7 +3170,7 @@ def ansys_apdl_builder_factory(
     return builder
 
 
-def parameter_study(
+def parameter_study_task(
     env: SCons.Environment.Environment,
     builder: SCons.Builder.Builder,
     *args,
@@ -3175,11 +3179,6 @@ def parameter_study(
     **kwargs,
 ) -> SCons.Node.NodeList:
     """Parameter study pseudo-builder.
-
-    .. warning::
-
-       Experimental solution to improved parameter study task re-use. The function name and interface are subject to
-       change without notice until this warning is removed.
 
     `SCons Pseudo-Builder`_ aids in task construction for WAVES parameter studies with any SCons builder. Works with
     WAVES parameter generators or parameter dictionaries to reduce parameter study task definition boilerplate and
@@ -3215,7 +3214,7 @@ def parameter_study(
            "AbaqusJournal": waves.scons_extensions.abaqus_journal(),
            "AbaqusSolver": waves.scons_extensions.abaqus_solver()
        })
-       env.AddMethod(waves.scons_extensions.parameter_study, "ParameterStudy")
+       env.AddMethod(waves.scons_extensions.parameter_study_task, "ParameterStudyTask")
 
        parameter_study_file = pathlib.Path("parameter_study.h5")
        parameter_generator = waves.parameter_generators.CartesianProduct(
@@ -3301,29 +3300,25 @@ def parameter_study_sconscript(
     env: SCons.Environment.Environment,
     *args,
     variant_dir=None,
-    exports: dict = dict(),
+    exports: typing.Optional[dict] = None,
     study=None,
     set_name: str = "",
-    parameters: dict = dict(),
     subdirectories: bool = False,
     **kwargs,
 ):
     """Wrap the SCons SConscript call to unpack parameter generators
 
-    .. warning::
-
-       Experimental solution to improved parameter study SConscript re-use. The function name and interface are subject
-       to change without notice until this warning is removed.
-
-    Always overrides the exports with the ``export_dictionary`` keys and appends ``set_name`` and ``parameters``
-    variables. When ``study`` is a dictionary or parameter generator, the ``parameters`` are overridden. When ``study``
-    is a parameter generator, the ``set_name`` is overridden.
+    Always overrides the ``exports`` dictionary with ``set_name`` and ``parameters`` keys. When ``study`` is a
+    dictionary or parameter generator, the ``parameters`` are overridden. When ``study`` is a parameter generator, the
+    ``set_name`` is overridden.
 
     * If the study is a WAVES parameter generator object, call SConscript once per ``set_name`` and ``parameters`` in
-      the genrator's parameter study dictionary.
+      the generator's parameter study dictionary.
     * If the study is a ``dict``, call SConscript with the study as ``parameters`` and use the ``set_name`` from the
       method API.
-    * In all other cases, the SConscript call is given the ``set_name`` and ``parameters`` from the method API.
+    * In all other cases, the SConscript call is given the ``set_name`` from the method API and an empty ``parameters``
+      dictionary.
+
 
     .. code-block::
        :caption: SConstruct
@@ -3375,13 +3370,11 @@ def parameter_study_sconscript(
         method, e.g. ``env.ParameterStudySConscript``.
     :param args: All positional arguments are passed through to the SConscript call directly
     :param variant_dir: The SConscript API variant directory argument
-    :param exports: Dictionary of key: value pairs for the ``exports`` variables. *Must* use the dictionary style
+    :param exports: Dictionary of ``{key: value}`` pairs for the ``exports`` variables. *Must* use the dictionary style
         because the calling script's namespace is not available to the function namespace.
     :param study: Parameter generator or dictionary simulation parameters
     :param set_name: Set name to use when not provided a ``study``. Overridden by the ``study`` set names when ``study``
         is a parameter generator.
-    :param parameters: Parameters dictionary to use when not provided a ``study``.  Overriden by ``study`` when
-        ``study`` is a parameter generator or a dictionary.
     :param kwargs: All other keyword arguments are passed through to the SConscript call directly
     :param subdirectories: Switch to use parameter generator ``study`` set names as subdirectories. Ignored when
         ``study`` is not a parameter generator.
@@ -3391,6 +3384,9 @@ def parameter_study_sconscript(
 
     :raises TypeError: if ``exports`` is not a dictionary
     """
+    if exports is None:
+        exports = dict()
+
     # Avoid importing parameter generator module (heavy) unless necessary
     from waves import parameter_generators
 
@@ -3402,7 +3398,7 @@ def parameter_study_sconscript(
             "this function does not have access to the calling script's namespace."
         )
         raise TypeError(message)
-    exports.update({"set_name": set_name, "parameters": parameters})
+    exports.update({"set_name": set_name, "parameters": dict()})
 
     sconscript_output = list()
 
@@ -3549,12 +3545,12 @@ class WAVESEnvironment(SConsEnvironment):
         """
         return substitution_syntax(self, *args, **kwargs)
 
-    def ParameterStudy(self, *args, **kwargs):
-        """Construction environment pseudo-builder from :meth:`waves.scons_extensions.parameter_study`
+    def ParameterStudyTask(self, *args, **kwargs):
+        """Construction environment pseudo-builder from :meth:`waves.scons_extensions.parameter_study_task`
 
         When using this environment pseudo-builder, do not provide the first ``env`` argument
         """
-        return parameter_study(self, *args, **kwargs)
+        return parameter_study_task(self, *args, **kwargs)
 
     def ParameterStudySConscript(self, *args, **kwargs):
         """Construction environment method from :meth:`waves.scons_extensions.parameter_study_sconscript`

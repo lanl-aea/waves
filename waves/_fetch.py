@@ -71,7 +71,7 @@ def main(
     root_directory: typing.Union[str, pathlib.Path],
     relative_paths: typing.Iterable[typing.Union[str, pathlib.Path]],
     destination: typing.Union[str, pathlib.Path],
-    requested_paths: typing.List[pathlib.Path] = [],
+    requested_paths: typing.Optional[typing.List[pathlib.Path]] = None,
     tutorial: typing.Optional[_settings._allowable_tutorial_numbers_typing] = None,
     overwrite: bool = False,
     dry_run: bool = False,
@@ -94,6 +94,8 @@ def main(
     :param dry_run: Print the destination tree and exit. Short circuited by ``print_available``
     :param print_available: Print the available source files and exit. Short circuits ``dry_run``
     """
+    if requested_paths is None:
+        requested_paths = []
     root_directory = pathlib.Path(root_directory)
     if not root_directory.is_dir():
         # During "waves fetch" sub-command, this should only be reached if the package installation
@@ -297,7 +299,7 @@ def recursive_copy(
     root_directory: typing.Union[str, pathlib.Path],
     relative_paths: typing.Iterable[typing.Union[str, pathlib.Path]],
     destination: typing.Union[str, pathlib.Path],
-    requested_paths: typing.List[pathlib.Path] = [],
+    requested_paths: typing.Optional[typing.List[pathlib.Path]] = None,
     tutorial: typing.Optional[_settings._allowable_tutorial_numbers_typing] = None,
     overwrite: bool = False,
     dry_run: bool = False,
@@ -321,6 +323,8 @@ def recursive_copy(
 
     :raises RuntimeError: If the no requested files exist in the longest common source path
     """
+    if requested_paths is None:
+        requested_paths = []
     if tutorial is not None:
         requested_paths = extend_requested_paths(requested_paths, tutorial)
 

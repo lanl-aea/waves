@@ -151,7 +151,7 @@ significant wall time, but are not part of the mesh convergence study, it might 
 locations and methods, depending on the needs of the project.
 
 * workflow files: :meth:`waves.scons_extensions.parameter_study_sconscript`
-* task definitions: :meth:`waves.scons_extensions.parameter_study`
+* task definitions: :meth:`waves.scons_extensions.parameter_study_task`
 * anywhere: :meth:`waves.parameter_generators.ParameterGenerator.parameter_study_to_dict`
 
 ****************
