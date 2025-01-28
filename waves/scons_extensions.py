@@ -1558,8 +1558,8 @@ class AbaqusPseudoBuilder:
         oldjob: typing.Optional[str] = None,
         write_restart: bool = False,
         double: str = "both",
-        extra_sources: typing.List[str] = list(),
-        extra_targets: typing.List[str] = list(),
+        extra_sources: typing.Optional[typing.List[str]] = None,
+        extra_targets: typing.Optional[typing.List[str]] = None,
         extra_options: str = "",
         **kwargs,
     ) -> SCons.Node.NodeList:
@@ -1696,9 +1696,9 @@ class AbaqusPseudoBuilder:
             options += f" user={user}"
 
         # Append user-specified arguments for builder
-        if extra_sources:
+        if extra_sources is not None:
             sources.extend(extra_sources)
-        if extra_targets:
+        if extra_targets is not None:
             targets.extend(extra_targets)
         if extra_options:
             options += f" {extra_options}"
