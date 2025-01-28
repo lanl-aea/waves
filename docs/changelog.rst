@@ -12,7 +12,8 @@ New Features
 ============
 - Release the parameter study task/SConscript wrapper pseudo-builders as fully supported features (:merge:`1095`). By
   `Kyle Brindley`_.
-- Add help message descriptions (:issue:`838`, :merge:`1076`). By `Sergio Cordova`_.
+- Add a project alias method and enhance the project help message to include descriptions for targets and aliases.
+  (:issue:`838`, :merge:`1076`). By `Sergio Cordova`_.
 
 Internal Changes
 ================
