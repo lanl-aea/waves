@@ -35,7 +35,7 @@ from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidat
 
 _exclude_from_namespace = set(globals().keys())
 
-#: The set name coordinate used in WAVES parameter study Xarray Datasets"""
+#: The set name coordinate used in WAVES parameter study Xarray Datasets
 SET_COORDINATE_KEY = _set_coordinate_key
 
 #: The set hash coordinate used in WAVES parameter study Xarray Datasets
