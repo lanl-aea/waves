@@ -857,8 +857,8 @@ def first_target_emitter(
     target: list,
     source: list,
     env: SCons.Environment.Environment,
-    suffixes: typing.Iterable[str] = None,
-    appending_suffixes: typing.Iterable[str] = None,
+    suffixes: typing.Optional[typing.Iterable[str]] = None,
+    appending_suffixes: typing.Optional[typing.Iterable[str] = None,
     stdout_extension: str = _settings._stdout_extension,
 ) -> typing.Tuple[list, list]:
     """SCons emitter function that emits new targets based on the first target
