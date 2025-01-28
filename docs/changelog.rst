@@ -8,6 +8,11 @@ Changelog
 0.12.6 (unreleased)
 *******************
 
+Internal Changes
+================
+- Replace optional mutable default arguments with None types (:issue:`850`, :merge:`1084`). By `Chris Johnson`_ and
+  `Kyle Brindley`_.
+
 *******************
 0.12.5 (2025-01-27)
 *******************
