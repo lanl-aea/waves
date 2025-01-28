@@ -29,17 +29,30 @@ class TestSALibSampler:
             },
             {},
             {"calc_second_order": False},
-        )
+        ),
+        "sobol: two parameter": (
+            "sobol",
+            {
+                "N": 4,
+                "problem": {
+                    "num_vars": 2,
+                    "names": ["parameter_1", "parameter_2"],
+                    "bounds": [[-1, 1], [-2, 2]],
+                },
+            },
+            {"override_kwargs": {"dummy key": "dummy value"}},
+            {"calc_second_order": False, "dummy key": "dummy value"},
+        ),
     }
 
     @pytest.mark.parametrize(
-        "sampler_class, parameter_schema, original, expected",
+        "sampler_class, parameter_schema, kwargs, expected",
         sampler_overrides.values(),
         ids=sampler_overrides.keys(),
     )
-    def test_sampler_overrides(self, sampler_class, parameter_schema, original, expected):
+    def test_sampler_overrides(self, sampler_class, parameter_schema, kwargs, expected):
         TestValidate = SALibSampler(sampler_class, parameter_schema)
-        override_kwargs = TestValidate._sampler_overrides(original)
+        override_kwargs = TestValidate._sampler_overrides(**kwargs)
         assert override_kwargs == expected
 
     validate_input = {
