@@ -8,6 +8,11 @@ Changelog
 0.12.6 (unreleased)
 *******************
 
+New Features
+============
+- Release the parameter study task/SConscript wrapper pseudo-builders as fully supported features (:merge:`1095`). By
+  `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Replace optional mutable default arguments with None types (:issue:`850`, :merge:`1084`). By `Chris Johnson`_ and
