@@ -67,8 +67,8 @@ class TestCustomStudy:
             {"a": numpy.int64},
         ),
         "two_parameter": (
-            {"parameter_names": ["a", "b"], "parameter_samples": numpy.array([[1, 10.], [2, 20.]], dtype=object)},
-            numpy.array([[1, 10.], [2, 20.]], dtype=object),
+            {"parameter_names": ["a", "b"], "parameter_samples": numpy.array([[1, 10.0], [2, 20.0]], dtype=object)},
+            numpy.array([[1, 10.0], [2, 20.0]], dtype=object),
             {"a": numpy.int64, "b": numpy.float64},
         ),
     }

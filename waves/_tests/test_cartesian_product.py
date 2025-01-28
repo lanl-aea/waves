@@ -180,7 +180,7 @@ class TestCartesianProduct:
     @pytest.mark.parametrize(
         "first_schema, second_schema, expected_array, expected_types",
         merge_test.values(),
-        ids=merge_test.keys()
+        ids=merge_test.keys(),
     )
     def test_merge(self, first_schema, second_schema, expected_array, expected_types):
         with patch("waves.parameter_generators._verify_parameter_study"):
