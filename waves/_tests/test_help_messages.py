@@ -209,35 +209,46 @@ def test_project_alias_order_dependence():
 
 
 project_help_descriptions = {
-    "No Descriptions": (["dummy_alias", "dummy_alias2"], {}, {}, "    dummy_alias\n    dummy_alias2\n"),
+    "No Descriptions": (["dummy_alias", "dummy_alias2"], {}, {}, "", "    dummy_alias\n    dummy_alias2\n"),
     "Existing Descriptions": (
         ["dummy_alias", "dummy_alias2"],
         {"dummy_alias": "dummy_description"},
         {},
+        "",
         "    dummy_alias: dummy_description\n    dummy_alias2\n",
     ),
     "Target Descriptions": (
         ["dummy_alias", "dummy_alias2"],
         {},
         {"dummy_alias": "dummy_description"},
+        "",
         "    dummy_alias: dummy_description\n    dummy_alias2\n",
+    ),
+    "Existing Message": (
+        ["dummy_alias", "dummy_alias2"],
+        {},
+        {"dummy_alias": "dummy_description"},
+        "Existing Message\n",
+        "Existing Message\n    dummy_alias: dummy_description\n    dummy_alias2\n",
     ),
     "Both Descriptions": (
         ["dummy_alias"],
         {"dummy_alias": "dummy_description"},
         {"dummy_alias": "dummy_description2"},
+        "",
         "    dummy_alias: dummy_description2\n",
     ),
 }
 
 
 @pytest.mark.parametrize(
-    "nodes, existing_descriptions, target_descriptions, expected",
+    "nodes, existing_descriptions, target_descriptions, message, expected",
     project_help_descriptions.values(),
     ids=project_help_descriptions.keys(),
 )
-def test_project_help_descriptions(nodes, existing_descriptions, target_descriptions, expected):
+def test_project_help_descriptions(nodes, existing_descriptions, target_descriptions, message, expected):
     with patch("waves.scons_extensions.project_alias", return_value=existing_descriptions) as mock_project_alias:
-        message = scons_extensions.project_help_descriptions(nodes, target_descriptions=target_descriptions)
-        assert message == expected
+        appended_message = scons_extensions.project_help_descriptions(nodes, target_descriptions=target_descriptions,
+                                                                      message=message)
+        assert appended_message == expected
         mock_project_alias.assert_called_once()
