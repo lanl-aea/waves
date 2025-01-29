@@ -2249,6 +2249,17 @@ def test_parameter_study_sconscript(args, kwargs, expected, outcome):
             pass
 
 
+def test_parameter_generator_write():
+    kwargs = {}
+    expected = ["test.h5"]
+
+    env = SCons.Environment.Environment()
+    parameter_generator = parameter_generators.CartesianProduct({"one": [1, 2]}, output_file="test.h5")
+    with patch("waves.parameter_generators.CartesianProduct.write") as mock_write:
+        targets = scons_extensions.parameter_generator_write(env, parameter_generator, **kwargs)
+        assert [str(target) for target in targets] == expected
+
+
 waves_environment_attributes = {
     "default": ({}),
     "no defaults": (
