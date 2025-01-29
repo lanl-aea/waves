@@ -3470,7 +3470,7 @@ def parameter_generator_write(
     if parameter_generator.output_file is not None:
         output_files = parameter_generator.output_file
     else:
-        output_files = list(parameter_generator.parameter_study[_settings._set_coordinate_key])
+        output_files = list(parameter_generator.parameter_study[_settings._set_coordinate_key].values)
 
     def write(self, target: list, source: list, env) -> None:
         """`SCons Python build function`_ wrapper for the parameter generator's write() function.
