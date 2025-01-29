@@ -98,6 +98,8 @@ class ParameterGenerator(ABC):
         self.previous_parameter_study = previous_parameter_study
         self.require_previous_parameter_study = require_previous_parameter_study
         self.overwrite = overwrite
+        # TODO: move the dry run option out of the parameter generator and into the write API
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
         self.dry_run = dry_run
         self.write_meta = write_meta
 
@@ -293,8 +295,14 @@ class ParameterGenerator(ABC):
                 if isinstance(parameter_study_object, dict)
                 else f"{parameter_study_object}\n"
             )
+            # TODO: move the dry run option out of the parameter generator and into the write API
+            # e.g. drop the ``self.``
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
             if self.output_file and not self.dry_run:
                 conditional_write_function(self.output_file, parameter_study_object)
+            # TODO: move the dry run option out of the parameter generator and into the write API
+            # e.g. drop the ``self.``
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
             elif self.output_file and self.dry_run:
                 sys.stdout.write(f"{self.output_file.resolve()}\n{output_text}")
             else:
@@ -306,6 +314,9 @@ class ParameterGenerator(ABC):
                 text = yaml.safe_dump(parameters) if isinstance(parameters, dict) else f"{parameters}\n"
                 if self.overwrite or not set_path.is_file():
                     # If dry run is specified, print the files that would have been written to stdout
+                    # TODO: move the dry run option out of the parameter generator and into the write API
+                    # e.g. drop the ``self.``
+                    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
                     if self.dry_run:
                         sys.stdout.write(f"{set_path.resolve()}\n{text}")
                     else:
