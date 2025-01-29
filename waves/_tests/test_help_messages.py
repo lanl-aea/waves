@@ -98,8 +98,6 @@ def test_alias_list_message():
 
 
 def test_project_help_message():
-    descriptions = {"somekey": "somevalue"}
-
     # Default behavior
     with (
         patch("waves.scons_extensions.default_targets_message") as mock_targets,
@@ -115,6 +113,7 @@ def test_project_help_message():
         patch("waves.scons_extensions.default_targets_message") as mock_targets,
         patch("waves.scons_extensions.alias_list_message") as mock_alias,
     ):
+        descriptions = {"somekey": "somevalue"}
         scons_extensions.project_help_message(env=env, append=False, keep_local=False, target_descriptions=descriptions)
         mock_targets.assert_called_once_with(env=env, append=False, keep_local=False, target_descriptions=descriptions)
         mock_alias.assert_called_once_with(env=env, append=False, keep_local=False, target_descriptions=descriptions)
@@ -134,6 +133,7 @@ def test_project_help_message():
         patch("waves.scons_extensions.default_targets_message") as mock_targets,
         patch("waves.scons_extensions.alias_list_message") as mock_alias,
     ):
+        descriptions = {"somekey": "somevalue"}
         env.ProjectHelp(append=False, keep_local=False, target_descriptions=descriptions)
         mock_targets.assert_called_once_with(env=env, append=False, keep_local=False, target_descriptions=descriptions)
         mock_alias.assert_called_once_with(env=env, append=False, keep_local=False, target_descriptions=descriptions)
@@ -161,16 +161,16 @@ project_aliases = {
 
 
 @pytest.mark.parametrize(
-    "args, kwargs, expected_alias_args, expected_kwargs, expected_description, expect_called",
+    "args, kwargs, expected_alias_args, expected_alias_kwargs, expected_description, expect_called",
     project_aliases.values(),
     ids=project_aliases.keys(),
 )
-def test_project_alias(args, kwargs, expected_alias_args, expected_kwargs, expected_description, expect_called):
+def test_project_alias(args, kwargs, expected_alias_args, expected_alias_kwargs, expected_description, expect_called):
     with patch("SCons.Environment.Base.Alias", return_value=args[1:]) as mock_alias:
         target_descriptions = scons_extensions.project_alias(*args, **kwargs, target_descriptions={})
         assert target_descriptions == expected_description
     if expect_called:
-        mock_alias.assert_called_once_with(*expected_alias_args, **expected_kwargs)
+        mock_alias.assert_called_once_with(*expected_alias_args, **expected_alias_kwargs)
     else:
         mock_alias.assert_not_called()
 
