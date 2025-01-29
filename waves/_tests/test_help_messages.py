@@ -227,7 +227,7 @@ project_help_descriptions = {
         "Existing Message\n",
         "Existing Message\n    dummy_alias: dummy_description\n    dummy_alias2\n",
     ),
-    "Both Descriptions": (
+    "Override Description": (
         ["dummy_alias"],
         {"dummy_alias": "dummy_description"},
         {"dummy_alias": "dummy_description2"},
