@@ -3459,6 +3459,7 @@ def parameter_generator_write(
     :return: SCons NodeList of target nodes
     """
     import yaml
+
     # Avoid importing parameter generator module (heavy) unless necessary
     from waves import parameter_generators
 

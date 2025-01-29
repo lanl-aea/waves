@@ -13,7 +13,7 @@ one_file = waves.parameter_generators.CartesianProduct(
 )
 two_file = waves.parameter_generators.CartesianProduct(
     schema,
-    output_file_template="two_file@number.h5"
+    output_file_template="two_file@number.h5",
 )
 
 env.ParameterGeneratorWrite(
