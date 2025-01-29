@@ -2249,7 +2249,7 @@ def test_parameter_study_sconscript(args, kwargs, expected, outcome):
             pass
 
 
-parameter_generator_write_cases = {
+parameter_study_write_cases = {
     "output file": (
         parameter_generators.CartesianProduct({"one": [1, 2]}, output_file="test.h5"),
         {},
@@ -2275,17 +2275,17 @@ parameter_generator_write_cases = {
 
 @pytest.mark.parametrize(
     "parameter_generator, kwargs, expected",
-    parameter_generator_write_cases.values(),
-    ids=parameter_generator_write_cases.keys(),
+    parameter_study_write_cases.values(),
+    ids=parameter_study_write_cases.keys(),
 )
-def test_parameter_generator_write(parameter_generator, kwargs, expected):
+def test_parameter_study_write(parameter_generator, kwargs, expected):
     env = SCons.Environment.Environment()
 
-    targets = scons_extensions.parameter_generator_write(env, parameter_generator, **kwargs)
+    targets = scons_extensions.parameter_study_write(env, parameter_generator, **kwargs)
     assert [str(target) for target in targets] == expected
 
-    env.AddMethod(scons_extensions.parameter_generator_write, "ParameterGeneratorWrite")
-    targets = env.ParameterGeneratorWrite(parameter_generator, **kwargs)
+    env.AddMethod(scons_extensions.parameter_study_write, "ParameterStudyWrite")
+    targets = env.ParameterStudyWrite(parameter_generator, **kwargs)
     assert [str(target) for target in targets] == expected
 
 

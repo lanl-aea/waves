@@ -3441,7 +3441,7 @@ def parameter_study_sconscript(
     return sconscript_output
 
 
-def parameter_generator_write(
+def parameter_study_write(
     env: SCons.Environment.Environment,
     parameter_generator,
     **kwargs,
