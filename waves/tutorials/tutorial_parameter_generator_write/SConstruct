@@ -1,0 +1,39 @@
+#! /usr/bin/env python
+
+import waves
+
+
+env = Environment()
+env.AddMethod(waves.scons_extensions.parameter_generator_write, "ParameterGeneratorWrite")
+
+schema = {"one": [1, 2]}
+one_file = waves.parameter_generators.CartesianProduct(
+    schema,
+    output_file="one_file.h5",
+)
+two_file = waves.parameter_generators.CartesianProduct(
+    schema,
+    output_file_template="two_file@number.h5"
+)
+
+env.ParameterGeneratorWrite(
+    one_file,
+)
+# Remove never execute logic when fixing the output file type bug
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/860
+if False:
+    yaml = env.ParameterGeneratorWrite(
+        one_file,
+        output_file_type="yaml",
+    )
+
+env.ParameterGeneratorWrite(
+    two_file,
+)
+# Remove never execute logic when fixing the output file type bug
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/860
+if False:
+    yaml = env.ParameterGeneratorWrite(
+        two_file,
+        output_file_type="yaml",
+    )
