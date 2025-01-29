@@ -14,6 +14,7 @@ New Features
   `Kyle Brindley`_.
 - Add a project alias method and enhance the project help message to include descriptions for targets and aliases.
   (:issue:`838`, :merge:`1076`). By `Sergio Cordova`_.
+- Experimental parameter study write pseudo-builders (:issue:`857`, :merge:`1097`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
