@@ -3468,9 +3468,13 @@ def parameter_generator_write(
         raise RuntimeError("Parameter generator's dry run attribute is set to True")
     # TODO: Refactor write/output file logic to avoid duplication here
     if parameter_generator.output_file is not None:
-        output_files = parameter_generator.output_file
+        output_files = [parameter_generator.output_file]
     else:
         output_files = list(parameter_generator.parameter_study[_settings._set_coordinate_key].values)
+    if "output_file_type" in kwargs.keys():
+        output_files = [
+            str(pathlib.Path(output_file).with_suffix(f".{kwargs['output_file_type']}")) for output_file in output_files
+        ]
 
     def write(self, target: list, source: list, env) -> None:
         """`SCons Python build function`_ wrapper for the parameter generator's write() function.
