@@ -280,6 +280,10 @@ class ParameterGenerator(ABC):
         :param source: The source file list of SCons.Node.FS.File objects
         :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
         """
+        warnings.warn(
+            "This method will be deprecated in favor of a full pseudo-builder in v1: "
+            "``waves.scons_extensions.parameter_generator_write``"
+        )
         self.write()
 
     def _write(self, parameter_study_object, parameter_study_iterator, conditional_write_function) -> None:
