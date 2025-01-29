@@ -415,7 +415,7 @@ def default_targets_message(
     :param keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     :param target_descriptions: dictionary containing target metadata.
     """
-    default_targets_help = project_help_descriptions(
+    default_targets_help = _project_help_descriptions(
         SCons.Script.DEFAULT_TARGETS, message="\nDefault Targets:\n", target_descriptions=target_descriptions
     )
     try:
@@ -448,7 +448,7 @@ def alias_list_message(
     :param keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     :param target_descriptions: dictionary containing target metadata.
     """
-    alias_help = project_help_descriptions(
+    alias_help = _project_help_descriptions(
         SCons.Node.Alias.default_ans, message="\nTarget Aliases:\n", target_descriptions=target_descriptions
     )
     try:
@@ -484,7 +484,7 @@ def project_alias(
     return target_descriptions
 
 
-def project_help_descriptions(
+def _project_help_descriptions(
     nodes: SCons.Node.NodeList, target_descriptions: typing.Optional[dict] = None, message=""
 ) -> str:
     """Return a help message for all nodes found in the alias and target descriptions

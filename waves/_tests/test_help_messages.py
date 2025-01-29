@@ -244,7 +244,7 @@ project_help_descriptions = {
 )
 def test_project_help_descriptions(nodes, existing_descriptions, target_descriptions, message, expected):
     with patch("waves.scons_extensions.project_alias", return_value=existing_descriptions) as mock_project_alias:
-        appended_message = scons_extensions.project_help_descriptions(
+        appended_message = scons_extensions._project_help_descriptions(
             nodes, target_descriptions=target_descriptions, message=message
         )
         assert appended_message == expected
