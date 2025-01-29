@@ -3441,6 +3441,57 @@ def parameter_study_sconscript(
     return sconscript_output
 
 
+def parameter_generator_write(
+    env: SCons.Environment.Environment,
+    parameter_generator,
+    **kwargs,
+) -> SCons.Node.NodeList:
+    """Pseudo-builder to write a parameter generator's parameter study file
+
+    .. warning::
+
+       This pseudo-builder is a work-in-progress and behavior may change without warning until this warning is removed
+
+    :param parameter_generator: WAVES ParameterGenerator class
+    :param kwargs: All other keyword arguments are passed directly to the
+        :meth:`waves.parameter_generators.ParameterGenerator.write` method.
+
+    :return: SCons NodeList of target nodes
+    """
+    import yaml
+    # Avoid importing parameter generator module (heavy) unless necessary
+    from waves import parameter_generators
+
+    # TODO: move the dry run option out of the parameter generator and into the write API
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
+    if parameter_generator.dry_run:
+        raise RuntimeError("Parameter generator's dry run attribute is set to True")
+    # TODO: Refactor write/output file logic to avoid duplication here
+    if parameter_generator.output_file is not None:
+        output_files = parameter_generator.output_file
+    else:
+        output_files = list(parameter_generator.parameter_study[_settings._set_coordinate_key])
+
+    def write(self, target: list, source: list, env) -> None:
+        """`SCons Python build function`_ wrapper for the parameter generator's write() function.
+
+        Reference: https://scons.org/doc/production/HTML/scons-user/ch17s04.html
+
+        :param target: The target file list of strings
+        :param source: The source file list of SCons.Node.FS.File objects
+        :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
+        """
+        parameter_generator.write(**kwargs)
+
+    targets = env.Command(
+        target=output_files,
+        source=[env.Value(yaml.dump(parameter_generator.parameter_study.to_dict()))],
+        action=[write],
+    )
+
+    return targets
+
+
 class WAVESEnvironment(SConsEnvironment):
     """Thin overload of SConsEnvironment with WAVES construction environment methods and builders"""
 
