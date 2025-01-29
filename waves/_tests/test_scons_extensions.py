@@ -2251,12 +2251,12 @@ def test_parameter_study_sconscript(args, kwargs, expected, outcome):
 
 parameter_generator_write_cases = {
     "output file": (
-        {"output_file": "test.h5"},
+        parameter_generators.CartesianProduct({"one": [1, 2]}, output_file="test.h5"),
         {},
         ["test.h5"],
     ),
     "output file template": (
-        {"output_file_template": "test@number.h5"},
+        parameter_generators.CartesianProduct({"one": [1, 2]}, output_file_template="test@number.h5"),
         {},
         ["test0.h5", "test1.h5"],
     )
@@ -2264,19 +2264,14 @@ parameter_generator_write_cases = {
 
 
 @pytest.mark.parametrize(
-    "parameter_generator_kwargs, parameter_generator_write_kwargs, expected",
+    "parameter_generator, kwargs, expected",
     parameter_generator_write_cases.values(),
     ids=parameter_generator_write_cases.keys(),
 )
-def test_parameter_generator_write(parameter_generator_kwargs, parameter_generator_write_kwargs, expected):
+def test_parameter_generator_write(parameter_generator, kwargs, expected):
     env = SCons.Environment.Environment()
-    parameter_generator = parameter_generators.CartesianProduct({"one": [1, 2]}, **parameter_generator_kwargs)
-    with patch("waves.parameter_generators.CartesianProduct.write") as mock_write:
-        targets = scons_extensions.parameter_generator_write(
-            env,
-            parameter_generator,
-            **parameter_generator_write_kwargs
-        )
+    with patch("waves.parameter_generators.ParameterGenerator.write") as mock_write:
+        targets = scons_extensions.parameter_generator_write(env, parameter_generator, **kwargs)
         assert [str(target) for target in targets] == expected
 
 
