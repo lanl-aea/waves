@@ -2280,13 +2280,13 @@ parameter_generator_write_cases = {
 )
 def test_parameter_generator_write(parameter_generator, kwargs, expected):
     env = SCons.Environment.Environment()
-    with patch("waves.parameter_generators.ParameterGenerator.write") as mock_write:
-        targets = scons_extensions.parameter_generator_write(env, parameter_generator, **kwargs)
-        assert [str(target) for target in targets] == expected
 
-        env.AddMethod(scons_extensions.parameter_generator_write, "ParameterGeneratorWrite")
-        targets = env.ParameterGeneratorWrite(parameter_generator, **kwargs)
-        assert [str(target) for target in targets] == expected
+    targets = scons_extensions.parameter_generator_write(env, parameter_generator, **kwargs)
+    assert [str(target) for target in targets] == expected
+
+    env.AddMethod(scons_extensions.parameter_generator_write, "ParameterGeneratorWrite")
+    targets = env.ParameterGeneratorWrite(parameter_generator, **kwargs)
+    assert [str(target) for target in targets] == expected
 
 
 waves_environment_attributes = {

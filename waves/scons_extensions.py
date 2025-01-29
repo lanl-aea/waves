@@ -3476,7 +3476,7 @@ def parameter_generator_write(
             str(pathlib.Path(output_file).with_suffix(f".{kwargs['output_file_type']}")) for output_file in output_files
         ]
 
-    def write(self, target: list, source: list, env) -> None:
+    def parameter_generator_write(target: list, source: list, env) -> None:
         """`SCons Python build function`_ wrapper for the parameter generator's write() function.
 
         Reference: https://scons.org/doc/production/HTML/scons-user/ch17s04.html
@@ -3490,7 +3490,7 @@ def parameter_generator_write(
     targets = env.Command(
         target=output_files,
         source=[env.Value(yaml.dump(parameter_generator.parameter_study.to_dict()))],
-        action=[write],
+        action=[parameter_generator_write],
     )
 
     return targets
