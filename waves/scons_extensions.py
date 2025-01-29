@@ -471,7 +471,8 @@ def project_alias(
     :param description: String representing metadata of the alias.
     :param target_descriptions: Mutable dictionary used to keep track of all alias's metadata. If the function is
         called with a user-supplied dictionary, the accumulated target descriptions are reset to match the provided
-        dictionary and all previously accumulated descriptions are discarded.
+        dictionary and all previously accumulated descriptions are discarded. If an existing alias is called it will
+        overwrite the previous description.
     :param kwargs: All other keyword arguments are passed to the `SCons Alias`_ method.
 
     :returns: target descriptions dictionary
