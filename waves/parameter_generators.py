@@ -100,6 +100,12 @@ class ParameterGenerator(ABC):
         # TODO: move the dry run option out of the parameter generator and into the write API
         # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
         self.dry_run = dry_run
+        if self.dry_run is not _settings._default_dry_run:
+            warnings.warn(
+                "The dry run behavior has moved to the :meth:`waves.scons_extensions.ParameterGenerator.write` method "
+                "and will be removed from the ParameterGenerator initialization in v1. Please move dry run behavior to "
+                "the `write` method API call"
+            )
         self.write_meta = write_meta
 
         if self.output_file_template is not None and self.output_file is not None:
