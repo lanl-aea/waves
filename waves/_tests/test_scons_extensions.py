@@ -2255,20 +2255,24 @@ parameter_study_write_cases = {
         {},
         ["test.h5"],
     ),
+    # TODO: Update expected output file extension when the write methods adds an output file override
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/634
     "output file and output file type": (
-        parameter_generators.CartesianProduct({"one": [1, 2]}, output_file="test.h5"),
+        parameter_generators.CartesianProduct({"one": [1, 2]}, output_file="actually_a_yaml_file.h5"),
         {"output_file_type": "yaml"},
-        ["test.yaml"],
+        ["actually_a_yaml_file.h5"],
     ),
     "output file template": (
         parameter_generators.CartesianProduct({"one": [1, 2]}, output_file_template="test@number.h5"),
         {},
         ["test0.h5", "test1.h5"],
     ),
+    # TODO: Update expected output file extension when the write methods adds an output file override
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/634
     "output file template and output file type": (
-        parameter_generators.CartesianProduct({"one": [1, 2]}, output_file_template="test@number.h5"),
+        parameter_generators.CartesianProduct({"one": [1, 2]}, output_file_template="actually_a_yaml_file@number.h5"),
         {"output_file_type": "yaml"},
-        ["test0.yaml", "test1.yaml"],
+        ["actually_a_yaml_file0.h5", "actually_a_yaml_file1.h5"],
     ),
 }
 

@@ -3492,10 +3492,6 @@ def parameter_study_write(
         output_files = [parameter_generator.output_file]
     else:
         output_files = list(parameter_generator.parameter_study[_settings._set_coordinate_key].values)
-    if "output_file_type" in kwargs.keys():
-        output_files = [
-            str(pathlib.Path(output_file).with_suffix(f".{kwargs['output_file_type']}")) for output_file in output_files
-        ]
 
     def parameter_study_write(target: list, source: list, env) -> None:
         """`SCons Python build function`_ wrapper for the parameter generator's write() function.
