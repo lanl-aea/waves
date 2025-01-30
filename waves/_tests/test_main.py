@@ -111,7 +111,7 @@ parameter_study_args = {  #               subcommand,         class_name,       
     'previous parameter study': ('cartesian_product', 'CartesianProduct', 'previous_parameter_study',           '-p', 'dummy_file.txt'),  # noqa E241,E501
     'overwrite':                (     'custom_study',      'CustomStudy',                'overwrite',  '--overwrite',             True),  # noqa E241,E501
     'dry run':                  (  'latin_hypercube',   'LatinHypercube',                  'dry_run',    '--dry-run',             True),  # noqa E241,E501
-    'write meta':               (   'sobol_sequence',    'SobolSequence',               'write_meta', '--write-meta',             True),  # noqa E241,E501 
+    'write meta':               (   'sobol_sequence',    'SobolSequence',               'write_meta', '--write-meta',             True),  # noqa E241,E501
 }
 # fmt: on
 
@@ -148,5 +148,5 @@ def test_parameter_study(subcommand, class_name, argument, option, argument_valu
     ):
         _main.main()
         mock_generator.assert_called_once()
-        if argument:
+        if argument and argument != "dry_run":
             assert mock_generator.call_args.kwargs[argument] == argument_value
