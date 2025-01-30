@@ -188,12 +188,11 @@ def main(
         previous_parameter_study=previous_parameter_study,
         require_previous_parameter_study=require_previous_parameter_study,
         overwrite=overwrite,
-        dry_run=dry_run,
         write_meta=write_meta,
     )
 
     # Build the parameter study.
-    parameter_generator.write()
+    parameter_generator.write(dry_run=dry_run)
 
 
 # Limit help() and 'from module import *' behavior to the module's public API

@@ -226,6 +226,7 @@ class ParameterGenerator(ABC):
     def write(
         self,
         output_file_type: typing.Union[_settings._allowable_output_file_typing, None] = None,
+        dry_run: typing.Optional[bool] = None,
     ) -> None:
         """Write the parameter study to STDOUT or an output file.
 
@@ -245,11 +246,18 @@ class ParameterGenerator(ABC):
            parameter_2: a
 
         :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+        :param dry_run: Print contents of new parameter study output files to STDOUT and exit
 
         :raises waves.exceptions.ChoicesError: If an unsupported output file type is requested
         """
         if output_file_type is None:
             output_file_type = self.output_file_type
+        # TODO: move the dry run option out of the parameter generator and into the write API
+        # Drop the None default, use the ``_settings._default_dry_run`` default, and stop performing the ``self.``
+        # assignment.
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
+        if dry_run is None:
+            dry_run = self.dry_run
 
         self.output_directory.mkdir(parents=True, exist_ok=True)
 
@@ -269,7 +277,12 @@ class ParameterGenerator(ABC):
                 f"Unsupported 'output_file_type': '{self.output_file_type}. "
                 f"The 'output_file_type' must be one of {_settings._allowable_output_file_types}"
             )
-        self._write(parameter_study_object, parameter_study_iterator, conditional_write_function)
+        self._write(
+            parameter_study_object,
+            parameter_study_iterator,
+            conditional_write_function,
+            dry_run=dry_run,
+        )
 
     def scons_write(self, target: list, source: list, env) -> None:
         """`SCons Python build function`_ wrapper for the parameter generator's write() function.
@@ -286,7 +299,13 @@ class ParameterGenerator(ABC):
         )
         self.write()
 
-    def _write(self, parameter_study_object, parameter_study_iterator, conditional_write_function) -> None:
+    def _write(
+        self,
+        parameter_study_object,
+        parameter_study_iterator,
+        conditional_write_function,
+        dry_run: bool = _settings._default_dry_run,
+    ) -> None:
         """Write parameter study formatted output to STDOUT, separate set files, or a single file
 
         Behavior as specified in :meth:`waves.parameter_generators.ParameterGenerator.write`
@@ -302,12 +321,12 @@ class ParameterGenerator(ABC):
             # TODO: move the dry run option out of the parameter generator and into the write API
             # e.g. drop the ``self.``
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
-            if self.output_file and not self.dry_run:
+            if self.output_file and not dry_run:
                 conditional_write_function(self.output_file, parameter_study_object)
             # TODO: move the dry run option out of the parameter generator and into the write API
             # e.g. drop the ``self.``
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
-            elif self.output_file and self.dry_run:
+            elif self.output_file and dry_run:
                 sys.stdout.write(f"{self.output_file.resolve()}\n{output_text}")
             else:
                 sys.stdout.write(output_text)
@@ -321,7 +340,7 @@ class ParameterGenerator(ABC):
                     # TODO: move the dry run option out of the parameter generator and into the write API
                     # e.g. drop the ``self.``
                     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
-                    if self.dry_run:
+                    if dry_run:
                         sys.stdout.write(f"{set_path.resolve()}\n{text}")
                     else:
                         conditional_write_function(set_path, parameters)
