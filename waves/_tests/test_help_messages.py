@@ -107,6 +107,7 @@ def test_project_help_message():
         "keep_local": False,
         "target_descriptions": {"somekey": "somevalue"},
     }
+    method_interface_non_default_kwargs = {key: value for key, value in non_default_kwargs.items() if key != "env"}
     # Default behavior
     with (
         patch("waves.scons_extensions.default_targets_message") as mock_targets,
@@ -139,8 +140,7 @@ def test_project_help_message():
         patch("waves.scons_extensions.default_targets_message") as mock_targets,
         patch("waves.scons_extensions.alias_list_message") as mock_alias,
     ):
-        filtered_non_default_kwargs = {k: v for k, v in non_default_kwargs.items() if k != "env"}
-        env.ProjectHelp(**filtered_non_default_kwargs)
+        env.ProjectHelp(**method_interface_non_default_kwargs)
         mock_targets.assert_called_once_with(**non_default_kwargs)
         mock_alias.assert_called_once_with(**non_default_kwargs)
 
