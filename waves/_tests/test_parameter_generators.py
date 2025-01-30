@@ -494,6 +494,26 @@ class TestParameterGenerator:
             mock_write_dataset.assert_not_called()
             assert mock_write_yaml.call_count == files
 
+        MismatchedOutputType = DummyGenerator(
+            schema,
+            output_file_template=template,
+            output_file_type="h5",
+            overwrite=overwrite,
+            dry_run=dry_run,
+            **kwargs,
+        )
+        with (
+            patch("waves.parameter_generators.ParameterGenerator._write_meta"),
+            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_yaml") as mock_write_yaml,
+            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_dataset") as mock_write_dataset,
+            patch("sys.stdout.write") as stdout_write,
+            patch("pathlib.Path.is_file", side_effect=is_file),
+        ):
+            MismatchedOutputType.write(output_file_type="yaml")
+            stdout_write.assert_not_called()
+            mock_write_dataset.assert_not_called()
+            assert mock_write_yaml.call_count == files
+
     @pytest.mark.parametrize(
         "schema, template, overwrite, dry_run, is_file, sets, files",
         init_write_files.values(),
@@ -512,9 +532,13 @@ class TestParameterGenerator:
         """
         kwargs = {"sets": sets}
         WriteParameterGenerator = DummyGenerator(
-            schema, output_file_template=template, output_file_type="h5", overwrite=overwrite, dry_run=dry_run, **kwargs
+            schema,
+            output_file_template=template,
+            output_file_type="h5",
+            overwrite=overwrite,
+            dry_run=dry_run,
+            **kwargs,
         )
-
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta"),
             patch("sys.stdout.write") as stdout_write,
@@ -524,6 +548,28 @@ class TestParameterGenerator:
             patch("pathlib.Path.mkdir"),
         ):
             WriteParameterGenerator.write()
+            stdout_write.assert_not_called()
+            mock_write_yaml.assert_not_called()
+            assert mock_write_dataset.call_count == files
+
+        kwargs = {"sets": sets}
+        MismatchedOutputType = DummyGenerator(
+            schema,
+            output_file_template=template,
+            output_file_type="yaml",
+            overwrite=overwrite,
+            dry_run=dry_run,
+            **kwargs,
+        )
+        with (
+            patch("waves.parameter_generators.ParameterGenerator._write_meta"),
+            patch("sys.stdout.write") as stdout_write,
+            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_yaml") as mock_write_yaml,
+            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_dataset") as mock_write_dataset,
+            patch("pathlib.Path.is_file", side_effect=is_file),
+            patch("pathlib.Path.mkdir"),
+        ):
+            MismatchedOutputType.write(output_file_type="h5")
             stdout_write.assert_not_called()
             mock_write_yaml.assert_not_called()
             assert mock_write_dataset.call_count == files
