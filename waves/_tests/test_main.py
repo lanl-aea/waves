@@ -138,11 +138,12 @@ def test_parameter_study(subcommand, class_name, argument, option, argument_valu
         # Don't pass boolean values
         if not isinstance(argument_value, bool):
             arg_list.append(argument_value)
+    mock_instantiation = Mock()
     with (
         patch("sys.argv", arg_list),
         patch("builtins.open", mock_open()),
         patch("yaml.safe_load"),
-        patch(f"waves.parameter_generators.{class_name}") as mock_generator,
+        patch(f"waves.parameter_generators.{class_name}", return_value=mock_instantiation) as mock_generator,
         patch("pathlib.Path.is_file", return_value=True),
         does_not_raise(),
     ):
@@ -150,3 +151,6 @@ def test_parameter_study(subcommand, class_name, argument, option, argument_valu
         mock_generator.assert_called_once()
         if argument and argument != "dry_run":
             assert mock_generator.call_args.kwargs[argument] == argument_value
+            mock_instantiation.write.assert_called_once_with(dry_run=_settings._default_dry_run)
+        elif argument and argument == "dry_run":
+            mock_instantiation.write.assert_called_once_with(dry_run=argument_value)
