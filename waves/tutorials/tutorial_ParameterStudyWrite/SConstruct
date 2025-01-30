@@ -19,21 +19,26 @@ two_file = waves.parameter_generators.CartesianProduct(
 env.ParameterStudyWrite(
     one_file,
 )
-# Remove never execute logic when fixing the output file type bug
-# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/860
-if False:
-    yaml = env.ParameterStudyWrite(
-        one_file,
-        output_file_type="yaml",
-    )
-
 env.ParameterStudyWrite(
     two_file,
 )
-# Remove never execute logic when fixing the output file type bug
-# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/860
-if False:
-    yaml = env.ParameterStudyWrite(
-        two_file,
-        output_file_type="yaml",
-    )
+
+# Remove the duplicate parameter generator when the write API allows output file name overrides
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/634
+one_file = waves.parameter_generators.CartesianProduct(
+    schema,
+    output_file="one_file.yaml",
+)
+two_file = waves.parameter_generators.CartesianProduct(
+    schema,
+    output_file_template="two_file@number.yaml",
+)
+
+yaml = env.ParameterStudyWrite(
+    one_file,
+    output_file_type="yaml",
+)
+yaml = env.ParameterStudyWrite(
+    two_file,
+    output_file_type="yaml",
+)
