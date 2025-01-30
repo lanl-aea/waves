@@ -100,8 +100,13 @@ def test_alias_list_message():
 def test_project_help_message():
     env = SCons.Environment.Environment()
     env.AddMethod(scons_extensions.project_help_message, "ProjectHelp")
-    default_kwargs = {'env': ANY, 'append': True, 'keep_local': True, 'target_descriptions': None}
-    non_default_kwargs = {'env': env, 'append': False, 'keep_local': False, 'target_descriptions': {"somekey": "somevalue"}}
+    default_kwargs = {"env": ANY, "append": True, "keep_local": True, "target_descriptions": None}
+    non_default_kwargs = {
+        "env": env,
+        "append": False,
+        "keep_local": False,
+        "target_descriptions": {"somekey": "somevalue"},
+    }
     # Default behavior
     with (
         patch("waves.scons_extensions.default_targets_message") as mock_targets,
