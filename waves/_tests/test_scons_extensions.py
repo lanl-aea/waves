@@ -2254,6 +2254,7 @@ parameter_study_write_cases = {
         parameter_generators.CartesianProduct({"one": [1, 2]}, output_file="test.h5"),
         {},
         ["test.h5"],
+        does_not_raise(),
     ),
     # TODO: Update expected output file extension when the write methods adds an output file override
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/634
@@ -2261,11 +2262,13 @@ parameter_study_write_cases = {
         parameter_generators.CartesianProduct({"one": [1, 2]}, output_file="actually_a_yaml_file.h5"),
         {"output_file_type": "yaml"},
         ["actually_a_yaml_file.h5"],
+        does_not_raise(),
     ),
     "output file template": (
         parameter_generators.CartesianProduct({"one": [1, 2]}, output_file_template="test@number.h5"),
         {},
         ["test0.h5", "test1.h5"],
+        does_not_raise(),
     ),
     # TODO: Update expected output file extension when the write methods adds an output file override
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/634
@@ -2273,24 +2276,36 @@ parameter_study_write_cases = {
         parameter_generators.CartesianProduct({"one": [1, 2]}, output_file_template="actually_a_yaml_file@number.h5"),
         {"output_file_type": "yaml"},
         ["actually_a_yaml_file0.h5", "actually_a_yaml_file1.h5"],
+        does_not_raise(),
     ),
+    # TODO: move the dry run option out of the parameter generator and into the write API
+    # Change to move dry run into write kwargs
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
+    "dry run is set": (
+        parameter_generators.CartesianProduct({"one": [1, 2]}, dry_run=True),
+        {},
+        [],
+        pytest.raises(RuntimeError),
+    )
 }
 
 
 @pytest.mark.parametrize(
-    "parameter_generator, kwargs, expected",
+    "parameter_generator, kwargs, expected, outcome",
     parameter_study_write_cases.values(),
     ids=parameter_study_write_cases.keys(),
 )
-def test_parameter_study_write(parameter_generator, kwargs, expected):
+def test_parameter_study_write(parameter_generator, kwargs, expected, outcome):
     env = SCons.Environment.Environment()
 
-    targets = scons_extensions.parameter_study_write(env, parameter_generator, **kwargs)
-    assert [str(target) for target in targets] == expected
+    with outcome:
+        targets = scons_extensions.parameter_study_write(env, parameter_generator, **kwargs)
+        assert [str(target) for target in targets] == expected
 
-    env.AddMethod(scons_extensions.parameter_study_write, "ParameterStudyWrite")
-    targets = env.ParameterStudyWrite(parameter_generator, **kwargs)
-    assert [str(target) for target in targets] == expected
+    with outcome:
+        env.AddMethod(scons_extensions.parameter_study_write, "ParameterStudyWrite")
+        targets = env.ParameterStudyWrite(parameter_generator, **kwargs)
+        assert [str(target) for target in targets] == expected
 
 
 waves_environment_attributes = {

@@ -3480,6 +3480,7 @@ def parameter_study_write(
     from waves import parameter_generators
 
     # TODO: move the dry run option out of the parameter generator and into the write API
+    # Check the kwargs for the dry run option instead of the parameter generator attributes
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
     if parameter_generator.dry_run:
         raise RuntimeError("Parameter generator's dry run attribute is set to True")
