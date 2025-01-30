@@ -282,7 +282,7 @@ class ParameterGenerator(ABC):
         """
         warnings.warn(
             "This method will be deprecated in favor of a full pseudo-builder in v1: "
-            "``waves.scons_extensions.parameter_generator_write``"
+            "``waves.scons_extensions.parameter_study_write``"
         )
         self.write()
 

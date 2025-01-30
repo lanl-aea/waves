@@ -114,7 +114,7 @@ system_tests = [
     ),
     pytest.param(
         [fetch_template, "scons . --jobs=4"],
-        "tutorials/tutorial_parameter_generator_write",
+        "tutorials/tutorial_ParameterStudyWrite",
     ),
     pytest.param(
         [fetch_template, "scons ."],
