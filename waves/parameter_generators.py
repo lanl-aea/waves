@@ -302,8 +302,6 @@ class ParameterGenerator(ABC):
             # TODO: move the dry run option out of the parameter generator and into the write API
             # e.g. drop the ``self.``
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
-            # FIXME: Call conditional write with the correct output file type
-            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/860
             if self.output_file and not self.dry_run:
                 conditional_write_function(self.output_file, parameter_study_object)
             # TODO: move the dry run option out of the parameter generator and into the write API
@@ -326,8 +324,6 @@ class ParameterGenerator(ABC):
                     if self.dry_run:
                         sys.stdout.write(f"{set_path.resolve()}\n{text}")
                     else:
-                        # FIXME: Call conditional write with the correct output file type
-                        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/860
                         conditional_write_function(set_path, parameters)
 
     def _conditionally_write_dataset(
