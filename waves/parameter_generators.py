@@ -65,7 +65,6 @@ class ParameterGenerator(ABC):
         study Xarray Dataset
     :param require_previous_parameter_study: Raise a ``RuntimeError`` if the previous parameter study file is missing.
     :param overwrite: Overwrite existing output files
-    :param dry_run: Print contents of new parameter study output files to STDOUT and exit
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
 
@@ -709,7 +708,6 @@ class CartesianProduct(ParameterGenerator):
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
     :param overwrite: Overwrite existing output files
-    :param dry_run: Print contents of new parameter study output files to STDOUT and exit
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
 
@@ -790,7 +788,6 @@ class LatinHypercube(_ScipyGenerator):
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
     :param overwrite: Overwrite existing output files
-    :param dry_run: Print contents of new parameter study output files to STDOUT and exit
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
@@ -874,7 +871,6 @@ class CustomStudy(ParameterGenerator):
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
     :param overwrite: Overwrite existing output files
-    :param dry_run: Print contents of new parameter study output files to STDOUT and exit
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
 
@@ -972,7 +968,6 @@ class SobolSequence(_ScipyGenerator):
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
     :param overwrite: Overwrite existing output files
-    :param dry_run: Print contents of new parameter study output files to STDOUT and exit
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
@@ -1063,7 +1058,6 @@ class ScipySampler(_ScipyGenerator):
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
     :param overwrite: Overwrite existing output files
-    :param dry_run: Print contents of new parameter study output files to STDOUT and exit
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
@@ -1163,7 +1157,6 @@ class SALibSampler(ParameterGenerator, ABC):
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
     :param overwrite: Overwrite existing output files
-    :param dry_run: Print contents of new parameter study output files to STDOUT and exit
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
