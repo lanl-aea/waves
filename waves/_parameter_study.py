@@ -188,6 +188,7 @@ def main(
         previous_parameter_study=previous_parameter_study,
         require_previous_parameter_study=require_previous_parameter_study,
         overwrite=overwrite,
+        dry_run=dry_run,
         write_meta=write_meta,
     )
 
