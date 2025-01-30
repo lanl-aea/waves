@@ -3236,7 +3236,7 @@ def parameter_study_task(
 
        Import("env", "study")
 
-       env.ParameterStudy(
+       env.ParameterStudyTask(
            env.AbaqusJournal,
            target=["@{set_name}job.inp"],
            source=["journal.py"],
@@ -3245,7 +3245,7 @@ def parameter_study_task(
            subdirectories=True,
        )
 
-       env.ParameterStudy(
+       env.ParameterStudyTask(
            env.AbaqusSolver,
            target=["@{set_name}job.odb"],
            source=["@{set_name}job.inp"],
@@ -3452,6 +3452,24 @@ def parameter_study_write(
 
        This pseudo-builder is a work-in-progress and behavior may change without warning until this warning is removed
 
+    .. code-block::
+       :caption: SConstruct
+
+       import pathlib
+       import waves
+
+       env = Environment()
+       env.AddMethod(waves.scons_extensions.parameter_study_write, "ParameterStudyWrite")
+
+       parameter_study_file = pathlib.Path("parameter_study.h5")
+       parameter_generator = waves.parameter_generators.CartesianProduct(
+           {"parameter_one": [1, 2, 3]},
+           output_file=parameter_study_file,
+           previous_parameter_study=parameter_study_file
+       )
+
+       env.ParameterStudyWrite(parameter_generator)
+
     :param parameter_generator: WAVES ParameterGenerator class
     :param kwargs: All other keyword arguments are passed directly to the
         :meth:`waves.parameter_generators.ParameterGenerator.write` method.
@@ -3615,6 +3633,13 @@ class WAVESEnvironment(SConsEnvironment):
         When using this environment method, do not provide the first ``env`` argument
         """
         return parameter_study_sconscript(self, *args, **kwargs)
+
+    def ParameterStudyWrite(self, *args, **kwargs):
+        """Construction environment method from :meth:`waves.scons_extensions.parameter_study_write`
+
+        When using this environment method, do not provide the first ``env`` argument
+        """
+        return parameter_study_write(self, *args, **kwargs)
 
     def FirstTargetBuilder(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.first_target_builder_factory`
