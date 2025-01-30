@@ -484,15 +484,15 @@ class TestParameterGenerator:
         )
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_yaml") as mock_file,
+            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_yaml") as mock_write_yaml,
+            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_dataset") as mock_write_dataset,
             patch("sys.stdout.write") as stdout_write,
-            patch("xarray.Dataset.to_netcdf") as xarray_to_netcdf,
             patch("pathlib.Path.is_file", side_effect=is_file),
         ):
             WriteParameterGenerator.write()
             stdout_write.assert_not_called()
-            xarray_to_netcdf.assert_not_called()
-            assert mock_file.call_count == files
+            mock_write_dataset.assert_not_called()
+            assert mock_write_yaml.call_count == files
 
     @pytest.mark.parametrize(
         "schema, template, overwrite, dry_run, is_file, sets, files",
@@ -517,16 +517,16 @@ class TestParameterGenerator:
 
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-            patch("builtins.open", mock_open()) as mock_file,
             patch("sys.stdout.write") as stdout_write,
-            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_dataset") as write_netcdf,
+            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_yaml") as mock_write_yaml,
+            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_dataset") as mock_write_dataset,
             patch("pathlib.Path.is_file", side_effect=is_file),
             patch("pathlib.Path.mkdir"),
         ):
             WriteParameterGenerator.write()
-            mock_file.assert_not_called()
             stdout_write.assert_not_called()
-            assert write_netcdf.call_count == files
+            mock_write_yaml.assert_not_called()
+            assert mock_write_dataset.call_count == files
 
     # fmt: off
     init_write_dataset_files = {# equals, is_file, overwrite, expected_call_count  # noqa: E261
