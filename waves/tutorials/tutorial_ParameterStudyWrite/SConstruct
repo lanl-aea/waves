@@ -9,11 +9,11 @@ env.AddMethod(waves.scons_extensions.parameter_study_write, "ParameterStudyWrite
 schema = {"one": [1, 2]}
 one_file = waves.parameter_generators.CartesianProduct(
     schema,
-    output_file="one_file.h5",
+    output_file="build/one_file.h5",
 )
 two_file = waves.parameter_generators.CartesianProduct(
     schema,
-    output_file_template="two_file@number.h5",
+    output_file_template="build/two_file@number.h5",
 )
 
 env.ParameterStudyWrite(
@@ -27,11 +27,11 @@ env.ParameterStudyWrite(
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/634
 one_file = waves.parameter_generators.CartesianProduct(
     schema,
-    output_file="one_file.yaml",
+    output_file="build/one_file.yaml",
 )
 two_file = waves.parameter_generators.CartesianProduct(
     schema,
-    output_file_template="two_file@number.yaml",
+    output_file_template="build/two_file@number.yaml",
 )
 
 yaml = env.ParameterStudyWrite(
