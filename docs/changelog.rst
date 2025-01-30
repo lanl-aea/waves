@@ -19,6 +19,8 @@ Internal Changes
 ================
 - Replace optional mutable default arguments with None types (:issue:`850`, :merge:`1084`). By `Chris Johnson`_ and
   `Kyle Brindley`_.
+- Flesh out unit tests related to output type file handling in parameter generator write method (:issue:`860`,
+  :merge:`1098`). By `Kyle Brindley`_.
 
 *******************
 0.12.5 (2025-01-27)
