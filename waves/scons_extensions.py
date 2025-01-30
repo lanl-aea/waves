@@ -17,7 +17,6 @@ from SCons.Script.SConscript import SConsEnvironment
 
 from waves import _settings
 from waves import _utilities
-from waves._abaqus import odb_extract
 
 
 _exclude_from_namespace = set(globals().keys())
@@ -2277,6 +2276,9 @@ def _build_odb_extract(
     :param source: The source file list of SCons.Node.FS.File objects
     :param env: The builder's SCons construction environment object
     """
+    # Avoid importing odb extract module (heavy) unless necessary
+    from waves._abaqus import odb_extract
+
     # Default odb_extract arguments
     output_type = "h5"
     odb_report_args = None
