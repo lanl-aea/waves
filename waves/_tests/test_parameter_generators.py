@@ -424,6 +424,8 @@ class TestParameterGenerator:
         """
         kwargs = {"sets": sets}
         for output_file_type in _settings._allowable_output_file_types:
+            # VVV TODO: Remove dry run generator init test VVV
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
             WriteParameterGenerator = DummyGenerator(
                 schema,
                 output_file_template=template,
@@ -444,7 +446,30 @@ class TestParameterGenerator:
                 mock_file.assert_not_called()
                 xarray_to_netcdf.assert_not_called()
                 assert stdout_write.call_count == stdout_calls
+            # ^^^ TODO: Remove dry run generator init test ^^^
 
+            WriteNoDryRun = DummyGenerator(
+                schema,
+                output_file_template=template,
+                output_file_type=output_file_type,
+                overwrite=overwrite,
+                **kwargs,
+            )
+            with (
+                patch("waves.parameter_generators.ParameterGenerator._write_meta"),
+                patch("builtins.open", mock_open()) as mock_file,
+                patch("sys.stdout.write") as stdout_write,
+                patch("xarray.Dataset.to_netcdf") as xarray_to_netcdf,
+                patch("pathlib.Path.is_file", side_effect=is_file),
+                patch("pathlib.Path.mkdir"),
+            ):
+                WriteParameterGenerator.write(dry_run=dry_run)
+                mock_file.assert_not_called()
+                xarray_to_netcdf.assert_not_called()
+                assert stdout_write.call_count == stdout_calls
+
+    # TODO: Remove dry run from test case construction
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
     # fmt: off
     init_write_files = {# schema, template, overwrite, dry_run,          is_file, sets, files  # noqa: E261,E721
         "template-1":  (      {},    "out",     False,   False,          [False],    1,     1),  # noqa: E241,E201
@@ -457,11 +482,15 @@ class TestParameterGenerator:
     }
     # fmt: on
 
+    # TODO: Remove dry run from test case construction
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
     @pytest.mark.parametrize(
         "schema, template, overwrite, dry_run, is_file, sets, files",
         init_write_files.values(),
         ids=init_write_files.keys(),
     )
+    # TODO: Remove dry run from test case construction
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
     def test_write_yaml(self, schema, template, overwrite, dry_run, is_file, sets, files):
         """Check for conditions that should result in calls to builtins.open
 
@@ -479,6 +508,8 @@ class TestParameterGenerator:
             output_file_template=template,
             output_file_type="yaml",
             overwrite=overwrite,
+            # TODO: Remove dry run attribute from generator init
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
             dry_run=dry_run,
             **kwargs,
         )
@@ -499,6 +530,8 @@ class TestParameterGenerator:
             output_file_template=template,
             output_file_type="h5",
             overwrite=overwrite,
+            # TODO: Remove dry run attribute from generator init
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
             dry_run=dry_run,
             **kwargs,
         )
@@ -514,11 +547,15 @@ class TestParameterGenerator:
             mock_write_dataset.assert_not_called()
             assert mock_write_yaml.call_count == files
 
+    # TODO: Remove dry run from test case construction
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
     @pytest.mark.parametrize(
         "schema, template, overwrite, dry_run, is_file, sets, files",
         init_write_files.values(),
         ids=init_write_files.keys(),
     )
+    # TODO: Remove dry run from test case construction
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
     def test_write_dataset(self, schema, template, overwrite, dry_run, is_file, sets, files):
         """Check for conditions that should result in calls to ParameterGenerator._write_netcdf
 
@@ -536,6 +573,8 @@ class TestParameterGenerator:
             output_file_template=template,
             output_file_type="h5",
             overwrite=overwrite,
+            # TODO: Remove dry run attribute from generator init
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
             dry_run=dry_run,
             **kwargs,
         )
@@ -558,6 +597,8 @@ class TestParameterGenerator:
             output_file_template=template,
             output_file_type="yaml",
             overwrite=overwrite,
+            # TODO: Remove dry run attribute from generator init
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
             dry_run=dry_run,
             **kwargs,
         )
