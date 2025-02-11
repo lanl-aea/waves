@@ -24,6 +24,8 @@ Internal Changes
   :merge:`1098`). By `Kyle Brindley`_.
 - Move the parameter study dry run implementation from the ParameterGenerator class initialization to the write method
   API. Maintain backward compatibility with a warning (:issue:`863`, :merge:`1099`). By `Kyle Brindley`_.
+- Re-name project help functions for a more consistent naming scheme (:issue:`861`, :merge:`1100`).
+  By `Sergio Cordova`_.
 
 *******************
 0.12.5 (2025-01-27)
