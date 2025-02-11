@@ -97,6 +97,8 @@ def test_alias_list_message():
     mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n    dummy_alias\n", append=True, keep_local=True)
 
 
+# TODO: Deprecate the old function name
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/862
 def test_project_help_message():
     env = SCons.Environment.Environment()
     env.AddMethod(scons_extensions.project_help_message, "ProjectHelp")
@@ -139,6 +141,54 @@ def test_project_help_message():
     with (
         patch("waves.scons_extensions.default_targets_message") as mock_targets,
         patch("waves.scons_extensions.alias_list_message") as mock_alias,
+    ):
+        env.ProjectHelp(**method_interface_non_default_kwargs)
+        mock_targets.assert_called_once_with(**non_default_kwargs)
+        mock_alias.assert_called_once_with(**non_default_kwargs)
+
+
+def test_project_help():
+    env = SCons.Environment.Environment()
+    env.AddMethod(scons_extensions.project_help_message, "ProjectHelp")
+    default_kwargs = {"env": ANY, "append": True, "keep_local": True, "target_descriptions": None}
+    non_default_kwargs = {
+        "env": env,
+        "append": False,
+        "keep_local": False,
+        "target_descriptions": {"somekey": "somevalue"},
+    }
+    method_interface_non_default_kwargs = {key: value for key, value in non_default_kwargs.items() if key != "env"}
+    # Default behavior
+    with (
+        patch("waves.scons_extensions.project_help_default_targets") as mock_targets,
+        patch("waves.scons_extensions.project_help_alias") as mock_alias,
+    ):
+        scons_extensions.project_help_message()
+        mock_targets.assert_called_once_with(**default_kwargs)
+        mock_alias.assert_called_once_with(**default_kwargs)
+
+    # Pass non-default kwargs
+    with (
+        patch("waves.scons_extensions.project_help_default_targets") as mock_targets,
+        patch("waves.scons_extensions.project_help_alias") as mock_alias,
+    ):
+        scons_extensions.project_help_message(**non_default_kwargs)
+        mock_targets.assert_called_once_with(**non_default_kwargs)
+        mock_alias.assert_called_once_with(**non_default_kwargs)
+
+    # Test the Method style interface
+    with (
+        patch("waves.scons_extensions.project_help_default_targets") as mock_targets,
+        patch("waves.scons_extensions.project_help_alias") as mock_alias,
+    ):
+        env.ProjectHelp()
+        mock_targets.assert_called_once_with(**default_kwargs)
+        mock_alias.assert_called_once_with(**default_kwargs)
+
+    # Test the Method style interface, non-default kwargs
+    with (
+        patch("waves.scons_extensions.project_help_default_targets") as mock_targets,
+        patch("waves.scons_extensions.project_help_alias") as mock_alias,
     ):
         env.ProjectHelp(**method_interface_non_default_kwargs)
         mock_targets.assert_called_once_with(**non_default_kwargs)
