@@ -391,7 +391,14 @@ def project_help_message(
     alias_list_message(env=env, append=append, keep_local=keep_local, target_descriptions=target_descriptions)
 
 
-def default_targets_message(
+# TODO: Deprecate the old function name
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/862
+def default_targets_message(*args, **kwargs):
+    warnings.warn("This function name has changed to ``waves.scons_extensions.project_help_default_targets``. This function will be deprecated in v1")
+    return project_help_default_targets(*args, **kwargs)
+
+
+def project_help_default_targets(
     env: SCons.Environment.Environment = SCons.Environment.Environment(),
     append: bool = True,
     keep_local: bool = True,
