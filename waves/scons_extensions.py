@@ -370,7 +370,7 @@ def ssh_builder_actions(
 
 # TODO: Deprecate the old function name
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/862
-def project_help_message(
+def project_help_message(*args, **kwargs):
     warnings.warn("This function name has changed to ``waves.scons_extensions.project_help``. This function will be deprecated in v1")
     return project_help(*args, **kwargs)
 
