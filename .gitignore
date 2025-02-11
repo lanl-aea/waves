@@ -63,6 +63,9 @@ coverage*.xml
 # PyCharm
 .idea
 
+# Spyder
+.spyproject
+
 # Pytest
 .coverage
 htmlcov
