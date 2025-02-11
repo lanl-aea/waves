@@ -5,6 +5,7 @@ import atexit
 import shutil
 import typing
 import pathlib
+import warnings
 import functools
 
 import SCons.Node
@@ -423,7 +424,14 @@ def default_targets_message(
         SConsEnvironment.Help(env, default_targets_help, append=append)
 
 
-def alias_list_message(
+# TODO: Deprecate the old function name
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/862
+def alias_list_message(*args, **kwargs):
+    warnings.warn("This function name has changed to ``waves.scons_extensions.project_help_alias``. This function will be deprecated in v1")
+    return project_help_alias(*args, **kwargs)
+
+
+def project_help_alias(
     env: SCons.Environment.Environment = SCons.Environment.Environment(),
     append: bool = True,
     keep_local: bool = True,
