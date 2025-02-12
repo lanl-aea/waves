@@ -385,8 +385,8 @@ def project_help(
 
     See the `SCons Help`_ documentation for appending behavior. Thin wrapper around
 
-    * :meth:`waves.scons_extensions.default_targets_message`
-    * :meth:`waves.scons_extensions.alias_list_message`
+    * :meth:`waves.scons_extensions.project_help_default_targets`
+    * :meth:`waves.scons_extensions.project_help_alias`
 
     :param env: The SCons construction environment object to modify
     :param append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
@@ -394,8 +394,8 @@ def project_help(
     :param keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     :param target_descriptions: dictionary containing target metadata.
     """
-    default_targets_message(env=env, append=append, keep_local=keep_local, target_descriptions=target_descriptions)
-    alias_list_message(env=env, append=append, keep_local=keep_local, target_descriptions=target_descriptions)
+    project_help_default_targets(env=env, append=append, keep_local=keep_local, target_descriptions=target_descriptions)
+    project_help_alias(env=env, append=append, keep_local=keep_local, target_descriptions=target_descriptions)
 
 
 # TODO: Deprecate the old function name
@@ -3617,11 +3617,11 @@ class WAVESEnvironment(SConsEnvironment):
         return copy_substfile(self, *args, **kwargs)
 
     def ProjectHelp(self, *args, **kwargs):
-        """Construction environment method from :meth:`waves.scons_extensions.project_help_message`
+        """Construction environment method from :meth:`waves.scons_extensions.project_help`
 
         When using this environment method, do not provide the first ``env`` argument
         """
-        return project_help_message(self, *args, **kwargs)
+        return project_help(self, *args, **kwargs)
 
     def ProjectAlias(self, *args, **kwargs):
         """Construction environment method from :meth:`waves.scons_extensions.project_alias`

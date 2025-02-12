@@ -221,8 +221,9 @@ def test_project_help_message():
     method_interface_non_default_kwargs = {key: value for key, value in non_default_kwargs.items() if key != "env"}
     # Default behavior
     with (
-        patch("waves.scons_extensions.default_targets_message") as mock_targets,
-        patch("waves.scons_extensions.alias_list_message") as mock_alias,
+        patch("waves.scons_extensions.project_help_default_targets") as mock_targets,
+        patch("waves.scons_extensions.SConsEnvironment.Help") as mock_help,
+        patch("waves.scons_extensions.project_help_alias") as mock_alias,
         patch("warnings.warn") as warning
     ):
         scons_extensions.project_help_message()
@@ -232,8 +233,8 @@ def test_project_help_message():
 
     # Pass non-default kwargs
     with (
-        patch("waves.scons_extensions.default_targets_message") as mock_targets,
-        patch("waves.scons_extensions.alias_list_message") as mock_alias,
+        patch("waves.scons_extensions.project_help_default_targets") as mock_targets,
+        patch("waves.scons_extensions.project_help_alias") as mock_alias,
     ):
         scons_extensions.project_help_message(**non_default_kwargs)
         mock_targets.assert_called_once_with(**non_default_kwargs)
@@ -241,8 +242,8 @@ def test_project_help_message():
 
     # Test the Method style interface
     with (
-        patch("waves.scons_extensions.default_targets_message") as mock_targets,
-        patch("waves.scons_extensions.alias_list_message") as mock_alias,
+        patch("waves.scons_extensions.project_help_default_targets") as mock_targets,
+        patch("waves.scons_extensions.project_help_alias") as mock_alias,
     ):
         env.ProjectHelp()
         mock_targets.assert_called_once_with(**default_kwargs)
@@ -250,8 +251,8 @@ def test_project_help_message():
 
     # Test the Method style interface, non-default kwargs
     with (
-        patch("waves.scons_extensions.default_targets_message") as mock_targets,
-        patch("waves.scons_extensions.alias_list_message") as mock_alias,
+        patch("waves.scons_extensions.project_help_default_targets") as mock_targets,
+        patch("waves.scons_extensions.project_help_alias") as mock_alias,
     ):
         env.ProjectHelp(**method_interface_non_default_kwargs)
         mock_targets.assert_called_once_with(**non_default_kwargs)
@@ -260,7 +261,7 @@ def test_project_help_message():
 
 def test_project_help():
     env = SCons.Environment.Environment()
-    env.AddMethod(scons_extensions.project_help_message, "ProjectHelp")
+    env.AddMethod(scons_extensions.project_help, "ProjectHelp")
     default_kwargs = {"env": ANY, "append": True, "keep_local": True, "target_descriptions": None}
     non_default_kwargs = {
         "env": env,
@@ -274,7 +275,7 @@ def test_project_help():
         patch("waves.scons_extensions.project_help_default_targets") as mock_targets,
         patch("waves.scons_extensions.project_help_alias") as mock_alias,
     ):
-        scons_extensions.project_help_message()
+        scons_extensions.project_help()
         mock_targets.assert_called_once_with(**default_kwargs)
         mock_alias.assert_called_once_with(**default_kwargs)
 
@@ -283,7 +284,7 @@ def test_project_help():
         patch("waves.scons_extensions.project_help_default_targets") as mock_targets,
         patch("waves.scons_extensions.project_help_alias") as mock_alias,
     ):
-        scons_extensions.project_help_message(**non_default_kwargs)
+        scons_extensions.project_help(**non_default_kwargs)
         mock_targets.assert_called_once_with(**non_default_kwargs)
         mock_alias.assert_called_once_with(**non_default_kwargs)
 
