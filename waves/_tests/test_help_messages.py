@@ -224,7 +224,7 @@ def test_project_help_message():
         patch("waves.scons_extensions.project_help_default_targets") as mock_targets,
         patch("waves.scons_extensions.SConsEnvironment.Help") as mock_help,
         patch("waves.scons_extensions.project_help_alias") as mock_alias,
-        patch("warnings.warn") as warning
+        patch("warnings.warn") as warning,
     ):
         scons_extensions.project_help_message()
         warning.assert_called_once()

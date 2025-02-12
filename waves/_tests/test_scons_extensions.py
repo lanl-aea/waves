@@ -2286,7 +2286,7 @@ parameter_study_write_cases = {
         {},
         [],
         pytest.raises(RuntimeError),
-    )
+    ),
 }
 
 
