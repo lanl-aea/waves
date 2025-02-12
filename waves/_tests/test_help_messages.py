@@ -8,14 +8,27 @@ import SCons.Environment
 from waves import scons_extensions
 
 
+# TODO: Remove this function once duplicate testing functions have been removed
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/862
+@pytest.fixture(autouse=True)
+def reset_alias():
+    # Reset aliases before each test
+    SCons.Script.DEFAULT_TARGETS = []
+    SCons.Node.Alias.default_ans = SCons.Node.Alias.AliasNameSpace()
+
+
 # TODO: Deprecate the old function name
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/862
 def test_default_targets_message():
     # Raise TypeError mocking SCons < 4.6.0
     # Git commit 7a95cef7: Normally you expect something like ``patch("SCons.Script.SConscript.SConsEnvironment...")``
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
-    with patch("waves.scons_extensions.SConsEnvironment.Help", side_effect=[TypeError, None]) as mock_help:
+    with (
+        patch("waves.scons_extensions.SConsEnvironment.Help", side_effect=[TypeError, None]) as mock_help,
+        patch("warnings.warn") as warning,
+    ):
         scons_extensions.default_targets_message()
+        warning.assert_called_once()
     calls = [
         call(ANY, "\nDefault Targets:\n", append=True, keep_local=True),
         call(ANY, "\nDefault Targets:\n", append=True),
@@ -106,7 +119,10 @@ def test_alias_list_message():
     # Raise TypeError mocking SCons < 4.6.0
     # Git commit 7a95cef7: Normally you expect something like ``patch("SCons.Script.SConscript.SConsEnvironment...")``
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
-    with patch("waves.scons_extensions.SConsEnvironment.Help", side_effect=[TypeError, None]) as mock_help:
+    with (
+        patch("waves.scons_extensions.SConsEnvironment.Help", side_effect=[TypeError, None]) as mock_help,
+        patch("warnings.warn") as warning,
+    ):
         scons_extensions.alias_list_message()
     calls = [
         call(ANY, "\nTarget Aliases:\n", append=True, keep_local=True),
@@ -207,8 +223,10 @@ def test_project_help_message():
     with (
         patch("waves.scons_extensions.default_targets_message") as mock_targets,
         patch("waves.scons_extensions.alias_list_message") as mock_alias,
+        patch("warnings.warn") as warning
     ):
         scons_extensions.project_help_message()
+        warning.assert_called_once()
         mock_targets.assert_called_once_with(**default_kwargs)
         mock_alias.assert_called_once_with(**default_kwargs)
 
