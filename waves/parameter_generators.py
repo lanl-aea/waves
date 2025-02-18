@@ -75,18 +75,18 @@ class ParameterGenerator(ABC):
     """
 
     def __init__(
-            self,
-            parameter_schema: dict,
-            output_file_template: typing.Optional[str] = _settings._default_output_file_template,
-            output_file: typing.Optional[str] = _settings._default_output_file,
-            output_file_type: _settings._allowable_output_file_typing = _settings._default_output_file_type_api,
-            set_name_template: str = _settings._default_set_name_template,
-            previous_parameter_study: typing.Optional[str] = _settings._default_previous_parameter_study,
-            require_previous_parameter_study: bool = _settings._default_require_previous_parameter_study,
-            overwrite: bool = _settings._default_overwrite,
-            dry_run: bool = _settings._default_dry_run,
-            write_meta: bool = _settings._default_write_meta,
-            **kwargs,
+        self,
+        parameter_schema: dict,
+        output_file_template: typing.Optional[str] = _settings._default_output_file_template,
+        output_file: typing.Optional[str] = _settings._default_output_file,
+        output_file_type: _settings._allowable_output_file_typing = _settings._default_output_file_type_api,
+        set_name_template: str = _settings._default_set_name_template,
+        previous_parameter_study: typing.Optional[str] = _settings._default_previous_parameter_study,
+        require_previous_parameter_study: bool = _settings._default_require_previous_parameter_study,
+        overwrite: bool = _settings._default_overwrite,
+        dry_run: bool = _settings._default_dry_run,
+        write_meta: bool = _settings._default_write_meta,
+        **kwargs,
     ) -> None:
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
@@ -228,9 +228,9 @@ class ParameterGenerator(ABC):
         # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 
     def write(
-            self,
-            output_file_type: typing.Union[_settings._allowable_output_file_typing, None] = None,
-            dry_run: typing.Optional[bool] = None,
+        self,
+        output_file_type: typing.Union[_settings._allowable_output_file_typing, None] = None,
+        dry_run: typing.Optional[bool] = None,
     ) -> None:
         """Write the parameter study to STDOUT or an output file.
 
@@ -304,11 +304,11 @@ class ParameterGenerator(ABC):
         self.write()
 
     def _write(
-            self,
-            parameter_study_object,
-            parameter_study_iterator,
-            conditional_write_function,
-            dry_run: bool = _settings._default_dry_run,
+        self,
+        parameter_study_object,
+        parameter_study_iterator,
+        conditional_write_function,
+        dry_run: bool = _settings._default_dry_run,
     ) -> None:
         """Write parameter study formatted output to STDOUT, separate set files, or a single file
 
@@ -350,9 +350,9 @@ class ParameterGenerator(ABC):
                         conditional_write_function(set_path, parameters)
 
     def _conditionally_write_dataset(
-            self,
-            existing_parameter_study: pathlib.Path,
-            parameter_study: xarray.Dataset,
+        self,
+        existing_parameter_study: pathlib.Path,
+        parameter_study: xarray.Dataset,
     ) -> None:
         """Write NetCDF file over previous study if the datasets have changed or self.overwrite is True
 
@@ -370,9 +370,9 @@ class ParameterGenerator(ABC):
             parameter_study.to_netcdf(path=existing_parameter_study, mode="w", format="NETCDF4", engine="h5netcdf")
 
     def _conditionally_write_yaml(
-            self,
-            output_file: typing.Union[str, pathlib.Path],
-            parameter_dictionary: dict,
+        self,
+        output_file: typing.Union[str, pathlib.Path],
+        parameter_dictionary: dict,
     ) -> None:
         """Write YAML file over previous study if the datasets have changed or self.overwrite is True
 
@@ -626,8 +626,8 @@ class _ScipyGenerator(ParameterGenerator, ABC):
             if "distribution" not in parameter_keys:
                 raise SchemaValidationError(f"Parameter '{name}' does not contain the required 'distribution' key")
             elif (
-                    not isinstance(parameter_definition["distribution"], str)
-                    or not parameter_definition["distribution"].isidentifier()  # noqa: W503
+                not isinstance(parameter_definition["distribution"], str)
+                or not parameter_definition["distribution"].isidentifier()  # noqa: W503
             ):
                 raise SchemaValidationError(
                     f"Parameter '{name}' distribution '{parameter_definition['distribution']}' "
@@ -1024,8 +1024,8 @@ class CustomStudy(ParameterGenerator):
                 self.parameter_schema["parameter_samples"], dtype=object
             )
         if (
-                self.parameter_schema["parameter_samples"].ndim != 2
-                or len(self._parameter_names) != self.parameter_schema["parameter_samples"].shape[1]  # noqa: W503
+            self.parameter_schema["parameter_samples"].ndim != 2
+            or len(self._parameter_names) != self.parameter_schema["parameter_samples"].shape[1]  # noqa: W503
         ):
             raise SchemaValidationError(
                 "The parameter samples must be an array of shape MxN, where N is the number of parameters."
