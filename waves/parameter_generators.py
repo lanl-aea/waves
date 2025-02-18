@@ -32,7 +32,6 @@ from waves._settings import _deprecated_set_coordinate_key
 # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
 
-
 _exclude_from_namespace = set(globals().keys())
 
 #: The set name coordinate used in WAVES parameter study Xarray Datasets
@@ -76,18 +75,18 @@ class ParameterGenerator(ABC):
     """
 
     def __init__(
-        self,
-        parameter_schema: dict,
-        output_file_template: typing.Optional[str] = _settings._default_output_file_template,
-        output_file: typing.Optional[str] = _settings._default_output_file,
-        output_file_type: _settings._allowable_output_file_typing = _settings._default_output_file_type_api,
-        set_name_template: str = _settings._default_set_name_template,
-        previous_parameter_study: typing.Optional[str] = _settings._default_previous_parameter_study,
-        require_previous_parameter_study: bool = _settings._default_require_previous_parameter_study,
-        overwrite: bool = _settings._default_overwrite,
-        dry_run: bool = _settings._default_dry_run,
-        write_meta: bool = _settings._default_write_meta,
-        **kwargs,
+            self,
+            parameter_schema: dict,
+            output_file_template: typing.Optional[str] = _settings._default_output_file_template,
+            output_file: typing.Optional[str] = _settings._default_output_file,
+            output_file_type: _settings._allowable_output_file_typing = _settings._default_output_file_type_api,
+            set_name_template: str = _settings._default_set_name_template,
+            previous_parameter_study: typing.Optional[str] = _settings._default_previous_parameter_study,
+            require_previous_parameter_study: bool = _settings._default_require_previous_parameter_study,
+            overwrite: bool = _settings._default_overwrite,
+            dry_run: bool = _settings._default_dry_run,
+            write_meta: bool = _settings._default_write_meta,
+            **kwargs,
     ) -> None:
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
@@ -229,9 +228,9 @@ class ParameterGenerator(ABC):
         # ^^^ TODO: Remove when the deprecated set coordinate key is fully removed ^^^
 
     def write(
-        self,
-        output_file_type: typing.Union[_settings._allowable_output_file_typing, None] = None,
-        dry_run: typing.Optional[bool] = None,
+            self,
+            output_file_type: typing.Union[_settings._allowable_output_file_typing, None] = None,
+            dry_run: typing.Optional[bool] = None,
     ) -> None:
         """Write the parameter study to STDOUT or an output file.
 
@@ -305,11 +304,11 @@ class ParameterGenerator(ABC):
         self.write()
 
     def _write(
-        self,
-        parameter_study_object,
-        parameter_study_iterator,
-        conditional_write_function,
-        dry_run: bool = _settings._default_dry_run,
+            self,
+            parameter_study_object,
+            parameter_study_iterator,
+            conditional_write_function,
+            dry_run: bool = _settings._default_dry_run,
     ) -> None:
         """Write parameter study formatted output to STDOUT, separate set files, or a single file
 
@@ -351,9 +350,9 @@ class ParameterGenerator(ABC):
                         conditional_write_function(set_path, parameters)
 
     def _conditionally_write_dataset(
-        self,
-        existing_parameter_study: pathlib.Path,
-        parameter_study: xarray.Dataset,
+            self,
+            existing_parameter_study: pathlib.Path,
+            parameter_study: xarray.Dataset,
     ) -> None:
         """Write NetCDF file over previous study if the datasets have changed or self.overwrite is True
 
@@ -371,9 +370,9 @@ class ParameterGenerator(ABC):
             parameter_study.to_netcdf(path=existing_parameter_study, mode="w", format="NETCDF4", engine="h5netcdf")
 
     def _conditionally_write_yaml(
-        self,
-        output_file: typing.Union[str, pathlib.Path],
-        parameter_dictionary: dict,
+            self,
+            output_file: typing.Union[str, pathlib.Path],
+            parameter_dictionary: dict,
     ) -> None:
         """Write YAML file over previous study if the datasets have changed or self.overwrite is True
 
@@ -627,8 +626,8 @@ class _ScipyGenerator(ParameterGenerator, ABC):
             if "distribution" not in parameter_keys:
                 raise SchemaValidationError(f"Parameter '{name}' does not contain the required 'distribution' key")
             elif (
-                not isinstance(parameter_definition["distribution"], str)
-                or not parameter_definition["distribution"].isidentifier()  # noqa: W503
+                    not isinstance(parameter_definition["distribution"], str)
+                    or not parameter_definition["distribution"].isidentifier()  # noqa: W503
             ):
                 raise SchemaValidationError(
                     f"Parameter '{name}' distribution '{parameter_definition['distribution']}' "
@@ -852,6 +851,99 @@ class LatinHypercube(_ScipyGenerator):
         super()._generate(**kwargs)
 
 
+class OneAtATime(ParameterGenerator):
+    """Builds a custom parameter study from user-specified values
+
+    Parameters must be scalar valued integers, floats, strings, or booleans
+
+    :param parameter_schema: Dictionary with two keys: ``parameter_samples`` and ``parameter_names``.
+        Parameter samples in the form of a 2D array with shape M x N, where M is the number of parameter sets and N is
+        the number of parameters. Parameter names in the form of a 1D array with length N. When creating a
+        `parameter_samples` array with mixed type (e.g. string and floats) use `dtype=object` to preserve the mixed
+        types and avoid casting all values to a common type (e.g. all your floats will become strings).
+    :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
+        parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
+        relative path template. May contain the ``@number`` set number placeholder in the file basename but not in the
+        path. If the placeholder is not found it will be appended to the template string. Output files are overwritten
+        if the content of the file has changed or if ``overwrite`` is True. ``output_file_template`` and ``output_file``
+        are mutually exclusive.
+    :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
+        be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
+        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
+        and ``output_file_template`` are mutually exclusive.
+    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
+    :param previous_parameter_study: A relative or absolute file path to a previously created parameter
+        study Xarray Dataset
+    :param overwrite: Overwrite existing output files
+    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
+        Useful for command line execution with build systems that require an explicit file list for target creation.
+
+    :var self.parameter_study: The final parameter study XArray Dataset object
+
+    :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
+        options are both specified
+    :raises waves.exceptions.APIError: If an unknown output file type is requested
+    :raises RuntimeError: If a previous parameter study file is specified and missing, and
+        ``require_previous_parameter_study`` is ``True``
+    :raises waves.exceptions.SchemaValidationError:
+
+        * Parameter schema is not a dictionary
+        * Parameter schema does not contain the ``parameter_names`` key
+        * Parameter schema does not contain the ``parameter_samples`` key
+        * The ``parameter_samples`` value is an improperly shaped array
+
+    Example
+
+    .. code-block::
+
+       >>> import waves
+       >>> parameter_schema = {
+       ...     'parameter_1': [1.0],
+       ...     'parameter_2': ['a', 'b'],
+       ...     'parameter_3': [5, 3, 7]
+       ... }
+       >>> parameter_generator = waves.parameter_generators.CartesianProduct(parameter_schema)
+       >>> print(parameter_generator.parameter_study)
+       <xarray.Dataset>
+       Dimensions:       (set_hash: 4)
+       Coordinates:
+           set_hash      (set_hash) <U32 'de3cb3eaecb767ff63973820b2...
+         * set_name      (set_hash) <U14 'parameter_set0' ... 'param...
+       Data variables:
+           parameter_1   (set_hash) object 1 2 1
+           parameter_2   (set_hash) object 'a' 'a' 'b'
+    """
+
+    def _validate(self) -> None:
+        """Validate the One-at-a-Time parameter schema. Executed by class initiation."""
+        if not isinstance(self.parameter_schema, dict):
+            raise SchemaValidationError("parameter_schema must be a dictionary")
+        self._parameter_names = list(self.parameter_schema.keys())
+        # List, sets, and tuples are the supported PyYAML iterables that will support expected behavior
+        for name in self._parameter_names:
+            if not isinstance(self.parameter_schema[name], (list, set, tuple)):
+                raise SchemaValidationError(f"Parameter '{name}' is not one of list, set, or tuple")
+            if len(self.parameter_schema[name]) < 1:
+                raise SchemaValidationError(f"Parameter '{name}' must have at least one value")
+        return
+
+    def _generate(self, **kwargs) -> None:
+        """Generate the parameter sets from the user provided parameter values."""
+        self._keys = self.parameter_schema.keys()
+        # Generate the nominal set, assuming that the first entry of each parameter is the nominal parameter
+        self._nominal_set = [self.parameter_schema[name][0] for name in self._keys]
+        self._samples = numpy.array([self._nominal_set], dtype=object)
+        # Generate the off-nominal parameter sets
+        for parameter_index, name in enumerate(self._keys):
+            if len(self.parameter_schema[name]) > 1:
+                for value in self.parameter_schema[name]:
+                    self._new_set = self._nominal_set
+                    self._new_set[parameter_index] = value  # Replace the value of the variable
+                    self._samples = numpy.append(self._samples, self._new_set)  # Create running list
+        super()._generate()
+
+
 class CustomStudy(ParameterGenerator):
     """Builds a custom parameter study from user-specified values
 
@@ -932,8 +1024,8 @@ class CustomStudy(ParameterGenerator):
                 self.parameter_schema["parameter_samples"], dtype=object
             )
         if (
-            self.parameter_schema["parameter_samples"].ndim != 2
-            or len(self._parameter_names) != self.parameter_schema["parameter_samples"].shape[1]  # noqa: W503
+                self.parameter_schema["parameter_samples"].ndim != 2
+                or len(self._parameter_names) != self.parameter_schema["parameter_samples"].shape[1]  # noqa: W503
         ):
             raise SchemaValidationError(
                 "The parameter samples must be an array of shape MxN, where N is the number of parameters."
