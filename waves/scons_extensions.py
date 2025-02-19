@@ -389,7 +389,7 @@ def project_help(
     See the `SCons Help`_ documentation for appending behavior. Thin wrapper around
 
     * :meth:`waves.scons_extensions.project_help_default_targets`
-    * :meth:`waves.scons_extensions.project_help_alias`
+    * :meth:`waves.scons_extensions.project_help_aliases`
 
     :param env: The SCons construction environment object to modify
     :param append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
@@ -398,7 +398,7 @@ def project_help(
     :param target_descriptions: dictionary containing target metadata.
     """
     project_help_default_targets(env=env, append=append, keep_local=keep_local, target_descriptions=target_descriptions)
-    project_help_alias(env=env, append=append, keep_local=keep_local, target_descriptions=target_descriptions)
+    project_help_aliases(env=env, append=append, keep_local=keep_local, target_descriptions=target_descriptions)
 
 
 # TODO: Deprecate the old function name
@@ -448,13 +448,13 @@ def project_help_default_targets(
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/862
 def alias_list_message(*args, **kwargs):
     warnings.warn(
-        "This function name has changed to ``waves.scons_extensions.project_help_alias``. "
+        "This function name has changed to ``waves.scons_extensions.project_help_aliases``. "
         "This function will be deprecated in v1"
     )
-    return project_help_alias(*args, **kwargs)
+    return project_help_aliases(*args, **kwargs)
 
 
-def project_help_alias(
+def project_help_aliases(
     env: SCons.Environment.Environment = SCons.Environment.Environment(),
     append: bool = True,
     keep_local: bool = True,
