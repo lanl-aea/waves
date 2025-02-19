@@ -741,6 +741,17 @@ class TestParameterGenerator:
             finally:
                 mock_private_write.assert_not_called()
 
+    def test_write_call_to_write_meta(self):
+        WriteParameterGenerator = DummyGenerator({})
+        WriteParameterGenerator.write_meta = True
+        WriteParameterGenerator.provided_output_file_template = True
+        with (
+            patch("waves.parameter_generators.ParameterGenerator._write_meta") as mock_write_meta,
+            patch("waves.parameter_generators.ParameterGenerator._write") as mock_private_write,
+        ):
+            WriteParameterGenerator.write()
+            mock_write_meta.assert_called_once()
+
     @pytest.mark.parametrize(
         "parameter_names, samples, expected_hashes",
         set_hashes.values(),
