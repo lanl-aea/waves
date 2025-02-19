@@ -218,7 +218,17 @@ def test_find_cubit_python():
         patch("os.access", return_value=True),
     ):
         cubit_python = _utilities.find_cubit_python(mock_abspath)
-    assert cubit_python == mock_python
+        assert cubit_python == mock_python
+
+    with (
+        patch("waves._utilities.find_command"),
+        patch("os.path.realpath", return_value=str(mock_abspath)),
+        patch("pathlib.Path.rglob", return_value=[mock_python]) as mock_rglob,
+        patch("pathlib.Path.is_file", return_value=False),
+        patch("os.access", return_value=True),
+        pytest.raises(FileNotFoundError),
+    ):
+        cubit_python = _utilities.find_cubit_python(mock_abspath)
 
 
 def test_tee_subprocess():
