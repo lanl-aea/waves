@@ -34,30 +34,32 @@ fs = SCons.Node.FS.FS()
 testing_windows, root_fs, testing_macos = platform_check()
 
 
-def test_print_action_signature_string():
+mock_decodable = Mock()
+mock_decodable.__str__ = lambda self: "mock_node"
+mock_decodable.get_executor.return_value.get_contents.return_value = b"action signature string"
+mock_not_decodable = Mock()
+mock_not_decodable.__str__ = lambda self: "mock_node"
+mock_not_decodable.get_executor.return_value.get_contents.return_value = b"\x81action signature string"
+test_print_action_signature_string_cases = {
+    "decode-able": (mock_decodable, "action signature string"),
+    "not decode-able": (mock_not_decodable, b"\x81action signature string"),
+}
 
+
+@pytest.mark.parametrize(
+    "mock_node, action_signature_string",
+    test_print_action_signature_string_cases.values(),
+    ids=test_print_action_signature_string_cases.keys(),
+)
+def test_print_action_signature_string(mock_node, action_signature_string):
     s = "s"
     source = []
     env = SCons.Environment.Environment()
-
-    mock_decodable = Mock()
-    mock_decodable.__str__ = lambda self: "mock_node"
-    mock_decodable.get_executor.return_value.get_contents.return_value = b"action signature string"
     with patch("builtins.print") as mock_print:
-        target = [mock_decodable]
+        target = [mock_node]
         scons_extensions.print_action_signature_string(s, target, source, env)
         mock_print.assert_called_once_with(
-            f"Building mock_node with action signature string:\n  action signature string\n{s}",
-        )
-
-    mock_not_decodable = Mock()
-    mock_not_decodable.__str__ = lambda self: "mock_node"
-    mock_not_decodable.get_executor.return_value.get_contents.return_value = b"\x81action signature string"
-    with patch("builtins.print") as mock_print:
-        target = [mock_not_decodable]
-        scons_extensions.print_action_signature_string(s, target, source, env)
-        mock_print.assert_called_once_with(
-            f"Building mock_node with action signature string:\n  b'\\x81action signature string'\n{s}",
+            f"Building {mock_node} with action signature string:\n  {action_signature_string}\n{s}",
         )
 
 
