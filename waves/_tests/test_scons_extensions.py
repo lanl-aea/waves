@@ -816,6 +816,7 @@ construct_action_list = {
     "list2": (["thing1", "thing2"], prefix, "", [f"{prefix} thing1", f"{prefix} thing2"]),
     "tuple": (("thing1",), prefix, "", [f"{prefix} thing1"]),
     "str": ("thing1", prefix, "", [f"{prefix} thing1"]),
+    "pathlib.Path": (pathlib.Path("thing1"), prefix, "", [f"{prefix} thing1"]),
     "list1 suffix": (["thing1"], prefix, suffix, [f"{prefix} thing1 {suffix}"]),
     "list2 suffix": (["thing1", "thing2"], prefix, suffix, [f"{prefix} thing1 {suffix}", f"{prefix} thing2 {suffix}"]),
     "tuple suffix": (("thing1",), prefix, suffix, [f"{prefix} thing1 {suffix}"]),
