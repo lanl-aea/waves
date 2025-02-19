@@ -24,6 +24,8 @@ Internal Changes
   :merge:`1098`). By `Kyle Brindley`_.
 - Move the parameter study dry run implementation from the ParameterGenerator class initialization to the write method
   API. Maintain backward compatibility with a warning (:issue:`863`, :merge:`1099`). By `Kyle Brindley`_.
+- Skip Fierro tutorial system tests while waiting on upstream package fix (:issue:`864`, :merge:`1102`). By `Kyle
+  Brindley`_.
 
 *******************
 0.12.5 (2025-01-27)
