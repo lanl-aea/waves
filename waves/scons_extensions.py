@@ -371,6 +371,12 @@ def ssh_builder_actions(
 # TODO: Deprecate the old function name
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/862
 def project_help_message(*args, **kwargs):
+    """
+    .. warning::
+
+       Deprecated function name scheduled for removal in version 1. Function implementation has moved to 
+       :meth:`waves.scons_extensions.project_help` for naming convention consistency.
+    """
     warnings.warn(
         "This function name has changed to ``waves.scons_extensions.project_help``. "
         "This function will be deprecated in v1"
@@ -404,6 +410,12 @@ def project_help(
 # TODO: Deprecate the old function name
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/862
 def default_targets_message(*args, **kwargs):
+    """
+    .. warning::
+
+       Deprecated function name scheduled for removal in version 1. Function implementation has moved to 
+       :meth:`waves.scons_extensions.project_help_default_targets` for naming convention consistency.
+    """
     warnings.warn(
         "This function name has changed to ``waves.scons_extensions.project_help_default_targets``. "
         "This function will be deprecated in v1"
@@ -447,6 +459,12 @@ def project_help_default_targets(
 # TODO: Deprecate the old function name
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/862
 def alias_list_message(*args, **kwargs):
+    """
+    .. warning::
+
+       Deprecated function name scheduled for removal in version 1. Function implementation has moved to 
+       :meth:`waves.scons_extensions.project_help_aliases` for naming convention consistency.
+    """
     warnings.warn(
         "This function name has changed to ``waves.scons_extensions.project_help_aliases``. "
         "This function will be deprecated in v1"
