@@ -374,7 +374,7 @@ def project_help_message(*args, **kwargs):
     """
     .. warning::
 
-       Deprecated function name scheduled for removal in version 1. Function implementation has moved to 
+       Deprecated function name scheduled for removal in version 1. Function implementation has moved to
        :meth:`waves.scons_extensions.project_help` for naming convention consistency.
     """
     warnings.warn(
@@ -413,7 +413,7 @@ def default_targets_message(*args, **kwargs):
     """
     .. warning::
 
-       Deprecated function name scheduled for removal in version 1. Function implementation has moved to 
+       Deprecated function name scheduled for removal in version 1. Function implementation has moved to
        :meth:`waves.scons_extensions.project_help_default_targets` for naming convention consistency.
     """
     warnings.warn(
@@ -462,7 +462,7 @@ def alias_list_message(*args, **kwargs):
     """
     .. warning::
 
-       Deprecated function name scheduled for removal in version 1. Function implementation has moved to 
+       Deprecated function name scheduled for removal in version 1. Function implementation has moved to
        :meth:`waves.scons_extensions.project_help_aliases` for naming convention consistency.
     """
     warnings.warn(
