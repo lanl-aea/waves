@@ -50,6 +50,9 @@ test:
     - calculix
     - ccx2paraview
     - fierro-fe-cpu
+    # Remove trilinos-cpu explicit requirement when Fierro package(s) resolve the missing library issue
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/865
+    - trilinos-cpu <=15
     - gmsh
     - h5netcdf
     - h5py
