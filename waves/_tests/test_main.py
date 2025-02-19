@@ -97,6 +97,13 @@ def test_main():
     ):
         _main.main()
 
+    with (
+        patch("sys.argv", ["_main.py"]),
+        patch("argparse.ArgumentParser.print_help") as mock_print_help,
+    ):
+        _main.main()
+        mock_print_help.assert_called_once()
+
 
 # fmt: off
 parameter_study_args = {  #               subcommand,         class_name,                   argument,         option, argument_value  # noqa: E262,E501
