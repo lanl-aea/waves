@@ -5,7 +5,7 @@ import copy
 import pathlib
 from contextlib import nullcontext as does_not_raise
 import unittest
-from unittest.mock import patch, call
+from unittest.mock import patch, call, Mock
 import subprocess
 
 import pytest
@@ -32,6 +32,22 @@ from waves._tests.common import platform_check
 fs = SCons.Node.FS.FS()
 
 testing_windows, root_fs, testing_macos = platform_check()
+
+
+def test_print_action_signature_string():
+    mock_node = Mock()
+    mock_node.__str__ = lambda self: "mock_node"
+    mock_node.get_executor.return_value.get_contents.return_value.decode.return_value = "action signature string"
+
+    s = "s"
+    source = []
+    target = [mock_node]
+    env = SCons.Environment.Environment()
+    with patch("builtins.print") as mock_print:
+        scons_extensions.print_action_signature_string("s", target, source, env)
+        mock_print.assert_called_once_with(
+            "Building mock_node with action signature string:\n  action signature string\ns",
+        )
 
 
 check_program = {
