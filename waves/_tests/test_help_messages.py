@@ -17,7 +17,7 @@ def reset_alias():
     SCons.Node.Alias.default_ans = SCons.Node.Alias.AliasNameSpace()
 
 
-# TODO: Deprecate the old function name
+# TODO: Remove entire test function when old function name `default_targets_message` is fully deprecated
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/862
 def test_default_targets_message():
     # Raise TypeError mocking SCons < 4.6.0
