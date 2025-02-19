@@ -2,7 +2,7 @@
 """
 
 import pathlib
-from unittest.mock import patch, mock_open
+from unittest.mock import patch, mock_open, Mock
 from contextlib import nullcontext as does_not_raise
 
 import pytest
@@ -751,6 +751,25 @@ class TestParameterGenerator:
         ):
             WriteParameterGenerator.write()
             mock_write_meta.assert_called_once()
+
+    def test_write_meta(self):
+        WriteMetaParameterGenerator = DummyGenerator({})
+        with (
+            patch("builtins.open", mock_open()) as mock_file,
+            patch("pathlib.Path.resolve", return_value=pathlib.Path("parameter_set1.h5")),
+        ):
+            WriteMetaParameterGenerator._write_meta()
+            handle = mock_file()
+            handle.write.assert_called_once_with("parameter_set1.h5\n")
+
+        WriteMetaParameterGenerator.output_file = pathlib.Path("dummy.h5")
+        with (
+            patch("builtins.open", mock_open()) as mock_file,
+            patch("pathlib.Path.resolve", return_value=pathlib.Path("dummy.h5")),
+        ):
+            WriteMetaParameterGenerator._write_meta()
+            handle = mock_file()
+            handle.write.assert_called_once_with("dummy.h5\n")
 
     @pytest.mark.parametrize(
         "parameter_names, samples, expected_hashes",
