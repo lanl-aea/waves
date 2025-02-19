@@ -298,21 +298,23 @@ def test_return_environment(command, kwargs, stdout, expected):
 
 cache_environment = {
     # kwargs, cache, overwrite_cache, expected, file_exists
-    "no cache": ({}, None, False, {"thing1": "a"}, False),
-    "cache exists": ({}, "dummy.yaml", False, {"thing1": "a"}, True),
-    "cache doesn't exist": ({}, "dummy.yaml", False, {"thing1": "a"}, False),
-    "overwrite cache": ({}, "dummy.yaml", True, {"thing1": "a"}, True),
-    "don't overwrite cache": ({}, "dummy.yaml", False, {"thing1": "a"}, False),
-    "shell override": ({"shell": "tcsh"}, None, False, {"thing1": "a"}, False),
+    "no cache": ({}, None, False, False, {"thing1": "a"}, False),
+    "no cache, verbose": ({}, None, False, True, {"thing1": "a"}, False),
+    "cache exists": ({}, "dummy.yaml", False, False, {"thing1": "a"}, True),
+    "cache exists, verbose": ({}, "dummy.yaml", False, True, {"thing1": "a"}, True),
+    "cache doesn't exist": ({}, "dummy.yaml", False, False, {"thing1": "a"}, False),
+    "overwrite cache": ({}, "dummy.yaml", True, False, {"thing1": "a"}, True),
+    "don't overwrite cache": ({}, "dummy.yaml", False, False, {"thing1": "a"}, False),
+    "shell override": ({"shell": "tcsh"}, None, False, False, {"thing1": "a"}, False),
 }
 
 
 @pytest.mark.parametrize(
-    "kwargs, cache, overwrite_cache, expected, file_exists",
+    "kwargs, cache, overwrite_cache, verbose, expected, file_exists",
     cache_environment.values(),
     ids=cache_environment.keys(),
 )
-def test_cache_environment(kwargs, cache, overwrite_cache, expected, file_exists):
+def test_cache_environment(kwargs, cache, overwrite_cache, verbose, expected, file_exists):
     return_environment_kwargs = {
         "shell": "bash",
     }
@@ -324,11 +326,13 @@ def test_cache_environment(kwargs, cache, overwrite_cache, expected, file_exists
         patch("pathlib.Path.exists", return_value=file_exists),
         patch("yaml.safe_dump") as yaml_dump,
         patch("builtins.open"),
+        patch("builtins.print") as mock_print,
     ):
         environment_dictionary = _utilities.cache_environment(
             "dummy command",
             cache=cache,
             overwrite_cache=overwrite_cache,
+            verbose=verbose,
             **kwargs,
         )
         if cache and file_exists and not overwrite_cache:
@@ -337,8 +341,14 @@ def test_cache_environment(kwargs, cache, overwrite_cache, expected, file_exists
         else:
             yaml_load.assert_not_called()
             return_environment.assert_called_once_with("dummy command", **return_environment_kwargs)
+
         if cache:
             yaml_dump.assert_called_once()
+
+        if verbose:
+            mock_print.assert_called_once()
+        else:
+            mock_print.assert_not_called()
     assert environment_dictionary == expected
 
 
