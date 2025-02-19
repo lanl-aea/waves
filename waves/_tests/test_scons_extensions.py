@@ -2364,6 +2364,7 @@ waves_environment_methods = {
     "SubstitutionSyntax": ("SubstitutionSyntax", "substitution_syntax"),
     "ParameterStudyTask": ("ParameterStudyTask", "parameter_study_task"),
     "ParameterStudySConscript": ("ParameterStudySConscript", "parameter_study_sconscript"),
+    "ParameterStudyWrite": ("ParameterStudyWrite", "parameter_study_write"),
 }
 
 
