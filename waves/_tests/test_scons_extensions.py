@@ -35,18 +35,29 @@ testing_windows, root_fs, testing_macos = platform_check()
 
 
 def test_print_action_signature_string():
-    mock_node = Mock()
-    mock_node.__str__ = lambda self: "mock_node"
-    mock_node.get_executor.return_value.get_contents.return_value.decode.return_value = "action signature string"
 
     s = "s"
     source = []
-    target = [mock_node]
     env = SCons.Environment.Environment()
+
+    mock_decodable = Mock()
+    mock_decodable.__str__ = lambda self: "mock_node"
+    mock_decodable.get_executor.return_value.get_contents.return_value = b"action signature string"
     with patch("builtins.print") as mock_print:
-        scons_extensions.print_action_signature_string("s", target, source, env)
+        target = [mock_decodable]
+        scons_extensions.print_action_signature_string(s, target, source, env)
         mock_print.assert_called_once_with(
-            "Building mock_node with action signature string:\n  action signature string\ns",
+            f"Building mock_node with action signature string:\n  action signature string\n{s}",
+        )
+
+    mock_not_decodable = Mock()
+    mock_not_decodable.__str__ = lambda self: "mock_node"
+    mock_not_decodable.get_executor.return_value.get_contents.return_value = b"\x81action signature string"
+    with patch("builtins.print") as mock_print:
+        target = [mock_not_decodable]
+        scons_extensions.print_action_signature_string(s, target, source, env)
+        mock_print.assert_called_once_with(
+            f"Building mock_node with action signature string:\n  b'\\x81action signature string'\n{s}",
         )
 
 
