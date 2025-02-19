@@ -316,6 +316,13 @@ class TestParameterGenerator:
     }
     # fmt: on
 
+    def test_merge_parameter_studies_with_missing_previous_parameter_study(self):
+        # Test exception on missing previous parameter study attribute
+        dummyGenerator = DummyGenerator({})
+        dummyGenerator.previous_parameter_study = None
+        with pytest.raises(RuntimeError):
+            dummyGenerator._merge_parameter_studies()
+
     @pytest.mark.parametrize("length", range(1, 20, 5))
     def test_parameter_study_to_dict(self, length):
         expected = {f"parameter_set{index}": {"parameter_1": float(index)} for index in range(length)}
