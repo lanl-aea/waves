@@ -98,7 +98,7 @@ Running a Datacheck
     .. literalinclude:: tutorials_tutorial_04_simulation
        :language: Python
        :lineno-match:
-       :emphasize-lines: 5-6
+       :emphasize-lines: 2-3
        :start-after: marker-4
        :end-before: marker-5
 
