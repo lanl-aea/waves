@@ -45,7 +45,7 @@ journal_options = ""
 workflow.extend(
     envCubit.PythonScript(
         target=["rectangle_partition.cub"],
-        source=["#/modsim_packaage/cubit/rectangle_partition.py", "rectangle_geometry.cub"],
+        source=["#/modsim_package/cubit/rectangle_partition.py", "rectangle_geometry.cub"],
         subcommand_options=journal_options,
     )
 )
