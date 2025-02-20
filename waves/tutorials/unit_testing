@@ -21,12 +21,10 @@ workflow_name = build_directory.name
 workflow = []
 
 # Unit test target
-test_files = ["#/modsim_package/python/tests/test_regression.py"]
-target = [f"{workflow_name}_results.xml"]
 workflow.extend(
     env.Command(
-        target=target,
-        source=test_files,
+        target=[f"{workflow_name}_results.xml"],
+        source=["#/modsim_package/python/tests/test_regression.py"],
         action="pytest --junitxml=${TARGETS[0]}",
     )
 )
