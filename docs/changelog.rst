@@ -16,6 +16,12 @@ New Features
   (:issue:`838`, :merge:`1076`). By `Sergio Cordova`_.
 - Experimental parameter study write pseudo-builders (:issue:`857`, :merge:`1097`). By `Kyle Brindley`_.
 
+Documentation
+=============
+- Use hardcoded target and source filename strings in tutorials where possible. Users report that the mix of Python and
+  SCons concepts makes learning SCons more difficult. Hardcoded filenames will make the task definitions easier to
+  understand (:merge:`1107`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Replace optional mutable default arguments with None types (:issue:`850`, :merge:`1084`). By `Chris Johnson`_ and
