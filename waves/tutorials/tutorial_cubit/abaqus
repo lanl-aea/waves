@@ -15,8 +15,6 @@ import pathlib
 # Inherit the parent construction environment
 Import("env")
 
-# Set project-wide paths with os-agnostic path separators
-
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name

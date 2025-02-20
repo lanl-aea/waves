@@ -14,8 +14,6 @@ import pathlib
 # Inherit the parent construction environment
 Import("env")
 
-# Set project-wide paths with os-agnostic path separators
-
 # Comment used in tutorial code snippets: marker-0
 
 # Simulation variables

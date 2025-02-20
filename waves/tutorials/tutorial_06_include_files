@@ -5,7 +5,6 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``python_source_abspath`` - String absolute path to the project's Python 3 files
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``abaqus`` - String path for the Abaqus executable
 """
@@ -16,9 +15,6 @@ from modsim_package.python import rectangle_compression_nominal
 
 # Inherit the parent construction environment
 Import("env")
-
-# Set project-wide paths with os-agnostic path separators
-python_source_abspath = env["python_source_abspath"]
 
 # Comment used in tutorial code snippets: marker-0
 

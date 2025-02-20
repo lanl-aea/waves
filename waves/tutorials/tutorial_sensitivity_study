@@ -5,7 +5,6 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``python_source_abspath`` - String absolute path to the project's Python 3 files
   * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
   * ``regression_alias`` - String for the alias collecting the regression test suite targets
   * ``archive_prefix`` - String prefix for archive target(s) containing identifying project and version information
@@ -25,9 +24,6 @@ from modsim_package.python.rectangle_compression_sensitivity_study import parame
 Import("env")
 
 # Comment used in tutorial code snippets: marker-1
-
-# Set project-wide paths with os-agnostic path separators
-python_source_abspath = env["python_source_abspath"]
 
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
@@ -163,7 +159,6 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
 # Comment used in tutorial code snippets: marker-6
 
 # Post-processing
-script = python_source_abspath / "sensitivity_study.py"
 post_processing_source = [
     f"{pathlib.Path(set_name) / job_name}_datasets.h5"
     for set_name in parameter_generator.parameter_study[SET_COORDINATE_KEY].values
@@ -174,7 +169,7 @@ script_options += " --parameter-study-file ${SOURCES[1].abspath}"
 workflow.extend(
     env.PythonScript(
         target=["sensitivity_study.pdf", "sensitivity_study.csv", "sensitivity_study.yaml"],
-        source=[script, parameter_study_file.name] + post_processing_source,
+        source=["#/modsim_package/python/sensitivity_study.py", parameter_study_file.name] + post_processing_source,
         subcommand_options=script_options,
     )
 )
