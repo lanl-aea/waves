@@ -28,12 +28,11 @@ workflow_name = build_directory.name
 workflow = []
 
 # Geometry
-journal_file = "rectangle_geometry"
 journal_options = ""
 workflow.extend(
     env.AbaqusJournal(
-        target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
-        source=[f"{abaqus_source_abspath / journal_file}.py"],
+        target=["rectangle_geometry.cae", "rectangle_geometry.jnl"],
+        source=[abaqus_source_abspath / "rectangle_geometry.py"],
         subcommand_options=journal_options,
     )
 )
@@ -41,23 +40,21 @@ workflow.extend(
 # Comment used in tutorial code snippets: marker-2
 
 # Partition
-journal_file = "rectangle_partition"
 journal_options = ""
 workflow.extend(
     env.AbaqusJournal(
-        target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
-        source=[f"{abaqus_source_abspath / journal_file}.py", "rectangle_geometry.cae"],
+        target=["rectangle_partition.cae", "rectangle_partition.jnl"],
+        source=[abaqus_source_abspath / "rectangle_partition.py", "rectangle_geometry.cae"],
         subcommand_options=journal_options,
     )
 )
 
 # Mesh
-journal_file = "rectangle_mesh"
 journal_options = ""
 workflow.extend(
     env.AbaqusJournal(
-        target=[f"{journal_file}.inp", f"{journal_file}.cae", f"{journal_file}.jnl"],
-        source=[f"{abaqus_source_abspath / journal_file}.py", "rectangle_partition.cae"],
+        target=["rectangle_mesh.inp", "rectangle_mesh.cae", "rectangle_mesh.jnl"],
+        source=[abaqus_source_abspath / "rectangle_mesh.py", "rectangle_partition.cae"],
         subcommand_options=journal_options,
     )
 )
