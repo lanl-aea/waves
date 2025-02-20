@@ -5,7 +5,6 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``cubit_source_abspath`` - String absolute path to the project's Cubit journal files
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
 
 * ``envCubit`` - The Cubit Python SCons construction environment with the following required keys
@@ -23,9 +22,6 @@ import waves
 # Inherit the parent construction environment
 Import("env", "envCubit", "element_type", "solver")
 
-# Set project-wide paths with os-agnostic path separators
-cubit_source_abspath = env["cubit_source_abspath"]
-
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
@@ -39,7 +35,7 @@ journal_options = ""
 workflow.extend(
     envCubit.PythonScript(
         target=["rectangle_geometry.cub"],
-        source=[cubit_source_abspath / "rectangle_geometry.py"],
+        source=["#/modsim_package/cubit/rectangle_geometry.py"],
         subcommand_options=journal_options,
     )
 )
@@ -49,7 +45,7 @@ journal_options = ""
 workflow.extend(
     envCubit.PythonScript(
         target=["rectangle_partition.cub"],
-        source=[cubit_source_abspath / "rectangle_partition.py", "rectangle_geometry.cub"],
+        source=["#/modsim_packaage/cubit/rectangle_partition.py", "rectangle_geometry.cub"],
         subcommand_options=journal_options,
     )
 )
@@ -65,7 +61,7 @@ journal_options = "--element-type ${element_type} --solver ${solver}"
 workflow.extend(
     envCubit.PythonScript(
         target=[f"rectangle_mesh.{mesh_extension}", "rectangle_mesh.cub"],
-        source=[cubit_source_abspath / "rectangle_mesh.py", "rectangle_partition.cub"],
+        source=["#/modsim_package/cubit/rectangle_mesh.py", "rectangle_partition.cub"],
         subcommand_options=journal_options,
         element_type=element_type,
         solver=solver,
@@ -79,7 +75,7 @@ journal_options = ""
 workflow.extend(
     envCubit.PythonScript(
         target=["cube_geometry.cub"],
-        source=[cubit_source_abspath / "cube_geometry.py"],
+        source=["#/modsim_package/cubit/cube_geometry.py"],
         subcommand_options=journal_options,
     )
 )
@@ -89,7 +85,7 @@ journal_options = ""
 workflow.extend(
     envCubit.PythonScript(
         target=["cube_partition.cub"],
-        source=[cubit_source_abspath / "cube_partition.py", "cube_geometry.cub"],
+        source=["#/modsim_package/cubit/cube_partition.py", "cube_geometry.cub"],
         subcommand_options=journal_options,
     )
 )
@@ -105,7 +101,7 @@ journal_options = "--element-type ${element_type} --solver ${solver}"
 workflow.extend(
     envCubit.PythonScript(
         target=[f"cube_mesh.{mesh_extension}", "cube_mesh.cub"],
-        source=[cubit_source_abspath / "cube_mesh.py", "cube_partition.cub"],
+        source=["#/modsim_package/cubit/cube_mesh.py", "cube_partition.cub"],
         subcommand_options=journal_options,
         element_type=element_type,
         solver=solver,
