@@ -208,7 +208,7 @@ text file parameter substitution.
       :lineno-match:
       :start-after: marker-4
       :end-before: marker-5
-      :emphasize-lines: 6-7, 18-19, 31-33, 35, 55
+      :emphasize-lines: 5-6, 16-17, 28-30, 32, 52
 
 The lines of code above are nearly a direct copy of the previous Geometry, Partition, Mesh, and SolverPrep workflows.
 Note the following two important aspects of the code above:
