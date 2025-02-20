@@ -159,10 +159,10 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
     )
     images.extend(
         env.AbaqusJournal(
-            target=[f"{set_name / model}_compression.png"],
+            target=[set_name / "rectangle_compression.png"],
             source=[str(abaqus_source_abspath / "export_abaqus_image.py")] + solve_source_list,
             subcommand_options=script_options,
-            model=model,
+            model="rectangle",
         )
     )
 
