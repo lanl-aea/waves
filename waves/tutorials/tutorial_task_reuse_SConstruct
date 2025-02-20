@@ -89,8 +89,6 @@ project_variables = {
     "project_name": project_name,
     "project_dir": project_dir,
     "version": version,
-    "python_source_abspath": project_dir / python_source_dir,
-    "test_source_abspath": project_dir / test_source_dir,
     "regression_alias": "regression",
     "datacheck_alias": "datacheck",
     "archive_prefix": archive_prefix,

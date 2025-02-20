@@ -82,7 +82,6 @@ project_variables = {
     "project_name": project_name,
     "project_dir": project_dir,
     "version": version,
-    "python_source_abspath": project_dir / python_source_dir,
 }
 for key, value in project_variables.items():
     env[key] = value
