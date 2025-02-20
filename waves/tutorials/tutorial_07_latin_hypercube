@@ -130,7 +130,7 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
 
     workflow.extend(
         env.AbaqusSolver(
-            target=[{set_name / job_name}.sta"],
+            target=[f"{set_name / job_name}.sta"],
             source=solve_source_list,
             job_name=job_name,
             abaqus_options=abaqus_options,
