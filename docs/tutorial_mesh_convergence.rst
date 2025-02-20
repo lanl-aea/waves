@@ -121,7 +121,7 @@ dictionaries will be combined later in the ``SConscript`` file.
       :lineno-match:
       :start-after: marker-3
       :end-before: marker-4
-      :emphasize-lines: 6, 18, 25, 30
+      :emphasize-lines: 5, 15, 23, 28
 
 The code above is largely copy and paste from :ref:`tutorial_regression_testing`, with a few significant
 differences:
