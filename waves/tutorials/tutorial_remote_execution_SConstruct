@@ -77,12 +77,10 @@ env["ABAQUS_PROGRAM"] = env.AddProgram(
 project_name = "WAVES-TUTORIAL"
 version = "0.1.0"
 project_dir = pathlib.Path(Dir(".").abspath)
-abaqus_source_dir = "modsim_package/abaqus"
 project_variables = {
     "project_name": project_name,
     "project_dir": project_dir,
     "version": version,
-    "abaqus_source_abspath": project_dir / abaqus_source_dir,
 }
 for key, value in project_variables.items():
     env[key] = value

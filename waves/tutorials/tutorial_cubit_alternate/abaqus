@@ -5,7 +5,6 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``abaqus_source_abspath`` - String absolute path to the project's Abaqus journal files
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``abaqus`` - String path for the Abaqus executable
 
@@ -21,7 +20,6 @@ import platform
 Import("env", "envCubit")
 
 # Set project-wide paths with os-agnostic path separators
-abaqus_source_abspath = env["abaqus_source_abspath"]
 
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
@@ -47,13 +45,13 @@ env.AddPostAction("rectangle_mesh.inp", f"sed {sed_options} 's/CPE4/CPS4/g' ${{T
 
 # SolverPrep
 abaqus_source_list = [
-    abaqus_source_abspath / "rectangle_compression.inp",
-    abaqus_source_abspath / "assembly.inp",
-    abaqus_source_abspath / "boundary.inp",
-    abaqus_source_abspath / "field_output.inp",
-    abaqus_source_abspath / "materials.inp",
-    abaqus_source_abspath / "parts.inp",
-    abaqus_source_abspath / "history_output.inp",
+    "#/modsim_package/abaqus/rectangle_compression.inp",
+    "#/modsim_package/abaqus/assembly.inp",
+    "#/modsim_package/abaqus/boundary.inp",
+    "#/modsim_package/abaqus/field_output.inp",
+    "#/modsim_package/abaqus/materials.inp",
+    "#/modsim_package/abaqus/parts.inp",
+    "#/modsim_package/abaqus/history_output.inp",
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
 workflow.extend(env.CopySubstfile(abaqus_source_list))

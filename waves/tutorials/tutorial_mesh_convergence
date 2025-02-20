@@ -5,7 +5,6 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``abaqus_source_abspath`` - String absolute path to the project's Abaqus journal files
   * ``python_source_abspath`` - String absolute path to the project's Python 3 files
   * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
   * ``regression_alias`` - String for the alias collecting the regression test suite targets
@@ -26,7 +25,6 @@ Import("env")
 # Comment used in tutorial code snippets: marker-1
 
 # Set project-wide paths with os-agnostic path separators
-abaqus_source_abspath = env["abaqus_source_abspath"]
 python_source_abspath = env["python_source_abspath"]
 
 # Simulation variables
@@ -60,7 +58,7 @@ journal_options = "--width ${width} --height ${height}"
 workflow.extend(
     env.AbaqusJournal(
         target=["rectangle_geometry.cae", "rectangle_geometry.jnl"],
-        source=[abaqus_source_abspath / "rectangle_geometry.py"],
+        source=["#/modsim_package/abaqus/rectangle_geometry.py"],
         subcommand_options=journal_options,
         **simulation_constants,
     )
@@ -70,7 +68,7 @@ workflow.extend(
 journal_options = "--width ${width} --height ${height}"
 partition_targets = env.AbaqusJournal(
     target=["rectangle_partition.cae", "rectangle_partition.jnl"],
-    source=[abaqus_source_abspath / "rectangle_partition.py", "rectangle_geometry.cae"],
+    source=["#/modsim_package/abaqus/rectangle_partition.py", "rectangle_geometry.cae"],
     subcommand_options=journal_options,
     **simulation_constants,
 )
@@ -96,7 +94,7 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
                 set_name / "rectangle_mesh.jnl",
             ],
             source=[
-                abaqus_source_abspath / "rectangle_mesh.py",
+                "#/modsim_package/abaqus/rectangle_mesh.py",
                 partition_cae_node,
             ],
             subcommand_options=journal_options,
@@ -106,13 +104,13 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
 
     # SolverPrep
     abaqus_source_list = [
-        abaqus_source_abspath / "rectangle_compression.inp.in",
-        abaqus_source_abspath / "assembly.inp",
-        abaqus_source_abspath / "boundary.inp",
-        abaqus_source_abspath / "field_output.inp",
-        abaqus_source_abspath / "materials.inp",
-        abaqus_source_abspath / "parts.inp",
-        abaqus_source_abspath / "history_output.inp",
+        "#/modsim_package/abaqus/rectangle_compression.inp.in",
+        "#/modsim_package/abaqus/assembly.inp",
+        "#/modsim_package/abaqus/boundary.inp",
+        "#/modsim_package/abaqus/field_output.inp",
+        "#/modsim_package/abaqus/materials.inp",
+        "#/modsim_package/abaqus/parts.inp",
+        "#/modsim_package/abaqus/history_output.inp",
     ]
     abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
     workflow.extend(

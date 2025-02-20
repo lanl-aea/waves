@@ -81,7 +81,6 @@ version = "0.1.0"
 archive_prefix = f"{project_name}-{version}"
 project_configuration = pathlib.Path(inspect.getfile(lambda: None))
 project_dir = project_configuration.parent
-abaqus_source_dir = "modsim_package/abaqus"
 python_source_dir = "modsim_package/python"
 test_source_dir = "modsim_package/python/tests"
 project_variables = {
@@ -89,7 +88,6 @@ project_variables = {
     "project_name": project_name,
     "project_dir": project_dir,
     "version": version,
-    "abaqus_source_abspath": project_dir / abaqus_source_dir,
     "python_source_abspath": project_dir / python_source_dir,
     "test_source_abspath": project_dir / test_source_dir,
     "regression_alias": "regression",
