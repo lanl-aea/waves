@@ -126,9 +126,7 @@ directory name. The alias thus represents the list of targets specified in the
 ``SConscript`` file.
 
 The final block of code instructs SCons on how to build the targets, an Abaqus CAE file and an Abaqus journal
-file whose names are constructed using the ``journal_file`` variable. The ``journal_file``
-variable exists solely to minimize hard-coded duplication of the string
-``'rectangle_geometry'``. ``journal_options`` allows for parameters to be passed as
+file. ``journal_options`` allows for parameters to be passed as
 command-line arguments to the journal file. Using the journal file's command-line
 interface with the ``journal_options`` string will be discussed in
 :ref:`tutorial_parameter_substitution`.
