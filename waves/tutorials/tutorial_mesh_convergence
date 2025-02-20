@@ -171,17 +171,19 @@ workflow.extend(
     )
 )
 
-script_options = "--input-file ${post_processing_source}"
-script_options += " --output-file ${TARGET.file} --x-units mm --y-units MPa --x-var global_seed --y-var S"
-script_options += f" --parameter-study-file {parameter_study_file.name}"
-script_options += f" --selection-dict {SOURCES[1].abspath}"
+script_options = (
+    "--input-file ${post_processing_source}"
+    " --output-file ${TARGET.file} --x-units mm --y-units MPa --x-var global_seed --y-var S"
+    " --parameter-study-file ${SOURCES[1].file}"
+    " --selection-dict ${SOURCES[2].abspath}"
+)
 workflow.extend(
     env.PythonScript(
         target=["mesh_convergence_stress.pdf", "mesh_convergence_stress.csv"],
         source=[
             "#/modsim_package/python/post_processing.py",
-            "#/modsim_package/python/mesh_convergence_stress.yaml",
             parameter_study_file.name,
+            "#/modsim_package/python/mesh_convergence_stress.yaml",
         ] + post_processing_source,
         subcommand_options=script_options,
         post_processing_source=post_processing_source,
