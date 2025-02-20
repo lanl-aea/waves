@@ -64,12 +64,11 @@ abaqus_source_abspath = env["abaqus_source_abspath"]
 build_directory = pathlib.Path(Dir(".").abspath)
 
 # Mesh
-journal_file = "rectangle_mesh"
 journal_options = "--global-seed ${global_seed}"
 workflow.extend(
     env.AbaqusJournal(
-        target=[f"{journal_file}.inp", f"{journal_file}.cae", f"{journal_file}.jnl"],
-        source=[f"{abaqus_source_abspath / journal_file}.py", "rectangle_partition.cae"],
+        target=["rectangle_mesh.inp", "rectangle_mesh.cae", "rectangle_mesh.jnl"],
+        source=[abaqus_source_abspath / "rectangle_mesh.py", "rectangle_partition.cae"],
         subcommand_options=journal_options,
         **simulation_variables,
     )
@@ -95,7 +94,7 @@ workflow.extend(
 
 # Abaqus Solve
 solve_source_list = [source_file.name.rstrip(".in") for source_file in abaqus_source_list]
-solve_source_list.append([f"{journal_file}.inp"])
+solve_source_list.append(["rectangle_mesh.inp"])
 job_name = pathlib.Path(solve_source_list[0]).stem
 datacheck_name = f"{job_name}_DATACHECK"
 datacheck_suffixes = ("023", "mdl", "sim", "stt")
