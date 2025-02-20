@@ -26,7 +26,6 @@ abaqus_source_abspath = env["abaqus_source_abspath"]
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
-model = "rectangle"
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
@@ -44,11 +43,11 @@ SConscript(
 # Linux style sed command options must be modified for macOS. Command must be modified if on Windows.
 system = platform.system()
 sed_options = "-i ''" if system.lower() == "darwin" else "-i"
-env.AddPostAction(f"{model}_mesh.inp", f"sed {sed_options} 's/CPE4/CPS4/g' ${{TARGET.abspath}}")
+env.AddPostAction("rectangle_mesh.inp", f"sed {sed_options} 's/CPE4/CPS4/g' ${{TARGET.abspath}}")
 
 # SolverPrep
 abaqus_source_list = [
-    abaqus_source_abspath / f"{model}_compression.inp",
+    abaqus_source_abspath / "rectangle_compression.inp",
     abaqus_source_abspath / "assembly.inp",
     abaqus_source_abspath / "boundary.inp",
     abaqus_source_abspath / "field_output.inp",
@@ -61,7 +60,7 @@ workflow.extend(env.CopySubstfile(abaqus_source_list))
 
 # Abaqus Solve
 solve_source_list = [source_file.name for source_file in abaqus_source_list]
-solve_source_list.append(f"{model}_mesh.inp")
+solve_source_list.append("rectangle_mesh.inp")
 job_name = pathlib.Path(solve_source_list[0]).stem
 datacheck_name = f"{job_name}_DATACHECK"
 datacheck_suffixes = ("023", "mdl", "sim", "stt")

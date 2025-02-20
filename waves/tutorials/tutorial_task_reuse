@@ -33,9 +33,8 @@ python_source_abspath = env["python_source_abspath"]
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
 parameter_study_file = build_directory / "parameter_study.h5"
-model = "rectangle"
-geometry_configuration = f"{model}_geometry_partition.scons"
-simulation_configuration = f"{model}_mesh_solverprep_solve_extract.scons"
+geometry_configuration = "rectangle_geometry_partition.scons"
+simulation_configuration = "rectangle_mesh_solverprep_solve_extract.scons"
 workflow_configuration = [env["project_configuration"], workflow_name, geometry_configuration, simulation_configuration]
 
 # Collect the target nodes to build a concise alias for all targets

@@ -67,10 +67,9 @@ abaqus_source_abspath = env["abaqus_source_abspath"]
 
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
-model = "rectangle"
 
 # Geometry
-journal_file = f"{model}_geometry"
+journal_file = "rectangle_geometry"
 journal_options = "--width ${width} --height ${height}"
 workflow.extend(
     env.AbaqusJournal(
@@ -82,12 +81,12 @@ workflow.extend(
 )
 
 # Partition
-journal_file = f"{model}_partition"
+journal_file = "rectangle_partition"
 journal_options = "--width ${width} --height ${height}"
 workflow.extend(
     env.AbaqusJournal(
         target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
-        source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
+        source=[f"{abaqus_source_abspath / journal_file}.py", "rectangle_geometry.cae"],
         subcommand_options=journal_options,
         **simulation_variables,
     )

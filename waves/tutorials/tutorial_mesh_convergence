@@ -33,7 +33,6 @@ python_source_abspath = env["python_source_abspath"]
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
 parameter_study_file = build_directory / "parameter_study.h5"
-model = "rectangle"
 simulation_constants = {
     "width": 1.0,
     "height": 1.0,
@@ -57,7 +56,7 @@ parameter_generator.write()
 # Comment used in tutorial code snippets: marker-3
 
 # Geometry
-journal_file = f"{model}_geometry"
+journal_file = "rectangle_geometry"
 journal_options = "--width ${width} --height ${height}"
 workflow.extend(
     env.AbaqusJournal(
@@ -70,11 +69,11 @@ workflow.extend(
 )
 
 # Partition
-journal_file = f"{model}_partition"
+journal_file = "rectangle_partition"
 journal_options = "--width ${width} --height ${height}"
 partition_targets = env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
-    source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
+    source=[f"{abaqus_source_abspath / journal_file}.py", "rectangle_geometry.cae"],
     subcommand_options=journal_options,
     width=simulation_constants["width"],
     height=simulation_constants["height"],
@@ -90,7 +89,7 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
     # Comment used in tutorial code snippets: marker-4
 
     # Mesh
-    journal_file = f"{model}_mesh"
+    journal_file = "rectangle_mesh"
     journal_options = (
         "--global-seed ${global_seed} --input-file ${SOURCES[1].abspath} --output-file ${TARGETS[0].abspath}"
     )
@@ -112,7 +111,7 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
 
     # SolverPrep
     abaqus_source_list = [
-        abaqus_source_abspath / f"{model}_compression.inp.in",
+        abaqus_source_abspath / "rectangle_compression.inp.in",
         abaqus_source_abspath / "assembly.inp",
         abaqus_source_abspath / "boundary.inp",
         abaqus_source_abspath / "field_output.inp",

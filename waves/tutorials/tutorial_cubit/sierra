@@ -25,7 +25,6 @@ sierra_source_abspath = env["sierra_source_abspath"]
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
-model = "rectangle"
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
@@ -45,7 +44,7 @@ workflow.extend(env.CopySubstfile(sierra_source_list))
 
 # Sierra Solve
 solve_source_list = [source_file.name for source_file in sierra_source_list]
-solve_source_list.append(f"{model}_mesh.g")
+solve_source_list.append("rectangle_mesh.g")
 workflow.extend(
     envSierra.Sierra(
         target=["rectangle_compression.e"],

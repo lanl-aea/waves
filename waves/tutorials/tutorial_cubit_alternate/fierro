@@ -24,7 +24,6 @@ fierro_source_abspath = env["fierro_source_abspath"]
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
-model = "cube"
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
@@ -39,8 +38,8 @@ SConscript(
 
 # Convert mesh file type for Fierro
 env.PythonScript(
-    target=[f"{model}_mesh.vtk"],
-    source=[fierro_source_abspath / "convert_to_vtk2ascii.py", f"{model}_mesh.g"],
+    target=["cube_mesh.vtk"],
+    source=[fierro_source_abspath / "convert_to_vtk2ascii.py", "cube_mesh.g"],
     subcommand_options="--input-format=exodus ${SOURCES[1].abspath} ${TARGET.abspath}",
 )
 
@@ -51,7 +50,7 @@ workflow.extend(env.CopySubstfile(fierro_source_list))
 
 # Fierro Solve
 solve_source_list = [source_file.name for source_file in fierro_source_list]
-solve_source_list.append(f"{model}_mesh.vtk")
+solve_source_list.append("cube_mesh.vtk")
 workflow.extend(
     env.FierroImplicit(
         target=["cube_compression.stdout", "TecplotTO0.dat", "TecplotTO_undeformed0.dat"],

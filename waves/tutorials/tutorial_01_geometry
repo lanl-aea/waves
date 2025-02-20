@@ -21,7 +21,6 @@ abaqus_source_abspath = env["abaqus_source_abspath"]
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
-model = "rectangle"
 
 # Comment used in tutorial code snippets: marker-1
 
@@ -29,7 +28,7 @@ model = "rectangle"
 workflow = []
 
 # Geometry
-journal_file = f"{model}_geometry"
+journal_file = "rectangle_geometry"
 journal_options = ""
 workflow.extend(
     env.AbaqusJournal(

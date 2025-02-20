@@ -34,9 +34,8 @@ workflow_name = build_directory.name
 workflow = []
 
 # Rectangle 2D
-model = "rectangle"
 # Geometry
-journal_file = f"{model}_geometry"
+journal_file = "cube_geometry"
 journal_options = ""
 workflow.extend(
     envCubit.PythonScript(
@@ -47,12 +46,12 @@ workflow.extend(
 )
 
 # Partition
-journal_file = f"{model}_partition"
+journal_file = "cube_partition"
 journal_options = ""
 workflow.extend(
     envCubit.PythonScript(
         target=[f"{journal_file}.cub"],
-        source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_geometry.cub"],
+        source=[f"{cubit_source_abspath / journal_file}.py", "cube_geometry.cub"],
         subcommand_options=journal_options,
     )
 )
@@ -64,12 +63,12 @@ elif solver.lower() in ["sierra", "adagio"]:
     mesh_extension = "g"
 else:
     raise RuntimeError(f"Unknown solver '{solver}'")
-journal_file = f"{model}_mesh"
+journal_file = "cube_mesh"
 journal_options = "--element-type ${element_type} --solver ${solver}"
 workflow.extend(
     envCubit.PythonScript(
         target=[f"{journal_file}.{mesh_extension}", f"{journal_file}.cub"],
-        source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_partition.cub"],
+        source=[f"{cubit_source_abspath / journal_file}.py", "cube_partition.cub"],
         subcommand_options=journal_options,
         element_type=element_type,
         solver=solver,
@@ -78,9 +77,8 @@ workflow.extend(
 
 
 # Cube 3D
-model = "cube"
 # Geometry
-journal_file = f"{model}_geometry"
+journal_file = "cube_geometry"
 journal_options = ""
 workflow.extend(
     envCubit.PythonScript(
@@ -91,12 +89,12 @@ workflow.extend(
 )
 
 # Partition
-journal_file = f"{model}_partition"
+journal_file = "cube_partition"
 journal_options = ""
 workflow.extend(
     envCubit.PythonScript(
         target=[f"{journal_file}.cub"],
-        source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_geometry.cub"],
+        source=[f"{cubit_source_abspath / journal_file}.py", "cube_geometry.cub"],
         subcommand_options=journal_options,
     )
 )
@@ -108,12 +106,12 @@ elif solver.lower() in ["sierra", "adagio"]:
     mesh_extension = "g"
 else:
     raise RuntimeError(f"Unknown solver '{solver}'")
-journal_file = f"{model}_mesh"
+journal_file = "cube_mesh"
 journal_options = "--element-type ${element_type} --solver ${solver}"
 workflow.extend(
     envCubit.PythonScript(
         target=[f"{journal_file}.{mesh_extension}", f"{journal_file}.cub"],
-        source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_partition.cub"],
+        source=[f"{cubit_source_abspath / journal_file}.py", "cube_partition.cub"],
         subcommand_options=journal_options,
         element_type=element_type,
         solver=solver,
