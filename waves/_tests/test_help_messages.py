@@ -129,7 +129,7 @@ def test_project_help_default_targets():
     mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n    dummy.target\n", append=True, keep_local=True)
 
 
-# TODO: Deprecate the old function name
+# TODO: Remove entire test function when old function name alias_list_message is fully deprecated
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/862
 def test_alias_list_message():
     # Raise TypeError mocking SCons < 4.6.0
@@ -222,7 +222,7 @@ def test_project_help_aliases():
     mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n    dummy_alias\n", append=True, keep_local=True)
 
 
-# TODO: Deprecate the old function name
+# TODO: Remove entire test function when old function name project_help_message is fully deprecated
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/862
 def test_project_help_message():
     env = SCons.Environment.Environment()
