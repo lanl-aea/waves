@@ -279,8 +279,10 @@ def test_project_help_message():
     with (
         patch("waves.scons_extensions.project_help_default_targets") as mock_targets,
         patch("waves.scons_extensions.project_help_aliases") as mock_alias,
+        patch("warnings.warn") as warning,
     ):
         env.ProjectHelp()
+        warning.assert_called_once()
         mock_targets.assert_called_once_with(**default_kwargs)
         mock_alias.assert_called_once_with(**default_kwargs)
 
@@ -288,8 +290,10 @@ def test_project_help_message():
     with (
         patch("waves.scons_extensions.project_help_default_targets") as mock_targets,
         patch("waves.scons_extensions.project_help_aliases") as mock_alias,
+        patch("warnings.warn") as warning,
     ):
         env.ProjectHelp(**method_interface_non_default_kwargs)
+        warning.assert_called_once()
         mock_targets.assert_called_once_with(**non_default_kwargs)
         mock_alias.assert_called_once_with(**non_default_kwargs)
 
