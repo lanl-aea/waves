@@ -919,9 +919,9 @@ class OneAtATime(ParameterGenerator):
         """Validate the One-at-a-Time parameter schema. Executed by class initiation."""
         if not isinstance(self.parameter_schema, dict):
             raise SchemaValidationError("parameter_schema must be a dictionary")
-        self._parameter_names = list(self.parameter_schema.keys())
+        parameter_names = list(self.parameter_schema.keys())
         # List, sets, and tuples are the supported PyYAML iterables that will support expected behavior
-        for name in self._parameter_names:
+        for name in parameter_names:
             if not isinstance(self.parameter_schema[name], (list, set, tuple)):
                 raise SchemaValidationError(f"Parameter '{name}' is not one of list, set, or tuple")
             if len(self.parameter_schema[name]) < 1:
@@ -929,17 +929,17 @@ class OneAtATime(ParameterGenerator):
 
     def _generate(self, **kwargs) -> None:
         """Generate the parameter sets from the user provided parameter values."""
-        self._keys = self.parameter_schema.keys()
+        parameter_names = list(self.parameter_schema.keys())
         # Generate the nominal set, assuming that the first entry of each parameter is the nominal parameter
-        self._nominal_set = [self.parameter_schema[name][0] for name in self._keys]
-        self._samples = numpy.array([self._nominal_set], dtype=object)
+        nominal_set = [self.parameter_schema[name][0] for name in parameter_names]
+        self._samples = numpy.array([nominal_set], dtype=object)
         # Generate the off-nominal parameter sets
-        for parameter_index, name in enumerate(self._keys):
+        for parameter_index, name in enumerate(parameter_names):
             if len(self.parameter_schema[name]) > 1:
                 for value in self.parameter_schema[name]:
-                    self._new_set = self._nominal_set
-                    self._new_set[parameter_index] = value  # Replace the value of the variable
-                    self._samples = numpy.append(self._samples, self._new_set)  # Create running list
+                    new_set = nominal_set
+                    new_set[parameter_index] = value  # Replace the value of the variable
+                    self._samples = numpy.append(self._samples, new_set)  # Create running list
         super()._generate()
 
 
