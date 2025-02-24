@@ -50,22 +50,20 @@ parameter_generator.write()
 # Comment used in tutorial code snippets: marker-3
 
 # Geometry
-journal_options = "--width ${width} --height ${height}"
 workflow.extend(
     env.AbaqusJournal(
         target=["rectangle_geometry.cae", "rectangle_geometry.jnl"],
         source=["#/modsim_package/abaqus/rectangle_geometry.py"],
-        subcommand_options=journal_options,
+        subcommand_options="--width ${width} --height ${height}",
         **simulation_constants,
     )
 )
 
 # Partition
-journal_options = "--width ${width} --height ${height}"
 partition_targets = env.AbaqusJournal(
     target=["rectangle_partition.cae", "rectangle_partition.jnl"],
     source=["#/modsim_package/abaqus/rectangle_partition.py", "rectangle_geometry.cae"],
-    subcommand_options=journal_options,
+    subcommand_options="--width ${width} --height ${height}",
     **simulation_constants,
 )
 workflow.extend(partition_targets)

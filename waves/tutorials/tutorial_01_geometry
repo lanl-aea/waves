@@ -24,12 +24,11 @@ workflow_name = build_directory.name
 workflow = []
 
 # Geometry
-journal_options = ""
 workflow.extend(
     env.AbaqusJournal(
         target=["rectangle_geometry.cae", "rectangle_geometry.jnl"],
         source=["#/modsim_package/abaqus/rectangle_geometry.py"],
-        subcommand_options=journal_options,
+        subcommand_options="",
     )
 )
 

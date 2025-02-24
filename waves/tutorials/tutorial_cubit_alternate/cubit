@@ -31,22 +31,20 @@ workflow = []
 
 # Rectangle 2D
 # Geometry
-journal_options = ""
 workflow.extend(
     envCubit.PythonScript(
         target=["rectangle_geometry.cub"],
         source=["#/modsim_package/cubit/rectangle_geometry.py"],
-        subcommand_options=journal_options,
+        subcommand_options="",
     )
 )
 
 # Partition
-journal_options = ""
 workflow.extend(
     envCubit.PythonScript(
         target=["rectangle_partition.cub"],
         source=["#/modsim_package/cubit/rectangle_partition.py", "rectangle_geometry.cub"],
-        subcommand_options=journal_options,
+        subcommand_options="",
     )
 )
 
@@ -57,12 +55,11 @@ elif solver.lower() in ["sierra", "adagio"]:
     mesh_extension = "g"
 else:
     raise RuntimeError(f"Unknown solver '{solver}'")
-journal_options = "--element-type ${element_type} --solver ${solver}"
 workflow.extend(
     envCubit.PythonScript(
         target=[f"rectangle_mesh.{mesh_extension}", "rectangle_mesh.cub"],
         source=["#/modsim_package/cubit/rectangle_mesh.py", "rectangle_partition.cub"],
-        subcommand_options=journal_options,
+        subcommand_options="--element-type ${element_type} --solver ${solver}",
         element_type=element_type,
         solver=solver,
     )
@@ -71,22 +68,20 @@ workflow.extend(
 
 # Cube 3D
 # Geometry
-journal_options = ""
 workflow.extend(
     envCubit.PythonScript(
         target=["cube_geometry.cub"],
         source=["#/modsim_package/cubit/cube_geometry.py"],
-        subcommand_options=journal_options,
+        subcommand_options="",
     )
 )
 
 # Partition
-journal_options = ""
 workflow.extend(
     envCubit.PythonScript(
         target=["cube_partition.cub"],
         source=["#/modsim_package/cubit/cube_partition.py", "cube_geometry.cub"],
-        subcommand_options=journal_options,
+        subcommand_options="",
     )
 )
 
@@ -97,12 +92,11 @@ elif solver.lower() in ["sierra", "adagio"]:
     mesh_extension = "g"
 else:
     raise RuntimeError(f"Unknown solver '{solver}'")
-journal_options = "--element-type ${element_type} --solver ${solver}"
 workflow.extend(
     envCubit.PythonScript(
         target=[f"cube_mesh.{mesh_extension}", "cube_mesh.cub"],
         source=["#/modsim_package/cubit/cube_mesh.py", "cube_partition.cub"],
-        subcommand_options=journal_options,
+        subcommand_options="--element-type ${element_type} --solver ${solver}",
         element_type=element_type,
         solver=solver,
     )

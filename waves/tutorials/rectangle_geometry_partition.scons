@@ -63,23 +63,21 @@ Import(["env", "simulation_variables", "workflow", "datacheck"])
 build_directory = pathlib.Path(Dir(".").abspath)
 
 # Geometry
-journal_options = "--width ${width} --height ${height}"
 workflow.extend(
     env.AbaqusJournal(
         target=["rectangle_geometry.cae", "rectangle_geometry.jnl"],
         source=["#/modsim_package/abaqus/rectangle_geometry.py"],
-        subcommand_options=journal_options,
+        subcommand_options="--width ${width} --height ${height}",
         **simulation_variables,
     )
 )
 
 # Partition
-journal_options = "--width ${width} --height ${height}"
 workflow.extend(
     env.AbaqusJournal(
         target=["rectangle_partition.cae", "rectangle_partition.jnl"],
         source=["#/modsim_package/abaqus/rectangle_partition.py", "rectangle_geometry.cae"],
-        subcommand_options=journal_options,
+        subcommand_options="--width ${width} --height ${height}",
         **simulation_variables,
     )
 )
