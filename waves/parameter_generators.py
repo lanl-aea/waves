@@ -931,14 +931,14 @@ class OneAtATime(ParameterGenerator):
         """Generate the parameter sets from the user provided parameter values."""
         # Generate the nominal set, assuming that the first entry of each parameter is the nominal parameter
         nominal_set = [self.parameter_schema[name][0] for name in self._parameter_names]
-        self._samples = numpy.array([nominal_set], dtype=object)
+        self._samples = numpy.array(nominal_set, dtype=object)
         # Generate the off-nominal parameter sets
         for parameter_index, name in enumerate(self._parameter_names):
             if len(self.parameter_schema[name]) > 1:
                 for value in self.parameter_schema[name]:
                     new_set = nominal_set
                     new_set[parameter_index] = value  # Replace the value of the variable
-                    self._samples = numpy.append(self._samples, new_set)  # Create running list
+                    self._samples = numpy.vstack((self._samples, new_set))  # Create running list
         super()._generate()
 
 
