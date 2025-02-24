@@ -919,9 +919,9 @@ class OneAtATime(ParameterGenerator):
         """Validate the One-at-a-Time parameter schema. Executed by class initiation."""
         if not isinstance(self.parameter_schema, dict):
             raise SchemaValidationError("parameter_schema must be a dictionary")
-        parameter_names = list(self.parameter_schema.keys())
+        self._parameter_names = list(self.parameter_schema.keys())
         # List, sets, and tuples are the supported PyYAML iterables that will support expected behavior
-        for name in parameter_names:
+        for name in self._parameter_names:
             if not isinstance(self.parameter_schema[name], (list, set, tuple)):
                 raise SchemaValidationError(f"Parameter '{name}' is not one of list, set, or tuple")
             if len(self.parameter_schema[name]) < 1:
@@ -929,12 +929,11 @@ class OneAtATime(ParameterGenerator):
 
     def _generate(self, **kwargs) -> None:
         """Generate the parameter sets from the user provided parameter values."""
-        parameter_names = list(self.parameter_schema.keys())
         # Generate the nominal set, assuming that the first entry of each parameter is the nominal parameter
-        nominal_set = [self.parameter_schema[name][0] for name in parameter_names]
+        nominal_set = [self.parameter_schema[name][0] for name in self._parameter_names]
         self._samples = numpy.array([nominal_set], dtype=object)
         # Generate the off-nominal parameter sets
-        for parameter_index, name in enumerate(parameter_names):
+        for parameter_index, name in enumerate(self._parameter_names):
             if len(self.parameter_schema[name]) > 1:
                 for value in self.parameter_schema[name]:
                     new_set = nominal_set
