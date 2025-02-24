@@ -203,7 +203,7 @@ text file parameter substitution.
       :lineno-match:
       :start-after: marker-4
       :end-before: marker-5
-      :emphasize-lines: 5-6, 16-17, 28-30, 32, 52
+      :emphasize-lines: 4, 14-15, 25-27, 29, 50
 
 The lines of code above are nearly a direct copy of the previous Geometry, Partition, Mesh, and SolverPrep workflows.
 Note the following two important aspects of the code above:
@@ -224,7 +224,7 @@ Note the following two important aspects of the code above:
       :lineno-match:
       :start-after: marker-5
       :end-before: marker-6
-      :emphasize-lines: 2-3, 10, 19
+      :emphasize-lines: 2-3, 8, 17
 
 The code above closes out our familiar workflow with the use of the :meth:`waves.scons_extensions.abaqus_solver` method where
 the highlighted lines include the parameter set directory as part of target definitions. Note that the ``# Abaqus
