@@ -133,7 +133,7 @@ this is implemented with the :meth:`waves.scons_extensions.copy_substfile` metho
       :lineno-match:
       :start-after: marker-1
       :end-before: marker-3
-      :emphasize-lines: 6, 11-12, 19, 24-25, 30, 35-36
+      :emphasize-lines: 10-11, 22-23, 32-33
 
 As was previously discussed, we use the key-value pairs of the ``simulation_variables`` dictionary in the arguments we
 pass to the command-line interfaces for ``rectangle_{geometry,partition,mesh}.py``. Using SCons variable
