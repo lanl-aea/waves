@@ -54,12 +54,11 @@ workflow.extend(
 )
 
 # Post-processing
-plot_name = "stress_strain_comparison"
 script_options = "--input-file ${SOURCES[1:].abspath}"
 script_options += " --output-file ${TARGET.file} --x-units mm/mm --y-units MPa"
 workflow.extend(
     env.PythonScript(
-        target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
+        target=["stress_strain_comparison.pdf", "stress_strain_comparison.csv"],
         source=["post_processing.py", "rectangle_compression.h5"],
         subcommand_options=script_options,
     )
