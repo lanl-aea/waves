@@ -5,7 +5,6 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``abaqus_source_abspath`` - String absolute path to the project's Abaqus journal files
 
 * ``simulation_variables`` - The dictionary of simulation variables with the following required keys
 
@@ -28,8 +27,6 @@ Example usage:
 
    env = Environment()
    project_dir = pathlib.Path(Dir(".").abspath)
-   abaqus_source_dir = "modsim_package/abaqus"
-   env["abaqus_source_abspath"] = project_dir / abaqus_source_dir
 
    workflow = []
    datacheck = []
@@ -62,32 +59,26 @@ import pathlib
 # Inherit the parent construction environment
 Import(["env", "simulation_variables", "workflow", "datacheck"])
 
-# Set project-wide paths with os-agnostic path separators
-abaqus_source_abspath = env["abaqus_source_abspath"]
-
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
-model = "rectangle"
 
 # Geometry
-journal_file = f"{model}_geometry"
 journal_options = "--width ${width} --height ${height}"
 workflow.extend(
     env.AbaqusJournal(
-        target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
-        source=[f"{abaqus_source_abspath / journal_file}.py"],
+        target=["rectangle_geometry.cae", "rectangle_geometry.jnl"],
+        source=["#/modsim_package/abaqus/rectangle_geometry.py"],
         subcommand_options=journal_options,
         **simulation_variables,
     )
 )
 
 # Partition
-journal_file = f"{model}_partition"
 journal_options = "--width ${width} --height ${height}"
 workflow.extend(
     env.AbaqusJournal(
-        target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
-        source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
+        target=["rectangle_partition.cae", "rectangle_partition.jnl"],
+        source=["#/modsim_package/abaqus/rectangle_partition.py", "rectangle_geometry.cae"],
         subcommand_options=journal_options,
         **simulation_variables,
     )

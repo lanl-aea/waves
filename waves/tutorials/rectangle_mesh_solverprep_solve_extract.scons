@@ -5,7 +5,6 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``abaqus_source_abspath`` - String absolute path to the project's Abaqus journal files
 
 * ``simulation_variables`` - The dictionary of simulation variables with the following required keys
 
@@ -28,8 +27,6 @@ Example usage:
 
    env = waves.scons_extensions.WAVESEnvironment()
    project_dir = pathlib.Path(Dir(".").abspath)
-   abaqus_source_dir = "modsim_package/abaqus"
-   env["abaqus_source_abspath"] = project_dir / abaqus_source_dir
 
    workflow = []
    datacheck = []
@@ -57,20 +54,15 @@ import pathlib
 # Inherit the parent construction environment
 Import(["env", "simulation_variables", "workflow", "datacheck"])
 
-# Set project-wide paths with os-agnostic path separators
-abaqus_source_abspath = env["abaqus_source_abspath"]
-
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
-model = "rectangle"
 
 # Mesh
-journal_file = f"{model}_mesh"
 journal_options = "--global-seed ${global_seed}"
 workflow.extend(
     env.AbaqusJournal(
-        target=[f"{journal_file}.inp", f"{journal_file}.cae", f"{journal_file}.jnl"],
-        source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
+        target=["rectangle_mesh.inp", "rectangle_mesh.cae", "rectangle_mesh.jnl"],
+        source=["#/modsim_package/abaqus/rectangle_mesh.py", "rectangle_partition.cae"],
         subcommand_options=journal_options,
         **simulation_variables,
     )
@@ -78,13 +70,13 @@ workflow.extend(
 
 # SolverPrep
 abaqus_source_list = [
-    abaqus_source_abspath / f"{model}_compression.inp.in",
-    abaqus_source_abspath / "assembly.inp",
-    abaqus_source_abspath / "boundary.inp",
-    abaqus_source_abspath / "field_output.inp",
-    abaqus_source_abspath / "materials.inp",
-    abaqus_source_abspath / "parts.inp",
-    abaqus_source_abspath / "history_output.inp",
+    "#/modsim_package/abaqus/rectangle_compression.inp.in",
+    "#/modsim_package/abaqus/assembly.inp",
+    "#/modsim_package/abaqus/boundary.inp",
+    "#/modsim_package/abaqus/field_output.inp",
+    "#/modsim_package/abaqus/materials.inp",
+    "#/modsim_package/abaqus/parts.inp",
+    "#/modsim_package/abaqus/history_output.inp",
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
 workflow.extend(
@@ -96,7 +88,7 @@ workflow.extend(
 
 # Abaqus Solve
 solve_source_list = [source_file.name.rstrip(".in") for source_file in abaqus_source_list]
-solve_source_list.append([f"{journal_file}.inp"])
+solve_source_list.append(["rectangle_mesh.inp"])
 job_name = pathlib.Path(solve_source_list[0]).stem
 datacheck_name = f"{job_name}_DATACHECK"
 datacheck_suffixes = ("023", "mdl", "sim", "stt")

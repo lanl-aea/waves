@@ -5,7 +5,7 @@ import copy
 import pathlib
 from contextlib import nullcontext as does_not_raise
 import unittest
-from unittest.mock import patch, call
+from unittest.mock import patch, call, Mock
 import subprocess
 
 import pytest
@@ -32,6 +32,35 @@ from waves._tests.common import platform_check
 fs = SCons.Node.FS.FS()
 
 testing_windows, root_fs, testing_macos = platform_check()
+
+
+mock_decodable = Mock()
+mock_decodable.__str__ = lambda self: "mock_node"
+mock_decodable.get_executor.return_value.get_contents.return_value = b"action signature string"
+mock_not_decodable = Mock()
+mock_not_decodable.__str__ = lambda self: "mock_node"
+mock_not_decodable.get_executor.return_value.get_contents.return_value = b"\x81action signature string"
+test_print_action_signature_string_cases = {
+    "decode-able": (mock_decodable, "action signature string"),
+    "not decode-able": (mock_not_decodable, b"\x81action signature string"),
+}
+
+
+@pytest.mark.parametrize(
+    "mock_node, action_signature_string",
+    test_print_action_signature_string_cases.values(),
+    ids=test_print_action_signature_string_cases.keys(),
+)
+def test_print_action_signature_string(mock_node, action_signature_string):
+    s = "s"
+    source = []
+    env = SCons.Environment.Environment()
+    with patch("builtins.print") as mock_print:
+        target = [mock_node]
+        scons_extensions.print_action_signature_string(s, target, source, env)
+        mock_print.assert_called_once_with(
+            f"Building {mock_node} with action signature string:\n  {action_signature_string}\n{s}",
+        )
 
 
 check_program = {
@@ -816,6 +845,7 @@ construct_action_list = {
     "list2": (["thing1", "thing2"], prefix, "", [f"{prefix} thing1", f"{prefix} thing2"]),
     "tuple": (("thing1",), prefix, "", [f"{prefix} thing1"]),
     "str": ("thing1", prefix, "", [f"{prefix} thing1"]),
+    "pathlib.Path": (pathlib.Path("thing1"), prefix, "", [f"{prefix} thing1"]),
     "list1 suffix": (["thing1"], prefix, suffix, [f"{prefix} thing1 {suffix}"]),
     "list2 suffix": (["thing1", "thing2"], prefix, suffix, [f"{prefix} thing1 {suffix}", f"{prefix} thing2 {suffix}"]),
     "tuple suffix": (("thing1",), prefix, suffix, [f"{prefix} thing1 {suffix}"]),
@@ -2364,6 +2394,7 @@ waves_environment_methods = {
     "SubstitutionSyntax": ("SubstitutionSyntax", "substitution_syntax"),
     "ParameterStudyTask": ("ParameterStudyTask", "parameter_study_task"),
     "ParameterStudySConscript": ("ParameterStudySConscript", "parameter_study_sconscript"),
+    "ParameterStudyWrite": ("ParameterStudyWrite", "parameter_study_write"),
 }
 
 

@@ -16,6 +16,12 @@ New Features
   (:issue:`838`, :merge:`1076`). By `Sergio Cordova`_.
 - Experimental parameter study write pseudo-builders (:issue:`857`, :merge:`1097`). By `Kyle Brindley`_.
 
+Documentation
+=============
+- Use hardcoded target and source filename strings in tutorials where possible. Users report that the mix of Python and
+  SCons concepts makes learning SCons more difficult. Hardcoded filenames will make the task definitions easier to
+  understand (:merge:`1107`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Replace optional mutable default arguments with None types (:issue:`850`, :merge:`1084`). By `Chris Johnson`_ and
@@ -25,6 +31,7 @@ Internal Changes
 - Move the parameter study dry run implementation from the ParameterGenerator class initialization to the write method
   API. Maintain backward compatibility with a warning (:issue:`863`, :merge:`1099`). By `Kyle Brindley`_.
 - Pin Fierro dependency while waiting on upstream package fix (:issue:`864`, :merge:`1102`). By `Kyle Brindley`_.
+- Miscellaneous unit test coverage updates (:merge:`1103`, :merge:`1104`, :merge:`1106`). By `Kyle Brindley`_.
 - Re-name project help functions for a more consistent naming scheme (:issue:`861`, :merge:`1100`).
   By `Sergio Cordova`_.
 

@@ -71,8 +71,7 @@ SConscript
       :end-before: marker-3
 
 Just like building the geometry in :ref:`tutorial_geometry`, the code you just added instructs SCons on how to
-build the targets for partitioning and meshing our rectangle part. Again, the ``journal_file`` variable exists
-solely to minimize hard-coded duplication of the strings ``'rectangle_partition'`` and ``'rectangle_mesh'``.
+build the targets for partitioning and meshing our rectangle part.
 
 In the code pertaining to ``# Partition``, we will again pass an empty string for the ``journal_options``. We will
 re-open the discussion of using the journal file's command-line interface via the ``journal_options`` variable in

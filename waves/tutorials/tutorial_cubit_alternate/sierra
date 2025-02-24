@@ -5,7 +5,6 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``sierra_source_abspath`` - String absolute path to the project's Sierra journal files
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
 
 * ``envCubit`` - The Cubit Python SCons construction environment with the following required keys
@@ -22,13 +21,9 @@ import pathlib
 # Inherit the parent construction environment
 Import("env", "envCubit", "envSierra")
 
-# Set project-wide paths with os-agnostic path separators
-sierra_source_abspath = env["sierra_source_abspath"]
-
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
-model = "rectangle"
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
@@ -42,13 +37,13 @@ SConscript(
 )
 
 # SolverPrep
-sierra_source_list = [sierra_source_abspath / "rectangle_compression.i"]
+sierra_source_list = ["#/modsim_package/sierra/rectangle_compression.i"]
 sierra_source_list = [pathlib.Path(source_file) for source_file in sierra_source_list]
 workflow.extend(env.CopySubstfile(sierra_source_list))
 
 # Sierra Solve
 solve_source_list = [source_file.name for source_file in sierra_source_list]
-solve_source_list.append(f"{model}_mesh.g")
+solve_source_list.append("rectangle_mesh.g")
 workflow.extend(
     envSierra.Sierra(
         target=["rectangle_compression.e"],

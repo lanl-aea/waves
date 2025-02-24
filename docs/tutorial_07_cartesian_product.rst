@@ -124,7 +124,7 @@ Step-By-Step SConscript Discussion
       :language: Python
       :lineno-match:
       :end-before: marker-1
-      :emphasize-lines: 18, 21
+      :emphasize-lines: 16, 19
 
 The beginning portion of the ``SConscript`` file consists of a series of straight forward Python package import
 statements. There are, however, two notable lines in the included code above. The first hightlighted line imports the
@@ -142,14 +142,9 @@ dictionary in previous tutorials.
       :lineno-match:
       :start-after: marker-1
       :end-before: marker-2
-      :emphasize-lines: 2-3, 8
 
-The unhighlighted portions of the code snippet above do not present any unique code that has not been previously
-discussed.
-
-The highlighted portions of the code snippet above define some new variables that will get used in various places in
-this tutorial's code. The ``parameter_study_file`` will allow the parameter generator to extend previously executed
-parameter studies without re-computing existing parameter set output files.
+Most of the code snippet has been seen before. The ``parameter_study_file`` variable will allow the parameter generator
+to extend previously executed parameter studies without re-computing existing parameter set output files.
 
 .. admonition:: waves-tutorials/tutorial_07_cartesian_product
 
@@ -208,7 +203,7 @@ text file parameter substitution.
       :lineno-match:
       :start-after: marker-4
       :end-before: marker-5
-      :emphasize-lines: 6-7, 18-19, 31-33, 35, 55
+      :emphasize-lines: 5-6, 16-17, 28-30, 32, 52
 
 The lines of code above are nearly a direct copy of the previous Geometry, Partition, Mesh, and SolverPrep workflows.
 Note the following two important aspects of the code above:
