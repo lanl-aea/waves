@@ -113,35 +113,33 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
     # Comment used in tutorial code snippets: marker-5
 
     # Abaqus Solve
-    solve_source_list = [f"{set_name / source_file.name.rstrip('.in')}" for source_file in abaqus_source_list]
-    solve_source_list.append([str(set_name / "rectangle_mesh.inp")])
-    job_name = pathlib.Path(solve_source_list[0]).stem
-    datacheck_name = f"{job_name}_DATACHECK"
+    solve_source_list = [set_name / source_file.name.rstrip('.in') for source_file in abaqus_source_list]
+    solve_source_list.append(set_name / "rectangle_mesh.inp")
     datacheck_suffixes = ("023", "mdl", "sim", "stt")
     abaqus_options = "-double both"
     datacheck.extend(
         env.AbaqusSolver(
-            target=[f"{set_name / datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
+            target=[set_name / f"rectangle_compression_DATACHECK.{suffix}" for suffix in datacheck_suffixes],
             source=solve_source_list,
-            job_name=datacheck_name,
+            job_name="rectangle_compression_DATACHECK",
             abaqus_options=f"{abaqus_options} -datacheck",
         )
     )
 
     workflow.extend(
         env.AbaqusSolver(
-            target=[f"{set_name / job_name}.sta"],
+            target=[set_name / "rectangle_compression.sta"],
             source=solve_source_list,
-            job_name=job_name,
+            job_name="rectangle_compression",
             abaqus_options=abaqus_options,
         )
     )
 
     # Extract Abaqus
-    extract_source_list = [f"{set_name / job_name}.odb"]
+    extract_source_list = [set_name / "rectangle_compression.odb"]
     workflow.extend(
         env.AbaqusExtract(
-            target=[f"{set_name / job_name}.h5"],
+            target=[set_name / "rectangle_compression.h5"],
             source=extract_source_list,
         )
     )
@@ -150,7 +148,7 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
 
 # Post-processing
 post_processing_source = [
-    f"{pathlib.Path(set_name) / job_name}_datasets.h5"
+    pathlib.Path(set_name) / "rectangle_compression_datasets.h5"
     for set_name in parameter_generator.parameter_study[SET_COORDINATE_KEY].values
 ]
 script_options = "--input-file ${SOURCES[2:].abspath}"
