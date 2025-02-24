@@ -926,7 +926,6 @@ class OneAtATime(ParameterGenerator):
                 raise SchemaValidationError(f"Parameter '{name}' is not one of list, set, or tuple")
             if len(self.parameter_schema[name]) < 1:
                 raise SchemaValidationError(f"Parameter '{name}' must have at least one value")
-        return
 
     def _generate(self, **kwargs) -> None:
         """Generate the parameter sets from the user provided parameter values."""
