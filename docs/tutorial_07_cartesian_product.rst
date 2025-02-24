@@ -212,7 +212,7 @@ Note the following two important aspects of the code above:
 * Target files must be defined with respect to their parameter set directory, which will be created in the current
   simulation build directory. Any targets that are later used as source must also include the parameter set directory as
   part of their relative path.
-* The usage of the ``simulation_variables`` dictionary in the ``journal_options`` for Geometry, Partition, and Mesh and
+* The usage of the ``simulation_variables`` dictionary in the ``subcommand_options`` for Geometry, Partition, and Mesh and
   the :meth:`waves.scons_extensions.copy_substfile` method for SolverPrep. Remember to use the
   :meth:`waves.scons_extensions.substitution_syntax` method to modify the parameter name keys for parameter substitution in text
   files.

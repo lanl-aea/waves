@@ -120,9 +120,9 @@ The final block of code instructs SCons on how to build the targets, an Abaqus C
 source file is specified as an absolute path using the SCons feature ``#`` which refers to the project root directory.
 Using an absolute path allows us to run the journal file without copying it to the build directory. The SCons ``#``
 feature allows us to construct an absolute path that is correct with respect to the current ``SConstruct`` file location
-even if the project is moved or copied somewhere else on the filing system. ``journal_options`` allows for parameters to
+even if the project is moved or copied somewhere else on the filing system. ``subcommand_options`` allows for parameters to
 be passed as command-line arguments to the journal file.  Using the journal file's command-line interface with the
-``journal_options`` string will be discussed in :ref:`tutorial_parameter_substitution`.
+``subcommand_options`` string will be discussed in :ref:`tutorial_parameter_substitution`.
 
 Next, the ``workflow`` list is extended to include the action to use the :meth:`waves.scons_extensions.abaqus_journal_builder_factory` builder,
 as discussed in :ref:`tutorialsconstruct`. For more information about the behavior of the
