@@ -20,7 +20,7 @@ Documentation
 =============
 - Use hardcoded target and source filename strings in tutorials where possible. Users report that the mix of Python and
   SCons concepts makes learning SCons more difficult. Hardcoded filenames will make the task definitions easier to
-  understand (:merge:`1107`). By `Kyle Brindley`_.
+  understand (:merge:`1107`, :merge:`1108`, :merge:`1109`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
