@@ -74,7 +74,7 @@ target = env.AbaqusSolver(
     source=abaqus_source_list,
     abaqus_program=env["ABAQUS_PROGRAM"],
     job_name="rectangle_compression",
-    abaqus_options="-double both",
+    program_options="-double both",
 )
 
 # Collector alias named after the model simulation

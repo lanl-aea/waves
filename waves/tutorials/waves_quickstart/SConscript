@@ -35,7 +35,7 @@ env.AbaqusSolver(
     target=["rectangle_compression.odb"],
     source=["rectangle_compression.inp"],
     job_name="rectangle_compression",
-    abaqus_options="-double both",
+    program_options="-double both",
     **parameters,
 )
 

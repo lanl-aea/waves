@@ -94,9 +94,8 @@ env.PrependENVPath("PYTHONPATH", project_dir)
 user = getpass.getuser()
 env.Append(
     BUILDERS={
-        "AbaqusSolver": waves.scons_extensions.abaqus_solver(program=env["ABAQUS_PROGRAM"]),
         "SSHAbaqusSolver": waves.scons_extensions.ssh_builder_actions(
-            waves.scons_extensions.abaqus_solver(program=env["ABAQUS_PROGRAM"]),
+            waves.scons_extensions.abaqus_solver_builder_factory(),
             remote_server="sstbigbird.lanl.gov",
             remote_directory=f"/scratch/{user}/WAVES-TUTORIAL/tutorial_remote_execution",
         ),

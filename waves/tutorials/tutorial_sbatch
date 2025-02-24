@@ -81,7 +81,7 @@ datacheck.extend(
         target=[f"rectangle_compression_DATACHECK.{suffix}" for suffix in common_suffixes + datacheck_suffixes],
         source=solve_source_list,
         job_name="rectangle_compression_DATACHECK",
-        abaqus_options=f"{abaqus_options} -datacheck",
+        program_options=f"{abaqus_options} -datacheck",
     )
 )
 
@@ -93,7 +93,7 @@ workflow.extend(
         target=["rectangle_compression.{suffix}" for suffix in common_suffixes + abaqus_implicit_extensions],
         source=solve_source_list,
         job_name="rectangle_compression",
-        abaqus_options=abaqus_options,
+        program_options=abaqus_options,
     )
 )
 

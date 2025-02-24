@@ -63,7 +63,6 @@ env["ABAQUS_PROGRAM"] = env.AddProgram(
 # Add WAVES builders
 env.Append(
     BUILDERS={
-        "AbaqusSolver": waves.scons_extensions.abaqus_solver(program=env["ABAQUS_PROGRAM"]),
         "AbaqusExtract": waves.scons_extensions.abaqus_extract(program=env["ABAQUS_PROGRAM"]),
     }
 )
