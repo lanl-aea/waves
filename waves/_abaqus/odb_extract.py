@@ -43,11 +43,11 @@ import json
 import yaml
 import shlex
 import select
+import shutil
 import typing
 import pathlib
-from shutil import which
-from subprocess import run
-from datetime import datetime
+import datetime
+import subprocess
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 
 from waves._abaqus import _settings
@@ -172,7 +172,7 @@ def odb_extract(
         )
         file_suffix = output_type
 
-    time_stamp = datetime.now().strftime(_settings._default_timestamp_format)
+    time_stamp = datetime.datetime.now().strftime(_settings._default_timestamp_format)
     job_name = path_output_file.with_suffix(".csv")
     if path_output_file.exists():
         new_output_file = f"{str(path_output_file.with_suffix(''))}_{time_stamp}.{file_suffix}"
@@ -183,7 +183,7 @@ def odb_extract(
         odb_report_args = ""
     odb_report_args = get_odb_report_args(odb_report_args, input_file, job_name)
 
-    abaqus_base_command = which(abaqus_command)
+    abaqus_base_command = shutil.which(abaqus_command)
     if not abaqus_base_command:
         abaqus_base_command = _settings._default_abaqus_command  # try 'abaqus' anyway
 
@@ -276,8 +276,8 @@ def run_external(cmd):
     :returns: output, return_code, error_code
     """
     args = shlex.split(cmd, posix=(os.name == "posix"))
-    p = run(args, capture_output=True)
-    return p.returncode, p.stdout.decode(), p.stderr.decode()
+    process = subprocess.run(args, capture_output=True)
+    return process.returncode, process.stdout.decode(), process.stderr.decode()
 
 
 def main():
