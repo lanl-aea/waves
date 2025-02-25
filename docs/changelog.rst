@@ -8,6 +8,11 @@ Changelog
 0.12.7 (unreleased)
 *******************
 
+Bug fixes
+=========
+- Add the Abaqus required ``-job`` option to the Abaqus solver builder factory (:issue:`868`, :merge:`1113`). By `Kyle
+  Brindley`_.
+
 Enhancements
 ============
 - Handle subdirectory style builds in the Abaqus Pseudo-Builder (:merge:`1111`). By `Kyle Brindley`_.
