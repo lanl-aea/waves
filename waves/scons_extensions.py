@@ -1771,7 +1771,7 @@ class AbaqusPseudoBuilder:
         options = ""
 
         # Specify job name
-        options += f" job={job}"
+        options += f" job={pathlib.Path(job).stem}"
 
         # Specify "double" option, if requested
         if double:
@@ -1779,7 +1779,7 @@ class AbaqusPseudoBuilder:
 
         # Like Abaqus, assume input file is <job>.inp unless otherwise specified
         if inp:
-            options += f" input={inp}"
+            options += f" input={pathlib.Path(inp).name}"
         else:
             inp = str(pathlib.Path(job).with_suffix(".inp"))
         # Include input file as first source
