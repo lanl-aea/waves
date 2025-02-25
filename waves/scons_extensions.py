@@ -2267,11 +2267,6 @@ def abaqus_extract(program: str = "abaqus") -> SCons.Builder.Builder:
     This builder supports the keyword arguments: ``output_type``, ``odb_report_args``, ``delete_report_file`` with
     behavior as described in the :ref:`odb_extract_cli` command line interface.
 
-    .. warning::
-
-       ``odb_extract`` *requires* Abaqus arguments for ``odb_report_args`` in the form of ``option=value``, e.g.
-       ``step=step_name``.
-
     .. code-block::
        :caption: Format of HDF5 file
 

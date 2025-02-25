@@ -96,8 +96,7 @@ def get_parser():
         "--odb-report-args",
         dest="odb_report_args",
         type=str,
-        help="Arguments to give to the odbreport command. Require the ``option=value`` interface style "
-        "(default: %(default)s)",
+        help="Arguments to give to the odbreport command (default: %(default)s)",
         metavar='"step=step1 results"',
     )
     parser.add_argument(
@@ -138,11 +137,6 @@ def odb_extract(
     verbose: bool = False,
 ):
     """The odb_extract Abaqus data extraction tool. Most users should use the associated command line interface.
-
-    .. warning::
-
-       ``odb_extract`` *requires* Abaqus arguments for ``odb_report_args`` in the form of ``option=value``, e.g.
-       ``step=step_name``.
 
     :param input_file: A list of ``*.odb`` files to extract. Current implementation only supports extraction on the
         first file in the list.
