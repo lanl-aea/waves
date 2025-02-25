@@ -142,9 +142,7 @@ def test_odb_extract():
     ):
         # Test case where output name doesn't match odb name
         odb_extract.odb_extract(["sample.odb"], "new_name.h5", odb_report_args="odbreport -all")
-        mock_run_external.assert_called_with(
-            "abaqus odbreport -all -job new_name -odb sample.odb -mode CSV -blocked"
-        )
+        mock_run_external.assert_called_with("abaqus odbreport -all -job new_name -odb sample.odb -mode CSV -blocked")
 
     with (
         patch("pathlib.Path.exists", return_value=True),
@@ -221,57 +219,57 @@ def test_odb_extract():
 odb_report_arguments = {
     "1 spaces": (
         "",
-        "/some/path with/spaces.txt",
-        "/no/spaces.csv",
-        "-all -job /no/spaces -odb /some/\"path with\"/spaces.txt -mode CSV -blocked",
+        f"{os.path.sep}some{os.path.sep}path with{os.path.sep}spaces.txt",
+        f"{os.path.sep}no{os.path.sep}spaces.csv",
+        f"-all -job {os.path.sep}no{os.path.sep}spaces -odb {os.path.sep}some{os.path.sep}\"path with\"{os.path.sep}spaces.txt -mode CSV -blocked",  # noqa: E501
     ),
     "2 spaces": (
         "",
-        "/some/path with/spaces.txt",
-        "/some more/spaces.csv",
-        "-all -job /\"some more\"/spaces -odb /some/\"path with\"/spaces.txt -mode CSV -blocked",
+        f"{os.path.sep}some{os.path.sep}path with{os.path.sep}spaces.txt",
+        f"{os.path.sep}some more{os.path.sep}spaces.csv",
+        f"-all -job {os.path.sep}\"some more\"{os.path.sep}spaces -odb {os.path.sep}some{os.path.sep}\"path with\"{os.path.sep}spaces.txt -mode CSV -blocked",  # noqa: E501
     ),
     "no spaces": (
         "",
-        "/some/path/without/spaces.txt",
-        "/no/spaces.csv",
-        "-all -job /no/spaces -odb /some/path/without/spaces.txt -mode CSV -blocked",
+        f"{os.path.sep}some{os.path.sep}path{os.path.sep}without{os.path.sep}spaces.txt",
+        f"{os.path.sep}no{os.path.sep}spaces.csv",
+        f"-all -job {os.path.sep}no{os.path.sep}spaces -odb {os.path.sep}some{os.path.sep}path{os.path.sep}without{os.path.sep}spaces.txt -mode CSV -blocked",  # noqa: E501
     ),
     "provided arguments, 1 spaces": (
         "arg1=val1",
-        "/some/path with/spaces.txt",
-        "/no/spaces.csv",
-        "arg1=val1 -job /no/spaces -odb /some/\"path with\"/spaces.txt -mode CSV -blocked",
+        f"{os.path.sep}some{os.path.sep}path with{os.path.sep}spaces.txt",
+        f"{os.path.sep}no{os.path.sep}spaces.csv",
+        f"arg1=val1 -job {os.path.sep}no{os.path.sep}spaces -odb {os.path.sep}some{os.path.sep}\"path with\"{os.path.sep}spaces.txt -mode CSV -blocked",  # noqa: E501
     ),
     "provided arguments, 2 spaces": (
         "arg1=val1",
-        "/some/path with/spaces.txt",
-        "/some more/spaces.csv",
-        "arg1=val1 -job /\"some more\"/spaces -odb /some/\"path with\"/spaces.txt -mode CSV -blocked",
+        f"{os.path.sep}some{os.path.sep}path with{os.path.sep}spaces.txt",
+        f"{os.path.sep}some more{os.path.sep}spaces.csv",
+        f"arg1=val1 -job {os.path.sep}\"some more\"{os.path.sep}spaces -odb {os.path.sep}some{os.path.sep}\"path with\"{os.path.sep}spaces.txt -mode CSV -blocked",  # noqa: E501
     ),
     "provided odb, no spaces": (
         "arg1=val1",
-        "/some/path/without/spaces.txt",
-        "/no/spaces.csv",
-        "arg1=val1 -job /no/spaces -odb /some/path/without/spaces.txt -mode CSV -blocked",
+        f"{os.path.sep}some{os.path.sep}path{os.path.sep}without{os.path.sep}spaces.txt",
+        f"{os.path.sep}no{os.path.sep}spaces.csv",
+        f"arg1=val1 -job {os.path.sep}no{os.path.sep}spaces -odb {os.path.sep}some{os.path.sep}path{os.path.sep}without{os.path.sep}spaces.txt -mode CSV -blocked",  # noqa: E501
     ),
     "provided odb, 1 spaces odb": (
         "odb=val1",
-        "/some/path with/spaces.txt",
-        "/no/spaces.csv",
-        "odb=val1 -job /no/spaces -odb /some/\"path with\"/spaces.txt -mode CSV -blocked",
+        f"{os.path.sep}some{os.path.sep}path with{os.path.sep}spaces.txt",
+        f"{os.path.sep}no{os.path.sep}spaces.csv",
+        f"odb=val1 -job {os.path.sep}no{os.path.sep}spaces -odb {os.path.sep}some{os.path.sep}\"path with\"{os.path.sep}spaces.txt -mode CSV -blocked",  # noqa: E501
     ),
     "provided odb, 2 spaces odb": (
         "odb=val1",
-        "/some/path with/spaces.txt",
-        "/some more/spaces.csv",
-        "odb=val1 -job /\"some more\"/spaces -odb /some/\"path with\"/spaces.txt -mode CSV -blocked",
+        f"{os.path.sep}some{os.path.sep}path with{os.path.sep}spaces.txt",
+        f"{os.path.sep}some more{os.path.sep}spaces.csv",
+        f"odb=val1 -job {os.path.sep}\"some more\"{os.path.sep}spaces -odb {os.path.sep}some{os.path.sep}\"path with\"{os.path.sep}spaces.txt -mode CSV -blocked",  # noqa: E501
     ),
     "provided odb, no spaces odb": (
         "odb=val1",
-        "/some/path/without/spaces.txt",
-        "/no/spaces.csv",
-        "odb=val1 -job /no/spaces -odb /some/path/without/spaces.txt -mode CSV -blocked",
+        f"{os.path.sep}some{os.path.sep}path{os.path.sep}without{os.path.sep}spaces.txt",
+        f"{os.path.sep}no{os.path.sep}spaces.csv",
+        f"odb=val1 -job {os.path.sep}no{os.path.sep}spaces -odb {os.path.sep}some{os.path.sep}path{os.path.sep}without{os.path.sep}spaces.txt -mode CSV -blocked",  # noqa: E501
     ),
 }
 # fmt: on
