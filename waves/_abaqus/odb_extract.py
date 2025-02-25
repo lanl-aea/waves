@@ -131,7 +131,7 @@ def odb_extract(
     input_file: list,
     output_file: str,
     output_type: str = "h5",
-    odb_report_args: str = "",
+    odb_report_args: typing.Optional[str] = None,
     abaqus_command: str = _settings._default_abaqus_command,
     delete_report_file: bool = False,
     verbose: bool = False,
