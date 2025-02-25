@@ -1,5 +1,4 @@
-"""Test ParameterGenerator Abstract Base Class
-"""
+"""Test ParameterGenerator Abstract Base Class"""
 
 import pathlib
 from unittest.mock import patch, mock_open, Mock

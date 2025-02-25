@@ -1,5 +1,4 @@
-"""Test LatinHypercube Class
-"""
+"""Test LatinHypercube Class"""
 
 from unittest.mock import patch
 

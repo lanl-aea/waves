@@ -12,11 +12,15 @@ Bug fixes
 =========
 - Add the Abaqus required ``-job`` option to the Abaqus solver builder factory (:issue:`868`, :merge:`1113`). By `Kyle
   Brindley`_.
+- Fix ambiguous odb extract options when provided user odbreport arguments (:issue:`869`, :merge:`114`). By `Kyle
+  Brindley`_.
 
 Enhancements
 ============
 - Handle subdirectory style builds in the Abaqus Pseudo-Builder (:merge:`1111`). By `Kyle Brindley`_.
 - Add Abaqus Pseudo-Builder to the WAVES construction environment (:merge:`1112`). By `Kyle Brindley`_.
+- Reduce user argument caveats in odbreport options when using odb extract (:issue:`869`, :merge:`114`). By `Kyle
+  Brindley`_.
 
 *******************
 0.12.6 (2025-02-24)

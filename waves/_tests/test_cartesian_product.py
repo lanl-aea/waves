@@ -1,5 +1,4 @@
-"""Test CartesianProduct Class
-"""
+"""Test CartesianProduct Class"""
 
 from unittest.mock import patch, call, mock_open
 from contextlib import nullcontext as does_not_raise

@@ -1,5 +1,4 @@
-"""Test Sobol Sequence Class
-"""
+"""Test Sobol Sequence Class"""
 
 from unittest.mock import patch
 
