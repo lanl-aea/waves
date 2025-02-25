@@ -3722,13 +3722,22 @@ class WAVESEnvironment(SConsEnvironment):
         builder = abaqus_solver_builder_factory(program="${ABAQUS_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def AbaqusPseudoBuilder(self, *args, **kwargs):
+    def AbaqusPseudoBuilder(self, job, *args, override_cpus: typing.Optional[int] = None, **kwargs):
         """Construction environment pseudo-builder from :class:`waves.scons_extensions.AbaqusPseudoBuilder`
 
         When using this environment pseudo-builder, do not provide the first ``env`` argument
+
+        :param job: Abaqus job name.
+        :param override_cpus: Override the task-specific default number of CPUs. This kwarg value is most useful if
+            propagated from a user-specified option at execution time. If None, Abaqus Pseudo-Builder tasks will use the
+            task-specific default.
+        :param args: All other positional arguments are passed through to
+            :meth:`waves.scons_extensions.AbaqusPseudoBuilder.__call__``
+        :param kwargs: All other keyword arguments are passed through to
+            :meth:`waves.scons_extensions.AbaqusPseudoBuilder.__call__``
         """
-        pseudo_builder = AbaqusPseudoBuilder(builder=self.AbaqusSolver)
-        return pseudo_builder(*args, env=self, **kwargs)
+        pseudo_builder = AbaqusPseudoBuilder(builder=self.AbaqusSolver, override_cpus=override_cpus)
+        return pseudo_builder(job, *args, env=self, **kwargs)
 
     def PythonScript(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.python_builder_factory`
