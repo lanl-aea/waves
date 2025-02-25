@@ -1174,6 +1174,14 @@ abaqus_pseudobuilder_input = {
         " job=job double=both $(cpus=1$)",
         {},
     ),
+    "job, subdirectory": (
+        {},
+        {"job": "subdir/job"},
+        ["subdir/job.inp"],
+        [f"subdir/job{ext}" for ext in _abaqus_standard_extensions],
+        " job=job double=both $(cpus=1$)",
+        {},
+    ),
     "override cpus": (
         {"override_cpus": 2},
         {"job": "job", "cpus": 3},
