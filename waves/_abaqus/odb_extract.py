@@ -240,9 +240,9 @@ def odb_extract(
         elif output_type == "yaml":
             with open(output_file, "w") as f:
                 yaml.safe_dump(parsed_odb, f)  # With safe_dump, tuples are converted to lists
-
+    # Remove odbreport file, don't raise exception if it doesn't exist
     if delete_report_file:
-        pathlib.Path(job_name).unlink(missing_ok=True)  # Remove odbreport file, don't raise exception if it doesn't exist
+        pathlib.Path(job_name).unlink(missing_ok=True)
 
 
 def get_odb_report_args(odb_report_args: str, input_file: pathlib.Path, job_name: pathlib.Path):

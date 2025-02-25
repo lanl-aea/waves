@@ -1,5 +1,4 @@
-"""Test ScipySampler Class
-"""
+"""Test ScipySampler Class"""
 
 from unittest.mock import patch
 

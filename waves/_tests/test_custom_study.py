@@ -1,5 +1,4 @@
-"""Test CustomStudy Class
-"""
+"""Test CustomStudy Class"""
 
 from unittest.mock import patch, call, mock_open
 from contextlib import nullcontext as does_not_raise

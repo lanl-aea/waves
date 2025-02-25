@@ -126,7 +126,9 @@ def test_odb_extract():
         # Test case where report args overridden by appended arguments
         odb_extract.odb_extract(["sample.odb"], None, odb_report_args="job=job_name odb=odb_file")
         mock_abaqus_file_parser.assert_called()
-        mock_run_external.assert_called_with("abaqus odbreport job=job_name odb=odb_file -job sample -odb sample.odb -all -mode CSV -blocked")
+        mock_run_external.assert_called_with(
+            "abaqus odbreport job=job_name odb=odb_file -job sample -odb sample.odb -all -mode CSV -blocked"
+        )
 
     with (
         patch("pathlib.Path.exists", return_value=True),
@@ -140,7 +142,9 @@ def test_odb_extract():
     ):
         # Test case where output name doesn't match odb name
         odb_extract.odb_extract(["sample.odb"], "new_name.h5", odb_report_args="odbreport all")
-        mock_run_external.assert_called_with("abaqus odbreport all -job new_name -odb sample.odb -all -mode CSV -blocked")
+        mock_run_external.assert_called_with(
+            "abaqus odbreport all -job new_name -odb sample.odb -all -mode CSV -blocked"
+        )
 
     with (
         patch("pathlib.Path.exists", return_value=True),
@@ -156,7 +160,20 @@ def test_odb_extract():
         odb_extract.odb_extract(["sample.odb"], "", odb_report_args="odbreport all", output_type="yaml")
         mock_safe_dump.assert_called()
         mock_run.assert_called_with(
-            ["abaqus", "odbreport", "all", "-job", "sample", "-odb", "sample.odb", "-all", "-mode", "CSV", "-blocked",], capture_output=True
+            [
+                "abaqus",
+                "odbreport",
+                "all",
+                "-job",
+                "sample",
+                "-odb",
+                "sample.odb",
+                "-all",
+                "-mode",
+                "CSV",
+                "-blocked",
+            ],
+            capture_output=True,
         )
 
     with (
