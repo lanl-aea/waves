@@ -2476,3 +2476,11 @@ def test_waves_environment_builders(builder, factory, factory_kwargs):
         attribute(target, source, *args, **kwargs)
         mock_factory.assert_called_once_with(**factory_kwargs)
         mock_builder.assert_called_once_with(env, *args, target=target, source=source, **kwargs)
+
+
+def test_waves_environment_abaqus_pseudo_builder():
+    env = scons_extensions.WAVESEnvironment()
+
+    with patch("waves.scons_extensions.AbaqusPseudoBuilder.__call__") as mock_call:
+        env.AbaqusPseudoBuilder(job="job")
+        mock_call.assert_called_once_with(env=env, job="job")
