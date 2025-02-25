@@ -184,6 +184,8 @@ def odb_extract(
         print_warning(verbose, f"{output_file} already exists. Will use {new_output_file} instead.")
         output_file = new_output_file
 
+    if odb_report_args is None:
+        odb_report_args = ""
     odb_report_args = get_odb_report_args(odb_report_args, input_file, job_name)
 
     abaqus_base_command = which(abaqus_command)
