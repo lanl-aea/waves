@@ -98,7 +98,7 @@ Running a Datacheck
     .. literalinclude:: tutorials_tutorial_04_simulation
        :language: Python
        :lineno-match:
-       :emphasize-lines: 5-6
+       :emphasize-lines: 2-3
        :start-after: marker-4
        :end-before: marker-5
 
@@ -124,11 +124,11 @@ require that the file names be extracted from the ``abaqus_source_list``. This t
 
     solve_source_list = [source_file.name for source_file in abaqus_source_list]
 
-Next, ``{journal_file}.inp`` needs to be appended to the list of simulation source files. Recall from
+Next, ``rectangle_mesh.inp`` needs to be appended to the list of simulation source files. Recall from
 :ref:`tutorial_partition_mesh` that this file is one of the targets that is generated from
 :meth:`waves.scons_extensions.abaqus_journal_builder_factory` builder in the code pertaining to ``# Mesh``.
 
-The highlighted lines will define an optional task called a *datacheck*. You can read the `Abaqus Standard/Explicit
+The code snippet will define an optional task called a *datacheck*. You can read the `Abaqus Standard/Explicit
 Execution`_ documentation :cite:`ABAQUS` for more details on running a datacheck. The primary purpose for running a
 datacheck is to verify the input file construction without running a full simulation. While Abaqus can continue with an
 analysis from the datacheck output, doing so modifies the datacheck output files, which has the affect of prompting

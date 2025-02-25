@@ -71,11 +71,10 @@ SConscript
       :end-before: marker-3
 
 Just like building the geometry in :ref:`tutorial_geometry`, the code you just added instructs SCons on how to
-build the targets for partitioning and meshing our rectangle part. Again, the ``journal_file`` variable exists
-solely to minimize hard-coded duplication of the strings ``'rectangle_partition'`` and ``'rectangle_mesh'``.
+build the targets for partitioning and meshing our rectangle part.
 
-In the code pertaining to ``# Partition``, we will again pass an empty string for the ``journal_options``. We will
-re-open the discussion of using the journal file's command-line interface via the ``journal_options`` variable in
+In the code pertaining to ``# Partition``, we will again pass an empty string for the ``subcommand_options``. We will
+re-open the discussion of using the journal file's command-line interface via the ``subcommand_options`` variable in
 :ref:`tutorial_parameter_substitution`. Next, the ``workflow`` list is extended once again to include the action
 to use the :meth:`waves.scons_extensions.abaqus_journal_builder_factory` builder. The ``target`` list specifies the
 files created by the :meth:`waves.scons_extensions.abaqus_journal_builder_factory` builder's action, and the ``source``
@@ -104,7 +103,7 @@ information it needs to build the ``rectangle_partition.cae`` target.
 
 In the code pertaining to ``# Mesh``, the trend continues. We will re-assign the ``journal_file`` variable to the
 meshing journal file name to reduce hard-coded duplication of strings. We define an empty string for
-``journal_options``, as nothing other than the default is required for this task. We finally extend the workflow to
+``subcommand_options``, as nothing other than the default is required for this task. We finally extend the workflow to
 utilize the :meth:`waves.scons_extensions.abaqus_journal_builder_factory` builder on the ``source`` list. Just like the
 code for ``# Partition``, we have two sources. In this tutorial, we rely on the ``rectangle_mesh.py`` CLI default
 arguments which will use the ``rectangle_partition.cae`` file as the input model file. Readers are encouraged to return

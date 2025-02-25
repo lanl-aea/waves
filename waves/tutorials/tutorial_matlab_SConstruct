@@ -57,12 +57,10 @@ env["MATLAB_PROGRAM"] = env.AddProgram(["/apps/matlab/R2021b/bin/matlab", "matla
 project_name = "WAVES-TUTORIAL"
 version = "0.1.0"
 project_dir = pathlib.Path(Dir(".").abspath)
-matlab_source_dir = "modsim_package/matlab"
 project_variables = {
     "project_name": project_name,
     "project_dir": project_dir,
     "version": version,
-    "matlab_source_abspath": project_dir / matlab_source_dir,
 }
 for key, value in project_variables.items():
     env[key] = value

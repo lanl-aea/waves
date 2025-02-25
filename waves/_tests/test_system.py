@@ -233,13 +233,29 @@ require_third_party_system_tests = [
         [
             fetch_template,
             string.Template(
-                "scons abaqus fierro ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
+                "scons abaqus ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
             ),
         ],
         "tutorials/tutorial_cubit",
         marks=[
             pytest.mark.require_third_party,
             pytest.mark.abaqus,
+            pytest.mark.cubit,
+            pytest.mark.skipif(
+                testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
+            ),
+        ],
+    ),
+    pytest.param(
+        [
+            fetch_template,
+            string.Template(
+                "scons fierro ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
+            ),
+        ],
+        "tutorials/tutorial_cubit",
+        marks=[
+            pytest.mark.require_third_party,
             pytest.mark.cubit,
             pytest.mark.fierro,
             pytest.mark.skipif(
@@ -273,13 +289,29 @@ require_third_party_system_tests = [
         [
             fetch_template,
             string.Template(
-                "scons abaqus fierro ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
+                "scons abaqus ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
             ),
         ],
         "tutorials/tutorial_cubit_alternate",
         marks=[
             pytest.mark.require_third_party,
             pytest.mark.abaqus,
+            pytest.mark.cubit,
+            pytest.mark.skipif(
+                testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
+            ),
+        ],
+    ),
+    pytest.param(
+        [
+            fetch_template,
+            string.Template(
+                "scons fierro ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
+            ),
+        ],
+        "tutorials/tutorial_cubit_alternate",
+        marks=[
+            pytest.mark.require_third_party,
             pytest.mark.cubit,
             pytest.mark.fierro,
             pytest.mark.skipif(
@@ -463,6 +495,16 @@ require_third_party_system_tests = [
             ),
         ],
         "--tutorial 12",
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
+    ),
+    pytest.param(
+        [
+            fetch_template,
+            string.Template(
+                "scons tutorial_abaqus_pseudo_builder --sconstruct=tutorial_abaqus_pseudo_builder_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+            ),
+        ],
+        "tutorials",
         marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     pytest.param(

@@ -5,7 +5,6 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``abaqus_source_abspath`` - String absolute path to the project's Abaqus journal files
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``abaqus`` - String path for the Abaqus executable
 """
@@ -15,13 +14,9 @@ import pathlib
 # Inherit the parent construction environment
 Import("env")
 
-# Set project-wide paths with os-agnostic path separators
-abaqus_source_abspath = env["abaqus_source_abspath"]
-
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
-model = "rectangle"
 
 # Comment used in tutorial code snippets: marker-1
 
@@ -29,13 +24,11 @@ model = "rectangle"
 workflow = []
 
 # Geometry
-journal_file = f"{model}_geometry"
-journal_options = ""
 workflow.extend(
     env.AbaqusJournal(
-        target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
-        source=[f"{abaqus_source_abspath / journal_file}.py"],
-        subcommand_options=journal_options,
+        target=["rectangle_geometry.cae", "rectangle_geometry.jnl"],
+        source=["#/modsim_package/abaqus/rectangle_geometry.py"],
+        subcommand_options="",
     )
 )
 

@@ -274,7 +274,7 @@ name. :ref:`tutorial_geometry` will introduce the first target alias, which will
 message displayed by the ``scons -h`` command option.
 
 We previously added the ``ProjectHelp`` method to the construction environment using
-:class:`waves.scons_extensions.WAVESEnvironment`. This points to :meth:`waves.scons_extensions.project_help_message`
+:class:`waves.scons_extensions.WAVESEnvironment`. This points to :meth:`waves.scons_extensions.project_help`
 which wraps two common calls to `SCons Help`_ that will append the following to the project help message accessed by
 ``scons -h``:
 

@@ -367,10 +367,12 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
     not_found = []
     available_files_output = (source_tree, not_found)
     single_file_requested = ([source_tree[0]], not_found)
+    bad_file_requests = [pathlib.Path("notfound")]
+    bad_file_requested = ([], bad_file_requests)
 
     # Files in destination tree do not exist. Copy the modsim_template file tree.
     with (
-        patch("waves._fetch.available_files", return_value=available_files_output),
+        patch("waves._fetch.build_source_files", return_value=available_files_output),
         patch("waves._fetch.print_list") as mock_print_list,
         patch("waves._fetch.conditional_copy") as mock_conditional_copy,
         patch("pathlib.Path.exists", side_effect=[False, False]),
@@ -383,7 +385,7 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
 
     # Files in destination tree do not exist. Only want the first file. Copy the first file..
     with (
-        patch("waves._fetch.available_files", side_effect=[available_files_output, single_file_requested]),
+        patch("waves._fetch.build_source_files", side_effect=[available_files_output, single_file_requested]),
         patch("waves._fetch.print_list") as mock_print_list,
         patch("waves._fetch.conditional_copy") as mock_conditional_copy,
         patch("pathlib.Path.exists", side_effect=[False, False]),
@@ -398,7 +400,7 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
 
     # Files in destination tree do not exist, but dry-run. Print destination file tree.
     with (
-        patch("waves._fetch.available_files", return_value=available_files_output),
+        patch("waves._fetch.build_source_files", return_value=available_files_output),
         patch("waves._fetch.print_list") as mock_print_list,
         patch("waves._fetch.conditional_copy") as mock_conditional_copy,
         patch("pathlib.Path.exists", side_effect=[False, False]),
@@ -411,7 +413,7 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
 
     # Files in destination tree do not exist, but print_available. Print source file tree.
     with (
-        patch("waves._fetch.available_files", return_value=available_files_output),
+        patch("waves._fetch.build_source_files", return_value=available_files_output),
         patch("waves._fetch.print_list") as mock_print_list,
         patch("waves._fetch.conditional_copy") as mock_conditional_copy,
         patch("pathlib.Path.exists", side_effect=[False, False]),
@@ -425,7 +427,7 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
     # All files in destination tree do exist. Don't copy the modsim_template file tree.
     # Don't error out, just remove destination file from the copy list
     with (
-        patch("waves._fetch.available_files", return_value=available_files_output),
+        patch("waves._fetch.build_source_files", return_value=available_files_output),
         patch("waves._fetch.print_list") as mock_print_list,
         patch("waves._fetch.conditional_copy") as mock_conditional_copy,
         patch("pathlib.Path.exists", side_effect=[True, True]),
@@ -438,7 +440,7 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
 
     # Files in destination tree do exist, we want to overwrite contents, and the files differ. Copy the source file.
     with (
-        patch("waves._fetch.available_files", return_value=available_files_output),
+        patch("waves._fetch.build_source_files", return_value=available_files_output),
         patch("waves._fetch.print_list") as mock_print_list,
         patch("waves._fetch.conditional_copy") as mock_conditional_copy,
         patch("pathlib.Path.exists", side_effect=[True, True]),
@@ -452,7 +454,7 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
     # Files in destination tree do exist, we want to overwrite contents, but the files are the same. Don't copy the
     # source file.
     with (
-        patch("waves._fetch.available_files", return_value=available_files_output),
+        patch("waves._fetch.build_source_files", return_value=available_files_output),
         patch("waves._fetch.print_list") as mock_print_list,
         patch("waves._fetch.conditional_copy") as mock_conditional_copy,
         patch("pathlib.Path.exists", side_effect=[True, True]),
@@ -466,7 +468,7 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
     # Files in destination tree do exist, but we want to overwrite contents and dry-run.
     # Print the modsim_template file tree.
     with (
-        patch("waves._fetch.available_files", return_value=available_files_output),
+        patch("waves._fetch.build_source_files", return_value=available_files_output),
         patch("waves._fetch.print_list") as mock_print_list,
         patch("waves._fetch.conditional_copy") as mock_conditional_copy,
         patch("pathlib.Path.exists", side_effect=[True, True]),
@@ -479,7 +481,7 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
 
     # Testing tutorial argument behavior..
     with (
-        patch("waves._fetch.available_files", return_value=available_files_output),
+        patch("waves._fetch.build_source_files", return_value=available_files_output),
         patch("waves._fetch.print_list") as mock_print_list,
         patch("waves._fetch.extend_requested_paths") as mock_extend,
         patch("waves._fetch.conditional_copy"),
@@ -493,6 +495,26 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
             mock_extend.assert_called_once()
         else:
             mock_extend.assert_not_called()
+
+    # Requested source files do not exist or do not resolve
+    with (
+        patch("waves._fetch.build_source_files", side_effect=[available_files_output, bad_file_requested]),
+        patch("waves._fetch.print_list") as mock_print_list,
+        patch("waves._fetch.conditional_copy") as mock_conditional_copy,
+        patch("pathlib.Path.exists", side_effect=[False, False]),
+        patch("filecmp.cmp", return_value=False),
+        pytest.raises(RuntimeError),
+    ):
+        try:
+            _fetch.recursive_copy(
+                root_directory.parent,
+                root_directory.name,
+                destination,
+                requested_paths=bad_file_requests,
+            )
+        finally:
+            mock_print_list.assert_not_called()
+            mock_conditional_copy.assert_not_called()
 
 
 def test_extend_requested_paths():

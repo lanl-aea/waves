@@ -1,7 +1,9 @@
 #! /usr/bin/env python
 
 import os
+import sys
 import pathlib
+import inspect
 
 import waves
 
@@ -58,6 +60,7 @@ env = waves.scons_extensions.WAVESEnvironment(
     unconditional_build=GetOption("unconditional_build"),
     print_build_failures=GetOption("print_build_failures"),
     abaqus_commands=GetOption("abaqus_command"),
+    TARFLAGS="-c -j",
 )
 
 # Conditionally print failed task *.stdout files
@@ -75,16 +78,23 @@ env["ABAQUS_PROGRAM"] = env.AddProgram(
 # Set project internal variables and variable substitution dictionaries
 project_name = "WAVES-TUTORIAL"
 version = "0.1.0"
-project_dir = pathlib.Path(Dir(".").abspath)
+archive_prefix = f"{project_name}-{version}"
+project_configuration = pathlib.Path(inspect.getfile(lambda: None))
+project_dir = project_configuration.parent
 project_variables = {
+    "project_configuration": project_configuration,
     "project_name": project_name,
     "project_dir": project_dir,
     "version": version,
+    "regression_alias": "regression",
+    "datacheck_alias": "datacheck",
+    "archive_prefix": archive_prefix,
 }
 for key, value in project_variables.items():
     env[key] = value
 
-# Make the project package importable for Python and Abaqus Python environments
+# Make the project package importable for: (1) SConscript files and (2) Python and Abaqus Python environments
+sys.path.insert(0, str(project_dir))
 env.PrependENVPath("PYTHONPATH", project_dir)
 
 # Comments used in tutorial code snippets: marker-5
@@ -92,7 +102,7 @@ env.PrependENVPath("PYTHONPATH", project_dir)
 # Add builders and pseudo-builders
 env.Append(
     BUILDERS={
-        "AbaqusSolver": waves.scons_extensions.abaqus_solver(program=env["ABAQUS_PROGRAM"]),
+        "AbaqusExtract": waves.scons_extensions.abaqus_extract(program=env["ABAQUS_PROGRAM"]),
     }
 )
 
@@ -105,10 +115,22 @@ workflow_configurations = [
     "tutorial_03_solverprep",
     "tutorial_04_simulation",
     "tutorial_05_parameter_substitution",
+    "tutorial_06_include_files",
+    "tutorial_07_cartesian_product",
+    "tutorial_08_data_extraction",
+    "tutorial_09_post_processing",
+    "tutorial_11_regression_testing",
+    "tutorial_12_archival",
+    "tutorial_abaqus_pseudo_builder",
 ]
 for workflow in workflow_configurations:
     build_dir = env["variant_dir_base"] / workflow
     SConscript(workflow, variant_dir=build_dir, exports={"env": env}, duplicate=False)
+
+# Add unit test target
+test_workflow = "unit_testing"
+test_build_dir = env["variant_dir_base"] / test_workflow
+SConscript(test_workflow, variant_dir=test_build_dir, exports={"env": env}, duplicate=False)
 
 # Comments used in tutorial code snippets: marker-7
 

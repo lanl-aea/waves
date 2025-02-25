@@ -101,7 +101,7 @@ SConscript
       :lineno-match:
       :start-after: marker-0
       :end-before: marker-1
-      :emphasize-lines: 5-10
+      :emphasize-lines: 4-10
 
 In the code you just added, a ``simulation_variables`` dictionary is defined.  Each key-value pair in the
 ``simulation_variables`` dictionary defines a parameter that already exists in several of the scripts we have utilized
@@ -124,7 +124,7 @@ the primary reason the ``@`` characters are required in the ``simulation_variabl
 this is implemented with the :meth:`waves.scons_extensions.copy_substfile` method will come later in this tutorial.
 
 8. Modify your ``tutorial_05_parameter_substitution`` file by using the highlighed lines below to modify the
-   ``journal_options`` for the code pertaining to ``# Geometry``, ``# Partition``, and ``# Mesh``.
+   ``subcommand_options`` for the code pertaining to ``# Geometry``, ``# Partition``, and ``# Mesh``.
 
 .. admonition:: waves-tutorials/tutorial_05_parameter_substitution
 
@@ -133,7 +133,7 @@ this is implemented with the :meth:`waves.scons_extensions.copy_substfile` metho
       :lineno-match:
       :start-after: marker-1
       :end-before: marker-3
-      :emphasize-lines: 7, 12-13, 21, 26-27, 33, 38-39
+      :emphasize-lines: 10-11, 22-23, 32-33
 
 As was previously discussed, we use the key-value pairs of the ``simulation_variables`` dictionary in the arguments we
 pass to the command-line interfaces for ``rectangle_{geometry,partition,mesh}.py``. Using SCons variable
@@ -144,7 +144,7 @@ the ``rectangle_geometry.py`` CLI:
 
    --width 1.0 --height 1.0
 
-Note that the keyword arguments ``journal_options``, ``width``, ``height``, and ``global_options`` are not part of the
+Note that the keyword arguments ``subcommand_options``, ``width``, ``height``, and ``global_options`` are not part of the
 normal builder interface. `SCons`_ will accept these keyword arguments and use them as substitution variables as part of
 the task definition. We can use this feature to pass arbitrary variables to the builder task construction on a per-task
 basis without affecting other tasks which use the same builder. For instance, the ``# Mesh`` task will not have access

@@ -5,7 +5,6 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``matlab_source_abspath`` - String absolute path to the project's Matlab journal files
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``matlab`` - String path for the Matlab executable
 """
@@ -15,13 +14,9 @@ import pathlib
 # Inherit the parent construction environment
 Import("env")
 
-# Set project-wide paths with os-agnostic path separators
-matlab_source_abspath = env["matlab_source_abspath"]
-
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
-output_name = "world"
 
 # Comment used in tutorial code snippets: marker-1
 
@@ -29,12 +24,11 @@ output_name = "world"
 workflow = []
 
 # Matlab
-matlab_script = matlab_source_abspath / "hello_world.m"
-script_options = f"'{output_name}'"
+script_options = "'world'"
 workflow.extend(
     env.MatlabScript(
-        target=[f"{output_name}.txt"],
-        source=[matlab_script],
+        target=["world.txt"],
+        source=["#/modsim_package/matlab/hello_world.m"],
         script_options=script_options,
     )
 )

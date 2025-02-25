@@ -13,7 +13,9 @@ aea-environment:
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
   tags:
-    - shell-aea
+    - shell
+    - aea
+    - linux
 
 aea-fast-test:
   extends:
@@ -24,7 +26,9 @@ aea-fast-test:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
   tags:
-    - shell-aea
+    - shell
+    - aea
+    - linux
 
 aea-style-guide:
   extends:
@@ -35,7 +39,9 @@ aea-style-guide:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
   tags:
-    - shell-aea
+    - shell
+    - aea
+    - linux
 
 aea-conda-build:
   extends:
@@ -51,7 +57,9 @@ aea-conda-build:
     paths:
       - conda-bld/noarch/waves-*-*.tar.bz2
   tags:
-    - shell-aea
+    - shell
+    - aea
+    - linux
 
 aea-conda-build-external:
   extends:
@@ -64,7 +72,9 @@ aea-conda-build-external:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
   tags:
-    - shell-aea
+    - shell
+    - aea
+    - linux
 
 aea-conda-build-matrix:
   extends:
@@ -82,7 +92,9 @@ aea-conda-build-matrix:
     - pytest recipe-matrix/matrix.py -v --no-showlocals --tb=short
     - conda build purge --croot ${croot}/recipe-matrix
   tags:
-    - shell-aea
+    - shell
+    - aea
+    - linux
 
 # https://re-git.lanl.gov/aea/developer-operations/aea-conda
 aea-conda-deploy:
@@ -120,7 +132,9 @@ pypi-deploy:
     - python -m build
     - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
   tags:
-    - shell-aea
+    - shell
+    - aea
+    - linux
 
 # It MUST be called pages
 pages:
@@ -150,4 +164,6 @@ pages:
       # It MUST be called public
       - public
   tags:
-    - shell-aea
+    - shell
+    - aea
+    - linux

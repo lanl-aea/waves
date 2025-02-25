@@ -5,7 +5,6 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``abaqus_source_abspath`` - String absolute path to the project's Abaqus journal files
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``abaqus`` - String path for the Abaqus executable
 
@@ -20,13 +19,9 @@ import platform
 # Inherit the parent construction environment
 Import("env", "envCubit")
 
-# Set project-wide paths with os-agnostic path separators
-abaqus_source_abspath = env["abaqus_source_abspath"]
-
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
-model = "rectangle"
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
@@ -44,42 +39,40 @@ SConscript(
 # Linux style sed command options must be modified for macOS. Command must be modified if on Windows.
 system = platform.system()
 sed_options = "-i ''" if system.lower() == "darwin" else "-i"
-env.AddPostAction(f"{model}_mesh.inp", f"sed {sed_options} 's/CPE4/CPS4/g' ${{TARGET.abspath}}")
+env.AddPostAction("rectangle_mesh.inp", f"sed {sed_options} 's/CPE4/CPS4/g' ${{TARGET.abspath}}")
 
 # SolverPrep
 abaqus_source_list = [
-    abaqus_source_abspath / f"{model}_compression.inp",
-    abaqus_source_abspath / "assembly.inp",
-    abaqus_source_abspath / "boundary.inp",
-    abaqus_source_abspath / "field_output.inp",
-    abaqus_source_abspath / "materials.inp",
-    abaqus_source_abspath / "parts.inp",
-    abaqus_source_abspath / "history_output.inp",
+    "#/modsim_package/abaqus/rectangle_compression.inp",
+    "#/modsim_package/abaqus/assembly.inp",
+    "#/modsim_package/abaqus/boundary.inp",
+    "#/modsim_package/abaqus/field_output.inp",
+    "#/modsim_package/abaqus/materials.inp",
+    "#/modsim_package/abaqus/parts.inp",
+    "#/modsim_package/abaqus/history_output.inp",
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
 workflow.extend(env.CopySubstfile(abaqus_source_list))
 
 # Abaqus Solve
-solve_source_list = [source_file.name for source_file in abaqus_source_list]
-solve_source_list.append(f"{model}_mesh.inp")
-job_name = pathlib.Path(solve_source_list[0]).stem
-datacheck_name = f"{job_name}_DATACHECK"
+solve_source_list = [source_file.name.rstrip(".in") for source_file in abaqus_source_list]
+solve_source_list.append("rectangle_mesh.inp")
 datacheck_suffixes = ("023", "mdl", "sim", "stt")
 abaqus_options = "-double both"
 datacheck.extend(
     env.AbaqusSolver(
-        target=[f"{datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
+        target=[f"rectangle_compression_DATACHECK.{suffix}" for suffix in datacheck_suffixes],
         source=solve_source_list,
-        job_name=datacheck_name,
+        job_name="rectangle_compression_DATACHECK",
         abaqus_options=f"{abaqus_options} -datacheck",
     )
 )
 
 workflow.extend(
     env.AbaqusSolver(
-        target=[f"{job_name}.sta"],
+        target=["rectangle_compression.sta"],
         source=solve_source_list,
-        job_name=job_name,
+        job_name="rectangle_compression",
         abaqus_options=abaqus_options,
     )
 )

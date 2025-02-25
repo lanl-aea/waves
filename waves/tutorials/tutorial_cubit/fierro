@@ -5,7 +5,6 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``fierro_source_abspath`` - String absolute path to the project's Fierro journal files
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``cubit`` - String path for the Cubit executable
 """
@@ -15,13 +14,9 @@ import pathlib
 # Inherit the parent construction environment
 Import("env")
 
-# Set project-wide paths with os-agnostic path separators
-fierro_source_abspath = env["fierro_source_abspath"]
-
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
-model = "cube"
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
@@ -32,19 +27,19 @@ SConscript("cubit", exports={"env": env, "element_type": element_type, "solver":
 
 # Convert mesh file type for Fierro
 env.PythonScript(
-    target=[f"{model}_mesh.vtk"],
-    source=[fierro_source_abspath / "convert_to_vtk2ascii.py", f"{model}_mesh.g"],
+    target=["cube_mesh.vtk"],
+    source=["#/modsim_package/fierro/convert_to_vtk2ascii.py", "cube_mesh.g"],
     subcommand_options="--input-format=exodus ${SOURCES[1].abspath} ${TARGET.abspath}",
 )
 
 # SolverPrep
-fierro_source_list = [fierro_source_abspath / "cube_compression.yaml"]
+fierro_source_list = ["#/modsim_package/fierro/cube_compression.yaml"]
 fierro_source_list = [pathlib.Path(source_file) for source_file in fierro_source_list]
 workflow.extend(env.CopySubstfile(fierro_source_list))
 
 # Fierro Solve
 solve_source_list = [source_file.name for source_file in fierro_source_list]
-solve_source_list.append(f"{model}_mesh.vtk")
+solve_source_list.append("cube_mesh.vtk")
 workflow.extend(
     env.FierroImplicit(
         target=["cube_compression.stdout", "TecplotTO0.dat", "TecplotTO_undeformed0.dat"],

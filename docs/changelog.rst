@@ -5,7 +5,21 @@ Changelog
 #########
 
 *******************
-0.12.6 (unreleased)
+0.12.7 (unreleased)
+*******************
+
+Bug fixes
+=========
+- Add the Abaqus required ``-job`` option to the Abaqus solver builder factory (:issue:`868`, :merge:`1113`). By `Kyle
+  Brindley`_.
+
+Enhancements
+============
+- Handle subdirectory style builds in the Abaqus Pseudo-Builder (:merge:`1111`). By `Kyle Brindley`_.
+- Add Abaqus Pseudo-Builder to the WAVES construction environment (:merge:`1112`). By `Kyle Brindley`_.
+
+*******************
+0.12.6 (2025-02-24)
 *******************
 
 New Features
@@ -16,6 +30,12 @@ New Features
   (:issue:`838`, :merge:`1076`). By `Sergio Cordova`_.
 - Experimental parameter study write pseudo-builders (:issue:`857`, :merge:`1097`). By `Kyle Brindley`_.
 
+Documentation
+=============
+- Use hardcoded target and source filename strings in tutorials where possible. Users report that the mix of Python and
+  SCons concepts makes learning SCons more difficult. Hardcoded filenames will make the task definitions easier to
+  understand (:merge:`1107`, :merge:`1108`, :merge:`1109`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Replace optional mutable default arguments with None types (:issue:`850`, :merge:`1084`). By `Chris Johnson`_ and
@@ -24,6 +44,10 @@ Internal Changes
   :merge:`1098`). By `Kyle Brindley`_.
 - Move the parameter study dry run implementation from the ParameterGenerator class initialization to the write method
   API. Maintain backward compatibility with a warning (:issue:`863`, :merge:`1099`). By `Kyle Brindley`_.
+- Pin Fierro dependency while waiting on upstream package fix (:issue:`864`, :merge:`1102`). By `Kyle Brindley`_.
+- Miscellaneous unit test coverage updates (:merge:`1103`, :merge:`1104`, :merge:`1106`). By `Kyle Brindley`_.
+- Re-name project help functions for a more consistent naming scheme (:issue:`861`, :merge:`1100`).
+  By `Sergio Cordova`_.
 
 *******************
 0.12.5 (2025-01-27)

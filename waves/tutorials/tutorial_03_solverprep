@@ -5,7 +5,6 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``abaqus_source_abspath`` - String absolute path to the project's Abaqus journal files
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``abaqus`` - String path for the Abaqus executable
 """
@@ -15,13 +14,9 @@ import pathlib
 # Inherit the parent construction environment
 Import("env")
 
-# Set project-wide paths with os-agnostic path separators
-abaqus_source_abspath = env["abaqus_source_abspath"]
-
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
-model = "rectangle"
 
 # Comment used in tutorial code snippets: marker-1
 
@@ -29,37 +24,31 @@ model = "rectangle"
 workflow = []
 
 # Geometry
-journal_file = f"{model}_geometry"
-journal_options = ""
 workflow.extend(
     env.AbaqusJournal(
-        target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
-        source=[f"{abaqus_source_abspath / journal_file}.py"],
-        subcommand_options=journal_options,
+        target=["rectangle_geometry.cae", "rectangle_geometry.jnl"],
+        source=["#/modsim_package/abaqus/rectangle_geometry.py"],
+        subcommand_options="",
     )
 )
 
 # Comment used in tutorial code snippets: marker-2
 
 # Partition
-journal_file = f"{model}_partition"
-journal_options = ""
 workflow.extend(
     env.AbaqusJournal(
-        target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
-        source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
-        subcommand_options=journal_options,
+        target=["rectangle_partition.cae", "rectangle_partition.jnl"],
+        source=["#/modsim_package/abaqus/rectangle_partition.py", "rectangle_geometry.cae"],
+        subcommand_options="",
     )
 )
 
 # Mesh
-journal_file = f"{model}_mesh"
-journal_options = ""
 workflow.extend(
     env.AbaqusJournal(
-        target=[f"{journal_file}.inp", f"{journal_file}.cae", f"{journal_file}.jnl"],
-        source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
-        subcommand_options=journal_options,
+        target=["rectangle_mesh.inp", "rectangle_mesh.cae", "rectangle_mesh.jnl"],
+        source=["#/modsim_package/abaqus/rectangle_mesh.py", "rectangle_partition.cae"],
+        subcommand_options="",
     )
 )
 
@@ -67,13 +56,13 @@ workflow.extend(
 
 # SolverPrep
 abaqus_source_list = [
-    abaqus_source_abspath / f"{model}_compression.inp",
-    abaqus_source_abspath / "assembly.inp",
-    abaqus_source_abspath / "boundary.inp",
-    abaqus_source_abspath / "field_output.inp",
-    abaqus_source_abspath / "materials.inp",
-    abaqus_source_abspath / "parts.inp",
-    abaqus_source_abspath / "history_output.inp",
+    "#/modsim_package/abaqus/rectangle_compression.inp",
+    "#/modsim_package/abaqus/assembly.inp",
+    "#/modsim_package/abaqus/boundary.inp",
+    "#/modsim_package/abaqus/field_output.inp",
+    "#/modsim_package/abaqus/materials.inp",
+    "#/modsim_package/abaqus/parts.inp",
+    "#/modsim_package/abaqus/history_output.inp",
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
 workflow.extend(env.CopySubstfile(abaqus_source_list))

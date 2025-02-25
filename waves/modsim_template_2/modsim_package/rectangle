@@ -23,34 +23,31 @@ workflow_file = pathlib.Path(inspect.getfile(lambda: None))
 artifacts = [str(workflow_file)]
 
 # Geometry
-journal_options = "--width ${width} --height ${height}"
 artifacts.extend(
     env.AbaqusJournal(
         target=["rectangle_geometry.cae", "rectangle_geometry.jnl"],
         source=["rectangle_geometry.py"],
-        subcommand_options=journal_options,
+        subcommand_options="--width ${width} --height ${height}",
         **parameters,
     )
 )
 
 # Partition
-journal_options = "--width ${width} --height ${height}"
 artifacts.extend(
     env.AbaqusJournal(
         target=["rectangle_partition.cae", "rectangle_partition.jnl"],
         source=["rectangle_partition.py", "rectangle_geometry.cae"],
-        subcommand_options=journal_options,
+        subcommand_options="--width ${width} --height ${height}",
         **parameters,
     )
 )
 
 # Mesh
-journal_options = "--global-seed ${global_seed}"
 artifacts.extend(
     env.AbaqusJournal(
         target=["rectangle_mesh.inp", "rectangle_mesh.cae", "rectangle_mesh.jnl"],
         source=["rectangle_mesh.py", "rectangle_partition.cae"],
-        subcommand_options=journal_options,
+        subcommand_options="--global-seed ${global_seed}",
         **parameters,
     )
 )

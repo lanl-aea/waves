@@ -38,6 +38,14 @@ class TestScipySampler:
             },
             {"seed": 42},
         ),
+        "good schema 1x2, no seed": (
+            {
+                "num_simulations": 1,
+                "parameter_1": {"distribution": "uniform", "loc": 0, "scale": 10},
+                "parameter_2": {"distribution": "uniform", "loc": 2, "scale": 3},
+            },
+            {},
+        ),
     }
 
     @pytest.mark.parametrize(

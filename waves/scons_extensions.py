@@ -5,6 +5,7 @@ import atexit
 import shutil
 import typing
 import pathlib
+import warnings
 import functools
 
 import SCons.Node
@@ -367,7 +368,23 @@ def ssh_builder_actions(
     return builder
 
 
-def project_help_message(
+# TODO: Deprecate the old function name
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/862
+def project_help_message(*args, **kwargs):
+    """
+    .. warning::
+
+       Deprecated function name scheduled for removal in version 1. Function implementation has moved to
+       :meth:`waves.scons_extensions.project_help` for naming convention consistency.
+    """
+    warnings.warn(
+        "This function name has changed to ``waves.scons_extensions.project_help``. "
+        "This function will be deprecated in v1"
+    )
+    return project_help(*args, **kwargs)
+
+
+def project_help(
     env: SCons.Environment.Environment = SCons.Environment.Environment(),
     append: bool = True,
     keep_local: bool = True,
@@ -377,8 +394,8 @@ def project_help_message(
 
     See the `SCons Help`_ documentation for appending behavior. Thin wrapper around
 
-    * :meth:`waves.scons_extensions.default_targets_message`
-    * :meth:`waves.scons_extensions.alias_list_message`
+    * :meth:`waves.scons_extensions.project_help_default_targets`
+    * :meth:`waves.scons_extensions.project_help_aliases`
 
     :param env: The SCons construction environment object to modify
     :param append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
@@ -386,11 +403,27 @@ def project_help_message(
     :param keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     :param target_descriptions: dictionary containing target metadata.
     """
-    default_targets_message(env=env, append=append, keep_local=keep_local, target_descriptions=target_descriptions)
-    alias_list_message(env=env, append=append, keep_local=keep_local, target_descriptions=target_descriptions)
+    project_help_default_targets(env=env, append=append, keep_local=keep_local, target_descriptions=target_descriptions)
+    project_help_aliases(env=env, append=append, keep_local=keep_local, target_descriptions=target_descriptions)
 
 
-def default_targets_message(
+# TODO: Deprecate the old function name
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/862
+def default_targets_message(*args, **kwargs):
+    """
+    .. warning::
+
+       Deprecated function name scheduled for removal in version 1. Function implementation has moved to
+       :meth:`waves.scons_extensions.project_help_default_targets` for naming convention consistency.
+    """
+    warnings.warn(
+        "This function name has changed to ``waves.scons_extensions.project_help_default_targets``. "
+        "This function will be deprecated in v1"
+    )
+    return project_help_default_targets(*args, **kwargs)
+
+
+def project_help_default_targets(
     env: SCons.Environment.Environment = SCons.Environment.Environment(),
     append: bool = True,
     keep_local: bool = True,
@@ -423,7 +456,23 @@ def default_targets_message(
         SConsEnvironment.Help(env, default_targets_help, append=append)
 
 
-def alias_list_message(
+# TODO: Deprecate the old function name
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/862
+def alias_list_message(*args, **kwargs):
+    """
+    .. warning::
+
+       Deprecated function name scheduled for removal in version 1. Function implementation has moved to
+       :meth:`waves.scons_extensions.project_help_aliases` for naming convention consistency.
+    """
+    warnings.warn(
+        "This function name has changed to ``waves.scons_extensions.project_help_aliases``. "
+        "This function will be deprecated in v1"
+    )
+    return project_help_aliases(*args, **kwargs)
+
+
+def project_help_aliases(
     env: SCons.Environment.Environment = SCons.Environment.Environment(),
     append: bool = True,
     keep_local: bool = True,
@@ -1490,7 +1539,7 @@ def abaqus_solver_builder_factory(
     environment: str = "",
     action_prefix: str = _settings._cd_action_prefix,
     program: str = "abaqus",
-    program_required: str = "-interactive -ask_delete no -input ${SOURCE.filebase}",
+    program_required: str = "-interactive -ask_delete no -job ${job} -input ${SOURCE.filebase}",
     program_options: str = "",
     subcommand: str = "",
     subcommand_required: str = "",
@@ -1524,7 +1573,7 @@ def abaqus_solver_builder_factory(
     .. code-block::
        :caption: action string default expansion
 
-       ${environment} cd ${TARGET.dir.abspath} && abaqus -interactive -ask_delete no -input ${SOURCE.filebase} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} > ${TARGETS[-1].abspath} 2>&1
+       ${environment} cd ${TARGET.dir.abspath} && abaqus -interactive -ask_delete no -job ${job} -input ${SOURCE.filebase} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} > ${TARGETS[-1].abspath} 2>&1
 
     .. code-block::
        :caption: SConstruct
@@ -1538,7 +1587,11 @@ def abaqus_solver_builder_factory(
                program=env["ABAQUS_PROGRAM"]
            )
        })
-       env.AbaqusSolver(target=["job.odb"], source=["input.inp"], program_options="-job job")
+       env.AbaqusSolver(target=["job.odb"], source=["input.inp"], job="job")
+
+    .. note::
+
+       The ``job`` keyword argument *must* be provided in the task definition.
 
     The builder returned by this factory accepts all SCons Builder arguments. The arguments of this function are also
     available as keyword arguments of the builder. When provided during task definition, the task keyword arguments
@@ -1722,7 +1775,7 @@ class AbaqusPseudoBuilder:
         options = ""
 
         # Specify job name
-        options += f" job={job}"
+        options += f" job={pathlib.Path(job).stem}"
 
         # Specify "double" option, if requested
         if double:
@@ -1730,7 +1783,7 @@ class AbaqusPseudoBuilder:
 
         # Like Abaqus, assume input file is <job>.inp unless otherwise specified
         if inp:
-            options += f" input={inp}"
+            options += f" input={pathlib.Path(inp).name}"
         else:
             inp = str(pathlib.Path(job).with_suffix(".inp"))
         # Include input file as first source
@@ -3595,11 +3648,11 @@ class WAVESEnvironment(SConsEnvironment):
         return copy_substfile(self, *args, **kwargs)
 
     def ProjectHelp(self, *args, **kwargs):
-        """Construction environment method from :meth:`waves.scons_extensions.project_help_message`
+        """Construction environment method from :meth:`waves.scons_extensions.project_help`
 
         When using this environment method, do not provide the first ``env`` argument
         """
-        return project_help_message(self, *args, **kwargs)
+        return project_help(self, *args, **kwargs)
 
     def ProjectAlias(self, *args, **kwargs):
         """Construction environment method from :meth:`waves.scons_extensions.project_alias`
@@ -3672,6 +3725,23 @@ class WAVESEnvironment(SConsEnvironment):
         """
         builder = abaqus_solver_builder_factory(program="${ABAQUS_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
+
+    def AbaqusPseudoBuilder(self, job, *args, override_cpus: typing.Optional[int] = None, **kwargs):
+        """Construction environment pseudo-builder from :class:`waves.scons_extensions.AbaqusPseudoBuilder`
+
+        When using this environment pseudo-builder, do not provide the first ``env`` argument
+
+        :param job: Abaqus job name.
+        :param override_cpus: Override the task-specific default number of CPUs. This kwarg value is most useful if
+            propagated from a user-specified option at execution time. If None, Abaqus Pseudo-Builder tasks will use the
+            task-specific default.
+        :param args: All other positional arguments are passed through to
+            :meth:`waves.scons_extensions.AbaqusPseudoBuilder.__call__``
+        :param kwargs: All other keyword arguments are passed through to
+            :meth:`waves.scons_extensions.AbaqusPseudoBuilder.__call__``
+        """
+        pseudo_builder = AbaqusPseudoBuilder(builder=self.AbaqusSolver, override_cpus=override_cpus)
+        return pseudo_builder(self, job, *args, **kwargs)
 
     def PythonScript(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.python_builder_factory`

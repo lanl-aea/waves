@@ -5,8 +5,6 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``abaqus_source_abspath`` - String absolute path to the project's Abaqus journal files
-  * ``python_source_abspath`` - String absolute path to the project's Python 3 files
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``abaqus`` - String path for the Abaqus executable
 """
@@ -22,15 +20,10 @@ Import("env")
 
 # Comment used in tutorial code snippets: marker-1
 
-# Set project-wide paths with os-agnostic path separators
-abaqus_source_abspath = env["abaqus_source_abspath"]
-python_source_abspath = env["python_source_abspath"]
-
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
 parameter_study_file = build_directory / "parameter_study.h5"
-model = "rectangle"
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
@@ -56,54 +49,48 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
     # Comment used in tutorial code snippets: marker-4
 
     # Geometry
-    journal_file = f"{model}_geometry"
-    journal_options = "--width ${width} --height ${height}"
     workflow.extend(
         env.AbaqusJournal(
-            target=[f"{set_name / journal_file}.cae", f"{set_name / journal_file}.jnl"],
-            source=[f"{abaqus_source_abspath / journal_file}.py"],
-            subcommand_options=journal_options,
+            target=[set_name / "rectangle_geometry.cae", set_name / "rectangle_geometry.jnl"],
+            source=["#/modsim_package/abaqus/rectangle_geometry.py"],
+            subcommand_options="--width ${width} --height ${height}",
             **simulation_variables,
         )
     )
 
     # Partition
-    journal_file = f"{model}_partition"
-    journal_options = "--width ${width} --height ${height}"
     workflow.extend(
         env.AbaqusJournal(
-            target=[f"{set_name / journal_file}.cae", f"{set_name / journal_file}.jnl"],
-            source=[f"{abaqus_source_abspath / journal_file}.py", f"{set_name / model}_geometry.cae"],
-            subcommand_options=journal_options,
+            target=[set_name / "rectangle_partition.cae", set_name / "rectangle_partition.jnl"],
+            source=["#/modsim_package/abaqus/rectangle_partition.py", set_name / "rectangle_geometry.cae"],
+            subcommand_options="--width ${width} --height ${height}",
             **simulation_variables,
         )
     )
 
     # Mesh
-    journal_file = f"{model}_mesh"
-    journal_options = "--global-seed ${global_seed}"
     workflow.extend(
         env.AbaqusJournal(
             target=[
-                f"{set_name / journal_file}.inp",
-                f"{set_name / journal_file}.cae",
-                f"{set_name / journal_file}.jnl",
+                set_name / "rectangle_mesh.inp",
+                set_name / "rectangle_mesh.cae",
+                set_name / "rectangle_mesh.jnl",
             ],
-            source=[f"{abaqus_source_abspath / journal_file}.py", f"{set_name / model}_partition.cae"],
-            subcommand_options=journal_options,
+            source=["#/modsim_package/abaqus/rectangle_mesh.py", set_name / "rectangle_partition.cae"],
+            subcommand_options="--global-seed ${global_seed}",
             **simulation_variables,
         )
     )
 
     # SolverPrep
     abaqus_source_list = [
-        abaqus_source_abspath / f"{model}_compression.inp.in",
-        abaqus_source_abspath / "assembly.inp",
-        abaqus_source_abspath / "boundary.inp",
-        abaqus_source_abspath / "field_output.inp",
-        abaqus_source_abspath / "materials.inp",
-        abaqus_source_abspath / "parts.inp",
-        abaqus_source_abspath / "history_output.inp",
+        "#/modsim_package/abaqus/rectangle_compression.inp.in",
+        "#/modsim_package/abaqus/assembly.inp",
+        "#/modsim_package/abaqus/boundary.inp",
+        "#/modsim_package/abaqus/field_output.inp",
+        "#/modsim_package/abaqus/materials.inp",
+        "#/modsim_package/abaqus/parts.inp",
+        "#/modsim_package/abaqus/history_output.inp",
     ]
     abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
     workflow.extend(
@@ -117,35 +104,33 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
     # Comment used in tutorial code snippets: marker-5
 
     # Abaqus Solve
-    solve_source_list = [f"{set_name / source_file.name.rstrip('.in')}" for source_file in abaqus_source_list]
-    solve_source_list.append([f"{set_name / journal_file}.inp"])
-    job_name = pathlib.Path(solve_source_list[0]).stem
-    datacheck_name = f"{job_name}_DATACHECK"
+    solve_source_list = [set_name / source_file.name.rstrip('.in') for source_file in abaqus_source_list]
+    solve_source_list.append(set_name / "rectangle_mesh.inp")
     datacheck_suffixes = ("023", "mdl", "sim", "stt")
     abaqus_options = "-double both"
     datacheck.extend(
         env.AbaqusSolver(
-            target=[f"{set_name / datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
+            target=[set_name / f"rectangle_compression_DATACHECK.{suffix}" for suffix in datacheck_suffixes],
             source=solve_source_list,
-            job_name=datacheck_name,
+            job_name="rectangle_compression_DATACHECK",
             abaqus_options=f"{abaqus_options} -datacheck",
         )
     )
 
     workflow.extend(
         env.AbaqusSolver(
-            target=[f"{set_name / job_name}.sta"],
+            target=[set_name / "rectangle_compression.sta"],
             source=solve_source_list,
-            job_name=job_name,
+            job_name="rectangle_compression",
             abaqus_options=abaqus_options,
         )
     )
 
     # Extract Abaqus
-    extract_source_list = [f"{set_name / job_name}.odb"]
+    extract_source_list = [set_name / "rectangle_compression.odb"]
     workflow.extend(
         env.AbaqusExtract(
-            target=[f"{set_name / job_name}.h5"],
+            target=[set_name / "rectangle_compression.h5"],
             source=extract_source_list,
         )
     )

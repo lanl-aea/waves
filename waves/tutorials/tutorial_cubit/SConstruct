@@ -116,18 +116,10 @@ envSierra["sierra"] = waves.scons_extensions.add_program(envSierra, ["sierra"])
 project_name = "WAVES-TUTORIAL"
 version = "0.1.0"
 project_dir = pathlib.Path(Dir(".").abspath)
-abaqus_source_dir = "modsim_package/abaqus"
-cubit_source_dir = "modsim_package/cubit"
-sierra_source_dir = "modsim_package/sierra"
-fierro_source_dir = "modsim_package/fierro"
 project_variables = {
     "project_name": project_name,
     "project_dir": project_dir,
     "version": version,
-    "abaqus_source_abspath": project_dir / abaqus_source_dir,
-    "cubit_source_abspath": project_dir / cubit_source_dir,
-    "sierra_source_abspath": project_dir / sierra_source_dir,
-    "fierro_source_abspath": project_dir / fierro_source_dir,
 }
 for key, value in project_variables.items():
     env[key] = value

@@ -93,21 +93,12 @@ rectangle part using the :meth:`waves.scons_extensions.abaqus_journal_builder_fa
         :language: Python
         :lineno-match:
         :end-before: marker-1
-        :emphasize-lines: 16, 19
+        :emphasize-lines: 15
 
 The ``SConscript`` file begins with imports of standard Python libraries. The first
 highlighted line imports the ``env`` variable (``Import('env')``), which is a variable set
 in ``waves-tutorials/SConstruct`` file. The ``env`` variable defines project settings,
 and is imported so settings variables are not hard-coded more than once.
-
-The highlighted line sets an operating system agnostic path by utilizing a
-`Python pathlib`_ object. This pathlib object can be an absolute or relative path on any
-operating system used to source files using variables defined in the
-``waves-tutorials/SConstruct`` file. This method of path definition allows for
-path-strings to be hard-coded only once, and then used as variables everywhere else in
-the code. For example, the variable ``abaqus_source_abspath`` is used in source
-definitions to point at the absolute path to the directory where the Abaqus journal files
-exist.
 
 7. Continue editing the file ``tutorial_01_geometry`` using the contents below.
 
@@ -125,13 +116,13 @@ we will ``extend`` this list and finally create an alias that matches the parent
 directory name. The alias thus represents the list of targets specified in the
 ``SConscript`` file.
 
-The final block of code instructs SCons on how to build the targets, an Abaqus CAE file and an Abaqus journal
-file whose names are constructed using the ``journal_file`` variable. The ``journal_file``
-variable exists solely to minimize hard-coded duplication of the string
-``'rectangle_geometry'``. ``journal_options`` allows for parameters to be passed as
-command-line arguments to the journal file. Using the journal file's command-line
-interface with the ``journal_options`` string will be discussed in
-:ref:`tutorial_parameter_substitution`.
+The final block of code instructs SCons on how to build the targets, an Abaqus CAE file and an Abaqus journal file. The
+source file is specified as an absolute path using the SCons feature ``#`` which refers to the project root directory.
+Using an absolute path allows us to run the journal file without copying it to the build directory. The SCons ``#``
+feature allows us to construct an absolute path that is correct with respect to the current ``SConstruct`` file location
+even if the project is moved or copied somewhere else on the filing system. ``subcommand_options`` allows for parameters to
+be passed as command-line arguments to the journal file.  Using the journal file's command-line interface with the
+``subcommand_options`` string will be discussed in :ref:`tutorial_parameter_substitution`.
 
 Next, the ``workflow`` list is extended to include the action to use the :meth:`waves.scons_extensions.abaqus_journal_builder_factory` builder,
 as discussed in :ref:`tutorialsconstruct`. For more information about the behavior of the

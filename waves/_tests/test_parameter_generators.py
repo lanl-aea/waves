@@ -2,7 +2,7 @@
 """
 
 import pathlib
-from unittest.mock import patch, mock_open
+from unittest.mock import patch, mock_open, Mock
 from contextlib import nullcontext as does_not_raise
 
 import pytest
@@ -315,6 +315,13 @@ class TestParameterGenerator:
         "file template": (    {},       "out", "overridden",           ["out0"]),  # noqa: E241,E201
     }
     # fmt: on
+
+    def test_merge_parameter_studies_with_missing_previous_parameter_study(self):
+        # Test exception on missing previous parameter study attribute
+        dummyGenerator = DummyGenerator({})
+        dummyGenerator.previous_parameter_study = None
+        with pytest.raises(RuntimeError):
+            dummyGenerator._merge_parameter_studies()
 
     @pytest.mark.parametrize("length", range(1, 20, 5))
     def test_parameter_study_to_dict(self, length):
@@ -733,6 +740,36 @@ class TestParameterGenerator:
                 WriteParameterGenerator.write(output_file_type="unsupported")
             finally:
                 mock_private_write.assert_not_called()
+
+    def test_write_call_to_write_meta(self):
+        WriteParameterGenerator = DummyGenerator({})
+        WriteParameterGenerator.write_meta = True
+        WriteParameterGenerator.provided_output_file_template = True
+        with (
+            patch("waves.parameter_generators.ParameterGenerator._write_meta") as mock_write_meta,
+            patch("waves.parameter_generators.ParameterGenerator._write") as mock_private_write,
+        ):
+            WriteParameterGenerator.write()
+            mock_write_meta.assert_called_once()
+
+    def test_write_meta(self):
+        WriteMetaParameterGenerator = DummyGenerator({})
+        with (
+            patch("builtins.open", mock_open()) as mock_file,
+            patch("pathlib.Path.resolve", return_value=pathlib.Path("parameter_set1.h5")),
+        ):
+            WriteMetaParameterGenerator._write_meta()
+            handle = mock_file()
+            handle.write.assert_called_once_with("parameter_set1.h5\n")
+
+        WriteMetaParameterGenerator.output_file = pathlib.Path("dummy.h5")
+        with (
+            patch("builtins.open", mock_open()) as mock_file,
+            patch("pathlib.Path.resolve", return_value=pathlib.Path("dummy.h5")),
+        ):
+            WriteMetaParameterGenerator._write_meta()
+            handle = mock_file()
+            handle.write.assert_called_once_with("dummy.h5\n")
 
     @pytest.mark.parametrize(
         "parameter_names, samples, expected_hashes",
