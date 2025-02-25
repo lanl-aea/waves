@@ -43,8 +43,8 @@ import json
 import yaml
 import shlex
 import select
+import pathlib
 from shutil import which
-from pathlib import Path
 from subprocess import run
 from datetime import datetime
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
@@ -63,7 +63,7 @@ def get_parser():
     :return: argument parser
     :rtype: parser
     """
-    _program_name = Path(__file__).stem
+    _program_name = pathlib.Path(__file__).stem
     example = f""" Example: >> {_program_name} sample.odb\n """
     parser = ArgumentParser(
         description=__doc__, formatter_class=RawDescriptionHelpFormatter, epilog=example, prog=_program_name
@@ -128,13 +128,13 @@ def get_parser():
 
 
 def odb_extract(
-    input_file,
-    output_file,
-    output_type="h5",
-    odb_report_args=None,
-    abaqus_command=_settings._default_abaqus_command,
-    delete_report_file=False,
-    verbose=False,
+    input_file: list,
+    output_file: str,
+    output_type: str = "h5",
+    odb_report_args: str = "",
+    abaqus_command: str = _settings._default_abaqus_command,
+    delete_report_file: bool = False,
+    verbose: bool = False,
 ):
     """The odb_extract Abaqus data extraction tool. Most users should use the associated command line interface.
 
@@ -143,20 +143,20 @@ def odb_extract(
        ``odb_extract`` *requires* Abaqus arguments for ``odb_report_args`` in the form of ``option=value``, e.g.
        ``step=step_name``.
 
-    :param list input_file: A list of ``*.odb`` files to extract. Current implementation only supports extraction on the
+    :param input_file: A list of ``*.odb`` files to extract. Current implementation only supports extraction on the
         first file in the list.
-    :param str output_file: The output file name to extract to. Extension should match on of the supported output types.
-    :param str output_type: Output file type. Defaults to ``h5``. Options are: ``h5``, ``yaml``, ``json``.
-    :param str odb_report_args: String of command line options to pass to ``abaqus odbreport``.
-    :param str abaqus_command: The abaqus command name or absolute path to the Abaqus exectuble.
-    :param bool delete_report_file: Boolean to delete the intermediate Abaqus generated report file after producing the
+    :param output_file: The output file name to extract to. Extension should match on of the supported output types.
+    :param output_type: Output file type. Defaults to ``h5``. Options are: ``h5``, ``yaml``, ``json``.
+    :param odb_report_args: String of command line options to pass to ``abaqus odbreport``.
+    :param abaqus_command: The abaqus command name or absolute path to the Abaqus exectuble.
+    :param delete_report_file: Boolean to delete the intermediate Abaqus generated report file after producing the
         ``output_file``.
-    :param bool verbose: Boolean to print more verbose messages
+    :param verbose: Boolean to print more verbose messages
     """
 
     # Handle arguments
     input_file = input_file[0]
-    path_input_file = Path(input_file)
+    path_input_file = pathlib.Path(input_file)
     odbreport_file = False
     if not path_input_file.exists():
         sys.exit(f"{input_file} does not exist.")
@@ -166,7 +166,7 @@ def odb_extract(
     file_base_name = str(path_input_file.with_suffix(""))
     if not output_file:  # If no output file given, use the name and path of odb file, but change the extension
         output_file = f"{file_base_name}.{output_type}"
-    path_output_file = Path(output_file)
+    path_output_file = pathlib.Path(output_file)
     file_suffix = path_output_file.suffix.replace(".", "")
     if file_suffix != output_type:  # If file ends in different extension than requested output
         output_file = str(path_output_file.with_suffix(f".{output_type}"))  # Change extension
@@ -184,7 +184,7 @@ def odb_extract(
         print_warning(verbose, f"{output_file} already exists. Will use {new_output_file} instead.")
         output_file = new_output_file
 
-    odb_report_args = get_odb_report_args(odb_report_args, input_file, job_name, verbose)
+    odb_report_args = get_odb_report_args(odb_report_args, input_file, job_name)
 
     abaqus_base_command = which(abaqus_command)
     if not abaqus_base_command:
@@ -197,7 +197,7 @@ def odb_extract(
         call_odbreport = False
     else:
         call_odbreport = True
-    if Path(job_name).exists() and not odbreport_file:
+    if pathlib.Path(job_name).exists() and not odbreport_file:
         call_odbreport = False  # Don't call odbreport again if the report file already exists
         print(f"Report file {job_name} already exists, would you like to use this file?")
         i, o, e = select.select([sys.stdin], [], [], 15)  # Wait 15 seconds for user input
@@ -209,7 +209,7 @@ def odb_extract(
         return_code, output, error_code = run_external(abaqus_command)
         if return_code != 0:
             sys.exit(f"Abaqus odbreport command failed to execute. Abaqus output: '{output}'")
-        if not Path(job_name).exists():
+        if not pathlib.Path(job_name).exists():
             sys.exit(f"{job_name} does not exist.")
 
     if output_type == "h5":  # If the dataset isn't empty
@@ -239,44 +239,28 @@ def odb_extract(
                 yaml.safe_dump(parsed_odb, f)  # With safe_dump, tuples are converted to lists
 
     if delete_report_file:
-        Path(job_name).unlink(missing_ok=True)  # Remove odbreport file, don't raise exception if it doesn't exist
+        pathlib.Path(job_name).unlink(missing_ok=True)  # Remove odbreport file, don't raise exception if it doesn't exist
 
 
-def get_odb_report_args(odb_report_args, input_file, job_name, verbose):
+def get_odb_report_args(odb_report_args: str, input_file: pathlib.Path, job_name: pathlib.Path):
     """
     Generates odb_report arguments
 
-    :param str odb_report_args: String of command line options to pass to ``abaqus odbreport``.
-    :param Path input_file: ``.odb`` file.
-    :param Path job_name: Report file.
-    :param bool verbose: Boolean to print more verbose messages
+    :param odb_report_args: String of command line options to pass to ``abaqus odbreport``.
+    :param input_file: ``.odb`` file.
+    :param job_name: Report file.
     """
     input_file = _quote_spaces_in_path(input_file)
     job_name = _quote_spaces_in_path(job_name)
-    odb_report_args = odb_report_args
-    if not odb_report_args:
-        odb_report_args = f"job={job_name.with_suffix('')} odb={input_file} all mode=CSV blocked"
-    else:
-        if "odb=" in odb_report_args or "job=" in odb_report_args:
-            print_warning(
-                verbose, f"Argument to odbreport cannot include odb or job. Will use default odbreport arguments."
-            )
-            odb_report_args = f"job={job_name.with_suffix('')} odb={input_file} all mode=CSV blocked"
+    odb_report_args = f"{odb_report_args} -job {job_name.with_suffix('')} -odb {input_file} -all -mode CSV -blocked"
 
     if "odbreport" in odb_report_args:
         odb_report_args = odb_report_args.replace("odbreport", "")
-    if "odb=" not in odb_report_args:
-        odb_report_args = f"odb={input_file} {odb_report_args.strip()}"
-    if "job=" not in odb_report_args:
-        odb_report_args = f"job={job_name.with_suffix('')} {odb_report_args.strip()}"
-    if "blocked" not in odb_report_args:
-        odb_report_args = f"{odb_report_args.strip()} blocked"
     if "invariants" in odb_report_args:
         odb_report_args = odb_report_args.replace("invariants", "")
-    if "mode=" not in odb_report_args:
-        odb_report_args = f"{odb_report_args.strip()} mode=CSV"
-    # use regex that ignores case to replace 'html' or 'HTML' with 'CSV'
-    odb_report_args = re.sub("(?i)" + re.escape("html"), lambda m: "CSV", odb_report_args)
+
+    odb_report_args = odb_report_args.strip()
+
     return odb_report_args
 
 
