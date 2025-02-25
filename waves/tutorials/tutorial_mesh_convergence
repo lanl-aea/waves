@@ -181,7 +181,7 @@ workflow.extend(
             parameter_study_file.name,
             "#/modsim_package/python/mesh_convergence_stress.yaml",
         ]
-        + post_processing_source,
+        + post_processing_source,  # noqa: W503
         subcommand_options=script_options,
         post_processing_source=post_processing_source,
     )

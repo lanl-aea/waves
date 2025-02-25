@@ -168,7 +168,7 @@ def odb_extract(
         print(
             f"Output specified as {output_type}, but output file extension is {file_suffix}. "
             f"Changing output file extension. Output file name {output_file}",
-            file=sys.stderr
+            file=sys.stderr,
         )
         file_suffix = output_type
 

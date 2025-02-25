@@ -282,5 +282,9 @@ odb_report_arguments = {
     ids=odb_report_arguments.keys(),
 )
 def test_get_odb_report_args(odb_report_args, input_file, job_name, expected):
-    new_odb_report_args = odb_extract.get_odb_report_args(odb_report_args, pathlib.Path(input_file), pathlib.Path(job_name))
+    new_odb_report_args = odb_extract.get_odb_report_args(
+        odb_report_args,
+        pathlib.Path(input_file),
+        pathlib.Path(job_name),
+    )
     assert new_odb_report_args == expected
