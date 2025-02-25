@@ -501,6 +501,16 @@ require_third_party_system_tests = [
         [
             fetch_template,
             string.Template(
+                "scons tutorial_abaqus_pseudo_builder --sconstruct=tutorial_abaqus_pseudo_builder_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+            ),
+        ],
+        "--tutorial 12",
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
+    ),
+    pytest.param(
+        [
+            fetch_template,
+            string.Template(
                 "scons tutorial_task_reuse --sconstruct=tutorial_task_reuse_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
             ),
         ],
