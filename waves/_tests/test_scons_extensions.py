@@ -1176,9 +1176,9 @@ abaqus_pseudobuilder_input = {
     ),
     "job, subdirectory": (
         {},
-        {"job": f"subdir{os.pathsep}job"},
-        [f"subdir{os.pathsep}job.inp"],
-        [f"subdir{os.pathsep}job{ext}" for ext in _abaqus_standard_extensions],
+        {"job": f"subdir{os.path.sep}job"},
+        [f"subdir{os.path.sep}job.inp"],
+        [f"subdir{os.path.sep}job{ext}" for ext in _abaqus_standard_extensions],
         " job=job double=both $(cpus=1$)",
         {},
     ),
