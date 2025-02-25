@@ -1539,7 +1539,7 @@ def abaqus_solver_builder_factory(
     environment: str = "",
     action_prefix: str = _settings._cd_action_prefix,
     program: str = "abaqus",
-    program_required: str = "-interactive -ask_delete no -input ${SOURCE.filebase}",
+    program_required: str = "-interactive -ask_delete no -job ${job} -input ${SOURCE.filebase}",
     program_options: str = "",
     subcommand: str = "",
     subcommand_required: str = "",
@@ -1573,7 +1573,7 @@ def abaqus_solver_builder_factory(
     .. code-block::
        :caption: action string default expansion
 
-       ${environment} cd ${TARGET.dir.abspath} && abaqus -interactive -ask_delete no -input ${SOURCE.filebase} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} > ${TARGETS[-1].abspath} 2>&1
+       ${environment} cd ${TARGET.dir.abspath} && abaqus -interactive -ask_delete no -job ${job} -input ${SOURCE.filebase} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} > ${TARGETS[-1].abspath} 2>&1
 
     .. code-block::
        :caption: SConstruct
@@ -1587,7 +1587,11 @@ def abaqus_solver_builder_factory(
                program=env["ABAQUS_PROGRAM"]
            )
        })
-       env.AbaqusSolver(target=["job.odb"], source=["input.inp"], program_options="-job job")
+       env.AbaqusSolver(target=["job.odb"], source=["input.inp"], job="job")
+
+    .. note::
+
+       The ``job`` keyword argument *must* be provided in the task definition.
 
     The builder returned by this factory accepts all SCons Builder arguments. The arguments of this function are also
     available as keyword arguments of the builder. When provided during task definition, the task keyword arguments

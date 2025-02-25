@@ -1465,7 +1465,7 @@ builder_factory_tests.update(
             "environment": "",
             "action_prefix": _cd_action_prefix,
             "program": "abaqus",
-            "program_required": "-interactive -ask_delete no -input ${SOURCE.filebase}",
+            "program_required": "-interactive -ask_delete no -job ${job} -input ${SOURCE.filebase}",
             "program_options": "",
             "subcommand": "",
             "subcommand_required": "",
