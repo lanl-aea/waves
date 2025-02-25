@@ -104,7 +104,7 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
     # Comment used in tutorial code snippets: marker-5
 
     # Abaqus Solve
-    solve_source_list = [set_name / source_file.name.rstrip('.in') for source_file in abaqus_source_list]
+    solve_source_list = [set_name / source_file.name.rstrip(".in") for source_file in abaqus_source_list]
     solve_source_list.append(set_name / "rectangle_mesh.inp")
     datacheck_suffixes = ("023", "mdl", "sim", "stt")
     abaqus_options = "-double both"
