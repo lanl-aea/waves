@@ -261,6 +261,10 @@ def get_odb_report_args(odb_report_args: str, input_file: pathlib.Path, job_name
     if "odbreport" in odb_report_args:
         odb_report_args = odb_report_args.replace("odbreport", "")
     if "invariants" in odb_report_args:
+        print(
+            "odb_extract does not work with invariant output. Removing the 'invariants' odbreport option",
+            file=sys.stderr,
+        )
         odb_report_args = odb_report_args.replace("invariants", "")
 
     odb_report_args = odb_report_args.strip()
