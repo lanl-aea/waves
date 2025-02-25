@@ -8,6 +8,10 @@ Changelog
 0.12.7 (unreleased)
 *******************
 
+Enhancements
+============
+- Handle subdirectory style builds in the Abaqus Pseudo-builder (:merge:`1111`). By `Kyle Brindley`_.
+
 *******************
 0.12.6 (2025-02-24)
 *******************
