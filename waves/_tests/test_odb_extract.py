@@ -153,7 +153,7 @@ def test_odb_extract():
         patch("select.select", return_value=["y", None, None]),
         patch("sys.stdin", return_value="y"),
         patch("waves._abaqus.abaqus_file_parser.OdbReportFileParser"),
-        patch("waves._abaqus.odb_extract.run", return_value=FakeProcess) as mock_run,
+        patch("subprocess.run", return_value=FakeProcess) as mock_run,
     ):
         # Test case where yaml dump is called
         odb_extract.odb_extract(["sample.odb"], "", odb_report_args="odbreport -all", output_type="yaml")
