@@ -156,7 +156,7 @@ def odb_extract(
     if not path_input_file.exists():
         sys.exit(f"{input_file} does not exist.")
     if path_input_file.suffix != ".odb":
-        print_warning(verbose, f"{input_file} is not an odb file. File will be assumed to be an odbreport file.")
+        print(f"{input_file} is not an odb file. File will be assumed to be an odbreport file.", file=sys.stderr)
         odbreport_file = True
     file_base_name = str(path_input_file.with_suffix(""))
     if not output_file:  # If no output file given, use the name and path of odb file, but change the extension
@@ -165,10 +165,10 @@ def odb_extract(
     file_suffix = path_output_file.suffix.replace(".", "")
     if file_suffix != output_type:  # If file ends in different extension than requested output
         output_file = str(path_output_file.with_suffix(f".{output_type}"))  # Change extension
-        print_warning(
-            verbose,
+        print(
             f"Output specified as {output_type}, but output file extension is {file_suffix}. "
             f"Changing output file extension. Output file name {output_file}",
+            file=sys.stderr
         )
         file_suffix = output_type
 
@@ -176,7 +176,7 @@ def odb_extract(
     job_name = path_output_file.with_suffix(".csv")
     if path_output_file.exists():
         new_output_file = f"{str(path_output_file.with_suffix(''))}_{time_stamp}.{file_suffix}"
-        print_warning(verbose, f"{output_file} already exists. Will use {new_output_file} instead.")
+        print(f"{output_file} already exists. Will use {new_output_file} instead.", file=sys.stderr)
         output_file = new_output_file
 
     if odb_report_args is None:
@@ -278,17 +278,6 @@ def run_external(cmd):
     args = shlex.split(cmd, posix=(os.name == "posix"))
     p = run(args, capture_output=True)
     return p.returncode, p.stdout.decode(), p.stderr.decode()
-
-
-def print_warning(verbose, message):
-    """
-    Log a message to the screen
-
-    :param bool verbose: Whether to print or not
-    :param str message: message to print
-    """
-    if verbose:
-        print(message, file=sys.stderr)
 
 
 def main():

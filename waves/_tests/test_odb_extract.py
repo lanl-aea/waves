@@ -4,7 +4,8 @@ Test odb_extract.py
 .. moduleauthor:: Prabhu S. Khalsa <pkhalsa@lanl.gov>
 """
 
-from pathlib import Path
+import os
+import pathlib
 
 import pytest
 from unittest.mock import patch, mock_open
@@ -62,7 +63,7 @@ def test_odb_extract():
         patch("waves._abaqus.odb_extract.which", return_value="abaqus"),
         patch("select.select", return_value=[None, None, None]),
         patch("waves._abaqus.abaqus_file_parser.OdbReportFileParser"),
-        patch("waves._abaqus.odb_extract.print_warning") as mock_print,
+        patch("builtins.print") as mock_print,
         patch("pathlib.Path.exists", return_value=True),
     ):  # Test warning after second critical error
         odb_extract.odb_extract(["sample"], None)
@@ -281,5 +282,5 @@ odb_report_arguments = {
     ids=odb_report_arguments.keys(),
 )
 def test_get_odb_report_args(odb_report_args, input_file, job_name, expected):
-    new_odb_report_args = odb_extract.get_odb_report_args(odb_report_args, Path(input_file), Path(job_name))
+    new_odb_report_args = odb_extract.get_odb_report_args(odb_report_args, pathlib.Path(input_file), pathlib.Path(job_name))
     assert new_odb_report_args == expected
