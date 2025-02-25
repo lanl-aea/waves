@@ -1176,9 +1176,9 @@ abaqus_pseudobuilder_input = {
     ),
     "job, subdirectory": (
         {},
-        {"job": "subdir/job"},
-        ["subdir/job.inp"],
-        [f"subdir/job{ext}" for ext in _abaqus_standard_extensions],
+        {"job": f"subdir{os.pathsep}job"},
+        [f"subdir{os.pathsep}job.inp"],
+        [f"subdir{os.pathsep}job{ext}" for ext in _abaqus_standard_extensions],
         " job=job double=both $(cpus=1$)",
         {},
     ),
@@ -1274,7 +1274,7 @@ abaqus_pseudobuilder_input = {
     abaqus_pseudobuilder_input.values(),
     ids=abaqus_pseudobuilder_input.keys(),
 )
-def test_abaqus_pseudobuilder(class_kwargs, call_kwargs, sources, targets, options, builder_kwargs):
+def test_abaqus_pseudo_builder(class_kwargs, call_kwargs, sources, targets, options, builder_kwargs):
     # Mock AbaqusSolver builder and env
     mock_builder = unittest.mock.Mock()
     mock_env = unittest.mock.Mock()
