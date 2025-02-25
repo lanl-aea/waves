@@ -3728,7 +3728,7 @@ class WAVESEnvironment(SConsEnvironment):
         When using this environment pseudo-builder, do not provide the first ``env`` argument
         """
         pseudo_builder = AbaqusPseudoBuilder(builder=self.AbaqusSolver)
-        return pseudo_builder(env=self, *args, **kwargs)
+        return pseudo_builder(*args, env=self, **kwargs)
 
     def PythonScript(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.python_builder_factory`
