@@ -3737,7 +3737,7 @@ class WAVESEnvironment(SConsEnvironment):
             :meth:`waves.scons_extensions.AbaqusPseudoBuilder.__call__``
         """
         pseudo_builder = AbaqusPseudoBuilder(builder=self.AbaqusSolver, override_cpus=override_cpus)
-        return pseudo_builder(job, *args, env=self, **kwargs)
+        return pseudo_builder(self, job, *args, **kwargs)
 
     def PythonScript(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.python_builder_factory`
