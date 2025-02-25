@@ -203,6 +203,8 @@ def odb_extract(
             if answer[:1].lower() != "y":
                 call_odbreport = True  # If user input is not yes, run odbreport again
     if call_odbreport:
+        if verbose:
+            print(f"Running Abaqus command: '{abaqus_command}'")
         return_code, output, error_code = run_external(abaqus_command)
         if return_code != 0:
             sys.exit(f"Abaqus odbreport command failed to execute. Abaqus output: '{output}'")
