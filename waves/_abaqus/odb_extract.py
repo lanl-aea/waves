@@ -251,7 +251,12 @@ def get_odb_report_args(odb_report_args: str, input_file: pathlib.Path, job_name
     """
     input_file = _quote_spaces_in_path(input_file)
     job_name = _quote_spaces_in_path(job_name)
-    odb_report_args = f"{odb_report_args} -job {job_name.with_suffix('')} -odb {input_file} -all -mode CSV -blocked"
+
+    required_arguments = f"-job {job_name.with_suffix('')} -odb {input_file} -mode CSV -blocked"
+    if not odb_report_args:
+        odb_report_args = f"-all {required_arguments}"
+    else:
+        odb_report_args = f"{odb_report_args} {required_arguments}"
 
     if "odbreport" in odb_report_args:
         odb_report_args = odb_report_args.replace("odbreport", "")

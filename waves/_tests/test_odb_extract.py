@@ -127,7 +127,7 @@ def test_odb_extract():
         odb_extract.odb_extract(["sample.odb"], None, odb_report_args="job=job_name odb=odb_file")
         mock_abaqus_file_parser.assert_called()
         mock_run_external.assert_called_with(
-            "abaqus odbreport job=job_name odb=odb_file -job sample -odb sample.odb -all -mode CSV -blocked"
+            "abaqus odbreport job=job_name odb=odb_file -job sample -odb sample.odb -mode CSV -blocked"
         )
 
     with (
@@ -141,9 +141,9 @@ def test_odb_extract():
         patch("waves._abaqus.odb_extract.run_external", return_value=[0, b"", b"valid command."]) as mock_run_external,
     ):
         # Test case where output name doesn't match odb name
-        odb_extract.odb_extract(["sample.odb"], "new_name.h5", odb_report_args="odbreport all")
+        odb_extract.odb_extract(["sample.odb"], "new_name.h5", odb_report_args="odbreport -all")
         mock_run_external.assert_called_with(
-            "abaqus odbreport all -job new_name -odb sample.odb -all -mode CSV -blocked"
+            "abaqus odbreport -all -job new_name -odb sample.odb -mode CSV -blocked"
         )
 
     with (
@@ -157,18 +157,17 @@ def test_odb_extract():
         patch("waves._abaqus.odb_extract.run", return_value=FakeProcess) as mock_run,
     ):
         # Test case where yaml dump is called
-        odb_extract.odb_extract(["sample.odb"], "", odb_report_args="odbreport all", output_type="yaml")
+        odb_extract.odb_extract(["sample.odb"], "", odb_report_args="odbreport -all", output_type="yaml")
         mock_safe_dump.assert_called()
         mock_run.assert_called_with(
             [
                 "abaqus",
                 "odbreport",
-                "all",
+                "-all",
                 "-job",
                 "sample",
                 "-odb",
                 "sample.odb",
-                "-all",
                 "-mode",
                 "CSV",
                 "-blocked",
@@ -224,55 +223,55 @@ odb_report_arguments = {
         "",
         "/some/path with/spaces.txt",
         "/no/spaces.csv",
-        "-job /no/spaces -odb /some/\"path with\"/spaces.txt -all -mode CSV -blocked",
+        "-all -job /no/spaces -odb /some/\"path with\"/spaces.txt -mode CSV -blocked",
     ),
     "2 spaces": (
         "",
         "/some/path with/spaces.txt",
         "/some more/spaces.csv",
-        "-job /\"some more\"/spaces -odb /some/\"path with\"/spaces.txt -all -mode CSV -blocked",
+        "-all -job /\"some more\"/spaces -odb /some/\"path with\"/spaces.txt -mode CSV -blocked",
     ),
     "no spaces": (
         "",
         "/some/path/without/spaces.txt",
         "/no/spaces.csv",
-        "-job /no/spaces -odb /some/path/without/spaces.txt -all -mode CSV -blocked",
+        "-all -job /no/spaces -odb /some/path/without/spaces.txt -mode CSV -blocked",
     ),
     "provided arguments, 1 spaces": (
         "arg1=val1",
         "/some/path with/spaces.txt",
         "/no/spaces.csv",
-        "arg1=val1 -job /no/spaces -odb /some/\"path with\"/spaces.txt -all -mode CSV -blocked",
+        "arg1=val1 -job /no/spaces -odb /some/\"path with\"/spaces.txt -mode CSV -blocked",
     ),
     "provided arguments, 2 spaces": (
         "arg1=val1",
         "/some/path with/spaces.txt",
         "/some more/spaces.csv",
-        "arg1=val1 -job /\"some more\"/spaces -odb /some/\"path with\"/spaces.txt -all -mode CSV -blocked",
+        "arg1=val1 -job /\"some more\"/spaces -odb /some/\"path with\"/spaces.txt -mode CSV -blocked",
     ),
     "provided odb, no spaces": (
         "arg1=val1",
         "/some/path/without/spaces.txt",
         "/no/spaces.csv",
-        "arg1=val1 -job /no/spaces -odb /some/path/without/spaces.txt -all -mode CSV -blocked",
+        "arg1=val1 -job /no/spaces -odb /some/path/without/spaces.txt -mode CSV -blocked",
     ),
     "provided odb, 1 spaces odb": (
         "odb=val1",
         "/some/path with/spaces.txt",
         "/no/spaces.csv",
-        "odb=val1 -job /no/spaces -odb /some/\"path with\"/spaces.txt -all -mode CSV -blocked",
+        "odb=val1 -job /no/spaces -odb /some/\"path with\"/spaces.txt -mode CSV -blocked",
     ),
     "provided odb, 2 spaces odb": (
         "odb=val1",
         "/some/path with/spaces.txt",
         "/some more/spaces.csv",
-        "odb=val1 -job /\"some more\"/spaces -odb /some/\"path with\"/spaces.txt -all -mode CSV -blocked",
+        "odb=val1 -job /\"some more\"/spaces -odb /some/\"path with\"/spaces.txt -mode CSV -blocked",
     ),
     "provided odb, no spaces odb": (
         "odb=val1",
         "/some/path/without/spaces.txt",
         "/no/spaces.csv",
-        "odb=val1 -job /no/spaces -odb /some/path/without/spaces.txt -all -mode CSV -blocked",
+        "odb=val1 -job /no/spaces -odb /some/path/without/spaces.txt -mode CSV -blocked",
     ),
 }
 # fmt: on
