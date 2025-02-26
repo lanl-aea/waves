@@ -7,7 +7,7 @@ dependencies:
   - calculix
   - ccx2paraview
   - flake8
-  - glab >=1.48
+  - glab >=1.52
   - h5netcdf
   - h5py
   - ipython
