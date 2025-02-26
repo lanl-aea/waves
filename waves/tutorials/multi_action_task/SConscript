@@ -73,7 +73,7 @@ target = env.AbaqusSolver(
     target=solve_targets,
     source=abaqus_source_list,
     abaqus_program=env["ABAQUS_PROGRAM"],
-    job_name="rectangle_compression",
+    job="rectangle_compression",
     program_options="-double both",
 )
 

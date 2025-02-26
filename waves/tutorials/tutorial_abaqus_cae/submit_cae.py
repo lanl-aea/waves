@@ -182,7 +182,7 @@ if __name__ == "__main__":
     sys.exit(
         main(
             input_file=args.input_file,
-            job_name=args.job_name,
+            job=args.job_name,
             model_name=args.model_name,
             cpus=args.cpus,
             write_inp=args.write_inp,

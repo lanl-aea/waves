@@ -67,7 +67,7 @@ datacheck.extend(
     env.AbaqusSolver(
         target=[f"{datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
         source=["rectangle_compression.inp"],
-        job_name=datacheck_name,
+        job=datacheck_name,
         program_options=f"{abaqus_options} -datacheck",
     )
 )
@@ -76,7 +76,7 @@ artifacts.extend(
     env.AbaqusSolver(
         target=["rectangle_compression.sta"],
         source=["rectangle_compression.inp"],
-        job_name="rectangle_compression",
+        job="rectangle_compression",
         program_options="${abaqus_options} -cpus $(${solve_cpus}$)",
         abaqus_options=abaqus_options,
         solve_cpus=env["solve_cpus"],
