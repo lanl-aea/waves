@@ -1,5 +1,4 @@
-"""Test OneAtATime Class
-"""
+"""Test OneAtATime Class"""
 
 from unittest.mock import patch, call, mock_open
 from contextlib import nullcontext as does_not_raise
@@ -91,14 +90,14 @@ class TestOneAtATime:
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
         ),
         "various parameter types, sizes, and orders": (
-            {"parameter_1": [1, 2], "parameter_2": [3.0, -1.0, 4.0], "parameter_3": ('a', 'b')},
+            {"parameter_1": [1, 2], "parameter_2": [3.0, -1.0, 4.0], "parameter_3": ("a", "b")},
             numpy.array(
                 [
-                    [1, 3.0, 'a'],
-                    [2, 3.0, 'a'],
-                    [1, -1.0, 'a'],
-                    [1, 4.0, 'a'],
-                    [1, 3.0, 'b'],
+                    [1, 3.0, "a"],
+                    [2, 3.0, "a"],
+                    [1, -1.0, "a"],
+                    [1, 4.0, "a"],
+                    [1, 3.0, "b"],
                 ],
                 dtype=object,
             ),
