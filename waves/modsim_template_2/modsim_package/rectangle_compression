@@ -74,7 +74,7 @@ datacheck.extend(
 
 artifacts.extend(
     env.AbaqusSolver(
-        target=["rectangle_compression.sta"],
+        target=["rectangle_compression.odb"],
         source=["rectangle_compression.inp"],
         job="rectangle_compression",
         program_options="${abaqus_options} -cpus $(${solve_cpus}$)",

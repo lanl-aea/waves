@@ -104,7 +104,7 @@ datacheck.extend(
 
 workflow.extend(
     env.AbaqusSolver(
-        target=["rectangle_compression.sta"],
+        target=["rectangle_compression.odb"],
         source=solve_source_list,
         job="rectangle_compression",
         program_options=abaqus_options,
