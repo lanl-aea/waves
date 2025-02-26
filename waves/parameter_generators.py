@@ -852,12 +852,13 @@ class LatinHypercube(_ScipyGenerator):
 
 
 class OneAtATime(ParameterGenerator):
-    """Builds a parameter study with single-value changes from a nominal parameter set
+    """Builds a parameter study with single-value changes from a nominal parameter set. The nominal parameter set is
+    created from the first value of every parameter iterable.
 
     Parameters must be scalar valued integers, floats, strings, or booleans
 
     :param parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
-        OneAtATime expects "schema value" to be an iterable. For example, when read from a YAML file "schema
+        OneAtATime expects "schema value" to be an ordered iterable. For example, when read from a YAML file "schema
         value" will be a Python list.
     :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
         parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
@@ -912,7 +913,6 @@ class OneAtATime(ParameterGenerator):
            parameter_1     (set_name) float64 32B 1.0 1.0 1.0 1.0
            parameter_2     (set_name) <U1 16B 'a' 'b' 'a' 'a'
            parameter_3     (set_name) int64 32B 5 5 3 7
-
     """
 
     def _validate(self) -> None:
