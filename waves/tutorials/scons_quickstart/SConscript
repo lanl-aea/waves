@@ -60,7 +60,7 @@ solve_targets = [
     "rectangle_compression.msg",
     "rectangle_compression.com",
     "rectangle_compression.prt",
-    "rectangle_compression.odb",
+    "rectangle_compression.sta",
 ]
 
 target = env.AbaqusSolver(
