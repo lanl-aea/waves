@@ -132,6 +132,8 @@ for key, value in project_variables.items():
 # Comments used in tutorial code snippets: marker-5
 
 # Add builders and pseudo-builders
+env.Append(BUILDERS={})
+
 envCubit.Append(
     BUILDERS={
         "PythonScript": waves.scons_extensions.python_builder_factory(program=envCubit["python"]),
