@@ -852,15 +852,13 @@ class LatinHypercube(_ScipyGenerator):
 
 
 class OneAtATime(ParameterGenerator):
-    """Builds a custom parameter study from user-specified values
+    """Builds a parameter study with single-value changes from a nominal parameter set
 
     Parameters must be scalar valued integers, floats, strings, or booleans
 
-    :param parameter_schema: Dictionary with two keys: ``parameter_samples`` and ``parameter_names``.
-        Parameter samples in the form of a 2D array with shape M x N, where M is the number of parameter sets and N is
-        the number of parameters. Parameter names in the form of a 1D array with length N. When creating a
-        `parameter_samples` array with mixed type (e.g. string and floats) use `dtype=object` to preserve the mixed
-        types and avoid casting all values to a common type (e.g. all your floats will become strings).
+    :param parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
+        OneAtATime expects "schema value" to be an iterable. For example, when read from a YAML file "schema
+        value" will be a Python list.
     :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
         parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
         relative path template. May contain the ``@number`` set number placeholder in the file basename but not in the
@@ -889,9 +887,8 @@ class OneAtATime(ParameterGenerator):
     :raises waves.exceptions.SchemaValidationError:
 
         * Parameter schema is not a dictionary
-        * Parameter schema does not contain the ``parameter_names`` key
-        * Parameter schema does not contain the ``parameter_samples`` key
-        * The ``parameter_samples`` value is an improperly shaped array
+        * Parameter key is not a supported iterable: tuple, list
+        * Parameter key is empty
 
     Example
 
@@ -903,16 +900,19 @@ class OneAtATime(ParameterGenerator):
        ...     'parameter_2': ['a', 'b'],
        ...     'parameter_3': [5, 3, 7]
        ... }
-       >>> parameter_generator = waves.parameter_generators.CartesianProduct(parameter_schema)
+       >>> parameter_generator = waves.parameter_generators.OneAtATime(parameter_schema)
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:       (set_hash: 4)
+       Dimensions:         (set_name: 4)
        Coordinates:
-           set_hash      (set_hash) <U32 'de3cb3eaecb767ff63973820b2...
-         * set_name      (set_hash) <U14 'parameter_set0' ... 'param...
+           set_hash        (set_name) <U32 '375a9b0b7c00d01bced92d9c5a6d302c' ....
+         * set_name        (set_name) <U14 'parameter_set0' ... 'parameter_set3'
+           parameter_sets  (set_name) <U14 'parameter_set0' ... 'parameter_set3'
        Data variables:
-           parameter_1   (set_hash) object 1 2 1
-           parameter_2   (set_hash) object 'a' 'a' 'b'
+           parameter_1     (set_name) float64 32B 1.0 1.0 1.0 1.0
+           parameter_2     (set_name) <U1 16B 'a' 'b' 'a' 'a'
+           parameter_3     (set_name) int64 32B 5 5 3 7
+
     """
 
     def _validate(self) -> None:
