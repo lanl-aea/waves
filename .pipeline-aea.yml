@@ -164,11 +164,17 @@ release:
     # *******************
     # ```
     #
-    # * (1) sed command prints everything between current version and the previous version, excluding the versions
-    # * (2) sed command strips the asterisk delimited section header bars
-    # * (3) sed command strip leading and trailing newlines
-    - notes_file="notes.rst"
-    - sed -n '/^'"$tag"'/,/^[0-9]\+\.[0-9]\+\.[0-9]\+/{//!p}' docs/changelog.rst | sed '/^\*\+$/d' | sed -e :a -e '/./,$!d;/^\n*$/{$d;N;};/\n$/ba' > ${notes_file}
+    # sed commands
+    #
+    # 1. print everything between current version and the previous version, excluding the versions
+    # 2. strip the asterisk delimited section header bars
+    # 3. replace the RST issue/merge custom directives with plain text
+    # 4. replace the RST author email anchors with plain text
+    - notes_file="notes.md"
+    - sed -n '/^'"$tag"'/,/^[0-9]\+\.[0-9]\+\.[0-9]\+/{//!p}' docs/changelog.rst > ${notes_file}
+    - sed -i '/^\*\+$/d' ${notes_file}
+    - sed -i 's/:\([a-z]\+\):`\([0-9]\+\)`/\1 \2/g' ${notes_file}
+    - sed -i 's/`\(.\+\)`_/\1/g' ${notes_file}
     # Authenticate and create release with glab
     - glab auth login --job-token ${CI_JOB_TOKEN} --hostname ${CI_SERVER_HOST} --api-protocol ${CI_SERVER_PROTOCOL}
     - GITLAB_HOST=${CI_SERVER_URL} glab release create ${tag} -R ${CI_PROJECT_PATH} --ref ${CI_COMMIT_SHA} --notes-file ${notes_file}
