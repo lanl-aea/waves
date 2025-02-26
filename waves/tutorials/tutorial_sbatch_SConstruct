@@ -95,9 +95,9 @@ env.PrependENVPath("PYTHONPATH", project_dir)
 def solve_builder_select():
     """Run the SLURM sbatch builder if available. Fall back to AbaqusSolver builder in not."""
     if env["SBATCH_PROGRAM"]:
-        return waves.scons_extensions.sbatch_abaqus_solver_builder_factory()
+        return waves.scons_extensions.sbatch_abaqus_solver_builder_factory(program="${ABAQUS_PROGRAM}")
     else:
-        return waves.scons_extensions.abaqus_solver_builder_factory()
+        return waves.scons_extensions.abaqus_solver_builder_factory(program="${ABAQUS_PROGRAM}")
 
 
 env.Append(
