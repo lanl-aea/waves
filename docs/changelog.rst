@@ -5,7 +5,11 @@ Changelog
 #########
 
 *******************
-0.12.7 (unreleased)
+0.12.8 (unreleased)
+*******************
+
+*******************
+0.12.7 (2025-02-26)
 *******************
 
 Bug fixes
@@ -14,6 +18,10 @@ Bug fixes
   Brindley`_.
 - Fix ambiguous odb extract options when provided user odbreport arguments (:issue:`869`, :merge:`114`). By `Kyle
   Brindley`_.
+
+Internal Changes
+================
+- Automated Gitlab release creation (:issue:`873`, :merge:`1116`). By `Kyle Brindley`_.
 
 Enhancements
 ============
