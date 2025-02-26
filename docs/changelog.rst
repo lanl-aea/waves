@@ -15,6 +15,10 @@ Bug fixes
 - Fix ambiguous odb extract options when provided user odbreport arguments (:issue:`869`, :merge:`114`). By `Kyle
   Brindley`_.
 
+Internal Changes
+================
+- Automated Gitlab release creation (:issue:`873`, :merge:`1116`). By `Kyle Brindley`_.
+
 Enhancements
 ============
 - Handle subdirectory style builds in the Abaqus Pseudo-Builder (:merge:`1111`). By `Kyle Brindley`_.
