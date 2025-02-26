@@ -13,7 +13,7 @@ abaqus_journal = Builder(
 abaqus_solver = Builder(
     action=[
         (
-            "cd ${TARGET.dir.abspath} && ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} "
+            "cd ${TARGET.dir.abspath} && ${abaqus_program} -job ${job} -input ${SOURCE.filebase} "
             "${abaqus_options} -interactive -ask_delete no"
         )
     ]
