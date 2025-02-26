@@ -95,7 +95,7 @@ user = getpass.getuser()
 env.Append(
     BUILDERS={
         "SSHAbaqusSolver": waves.scons_extensions.ssh_builder_actions(
-            waves.scons_extensions.abaqus_solver_builder_factory(),
+            waves.scons_extensions.abaqus_solver_builder_factory(program="/apps/abaqus/Commands/abq2024"),
             remote_server="sstbigbird.lanl.gov",
             remote_directory=f"/scratch/{user}/WAVES-TUTORIAL/tutorial_remote_execution",
         ),
