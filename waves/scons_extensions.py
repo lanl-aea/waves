@@ -3698,7 +3698,7 @@ class WAVESEnvironment(SConsEnvironment):
     def AbaqusJournal(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.abaqus_journal_builder_factory`
 
-        * ``program``: ``${ABAQUS_PROGRAM}``
+        :var program: ``${ABAQUS_PROGRAM}``
 
         :param target: The task target list
         :param source: The task source list
@@ -3711,7 +3711,7 @@ class WAVESEnvironment(SConsEnvironment):
     def AbaqusSolver(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.abaqus_solver_builder_factory`
 
-        * ``program``: ``${ABAQUS_PROGRAM}``
+        :var program: ``${ABAQUS_PROGRAM}``
 
         :param target: The task target list
         :param source: The task source list
@@ -3741,7 +3741,7 @@ class WAVESEnvironment(SConsEnvironment):
     def PythonScript(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.python_builder_factory`
 
-        * ``program``: ``${PYTHON_PROGRAM}``
+        :var program: ``${PYTHON_PROGRAM}``
 
         :param target: The task target list
         :param source: The task source list
@@ -3754,8 +3754,8 @@ class WAVESEnvironment(SConsEnvironment):
     def QuinoaSolver(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.quinoa_builder_factory`
 
-        * ``program``: ``${CHARMRUN_PROGRAM}``
-        * ``subcommand``: ``${INCITER_PROGRAM}``
+        :var program: ``${CHARMRUN_PROGRAM}``
+        :var subcommand: ``${INCITER_PROGRAM}``
 
         :param target: The task target list
         :param source: The task source list
@@ -3768,7 +3768,7 @@ class WAVESEnvironment(SConsEnvironment):
     def CalculiX(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.calculix_builder_factory`
 
-        * ``program``: ``${CCX_PROGRAM}``
+        :var program: ``${CCX_PROGRAM}``
 
         :param target: The task target list
         :param source: The task source list
@@ -3781,8 +3781,8 @@ class WAVESEnvironment(SConsEnvironment):
     def FierroExplicit(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.fierro_explicit_builder_factory`
 
-        * ``program``: ``${MPIRUN_PROGRAM}``
-        * ``subcommand``: ``${FIERRO_EXPLICIT_PROGRAM}``
+        :var program: ``${MPIRUN_PROGRAM}``
+        :var subcommand: ``${FIERRO_EXPLICIT_PROGRAM}``
 
         :param target: The task target list
         :param source: The task source list
@@ -3795,8 +3795,8 @@ class WAVESEnvironment(SConsEnvironment):
     def FierroImplicit(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.fierro_implicit_builder_factory`
 
-        * ``program``: ``${MPIRUN_PROGRAM}``
-        * ``subcommand``: ``${FIERRO_IMPLICIT_PROGRAM}``
+        :var program: ``${MPIRUN_PROGRAM}``
+        :var subcommand: ``${FIERRO_IMPLICIT_PROGRAM}``
 
         :param target: The task target list
         :param source: The task source list
@@ -3809,7 +3809,7 @@ class WAVESEnvironment(SConsEnvironment):
     def Sierra(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.sierra_builder_factory`
 
-        * ``program``: ``${SIERRA_PROGRAM}``
+        :var program: ``${SIERRA_PROGRAM}``
 
         :param target: The task target list
         :param source: The task source list
@@ -3822,7 +3822,7 @@ class WAVESEnvironment(SConsEnvironment):
     def AnsysAPDL(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.ansys_apdl_builder_factory`
 
-        * ``program``: ``${ANSYS_PROGRAM}``
+        :var program: ``${ANSYS_PROGRAM}``
 
         :param target: The task target list
         :param source: The task source list
@@ -3835,7 +3835,7 @@ class WAVESEnvironment(SConsEnvironment):
     def SphinxBuild(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.sphinx_build`
 
-        * ``program``: ``${SPHINX_BUILD_PROGRAM}``
+        :var program: ``${SPHINX_BUILD_PROGRAM}``
 
         :param target: The task target list
         :param source: The task source list
@@ -3848,7 +3848,7 @@ class WAVESEnvironment(SConsEnvironment):
     def SphinxPDF(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.sphinx_latexpdf`
 
-        * ``program``: ``${SPHINX_BUILD_PROGRAM}``
+        :var program: ``${SPHINX_BUILD_PROGRAM}``
 
         :param target: The task target list
         :param source: The task source list
