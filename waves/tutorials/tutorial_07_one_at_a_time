@@ -33,7 +33,7 @@ datacheck = []
 
 # Parameter Study with One-at-a-Time
 parameter_generator = waves.parameter_generators.OneAtATime(
-    parameter_schema(),  # Use the same schema as Cartesian Product, will result in only 3 sims (vs 4 in CartProd)
+    parameter_schema(),
     output_file=parameter_study_file,
     previous_parameter_study=parameter_study_file,
 )
