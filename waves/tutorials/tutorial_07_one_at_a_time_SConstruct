@@ -1,0 +1,126 @@
+#! /usr/bin/env python
+
+import os
+import sys
+import pathlib
+
+import waves
+
+# Comments used in tutorial code snippets: marker-1
+
+# Accept command line options with fall back default values
+AddOption(
+    "--build-dir",
+    dest="variant_dir_base",
+    default="build",
+    nargs=1,
+    type="string",
+    action="store",
+    metavar="DIR",
+    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')",
+)
+AddOption(
+    "--unconditional-build",
+    dest="unconditional_build",
+    default=False,
+    action="store_true",
+    help="Boolean flag to force building of conditionally ignored targets. (default: '%default')",
+)
+AddOption(
+    "--print-build-failures",
+    dest="print_build_failures",
+    default=False,
+    action="store_true",
+    help="Print task *.stdout target file(s) on build failures. (default: '%default')",
+)
+# Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
+default_abaqus_commands = [
+    "/apps/abaqus/Commands/abq2024",
+    "/usr/projects/ea/abaqus/Commands/abq2024",
+    "abq2024",
+    "abaqus",
+]
+AddOption(
+    "--abaqus-command",
+    dest="abaqus_command",
+    nargs=1,
+    type="string",
+    action="append",
+    metavar="COMMAND",
+    help=f"Override for the Abaqus command. Repeat to specify more than one (default: {default_abaqus_commands})",
+)
+
+# Comments used in tutorial code snippets: marker-2
+
+# Inherit user's full environment and set project variables
+env = waves.scons_extensions.WAVESEnvironment(
+    ENV=os.environ.copy(),
+    variant_dir_base=pathlib.Path(GetOption("variant_dir_base")),
+    unconditional_build=GetOption("unconditional_build"),
+    print_build_failures=GetOption("print_build_failures"),
+    abaqus_commands=GetOption("abaqus_command"),
+)
+
+# Conditionally print failed task *.stdout files
+env.PrintBuildFailures(print_stdout=env["print_build_failures"])
+
+# Comments used in tutorial code snippets: marker-3
+
+# Find required programs for conditional target ignoring and absolute path for use in target actions
+env["ABAQUS_PROGRAM"] = env.AddProgram(
+    env["abaqus_commands"] if env["abaqus_commands"] is not None else default_abaqus_commands
+)
+
+# Comments used in tutorial code snippets: marker-4
+
+# Set project internal variables and variable substitution dictionaries
+project_name = "WAVES-TUTORIAL"
+version = "0.1.0"
+project_dir = pathlib.Path(Dir(".").abspath)
+project_variables = {
+    "project_name": project_name,
+    "project_dir": project_dir,
+    "version": version,
+}
+for key, value in project_variables.items():
+    env[key] = value
+
+# Make the project package importable for: (1) SConscript files and (2) Python and Abaqus Python environments
+sys.path.insert(0, str(project_dir))
+env.PrependENVPath("PYTHONPATH", project_dir)
+
+# Comments used in tutorial code snippets: marker-5
+
+# Add builders and pseudo-builders
+env.Append(
+    BUILDERS={
+        "AbaqusSolver": waves.scons_extensions.abaqus_solver(program=env["ABAQUS_PROGRAM"]),
+    }
+)
+
+# Comments used in tutorial code snippets: marker-6
+
+# Add simulation targets
+workflow_configurations = [
+    "tutorial_01_geometry",
+    "tutorial_02_partition_mesh",
+    "tutorial_03_solverprep",
+    "tutorial_04_simulation",
+    "tutorial_05_parameter_substitution",
+    "tutorial_06_include_files",
+    "tutorial_07_cartesian_product",
+    "tutorial_07_one_at_a_time",
+]
+for workflow in workflow_configurations:
+    build_dir = env["variant_dir_base"] / workflow
+    SConscript(workflow, variant_dir=build_dir, exports={"env": env}, duplicate=False)
+
+# Comments used in tutorial code snippets: marker-7
+
+# Add default target list to help message
+env.Default()  # Empty defaults list to avoid building all simulation targets by default
+# Add aliases to help message so users know what build target options are available
+# This must come *after* all expected Alias definitions and SConscript files.
+env.ProjectHelp()
+
+# Comments used in tutorial code snippets: marker-8
