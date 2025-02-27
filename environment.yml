@@ -12,7 +12,7 @@ dependencies:
   # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/865
   - trilinos-cpu <=15
   - flake8
-  - glab >=1.48
+  - glab >=1.52
   - h5netcdf
   - h5py
   - ipython

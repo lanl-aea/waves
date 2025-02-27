@@ -8,6 +8,10 @@ Changelog
 0.12.8 (unreleased)
 *******************
 
+Internal Changes
+================
+- Limit scope of changes possible in automated Gitlab release job (:issue:`875`, :merge:`1117`). By `Kyle Brindley`_.
+
 *******************
 0.12.7 (2025-02-26)
 *******************

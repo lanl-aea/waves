@@ -126,6 +126,7 @@ pypi-deploy:
   script:
     # Only deploy to Gitlab PyPI registry for clean version tags
     - tag=$(git tag --points-at HEAD)
+    - echo ${tag}
     - if [[ -z ${tag} ]]; then exit 0; fi
     - scons html-internal man --unconditional-build
     - cp -r build/docs/html-internal waves/docs
@@ -150,6 +151,7 @@ release:
   script:
     # Only create a release for clean version tags
     - tag=$(git tag --points-at HEAD)
+    - echo ${tag}
     - if [[ -z ${tag} ]]; then exit 0; fi
     # Create the release notes. Assumes changelog contains section headers with version number in reverse chronological
     # order as:
@@ -173,9 +175,11 @@ release:
     - sed -n '/^'"$tag"'/,/^[0-9]\+\.[0-9]\+\.[0-9]\+/{//!p}' docs/changelog.rst > ${notes_file}
     - sed -i '/^\*\+$/d' ${notes_file}
     - sed -i 's/:\([a-z]\+\):`\([0-9]\+\)`/\1 \2/g' ${notes_file}
+    - cat ${notes_file}
     # Authenticate and create release with glab
     - glab auth login --job-token ${CI_JOB_TOKEN} --hostname ${CI_SERVER_HOST} --api-protocol ${CI_SERVER_PROTOCOL}
-    - GITLAB_HOST=${CI_SERVER_URL} glab release create ${tag} -R ${CI_PROJECT_PATH} --ref ${CI_COMMIT_SHA} --notes-file ${notes_file}
+    - GITLAB_HOST=${CI_SERVER_URL} glab release create ${tag} -R ${CI_PROJECT_PATH} --ref ${CI_COMMIT_SHA} --notes-file ${notes_file} --no-update --no-close-milestone
+
   tags:
     - shell
     - aea
