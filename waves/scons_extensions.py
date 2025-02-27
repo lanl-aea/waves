@@ -1789,19 +1789,19 @@ class AbaqusPseudoBuilder:
         # Include input file as first source
         sources.append(inp)
 
-        targets.extend([f"{job}{ext}" for ext in _settings._abaqus_standard_extensions])
+        targets.extend([f"{job}{extension}" for extension in _settings._abaqus_standard_extensions])
 
         # Always allow user to override CPUs with CLI option and exclude CPUs from build signature
         options += f" $(cpus={self.override_cpus or cpus}$)"
 
         # If restarting a job, add old job restart files to sources
         if oldjob:
-            sources.extend([f"{oldjob}{ext}" for ext in _settings._abaqus_restart_extensions])
+            sources.extend([f"{oldjob}{extension}" for extension in _settings._abaqus_restart_extensions])
             options += f" oldjob={oldjob}"
 
         # If writing restart files, add restart files to targets
         if write_restart:
-            targets.extend([f"{job}{ext}" for ext in _settings._abaqus_restart_extensions])
+            targets.extend([f"{job}{extension}" for extension in _settings._abaqus_restart_extensions])
 
         # If user subroutine is specified, add user subroutine to sources
         if user:
