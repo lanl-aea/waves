@@ -178,7 +178,7 @@ def main(
         _settings._custom_study_subcommand: parameter_generators.CustomStudy,
         _settings._latin_hypercube_subcommand: parameter_generators.LatinHypercube,
         _settings._sobol_sequence_subcommand: parameter_generators.SobolSequence,
-        _settings._one_at_a_time_subcomnmand: parameter_generators.OneAtATime,
+        _settings._one_at_a_time_subcommand: parameter_generators.OneAtATime,
     }
     parameter_generator = available_parameter_generators[subcommand](
         parameter_schema,

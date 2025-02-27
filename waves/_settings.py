@@ -68,13 +68,13 @@ _cartesian_product_subcommand = "cartesian_product"
 _custom_study_subcommand = "custom_study"
 _latin_hypercube_subcommand = "latin_hypercube"
 _sobol_sequence_subcommand = "sobol_sequence"
-_one_at_a_time_subcomnmand = "one_at_a_time"
+_one_at_a_time_subcommand = "one_at_a_time"
 _parameter_study_subcommands = [
     _cartesian_product_subcommand,
     _custom_study_subcommand,
     _latin_hypercube_subcommand,
     _sobol_sequence_subcommand,
-    _one_at_a_time_subcomnmand,
+    _one_at_a_time_subcommand,
 ]
 _parameter_study_description = (
     "Generates parameter studies in various output formats. Writes parameter study to STDOUT by default. If an "
