@@ -67,6 +67,8 @@ class ParameterGenerator(ABC):
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
 
+    :var self.parameter_study: The final parameter study XArray Dataset object
+
     :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
         options are both specified
     :raises waves.exceptions.APIError: If an unknown output file type is requested
@@ -639,7 +641,7 @@ class _ScipyGenerator(ParameterGenerator, ABC):
                         raise SchemaValidationError(
                             f"Parameter '{name}' keyword argument '{key}' is not a valid Python identifier"
                         )
-        # TODO: Raise an execption if the current parameter distributions don't match the previous_parameter_study
+        # TODO: Raise an exception if the current parameter distributions don't match the previous_parameter_study
         self.parameter_distributions = self._generate_parameter_distributions()
 
     def _generate(self, **kwargs) -> None:
@@ -1074,6 +1076,9 @@ class SobolSequence(_ScipyGenerator):
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
+
+    :var self.parameter_distributions: A dictionary mapping parameter names to the ``scipy.stats`` distribution
+    :var self.parameter_study: The final parameter study XArray Dataset object
 
     :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
         options are both specified
