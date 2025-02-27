@@ -445,7 +445,7 @@ require_third_party_system_tests = [
                 "scons tutorial_07_one_at_a_time --sconstruct=tutorial_07_one_at_a_time_SConstruct --jobs=3 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
             ),
         ],
-        "tutorials",
+        "tutorials one at a time",
         marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
     ),
     pytest.param(
