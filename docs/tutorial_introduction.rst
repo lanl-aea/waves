@@ -89,6 +89,8 @@ Time to complete (HH:MM) Tutorial                                     Summary
                                                                       hypercube
                    00:30 :ref:`tutorial_sobol_sequence`               Parameter study introduction using a Sobol
                                                                       sequence
+                   00:10 :ref:`tutorial_one_at_a_time`                Parameter study introduction using one-at-a-time
+                                                                      set generation
                    00:30 :ref:`tutorial_mesh_convergence`             Mesh convergence parameter study that uses
                                                                       common Geometry and Partition tasks.
                    00:10 :ref:`tutorial_part_image`                   Generate Abaqus model images for documentation

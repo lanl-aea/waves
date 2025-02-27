@@ -16,6 +16,7 @@ Supplemental Lessons
    tutorial_escape_sequences
    tutorial_07_latin_hypercube
    tutorial_07_sobol_sequence
+   tutorial_07_one_at_a_time
    tutorial_mesh_convergence
    tutorial_part_image
    tutorial_sensitivity_study
