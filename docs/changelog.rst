@@ -8,6 +8,10 @@ Changelog
 0.12.8 (unreleased)
 *******************
 
+New Features
+============
+- Add one-at-a-time parameter generator. (:issue:`853`, :merge:`1101`). By  `Chris Johnson`_.
+
 Internal Changes
 ================
 - Limit scope of changes possible in automated Gitlab release job (:issue:`875`, :merge:`1117`). By `Kyle Brindley`_.
