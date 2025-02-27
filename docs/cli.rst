@@ -98,6 +98,16 @@ sobol_sequence
    :nodefault:
    :path: sobol_sequence
 
+.. _one_at_a_time_cli:
+
+one_at_a_time
+-------------
+
+.. argparse::
+   :ref: waves._main.get_parser
+   :nodefault:
+   :path: one_at_a_time
+
 .. _print_study_cli:
 
 print_study
