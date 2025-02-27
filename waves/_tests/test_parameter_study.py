@@ -66,6 +66,7 @@ def test_main():
         ("custom_study", "CustomStudy"),
         ("latin_hypercube", "LatinHypercube"),
         ("sobol_sequence", "SobolSequence"),
+        ("one_at_a_time", "OneAtATime"),
     )
     for subcommand, generator in associations:
         mock_generator = Mock()

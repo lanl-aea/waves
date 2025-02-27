@@ -111,6 +111,7 @@ parameter_study_args = {  #               subcommand,         class_name,       
     'custom study':             (     'custom_study',      'CustomStudy',                       None,           None,             None),  # noqa E241,E501
     'latin hypercube':          (  'latin_hypercube',   'LatinHypercube',                       None,           None,             None),  # noqa E241,E501
     'sobol sequence':           (   'sobol_sequence',    'SobolSequence',                       None,           None,             None),  # noqa E241,E501
+    'one at a time':            (    'one_at_a_time',       'OneAtATime',                       None,           None,             None),  # noqa E241,E501
     'output file template':     ('cartesian_product', 'CartesianProduct',     'output_file_template',           '-o', 'dummy_template'),  # noqa E241,E501
     'output file':              (     'custom_study',      'CustomStudy',              'output_file',           '-f', 'dummy_file.txt'),  # noqa E241,E501
     'output file type':         (  'latin_hypercube',   'LatinHypercube',         'output_file_type',           '-t',             'h5'),  # noqa E241,E501
