@@ -62,6 +62,9 @@ In the ``parameter_schema``, there are two parameters with two samples each and 
 each. The nominal parameter set is constructed from the first sample of each parameter. This will result in three total
 simulations: one for the nominal parameter set and two using each off-nominal value.
 
+The idea behind one-at-a-time parameter sets is that, for each parameter set, only one value of one single parameter has
+changed compared to the nominal values.
+
 **********
 SConscript
 **********
