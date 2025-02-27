@@ -68,6 +68,7 @@ system_tests = [
     ([string.Template("${waves_command} custom_study --help")], None),
     ([string.Template("${waves_command} latin_hypercube --help")], None),
     ([string.Template("${waves_command} sobol_sequence --help")], None),
+    ([string.Template("${waves_command} one_at_a_time --help")], None),
     ([string.Template("${waves_command} print_study --help")], None),
     ([string.Template("${odb_extract_command} --help")], None),
     pytest.param(
@@ -432,6 +433,16 @@ require_third_party_system_tests = [
             fetch_template,
             string.Template(
                 "scons tutorial_07_sobol_sequence --sconstruct=tutorial_07_sobol_sequence_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+            ),
+        ],
+        "tutorials",
+        marks=[pytest.mark.require_third_party, pytest.mark.abaqus],
+    ),
+    pytest.param(
+        [
+            fetch_template,
+            string.Template(
+                "scons tutorial_07_one_at_a_time --sconstruct=tutorial_07_one_at_a_time_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
             ),
         ],
         "tutorials",
