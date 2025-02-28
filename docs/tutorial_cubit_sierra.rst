@@ -130,7 +130,6 @@ Build Targets
    cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/sierra && python /home/roppenheimer/waves-tutorials/tutorial_cubit/modsim_package/cubit/rectangle_geometry.py > rectangle_geometry.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/sierra && python /home/roppenheimer/waves-tutorials/tutorial_cubit/modsim_package/cubit/rectangle_partition.py > rectangle_partition.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/sierra && python /home/roppenheimer/waves-tutorials/tutorial_cubit/modsim_package/cubit/rectangle_mesh.py --element-type SHELL --solver sierra > rectangle_mesh.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/sierra && /projects/sierra/sierra5121/install/tools/sntools/engine/sierra adagio --version > rectangle_compression.env
    cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/sierra && /projects/sierra/sierra5121/install/tools/sntools/engine/sierra adagio -i rectangle_compression.i > rectangle_compression.stdout 2>&1
    scons: done building targets.
 
@@ -148,7 +147,6 @@ below.
    $ tree build/sierra/
    build/sierra/
    |-- rectangle_compression.e
-   |-- rectangle_compression.env
    |-- rectangle_compression.i
    |-- rectangle_compression.log
    |-- rectangle_compression.stdout

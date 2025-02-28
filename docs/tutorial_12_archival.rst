@@ -175,7 +175,6 @@ file. You can inspect the contents of the archive as below.
    build/tutorial_12_archival/parameter_set0/history_output.inp
    build/tutorial_12_archival/parameter_set0/rectangle_compression.sta
    build/tutorial_12_archival/parameter_set0/rectangle_compression.stdout
-   build/tutorial_12_archival/parameter_set0/rectangle_compression.abaqus_v6.env
    build/tutorial_12_archival/parameter_set0/rectangle_compression.odb
    build/tutorial_12_archival/parameter_set0/rectangle_compression.dat
    build/tutorial_12_archival/parameter_set0/rectangle_compression.msg
@@ -199,7 +198,7 @@ First, plot the workflow with all parameter sets.
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_12_archival_archive --output-file tutorial_12_archival.png --width=50 --height=12 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta
+   $ waves visualize tutorial_12_archival_archive --output-file tutorial_12_archival.png --width=50 --height=12 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta
 
 The output should look similar to the figure below.
 
@@ -230,7 +229,7 @@ Now plot the workflow with only the first set, ``set0``.
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_12_archival_archive --output-file tutorial_12_archival_set0.png --width=50 --height=8 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
+   $ waves visualize tutorial_12_archival_archive --output-file tutorial_12_archival_set0.png --width=50 --height=8 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
 
 The output should look similar to the figure below.
 

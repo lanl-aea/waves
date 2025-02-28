@@ -237,7 +237,7 @@ First, plot the workflow with all parameter sets.
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_08_data_extraction --output-file tutorial_08_data_extraction.png --width=36 --height=12 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta
+   $ waves visualize tutorial_08_data_extraction --output-file tutorial_08_data_extraction.png --width=36 --height=12 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta
 
 The output should look similar to the figure below.
 
@@ -261,7 +261,7 @@ Now plot the workflow with only the first set, ``set0``.
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_08_data_extraction --output-file tutorial_08_data_extraction_set0.png --width=28 --height=6 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
+   $ waves visualize tutorial_08_data_extraction --output-file tutorial_08_data_extraction_set0.png --width=28 --height=6 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
 
 The output should look similar to the figure below.
 

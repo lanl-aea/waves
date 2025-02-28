@@ -226,7 +226,6 @@ Output Files
    |-- rectangle_compression.inp
    |-- rectangle_compression.inp.in
    |-- rectangle_compression_DATACHECK.023
-   |-- rectangle_compression_DATACHECK.abaqus_v6.env
    |-- rectangle_compression_DATACHECK.com
    |-- rectangle_compression_DATACHECK.dat
    |-- rectangle_compression_DATACHECK.mdl
@@ -274,7 +273,7 @@ Plot the workflow with only the first set, ``set0``.
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves visualize datacheck --output-file tutorial_11_datacheck_set0.png --width=42 --height=8 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
+   $ waves visualize datacheck --output-file tutorial_11_datacheck_set0.png --width=42 --height=8 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
 
 The output should look similar to the figure below.
 

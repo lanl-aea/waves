@@ -127,7 +127,6 @@ Output Files
    |-- history_output.inp
    |-- materials.inp
    |-- parts.inp
-   |-- rectangle_compression.abaqus_v6.env
    |-- rectangle_compression.com
    |-- rectangle_compression.dat
    |-- rectangle_compression.inp
@@ -158,10 +157,10 @@ Workflow Visualization
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_07_one_at_a_time --output-file tutorial_07_one_at_a_time.png --width=36 --height=12 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta
+   $ waves visualize tutorial_07_one_at_a_time --output-file tutorial_07_one_at_a_time.png --width=36 --height=12 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta
 
 .. code-block::
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_07_one_at_a_time --output-file tutorial_07_one_at_a_time_set0.png --width=28 --height=6 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
+   $ waves visualize tutorial_07_one_at_a_time --output-file tutorial_07_one_at_a_time_set0.png --width=28 --height=6 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta --exclude-regex "set[1-9]"

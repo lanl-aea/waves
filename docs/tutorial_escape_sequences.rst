@@ -112,7 +112,6 @@ Build Targets
    Copy("build/tutorial_escape_sequences/materials.inp", "modsim_package/abaqus/materials.inp")
    Copy("build/tutorial_escape_sequences/parts.inp", "modsim_package/abaqus/parts.inp")
    Copy("build/tutorial_escape_sequences/history_output.inp", "modsim_package/abaqus/history_output.inp")
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2024 -information environment > rectangle_compression.abaqus_v6.env
    cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2024 -job rectangle_compression -input rectangle_compression -double both -cpus 1 -interactive -ask_delete no > rectangle_compression.stdout 2>&1
    scons: done building targets.
 
@@ -155,7 +154,6 @@ is specified by name to reduce clutter in the ouptut shown.
    |-- history_output.inp
    |-- materials.inp
    |-- parts.inp
-   |-- rectangle_compression.abaqus_v6.env
    |-- rectangle_compression.com
    |-- rectangle_compression.dat
    |-- rectangle_compression.inp

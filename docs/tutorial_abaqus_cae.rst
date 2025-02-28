@@ -183,7 +183,6 @@ look identical (except for timestamps and job name) to the output produced by th
    |-- beam.log
    |-- beam.msg
    |-- beam.odb
-   |-- beam.odb.abaqus_v6.env
    |-- beam.odb.stdout
    |-- beam.prt
    `-- beam.sta
@@ -206,7 +205,6 @@ output below.
    scons: done reading SConscript files.
    scons: Building targets ...
    scons: rebuilding `build/beam.odb' because `build/beam.cae' changed
-   cd /home/roppenheimer/waves-tutorials/tutorial_abaqus_cae/build && /apps/abaqus/Commands/abq2024 -information environment > /home/roppenheimer/waves-tutorials/tutorial_abaqus_cae/build/beam.odb.abaqus_v6.env 2>&1
    cd /home/roppenheimer/waves-tutorials/tutorial_abaqus_cae/build && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/tutorial_abaqus_cae/build/submit_cae.py -- --input-file /home/roppenheimer/waves-tutorials/tutorial_abaqus_cae/build/beam.cae --job-name beam --model-name Beam > /home/roppenheimer/waves-tutorials/tutorial_abaqus_cae/build/beam.odb.stdout 2>&1
    scons: done building targets.
 
@@ -234,7 +232,6 @@ The full output directory should look like the following
    |-- beam.log
    |-- beam.msg
    |-- beam.odb
-   |-- beam.odb.abaqus_v6.env
    |-- beam.odb.stdout
    |-- beam.prt
    |-- beam.sta

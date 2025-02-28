@@ -346,7 +346,7 @@ View the workflow directed graph by running the following command and opening th
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_02_partition_mesh --output-file tutorial_02_partition_mesh.png --width=28 --height=3 --exclude-list /usr/bin .stdout .jnl .env
+   $ waves visualize tutorial_02_partition_mesh --output-file tutorial_02_partition_mesh.png --width=28 --height=3 --exclude-list /usr/bin .stdout .jnl
 
 The output should look similar to the figure below.
 

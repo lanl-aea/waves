@@ -254,7 +254,7 @@ View the workflow directed graph by running the following command and opening th
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_03_solverprep --output-file tutorial_03_solverprep.png --width=28 --height=5 --exclude-list /usr/bin .stdout .jnl .env
+   $ waves visualize tutorial_03_solverprep --output-file tutorial_03_solverprep.png --width=28 --height=5 --exclude-list /usr/bin .stdout .jnl
 
 The output should look similar to the figure below.
 

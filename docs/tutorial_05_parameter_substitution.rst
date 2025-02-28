@@ -253,7 +253,6 @@ Build Targets
     Copy("build/tutorial_05_parameter_substitution/materials.inp", "modsim_package/abaqus/materials.inp")
     Copy("build/tutorial_05_parameter_substitution/parts.inp", "modsim_package/abaqus/parts.inp")
     Copy("build/tutorial_05_parameter_substitution/history_output.inp", "modsim_package/abaqus/history_output.inp")
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2024 -information environment > rectangle_compression.abaqus_v6.env
     cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2024 -job rectangle_compression -input rectangle_compression -double both -interactive -ask_delete no > rectangle_compression.stdout 2>&1
     scons: done building targets.
 
@@ -281,7 +280,6 @@ below. Note the usage of the ``-I`` option to reduce clutter in the ``tree`` com
    |-- history_output.inp
    |-- materials.inp
    |-- parts.inp
-   |-- rectangle_compression.abaqus_v6.env
    |-- rectangle_compression.com
    |-- rectangle_compression.dat
    |-- rectangle_compression.inp
@@ -344,7 +342,7 @@ View the workflow directed graph by running the following command and opening th
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_05_parameter_substitution --output-file tutorial_05_parameter_substitution.png --width=28 --height=6 --exclude-list /usr/bin .stdout .jnl .env .prt .com
+   $ waves visualize tutorial_05_parameter_substitution --output-file tutorial_05_parameter_substitution.png --width=28 --height=6 --exclude-list /usr/bin .stdout .jnl .prt .com
 
 The output should look similar to the figure below.
 
