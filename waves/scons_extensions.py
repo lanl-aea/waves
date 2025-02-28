@@ -1350,7 +1350,7 @@ def _abaqus_solver_emitter(
     target: list,
     source: list,
     env: SCons.Environment.Environment,
-    suffixes: typing.Iterable[str] = _settings._abaqus_solver_common_suffixes,
+    suffixes: typing.Iterable[str] = _settings._abaqus_common_extensions,
     stdout_extension: str = _settings._stdout_extension,
 ) -> typing.Tuple[list, list]:
     """Appends the abaqus_solver builder target list with the builder managed targets
@@ -1796,12 +1796,12 @@ class AbaqusPseudoBuilder:
 
         # If restarting a job, add old job restart files to sources
         if oldjob:
-            sources.extend([f"{oldjob}{extension}" for extension in _settings._abaqus_restart_extensions])
+            sources.extend([f"{oldjob}{extension}" for extension in _settings._abaqus_standard_restart_extensions])
             options += f" oldjob={oldjob}"
 
         # If writing restart files, add restart files to targets
         if write_restart:
-            targets.extend([f"{job}{extension}" for extension in _settings._abaqus_restart_extensions])
+            targets.extend([f"{job}{extension}" for extension in _settings._abaqus_standard_restart_extensions])
 
         # If user subroutine is specified, add user subroutine to sources
         if user:
