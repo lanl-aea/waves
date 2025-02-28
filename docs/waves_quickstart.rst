@@ -195,7 +195,6 @@ previous parameter study is being requested which will only exist on subsequent 
    cd /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal && /apps/abaqus/Commands/abq2024 cae -noGUI /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal/rectangle_geometry.py -- --width 1.0 --height 1.0 > /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal/rectangle_geometry.cae.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal && /apps/abaqus/Commands/abq2024 cae -noGUI /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal/rectangle_partition.py -- --width 1.0 --height 1.0 > /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal/rectangle_partition.cae.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal && /apps/abaqus/Commands/abq2024 cae -noGUI /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal/rectangle_mesh.py -- --global-seed 1.0 > /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal/rectangle_mesh.inp.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal && /apps/abaqus/Commands/abq2024 -information environment > /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal/rectangle_compression.abaqus_v6.env 2>&1
    cd /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal && /apps/abaqus/Commands/abq2024 -interactive -ask_delete no -job rectangle_compression -input rectangle_compression -double both > /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal/rectangle_compression.stdout 2>&1
    _build_odb_extract(["build/nominal/rectangle_compression.h5", "build/nominal/rectangle_compression_datasets.h5", "build/nominal/rectangle_compression.csv"], ["build/nominal/rectangle_compression.odb"])
    cd /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal && python /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal/post_processing.py --input-file /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal/rectangle_compression_datasets.h5 --output-file stress_strain.pdf --x-units mm/mm --y-units MPa > /home/roppenheimer/waves-tutorials/waves_quickstart/build/nominal/stress_strain.pdf.stdout 2>&1
@@ -364,7 +363,6 @@ set because the workflow definitions are identical for each parameter set.
    |-- abaqus_utilities.py
    |-- abaqus_utilities.pyc
    |-- post_processing.py
-   |-- rectangle_compression.abaqus_v6.env
    |-- rectangle_compression.com
    |-- rectangle_compression.csv
    |-- rectangle_compression.dat
