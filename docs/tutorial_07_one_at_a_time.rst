@@ -69,6 +69,9 @@ changed compared to the nominal values.
 SConscript
 **********
 
+5. Modify the SConscript file ``tutorial_07_one_at_a_time`` to utilize the :meth:`waves.parameter_generators.OneAtATime`
+builder.
+
 A ``diff`` against the ``tutorial_07_cartesian_product`` file from :ref:`tutorial_cartesian_product` is included
 below to help identify the differences between the two parameter generators.
 
@@ -81,6 +84,8 @@ below to help identify the differences between the two parameter generators.
 **********
 SConstruct
 **********
+
+6. Add the workflow ``tutorial_07_one_at_a_time`` to the SConstruct file.
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_cartesian_product` is included below to help identify the
 changes made in this tutorial.
@@ -95,7 +100,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-5. Build the new targets
+7. Build the new targets.
 
 .. code-block:: bash
 
