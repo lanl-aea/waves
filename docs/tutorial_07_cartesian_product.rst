@@ -226,10 +226,11 @@ Note the following two important aspects of the code above:
       :end-before: marker-6
       :emphasize-lines: 2-3, 8, 17
 
-The code above closes out our familiar workflow with the use of the :meth:`waves.scons_extensions.abaqus_solver` method where
-the highlighted lines include the parameter set directory as part of target definitions. Note that the ``# Abaqus
-Solver`` code is still within the ``for`` loop, so the Abaqus Solver will be called as many times as we have parameter
-sets. In this case, we will solve four Abaqus simulations.
+The code above closes out our familiar workflow with the use of the
+:meth:`waves.scons_extensions.abaqus_solver_builder_factory` method where the highlighted lines include the parameter
+set directory as part of target definitions. Note that the ``# Abaqus Solver`` code is still within the ``for`` loop, so
+the Abaqus Solver will be called as many times as we have parameter sets. In this case, we will solve four Abaqus
+simulations.
 
 .. admonition:: waves-tutorials/tutorial_07_cartesian_product
 

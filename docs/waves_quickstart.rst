@@ -83,9 +83,9 @@ expensive and require significant wall time to solve.
 
 The ``SConscript`` file below contains the workflow task definitions. Review the source and target files defining the
 workflow tasks. As discussed briefly above and in detail in :ref:`build_system`, a task definition also requires an
-action. For convenience, |PROJECT| provides builders for common engineering software with pre-defined task actions.
-See the :meth:`waves.scons_extensions.abaqus_journal_builder_factory` and :meth:`waves.scons_extensions.abaqus_solver`
-for more complete descriptions of the builder actions.
+action. For convenience, |PROJECT| provides builders for common engineering software with pre-defined task actions. See
+the :meth:`waves.scons_extensions.abaqus_journal_builder_factory` and
+:meth:`waves.scons_extensions.abaqus_solver_builder_factory` for more complete descriptions of the builder actions.
 
 .. admonition:: waves_quickstart/SConscript
 
