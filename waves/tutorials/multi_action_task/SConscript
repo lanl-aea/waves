@@ -48,8 +48,8 @@ env.Command(
     abaqus_program=env["ABAQUS_PROGRAM"],
 )
 
-# SolverPrep
-abaqus_source_list = [
+# Abaqus Solve
+solve_sources = [
     "rectangle_compression.inp",
     "assembly.inp",
     "boundary.inp",
@@ -71,7 +71,7 @@ solve_targets = [
 
 target = env.AbaqusSolver(
     target=solve_targets,
-    source=abaqus_source_list,
+    source=solve_sources,
     abaqus_program=env["ABAQUS_PROGRAM"],
     job="rectangle_compression",
     program_options="-double both",
