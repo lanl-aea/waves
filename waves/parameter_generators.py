@@ -923,7 +923,7 @@ class OneAtATime(ParameterGenerator):
         if not isinstance(self.parameter_schema, dict):
             raise SchemaValidationError("parameter_schema must be a dictionary")
         self._parameter_names = list(self.parameter_schema.keys())
-        # List, sets, and tuples are the supported PyYAML iterables that will support expected behavior
+        # List and tuples are the supported PyYAML ordered iterables that will support expected behavior
         for name in self._parameter_names:
             if not isinstance(self.parameter_schema[name], (list, tuple)):
                 raise SchemaValidationError(f"Parameter '{name}' is not a list or tuple")
