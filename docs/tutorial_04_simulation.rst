@@ -285,7 +285,7 @@ below.
     |-- rectangle_partition.cae.stdout
     `-- rectangle_partition.jnl
 
-    0 directories, 28 files
+    0 directories, 27 files
 
 The ``build/tutorial_04_simulation`` directory contains several different subsets of related files:
 

@@ -147,7 +147,7 @@ Output Files
    |-- rectangle_partition.jnl
    `-- rectangle_partition.stdout
 
-   0 directories, 29 files
+   0 directories, 28 files
 
 **********************
 Workflow Visualization

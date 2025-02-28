@@ -169,4 +169,4 @@ below.
    |-- rectangle_partition.cub
    `-- rectangle_partition.stdout
 
-   0 directories, 22 files
+   0 directories, 21 files

@@ -338,7 +338,7 @@ Explore the contents of the ``parameter_set0`` directory using the ``tree`` comm
    |-- rectangle_partition.jnl
    `-- rectangle_partition.stdout
 
-   0 directories, 29 files
+   0 directories, 28 files
 
 The contents of the ``parameter_set0`` directory will appear identical to the contents of the previous tutorials. In
 this case, the contents of the files is different, as we have inserted parameters as part of the parameter study.

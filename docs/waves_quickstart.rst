@@ -392,7 +392,7 @@ set because the workflow definitions are identical for each parameter set.
    |-- stress_strain.pdf
    `-- stress_strain.pdf.stdout
 
-   0 directories, 36 files
+   0 directories, 35 files
 
 **********************
 Workflow Visualization

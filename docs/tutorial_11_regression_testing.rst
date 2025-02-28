@@ -246,7 +246,7 @@ Output Files
    |-- rectangle_partition.jnl
    `-- rectangle_partition.stdout
 
-   0 directories, 32 files
+   0 directories, 31 files
    $ tree build/tutorial_11_regression_testing/ -L 1
    build/tutorial_11_regression_testing/
    |-- parameter_set0

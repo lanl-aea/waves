@@ -231,7 +231,7 @@ Explore the contents of the ``build`` directory using the ``tree`` command again
     |-- rectangle_partition.cae.stdout
     `-- rectangle_partition.jnl
 
-    0 directories, 37 files
+    0 directories, 36 files
 
 Inside the build directory are three sub-directories. ``tutorial_01_geometry`` and
 ``tutorial_02_partition_mesh``  remain from the previous two tutorials. The third

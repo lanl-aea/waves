@@ -233,7 +233,7 @@ below. Note the usage of the ``-I`` to reduce clutter in the ``tree`` command ou
     |-- rectangle_partition.jnl
     `-- rectangle_partition.stdout
 
-    0 directories, 29 files
+    0 directories, 28 files
 
 The output files for this tutorial are *exactly* the same as those from :ref:`tutorial_parameter_substitution`. As
 was mentioned when modifying the :ref:`tutorials_tutorial_include_files` file, the use of an included Python file

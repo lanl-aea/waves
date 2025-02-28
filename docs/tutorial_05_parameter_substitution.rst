@@ -300,7 +300,7 @@ below. Note the usage of the ``-I`` option to reduce clutter in the ``tree`` com
    |-- rectangle_partition.jnl
    `-- rectangle_partition.stdout
 
-   0 directories, 29 files
+   0 directories, 28 files
 
 The output files for this tutorial are very similar to those from :ref:`tutorial_simulation` with a few key
 differences.

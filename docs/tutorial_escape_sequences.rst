@@ -173,4 +173,4 @@ is specified by name to reduce clutter in the ouptut shown.
    |-- rectangle_partition.jnl
    `-- rectangle_partition.stdout
 
-   0 directories, 28 files
+   0 directories, 27 files

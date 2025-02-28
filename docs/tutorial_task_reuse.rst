@@ -194,4 +194,4 @@ Output Files
    |-- rectangle_partition.jnl
    `-- rectangle_partition.stdout
 
-   0 directories, 32 files
+   0 directories, 30 files

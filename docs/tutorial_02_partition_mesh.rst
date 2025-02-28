@@ -321,7 +321,7 @@ below.
    |-- rectangle_partition.jnl
    `-- rectangle_partition.cae.stdout
 
-   0 directories, 17 files
+   0 directories, 16 files
 
 Examine the contents of the ``build/tutorial_01_geometry`` and a ``build/tutorial_02_partition_mesh`` directories.
 Recall from the earlier note that we require the geometry target introduced in :ref:`tutorial_geometry` to build the
