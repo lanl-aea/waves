@@ -55,7 +55,7 @@ workflow.extend(
 # Comment used in tutorial code snippets: marker-3
 
 # SolverPrep
-abaqus_source_list = [
+copy_source_list = [
     "#/modsim_package/abaqus/rectangle_compression.inp",
     "#/modsim_package/abaqus/assembly.inp",
     "#/modsim_package/abaqus/boundary.inp",
@@ -64,8 +64,11 @@ abaqus_source_list = [
     "#/modsim_package/abaqus/parts.inp",
     "#/modsim_package/abaqus/history_output.inp",
 ]
-abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
-workflow.extend(env.CopySubstfile(abaqus_source_list))
+workflow.extend(
+    env.CopySubstfile(
+        copy_source_list,
+    )
+)
 
 # Comment used in tutorial code snippets: marker-4
 
