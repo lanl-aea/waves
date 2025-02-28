@@ -45,7 +45,7 @@ datacheck = []
 # Comment used in tutorial code snippets: marker-2
 
 # Parameter Study with SALib Sobol sequence sampler
-parameter_generator = SALibSampler(
+parameter_generator = waves.parameter_generators.SALibSampler(
     "sobol",
     parameter_schema(),
     output_file=parameter_study_file,
