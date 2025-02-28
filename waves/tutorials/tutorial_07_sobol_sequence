@@ -89,7 +89,7 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
     )
 
     # SolverPrep
-    abaqus_source_list = [
+    copy_source_list = [
         "#/modsim_package/abaqus/rectangle_compression.inp.in",
         "#/modsim_package/abaqus/assembly.inp",
         "#/modsim_package/abaqus/boundary.inp",
@@ -98,10 +98,9 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
         "#/modsim_package/abaqus/parts.inp",
         "#/modsim_package/abaqus/history_output.inp",
     ]
-    abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
     workflow.extend(
         env.CopySubstfile(
-            abaqus_source_list,
+            copy_source_list,
             substitution_dictionary=env.SubstitutionSyntax(simulation_variables),
             build_subdirectory=set_name,
         )
@@ -110,13 +109,31 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
     # Comment used in tutorial code snippets: marker-5
 
     # Abaqus Solve
-    solve_source_list = [set_name / source_file.name.rstrip(".in") for source_file in abaqus_source_list]
-    solve_source_list.append(set_name / "rectangle_mesh.inp")
-    datacheck_suffixes = ("023", "mdl", "sim", "stt")
     abaqus_options = "-double both"
+    solve_source_list = [
+        set_name / "rectangle_compression.inp",
+        set_name / "assembly.inp",
+        set_name / "boundary.inp",
+        set_name / "field_output.inp",
+        set_name / "materials.inp",
+        set_name / "parts.inp",
+        set_name / "history_output.inp",
+        set_name / "rectangle_mesh.inp",
+    ]
+
     datacheck.extend(
         env.AbaqusSolver(
-            target=[set_name / f"rectangle_compression_DATACHECK.{suffix}" for suffix in datacheck_suffixes],
+            target=[
+                set_name / "rectangle_compression_DATACHECK.odb",
+                set_name / "rectangle_compression_DATACHECK.dat",
+                set_name / "rectangle_compression_DATACHECK.msg",
+                set_name / "rectangle_compression_DATACHECK.com",
+                set_name / "rectangle_compression_DATACHECK.prt",
+                set_name / "rectangle_compression_DATACHECK.023",
+                set_name / "rectangle_compression_DATACHECK.mdl",
+                set_name / "rectangle_compression_DATACHECK.sim",
+                set_name / "rectangle_compression_DATACHECK.stt",
+            ],
             source=solve_source_list,
             job="rectangle_compression_DATACHECK",
             program_options=f"{abaqus_options} -datacheck",
@@ -125,7 +142,14 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
 
     workflow.extend(
         env.AbaqusSolver(
-            target=[set_name / "rectangle_compression.odb"],
+            target=[
+                set_name / "rectangle_compression.odb",
+                set_name / "rectangle_compression.dat",
+                set_name / "rectangle_compression.msg",
+                set_name / "rectangle_compression.com",
+                set_name / "rectangle_compression.prt",
+                set_name / "rectangle_compression.sta",
+            ],
             source=solve_source_list,
             job="rectangle_compression",
             program_options=abaqus_options,
