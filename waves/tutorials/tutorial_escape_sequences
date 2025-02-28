@@ -57,7 +57,7 @@ workflow.extend(
 # Comment used in tutorial code snippets: marker-3
 
 # SolverPrep
-abaqus_source_list = [
+copy_source_list = [
     "#/modsim_package/abaqus/rectangle_compression.inp",
     "#/modsim_package/abaqus/assembly.inp",
     "#/modsim_package/abaqus/boundary.inp",
@@ -66,19 +66,40 @@ abaqus_source_list = [
     "#/modsim_package/abaqus/parts.inp",
     "#/modsim_package/abaqus/history_output.inp",
 ]
-abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
-workflow.extend(env.CopySubstfile(abaqus_source_list))
+workflow.extend(
+    env.CopySubstfile(
+        copy_source_list,
+    )
+)
 
 # Comment used in tutorial code snippets: marker-4
 
 # Abaqus Solve
-solve_source_list = [source_file.name.rstrip(".in") for source_file in abaqus_source_list]
-solve_source_list.append("rectangle_mesh.inp")
-datacheck_suffixes = ("023", "mdl", "sim", "stt")
 abaqus_options = "-double both"
+solve_source_list = [
+    "rectangle_compression.inp",
+    "assembly.inp",
+    "boundary.inp",
+    "field_output.inp",
+    "materials.inp",
+    "parts.inp",
+    "history_output.inp",
+    "rectangle_mesh.inp",
+]
+
 datacheck.extend(
     env.AbaqusSolver(
-        target=[f"rectangle_compression_DATACHECK.{suffix}" for suffix in datacheck_suffixes],
+        target=[
+            "rectangle_compression_DATACHECK.odb",
+            "rectangle_compression_DATACHECK.dat",
+            "rectangle_compression_DATACHECK.msg",
+            "rectangle_compression_DATACHECK.com",
+            "rectangle_compression_DATACHECK.prt",
+            "rectangle_compression_DATACHECK.023",
+            "rectangle_compression_DATACHECK.mdl",
+            "rectangle_compression_DATACHECK.sim",
+            "rectangle_compression_DATACHECK.stt",
+        ],
         source=solve_source_list,
         job="rectangle_compression_DATACHECK",
         program_options=f"{abaqus_options} -datacheck",
@@ -89,7 +110,14 @@ datacheck.extend(
 
 workflow.extend(
     env.AbaqusSolver(
-        target=["rectangle_compression.odb"],
+        target=[
+            "rectangle_compression.odb",
+            "rectangle_compression.dat",
+            "rectangle_compression.msg",
+            "rectangle_compression.com",
+            "rectangle_compression.prt",
+            "rectangle_compression.sta",
+        ],
         source=solve_source_list,
         job="rectangle_compression",
         program_options="${abaqus_options} -cpus $(${solve_cpus}$)",
