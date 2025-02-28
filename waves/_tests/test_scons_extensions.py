@@ -21,8 +21,8 @@ from waves._settings import _abaqus_environment_extension
 from waves._settings import _abaqus_datacheck_extensions
 from waves._settings import _abaqus_explicit_extensions
 from waves._settings import _abaqus_standard_extensions
-from waves._settings import _abaqus_restart_extensions
-from waves._settings import _abaqus_solver_common_suffixes
+from waves._settings import _abaqus_standard_restart_extensions
+from waves._settings import _abaqus_common_extensions
 from waves._settings import _sbatch_wrapper_options
 from waves._settings import _stdout_extension
 from waves._tests.common import platform_check
@@ -354,7 +354,7 @@ def check_abaqus_solver_targets(nodes, solver, stem, suffixes):
     elif solver == "datacheck":
         expected_suffixes.extend(_abaqus_datacheck_extensions)
     else:
-        expected_suffixes.extend(_abaqus_solver_common_suffixes)
+        expected_suffixes.extend(_abaqus_common_extensions)
     suffixes = [str(node).split(stem)[-1] for node in nodes]
     assert set(expected_suffixes) == set(suffixes)
 
@@ -1209,7 +1209,7 @@ abaqus_pseudobuilder_input = {
     "oldjob": (
         {},
         {"job": "job", "oldjob": "oldjob"},
-        ["job.inp"] + [f"oldjob{ext}" for ext in _abaqus_restart_extensions],
+        ["job.inp"] + [f"oldjob{ext}" for ext in _abaqus_standard_restart_extensions],
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " job=job double=both $(cpus=1$) oldjob=oldjob",
         {},
@@ -1218,7 +1218,7 @@ abaqus_pseudobuilder_input = {
         {},
         {"job": "job", "write_restart": True},
         ["job.inp"],
-        [f"job{ext}" for ext in (_abaqus_standard_extensions + _abaqus_restart_extensions)],
+        [f"job{ext}" for ext in (_abaqus_standard_extensions + _abaqus_standard_restart_extensions)],
         " job=job double=both $(cpus=1$)",
         {},
     ),
@@ -1261,8 +1261,8 @@ abaqus_pseudobuilder_input = {
             "extra_options": "--extra-opt",
             "kwarg_1": "value_1",
         },
-        ["input.inp"] + [f"oldjob{ext}" for ext in _abaqus_restart_extensions] + ["user.f", "extra.inp"],
-        [f"job{ext}" for ext in (_abaqus_standard_extensions + _abaqus_restart_extensions)] + ["extra.odb"],
+        ["input.inp"] + [f"oldjob{ext}" for ext in _abaqus_standard_restart_extensions] + ["user.f", "extra.inp"],
+        [f"job{ext}" for ext in (_abaqus_standard_extensions + _abaqus_standard_restart_extensions)] + ["extra.odb"],
         " job=job double=constraint input=input.inp $(cpus=2$) oldjob=oldjob user=user.f --extra-opt",
         {"kwarg_1": "value_1"},
     ),
