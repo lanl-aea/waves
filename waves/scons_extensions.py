@@ -1535,22 +1535,23 @@ def abaqus_solver(
     return abaqus_solver_builder
 
 
-def abaqus_solver_builder_factory_emitter(
+def _task_kwarg_emitter(
     target: list,
     source: list,
     env: SCons.Environment.Environment,
-    suffixes: typing.Iterable[str] = _settings._abaqus_common_extensions,
+    suffixes: typing.Optional[typing.Iterable[str]] = None,
     appending_suffixes: typing.Optional[typing.Iterable[str]] = None,
     stdout_extension: str = _settings._stdout_extension,
+    required_task_kwarg: str = "",
 ):
     """SCons emitter function template designed for :meth:`waves.scons_extensions.abaqus_solver_builder_factory` based
     builders.
 
-    This emitter prepends the target list with ``job`` task keyword argument named targets before passing through the
-    :meth:`waves.scons_extensions.first_target_emitter` emitter.
+    This emitter prepends the target list with the value of the ``env[required_task_kwarg]`` task keyword argument named
+    targets before passing through the :meth:`waves.scons_extensions.first_target_emitter` emitter.
 
-    Searches for the ``job`` task keyword argument and appends the target list with ``{job}{suffix}`` targets using the
-    ``suffixes`` list.
+    Searches for the ``required_task_kwarg`` task keyword argument and appends the target list with
+    ``{env[required_task_kwarg]}{suffix}`` targets using the ``suffixes`` list.
 
     Searches for a file ending in the stdout extension. If none is found, creates a target by appending the stdout
     extension to the first target in the ``target`` list. The associated Builder requires at least one target for this
@@ -1575,10 +1576,9 @@ def abaqus_solver_builder_factory_emitter(
 
     :return: target, source
     """
-    if "job" not in env or not env["job"]:
+    if not required_task_kwarg or required_task_kwarg not in env or not env[required_task_kwarg]:
         raise RuntimeError(
-            "Emitters based on ``waves.scons_extensions.abaqus_solver_builder_factory_emitter`` "
-            "require the ``job`` task keyword argument"
+            f"Emitter requires the '{required_task_kwarg}' task keyword argument"
         )
 
     if len(target) > 0:
@@ -1635,13 +1635,14 @@ def abaqus_standard_emitter(
 
     :return: target, source
     """
-    return abaqus_solver_builder_factory_emitter(
+    return _task_kwarg_emitter(
         target=target,
         source=source,
         env=env,
         suffixes=suffixes,
         appending_suffixes=appending_suffixes,
-        stdout_extension=stdout_extension
+        stdout_extension=stdout_extension,
+        required_task_kwarg="job",
     )
 
 
