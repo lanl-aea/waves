@@ -227,9 +227,9 @@ Note the following two important aspects of the code above:
 
 The code above closes out our familiar workflow with the use of the
 :meth:`waves.scons_extensions.abaqus_solver_builder_factory` method where the task definitions have changed to include
-the parameter set directory as part of source and target definitions. Note that the ``# Abaqus Solver`` code is still
-within the ``for`` loop, so the Abaqus Solver will be called as many times as we have parameter sets. In this case, we
-will solve four Abaqus simulations.
+the parameter set directory, ``set_name``, as part of source and target definitions. Note that the ``# Abaqus Solver``
+code is still within the ``for`` loop, so the Abaqus Solver will be called as many times as we have parameter sets. In
+this case, we will solve four Abaqus simulations.
 
 .. admonition:: waves-tutorials/tutorial_07_cartesian_product
 
