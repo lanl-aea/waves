@@ -165,7 +165,7 @@ source file change.
       :lineno-match:
       :start-after: marker-3
       :end-before: marker-4
-      :emphasize-lines: 3, 14-15
+      :emphasize-lines: 3, 14
 
 Per the changes you made earlier in this tutorial, the ``abaqus_source_list`` must be updated to reflect the replacement
 of ``rectangle_compression.inp`` with the parameterized ``rectangle_compression.inp.in`` file.
