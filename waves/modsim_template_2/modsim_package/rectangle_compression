@@ -62,13 +62,11 @@ images.extend(
 # Abaqus Solve
 abaqus_options = "-double both"
 
-datacheck_name = "rectangle_compression_DATACHECK"
-datacheck_extensions = ("odb", "dat", "msg", "com", "prt", "023", "mdl", "sim", "stt")
 datacheck.extend(
-    env.AbaqusSolver(
-        target=[f"{datacheck_name}.{extension}" for extension in datacheck_extensions],
-        source=["rectangle_compression.inp"],
-        job=datacheck_name,
+    env.AbaqusDatacheck(
+        target=["rectangle_compression_DATACHECK.odb"],
+        source=solve_source_list,
+        job="rectangle_compression_DATACHECK",
         program_options=f"{abaqus_options} -datacheck",
     )
 )

@@ -1595,6 +1595,57 @@ def _task_kwarg_emitter(
     )
 
 
+def abaqus_datacheck_emitter(
+    target: list,
+    source: list,
+    env: SCons.Environment.Environment,
+    suffixes: typing.Iterable[str] = _settings._abaqus_datacheck_extensions,
+    appending_suffixes: typing.Optional[typing.Iterable[str]] = None,
+    stdout_extension: str = _settings._stdout_extension,
+):
+    """SCons emitter function template designed for :meth:`waves.scons_extensions.abaqus_solver_builder_factory` based
+    builders.
+
+    This emitter prepends the target list with ``job`` task keyword argument named targets before passing through the
+    :meth:`waves.scons_extensions.first_target_emitter` emitter.
+
+    Searches for the ``job`` task keyword argument and appends the target list with ``{job}{suffix}`` targets using the
+    ``suffixes`` list.
+
+    Searches for a file ending in the stdout extension. If none is found, creates a target by appending the stdout
+    extension to the first target in the ``target`` list. The associated Builder requires at least one target for this
+    reason. The stdout file is always placed at the end of the returned target list.
+
+    This is an SCons emitter function and not an emitter factory. The suffix arguments: ``suffixes`` and
+    ``appending_suffixes`` are only relevant for developers writing new emitters which call this function as a base. The
+    suffixes list emits targets where the suffix replaces the first target's suffix, e.g. for ``target.ext`` emit a new
+    target ``target.suffix``. The appending suffixes list emits targets where the suffix appends the first target's
+    suffix, e.g.  for ``target.ext`` emit a new target ``target.ext.appending_suffix``.
+
+    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
+    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
+    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file with the ``.stdout``
+    extension as a target, e.g. ``target.stdout`` or ``parameter_set1/target.stdout``.
+
+    :param target: The target file list of strings
+    :param source: The source file list of SCons.Node.FS.File objects
+    :param env: The builder's SCons construction environment object
+    :param suffixes: Suffixes which should replace the first target's extension
+    :param appending_suffixes: Suffixes which should append the first target's extension
+
+    :return: target, source
+    """
+    return _task_kwarg_emitter(
+        target=target,
+        source=source,
+        env=env,
+        suffixes=suffixes,
+        appending_suffixes=appending_suffixes,
+        stdout_extension=stdout_extension,
+        required_task_kwarg="job",
+    )
+
+
 def abaqus_standard_emitter(
     target: list,
     source: list,
