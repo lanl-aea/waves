@@ -1214,6 +1214,14 @@ abaqus_pseudobuilder_input = {
         " job=job double=both input=input.inp $(cpus=1$)",
         {},
     ),
+    "custom inp, subdirectory": (
+        {},
+        {"job": f"subdir{os.path.sep}job", "inp": f"subdir{os.path.sep}input.inp"},
+        [f"subdir{os.path.sep}input.inp"],
+        [f"subdir{os.path.sep}job{ext}" for ext in _abaqus_standard_extensions],
+        " job=job double=both input=input.inp $(cpus=1$)",
+        {},
+    ),
     "user": (
         {},
         {"job": "job", "user": "user.f"},
