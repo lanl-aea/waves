@@ -1581,9 +1581,8 @@ def _task_kwarg_emitter(
             f"Emitter requires the '{required_task_kwarg}' task keyword argument"
         )
 
-    if len(target) > 0:
-        target_parent = pathlib.Path(str(target[0])).parent
-    target = target + [target_parent / f"{env['job']}{suffix}" for suffix in suffixes]
+    build_subdirectory = _build_subdirectory(target)
+    target = target + [build_subdirectory / f"{env['job']}{suffix}" for suffix in suffixes]
 
     return first_target_emitter(
         target=target,
