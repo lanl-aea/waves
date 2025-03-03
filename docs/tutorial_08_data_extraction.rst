@@ -24,6 +24,7 @@ References
 **********
 
 * |PROJECT| :ref:`waves_scons_api` API: :meth:`waves.scons_extensions.abaqus_extract`
+* `SCons Attaching a Builder to a Construction Environment`_ :cite:`scons-user`
 * :ref:`odb_extract_cli` CLI
 * `Xarray`_ :cite:`xarray`
 * `h5py`_ :cite:`h5py`
@@ -93,6 +94,13 @@ accessing and organizing the results files and concatenating the parameter study
 SConstruct
 **********
 
+5. Update the ``SConstruct`` file with the changes below.
+
+   * Attach the  :meth:`waves.scons_extensions.abaqus_extract` builder to the construction environment as
+     ``AbaqusExtract`` by appending the ``BUILDERS`` dictionary as documented in `SCons Attaching a Builder to a
+     Construction Environment`_ :cite:`scons-user`.
+   * Add ``tutorial_08_data_extraction`` to the workflow_configurations list.
+
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_cartesian_product` is included below to help identify the
 changes made in this tutorial.
 
@@ -106,7 +114,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-5. Build the new targets
+6. Build the new targets
 
 .. code-block:: bash
 
@@ -119,7 +127,7 @@ Build Targets
 Output Files
 ************
 
-6. View the output files. The output files should match those introduced in :ref:`tutorial_cartesian_product`, with
+7. View the output files. The output files should match those introduced in :ref:`tutorial_cartesian_product`, with
    the addition of the :ref:`odb_extract_cli` output files.
 
 .. code-block:: bash

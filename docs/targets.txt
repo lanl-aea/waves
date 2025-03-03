@@ -97,6 +97,7 @@
 .. _`SCons command-line build options`: https://scons.org/doc/production/HTML/scons-user/ch10.html#idm46358236334624
 .. _`SCons command-line build variables`: https://scons.org/doc/production/HTML/scons-user/ch10s02.html
 .. _`SCons construction environment`: https://scons.org/doc/production/HTML/scons-user/ch07s02.html
+.. _`SCons Attaching a Builder to a Construction Environment`: https://scons.org/doc/production/HTML/scons-user/ch17s02.html
 .. _`SCons custom builders`: https://scons.org/doc/production/HTML/scons-user/ch17.html
 .. _`SCons hierarchical build`: https://scons.org/doc/production/HTML/scons-user/ch14.html
 .. _`SCons project build help`: https://scons.org/doc/production/HTML/scons-user/ch09.html#idm46358284707920
