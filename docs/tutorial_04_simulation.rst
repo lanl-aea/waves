@@ -98,66 +98,31 @@ Running a Datacheck
     .. literalinclude:: tutorials_tutorial_04_simulation
        :language: Python
        :lineno-match:
-       :emphasize-lines: 2-3
        :start-after: marker-4
        :end-before: marker-5
 
-In the changes you just made, the first line of code extracts the file ``name`` from the `Python pathlib`_ objects in
-the ``abaqus_source_list`` (which you defined in the previous tutorial) and removes any trailing ``.in`` extensions from
-the file names. The ``pathlib.Path.name`` method strips the leading path from the `Python pathlib`_ object and leaves
-the file name, for example:
-
-.. code-block:: Text
-
-    >>> source_file = pathlib.Path('/path/to/file.extension')
-    >>> print(type(source_file), str(source_file))
-    <class 'pathlib.PosixPath'> /path/to/file.extension
-    >>> print(type(source_file.name), source_file.name)
-    <class 'str'> file.extension
-
-In this tutorial, there are no files with ``.in`` extension; this is required when it comes to substituting parameters
-into files which is discussed in the next tutorial, :ref:`tutorial_parameter_substitution`. For this tutorial, we only
-require that the file names be extracted from the ``abaqus_source_list``. This tutorial would behave identically if the
-``solve_source_list`` was defined as
-
-.. code-block:: Python
-
-    solve_source_list = [source_file.name for source_file in abaqus_source_list]
-
-Next, ``rectangle_mesh.inp`` needs to be appended to the list of simulation source files. Recall from
-:ref:`tutorial_partition_mesh` that this file is one of the targets that is generated from
-:meth:`waves.scons_extensions.abaqus_journal_builder_factory` builder in the code pertaining to ``# Mesh``.
+The ``solve_source_list`` variable looks similar to the solver prep list added in :ref:`tutorial_solverprep`. There are
+two important differences. First, the solve source list uses the file basenames. The solver prep task copied the
+necessary Abaqus input files into the build directory. When we refer to the file basenames, SCons will know to look for
+the copy in the current build directory. Second, the ``rectangle_mesh.inp`` file has been added to the end of the solve
+source list. This is the mesh file produced by the mesh task defined in :ref:`tutorial_partition_mesh`.
 
 The code snippet will define an optional task called a *datacheck*. You can read the `Abaqus Standard/Explicit
 Execution`_ documentation :cite:`ABAQUS` for more details on running a datacheck. The primary purpose for running a
 datacheck is to verify the input file construction without running a full simulation. While Abaqus can continue with an
 analysis from the datacheck output, doing so modifies the datacheck output files, which has the affect of prompting
-`SCons`_ to always re-build the datacheck target. This task is excluded from the main workflow to avoid duplicate
+`SCons`_ to always re-build the datacheck target. This task is excluded from the main ``workflow`` to avoid duplicate
 preprocessing of the input file. It will be used later in :ref:`tutorial_regression_testing`.
 
-First, the ``job_name`` is resolved from the name of the first source file listed in code pertaining to ``#
-SolverPrep``, in this case ``rectangle_compression``. That name is appended with the ``_DATACHECK`` string to
-uniquely identify output files that might have a common name and extension with those from the actual analysis to come.
-The ``datacheck_suffixes`` are standard output file extensions that will form the targets of our datacheck task. See the
-`Abaqus File Extension Definitions`_ documentation :cite:`ABAQUS` for more information about each of the file
-extensions listed.
-
 One new section of code that we have not utilized yet in the previous tutorials is the passing of command-line options
-to the builder. This is done using the ``abaqus_options`` variable. Here, we instruct the Abaqus solver to use double
+to the builder. This is done using the ``program_options`` variable. Here, we instruct the Abaqus solver to use double
 precision for both the packager and the analysis. See the `Abaqus Precision Level for Executables`_ documentation
 :cite:`ABAQUS` for more information about the use of single or double precision in an Abaqus analysis.
 
-Finally, the ``datacheck`` list is extended separately from the ``workflow`` list to separate the task for running the
-datacheck from the full simulation workflow. The ``target`` list is formed by adding the ``datacheck_suffixes`` to the
-``datacheck_name``. The ``source`` list was created in the first portions of the new code for this tutorial.
-``job_name`` is used in the Abaqus solver call. See the :meth:`waves.scons_extensions.abaqus_solver_builder_factory` API
-for information about default behavior. Lastly, the ``abaqus_options`` are passed to the builder to be appended to the
-Abaqus solver call.
-
-While :class:`waves.scons_extensions.WAVESEnvironment` includes an ``AbaqusSolver`` builder that behaves similarly to
-the ``AbaqusJournal`` builder, in these tutorials we use the
-:meth:`waves.scons_extensions.abaqus_solver_builder_factory` builder for improved emitted target control and because the
-builder action creates a copy of the Abaqus environment file for compute environment reproducibility.
+The ``solve_source_list`` and target lists are hardcoded for clarity in the tutorials. Python users familiar with list
+comprehensions and the ``pathlib`` module should be able to construct the ``solve_source_list`` from the
+``copy_source_list`` introduced in :ref:`tutorial_solverprep`. Similarly, the datacheck target list could be constructed
+from a list comprehension and Python f-strings.
 
 .. _tutorial_simulation_waves_running_analysis:
 
