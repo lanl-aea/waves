@@ -51,13 +51,7 @@ env.Command(
 # Abaqus Solve
 solve_sources = [
     "rectangle_compression.inp",
-    "assembly.inp",
-    "boundary.inp",
-    "field_output.inp",
-    "materials.inp",
-    "parts.inp",
     "rectangle_mesh.inp",
-    "history_output.inp",
 ]
 
 solve_targets = [

@@ -49,7 +49,7 @@ env.AbaqusJournal(
 )
 
 # Abaqus Solve
-abaqus_source_list = [
+solve_sources = [
     "rectangle_compression.inp",
     "rectangle_mesh.inp",
 ]
@@ -65,7 +65,7 @@ solve_targets = [
 
 target = env.AbaqusSolver(
     target=solve_targets,
-    source=abaqus_source_list,
+    source=solve_sources,
     abaqus_program=env["ABAQUS_PROGRAM"],
     job="rectangle_compression",
     program_options="-double both",
