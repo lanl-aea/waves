@@ -97,8 +97,7 @@ SConstruct
 5. Update the ``SConstruct`` file with the changes below.
 
    * Attach the  :meth:`waves.scons_extensions.abaqus_extract` builder to the construction environment as
-     ``AbaqusExtract`` by appending the ``BUILDERS`` dictionary as documented in `SCons Attaching a Builder to a
-     Construction Environment`_ :cite:`scons-user`.
+     ``AbaqusExtract`` by appending the ``BUILDERS`` dictionary.
    * Add ``tutorial_08_data_extraction`` to the workflow_configurations list.
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_cartesian_product` is included below to help identify the
