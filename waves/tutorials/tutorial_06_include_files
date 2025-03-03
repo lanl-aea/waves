@@ -83,7 +83,6 @@ workflow.extend(
 # Comment used in tutorial code snippets: marker-4
 
 # Abaqus Solve
-abaqus_options = "-double both"
 solve_source_list = [
     "rectangle_compression.inp",
     "assembly.inp",
@@ -110,7 +109,7 @@ datacheck.extend(
         ],
         source=solve_source_list,
         job="rectangle_compression_DATACHECK",
-        program_options=f"{abaqus_options} -datacheck",
+        program_options="-double both -datacheck",
     )
 )
 
@@ -128,7 +127,7 @@ workflow.extend(
         ],
         source=solve_source_list,
         job="rectangle_compression",
-        program_options=abaqus_options,
+        program_options="-double both",
     )
 )
 

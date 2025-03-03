@@ -105,7 +105,6 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
     # Comment used in tutorial code snippets: marker-5
 
     # Abaqus Solve
-    abaqus_options = "-double both"
     solve_source_list = [
         set_name / "rectangle_compression.inp",
         set_name / "assembly.inp",
@@ -132,7 +131,7 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
             ],
             source=solve_source_list,
             job="rectangle_compression_DATACHECK",
-            program_options=f"{abaqus_options} -datacheck",
+            program_options="-double both -datacheck",
         )
     )
 
@@ -148,7 +147,7 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
             ],
             source=solve_source_list,
             job="rectangle_compression",
-            program_options=abaqus_options,
+            program_options="-double both",
         )
     )
 
