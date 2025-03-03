@@ -65,7 +65,7 @@ abaqus_options = "-double both"
 datacheck.extend(
     env.AbaqusDatacheck(
         target=["rectangle_compression_DATACHECK.odb"],
-        source=solve_source_list,
+        source=["rectangle_compression.inp"],
         job="rectangle_compression_DATACHECK",
         program_options=f"{abaqus_options} -datacheck",
     )
