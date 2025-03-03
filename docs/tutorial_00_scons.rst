@@ -34,7 +34,7 @@ Description
 automate the execution of complex computing workflows by constructing component task execution order. In the
 `WAVES tutorials`_ there are two components to the `SCons`_ project configuration: project configuration and
 simulation workflow configurations. This tutorial introduces the `SCons`_ project configuration file for the
-`WAVES tutorials`_ template :term:`modsim` repository.
+`WAVES tutorials`_ and template :term:`modsim` repository.
 
 The command-line utilities provided by `WAVES`_ are those utilities required to implement engineering workflows in
 traditional software build systems. For most engineering simulation workflows, software build systems will work
@@ -46,11 +46,12 @@ with the requirements of `CMake`_ in mind.
 For production-engineering analysis, `WAVES`_ focuses on extending the build system `SCons`_ because `SCons`_
 configuration files use `Python`_ as a fully featured scripting language. This choice is primarily driven by the
 familiarity of the engineering community with `Python`_ as a programming language, but also because the parameter
-generation utility can be integrated more closely with the build system, :ref:`parameter_generator_api`.
+generation utility can be integrated more closely with the build system via a Python API,
+:ref:`parameter_generator_api`.
 
-This tutorial will build out the project configuration file, named SConstruct by default. First a code snippet will
-be introduced followed by a description of what that snippet does. After sufficient code is added to the file, it can
-be executed with the ``scons`` command. Later tutorials will continue to expand the SConstruct file and add workflow
+This tutorial will build out the project configuration file, named ``SConstruct`` by default. First a code snippet will
+be introduced followed by a description of what that snippet does. After sufficient code is added to the file, it can be
+executed with the ``scons`` command. Later tutorials will continue to expand the SConstruct file and add workflow
 configuration files.
 
 ***************************
@@ -60,7 +61,7 @@ SCons Project Configuration
 .. include:: tutorial_directory_setup.txt
 
 4. Create a new file named ``SConstruct`` in the ``waves-tutorials`` directory and add the contents listed below. Note
-   that the filename is case sensitive.
+   that the filename is case sensitive and does not use a file extension.
 
 .. admonition:: waves-tutorials/SConstruct
 
