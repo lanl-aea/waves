@@ -12,6 +12,14 @@ New Features
 ============
 - Add one-at-a-time parameter generator. (:issue:`853`, :merge:`1101`). By  `Chris Johnson`_.
 
+Documentation
+=============
+- Use the WAVES construction environment Abaqus solve builder factory in the tutorials (:issue:`876`, :merge:`1118`). By
+  `Kyle Brindley`_.
+- Explicit source and target lists in the tutorials to limit use of intermediate and advanced Python concepts. Users
+  report that the mix of Python and SCons concepts makes learning SCons more difficult (:issue:`876`, :merge:`1118`).
+  By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Limit scope of changes possible in automated Gitlab release job (:issue:`875`, :merge:`1117`). By `Kyle Brindley`_.
