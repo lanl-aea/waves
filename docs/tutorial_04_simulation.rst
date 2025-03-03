@@ -166,12 +166,7 @@ addition of a separate datacheck alias, which will be used in :ref:`tutorial_reg
 SConstruct
 **********
 
-9. Make the following additions to the ``SConstruct`` file using the ``diff`` against the
-   ``SConstruct`` file from the last tutorial:
-
-   * Add the ``AbaqusSolver`` key-value pair to the ``BUILDERS`` dictionary in the code beneath ``# Add builders and
-     pseudo-builders``
-   * Add ``tutorial_04_simulation`` to the ``workflow_configurations`` list
+9. Add ``tutorial_04_simulation`` to the ``workflow_configurations`` list in the ``SConstruct`` file.
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_solverprep` is included below to help identify the
 changes made in this tutorial.
