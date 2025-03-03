@@ -34,7 +34,7 @@ Description
 automate the execution of complex computing workflows by constructing component task execution order. In the
 `WAVES tutorials`_ there are two components to the `SCons`_ project configuration: project configuration and
 simulation workflow configurations. This tutorial introduces the `SCons`_ project configuration file for the
-`WAVES tutorials`_ and template :term:`modsim` repository.
+`WAVES tutorials`_ and :ref:`modsim_templates`.
 
 The command-line utilities provided by `WAVES`_ are those utilities required to implement engineering workflows in
 traditional software build systems. For most engineering simulation workflows, software build systems will work
