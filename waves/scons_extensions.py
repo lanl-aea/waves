@@ -1686,7 +1686,7 @@ class AbaqusPseudoBuilder:
             currently added to the source and target lists when specifying ``oldjob`` or ``write_restart``. Use
             ``extra_sources`` and ``extra_targets`` to manually add them when needed.
 
-        :param job: Abaqus job name.
+        :param job: Abaqus job name *without* file extension.
         :param inp: Abaqus input file name. Defaults to ``job``.inp.
         :param user: User subroutine.
         :param cpus: CPUs to use for simulation. Is superceded by ``override_cpus`` if provided during object
@@ -1775,7 +1775,7 @@ class AbaqusPseudoBuilder:
         options = ""
 
         # Specify job name
-        options += f" job={pathlib.Path(job).stem}"
+        options += f" job={pathlib.Path(job).name}"
 
         # Specify "double" option, if requested
         if double:
@@ -1785,7 +1785,7 @@ class AbaqusPseudoBuilder:
         if inp:
             options += f" input={pathlib.Path(inp).name}"
         else:
-            inp = str(pathlib.Path(job).with_suffix(".inp"))
+            inp = f"{job}.inp"
         # Include input file as first source
         sources.append(inp)
 

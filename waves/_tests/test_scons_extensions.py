@@ -1174,12 +1174,28 @@ abaqus_pseudobuilder_input = {
         " job=job double=both $(cpus=1$)",
         {},
     ),
+    "job with periods": (
+        {},
+        {"job": "job.with.periods"},
+        ["job.with.periods.inp"],
+        [f"job.with.periods{ext}" for ext in _abaqus_standard_extensions],
+        " job=job.with.periods double=both $(cpus=1$)",
+        {},
+    ),
     "job, subdirectory": (
         {},
         {"job": f"subdir{os.path.sep}job"},
         [f"subdir{os.path.sep}job.inp"],
         [f"subdir{os.path.sep}job{ext}" for ext in _abaqus_standard_extensions],
         " job=job double=both $(cpus=1$)",
+        {},
+    ),
+    "job with periods, subdirectory": (
+        {},
+        {"job": f"subdir{os.path.sep}job.with.periods"},
+        [f"subdir{os.path.sep}job.with.periods.inp"],
+        [f"subdir{os.path.sep}job.with.periods{ext}" for ext in _abaqus_standard_extensions],
+        " job=job.with.periods double=both $(cpus=1$)",
         {},
     ),
     "override cpus": (

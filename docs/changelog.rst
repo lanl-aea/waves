@@ -12,6 +12,10 @@ New Features
 ============
 - Add one-at-a-time parameter generator. (:issue:`853`, :merge:`1101`). By  `Chris Johnson`_.
 
+Bug fixes
+=========
+- Allow periods in Abaqus pseudo-builder job names (:issue:`878`, :merge:`1119`). By `Kyle Brindley`_.
+
 Documentation
 =============
 - Use the WAVES construction environment Abaqus solve builder factory in the tutorials (:issue:`876`, :merge:`1118`). By
