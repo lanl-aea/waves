@@ -76,10 +76,9 @@ datacheck.extend(
     )
 )
 
-standard_extensions = ("odb", "dat", "msg", "com", "prt", "sta")
 artifacts.extend(
-    env.AbaqusSolver(
-        target=[f"rectangle_compression.{extension}" for extension in standard_extensions],
+    env.AbaqusStandard(
+        target=["rectangle_compression.odb"],
         source=solve_source_list,
         job="rectangle_compression",
         program_options="${abaqus_options} -cpus $(${solve_cpus}$)",
