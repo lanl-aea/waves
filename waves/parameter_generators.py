@@ -475,6 +475,25 @@ class ParameterGenerator(ABC):
             _set_coordinate_key
         )
 
+
+    def _coerce_values(self, name, values) -> numpy.array:
+        """Coerces values of each parameter into a single datatype. Warns the user if coercion was necessary.
+
+        requires:
+
+        * ``name``: name of the parameter obtained from ``self._parameter_names``
+        * ``values``: list of values obtained from ``self._samples.T``
+
+        :return: numpy.array
+        """
+        datatypes = set([type(value) for value in values])
+        values_coerced = numpy.array(values)
+        if len(datatypes) > 1:
+            warnings.warn(f'Found mixed datatypes in parameter {name}: {datatypes}. Values will be converted to '
+                          f'{type(values_coerced[0])}.')
+        return values_coerced
+
+
     def _create_parameter_study(self) -> None:
         """Create the standard structure for the parameter study dataset
 
@@ -490,7 +509,7 @@ class ParameterGenerator(ABC):
         """
         sample_arrays = [
             xarray.DataArray(
-                list(values),
+                self._coerce_values(name, list(values)),
                 name=name,
                 dims=[_hash_coordinate_key],
                 coords={_hash_coordinate_key: self._set_hashes},
