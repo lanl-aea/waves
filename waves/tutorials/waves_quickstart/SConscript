@@ -31,7 +31,7 @@ env.CopySubstfile(
 )
 
 # Abaqus Solve
-env.AbaqusSolver(
+env.AbaqusStandard(
     target=["rectangle_compression.odb"],
     source=["rectangle_compression.inp"],
     job="rectangle_compression",

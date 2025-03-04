@@ -127,14 +127,6 @@ env["ABAQUS_PROGRAM"] = env.AddProgram(
 # Add WAVES builders and scanners
 env.Append(
     BUILDERS={
-        "AbaqusDatacheck": waves.scons_extensions.abaqus_solver_builder_factory(
-            program="${ABAQUS_PROGRAM}",
-            emitter=waves.scons_extensions.abaqus_datacheck_emitter,
-        ),
-        "AbaqusStandard": waves.scons_extensions.abaqus_solver_builder_factory(
-            program="${ABAQUS_PROGRAM}",
-            emitter=waves.scons_extensions.abaqus_standard_emitter,
-        ),
         "AbaqusExtract": waves.scons_extensions.abaqus_extract(program=env["ABAQUS_PROGRAM"]),
         "CondaEnvironment": waves.scons_extensions.conda_environment(),
     }
