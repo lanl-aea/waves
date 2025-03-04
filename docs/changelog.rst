@@ -30,6 +30,8 @@ Documentation
   By `Kyle Brindley`_.
 - Use Abaqus datacheck, explicit, and standard builders with emitters from the WAVES construction environment in modsim
   templates (:issue:`877`, :merge:`1120`). By `Kyle Brindley`_.
+- Clarify all output files from tutorials' rectangle Abaqus journal files (:issue:`877`, :merge:`1120`). By `Kyle
+  Brindley`_.
 
 Internal Changes
 ================
