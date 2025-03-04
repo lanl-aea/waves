@@ -491,7 +491,7 @@ class ParameterGenerator(ABC):
         """
         sample_arrays = [
             xarray.DataArray(
-                self._coerce_values(name, list(values)),
+                _coerce_values(list(values), name),
                 name=name,
                 dims=[_hash_coordinate_key],
                 coords={_hash_coordinate_key: self._set_hashes},
