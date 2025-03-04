@@ -1168,9 +1168,41 @@ def test_abaqus_solver(builder_kwargs, task_kwargs, node_count, action_count, so
 def test_task_kwarg_emitter():
     pass
 
+abaqus_solver_emitter_factory_cases = {
+    "defaults": {},
+    "no defaults": {"suffixes": (".suffix",), "appending_suffixes": (".appending",), "stdout_extension": ".out"},
+}
 
-def test_abaqus_solver_emitter_factory():
-    pass
+
+@pytest.mark.parametrize(
+    "factory_kwargs",
+    abaqus_solver_emitter_factory_cases.values(),
+    ids=abaqus_solver_emitter_factory_cases.keys(),
+)
+def test_abaqus_solver_emitter_factory(factory_kwargs):
+    target = ["job.extension"]
+    source = ["source.extension"]
+    env = SCons.Environment.Environment()
+    env["job"] = "job"
+    emitter_positional = (target, source, env)
+
+    default_factory_kwargs = {
+        "suffixes": _abaqus_common_extensions,
+        "appending_suffixes": None,
+        "stdout_extension": _stdout_extension,
+    }
+
+    expected_factory_kwargs = copy.deepcopy(default_factory_kwargs)
+    expected_factory_kwargs.update(**factory_kwargs)
+
+    with patch("waves.scons_extensions._task_kwarg_emitter") as mock_emitter:
+        test_emitter = scons_extensions.abaqus_solver_emitter_factory(**factory_kwargs)
+        test_emitter(*emitter_positional)
+        mock_emitter.assert_called_once_with(
+            *emitter_positional,
+            **expected_factory_kwargs,
+            required_task_kwarg="job",
+        )
 
 
 abaqus_solver_emitter_factory_emitters_cases = {
@@ -1182,7 +1214,7 @@ abaqus_solver_emitter_factory_emitters_cases = {
     "datacheck no defaults": (
         "abaqus_datacheck_emitter",
         {"suffixes": _abaqus_datacheck_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
-        {"suffixes": (".notdefault",), "appending_suffixes": (".appending",), "stdout_extension": ".out"},
+        {"suffixes": (".suffixes",), "appending_suffixes": (".appending",), "stdout_extension": ".out"},
     ),
     "explicit defaults": (
         "abaqus_explicit_emitter",
@@ -1192,7 +1224,7 @@ abaqus_solver_emitter_factory_emitters_cases = {
     "explicit no defaults": (
         "abaqus_explicit_emitter",
         {"suffixes": _abaqus_explicit_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
-        {"suffixes": (".notdefault",), "appending_suffixes": (".appending",), "stdout_extension": ".out"},
+        {"suffixes": (".suffixes",), "appending_suffixes": (".appending",), "stdout_extension": ".out"},
     ),
     "standard defaults": (
         "abaqus_standard_emitter",
@@ -1202,7 +1234,7 @@ abaqus_solver_emitter_factory_emitters_cases = {
     "standard no defaults": (
         "abaqus_standard_emitter",
         {"suffixes": _abaqus_standard_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
-        {"suffixes": (".notdefault",), "appending_suffixes": (".appending",), "stdout_extension": ".out"},
+        {"suffixes": (".suffixes",), "appending_suffixes": (".appending",), "stdout_extension": ".out"},
     ),
 }
 
@@ -1227,7 +1259,7 @@ def test_abaqus_solver_emitter_factory_emitters(emitter_name, default_factory_kw
         patch("waves.scons_extensions.abaqus_solver_emitter_factory", return_value=mock_emitter) as mock_factory
     ):
         test_emitter = getattr(scons_extensions, emitter_name)
-        test_emitter(*emitter_positional, **expected_factory_kwargs)
+        test_emitter(*emitter_positional, **factory_kwargs)
         mock_factory.assert_called_once_with(
             **expected_factory_kwargs,
         )

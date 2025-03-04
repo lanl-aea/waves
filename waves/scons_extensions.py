@@ -1658,9 +1658,9 @@ def abaqus_solver_emitter_factory(
     """
     def emitter(target, source, env):
         return _task_kwarg_emitter(
-            target=target,
-            source=source,
-            env=env,
+            target,
+            source,
+            env,
             suffixes=suffixes,
             appending_suffixes=appending_suffixes,
             stdout_extension=stdout_extension,
