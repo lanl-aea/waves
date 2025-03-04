@@ -1174,34 +1174,51 @@ def test_abaqus_solver_emitter_factory():
 
 
 abaqus_datacheck_emitter_cases = {
-    "defaults": (
+    "datacheck defaults": (
         "abaqus_datacheck_emitter",
+        {"suffixes": _abaqus_datacheck_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
         {},
     ),
-    "no defaults": (
+    "datacheck no defaults": (
         "abaqus_datacheck_emitter",
+        {"suffixes": _abaqus_datacheck_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
+        {"suffixes": (".notdefault",), "appending_suffixes": (".appending",), "stdout_extension": ".out"},
+    ),
+    "explicit defaults": (
+        "abaqus_explicit_emitter",
+        {"suffixes": _abaqus_explicit_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
+        {},
+    ),
+    "explicit no defaults": (
+        "abaqus_explicit_emitter",
+        {"suffixes": _abaqus_explicit_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
+        {"suffixes": (".notdefault",), "appending_suffixes": (".appending",), "stdout_extension": ".out"},
+    ),
+    "standard defaults": (
+        "abaqus_standard_emitter",
+        {"suffixes": _abaqus_standard_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
+        {},
+    ),
+    "standard no defaults": (
+        "abaqus_standard_emitter",
+        {"suffixes": _abaqus_standard_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
         {"suffixes": (".notdefault",), "appending_suffixes": (".appending",), "stdout_extension": ".out"},
     ),
 }
 
 
 @pytest.mark.parametrize(
-    "emitter_name, factory_kwargs",
+    "emitter_name, default_factory_kwargs, factory_kwargs",
     abaqus_datacheck_emitter_cases.values(),
     ids=abaqus_datacheck_emitter_cases.keys(),
 )
-def test_abaqus_datacheck_emitter(emitter_name, factory_kwargs):
+def test_abaqus_solver_emitter_factory_emitters(emitter_name, default_factory_kwargs, factory_kwargs):
     target = ["job.extension"]
     source = ["source.extension"]
     env = SCons.Environment.Environment()
     env["job"] = "job"
     emitter_positional = (target, source, env)
 
-    default_factory_kwargs = {
-        "suffixes": _abaqus_datacheck_extensions,
-        "appending_suffixes": None,
-        "stdout_extension": _stdout_extension,
-    }
     expected_factory_kwargs = copy.deepcopy(default_factory_kwargs)
     expected_factory_kwargs.update(**factory_kwargs)
 
