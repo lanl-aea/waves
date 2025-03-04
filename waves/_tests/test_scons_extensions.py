@@ -1165,8 +1165,50 @@ def test_abaqus_solver(builder_kwargs, task_kwargs, node_count, action_count, so
             assert node.env[key] == expected_value
 
 
-def test_task_kwarg_emitter():
-    pass
+test_task_kwarg_emitter_cases = {
+    "required kwarg: 'required_kwarg'": (
+        (["target.out"], ["source.in"], SCons.Environment.Environment(required_kwarg="required_kwarg")),
+        {"required_task_kwarg": "required_kwarg"},
+        ["target.out"],
+        ["source.in"],
+        does_not_raise(),
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "positional, kwargs, expected_target, expected_source, outcome",
+    test_task_kwarg_emitter_cases.values(),
+    ids=test_task_kwarg_emitter_cases.keys(),
+)
+def test_task_kwarg_emitter(positional, kwargs, expected_target, expected_source, outcome):
+    default_kwargs = {
+        "suffixes": None,
+        "appending_suffixes": None,
+        "stdout_extension": _stdout_extension,
+        "required_task_kwarg": "",
+    }
+
+    expected_kwargs = copy.deepcopy(default_kwargs)
+    expected_kwargs.update(**kwargs)
+    expected_kwargs.pop("required_task_kwarg")
+    expected_env = positional[2]
+
+    with (
+        patch("waves.scons_extensions.first_target_emitter") as mock_emitter,
+        outcome,
+    ):
+        try:
+            scons_extensions._task_kwarg_emitter(*positional, **kwargs)
+            mock_emitter.assert_called_once_with(
+                expected_target,
+                expected_source,
+                expected_env,
+                **expected_kwargs,
+            )
+        finally:
+            pass
+
 
 abaqus_solver_emitter_factory_cases = {
     "defaults": {},

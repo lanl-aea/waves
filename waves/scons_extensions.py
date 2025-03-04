@@ -1582,18 +1582,21 @@ def _task_kwarg_emitter(
 
     :return: target, source
     """
-    if not required_task_kwarg or required_task_kwarg not in env or not env[required_task_kwarg]:
+    if not required_task_kwarg:
+        raise RuntimeError("Emitter requires a populated ``required_task_kwarg`` argument")
+    if required_task_kwarg not in env or not env[required_task_kwarg]:
         raise RuntimeError(
             f"Emitter requires the '{required_task_kwarg}' task keyword argument"
         )
 
     build_subdirectory = _build_subdirectory(target)
-    target = target + [build_subdirectory / f"{env['job']}{suffix}" for suffix in suffixes]
+    if suffixes is not None:
+        target = target + [build_subdirectory / f"{env['job']}{suffix}" for suffix in suffixes]
 
     return first_target_emitter(
-        target=target,
-        source=source,
-        env=env,
+        target,
+        source,
+        env,
         suffixes=suffixes,
         appending_suffixes=appending_suffixes,
         stdout_extension=stdout_extension
