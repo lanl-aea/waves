@@ -1373,15 +1373,16 @@ def _abaqus_solver_emitter(
 
     :return: target, source
     """
-    suffixes_copy = copy.deepcopy(suffixes)
+    suffixes_copy = list(copy.deepcopy(suffixes))
     if "suffixes" in env and env["suffixes"] is not None:
         suffixes_copy = copy.deepcopy(env["suffixes"])
-    primary_input_file = pathlib.Path(source[0].path)
-    if "job_name" not in env or not env["job_name"]:
-        env["job_name"] = primary_input_file.stem
     if isinstance(suffixes_copy, str):
         suffixes_copy = [suffixes_copy]
     suffixes_copy.append(_settings._abaqus_environment_extension)
+
+    primary_input_file = pathlib.Path(source[0].path)
+    if "job_name" not in env or not env["job_name"]:
+        env["job_name"] = primary_input_file.stem
     build_subdirectory = _build_subdirectory(target)
 
     # Search for a user specified stdout file. Fall back to job name with appended stdout extension
@@ -1672,7 +1673,9 @@ def abaqus_datacheck_emitter(
     target: list,
     source: list,
     env: SCons.Environment.Environment,
-    suffixes=_settings._abaqus_datacheck_extensions
+    suffixes: typing.Iterable[str] = _settings._abaqus_datacheck_extensions,
+    appending_suffixes: typing.Optional[typing.Iterable[str]] = None,
+    stdout_extension: str = _settings._stdout_extension,
 ):
     """Abaqus solver emitter for datacheck targets
 
@@ -1719,13 +1722,20 @@ def abaqus_datacheck_emitter(
 
        The ``job`` keyword argument *must* be provided in the task definition.
 
+    :param target: The target file list of strings
+    :param source: The source file list of SCons.Node.FS.File objects
+    :param env: The builder's SCons construction environment object
     :param suffixes: Suffixes which should replace the first target's extension
     :param appending_suffixes: Suffixes which should append the first target's extension
     :param stdout_extension: The extension used by the STDOUT/STDERR redirect file
 
     :return: target, source
     """
-    emitter = abaqus_solver_emitter_factory(suffixes=suffixes)
+    emitter = abaqus_solver_emitter_factory(
+        suffixes=suffixes,
+        appending_suffixes=appending_suffixes,
+        stdout_extension=stdout_extension
+    )
     return emitter(target, source, env)
 
 
@@ -1782,6 +1792,9 @@ def abaqus_explicit_emitter(
 
        The ``job`` keyword argument *must* be provided in the task definition.
 
+    :param target: The target file list of strings
+    :param source: The source file list of SCons.Node.FS.File objects
+    :param env: The builder's SCons construction environment object
     :param suffixes: Suffixes which should replace the first target's extension
     :param appending_suffixes: Suffixes which should append the first target's extension
     :param stdout_extension: The extension used by the STDOUT/STDERR redirect file
@@ -1849,6 +1862,9 @@ def abaqus_standard_emitter(
 
        The ``job`` keyword argument *must* be provided in the task definition.
 
+    :param target: The target file list of strings
+    :param source: The source file list of SCons.Node.FS.File objects
+    :param env: The builder's SCons construction environment object
     :param suffixes: Suffixes which should replace the first target's extension
     :param appending_suffixes: Suffixes which should append the first target's extension
     :param stdout_extension: The extension used by the STDOUT/STDERR redirect file

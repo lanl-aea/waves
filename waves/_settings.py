@@ -9,12 +9,12 @@ _project_name = f"{_project_name_short} Analysis for Verified Engineering Simula
 # SCons extensions
 _abaqus_environment_file = "abaqus_v6.env"
 _abaqus_environment_extension = f".{_abaqus_environment_file}"
-_abaqus_common_extensions = [".odb", ".dat", ".msg", ".com", ".prt"]
-_abaqus_datacheck_extensions = [".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt"]
-_abaqus_explicit_extensions = [".odb", ".dat", ".msg", ".com", ".prt", ".sta"]
-_abaqus_explicit_restart_extensions = [".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"]
-_abaqus_standard_extensions = [".odb", ".dat", ".msg", ".com", ".prt", ".sta"]
-_abaqus_standard_restart_extensions = [".odb", ".prt", ".mdl", ".sim", ".stt", ".res"]
+_abaqus_common_extensions = (".odb", ".dat", ".msg", ".com", ".prt")
+_abaqus_datacheck_extensions = (".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt")
+_abaqus_explicit_extensions = (".odb", ".dat", ".msg", ".com", ".prt", ".sta")
+_abaqus_explicit_restart_extensions = (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel")
+_abaqus_standard_extensions = (".odb", ".dat", ".msg", ".com", ".prt", ".sta")
+_abaqus_standard_restart_extensions = (".odb", ".prt", ".mdl", ".sim", ".stt", ".res")
 _matlab_environment_extension = ".matlab.env"
 _sbatch_wrapper_options = "--wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap"
 _sierra_environment_extension = ".env"
