@@ -1596,9 +1596,6 @@ def _task_kwarg_emitter(
 
 
 def abaqus_solver_emitter_factory(
-    target: list,
-    source: list,
-    env: SCons.Environment.Environment,
     suffixes: typing.Iterable[str] = _settings._abaqus_datacheck_extensions,
     appending_suffixes: typing.Optional[typing.Iterable[str]] = None,
     stdout_extension: str = _settings._stdout_extension,
@@ -1646,6 +1643,10 @@ def abaqus_solver_emitter_factory(
             required_task_kwarg="job",
         )
     return emitter
+
+
+abaqus_standard_emitter = abaqus_solver_emitter_factory(suffixes=_settings._abaqus_standard_extensions)
+abaqus_datacheck_emitter = abaqus_solver_emitter_factory(suffixes=_settings._abaqus_datacheck_extensions)
 
 
 def abaqus_solver_builder_factory(
