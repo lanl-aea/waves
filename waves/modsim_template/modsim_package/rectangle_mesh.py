@@ -30,7 +30,7 @@ def main(input_file, output_file, model_name, part_name, global_seed):
     :param str part_name: The name of the Abaqus part
     :param float global_seed: The global mesh seed size
 
-    :returns: ``output_file``.cae, ``output_file``.inp
+    :returns: ``output_file``.cae, ``output_file``.jnl, ``output_file``.inp
     """
     input_file = os.path.splitext(input_file)[0] + ".cae"
     output_file = os.path.splitext(output_file)[0] + ".cae"
