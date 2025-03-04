@@ -21,7 +21,7 @@ def main(output_file, model_name, part_name, width, height):
     :param float width: The rectangle width
     :param float height: The rectangle height
 
-    :returns: writes ``output_file``.cae
+    :returns: writes ``output_file``.cae and ``output_file``.jnl
     """
     output_file = os.path.splitext(output_file)[0] + ".cae"
 
