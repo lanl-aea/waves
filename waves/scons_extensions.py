@@ -1628,6 +1628,27 @@ def abaqus_solver_emitter_factory(
     subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file with the ``.stdout``
     extension as a target, e.g. ``target.stdout`` or ``parameter_set1/target.stdout``.
 
+    .. code-block::
+       :caption: SConstruct
+
+       import waves
+       env = Environment()
+       env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
+       env["ABAQUS_PROGRAM"] = env.AddProgram(["abaqus"])
+       env.Append(BUILDERS={
+           "AbaqusStandard": waves.scons_extensions.abaqus_solver_builder_factory(
+               program=env["ABAQUS_PROGRAM"],
+               emitter=waves.scons_extensions.abaqus_solver_emitter_factory(
+                   suffixes=[".odb", ".dat", ".msg", ".com", ".prt", ".sta"],
+               )
+           )
+       })
+       env.AbaqusStandard(target=["job.odb"], source=["input.inp"], job="job")
+
+    .. note::
+
+       The ``job`` keyword argument *must* be provided in the task definition.
+
     :param suffixes: Suffixes which should replace the first target's extension
     :param appending_suffixes: Suffixes which should append the first target's extension
     :param stdout_extension: The extension used by the STDOUT/STDERR redirect file
@@ -1679,6 +1700,25 @@ def abaqus_datacheck_emitter(
     subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file with the ``.stdout``
     extension as a target, e.g. ``target.stdout`` or ``parameter_set1/target.stdout``.
 
+    .. code-block::
+       :caption: SConstruct
+
+       import waves
+       env = Environment()
+       env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
+       env["ABAQUS_PROGRAM"] = env.AddProgram(["abaqus"])
+       env.Append(BUILDERS={
+           "AbaqusDatacheck": waves.scons_extensions.abaqus_solver_builder_factory(
+               program=env["ABAQUS_PROGRAM"],
+               emitter=waves.scons_extensions.abaqus_datacheck_emitter,
+           )
+       })
+       env.AbaqusDatacheck(target=["job.odb"], source=["input.inp"], job="job")
+
+    .. note::
+
+       The ``job`` keyword argument *must* be provided in the task definition.
+
     :param suffixes: Suffixes which should replace the first target's extension
     :param appending_suffixes: Suffixes which should append the first target's extension
     :param stdout_extension: The extension used by the STDOUT/STDERR redirect file
@@ -1722,6 +1762,25 @@ def abaqus_explicit_emitter(
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
     subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file with the ``.stdout``
     extension as a target, e.g. ``target.stdout`` or ``parameter_set1/target.stdout``.
+
+    .. code-block::
+       :caption: SConstruct
+
+       import waves
+       env = Environment()
+       env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
+       env["ABAQUS_PROGRAM"] = env.AddProgram(["abaqus"])
+       env.Append(BUILDERS={
+           "AbaqusExplicit": waves.scons_extensions.abaqus_solver_builder_factory(
+               program=env["ABAQUS_PROGRAM"],
+               emitter=waves.scons_extensions.abaqus_explicit_emitter,
+           )
+       })
+       env.AbaqusExplicit(target=["job.odb"], source=["input.inp"], job="job")
+
+    .. note::
+
+       The ``job`` keyword argument *must* be provided in the task definition.
 
     :param suffixes: Suffixes which should replace the first target's extension
     :param appending_suffixes: Suffixes which should append the first target's extension
@@ -1770,6 +1829,25 @@ def abaqus_standard_emitter(
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
     subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file with the ``.stdout``
     extension as a target, e.g. ``target.stdout`` or ``parameter_set1/target.stdout``.
+
+    .. code-block::
+       :caption: SConstruct
+
+       import waves
+       env = Environment()
+       env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
+       env["ABAQUS_PROGRAM"] = env.AddProgram(["abaqus"])
+       env.Append(BUILDERS={
+           "AbaqusStandard": waves.scons_extensions.abaqus_solver_builder_factory(
+               program=env["ABAQUS_PROGRAM"],
+               emitter=waves.scons_extensions.abaqus_standard_emitter,
+           )
+       })
+       env.AbaqusStandard(target=["job.odb"], source=["input.inp"], job="job")
+
+    .. note::
+
+       The ``job`` keyword argument *must* be provided in the task definition.
 
     :param suffixes: Suffixes which should replace the first target's extension
     :param appending_suffixes: Suffixes which should append the first target's extension
