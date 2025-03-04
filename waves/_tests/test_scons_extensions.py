@@ -1173,7 +1173,7 @@ def test_abaqus_solver_emitter_factory():
     pass
 
 
-abaqus_datacheck_emitter_cases = {
+abaqus_solver_emitter_factory_emitters_cases = {
     "datacheck defaults": (
         "abaqus_datacheck_emitter",
         {"suffixes": _abaqus_datacheck_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
@@ -1209,8 +1209,8 @@ abaqus_datacheck_emitter_cases = {
 
 @pytest.mark.parametrize(
     "emitter_name, default_factory_kwargs, factory_kwargs",
-    abaqus_datacheck_emitter_cases.values(),
-    ids=abaqus_datacheck_emitter_cases.keys(),
+    abaqus_solver_emitter_factory_emitters_cases.values(),
+    ids=abaqus_solver_emitter_factory_emitters_cases.keys(),
 )
 def test_abaqus_solver_emitter_factory_emitters(emitter_name, default_factory_kwargs, factory_kwargs):
     target = ["job.extension"]
