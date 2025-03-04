@@ -1174,17 +1174,23 @@ def test_abaqus_solver_emitter_factory():
 
 
 abaqus_datacheck_emitter_cases = {
-    "defaults": {},
-    "no defaults": {"suffixes": (".notdefault",), "appending_suffixes": (".appending",), "stdout_extension": ".out"},
+    "defaults": (
+        "abaqus_datacheck_emitter",
+        {},
+    ),
+    "no defaults": (
+        "abaqus_datacheck_emitter",
+        {"suffixes": (".notdefault",), "appending_suffixes": (".appending",), "stdout_extension": ".out"},
+    ),
 }
 
 
 @pytest.mark.parametrize(
-    "factory_kwargs",
+    "emitter_name, factory_kwargs",
     abaqus_datacheck_emitter_cases.values(),
     ids=abaqus_datacheck_emitter_cases.keys(),
 )
-def test_abaqus_datacheck_emitter(factory_kwargs):
+def test_abaqus_datacheck_emitter(emitter_name, factory_kwargs):
     target = ["job.extension"]
     source = ["source.extension"]
     env = SCons.Environment.Environment()
@@ -1203,21 +1209,14 @@ def test_abaqus_datacheck_emitter(factory_kwargs):
     with (
         patch("waves.scons_extensions.abaqus_solver_emitter_factory", return_value=mock_emitter) as mock_factory
     ):
-        scons_extensions.abaqus_datacheck_emitter(*emitter_positional, **expected_factory_kwargs)
+        test_emitter = getattr(scons_extensions, emitter_name)
+        test_emitter(*emitter_positional, **expected_factory_kwargs)
         mock_factory.assert_called_once_with(
             **expected_factory_kwargs,
         )
         mock_emitter.assert_called_once_with(
             *emitter_positional,
         )
-
-
-def test_abaqus_explicit_emitter():
-    pass
-
-
-def test_abaqus_standard_emitter():
-    pass
 
 
 abaqus_pseudobuilder_input = {
