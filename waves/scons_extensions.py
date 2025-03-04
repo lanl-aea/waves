@@ -1591,7 +1591,7 @@ def _task_kwarg_emitter(
 
     build_subdirectory = _build_subdirectory(target)
     if suffixes is not None:
-        target = target + [build_subdirectory / f"{env['job']}{suffix}" for suffix in suffixes]
+        target = target + [build_subdirectory / f"{env[required_task_kwarg]}{suffix}" for suffix in suffixes]
 
     return first_target_emitter(
         target,

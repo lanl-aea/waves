@@ -1166,12 +1166,47 @@ def test_abaqus_solver(builder_kwargs, task_kwargs, node_count, action_count, so
 
 
 test_task_kwarg_emitter_cases = {
-    "required kwarg: 'required_kwarg'": (
-        (["target.out"], ["source.in"], SCons.Environment.Environment(required_kwarg="required_kwarg")),
-        {"required_task_kwarg": "required_kwarg"},
+    "designed use behavior": (
+        (["target.out"], ["source.in"], SCons.Environment.Environment(task_kwarg="value")),
+        {"required_task_kwarg": "task_kwarg"},
         ["target.out"],
         ["source.in"],
         does_not_raise(),
+    ),
+    "subdirectory designed use behavior": (
+        ([f"subdir{os.path.sep}target.out"], ["source.in"], SCons.Environment.Environment(task_kwarg="value")),
+        {"required_task_kwarg": "task_kwarg"},
+        [f"subdir{os.path.sep}target.out"],
+        ["source.in"],
+        does_not_raise(),
+    ),
+    "specified suffixes": (
+        (["target.out"], ["source.in"], SCons.Environment.Environment(task_kwarg="value")),
+        {"required_task_kwarg": "task_kwarg", "suffixes": (".suffixes",)},
+        ["target.out", pathlib.Path("value.suffixes")],
+        ["source.in"],
+        does_not_raise(),
+    ),
+    "subdirectory specified suffixes": (
+        ([f"subdir{os.path.sep}target.out"], ["source.in"], SCons.Environment.Environment(task_kwarg="value")),
+        {"required_task_kwarg": "task_kwarg", "suffixes": (".suffixes",)},
+        [f"subdir{os.path.sep}target.out", pathlib.Path("subdir") / "value.suffixes"],
+        ["source.in"],
+        does_not_raise(),
+    ),
+    "required kwarg not specified": (
+        (["target.out"], ["source.in"], SCons.Environment.Environment()),
+        {},
+        ["target.out"],
+        ["source.in"],
+        pytest.raises(RuntimeError),
+    ),
+    "required kwarg missing in env": (
+        (["target.out"], ["source.in"], SCons.Environment.Environment()),
+        {"required_task_kwarg": "task_kwarg"},
+        ["target.out"],
+        ["source.in"],
+        pytest.raises(RuntimeError),
     ),
 }
 
