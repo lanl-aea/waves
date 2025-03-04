@@ -11,6 +11,11 @@ Changelog
 New Features
 ============
 - Add one-at-a-time parameter generator. (:issue:`853`, :merge:`1101`). By  `Chris Johnson`_.
+- Add public emitter factory for the Abaqus solver builder factory (:issue:`877`, :merge:`1120`). By `Kyle Brindley`_.
+- Add public emitters for the Abaqus solver builder factory based builders (:issue:`877`, :merge:`1120`). By `Kyle
+  Brindley`_.
+- Add Abaqus datacheck, explicit, and standard builders with emitters to the WAVES construction environment
+  (:issue:`877`, :merge:`1120`). By `Kyle Brindley`_.
 
 Bug fixes
 =========
@@ -23,6 +28,8 @@ Documentation
 - Explicit source and target lists in the tutorials to limit use of intermediate and advanced Python concepts. Users
   report that the mix of Python and SCons concepts makes learning SCons more difficult (:issue:`876`, :merge:`1118`).
   By `Kyle Brindley`_.
+- Use Abaqus datacheck, explicit, and standard builders with emitters from the WAVES construction environment in modsim
+  templates (:issue:`877`, :merge:`1120`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
