@@ -2629,6 +2629,21 @@ waves_environment_builders = {
     "FirstTargetBuilder": ("FirstTargetBuilder", "first_target_builder_factory", {}),
     "AbaqusJournal": ("AbaqusJournal", "abaqus_journal_builder_factory", {"program": "${ABAQUS_PROGRAM}"}),
     "AbaqusSolver": ("AbaqusSolver", "abaqus_solver_builder_factory", {"program": "${ABAQUS_PROGRAM}"}),
+    "AbaqusDatacheck": (
+        "AbaqusDatacheck",
+        "abaqus_solver_builder_factory",
+        {"program": "${ABAQUS_PROGRAM}", "emitter": scons_extensions.abaqus_datacheck_emitter}
+    ),
+    "AbaqusExplicit": (
+        "AbaqusExplicit",
+        "abaqus_solver_builder_factory",
+        {"program": "${ABAQUS_PROGRAM}", "emitter": scons_extensions.abaqus_explicit_emitter}
+    ),
+    "AbaqusStandard": (
+        "AbaqusStandard",
+        "abaqus_solver_builder_factory",
+        {"program": "${ABAQUS_PROGRAM}", "emitter": scons_extensions.abaqus_standard_emitter}
+    ),
     "PythonScript": ("PythonScript", "python_builder_factory", {"program": "${PYTHON_PROGRAM}"}),
     "QuinoaSolver": (
         "QuinoaSolver",

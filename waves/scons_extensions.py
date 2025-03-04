@@ -4068,6 +4068,60 @@ class WAVESEnvironment(SConsEnvironment):
         builder = abaqus_solver_builder_factory(program="${ABAQUS_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
+    def AbaqusDatacheck(self, target, source, *args, **kwargs):
+        """Builder from factory :meth:`waves.scons_extensions.abaqus_solver_builder_factory` using the
+        :meth:`waves.scons_extensions.abaqus_datacheck_emitter`.
+
+        :var program: ``${ABAQUS_PROGRAM}``
+        :var emitter: :meth:`waves.scons_extensions.abaqus_datacheck_emitter`
+
+        :param target: The task target list
+        :param source: The task source list
+        :param args: All positional arguments are passed through to the builder (*not* to the builder factory)
+        :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
+        """
+        builder = abaqus_solver_builder_factory(
+            program="${ABAQUS_PROGRAM}",
+            emitter=abaqus_datacheck_emitter,
+        )
+        return builder(self, *args, target=target, source=source, **kwargs)
+
+    def AbaqusExplicit(self, target, source, *args, **kwargs):
+        """Builder from factory :meth:`waves.scons_extensions.abaqus_solver_builder_factory` using the
+        :meth:`waves.scons_extensions.abaqus_explicit_emitter`.
+
+        :var program: ``${ABAQUS_PROGRAM}``
+        :var emitter: :meth:`waves.scons_extensions.abaqus_explicit_emitter`
+
+        :param target: The task target list
+        :param source: The task source list
+        :param args: All positional arguments are passed through to the builder (*not* to the builder factory)
+        :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
+        """
+        builder = abaqus_solver_builder_factory(
+            program="${ABAQUS_PROGRAM}",
+            emitter=abaqus_explicit_emitter,
+        )
+        return builder(self, *args, target=target, source=source, **kwargs)
+
+    def AbaqusStandard(self, target, source, *args, **kwargs):
+        """Builder from factory :meth:`waves.scons_extensions.abaqus_solver_builder_factory` using the
+        :meth:`waves.scons_extensions.abaqus_standard_emitter`.
+
+        :var program: ``${ABAQUS_PROGRAM}``
+        :var emitter: :meth:`waves.scons_extensions.abaqus_standard_emitter`
+
+        :param target: The task target list
+        :param source: The task source list
+        :param args: All positional arguments are passed through to the builder (*not* to the builder factory)
+        :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
+        """
+        builder = abaqus_solver_builder_factory(
+            program="${ABAQUS_PROGRAM}",
+            emitter=abaqus_standard_emitter,
+        )
+        return builder(self, *args, target=target, source=source, **kwargs)
+
     def AbaqusPseudoBuilder(self, job, *args, override_cpus: typing.Optional[int] = None, **kwargs):
         """Construction environment pseudo-builder from :class:`waves.scons_extensions.AbaqusPseudoBuilder`
 
