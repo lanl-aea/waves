@@ -20,6 +20,11 @@ New Features
 Bug fixes
 =========
 - Allow periods in Abaqus pseudo-builder job names (:issue:`878`, :merge:`1119`). By `Kyle Brindley`_.
+- Handle the project help keyword argument breaking change from ``keep_local`` to ``local_only`` released as a fix in
+  SCons 4.9.0: https://scons.org/scons-490-is-available.html. The ``project_help`` related functions make the same
+  breaking change in the keyword argument name to match SCons, but preserve support for older versions of SCons by using
+  the older keyword argument when the new keyword argument throws a ``TypeError`` exception (:issue:`879`,
+  :merge:`1128`). By `Kyle Brindley`_.
 
 Documentation
 =============
