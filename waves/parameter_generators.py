@@ -1553,7 +1553,7 @@ def _coerce_values(values: typing.Iterable, name: typing.Optional[str] = None) -
 
     :return: 1D numpy array of a consistent datatype
     """
-    datatypes = set([type(value) for value in values])
+    datatypes = set(type(value) for value in values)
     values_coerced = numpy.array(values)
     if len(datatypes) > 1:
         warnings.warn(
