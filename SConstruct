@@ -118,7 +118,7 @@ else:  # *Nix style tee
     env["tee_suffix"] = "$(2>&1 | tee ${TARGETS[-1].abspath}$)"
 
 # Find required programs for conditional target ignoring
-required_programs = ["sphinx-build", "latexmk"]
+required_programs = ["pytest", "sphinx-build", "latexmk", "flake8", "black", "mypy"]
 for program in required_programs:
     absolute_path = env[program.replace("-", "_")] = shutil.which(program, path=env["ENV"]["PATH"])
     print(f"Checking whether '{program}' program exists...{absolute_path}")
