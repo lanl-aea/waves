@@ -1557,8 +1557,8 @@ def _coerce_values(values: typing.Iterable, name: typing.Optional[str] = None) -
     values_coerced = numpy.array(values)
     if len(datatypes) > 1:
         warnings.warn(
-            f"Found mixed datatypes in parameter '{name}': '{datatypes}'. All values will be unified to datatype: "
-            f"'{type(values_coerced[0])}'."
+            f"Found mixed datatypes in parameter '{name}': '{datatypes}'. Parameter values will be unified to datatype:"
+            f" '{type(values_coerced[0])}'."
         )
     return values_coerced
 
