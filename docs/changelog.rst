@@ -32,6 +32,8 @@ Documentation
   templates (:issue:`877`, :merge:`1120`). By `Kyle Brindley`_.
 - Clarify all output files from tutorials' rectangle Abaqus journal files (:issue:`877`, :merge:`1120`). By `Kyle
   Brindley`_.
+- Update the WAVES quickstart Abaqus installation note to take advantage of the ``--abaqus-command`` project command
+  line option (:merge:`1126`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
