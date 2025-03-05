@@ -57,9 +57,9 @@ use `SCons`_ as the automated build system and translate software build system c
 simulation and analysis. The `SCons documentation`_ should be consulted as a reference for additional build system
 concepts, command line options, and project configuration.
 
-This project includes a template `MODSIM-TEMPLATE`_ which is used for the tutorials and for integration and regression
-testing of the `WAVES`_ extensions to SCons. The template modsim project can be duplicated from the command line as
-``waves fetch modsim_template`` after installation.
+This project includes a `MODSIM-TEMPLATE`_ which is used for the tutorials and for integration and regression testing of
+the `WAVES`_ extensions to SCons. The template modsim project can be duplicated from the command line as ``waves fetch
+modsim_template`` after installation.
 
 .. project-description-end-do-not-remove
 
