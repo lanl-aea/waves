@@ -475,7 +475,6 @@ class ParameterGenerator(ABC):
             _set_coordinate_key
         )
 
-
     def _create_parameter_study(self) -> None:
         """Create the standard structure for the parameter study dataset
 
@@ -1557,8 +1556,10 @@ def _coerce_values(values: typing.Iterable, name: typing.Optional[str] = None) -
     datatypes = set([type(value) for value in values])
     values_coerced = numpy.array(values)
     if len(datatypes) > 1:
-        warnings.warn(f"Found mixed datatypes in parameter '{name}': '{datatypes}'. Values will be converted to "
-                      f"'{type(values_coerced[0])}'.")
+        warnings.warn(
+            f"Found mixed datatypes in parameter '{name}': '{datatypes}'. Values will be converted to "
+            f"'{type(values_coerced[0])}'."
+        )
     return values_coerced
 
 
