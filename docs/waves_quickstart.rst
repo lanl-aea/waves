@@ -147,8 +147,8 @@ definition granularity, and computational resources. For instance, if the geomet
 significant wall time, but are not part of the mesh convergence study, it might be desirable to parameterize within the
 ``SConscript`` file where the geometry and partition tasks could be excluded from the parameter study.
 
-|PROJECT| provides several solutions for paramterizing at the level of workflow files, task definitions, or in arbitrary
-locations and methods, depending on the needs of the project.
+|PROJECT| provides several solutions for parameterizing at the level of workflow files, task definitions, or in
+arbitrary locations and methods, depending on the needs of the project.
 
 * workflow files: :meth:`waves.scons_extensions.parameter_study_sconscript`
 * task definitions: :meth:`waves.scons_extensions.parameter_study_task`
@@ -160,17 +160,25 @@ Building targets
 
 .. note::
 
-   Before you can run the workflow, you may need to edit the SConstruct file contents below to include the absolute path
-   or relative executable name for your Abaqus installation. The ``AddProgram`` method performs an ordered preference
-   search for executables by absolute and relative paths in the system ``PATH``.
+   You may need to pass the relative or absolute path to your Abaqus installation when running the workflow.
+
+   .. code-block::
+
+      scons --abaqus-command /path/to/executable/abaqus ...
+
+   You can also edit the SConstruct file contents below to include your Abaqus installation in the default search for an
+   Abaqus executable.
 
    .. admonition:: waves_quickstart/SConstruct
 
        .. literalinclude:: waves_quickstart_SConstruct
           :language: Python
           :lineno-match:
-          :start-at: # Find required programs
-          :end-before: # Add WAVES builders
+          :start-after: documentation-marker-default-abaqus-commands-start
+          :end-before: documentation-marker-default-abaqus-commands-end
+
+   The :meth:`waves.scons_extensions.WAVESEnvironment.AddProgram` method performs an ordered preference search for
+   executables by absolute and relative paths in the system ``PATH``.
 
 In ``SConstruct``, the workflows were provided aliases matching the study names for more convenient execution. First,
 run the ``nominal`` workflow and observe the task command output as below. The default behavior of `SCons`_ is to report
