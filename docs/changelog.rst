@@ -40,6 +40,8 @@ Internal Changes
 - Limit scope of changes possible in automated Gitlab release job (:issue:`875`, :merge:`1117`). By `Kyle Brindley`_.
 - Remove the WAVES package mocks in the modsim template documentation configuration (:issue:`854`, :merge:`1125`). By
   `Kyle Brindley`_.
+- Update visialize subcommand to use ``networkx.topological_generation`` to set image columns (:issue:`835`, 
+  :merge:`1129`). By `Sergio Cordova`_.
 
 *******************
 0.12.7 (2025-02-26)
