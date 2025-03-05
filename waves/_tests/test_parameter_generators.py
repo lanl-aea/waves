@@ -257,6 +257,54 @@ def test_return_dataset_types(dataset_1, dataset_2, expected_types, outcome):
             pass
 
 
+coerce_values_cases = {
+    "no coercion int": (
+        [1, 2],
+        None,
+        numpy.int64,
+        does_not_raise(),
+    ),
+    "no coercion float": (
+        [1.0, 2.0],
+        None,
+        numpy.float64,
+        does_not_raise(),
+    ),
+    "no coercion str": (
+        ['a', 'b'],
+        None,
+        numpy.str_,
+        does_not_raise(),
+    ),
+    "coerce int to float": (
+        [1, 2.0],
+        None,
+        numpy.float64,
+        does_not_raise(),
+    ),
+    "coerce all to string": (
+        [1, 2.0, 'a'],
+        None,
+        numpy.str_,
+        does_not_raise(),
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "values, name, expected_output_type, outcome",
+    coerce_values_cases.values(),
+    ids=coerce_values_cases.keys(),
+)
+def test_coerce_values(values, name, expected_output_type, outcome):
+    with outcome:
+        try:
+            values_coerced = parameter_generators._coerce_values(values, name)
+            assert [type(item) for item in values_coerced] == [expected_output_type for _ in values_coerced]
+        finally:
+            pass
+
+
 def test_open_parameter_study():
     mock_file = "dummy.h5"
     with (
