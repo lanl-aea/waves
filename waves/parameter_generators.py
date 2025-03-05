@@ -1548,10 +1548,10 @@ def _coerce_values(values: typing.Iterable, name: typing.Optional[str] = None) -
 
     requires:
 
-    * ``values``: list of values
+    * :param values:: list of values
     * ``name``: optional name of the parameter
 
-    :return: numpy.ndarray
+    :return: 1D numpy array of a consistent datatype
     """
     datatypes = set([type(value) for value in values])
     values_coerced = numpy.array(values)
