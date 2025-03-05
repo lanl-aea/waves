@@ -36,6 +36,8 @@ Documentation
 Internal Changes
 ================
 - Limit scope of changes possible in automated Gitlab release job (:issue:`875`, :merge:`1117`). By `Kyle Brindley`_.
+- Remove the WAVES package mocks in the modsim template documentation configuration (:issue:`854`, :merge:`1125`). By
+  `Kyle Brindley`_.
 
 *******************
 0.12.7 (2025-02-26)

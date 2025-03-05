@@ -18,10 +18,6 @@ mock_modules = [
     "abaqusConstants",
     "mesh",
     "cubit",
-    # VVV End users can safely delete these lines. They are necessary for system testing the WAVES package VVV
-    "waves",
-    "waves.parameter_generators",
-    # ^^^ End users can safely delete these lines. They are necessary for system testing the WAVES package ^^^
 ]
 for mod_name in mock_modules:
     sys.modules[mod_name] = unittest.mock.Mock()
