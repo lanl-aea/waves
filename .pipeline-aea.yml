@@ -43,7 +43,7 @@ aea-style-guide:
     - aea
     - linux
 
-aea-conda-build:
+aea-conda-build-internal:
   extends:
     - .linux_before_script
     - .conda-build
@@ -61,7 +61,7 @@ aea-conda-build:
     - aea
     - linux
 
-aea-conda-build-external:
+aea-conda-build:
   extends:
     - .linux_before_script
     - .conda-build
@@ -106,7 +106,7 @@ aea-conda-deploy:
   variables:
     PARENT_CI_PROJECT_PATH: $CI_PROJECT_PATH
     PARENT_CI_COMMIT_BRANCH: $PARENT_CI_COMMIT_BRANCH
-    AEA_CONDA_PACKAGE_JOB: aea-conda-build
+    AEA_CONDA_PACKAGE_JOB: aea-conda-build-internal
     AEA_CONDA_PACKAGE_ARTIFACTS: conda-bld/noarch/waves-*-*.tar.bz2
   trigger:
     project: aea/developer-operations/aea-conda
