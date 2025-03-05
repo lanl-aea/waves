@@ -345,7 +345,7 @@ def parse_output(
                 label = node_name
 
             if node_name not in graph.nodes:
-                graph.add_node(node_name, label=label, layer=current_indent)
+                graph.add_node(node_name, label=label)
             higher_nodes[current_indent] = node_name
 
             if current_indent != 1:  # If it's not the first node which is the top level node
@@ -408,6 +408,9 @@ def visualize(
     multipartite_kwargs = dict(align="vertical")
     if vertical:
         multipartite_kwargs.update({"align": "horizontal"})
+    for layer, nodes in enumerate(networkx.topological_generations(graph)):
+        for node in nodes:
+            graph.nodes[node]["layer"] = layer * -1 # The negative one indicated the order of the layers
     node_positions = networkx.multipartite_layout(graph, subset_key="layer", **multipartite_kwargs)
 
     # The nodes are drawn tiny so that labels can go on top
