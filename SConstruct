@@ -168,6 +168,11 @@ alias_help = "\nTarget Aliases:\n"
 for alias in default_ans:
     alias_help += f"    {alias}\n"
 try:
-    Help(alias_help, append=True, keep_local=True)
+    # SCons >= 4.9.0
+    Help(alias_help, append=True, local_only=True)
 except TypeError as err:
-    Help(alias_help, append=True)
+    try:
+        # SCons >= 4.6, <4.9.0
+        Help(alias_help, append=True, keep_local=True)
+    except TypeError as err:
+        Help(alias_help, append=True)
