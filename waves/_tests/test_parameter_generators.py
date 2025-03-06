@@ -288,6 +288,12 @@ coerce_values_cases = {
         numpy.str_,
         True,
     ),
+    "coerce to float with parameter name": (
+        [1, 2, 3, 5.0, 7.0],
+        'test_name',
+        numpy.float64,
+        True,
+    ),
 }
 
 
