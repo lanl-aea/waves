@@ -25,10 +25,10 @@ def test_default_targets_message():
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with (
         patch("waves.scons_extensions.SConsEnvironment.Help", side_effect=[TypeError, None]) as mock_help,
-        patch("warnings.warn") as warning,
+        patch("warnings.warn") as mock_warn,
     ):
         scons_extensions.default_targets_message()
-        warning.assert_called_once()
+        mock_warn.assert_called_once()
     calls = [
         call(ANY, "\nDefault Targets:\n", append=True, local_only=True),
         call(ANY, "\nDefault Targets:\n", append=True, keep_local=True),
@@ -40,10 +40,10 @@ def test_default_targets_message():
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with (
         patch("waves.scons_extensions.SConsEnvironment.Help", side_effect=[TypeError, TypeError, None]) as mock_help,
-        patch("warnings.warn") as warning,
+        patch("warnings.warn") as mock_warn,
     ):
         scons_extensions.default_targets_message()
-        warning.assert_called_once()
+        mock_warn.assert_called_once()
     calls = [
         call(ANY, "\nDefault Targets:\n", append=True, local_only=True),
         call(ANY, "\nDefault Targets:\n", append=True, keep_local=True),
@@ -56,10 +56,10 @@ def test_default_targets_message():
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with (
         patch("waves.scons_extensions.SConsEnvironment.Help", side_effect=[None, None]) as mock_help,
-        patch("warnings.warn") as warning,
+        patch("warnings.warn") as mock_warn,
     ):
         scons_extensions.default_targets_message()
-        warning.assert_called_once()
+        mock_warn.assert_called_once()
     mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n", append=True, local_only=True)
 
     # Provide environment with no defaults
@@ -69,10 +69,10 @@ def test_default_targets_message():
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with (
         patch("waves.scons_extensions.SConsEnvironment.Help") as mock_help,
-        patch("warnings.warn") as warning,
+        patch("warnings.warn") as mock_warn,
     ):
         scons_extensions.default_targets_message(env)
-        warning.assert_called_once()
+        mock_warn.assert_called_once()
     mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n", append=True, local_only=True)
 
     # Provide environment with defaults
@@ -81,10 +81,10 @@ def test_default_targets_message():
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with (
         patch("waves.scons_extensions.SConsEnvironment.Help") as mock_help,
-        patch("warnings.warn") as warning,
+        patch("warnings.warn") as mock_warn,
     ):
         scons_extensions.default_targets_message(env)
-        warning.assert_called_once()
+        mock_warn.assert_called_once()
     mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n    dummy.target\n", append=True, local_only=True)
 
     # Test the Method style interface
@@ -93,10 +93,10 @@ def test_default_targets_message():
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with (
         patch("waves.scons_extensions.SConsEnvironment.Help") as mock_help,
-        patch("warnings.warn") as warning,
+        patch("warnings.warn") as mock_warn,
     ):
         env.ProjectHelp()
-        warning.assert_called_once()
+        mock_warn.assert_called_once()
     mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n    dummy.target\n", append=True, local_only=True)
 
 
@@ -165,10 +165,10 @@ def test_alias_list_message():
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with (
         patch("waves.scons_extensions.SConsEnvironment.Help", side_effect=[TypeError, None]) as mock_help,
-        patch("warnings.warn") as warning,
+        patch("warnings.warn") as mock_warn,
     ):
         scons_extensions.alias_list_message()
-        warning.assert_called_once()
+        mock_warn.assert_called_once()
     calls = [
         call(ANY, "\nTarget Aliases:\n", append=True, local_only=True),
         call(ANY, "\nTarget Aliases:\n", append=True, keep_local=True),
@@ -180,10 +180,10 @@ def test_alias_list_message():
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with (
         patch("waves.scons_extensions.SConsEnvironment.Help", side_effect=[TypeError, TypeError, None]) as mock_help,
-        patch("warnings.warn") as warning,
+        patch("warnings.warn") as mock_warn,
     ):
         scons_extensions.alias_list_message()
-        warning.assert_called_once()
+        mock_warn.assert_called_once()
     calls = [
         call(ANY, "\nTarget Aliases:\n", append=True, local_only=True),
         call(ANY, "\nTarget Aliases:\n", append=True, keep_local=True),
@@ -196,10 +196,10 @@ def test_alias_list_message():
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with (
         patch("waves.scons_extensions.SConsEnvironment.Help") as mock_help,
-        patch("warnings.warn") as warning,
+        patch("warnings.warn") as mock_warn,
     ):
         scons_extensions.alias_list_message()
-        warning.assert_called_once()
+        mock_warn.assert_called_once()
     mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n", append=True, local_only=True)
 
     # Provide environment with no aliases
@@ -208,10 +208,10 @@ def test_alias_list_message():
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with (
         patch("waves.scons_extensions.SConsEnvironment.Help") as mock_help,
-        patch("warnings.warn") as warning,
+        patch("warnings.warn") as mock_warn,
     ):
         scons_extensions.alias_list_message(env)
-        warning.assert_called_once()
+        mock_warn.assert_called_once()
     mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n", append=True, local_only=True)
 
     # Provide environment with alias
@@ -220,10 +220,10 @@ def test_alias_list_message():
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with (
         patch("waves.scons_extensions.SConsEnvironment.Help") as mock_help,
-        patch("warnings.warn") as warning,
+        patch("warnings.warn") as mock_warn,
     ):
         scons_extensions.alias_list_message(env)
-        warning.assert_called_once()
+        mock_warn.assert_called_once()
     mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n    dummy_alias\n", append=True, local_only=True)
 
     # Test the Method style interface
@@ -232,10 +232,10 @@ def test_alias_list_message():
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with (
         patch("waves.scons_extensions.SConsEnvironment.Help") as mock_help,
-        patch("warnings.warn") as warning,
+        patch("warnings.warn") as mock_warn,
     ):
         env.ProjectHelp()
-        warning.assert_called_once()
+        mock_warn.assert_called_once()
     mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n    dummy_alias\n", append=True, local_only=True)
 
 
@@ -313,10 +313,10 @@ def test_project_help_message():
         patch("waves.scons_extensions.project_help_default_targets") as mock_targets,
         patch("waves.scons_extensions.SConsEnvironment.Help") as mock_help,
         patch("waves.scons_extensions.project_help_aliases") as mock_alias,
-        patch("warnings.warn") as warning,
+        patch("warnings.warn") as mock_warn,
     ):
         scons_extensions.project_help_message()
-        warning.assert_called_once()
+        mock_warn.assert_called_once()
         mock_targets.assert_called_once_with(**default_kwargs)
         mock_alias.assert_called_once_with(**default_kwargs)
 
@@ -324,10 +324,10 @@ def test_project_help_message():
     with (
         patch("waves.scons_extensions.project_help_default_targets") as mock_targets,
         patch("waves.scons_extensions.project_help_aliases") as mock_alias,
-        patch("warnings.warn") as warning,
+        patch("warnings.warn") as mock_warn,
     ):
         scons_extensions.project_help_message(**non_default_kwargs)
-        warning.assert_called_once()
+        mock_warn.assert_called_once()
         mock_targets.assert_called_once_with(**non_default_kwargs)
         mock_alias.assert_called_once_with(**non_default_kwargs)
 
@@ -335,10 +335,10 @@ def test_project_help_message():
     with (
         patch("waves.scons_extensions.project_help_default_targets") as mock_targets,
         patch("waves.scons_extensions.project_help_aliases") as mock_alias,
-        patch("warnings.warn") as warning,
+        patch("warnings.warn") as mock_warn,
     ):
         env.ProjectHelp()
-        warning.assert_called_once()
+        mock_warn.assert_called_once()
         mock_targets.assert_called_once_with(**default_kwargs)
         mock_alias.assert_called_once_with(**default_kwargs)
 
@@ -346,10 +346,10 @@ def test_project_help_message():
     with (
         patch("waves.scons_extensions.project_help_default_targets") as mock_targets,
         patch("waves.scons_extensions.project_help_aliases") as mock_alias,
-        patch("warnings.warn") as warning,
+        patch("warnings.warn") as mock_warn,
     ):
         env.ProjectHelp(**method_interface_non_default_kwargs)
-        warning.assert_called_once()
+        mock_warn.assert_called_once()
         mock_targets.assert_called_once_with(**non_default_kwargs)
         mock_alias.assert_called_once_with(**non_default_kwargs)
 
