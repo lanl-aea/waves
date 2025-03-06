@@ -271,7 +271,7 @@ coerce_values_cases = {
         False,
     ),
     "no coercion str": (
-        ['a', 'b'],
+        ["a", "b"],
         None,
         numpy.str_,
         False,
@@ -283,14 +283,14 @@ coerce_values_cases = {
         True,
     ),
     "coerce all to string": (
-        [1, 2.0, 'a'],
+        [1, 2.0, "a"],
         None,
         numpy.str_,
         True,
     ),
     "coerce to float with parameter name": (
         [1, 2, 3, 5.0, 7.0],
-        'test_name',
+        "test_name",
         numpy.float64,
         True,
     ),
