@@ -20,7 +20,7 @@ def reset_alias():
 # TODO: Remove entire test function when old function name `default_targets_message` is fully deprecated
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/862
 def test_default_targets_message():
-    # Raise TypeError mocking SCons < 4.6.0
+    # Raise TypeError mocking SCons >=4.6.0,<4.9.0
     # Git commit 7a95cef7: Normally you expect something like ``patch("SCons.Script.SConscript.SConsEnvironment...")``
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with (
@@ -30,6 +30,22 @@ def test_default_targets_message():
         scons_extensions.default_targets_message()
         warning.assert_called_once()
     calls = [
+        call(ANY, "\nDefault Targets:\n", append=True, local_only=True),
+        call(ANY, "\nDefault Targets:\n", append=True, keep_local=True),
+    ]
+    mock_help.assert_has_calls(calls)
+
+    # Raise TypeError mocking SCons <4.6.0
+    # Git commit 7a95cef7: Normally you expect something like ``patch("SCons.Script.SConscript.SConsEnvironment...")``
+    # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
+    with (
+        patch("waves.scons_extensions.SConsEnvironment.Help", side_effect=[TypeError, TypeError, None]) as mock_help,
+        patch("warnings.warn") as warning,
+    ):
+        scons_extensions.default_targets_message()
+        warning.assert_called_once()
+    calls = [
+        call(ANY, "\nDefault Targets:\n", append=True, local_only=True),
         call(ANY, "\nDefault Targets:\n", append=True, keep_local=True),
         call(ANY, "\nDefault Targets:\n", append=True),
     ]
@@ -44,7 +60,7 @@ def test_default_targets_message():
     ):
         scons_extensions.default_targets_message()
         warning.assert_called_once()
-    mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n", append=True, keep_local=True)
+    mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n", append=True, local_only=True)
 
     # Provide environment with no defaults
     env = SCons.Environment.Environment()
@@ -57,7 +73,7 @@ def test_default_targets_message():
     ):
         scons_extensions.default_targets_message(env)
         warning.assert_called_once()
-    mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n", append=True, keep_local=True)
+    mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n", append=True, local_only=True)
 
     # Provide environment with defaults
     env.Default("dummy.target")
@@ -69,7 +85,7 @@ def test_default_targets_message():
     ):
         scons_extensions.default_targets_message(env)
         warning.assert_called_once()
-    mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n    dummy.target\n", append=True, keep_local=True)
+    mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n    dummy.target\n", append=True, local_only=True)
 
     # Test the Method style interface
     env.AddMethod(scons_extensions.default_targets_message, "ProjectHelp")
@@ -81,16 +97,28 @@ def test_default_targets_message():
     ):
         env.ProjectHelp()
         warning.assert_called_once()
-    mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n    dummy.target\n", append=True, keep_local=True)
+    mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n    dummy.target\n", append=True, local_only=True)
 
 
 def test_project_help_default_targets():
-    # Raise TypeError mocking SCons < 4.6.0
+    # Raise TypeError mocking SCons >=4.6.0,<4.9.0
     # Git commit 7a95cef7: Normally you expect something like ``patch("SCons.Script.SConscript.SConsEnvironment...")``
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with patch("waves.scons_extensions.SConsEnvironment.Help", side_effect=[TypeError, None]) as mock_help:
         scons_extensions.project_help_default_targets()
     calls = [
+        call(ANY, "\nDefault Targets:\n", append=True, local_only=True),
+        call(ANY, "\nDefault Targets:\n", append=True, keep_local=True),
+    ]
+    mock_help.assert_has_calls(calls)
+
+    # Raise TypeError mocking SCons <4.6.0
+    # Git commit 7a95cef7: Normally you expect something like ``patch("SCons.Script.SConscript.SConsEnvironment...")``
+    # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
+    with patch("waves.scons_extensions.SConsEnvironment.Help", side_effect=[TypeError, TypeError, None]) as mock_help:
+        scons_extensions.project_help_default_targets()
+    calls = [
+        call(ANY, "\nDefault Targets:\n", append=True, local_only=True),
         call(ANY, "\nDefault Targets:\n", append=True, keep_local=True),
         call(ANY, "\nDefault Targets:\n", append=True),
     ]
@@ -101,7 +129,7 @@ def test_project_help_default_targets():
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with patch("waves.scons_extensions.SConsEnvironment.Help", side_effect=[None, None]) as mock_help:
         scons_extensions.project_help_default_targets()
-    mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n", append=True, keep_local=True)
+    mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n", append=True, local_only=True)
 
     # Provide environment with no defaults
     env = SCons.Environment.Environment()
@@ -110,7 +138,7 @@ def test_project_help_default_targets():
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with patch("waves.scons_extensions.SConsEnvironment.Help") as mock_help:
         scons_extensions.project_help_default_targets(env)
-    mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n", append=True, keep_local=True)
+    mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n", append=True, local_only=True)
 
     # Provide environment with defaults
     env.Default("dummy.target")
@@ -118,7 +146,7 @@ def test_project_help_default_targets():
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with patch("waves.scons_extensions.SConsEnvironment.Help") as mock_help:
         scons_extensions.project_help_default_targets(env)
-    mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n    dummy.target\n", append=True, keep_local=True)
+    mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n    dummy.target\n", append=True, local_only=True)
 
     # Test the Method style interface
     env.AddMethod(scons_extensions.project_help_default_targets, "ProjectHelp")
@@ -126,13 +154,13 @@ def test_project_help_default_targets():
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with patch("waves.scons_extensions.SConsEnvironment.Help") as mock_help:
         env.ProjectHelp()
-    mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n    dummy.target\n", append=True, keep_local=True)
+    mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n    dummy.target\n", append=True, local_only=True)
 
 
 # TODO: Remove entire test function when old function name alias_list_message is fully deprecated
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/862
 def test_alias_list_message():
-    # Raise TypeError mocking SCons < 4.6.0
+    # Raise TypeError mocking SCons >=4.6.0,<4.9.0
     # Git commit 7a95cef7: Normally you expect something like ``patch("SCons.Script.SConscript.SConsEnvironment...")``
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with (
@@ -142,6 +170,22 @@ def test_alias_list_message():
         scons_extensions.alias_list_message()
         warning.assert_called_once()
     calls = [
+        call(ANY, "\nTarget Aliases:\n", append=True, local_only=True),
+        call(ANY, "\nTarget Aliases:\n", append=True, keep_local=True),
+    ]
+    mock_help.assert_has_calls(calls)
+
+    # Raise TypeError mocking SCons <4.6.0
+    # Git commit 7a95cef7: Normally you expect something like ``patch("SCons.Script.SConscript.SConsEnvironment...")``
+    # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
+    with (
+        patch("waves.scons_extensions.SConsEnvironment.Help", side_effect=[TypeError, TypeError, None]) as mock_help,
+        patch("warnings.warn") as warning,
+    ):
+        scons_extensions.alias_list_message()
+        warning.assert_called_once()
+    calls = [
+        call(ANY, "\nTarget Aliases:\n", append=True, local_only=True),
         call(ANY, "\nTarget Aliases:\n", append=True, keep_local=True),
         call(ANY, "\nTarget Aliases:\n", append=True),
     ]
@@ -156,7 +200,7 @@ def test_alias_list_message():
     ):
         scons_extensions.alias_list_message()
         warning.assert_called_once()
-    mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n", append=True, keep_local=True)
+    mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n", append=True, local_only=True)
 
     # Provide environment with no aliases
     env = SCons.Environment.Environment()
@@ -168,7 +212,7 @@ def test_alias_list_message():
     ):
         scons_extensions.alias_list_message(env)
         warning.assert_called_once()
-    mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n", append=True, keep_local=True)
+    mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n", append=True, local_only=True)
 
     # Provide environment with alias
     env.Alias("dummy_alias", "dummy.target")
@@ -180,7 +224,7 @@ def test_alias_list_message():
     ):
         scons_extensions.alias_list_message(env)
         warning.assert_called_once()
-    mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n    dummy_alias\n", append=True, keep_local=True)
+    mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n    dummy_alias\n", append=True, local_only=True)
 
     # Test the Method style interface
     env.AddMethod(scons_extensions.alias_list_message, "ProjectHelp")
@@ -192,16 +236,28 @@ def test_alias_list_message():
     ):
         env.ProjectHelp()
         warning.assert_called_once()
-    mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n    dummy_alias\n", append=True, keep_local=True)
+    mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n    dummy_alias\n", append=True, local_only=True)
 
 
 def test_project_help_aliases():
-    # Raise TypeError mocking SCons < 4.6.0
+    # Raise TypeError mocking SCons >=4.6.0,<4.9.0
     # Git commit 7a95cef7: Normally you expect something like ``patch("SCons.Script.SConscript.SConsEnvironment...")``
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with patch("waves.scons_extensions.SConsEnvironment.Help", side_effect=[TypeError, None]) as mock_help:
         scons_extensions.project_help_aliases()
     calls = [
+        call(ANY, "\nTarget Aliases:\n", append=True, local_only=True),
+        call(ANY, "\nTarget Aliases:\n", append=True, keep_local=True),
+    ]
+    mock_help.assert_has_calls(calls)
+
+    # Raise TypeError mocking SCons <4.6.0
+    # Git commit 7a95cef7: Normally you expect something like ``patch("SCons.Script.SConscript.SConsEnvironment...")``
+    # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
+    with patch("waves.scons_extensions.SConsEnvironment.Help", side_effect=[TypeError, TypeError, None]) as mock_help:
+        scons_extensions.project_help_aliases()
+    calls = [
+        call(ANY, "\nTarget Aliases:\n", append=True, local_only=True),
         call(ANY, "\nTarget Aliases:\n", append=True, keep_local=True),
         call(ANY, "\nTarget Aliases:\n", append=True),
     ]
@@ -212,7 +268,7 @@ def test_project_help_aliases():
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with patch("waves.scons_extensions.SConsEnvironment.Help") as mock_help:
         scons_extensions.project_help_aliases()
-    mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n", append=True, keep_local=True)
+    mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n", append=True, local_only=True)
 
     # Provide environment with no aliases
     env = SCons.Environment.Environment()
@@ -220,7 +276,7 @@ def test_project_help_aliases():
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with patch("waves.scons_extensions.SConsEnvironment.Help") as mock_help:
         scons_extensions.project_help_aliases(env)
-    mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n", append=True, keep_local=True)
+    mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n", append=True, local_only=True)
 
     # Provide environment with alias
     env.Alias("dummy_alias", "dummy.target")
@@ -228,7 +284,7 @@ def test_project_help_aliases():
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with patch("waves.scons_extensions.SConsEnvironment.Help") as mock_help:
         scons_extensions.project_help_aliases(env)
-    mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n    dummy_alias\n", append=True, keep_local=True)
+    mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n    dummy_alias\n", append=True, local_only=True)
 
     # Test the Method style interface
     env.AddMethod(scons_extensions.project_help_aliases, "ProjectHelp")
@@ -236,7 +292,7 @@ def test_project_help_aliases():
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with patch("waves.scons_extensions.SConsEnvironment.Help") as mock_help:
         env.ProjectHelp()
-    mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n    dummy_alias\n", append=True, keep_local=True)
+    mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n    dummy_alias\n", append=True, local_only=True)
 
 
 # TODO: Remove entire test function when old function name project_help_message is fully deprecated
@@ -244,11 +300,11 @@ def test_project_help_aliases():
 def test_project_help_message():
     env = SCons.Environment.Environment()
     env.AddMethod(scons_extensions.project_help_message, "ProjectHelp")
-    default_kwargs = {"env": ANY, "append": True, "keep_local": True, "target_descriptions": None}
+    default_kwargs = {"env": ANY, "append": True, "local_only": True, "target_descriptions": None}
     non_default_kwargs = {
         "env": env,
         "append": False,
-        "keep_local": False,
+        "local_only": False,
         "target_descriptions": {"somekey": "somevalue"},
     }
     method_interface_non_default_kwargs = {key: value for key, value in non_default_kwargs.items() if key != "env"}
@@ -301,11 +357,11 @@ def test_project_help_message():
 def test_project_help():
     env = SCons.Environment.Environment()
     env.AddMethod(scons_extensions.project_help, "ProjectHelp")
-    default_kwargs = {"env": ANY, "append": True, "keep_local": True, "target_descriptions": None}
+    default_kwargs = {"env": ANY, "append": True, "local_only": True, "target_descriptions": None}
     non_default_kwargs = {
         "env": env,
         "append": False,
-        "keep_local": False,
+        "local_only": False,
         "target_descriptions": {"somekey": "somevalue"},
     }
     method_interface_non_default_kwargs = {key: value for key, value in non_default_kwargs.items() if key != "env"}

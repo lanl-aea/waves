@@ -14,8 +14,7 @@ Requires the following ``SConscript(..., exports={})``
 
 import pathlib
 
-from waves.parameter_generators import SET_COORDINATE_KEY
-from waves.parameter_generators import CartesianProduct
+import waves
 
 from modsim_package import rectangle_compression
 
@@ -37,7 +36,7 @@ artifacts = []
 workflow = []
 
 # Parameter Study with Cartesian Product
-parameter_generator = CartesianProduct(
+parameter_generator = waves.parameter_generators.CartesianProduct(
     parameter_schema,
     output_file=parameter_study_file,
     previous_parameter_study=parameter_study_file,
@@ -70,7 +69,7 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
 plot_name = "stress_strain_comparison"
 post_processing_source = [
     pathlib.Path(set_name) / "rectangle_compression_datasets.h5"
-    for set_name in parameter_generator.parameter_study[SET_COORDINATE_KEY].values
+    for set_name in parameter_generator.parameter_study_to_dict().keys()
 ]
 script_options = "--input-file ${post_processing_source}"
 script_options += " --output-file ${TARGET.file} --x-units 'mm/mm' --y-units 'MPa'"

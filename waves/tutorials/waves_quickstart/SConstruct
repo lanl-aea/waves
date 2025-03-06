@@ -24,12 +24,14 @@ AddOption(
     help="Boolean to force building of conditionally ignored targets. (default: '%default')",
 )
 # Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
+# documentation-marker-default-abaqus-commands-start
 default_abaqus_commands = [
     "/apps/abaqus/Commands/abq2024",
     "/usr/projects/ea/abaqus/Commands/abq2024",
     "abq2024",
     "abaqus",
 ]
+# documentation-marker-default-abaqus-commands-end
 AddOption(
     "--abaqus-command",
     dest="abaqus_command",

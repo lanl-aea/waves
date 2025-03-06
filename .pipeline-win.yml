@@ -56,7 +56,7 @@ win-fast-test:
     - powershell
     - aea
 
-win-conda-build-external:
+win-conda-build:
   stage: test
   variables:
     GIT_STRATEGY: clone

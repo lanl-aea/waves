@@ -55,7 +55,7 @@ mac-fast-test:
     - macos
     - pn2301275
 
-mac-conda-build-external:
+mac-conda-build:
   extends:
     - .conda-build
   stage: test

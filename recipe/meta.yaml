@@ -50,6 +50,10 @@ test:
     - pip
     - pytest>=6
     - pytest-xdist
+    - sphinx >=7.1
+    - sphinx-argparse
+    - sphinx-book-theme
+    - sphinxcontrib-bibtex
   imports:
     - waves
 

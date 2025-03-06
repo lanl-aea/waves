@@ -41,7 +41,7 @@ env.AbaqusStandard(
 
 # Abaqus Extract
 env.AbaqusExtract(
-    target=["rectangle_compression.h5"],
+    target=["rectangle_compression.h5", "rectangle_compression_datasets.h5"],
     source=["rectangle_compression.odb"],
 )
 

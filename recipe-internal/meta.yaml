@@ -74,6 +74,10 @@ test:
     - seaborn
     - sed
     - setuptools_scm
+    - sphinx >=7.1
+    - sphinx-argparse
+    - sphinx-book-theme
+    - sphinxcontrib-bibtex
     - xarray
   imports:
     - waves
