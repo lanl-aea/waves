@@ -262,47 +262,48 @@ coerce_values_cases = {
         [1, 2],
         None,
         numpy.int64,
-        does_not_raise(),
+        False,
     ),
     "no coercion float": (
         [1.0, 2.0],
         None,
         numpy.float64,
-        does_not_raise(),
+        False,
     ),
     "no coercion str": (
         ['a', 'b'],
         None,
         numpy.str_,
-        does_not_raise(),
+        False,
     ),
     "coerce int to float": (
         [1, 2.0],
         None,
         numpy.float64,
-        does_not_raise(),
+        True,
     ),
     "coerce all to string": (
         [1, 2.0, 'a'],
         None,
         numpy.str_,
-        does_not_raise(),
+        True,
     ),
 }
 
 
 @pytest.mark.parametrize(
-    "values, name, expected_output_type, outcome",
+    "values, name, expected_output_type, should_warn",
     coerce_values_cases.values(),
     ids=coerce_values_cases.keys(),
 )
-def test_coerce_values(values, name, expected_output_type, outcome):
-    with outcome:
-        try:
-            values_coerced = parameter_generators._coerce_values(values, name)
-            assert [type(item) for item in values_coerced] == [expected_output_type for _ in values_coerced]
-        finally:
-            pass
+def test_coerce_values(values, name, expected_output_type, should_warn):
+    with patch("warnings.warn") as mock_warn:
+        values_coerced = parameter_generators._coerce_values(values, name)
+        assert [type(item) for item in values_coerced] == [expected_output_type for _ in values_coerced]
+        if should_warn:
+            mock_warn.assert_called_once()
+        else:
+            mock_warn.assert_not_called()
 
 
 def test_open_parameter_study():
