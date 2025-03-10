@@ -52,8 +52,7 @@ Internal Changes
   `Chris Johnson`_.
 - Remove Paraview from CI environment in favor of the fully specified runtime dependencies in ``ccx2paraview>=3.2.0``
   conda-forge package, which uses the mutually incompatible VTK package instead of Paraview. Make the Gmsh+CalculiX
-  tutorial compatible with ``ccx2paraview>=3.1`` (:merge:`1132`). By `Kyle
-  Brindley`_.
+  tutorial compatible with ``ccx2paraview>=3.1`` (:merge:`1132`). By `Kyle Brindley`_.
 
 *******************
 0.12.7 (2025-02-26)
