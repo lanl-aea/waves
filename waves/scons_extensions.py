@@ -3883,9 +3883,6 @@ def parameter_study_write(
     """
     import yaml
 
-    # Avoid importing parameter generator module (heavy) unless necessary
-    from waves import parameter_generators
-
     # TODO: move the dry run option out of the parameter generator and into the write API
     # Check the kwargs for the dry run option instead of the parameter generator attributes
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
@@ -3897,21 +3894,11 @@ def parameter_study_write(
     else:
         output_files = list(parameter_generator.parameter_study[_settings._set_coordinate_key].values)
 
-    def parameter_study_write(target: list, source: list, env) -> None:
-        """`SCons Python build function`_ wrapper for the parameter generator's write() function.
-
-        Reference: https://scons.org/doc/production/HTML/scons-user/ch17s04.html
-
-        :param target: The target file list of strings
-        :param source: The source file list of SCons.Node.FS.File objects
-        :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
-        """
-        parameter_generator.write(**kwargs)
-
     targets = env.Command(
         target=output_files,
         source=[env.Value(yaml.dump(parameter_generator.parameter_study.to_dict()))],
-        action=[parameter_study_write],
+        action=[SCons.Action.Action(parameter_generator.scons_write, varlist=["output_file_type"])],
+        **kwargs,
     )
 
     return targets
