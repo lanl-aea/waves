@@ -24,6 +24,8 @@ Bug fixes
   SCons 4.9.0: https://scons.org/scons-490-is-available.html. The ``project_help`` related functions make the same
   breaking change in the keyword argument name to match SCons, but preserve support for older versions of SCons by
   falling back to the older keyword argument when necessary (:issue:`879`, :merge:`1128`). By `Kyle Brindley`_.
+- Avoid always re-build behavior in parameter study write pseudo-builder (:issue:`881`, :merge:`1131`). By `Kyle
+  Brindley`_.
 
 Documentation
 =============

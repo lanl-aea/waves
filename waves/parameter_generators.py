@@ -297,6 +297,10 @@ class ParameterGenerator(ABC):
 
         Reference: https://scons.org/doc/production/HTML/scons-user/ch17s04.html
 
+        Searches for following keyword arguments in the task construction environment and passes to the write function:
+
+        * ``output_file_type``
+
         :param target: The target file list of strings
         :param source: The source file list of SCons.Node.FS.File objects
         :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
