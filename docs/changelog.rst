@@ -51,7 +51,8 @@ Internal Changes
 - Consistent naming convention for mock warning objects in ``tests_help_messages`` (:issue:`880`, :merge:`1130`). By
   `Chris Johnson`_.
 - Remove Paraview from CI environment in favor of the fully specified runtime dependencies in ``ccx2paraview>=3.2.0``
-  conda-forge package, which uses the mutually incompatible VTK package instead of Paraview. By `Kyle Brindley`_.
+  conda-forge package, which uses the mutually incompatible VTK package instead of Paraview (:merge:`1132`). By `Kyle
+  Brindley`_.
 
 *******************
 0.12.7 (2025-02-26)
