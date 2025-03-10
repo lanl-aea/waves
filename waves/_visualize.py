@@ -321,7 +321,6 @@ def parse_output(
     for line in tree_lines:
         line_match = re.match(r"^\[(.*)\](.*)\+-(.*)", line)
         if line_match:
-            status = [_settings._scons_tree_status[_] for _ in line_match.group(1) if _.strip()]
             placement = line_match.group(2)
             node_name = line_match.group(3)
             current_indent = int(len(placement) / 2) + 1
@@ -351,7 +350,9 @@ def parse_output(
             if current_indent != 1:  # If it's not the first node which is the top level node
                 higher_node = higher_nodes[current_indent - 1]
                 graph.add_edge(node_name, higher_node)
-
+    for layer, nodes in enumerate(networkx.topological_generations(graph)):
+        for node in nodes:
+            graph.nodes[node]["layer"] = layer * -1 # The `-1` indicates the order of the layers
     # If SCons tree or input_file is not in the expected format the nodes will be empty
     number_of_nodes = graph.number_of_nodes()
     if number_of_nodes <= 0:
@@ -408,9 +409,6 @@ def visualize(
     multipartite_kwargs = dict(align="vertical")
     if vertical:
         multipartite_kwargs.update({"align": "horizontal"})
-    for layer, nodes in enumerate(networkx.topological_generations(graph)):
-        for node in nodes:
-            graph.nodes[node]["layer"] = layer * -1 # The negative one indicated the order of the layers
     node_positions = networkx.multipartite_layout(graph, subset_key="layer", **multipartite_kwargs)
 
     # The nodes are drawn tiny so that labels can go on top
