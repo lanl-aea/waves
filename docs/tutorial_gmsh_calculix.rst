@@ -35,7 +35,7 @@ manager. See the `Conda installation`_ and `Conda environment management`_ docum
 
    .. code-block::
 
-      $ conda create --name waves-gmsh-env --channel conda-forge waves 'scons>=4.6' python-gmsh calculix 'ccx2paraview>=3.1' meshio vtk
+      $ conda create --name waves-gmsh-env --channel conda-forge waves 'scons>=4.6' python-gmsh calculix 'ccx2paraview>=3.2' meshio
 
 2. Activate the environment
 
