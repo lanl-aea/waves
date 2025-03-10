@@ -305,7 +305,7 @@ coerce_values_cases = {
 def test_coerce_values(values, name, expected_output_type, should_warn):
     with patch("warnings.warn") as mock_warn:
         values_coerced = parameter_generators._coerce_values(values, name)
-        assert [type(item) for item in values_coerced] == [expected_output_type for _ in values_coerced]
+        assert [type(item) for item in values_coerced] == [expected_output_type] * len(values_coerced)
         if should_warn:
             mock_warn.assert_called_once()
         else:
