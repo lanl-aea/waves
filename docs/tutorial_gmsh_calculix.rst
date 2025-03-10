@@ -57,7 +57,7 @@ Directory Structure
    /home/roppenheimer/waves-tutorials
    $ waves fetch --destination tutorial_gmsh tutorials/tutorial_gmsh
    $ ls tutorial_gmsh
-   SConscript  SConstruct  environment.yml  extract.py  post_processing.py  rectangle.py  rectangle_compression.inp  strip_heading.py  vtu2xarray.py
+   SConscript  SConstruct  environment.yml  post_processing.py  rectangle.py  rectangle_compression.inp  strip_heading.py  vtu2xarray.py
 
 5. Make the new ``tutorial_gmsh`` directory the current working directory
 
@@ -69,7 +69,7 @@ Directory Structure
    $ pwd
    /home/roppenheimer/waves-tutorials/tutorial_gmsh
    $ ls
-   SConscript  SConstruct  environment.yml  extract.py  post_processing.py  rectangle.py  rectangle_compression.inp  strip_heading.py  vtu2xarray.py
+   SConscript  SConstruct  environment.yml  post_processing.py  rectangle.py  rectangle_compression.inp  strip_heading.py  vtu2xarray.py
 
 **********
 SConscript
@@ -153,7 +153,7 @@ Build Targets
    cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build && python /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle.py --output-file=/home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_gmsh.inp > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_gmsh.inp.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build && python /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/strip_heading.py --input-file=/home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_gmsh.inp --output-file=/home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_mesh.inp > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_mesh.inp.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build && /projects/aea_compute/waves-env/bin/ccx -i rectangle_compression > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_compression.frd.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build && python /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/extract.py --input-file /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_compression.frd > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_compression.vtu.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build && ccx2paraview /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_compression.frd > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_compression.vtu.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build && python /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/vtu2xarray.py --input-file /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_compression.vtu --output-file /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_compression.h5 > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_compression.h5.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build && python /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/post_processing.py --input-file /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_compression.h5 --output-file stress_strain_comparison.pdf --x-units mm/mm --y-units MPa > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/stress_strain_comparison.pdf.stdout 2>&1
    scons: done building targets.
@@ -177,7 +177,6 @@ below.
    build/rectangle_compression.sta
    build/rectangle_compression.dat
    build/rectangle_mesh.inp
-   build/extract.py
    build/rectangle_compression.vtu.stdout
    build/rectangle_compression.12d
    build/spooles.out
