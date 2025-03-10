@@ -24,7 +24,6 @@ dependencies:
   # Required to satisfy undocumented SALib dependencies on numpy version
   - numpy >=2
   - pandas
-  - paraview
   - pip
   - pytest>=6
   - pytest-cov
