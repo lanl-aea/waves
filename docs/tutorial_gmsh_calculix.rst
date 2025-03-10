@@ -146,13 +146,13 @@ Build Targets
    /path/to/waves-tutorials/tutorial_gmsh
    $ scons fierro
    scons: Reading SConscript files ...
-   Checking whether 'ccx' program exists.../projects/aea_compute/waves-env/bin/ccx
-   Checking whether 'ccx2paraview' module imports...yes
+   Checking whether 'ccx' program exists.../home/roppenheimer/anaconda3/envs/waves-gmsh-env/bin/ccx
+   Checking whether 'ccx2paraview' program exists.../home/roppenheimer/anaconda3/envs/waves-gmsh-env/bin/ccx2paraview
    scons: done reading SConscript files.
    scons: Building targets ...
    cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build && python /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle.py --output-file=/home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_gmsh.inp > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_gmsh.inp.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build && python /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/strip_heading.py --input-file=/home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_gmsh.inp --output-file=/home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_mesh.inp > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_mesh.inp.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build && /projects/aea_compute/waves-env/bin/ccx -i rectangle_compression > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_compression.frd.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build && /home/roppenheimer/anaconda3/envs/waves-gmsh-env/bin/ccx -i rectangle_compression > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_compression.frd.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build && ccx2paraview /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_compression.frd > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_compression.vtu.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build && python /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/vtu2xarray.py --input-file /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_compression.vtu --output-file /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_compression.h5 > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_compression.h5.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build && python /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/post_processing.py --input-file /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_compression.h5 --output-file stress_strain_comparison.pdf --x-units mm/mm --y-units MPa > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/stress_strain_comparison.pdf.stdout 2>&1
