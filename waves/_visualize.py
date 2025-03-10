@@ -341,7 +341,8 @@ def parse_output(
             if no_labels:
                 label = " "
             else:
-                label = node_name
+             #   label = node_name
+                label = "/\n".join(node_name.split('/'))
 
             if node_name not in graph.nodes:
                 graph.add_node(node_name, label=label)
@@ -352,7 +353,7 @@ def parse_output(
                 graph.add_edge(node_name, higher_node)
     for layer, nodes in enumerate(networkx.topological_generations(graph)):
         for node in nodes:
-            graph.nodes[node]["layer"] = layer * -1 # The `-1` indicates the order of the layers
+            graph.nodes[node]["layer"] = layer * -1
     # If SCons tree or input_file is not in the expected format the nodes will be empty
     number_of_nodes = graph.number_of_nodes()
     if number_of_nodes <= 0:
