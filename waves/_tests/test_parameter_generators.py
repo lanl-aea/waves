@@ -348,11 +348,23 @@ class TestParameterGenerator:
             finally:
                 pass
 
-    def test_scons_write(self):
+    scons_write_cases = {
+        "no kwargs": ({}, {}),
+        "output file type": ({"output_file_type": "h5"}, {"output_file_type": "h5"}),
+        "unused keyword argument": ({"unused": "should not show up in call"}, {}),
+    }
+
+    @pytest.mark.parametrize(
+        "env, expected_kwargs",
+        scons_write_cases.values(),
+        ids=scons_write_cases.keys(),
+    )
+    def test_scons_write(self, env, expected_kwargs):
         sconsWrite = DummyGenerator({})
         with patch("waves.parameter_generators.ParameterGenerator.write") as mock_write:
-            sconsWrite.scons_write([], [], {})
-        mock_write.assert_called_once()
+            # Fake an SCons environment with a dictionary. SCons environment object not required for unit testing
+            sconsWrite.scons_write([], [], env)
+        mock_write.assert_called_once_with(**expected_kwargs)
 
     # fmt: off
     templates = {       # schema, file_template, set_template,          expected
