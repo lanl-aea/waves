@@ -276,6 +276,12 @@ coerce_values_cases = {
         numpy.str_,
         False,
     ),
+    "no coercion bool": (
+        [True, False],
+        None,
+        numpy.bool,
+        False,
+    ),
     "coerce int to float": (
         [1, 2.0],
         None,
@@ -283,13 +289,13 @@ coerce_values_cases = {
         True,
     ),
     "coerce all to string": (
-        [1, 2.0, "a"],
+        [1, 2.0, False, "a"],
         None,
         numpy.str_,
         True,
     ),
-    "coerce to float with parameter name": (
-        [1, 2, 3, 5.0, 7.0],
+    "coerce all to float with parameter name": (
+        [True, False, 3, 5.0, 7.0],
         "test_name",
         numpy.float64,
         True,
