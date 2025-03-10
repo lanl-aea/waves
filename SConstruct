@@ -118,7 +118,7 @@ else:  # *Nix style tee
     env["tee_suffix"] = "$(2>&1 | tee ${TARGETS[-1].abspath}$)"
 
 # Find required programs for conditional target ignoring
-required_programs = ["sphinx-build", "latexmk"]
+required_programs = ["pytest", "sphinx-build", "latexmk", "flake8", "black", "mypy"]
 for program in required_programs:
     absolute_path = env[program.replace("-", "_")] = shutil.which(program, path=env["ENV"]["PATH"])
     print(f"Checking whether '{program}' program exists...{absolute_path}")
@@ -168,6 +168,12 @@ alias_help = "\nTarget Aliases:\n"
 for alias in default_ans:
     alias_help += f"    {alias}\n"
 try:
-    Help(alias_help, append=True, keep_local=True)
+    # SCons >=4.9.0
+    Help(alias_help, append=True, local_only=True)
 except TypeError as err:
-    Help(alias_help, append=True)
+    try:
+        # SCons >=4.6,<4.9.0
+        Help(alias_help, append=True, keep_local=True)
+    except TypeError as err:
+        # SCons <4.6
+        Help(alias_help, append=True)

@@ -20,6 +20,12 @@ New Features
 Bug fixes
 =========
 - Allow periods in Abaqus pseudo-builder job names (:issue:`878`, :merge:`1119`). By `Kyle Brindley`_.
+- Handle the project help keyword argument breaking change from ``keep_local`` to ``local_only`` released as a fix in
+  SCons 4.9.0: https://scons.org/scons-490-is-available.html. The ``project_help`` related functions make the same
+  breaking change in the keyword argument name to match SCons, but preserve support for older versions of SCons by
+  falling back to the older keyword argument when necessary (:issue:`879`, :merge:`1128`). By `Kyle Brindley`_.
+- Avoid always re-build behavior in parameter study write pseudo-builder (:issue:`881`, :merge:`1131`). By `Kyle
+  Brindley`_.
 
 Documentation
 =============
@@ -40,7 +46,9 @@ Internal Changes
 - Limit scope of changes possible in automated Gitlab release job (:issue:`875`, :merge:`1117`). By `Kyle Brindley`_.
 - Remove the WAVES package mocks in the modsim template documentation configuration (:issue:`854`, :merge:`1125`). By
   `Kyle Brindley`_.
-- Update visialize subcommand to use ``networkx.topological_generation`` to set image columns (:issue:`835`, 
+- Consistent naming convention for mock warning objects in ``tests_help_messages`` (:issue:`880`, :merge:`1130`). By
+  `Chris Johnson`_.
+- Update visualize subcommand to use ``networkx.topological_generation`` to set image columns (:issue:`835`, 
   :merge:`1129`). By `Sergio Cordova`_.
 
 *******************

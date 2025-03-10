@@ -388,7 +388,7 @@ def project_help_message(*args, **kwargs):
 def project_help(
     env: SCons.Environment.Environment = SCons.Environment.Environment(),
     append: bool = True,
-    keep_local: bool = True,
+    local_only: bool = True,
     target_descriptions: typing.Optional[dict] = None,
 ) -> None:
     """Add default targets and alias lists to project help message
@@ -401,11 +401,11 @@ def project_help(
     :param env: The SCons construction environment object to modify
     :param append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
         overwritten if ``env.Help`` has not been previously called.
-    :param keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
+    :param local_only: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     :param target_descriptions: dictionary containing target metadata.
     """
-    project_help_default_targets(env=env, append=append, keep_local=keep_local, target_descriptions=target_descriptions)
-    project_help_aliases(env=env, append=append, keep_local=keep_local, target_descriptions=target_descriptions)
+    project_help_default_targets(env=env, append=append, local_only=local_only, target_descriptions=target_descriptions)
+    project_help_aliases(env=env, append=append, local_only=local_only, target_descriptions=target_descriptions)
 
 
 # TODO: Deprecate the old function name
@@ -427,7 +427,7 @@ def default_targets_message(*args, **kwargs):
 def project_help_default_targets(
     env: SCons.Environment.Environment = SCons.Environment.Environment(),
     append: bool = True,
-    keep_local: bool = True,
+    local_only: bool = True,
     target_descriptions: typing.Optional[dict] = None,
 ) -> None:
     """Add a default targets list to the project's help message
@@ -445,16 +445,22 @@ def project_help_default_targets(
     :param env: The SCons construction environment object to modify
     :param append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
         overwritten if ``env.Help`` has not been previously called.
-    :param keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
+    :param local_only: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     :param target_descriptions: dictionary containing target metadata.
     """
     default_targets_help = _project_help_descriptions(
         SCons.Script.DEFAULT_TARGETS, message="\nDefault Targets:\n", target_descriptions=target_descriptions
     )
     try:
-        SConsEnvironment.Help(env, default_targets_help, append=append, keep_local=keep_local)
+        # SCons >=4.9.0
+        SConsEnvironment.Help(env, default_targets_help, append=append, local_only=local_only)
     except TypeError as err:
-        SConsEnvironment.Help(env, default_targets_help, append=append)
+        try:
+            # SCons >=4.6,<4.9.0
+            SConsEnvironment.Help(env, default_targets_help, append=append, keep_local=local_only)
+        except TypeError as err:
+            # SCons <4.6
+            SConsEnvironment.Help(env, default_targets_help, append=append)
 
 
 # TODO: Deprecate the old function name
@@ -476,7 +482,7 @@ def alias_list_message(*args, **kwargs):
 def project_help_aliases(
     env: SCons.Environment.Environment = SCons.Environment.Environment(),
     append: bool = True,
-    keep_local: bool = True,
+    local_only: bool = True,
     target_descriptions: typing.Optional[dict] = None,
 ) -> None:
     """Add the alias list to the project's help message
@@ -494,16 +500,22 @@ def project_help_aliases(
     :param env: The SCons construction environment object to modify
     :param append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
         overwritten if ``env.Help`` has not been previously called.
-    :param keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
+    :param local_only: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     :param target_descriptions: dictionary containing target metadata.
     """
     alias_help = _project_help_descriptions(
         SCons.Node.Alias.default_ans, message="\nTarget Aliases:\n", target_descriptions=target_descriptions
     )
     try:
-        SConsEnvironment.Help(env, alias_help, append=append, keep_local=keep_local)
+        # SCons >=4.9.0
+        SConsEnvironment.Help(env, alias_help, append=append, local_only=local_only)
     except TypeError:
-        SConsEnvironment.Help(env, alias_help, append=append)
+        try:
+            # SCons >=4.6,<4.9.0
+            SConsEnvironment.Help(env, alias_help, append=append, keep_local=local_only)
+        except TypeError:
+            # SCons <4.6
+            SConsEnvironment.Help(env, alias_help, append=append)
 
 
 def project_alias(
@@ -3871,9 +3883,6 @@ def parameter_study_write(
     """
     import yaml
 
-    # Avoid importing parameter generator module (heavy) unless necessary
-    from waves import parameter_generators
-
     # TODO: move the dry run option out of the parameter generator and into the write API
     # Check the kwargs for the dry run option instead of the parameter generator attributes
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
@@ -3885,21 +3894,11 @@ def parameter_study_write(
     else:
         output_files = list(parameter_generator.parameter_study[_settings._set_coordinate_key].values)
 
-    def parameter_study_write(target: list, source: list, env) -> None:
-        """`SCons Python build function`_ wrapper for the parameter generator's write() function.
-
-        Reference: https://scons.org/doc/production/HTML/scons-user/ch17s04.html
-
-        :param target: The target file list of strings
-        :param source: The source file list of SCons.Node.FS.File objects
-        :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
-        """
-        parameter_generator.write(**kwargs)
-
     targets = env.Command(
         target=output_files,
         source=[env.Value(yaml.dump(parameter_generator.parameter_study.to_dict()))],
-        action=[parameter_study_write],
+        action=[SCons.Action.Action(parameter_generator.scons_write, varlist=["output_file_type"])],
+        **kwargs,
     )
 
     return targets
