@@ -44,7 +44,7 @@ Internal Changes
 - Limit scope of changes possible in automated Gitlab release job (:issue:`875`, :merge:`1117`). By `Kyle Brindley`_.
 - Remove the WAVES package mocks in the modsim template documentation configuration (:issue:`854`, :merge:`1125`). By
   `Kyle Brindley`_.
-- Use ``mock_warn`` instead of ``warning`` in ``tests_help_messages`` (:issue:`880`, :merge:`1130`). By
+- Consistent naming convention for mock warning objects in ``tests_help_messages`` (:issue:`880`, :merge:`1130`). By
   `Chris Johnson`_.
 
 *******************
