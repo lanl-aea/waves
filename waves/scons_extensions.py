@@ -2134,7 +2134,8 @@ class AbaqusPseudoBuilder:
         options = ""
 
         # Specify job name
-        options += f" job={pathlib.Path(job).name}"
+        job_option = pathlib.Path(job).name
+        options += f" job={job_option}"
 
         # Specify "double" option, if requested
         if double:
@@ -2175,7 +2176,7 @@ class AbaqusPseudoBuilder:
         if extra_options:
             options += f" {extra_options}"
 
-        return self.builder(target=targets, source=sources, program_options=options, **kwargs)
+        return self.builder(target=targets, source=sources, job=job_option, program_options=options, **kwargs)
 
 
 @catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)

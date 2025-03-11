@@ -26,6 +26,8 @@ Bug fixes
   falling back to the older keyword argument when necessary (:issue:`879`, :merge:`1128`). By `Kyle Brindley`_.
 - Avoid always re-build behavior in parameter study write pseudo-builder (:issue:`881`, :merge:`1131`). By `Kyle
   Brindley`_.
+- Use the required ``job`` option of the Abaqus solver builder factory in the Abaqus pseudo-builder (:issue:`884`,
+  :merge:`1133`). By `Kyle Brindley`_.
 
 Documentation
 =============
