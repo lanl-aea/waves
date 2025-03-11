@@ -1457,6 +1457,8 @@ def _parameter_study_to_numpy(parameter_study: xarray.Dataset) -> numpy.ndarray:
 def _verify_parameter_study(parameter_study: xarray.Dataset):
     """Verify the contents of a parameter study
 
+    :param parameter_study: A :class:`ParameterGenerator` parameter study Xarray Dataset
+
     Intended to verify parameter studies read from user supplied files. Currently the only check implemented in the set
     hash/set content consistency. Implies checking for the hash coordinate key and consistent data variable
     column/parameter names.
