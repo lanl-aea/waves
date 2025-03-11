@@ -26,6 +26,8 @@ Bug fixes
   falling back to the older keyword argument when necessary (:issue:`879`, :merge:`1128`). By `Kyle Brindley`_.
 - Avoid always re-build behavior in parameter study write pseudo-builder (:issue:`881`, :merge:`1131`). By `Kyle
   Brindley`_.
+- Use the required ``job`` option of the Abaqus solver builder factory in the Abaqus pseudo-builder (:issue:`884`,
+  :merge:`1133`). By `Kyle Brindley`_.
 
 Documentation
 =============
@@ -48,8 +50,16 @@ Internal Changes
   `Kyle Brindley`_.
 - Consistent naming convention for mock warning objects in ``tests_help_messages`` (:issue:`880`, :merge:`1130`). By
   `Chris Johnson`_.
+- Remove Paraview from CI environment in favor of the fully specified runtime dependencies in ``ccx2paraview>=3.2.0``
+  conda-forge package, which uses the mutually incompatible VTK package instead of Paraview. Make the Gmsh+CalculiX
+  tutorial compatible with ``ccx2paraview>=3.1`` (:merge:`1132`). By `Kyle Brindley`_.
 - Update visualize subcommand to use ``networkx.topological_generation`` to set image columns (:issue:`835`, 
   :merge:`1129`). By `Sergio Cordova`_.
+
+Enhancements
+============
+- Coerce each parameter into a consistent data type when initializing a parameter study. Warn the user when a parameter
+  contains inconsistent data types. (:issue:`871`, :merge:`1123`). By `Chris Johnson`_.
 
 *******************
 0.12.7 (2025-02-26)

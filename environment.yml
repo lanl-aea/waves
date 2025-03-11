@@ -6,7 +6,7 @@ dependencies:
   - black
   - boa
   - calculix
-  - ccx2paraview
+  - ccx2paraview >=3.2
   - fierro-fe-cpu
   # Remove trilinos-cpu explicit requirement when Fierro package(s) resolve the missing library issue
   # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/865
@@ -24,7 +24,6 @@ dependencies:
   # Required to satisfy undocumented SALib dependencies on numpy version
   - numpy >=2
   - pandas
-  - paraview
   - pip
   - pytest>=6
   - pytest-cov

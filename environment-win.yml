@@ -5,7 +5,7 @@ dependencies:
   - black
   - boa
   - calculix
-  - ccx2paraview
+  - ccx2paraview >=3.2
   - flake8
   - glab >=1.52
   - h5netcdf
@@ -19,7 +19,6 @@ dependencies:
   # Required to satisfy undocumented SALib dependencies on numpy version
   - numpy >=2
   - pandas
-  - paraview
   - pip
   - pytest>=6
   - pytest-cov
