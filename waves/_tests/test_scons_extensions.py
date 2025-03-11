@@ -1352,7 +1352,7 @@ abaqus_pseudobuilder_input = {
         ["job.inp"],
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " job=job double=both $(cpus=1$)",
-        {},
+        {"job": "job"},
     ),
     "job with periods": (
         {},
@@ -1360,7 +1360,7 @@ abaqus_pseudobuilder_input = {
         ["job.with.periods.inp"],
         [f"job.with.periods{ext}" for ext in _abaqus_standard_extensions],
         " job=job.with.periods double=both $(cpus=1$)",
-        {},
+        {"job": "job.with.periods"},
     ),
     "job, subdirectory": (
         {},
@@ -1368,7 +1368,7 @@ abaqus_pseudobuilder_input = {
         [f"subdir{os.path.sep}job.inp"],
         [f"subdir{os.path.sep}job{ext}" for ext in _abaqus_standard_extensions],
         " job=job double=both $(cpus=1$)",
-        {},
+        {"job": "job"},
     ),
     "job with periods, subdirectory": (
         {},
@@ -1376,7 +1376,7 @@ abaqus_pseudobuilder_input = {
         [f"subdir{os.path.sep}job.with.periods.inp"],
         [f"subdir{os.path.sep}job.with.periods{ext}" for ext in _abaqus_standard_extensions],
         " job=job.with.periods double=both $(cpus=1$)",
-        {},
+        {"job": "job.with.periods"},
     ),
     "override cpus": (
         {"override_cpus": 2},
@@ -1384,7 +1384,7 @@ abaqus_pseudobuilder_input = {
         ["job.inp"],
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " job=job double=both $(cpus=2$)",
-        {},
+        {"job": "job"},
     ),
     "custom inp": (
         {},
@@ -1392,7 +1392,7 @@ abaqus_pseudobuilder_input = {
         ["input.inp"],
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " job=job double=both input=input.inp $(cpus=1$)",
-        {},
+        {"job": "job"},
     ),
     "custom inp, subdirectory": (
         {},
@@ -1400,7 +1400,7 @@ abaqus_pseudobuilder_input = {
         [f"subdir{os.path.sep}input.inp"],
         [f"subdir{os.path.sep}job{ext}" for ext in _abaqus_standard_extensions],
         " job=job double=both input=input.inp $(cpus=1$)",
-        {},
+        {"job": "job"},
     ),
     "user": (
         {},
@@ -1408,7 +1408,7 @@ abaqus_pseudobuilder_input = {
         ["job.inp"] + ["user.f"],
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " job=job double=both $(cpus=1$) user=user.f",
-        {},
+        {"job": "job"},
     ),
     "oldjob": (
         {},
@@ -1416,7 +1416,7 @@ abaqus_pseudobuilder_input = {
         ["job.inp"] + [f"oldjob{ext}" for ext in _abaqus_standard_restart_extensions],
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " job=job double=both $(cpus=1$) oldjob=oldjob",
-        {},
+        {"job": "job"},
     ),
     "write restart": (
         {},
@@ -1424,7 +1424,7 @@ abaqus_pseudobuilder_input = {
         ["job.inp"],
         [f"job{ext}" for ext in (_abaqus_standard_extensions + _abaqus_standard_restart_extensions)],
         " job=job double=both $(cpus=1$)",
-        {},
+        {"job": "job"},
     ),
     "double": (
         {},
@@ -1432,7 +1432,7 @@ abaqus_pseudobuilder_input = {
         ["job.inp"],
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " job=job double=constraint $(cpus=1$)",
-        {},
+        {"job": "job"},
     ),
     "extras": (
         {},
@@ -1440,7 +1440,7 @@ abaqus_pseudobuilder_input = {
         ["job.inp"] + ["extra.inp"],
         [f"job{ext}" for ext in _abaqus_standard_extensions] + ["extra.odb"],
         " job=job double=both $(cpus=1$) --extra-opt",
-        {},
+        {"job": "job"},
     ),
     "kwargs passthrough": (
         {},
@@ -1448,7 +1448,7 @@ abaqus_pseudobuilder_input = {
         ["job.inp"],
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " job=job double=both $(cpus=1$)",
-        {"kwarg_1": "value_1"},
+        {"job": "job", "kwarg_1": "value_1"},
     ),
     "all with override": (
         {"override_cpus": 2},
@@ -1468,7 +1468,7 @@ abaqus_pseudobuilder_input = {
         ["input.inp"] + [f"oldjob{ext}" for ext in _abaqus_standard_restart_extensions] + ["user.f", "extra.inp"],
         [f"job{ext}" for ext in (_abaqus_standard_extensions + _abaqus_standard_restart_extensions)] + ["extra.odb"],
         " job=job double=constraint input=input.inp $(cpus=2$) oldjob=oldjob user=user.f --extra-opt",
-        {"kwarg_1": "value_1"},
+        {"job": "job", "kwarg_1": "value_1"},
     ),
 }
 

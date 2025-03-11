@@ -60,14 +60,7 @@ env.Default()
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env["CCX_PROGRAM"] = env.AddProgram(["ccx"])
-try:
-    import ccx2paraview
-
-    print("Checking whether 'ccx2paraview' module imports...yes")
-    env["ccx2paraview"] = True
-except ImportError:
-    env["ccx2paraview"] = False
-    print("Checking whether 'ccx2paraview' module imports...no")
+env["ccx2paraview"] = env.AddProgram(["ccx2paraview"])
 
 # Abaqus input file implicit dependency scanner
 # Works for CalculiX because CalculiX uses the Abaqus include keyword semantics and input file extension

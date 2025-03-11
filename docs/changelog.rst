@@ -24,6 +24,10 @@ Bug fixes
   SCons 4.9.0: https://scons.org/scons-490-is-available.html. The ``project_help`` related functions make the same
   breaking change in the keyword argument name to match SCons, but preserve support for older versions of SCons by
   falling back to the older keyword argument when necessary (:issue:`879`, :merge:`1128`). By `Kyle Brindley`_.
+- Avoid always re-build behavior in parameter study write pseudo-builder (:issue:`881`, :merge:`1131`). By `Kyle
+  Brindley`_.
+- Use the required ``job`` option of the Abaqus solver builder factory in the Abaqus pseudo-builder (:issue:`884`,
+  :merge:`1133`). By `Kyle Brindley`_.
 
 Documentation
 =============
@@ -46,6 +50,9 @@ Internal Changes
   `Kyle Brindley`_.
 - Consistent naming convention for mock warning objects in ``tests_help_messages`` (:issue:`880`, :merge:`1130`). By
   `Chris Johnson`_.
+- Remove Paraview from CI environment in favor of the fully specified runtime dependencies in ``ccx2paraview>=3.2.0``
+  conda-forge package, which uses the mutually incompatible VTK package instead of Paraview. Make the Gmsh+CalculiX
+  tutorial compatible with ``ccx2paraview>=3.1`` (:merge:`1132`). By `Kyle Brindley`_.
 
 Enhancements
 ============

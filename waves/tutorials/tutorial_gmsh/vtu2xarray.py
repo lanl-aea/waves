@@ -2,6 +2,7 @@ import sys
 import typing
 import pathlib
 import argparse
+import warnings
 
 import meshio
 import xarray
@@ -12,14 +13,14 @@ def main(
     output_file: pathlib.Path,
     mesh_file: typing.Optional[pathlib.Path] = None,
 ) -> None:
-    """Read VTU file provided by ``extract.py`` and write an Xarray H5 file
+    """Read VTU file provided by ``ccx2paraview`` and write an Xarray H5 file
 
     Assumes
 
     1. Nodes are numbered sequentially from one in the CalculiX input file
     2. Nodes will be converted to zero index by ``meshio``
 
-    :param input_file: VTU file created by ``extract.py``
+    :param input_file: VTU file created by ``ccx2paraview``
     :param output_file: Xarray H5 output file
     :param mesh_file: CalculiX input file containing node sets
     """
@@ -64,7 +65,10 @@ def main(
                 )
             )
         else:
-            raise RuntimeError(f"Do not know how to handle '{key}' data '{value}'")
+            warnings.warn(
+                f"Do not know how to handle '{key}' data '{value}'. "
+                "Data variable will not be saved in the xarray dataset"
+            )
 
     # TODO: Find a better way to add the node set information
     if mesh_file is not None and mesh_file.is_file():
@@ -92,7 +96,7 @@ def existing_file(argument):
 def get_parser():
     script_name = pathlib.Path(__file__)
     prog = f"python {script_name.name} "
-    cli_description = "Open a CalculiX-to-VTU output file produced by ``extract.py`` and convert to Xarray"
+    cli_description = "Open a CalculiX-to-VTU output file produced by ``ccx2paraview`` and convert to Xarray"
     parser = argparse.ArgumentParser(description=cli_description, prog=prog)
     parser.add_argument(
         "--input-file",

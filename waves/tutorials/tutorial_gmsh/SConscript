@@ -37,10 +37,10 @@ artifacts.extend(
 
 # Extract
 artifacts.extend(
-    env.PythonScript(
-        target=["rectangle_compression.vtu"],
-        source=["extract.py", "rectangle_compression.frd"],
-        subcommand_options="--input-file ${SOURCES[1].abspath}",
+    env.Command(
+        target=["rectangle_compression.vtu", "rectangle_compression.vtu.stdout"],
+        source=["rectangle_compression.frd"],
+        action=["cd ${TARGET.dir.abspath} && ccx2paraview ${SOURCES[0].abspath} vtu ${action_suffix}"],
         action_suffix=env["action_suffix"],
     )
 )
