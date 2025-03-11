@@ -1502,7 +1502,7 @@ def _return_dataset_types(dataset_1, dataset_2) -> dict:
     :param dataset_1: Xarray Dataset
     :param dataset_2: Xarray Dataset
 
-    :return: Dictionary with entries of type ``{parameter_name: dtype}`` constructed from ``dataset_1`` and
+    :return: Dictionary with entries of type ``{name: dtype}`` constructed from ``dataset_1`` and
     ``dataset_2``
 
     :raises RuntimeError: if data variables with matching names have different types
