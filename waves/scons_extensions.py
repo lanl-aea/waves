@@ -1597,21 +1597,14 @@ def _task_kwarg_emitter(
     if not required_task_kwarg:
         raise RuntimeError("Emitter requires a populated ``required_task_kwarg`` argument")
     if required_task_kwarg not in env or not env[required_task_kwarg]:
-        raise RuntimeError(
-            f"Emitter requires the '{required_task_kwarg}' task keyword argument"
-        )
+        raise RuntimeError(f"Emitter requires the '{required_task_kwarg}' task keyword argument")
 
     build_subdirectory = _build_subdirectory(target)
     if suffixes is not None:
         target = target + [build_subdirectory / f"{env[required_task_kwarg]}{suffix}" for suffix in suffixes]
 
     return first_target_emitter(
-        target,
-        source,
-        env,
-        suffixes=suffixes,
-        appending_suffixes=appending_suffixes,
-        stdout_extension=stdout_extension
+        target, source, env, suffixes=suffixes, appending_suffixes=appending_suffixes, stdout_extension=stdout_extension
     )
 
 
@@ -1671,6 +1664,7 @@ def abaqus_solver_emitter_factory(
 
     :return: emitter function
     """
+
     def emitter(target, source, env):
         return _task_kwarg_emitter(
             target,
@@ -1681,6 +1675,7 @@ def abaqus_solver_emitter_factory(
             stdout_extension=stdout_extension,
             required_task_kwarg="job",
         )
+
     return emitter
 
 
@@ -1747,9 +1742,7 @@ def abaqus_datacheck_emitter(
     :return: target, source
     """
     emitter = abaqus_solver_emitter_factory(
-        suffixes=suffixes,
-        appending_suffixes=appending_suffixes,
-        stdout_extension=stdout_extension
+        suffixes=suffixes, appending_suffixes=appending_suffixes, stdout_extension=stdout_extension
     )
     return emitter(target, source, env)
 
@@ -1817,9 +1810,7 @@ def abaqus_explicit_emitter(
     :return: target, source
     """
     emitter = abaqus_solver_emitter_factory(
-        suffixes=suffixes,
-        appending_suffixes=appending_suffixes,
-        stdout_extension=stdout_extension
+        suffixes=suffixes, appending_suffixes=appending_suffixes, stdout_extension=stdout_extension
     )
     return emitter(target, source, env)
 
@@ -1887,9 +1878,7 @@ def abaqus_standard_emitter(
     :return: target, source
     """
     emitter = abaqus_solver_emitter_factory(
-        suffixes=suffixes,
-        appending_suffixes=appending_suffixes,
-        stdout_extension=stdout_extension
+        suffixes=suffixes, appending_suffixes=appending_suffixes, stdout_extension=stdout_extension
     )
     return emitter(target, source, env)
 

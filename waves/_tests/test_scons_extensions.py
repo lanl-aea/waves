@@ -1332,9 +1332,7 @@ def test_abaqus_solver_emitter_factory_emitters(emitter_name, default_factory_kw
     expected_factory_kwargs.update(**factory_kwargs)
 
     mock_emitter = Mock()
-    with (
-        patch("waves.scons_extensions.abaqus_solver_emitter_factory", return_value=mock_emitter) as mock_factory
-    ):
+    with patch("waves.scons_extensions.abaqus_solver_emitter_factory", return_value=mock_emitter) as mock_factory:
         test_emitter = getattr(scons_extensions, emitter_name)
         test_emitter(*emitter_positional, **factory_kwargs)
         mock_factory.assert_called_once_with(
@@ -2632,17 +2630,17 @@ waves_environment_builders = {
     "AbaqusDatacheck": (
         "AbaqusDatacheck",
         "abaqus_solver_builder_factory",
-        {"program": "${ABAQUS_PROGRAM}", "emitter": scons_extensions.abaqus_datacheck_emitter}
+        {"program": "${ABAQUS_PROGRAM}", "emitter": scons_extensions.abaqus_datacheck_emitter},
     ),
     "AbaqusExplicit": (
         "AbaqusExplicit",
         "abaqus_solver_builder_factory",
-        {"program": "${ABAQUS_PROGRAM}", "emitter": scons_extensions.abaqus_explicit_emitter}
+        {"program": "${ABAQUS_PROGRAM}", "emitter": scons_extensions.abaqus_explicit_emitter},
     ),
     "AbaqusStandard": (
         "AbaqusStandard",
         "abaqus_solver_builder_factory",
-        {"program": "${ABAQUS_PROGRAM}", "emitter": scons_extensions.abaqus_standard_emitter}
+        {"program": "${ABAQUS_PROGRAM}", "emitter": scons_extensions.abaqus_standard_emitter},
     ),
     "PythonScript": ("PythonScript", "python_builder_factory", {"program": "${PYTHON_PROGRAM}"}),
     "QuinoaSolver": (
