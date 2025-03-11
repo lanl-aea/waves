@@ -2,6 +2,7 @@ import sys
 import typing
 import pathlib
 import argparse
+import warnings
 
 import meshio
 import xarray
@@ -64,7 +65,10 @@ def main(
                 )
             )
         else:
-            raise RuntimeError(f"Do not know how to handle '{key}' data '{value}'")
+            warnings.warn(
+                f"Do not know how to handle '{key}' data '{value}'. "
+                "Data variable will not be saved in the xarray dataset"
+            )
 
     # TODO: Find a better way to add the node set information
     if mesh_file is not None and mesh_file.is_file():
