@@ -1497,10 +1497,10 @@ def _verify_parameter_study(parameter_study: xarray.Dataset):
 
 
 def _return_dataset_types(dataset_1, dataset_2) -> dict:
-    """Return the union of data variables ``{parameter_name: dtype}``
+    """Return the union of data variables ``{name: dtype}``
 
-    :param dataset_1: Dictionary with entries of type ``{parameter_name: value}``
-    :param dataset_2: Dictionary with entries of type ``{parameter_name: value}``
+    :param dataset_1: Xarray Dataset
+    :param dataset_2: Xarray Dataset
 
     :return: Dictionary with entries of type ``{parameter_name: dtype}`` constructed from ``dataset_1`` and
     ``dataset_2``
