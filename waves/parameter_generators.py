@@ -697,7 +697,7 @@ class CartesianProduct(ParameterGenerator):
 
     Parameters must be scalar valued integers, floats, strings, or booleans
 
-    :param parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
+    :param parameter_schema: The YAML loaded parameter study schema dictionary - ``{parameter_name: schema value}``
         CartesianProduct expects "schema value" to be an iterable. For example, when read from a YAML file "schema
         value" will be a Python list. Each parameter's values must have a consistent data type, but data type may vary
         between parameters.
@@ -779,7 +779,7 @@ class LatinHypercube(_ScipyGenerator):
        parameter definitions and merging with a previous parameter study will result in incorrect relationships between
        parameter schema and the parameter study samples.
 
-    :param parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
+    :param parameter_schema: The YAML loaded parameter study schema dictionary - ``{parameter_name: schema value}``
         LatinHypercube expects "schema value" to be a dictionary with a strict structure and several required keys.
         Validated on class instantiation.
     :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
@@ -862,7 +862,7 @@ class OneAtATime(ParameterGenerator):
 
     Parameters must be scalar valued integers, floats, strings, or booleans
 
-    :param parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
+    :param parameter_schema: The YAML loaded parameter study schema dictionary - ``{parameter_name: schema value}``
         OneAtATime expects "schema value" to be an ordered iterable. For example, when read from a YAML file "schema
         value" will be a Python list. Each parameter's values must have a consistent data type, but data type may vary
         between parameters.
@@ -1058,7 +1058,7 @@ class SobolSequence(_ScipyGenerator):
        parameter definitions and merging with a previous parameter study will result in incorrect relationships between
        parameter schema and the parameter study samples.
 
-    :param parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
+    :param parameter_schema: The YAML loaded parameter study schema dictionary - ``{parameter_name: schema value}``
         SobolSequence expects "schema value" to be a dictionary with a strict structure and several required keys.
         Validated on class instantiation.
     :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
@@ -1151,7 +1151,7 @@ class ScipySampler(_ScipyGenerator):
        parameter schema and the parameter study samples.
 
     :param sampler_class: The `scipy.stats.qmc`_ sampler class name. Case sensitive.
-    :param parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
+    :param parameter_schema: The YAML loaded parameter study schema dictionary - ``{parameter_name: schema value}``
         ScipySampler expects "schema value" to be a dictionary with a strict structure and several required keys.
         Validated on class instantiation.
     :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
@@ -1250,7 +1250,7 @@ class SALibSampler(ParameterGenerator, ABC):
        parameter schema and the parameter study samples.
 
     :param sampler_class: The `SALib.sample`_ sampler class name. Case sensitive.
-    :param parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
+    :param parameter_schema: The YAML loaded parameter study schema dictionary - ``{parameter_name: schema value}``
         SALibSampler expects "schema value" to be a dictionary with a strict structure and several required keys.
         Validated on class instantiation.
     :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
