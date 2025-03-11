@@ -1544,6 +1544,8 @@ def _open_parameter_study(parameter_study_file: typing.Union[pathlib.Path, str])
 
     :param parameter_study_file: Xarray parameter study file to open
 
+    :return: A verified :class:`ParameterGenerator` parameter study xarray Dataset
+
     :raises RuntimeError: if file path is not found or is not a file
     :raises RuntimeError: if parameter study verification raises a RuntimeError
     """
