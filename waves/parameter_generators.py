@@ -1523,7 +1523,12 @@ def _return_dataset_types(dataset_1, dataset_2) -> dict:
 # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/855
 def _convert_parameter_study(parameter_study: xarray.Dataset) -> xarray.Dataset:
-    """Convert <0.12.5 parmaeter study datasets into 0.12.5+ parameter study datasets"""
+    """Convert <0.12.5 parmaeter study datasets into 0.12.5+ parameter study datasets
+
+    :param parameter_study: A :class:`ParameterGenerator` parameter study Xarray Dataset
+
+    :return: A :class:`ParameterGenerator` parameter study Xarray Dataset with updated set and hash coordinate keys
+    """
     if _set_coordinate_key not in parameter_study.coords:
         parameter_study = parameter_study.rename({_deprecated_set_coordinate_key: _set_coordinate_key})
     if _hash_coordinate_key not in parameter_study.coords:
