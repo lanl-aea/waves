@@ -3,7 +3,7 @@ channels:
 
 dependencies:
   - calculix
-  - ccx2paraview
+  - ccx2paraview >=3.2
   - ipython
   - python-gmsh
   - scons >=4
