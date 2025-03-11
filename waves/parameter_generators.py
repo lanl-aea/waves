@@ -1549,10 +1549,8 @@ def _open_parameter_study(parameter_study_file: typing.Union[pathlib.Path, str])
 def _coerce_values(values: typing.Iterable, name: typing.Optional[str] = None) -> numpy.ndarray:
     """Coerces values of an iterable into a single datatype. Warns the user if coercion was necessary.
 
-    requires:
-
-    * :param values:: list of values
-    * ``name``: optional name of the parameter
+    :param values: list of values
+    :param name: optional name of the parameter
 
     :return: 1D numpy array of a consistent datatype
     """
