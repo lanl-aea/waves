@@ -1,3 +1,4 @@
+import os
 import pathlib
 from unittest.mock import patch
 
@@ -48,30 +49,58 @@ def test_graph_to_graphml():
     assert graphml != ""
 
 
-def test_parse_output():
+parse_output_input = {
+    "no break path": (
+        "[E b   C  ]+-nominal\n[  B      ]  +-build/nominal/stress_strain_comparison.pdf",
+        None,
+        {
+            "nominal": "nominal",
+            "build/nominal/stress_strain_comparison.pdf": "build/nominal/stress_strain_comparison.pdf",
+        },
+        1,
+    ),
+    "windows break path": (
+        "[E b   C  ]+-nominal\n[  B      ]  +-build\\nominal\\stress_strain_comparison.pdf",
+        "\\",
+        {
+            "nominal": "nominal",
+            "build\\nominal\\stress_strain_comparison.pdf": "build\\\nnominal\\\nstress_strain_comparison.pdf",
+        },
+        1,
+    ),
+    "linux break path": (
+        "[E b   C  ]+-nominal\n[  B      ]  +-build/nominal/stress_strain_comparison.pdf",
+        "/",
+        {
+            "nominal": "nominal",
+            "build/nominal/stress_strain_comparison.pdf": "build/\nnominal/\nstress_strain_comparison.pdf",
+        },
+        1,
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "tree_output, break_path_separator, expected_nodes, expected_edge_count",
+    parse_output_input.values(),
+    ids=parse_output_input.keys(),
+)
+def test_parse_output(tree_output, break_path_separator, expected_nodes, expected_edge_count):
     """Test raises behavior and regression test a sample SCons tree output parsing"""
     # Check for a runtime error on empty parsing
     with pytest.raises(RuntimeError):
         graph = _visualize.parse_output([])
 
-    # Sign-of-life with partial reproduction of modsim template nominal tree output
-    tree_output = "[E b   C  ]+-nominal\n[  B      ]  +-build/nominal/stress_strain_comparison.pdf"
     tree_lines = tree_output.split("\n")
-    graph = _visualize.parse_output(tree_lines)
-    assert len(graph.nodes) == 2
-    assert len(graph.edges) == 1
-    assert "nominal" in graph.nodes
-    assert "build/nominal/stress_strain_comparison.pdf" in graph.nodes
+    break_paths = True if break_path_separator is not None else False
+    with patch(f"os.path.sep", new=break_path_separator):
+        graph = _visualize.parse_output(tree_lines, break_paths=break_paths)
 
-    # Test newline breaks at path separators
-    graph = _visualize.parse_output(tree_lines, break_paths=True)
-    assert len(graph.nodes) == 2
-    assert len(graph.edges) == 1
-    assert "nominal" in graph.nodes
-    test_node = "build/nominal/stress_strain_comparison.pdf"
-    test_label = "build/\nnominal/\nstress_strain_comparison.pdf"
-    assert test_node in graph.nodes
-    assert test_label == graph.nodes[test_node]["label"]
+    assert len(graph.nodes) == len(expected_nodes)
+    assert len(graph.edges) == expected_edge_count
+    for expected_node, expected_label in expected_nodes.items():
+        assert expected_node in graph.nodes
+        assert expected_label in graph.nodes[expected_node]["label"]
 
 
 def test_check_regex_exclude():
