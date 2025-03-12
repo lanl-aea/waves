@@ -60,7 +60,7 @@ Enhancements
 ============
 - Coerce each parameter into a consistent data type when initializing a parameter study. Warn the user when a parameter
   contains inconsistent data types. (:issue:`871`, :merge:`1123`). By `Chris Johnson`_.
-- Added --break-paths option to visualize subcommand to format paths by inserting newlines after path separator (:issue:`887`, :merge:`1135`). By 
+- Added ``--break-paths`` option to visualize subcommand to format paths by inserting newlines after path separator (:issue:`887`, :merge:`1135`). By 
   `Sergio Cordova`_.
 
 *******************
