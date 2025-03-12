@@ -1496,20 +1496,21 @@ def _verify_parameter_study(parameter_study: xarray.Dataset):
         )
 
 
-def _return_dataset_types(dataset_1, dataset_2) -> dict:
+def _return_dataset_types(original_dataset: xarray.Dataset, update_dataset: xarray.Dataset) -> dict:
     """Return the union of data variables ``{name: dtype}``
 
-    :param dataset_1: Xarray Dataset
-    :param dataset_2: Xarray Dataset
+    :param original_dataset: Xarray Dataset with original types
+    :param update_dataset: Xarray Dataset with override types. Types in this dataset overwrite types in
+    ``original_dataset``
 
-    :return: Dictionary with entries of type ``{name: dtype}`` constructed from ``dataset_1`` and
-    ``dataset_2``
+    :return: Dictionary with entries of type ``{name: dtype}`` constructed from ``original_dataset`` and
+    ``update_dataset``
 
     :raises RuntimeError: if data variables with matching names have different types
     """
     # TODO: Accept an arbitrarily long list of positional arguments
-    types_1 = {key: dataset_1[key].dtype for key in dataset_1.keys()}
-    types_2 = {key: dataset_2[key].dtype for key in dataset_2.keys()}
+    types_1 = {key: original_dataset[key].dtype for key in original_dataset.keys()}
+    types_2 = {key: update_dataset[key].dtype for key in update_dataset.keys()}
     matching_keys = set(types_1.keys()) & set(types_2.keys())
     for key in matching_keys:
         type_1 = types_1[key]
