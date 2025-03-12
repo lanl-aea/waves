@@ -230,7 +230,7 @@ class TestOneAtATime:
                 call("parameter_1: 1\nparameter_2: b\n"),
             ],
         ),
-        "two parameter yaml: floats and ints": (
+        "two parameter yaml: float and ints": (
             {"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]},
             "out",
             None,
