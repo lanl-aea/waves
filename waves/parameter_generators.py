@@ -1540,7 +1540,7 @@ def _convert_parameter_study(parameter_study: xarray.Dataset) -> xarray.Dataset:
 
 
 def _open_parameter_study(parameter_study_file: typing.Union[pathlib.Path, str]) -> xarray.Dataset:
-    """Return a :meth:`ParameterGenerator.parameter_study` xarray Dataset after verifying contents
+    """Return a :class:`ParameterGenerator` parameter study xarray Dataset after verifying contents
 
     :param parameter_study_file: Xarray parameter study file to open
 
