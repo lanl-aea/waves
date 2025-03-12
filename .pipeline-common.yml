@@ -139,4 +139,5 @@
     - umask 0022
     - mkdir ${conda_artifacts_directory}
     - VERSION=$(python -m setuptools_scm) conda mambabuild ${recipe_directory} --channel fierromechanics --channel conda-forge --no-anaconda-upload --croot ${croot_recipe} --output-folder ${conda_artifacts_directory}
+    - echo $?
     - conda build purge --croot ${croot_recipe}
