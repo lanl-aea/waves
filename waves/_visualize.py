@@ -352,7 +352,7 @@ def parse_output(
             if no_labels:
                 label = " "
             elif break_paths:
-                label = f'{os.path.sep}\n'.join(node_name.split(os.path.sep))
+                label = f"{os.path.sep}\n".join(node_name.split(os.path.sep))
             else:
                 label = node_name
 
