@@ -62,6 +62,16 @@ def test_parse_output():
     assert len(graph.edges) == 1
     assert "nominal" in graph.nodes
     assert "build/nominal/stress_strain_comparison.pdf" in graph.nodes
+    
+    # Test newline breaks at path separators
+    graph = _visualize.parse_output(tree_lines, break_paths=True)
+    assert len(graph.nodes) == 2
+    assert len(graph.edges) == 1
+    assert "nominal" in graph.nodes
+    test_node = "build/nominal/stress_strain_comparison.pdf"
+    test_label = "build/\nnominal/\nstress_strain_comparison.pdf"
+    assert test_node in graph.nodes
+    assert test_label == graph.nodes[test_node]['label']
 
 
 def test_check_regex_exclude():
