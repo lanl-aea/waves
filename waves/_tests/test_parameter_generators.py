@@ -279,7 +279,7 @@ coerce_values_cases = {
     "no coercion bool": (
         [True, False],
         None,
-        numpy.bool,
+        numpy.bool_,
         False,
     ),
     "coerce int to float": (
