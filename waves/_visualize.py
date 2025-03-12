@@ -127,7 +127,7 @@ def get_parser() -> argparse.ArgumentParser:
     plot_options.add_argument(
         "--break-paths",
         action="store_true",
-        help="Format paths by breaking at `/` with a newline (default: %(default)s)",
+        help="Format paths by breaking at path separator with a newline (default: %(default)s)",
     )
 
     print_group = parser.add_mutually_exclusive_group()
