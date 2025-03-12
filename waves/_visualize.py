@@ -4,13 +4,14 @@ Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAV
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
 
-import subprocess
-import argparse
-import pathlib
-import typing
-import sys
-import re
 import io
+import os
+import re
+import sys
+import typing
+import pathlib
+import argparse
+import subprocess
 
 import networkx
 import matplotlib.pyplot
@@ -351,7 +352,7 @@ def parse_output(
             if no_labels:
                 label = " "
             elif break_paths:
-                label = '/\n'.join(node_name.split('/'))
+                label = f'{os.path.sep}\n'.join(node_name.split(os.path.sep))
             else:
                 label = node_name
 
