@@ -189,7 +189,7 @@ def main(
     :param no_labels: Don't print labels on the nodes of the visualization
     :param node_count: Add a node count orphan node
     :param transparent: Use a transparent background
-    :param break_paths: Format paths by breaking at `/` with a newline
+    :param break_paths: Format paths by breaking at path separator with a newline
     :param input_file: Path to text file storing output from SCons tree command
     """
     if not scons_args:
@@ -319,7 +319,7 @@ def parse_output(
     :param exclude_list: exclude nodes starting with strings in this list(e.g. /usr/bin)
     :param exclude_regex: exclude nodes that match this regular expression
     :param no_labels: Don't print labels on the nodes of the visualization
-    :param break_paths: Format paths by breaking at `/` with a newline
+    :param break_paths: Format paths by breaking at path separator with a newline
 
     :returns: networkx directed graph
 
