@@ -1509,16 +1509,16 @@ def _return_dataset_types(original_dataset: xarray.Dataset, update_dataset: xarr
     :raises RuntimeError: if data variables with matching names have different types
     """
     # TODO: Accept an arbitrarily long list of positional arguments
-    types_1 = {key: original_dataset[key].dtype for key in original_dataset.keys()}
-    types_2 = {key: update_dataset[key].dtype for key in update_dataset.keys()}
-    matching_keys = set(types_1.keys()) & set(types_2.keys())
+    original_types = {key: original_dataset[key].dtype for key in original_dataset.keys()}
+    update_types = {key: update_dataset[key].dtype for key in update_dataset.keys()}
+    matching_keys = set(original_types.keys()) & set(update_types.keys())
     for key in matching_keys:
-        type_1 = types_1[key]
-        type_2 = types_2[key]
-        if type_1 != type_2:
-            raise RuntimeError(f"Different types for '{key}': '{type_1}' and '{type_2}'")
-    types_1.update(types_2)
-    return types_1
+        original_type = original_types[key]
+        update_type = update_types[key]
+        if original_type != update_type:
+            raise RuntimeError(f"Different types for '{key}': '{original_type}' and '{update_type}'")
+    original_types.update(update_types)
+    return original_types
 
 
 # VVV TODO: Remove when the deprecated set coordinate key is fully removed VVV
