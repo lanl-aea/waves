@@ -58,6 +58,17 @@ parse_output_input = {
             "build/nominal/stress_strain_comparison.pdf": "build/nominal/stress_strain_comparison.pdf",
         },
         1,
+        False,
+    ),
+    "no label": (
+        "[E b   C  ]+-nominal\n[  B      ]  +-build/nominal/stress_strain_comparison.pdf",
+        None,
+        {
+            "nominal": " ",
+            "build/nominal/stress_strain_comparison.pdf": " ",
+        },
+        1,
+        True,
     ),
     "windows break path": (
         "[E b   C  ]+-nominal\n[  B      ]  +-build\\nominal\\stress_strain_comparison.pdf",
@@ -67,6 +78,7 @@ parse_output_input = {
             "build\\nominal\\stress_strain_comparison.pdf": "build\\\nnominal\\\nstress_strain_comparison.pdf",
         },
         1,
+        False,
     ),
     "linux break path": (
         "[E b   C  ]+-nominal\n[  B      ]  +-build/nominal/stress_strain_comparison.pdf",
@@ -76,16 +88,17 @@ parse_output_input = {
             "build/nominal/stress_strain_comparison.pdf": "build/\nnominal/\nstress_strain_comparison.pdf",
         },
         1,
+        False,
     ),
 }
 
 
 @pytest.mark.parametrize(
-    "tree_output, break_path_separator, expected_nodes, expected_edge_count",
+    "tree_output, break_path_separator, expected_nodes, expected_edge_count, no_labels",
     parse_output_input.values(),
     ids=parse_output_input.keys(),
 )
-def test_parse_output(tree_output, break_path_separator, expected_nodes, expected_edge_count):
+def test_parse_output(tree_output, break_path_separator, expected_nodes, expected_edge_count, no_labels,):
     """Test raises behavior and regression test a sample SCons tree output parsing"""
     # Check for a runtime error on empty parsing
     with pytest.raises(RuntimeError):
@@ -94,7 +107,7 @@ def test_parse_output(tree_output, break_path_separator, expected_nodes, expecte
     tree_lines = tree_output.split("\n")
     break_paths = True if break_path_separator is not None else False
     with patch(f"os.path.sep", new=break_path_separator):
-        graph = _visualize.parse_output(tree_lines, break_paths=break_paths)
+        graph = _visualize.parse_output(tree_lines, break_paths=break_paths, no_labels=no_labels)
 
     assert len(graph.nodes) == len(expected_nodes)
     assert len(graph.edges) == expected_edge_count
