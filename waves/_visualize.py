@@ -4,13 +4,14 @@ Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAV
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
 
-import subprocess
-import argparse
-import pathlib
-import typing
-import sys
-import re
 import io
+import os
+import re
+import sys
+import typing
+import pathlib
+import argparse
+import subprocess
 
 import networkx
 import matplotlib.pyplot
@@ -123,6 +124,11 @@ def get_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Use a transparent background. Requires a format that supports transparency (default: %(default)s)",
     )
+    plot_options.add_argument(
+        "--break-paths",
+        action="store_true",
+        help="Format paths by breaking at path separator with a newline (default: %(default)s)",
+    )
 
     print_group = parser.add_mutually_exclusive_group()
     print_group.add_argument(
@@ -159,6 +165,7 @@ def main(
     no_labels: bool = False,
     node_count: bool = False,
     transparent: bool = False,
+    break_paths: bool = False,
     input_file: typing.Union[str, pathlib.Path, None] = None,
 ) -> None:
     """Visualize the directed acyclic graph created by a SCons build
@@ -182,6 +189,7 @@ def main(
     :param no_labels: Don't print labels on the nodes of the visualization
     :param node_count: Add a node count orphan node
     :param transparent: Use a transparent background
+    :param break_paths: Format paths by breaking at path separator with a newline
     :param input_file: Path to text file storing output from SCons tree command
     """
     if not scons_args:
@@ -222,6 +230,7 @@ def main(
         exclude_list=exclude_list,
         exclude_regex=exclude_regex,
         no_labels=no_labels,
+        break_paths=break_paths,
     )
     subgraph = ancestor_subgraph(graph, targets)
     if node_count:
@@ -302,6 +311,7 @@ def parse_output(
     exclude_list: typing.List[str] = _settings._visualize_exclude,
     exclude_regex: typing.Optional[str] = None,
     no_labels: bool = False,
+    break_paths: bool = False,
 ) -> networkx.DiGraph:
     """Parse the string that has the tree output and return as a networkx directed graph
 
@@ -309,6 +319,7 @@ def parse_output(
     :param exclude_list: exclude nodes starting with strings in this list(e.g. /usr/bin)
     :param exclude_regex: exclude nodes that match this regular expression
     :param no_labels: Don't print labels on the nodes of the visualization
+    :param break_paths: Format paths by breaking at path separator with a newline
 
     :returns: networkx directed graph
 
@@ -340,6 +351,8 @@ def parse_output(
 
             if no_labels:
                 label = " "
+            elif break_paths:
+                label = f"{os.path.sep}\n".join(node_name.split(os.path.sep))
             else:
                 label = node_name
 
