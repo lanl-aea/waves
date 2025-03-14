@@ -436,30 +436,30 @@ def visualize(
     sorted_edges = sorted(
         graph.edges(), key=lambda edge: min(graph.nodes[edge[0]]["layer"], graph.nodes[edge[1]]["layer"])
     )
-    # Labels are written on top of existing nodes, which are laid out by networkx
 
+    patch_kwargs = dict(
+        xycoords="data",
+        ha="center",
+        va="center",
+        size=font_size,
+        bbox=dict(facecolor=node_color, boxstyle="round")
+    )
+
+    # Labels are written on top of existing nodes, which are laid out by networkx
     for source, target in sorted_edges:
-        patchA = axes.annotate(
+        patch_a = axes.annotate(
             graph.nodes[target]["label"],
             xy=node_positions[target],
-            xycoords="data",
-            ha="center",
-            va="center",
-            size=font_size,
-            bbox=dict(facecolor=node_color, boxstyle="round"),
+            **patch_kwargs
         )
-        patchB = axes.annotate(
+        patch_b = axes.annotate(
             graph.nodes[source]["label"],
             xy=node_positions[source],
-            xycoords="data",
-            ha="center",
-            va="center",
-            size=font_size,
-            bbox=dict(facecolor=node_color, boxstyle="round"),
+            **patch_kwargs
         )
 
         arrowprops = dict(
-            arrowstyle="<-", color=edge_color, connectionstyle="arc3,rad=0.1", patchA=patchA, patchB=patchB
+            arrowstyle="<-", color=edge_color, connectionstyle="arc3,rad=0.1", patchA=patch_a, patchB=patch_b
         )
 
         axes.annotate(
