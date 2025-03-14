@@ -432,7 +432,7 @@ def visualize(
     axes = figure.axes[0]
     axes.axis("off")
 
-    # Sort edges by the highest layer of their connected nodes
+    # Sort edges by the lowest layer of their connected nodes
     sorted_edges = sorted(
         graph.edges(), key=lambda edge: min(graph.nodes[edge[0]]["layer"], graph.nodes[edge[1]]["layer"])
     )
