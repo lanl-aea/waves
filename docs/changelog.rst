@@ -64,6 +64,7 @@ Enhancements
   contains inconsistent data types. (:issue:`871`, :merge:`1123`). By `Chris Johnson`_.
 - Added ``--break-paths`` option to visualize subcommand to format paths by inserting newlines after path separator 
   (:issue:`887`, :merge:`1135`). By `Sergio Cordova`_.
+- Improved edge rendering order to enhance node visibility (:issue:`888`, :merge:`1137`). By `Sergio Cordova`_.
 
 *******************
 0.12.7 (2025-02-26)
