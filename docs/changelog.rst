@@ -31,7 +31,7 @@ Bug fixes
 
 Documentation
 =============
-- Add completed parameter lists, returns, and typing hints to parameter generator private functions 
+- Add completed parameter lists, returns, and typing hints to parameter generator private functions
   (:issue:`882`, :merge:`1134`). By  `Chris Johnson`_.
 - Use the WAVES construction environment Abaqus solve builder factory in the tutorials (:issue:`876`, :merge:`1118`). By
   `Kyle Brindley`_.
@@ -55,16 +55,17 @@ Internal Changes
 - Remove Paraview from CI environment in favor of the fully specified runtime dependencies in ``ccx2paraview>=3.2.0``
   conda-forge package, which uses the mutually incompatible VTK package instead of Paraview. Make the Gmsh+CalculiX
   tutorial compatible with ``ccx2paraview>=3.1`` (:merge:`1132`). By `Kyle Brindley`_.
-- Update visualize subcommand to use ``networkx.topological_generation`` to set image columns (:issue:`835`, 
+- Update visualize subcommand to use ``networkx.topological_generation`` to set image columns (:issue:`835`,
   :merge:`1129`). By `Sergio Cordova`_.
 
 Enhancements
 ============
 - Coerce each parameter into a consistent data type when initializing a parameter study. Warn the user when a parameter
   contains inconsistent data types. (:issue:`871`, :merge:`1123`). By `Chris Johnson`_.
-- Added ``--break-paths`` option to visualize subcommand to format paths by inserting newlines after path separator 
+- Added ``--break-paths`` option to visualize subcommand to format paths by inserting newlines after path separator
   (:issue:`887`, :merge:`1135`). By `Sergio Cordova`_.
-- Improved edge rendering order to enhance node visibility (:issue:`888`, :merge:`1137`). By `Sergio Cordova`_.
+- Improved edge rendering order to enhance node visibility in visualize subcommand output (:issue:`888`, :merge:`1137`).
+  By `Sergio Cordova`_.
 
 *******************
 0.12.7 (2025-02-26)
