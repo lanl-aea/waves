@@ -98,7 +98,13 @@ parse_output_input = {
     parse_output_input.values(),
     ids=parse_output_input.keys(),
 )
-def test_parse_output(tree_output, break_path_separator, expected_nodes, expected_edge_count, no_labels,):
+def test_parse_output(
+    tree_output,
+    break_path_separator,
+    expected_nodes,
+    expected_edge_count,
+    no_labels,
+):
     """Test raises behavior and regression test a sample SCons tree output parsing"""
     # Check for a runtime error on empty parsing
     with pytest.raises(RuntimeError):

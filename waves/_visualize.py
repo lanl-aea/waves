@@ -432,12 +432,25 @@ def visualize(
     axes = figure.axes[0]
     axes.axis("off")
 
+    # Sort edges by the highest layer of their connected nodes
+    sorted_edges = sorted(
+        graph.edges(), key=lambda edge: min(graph.nodes[edge[0]]["layer"], graph.nodes[edge[1]]["layer"])
+    )
     # Labels are written on top of existing nodes, which are laid out by networkx
-    annotations: typing.Dict[str, typing.Any] = dict()
-    for node in graph.nodes:
-        annotations[node] = axes.annotate(
-            graph.nodes[node]["label"],
-            xy=node_positions[node],
+
+    for source, target in sorted_edges:
+        patchA = axes.annotate(
+            graph.nodes[target]["label"],
+            xy=node_positions[target],
+            xycoords="data",
+            ha="center",
+            va="center",
+            size=font_size,
+            bbox=dict(facecolor=node_color, boxstyle="round"),
+        )
+        patchB = axes.annotate(
+            graph.nodes[source]["label"],
+            xy=node_positions[source],
             xycoords="data",
             ha="center",
             va="center",
@@ -445,13 +458,10 @@ def visualize(
             bbox=dict(facecolor=node_color, boxstyle="round"),
         )
 
-    for source, target in graph.edges:
-        patchA = annotations[target]
-        patchB = annotations[source]
-
         arrowprops = dict(
             arrowstyle="<-", color=edge_color, connectionstyle="arc3,rad=0.1", patchA=patchA, patchB=patchB
         )
+
         axes.annotate(
             "",
             xy=node_positions[source],
