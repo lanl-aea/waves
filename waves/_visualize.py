@@ -442,21 +442,13 @@ def visualize(
         ha="center",
         va="center",
         size=font_size,
-        bbox=dict(facecolor=node_color, boxstyle="round")
+        bbox=dict(facecolor=node_color, boxstyle="round"),
     )
 
     # Labels are written on top of existing nodes, which are laid out by networkx
     for source, target in sorted_edges:
-        patch_a = axes.annotate(
-            graph.nodes[target]["label"],
-            xy=node_positions[target],
-            **patch_kwargs
-        )
-        patch_b = axes.annotate(
-            graph.nodes[source]["label"],
-            xy=node_positions[source],
-            **patch_kwargs
-        )
+        patch_a = axes.annotate(graph.nodes[target]["label"], xy=node_positions[target], **patch_kwargs)
+        patch_b = axes.annotate(graph.nodes[source]["label"], xy=node_positions[source], **patch_kwargs)
 
         arrowprops = dict(
             arrowstyle="<-", color=edge_color, connectionstyle="arc3,rad=0.1", patchA=patch_a, patchB=patch_b
