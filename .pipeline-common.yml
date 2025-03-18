@@ -1,5 +1,7 @@
 .linux_before_script: &linux_before_script
   before_script:
+    # Remove when AEA RHEL ``all_proxy`` environment variable is removed or set to empty
+    - export all_proxy=''
     # Handle mixed AEA/HPC jobs
     - aea_compute_path="/projects/aea_compute"
     - scratch_path="/scratch/${USER}"
