@@ -386,7 +386,7 @@ Now plot the workflow with only the first set, ``set0``.
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_07_cartesian_product --output-file tutorial_07_cartesian_product_set0.png --width=28 --height=6 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
+   $ waves visualize tutorial_07_cartesian_product --output-file tutorial_07_cartesian_product_set0.png --width=42 --height=6 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
 
 The output should look similar to the figure below.
 
