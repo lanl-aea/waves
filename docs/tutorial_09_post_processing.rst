@@ -227,7 +227,7 @@ Plot the workflow with only the first set, ``set0``.
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_09_post_processing --output-file tutorial_09_post_processing_set0.png --width=42 --height=8 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
+   $ waves visualize tutorial_09_post_processing --output-file tutorial_09_post_processing_set0.png --width=54 --height=8 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
 
 The output should look similar to the figure below.
 
