@@ -354,7 +354,7 @@ First, plot the workflow with all parameter sets.
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_07_cartesian_product --output-file tutorial_07_cartesian_product.png --width=36 --height=12 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta
+   $ waves visualize tutorial_07_cartesian_product --output-file tutorial_07_cartesian_product.png --width=40 --height=12 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta
 
 The output should look similar to the figure below.
 
