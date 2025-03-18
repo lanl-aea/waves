@@ -44,6 +44,7 @@ Documentation
   Brindley`_.
 - Update the WAVES quickstart Abaqus installation note to take advantage of the ``--abaqus-command`` project command
   line option (:merge:`1126`). By `Kyle Brindley`_.
+- Update tutorial visualize images (:issue:`835`, :merge:`1136`). By `Sergio Cordova`_.
 
 Internal Changes
 ================
