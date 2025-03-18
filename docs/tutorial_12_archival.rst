@@ -198,7 +198,7 @@ First, plot the workflow with all parameter sets.
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_12_archival_archive --output-file tutorial_12_archival.png --width=50 --height=12 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta
+   $ waves visualize tutorial_12_archival_archive --output-file tutorial_12_archival.png --width=60 --height=12 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta
 
 The output should look similar to the figure below.
 
