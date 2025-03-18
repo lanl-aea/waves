@@ -342,7 +342,7 @@ View the workflow directed graph by running the following command and opening th
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_05_parameter_substitution --output-file tutorial_05_parameter_substitution.png --width=28 --height=6 --exclude-list /usr/bin .stdout .jnl .prt .com
+   $ waves visualize tutorial_05_parameter_substitution --output-file tutorial_05_parameter_substitution.png --width=36 --height=6 --exclude-list /usr/bin .stdout .jnl .prt .com
 
 The output should look similar to the figure below.
 
