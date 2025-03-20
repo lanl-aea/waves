@@ -48,7 +48,7 @@ env["MPIRUN_PROGRAM"] = env.AddProgram(["mpirun"])
 # Add project builders
 env.Append(
     BUILDERS={
-        "Truchas": scons_extensions.truchas_builder_factory(
+        "Truchas": waves.scons_extensions.truchas_builder_factory(
             program="mpirun" if env["MPIRUN_PROGRAM"] is not None else "",
             program_options="-np 1" if env["MPIRUN_PROGRAM"] is not None else "",
             subcommand="${TRUCHAS_PROGRAM}",
