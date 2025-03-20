@@ -4348,6 +4348,20 @@ class WAVESEnvironment(SConsEnvironment):
         builder = ansys_apdl_builder_factory(program="${ANSYS_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
+    def Truchas(self, target, source, *args, **kwargs):
+        """Builder from factory :meth:`waves.scons_extensions.truchas_builder_factory`
+
+        :var program: ``${MPIRUN_PROGRAM}``
+        :var subcommand: ``${TRUCHAS_PROGRAM}``
+
+        :param target: The task target list
+        :param source: The task source list
+        :param args: All positional arguments are passed through to the builder (*not* to the builder factory)
+        :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
+        """
+        builder = truchas_builder_factory(program="${MPIRUN_PROGRAM}", subcommand="${TRUCHAS_PROGRAM}")
+        return builder(self, *args, target=target, source=source, **kwargs)
+
     def SphinxBuild(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.sphinx_build`
 
