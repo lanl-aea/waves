@@ -1,0 +1,72 @@
+import os
+import pathlib
+
+import waves
+import scons_extensions
+
+# Accept command line options with fall back default values
+AddOption(
+    "--build-dir",
+    dest="variant_dir_base",
+    default="build",
+    nargs=1,
+    type="string",
+    action="store",
+    metavar="DIR",
+    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')",
+)
+# Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
+default_truchas_commands = [
+    "truchas",
+]
+AddOption(
+    "--truchas-command",
+    dest="truchas_command",
+    nargs=1,
+    type="string",
+    action="append",
+    metavar="COMMAND",
+    help=f"Override for the Truchas command. Repeat to specify more than one (default: {default_truchas_commands})",
+)
+
+# Inherit user's full environment and set project options
+env = waves.scons_extensions.WAVESEnvironment(
+    ENV=os.environ.copy(),
+    variant_dir_base=pathlib.Path(GetOption("variant_dir_base")),
+    truchas_commands=GetOption("truchas_command"),
+)
+
+# Always put a full copy of source files in build directory instead of links
+env.SetOption("duplicate", "copy")
+
+# Find required programs for conditional target ignoring and absolute path for use in target actions
+env["TRUCHAS_PROGRAM"] = env.AddProgram(
+    env["truchas_commands"] if env["truchas_commands"] is not None else default_truchas_commands
+)
+env["MPIRUN_PROGRAM"] = env.AddProgram(["mpirun"])
+
+# Add project builders
+env.Append(
+    BUILDERS={
+        "Truchas": scons_extensions.truchas_builder_factory(
+            program="mpirun" if env["MPIRUN_PROGRAM"] is not None else "",
+            program_options="-np 1" if env["MPIRUN_PROGRAM"] is not None else "",
+            subcommand="${TRUCHAS_PROGRAM}",
+        )
+    }
+)
+
+# Empty defaults list to avoid building all simulation targets by default
+env.Default()
+
+# Print captured STDOUT/STDERR for failed task(s)
+env.PrintBuildFailures()
+
+# Workflow configurations
+build_dir = env["variant_dir_base"]
+SConscript("SConscript", variant_dir=build_dir, exports={"env": env}, duplicate=True)
+
+# Add default target list to help message
+# Add aliases to help message so users know what build target options are available
+# This must come *after* all expected Alias definitions and SConscript files.
+env.ProjectHelp()

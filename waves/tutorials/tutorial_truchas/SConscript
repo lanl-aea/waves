@@ -1,0 +1,14 @@
+Import("env")
+
+stretch_hex_targets = env.Truchas(
+    target=[
+        "stretch-hex/stretch-hex.log",
+        "stretch-hex/stretch-hex.h5",
+    ],
+    source=["stretch-hex.inp"],
+)
+env.Alias("stretch-hex.inp", stretch_hex_targets)
+
+if not env["TRUCHAS_PROGRAM"]:
+    print(f"Program 'truchas' was not found in construction environment. Ignoring simulation target(s)")
+    Ignore([".", "stretch-hex.inp"], stretch_hex_targets)

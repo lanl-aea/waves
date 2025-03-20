@@ -1,0 +1,4 @@
+openmpi
+paraview
+scons >=4.6
+waves >=0.12
