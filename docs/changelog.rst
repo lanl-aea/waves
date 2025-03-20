@@ -8,6 +8,10 @@ Changelog
 0.12.9 (unreleased)
 *******************
 
+New Features
+============
+- Experimental builder support for Truchas (:issue:`890`, :merge:`1140`). By `Kyle Brindley`_.
+
 *******************
 0.12.8 (2025-03-18)
 *******************
