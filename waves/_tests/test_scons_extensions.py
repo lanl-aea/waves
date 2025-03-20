@@ -1772,6 +1772,22 @@ builder_factory_tests.update(
         },
     )
 )
+builder_factory_tests.update(
+    first_target_builder_factory_test_cases(
+        "truchas_builder_factory",
+        {
+            "environment": "",
+            "action_prefix": "cd ${TARGET.dir.dir.abspath} &&",
+            "program": "mpirun",
+            "program_required": "",
+            "program_options": "-np 1",
+            "subcommand": "truchas",
+            "subcommand_required": "-f -o:${TARGET.dir.filebase} ${SOURCE.abspath}",
+            "subcommand_options": "",
+            "action_suffix": _redirect_action_suffix,
+        },
+    )
+)
 
 
 @pytest.mark.parametrize(
@@ -2671,6 +2687,11 @@ waves_environment_builders = {
     "AnsysAPDL": ("AnsysAPDL", "ansys_apdl_builder_factory", {"program": "${ANSYS_PROGRAM}"}),
     "SphinxBuild": ("SphinxBuild", "sphinx_build", {"program": "${SPHINX_BUILD_PROGRAM}"}),
     "SphinxPDF": ("SphinxPDF", "sphinx_latexpdf", {"program": "${SPHINX_BUILD_PROGRAM}"}),
+    "Truchas": (
+        "Truchas",
+        "truchas_builder_factory",
+        {"program": "${MPIRUN_PROGRAM}", "subcommand": "${TRUCHAS_PROGRAM}"},
+    ),
 }
 
 
