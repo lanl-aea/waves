@@ -47,9 +47,7 @@ If you have a conda-package deployment of Truchas available, you can install all
    $ conda create --name waves-truchas --file environment.txt truchas --channel /projects/aea_compute/aea-conda --channel conda-forge
    $ conda create --name waves-truchas --file environment.txt truchas --channel /Users/roppenheimer/Documents/aea-conda --channel conda-forge
 
-If you need to build the conda packages for your operating system, a Truchas Conda package recipe can be found here:
-https://re-git.lanl.gov/aea/feedstocks/truchas-feedstock. You can create a local Conda channel to use for environment
-creation. See the Conda documentation:
+You can create a local Conda channel to use for environment creation. See the Conda documentation:
 https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/create-custom-channels.html.
 
 *******************
@@ -69,7 +67,7 @@ Example build directory expectations
    (waves-truchas) [roppenheimer@host waves-truchas]% find build -type f
    build/stretch-hex/stretch-hex.h5
    build/stretch-hex/stretch-hex.log
-   build/stretch-hex.stdout
+   build/stretch-hex/stretch-hex.log.stdout
    build/SConscript
    build/stretch-hex.inp
 
