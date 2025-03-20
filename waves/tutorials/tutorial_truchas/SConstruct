@@ -2,7 +2,6 @@ import os
 import pathlib
 
 import waves
-import scons_extensions
 
 # Accept command line options with fall back default values
 AddOption(
