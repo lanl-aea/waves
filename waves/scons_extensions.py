@@ -3581,6 +3581,121 @@ def ansys_apdl_builder_factory(
     return builder
 
 
+def truchas_builder_factory(
+    environment: str = "",
+    action_prefix: str = "cd ${TARGET.dir.dir.abspath} &&",
+    program: str = "mpirun",
+    program_required: str = "",
+    program_options: str = "-np 1",
+    subcommand: str = "truchas",
+    subcommand_required: str = "-f -o:${TARGET.dir.filebase} ${SOURCE.abspath}",
+    subcommand_options: str = "",
+    action_suffix: str = _settings._redirect_action_suffix,
+    emitter=first_target_emitter,
+    **kwargs,
+) -> SCons.Builder.Builder:
+    """Truchas builder factory.
+
+    .. warning::
+
+       This is an experimental builder. It is subject to change without warning.
+
+    .. warning::
+
+       This builder is not included in the regression test suite yet. Contact the development team if you encounter
+       problems or have recommendations for improved design behavior.
+
+    This builder factory extends :meth:`waves.scons_extensions.first_target_builder_factory`. This builder factory uses
+    the :meth:`waves.scons_extensions.first_target_emitter`. At least one task target must be specified in the task
+    definition and the last target will always be the expected STDOUT and STDERR redirection output file,
+    ``TARGETS[-1]`` ending in ``*.stdout``.
+
+    .. warning::
+
+       Note that this builder's action prefix is different from other builders. Truchas output control produces a
+       build subdirectory, so the action prefix moves up *two* directories above the expected output instead of one.
+       All Truchas output targets must include the requested output directory and the output directory name must match
+       the target file basename, e.g. ``target/target.log`` and ``parameter_set1/target/target.log``.
+
+    With the default options this builder requires the following sources file provided in the order:
+
+    1. Truchas input file: ``*.inp``
+
+    With the default options this builder requires the following target file provided in the order:
+
+    1. Truchas output log with desired output directory: ``target/target.log``
+
+    .. code-block::
+       :caption: action string construction
+
+       ${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}
+
+    .. code-block::
+       :caption: action string default expansion
+
+       ${environment} cd ${TARGET.dir.dir.abspath} && mpirun ${program_required} -np 1 truchas -f -o:${TARGET.dir.filebase} ${SOURCE.abspath} ${subcommand_options} > ${TARGETS[-1].abspath} 2>&1
+
+    .. code-block::
+       :caption: SConstruct
+
+       import waves
+       env = Environment()
+       env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
+       env["TRUCHAS_PROGRAM"] = env.AddProgram(["truchas"])
+       env.Append(BUILDERS={
+           "Truchas": waves.scons_extensions.truchas_builder_factory(
+               subcommand=env["TRUCHAS_PROGRAM"]
+           )
+       })
+       env.Truchas(
+           target=[
+               "target/target.log"
+               "target/target.h5"
+           ],
+           source=["source.inp"],
+       )
+
+    The builder returned by this factory accepts all SCons Builder arguments. The arguments of this function are also
+    available as keyword arguments of the builder. When provided during task definition, the task keyword arguments
+    override the builder keyword arguments.
+
+    :param environment: This variable is intended primarily for use with builders and tasks that can not execute from an
+        SCons construction environment. For instance, when tasks execute on a remote server with SSH wrapped actions
+        using :meth:`waves.scons_extensions.ssh_builder_actions` and therefore must initialize the remote environment as
+        part of the builder action.
+    :param action_prefix: This variable is intended to perform directory change operations prior to program execution
+    :param program: The mpirun absolute or relative path
+    :param program_required: Space delimited string of required mpirun options and arguments that are crucial to
+        builder behavior and should not be modified except by advanced users
+    :param program_options: Space delimited string of optional mpirun options and arguments that can be freely
+        modified by the user
+    :param subcommand: The Truchas absolute or relative path
+    :param subcommand_required: Space delimited string of required Truchas options and arguments
+        that are crucial to builder behavior and should not be modified except by advanced users.
+    :param subcommand_options: Space delimited string of optional Truchas options and arguments
+        that can be freely modified by the user
+    :param action_suffix: This variable is intended to perform program STDOUT and STDERR redirection operations.
+    :param emitter: An SCons emitter function. This is not a keyword argument in the action string.
+    :param kwargs: Any additional keyword arguments are passed directly to the SCons builder object.
+
+    :returns: Truchas builder
+    """  # noqa: E501
+    builder = first_target_builder_factory(
+        environment=environment,
+        action_prefix=action_prefix,
+        program=program,
+        program_required=program_required,
+        program_options=program_options,
+        subcommand=subcommand,
+        subcommand_required=subcommand_required,
+        subcommand_options=subcommand_options,
+        action_suffix=action_suffix,
+        emitter=emitter,
+        **kwargs,
+    )
+    return builder
+
+
 def parameter_study_task(
     env: SCons.Environment.Environment,
     builder: SCons.Builder.Builder,
