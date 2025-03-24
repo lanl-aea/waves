@@ -16,6 +16,7 @@ import os
 import re
 import sys
 import shlex
+import shutil
 import string
 import typing
 import inspect
@@ -32,6 +33,9 @@ from waves._tests.common import platform_check
 
 
 testing_windows, root_fs, testing_macos = platform_check()
+# TODO: Fix HPC CI system tests that run TeXLive
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
+testing_hpc = shutil.which("sbatch") is not None
 python_313_or_above = sys.version_info >= (3, 13)
 
 tutorial_directory = _settings._tutorials_directory
@@ -578,6 +582,9 @@ require_third_party_system_tests = [
                 testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus"
             ),
             pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
+            # TODO: Fix HPC CI system tests that run TeXLive
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
+            pytest.mark.skipif(testing_hpc, reason="HPC CI server fails TeXLive PDF builds"),
         ],
         id="modsim_template_full",
     ),
@@ -600,6 +607,9 @@ require_third_party_system_tests = [
                 testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus"
             ),
             pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
+            # TODO: Fix HPC CI system tests that run TeXLive
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
+            pytest.mark.skipif(testing_hpc, reason="HPC CI server fails TeXLive PDF builds"),
         ],
         id="modsim_template_2_full",
     ),
