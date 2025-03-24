@@ -30,4 +30,4 @@ hpc-fast-test:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
   tags:
     - rocinante
-    - shell
+    - batch
