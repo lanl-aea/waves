@@ -950,7 +950,6 @@ def builder_factory(
     :param kwargs: Any additional keyword arguments are passed directly to the SCons builder object.
 
     :returns: SCons template builder
-    :rtype: SCons.Builder.Builder
     """  # noqa: E501
     action = [
         (
@@ -1211,7 +1210,6 @@ def abaqus_journal(
     :param environment_suffix: Advanced behavior. Most users should accept the defaults.
 
     :return: Abaqus journal builder
-    :rtype: SCons.Builder.Builder
     """  # noqa: E501
     action = [
         "${action_prefix} ${program} -information environment ${environment_suffix}",
@@ -2559,7 +2557,6 @@ def conda_environment(
     :param action_prefix: Advanced behavior. Most users should accept the defaults
 
     :return: Conda environment builder
-    :rtype: SCons.Builder.Builder
     """
     action = ["${action_prefix} ${program} ${subcommand} ${required} ${options}"]
     conda_environment_builder = SCons.Builder.Builder(
@@ -2787,7 +2784,6 @@ def abaqus_input_scanner() -> SCons.Scanner.Scanner:
     ``*.inp`` files.
 
     :return: Abaqus input file dependency Scanner
-    :rtype: SCons.Scanner.Scanner
     """
     flags = re.IGNORECASE
     return _custom_scanner(r"^\*[^*]*,\s*input=(.+)$", [".inp"], flags)
@@ -2805,7 +2801,6 @@ def sphinx_scanner() -> SCons.Scanner.Scanner:
     inside ``.rst`` and ``.txt`` files
 
     :return: Sphinx source file dependency Scanner
-    :rtype: SCons.Scanner.Scanner
     """
     return _custom_scanner(r"^\s*\.\. (?:include|literalinclude|image|figure|bibliography)::\s*(.+)$", [".rst", ".txt"])
 
