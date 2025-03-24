@@ -24,7 +24,18 @@ hpc-environment:
 hpc-fast-test:
   extends:
     - .linux_before_script
-    - .fast-test
+  script:
+    # TODO: Remove HPC specific fast-test script when HPC CI TeXLive builds are fixed
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
+    # Job variables
+    - echo ${abaqus_command_prefix}
+    - echo ${cubit_command_prefix}
+    - if [[ -z ${abaqus_command_prefix} ]]; then exit 1; fi
+    - if [[ -z ${cubit_command_prefix} ]]; then exit 1; fi
+    - echo ${PARENT_CI_PIPELINE_SOURCE}
+    # Job commands
+    - scons pytest systemtest --keep-going --unconditional-build --abaqus-command=${abaqus_command_prefix}/abq2024 --cubit-command=${cubit_command_prefix}/Cubit-16.16/cubit
+    - if [[ $PARENT_CI_PIPELINE_SOURCE == "schedule" ]]; then scons systemtest --keep-going --unconditional-build --abaqus-command=${abaqus_command_prefix}/abq2023 --cubit-command=${cubit_command_prefix}/Cubit-16.12/cubit; fi
   stage: test
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
