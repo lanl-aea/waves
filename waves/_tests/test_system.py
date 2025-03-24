@@ -562,7 +562,7 @@ require_third_party_system_tests = [
     pytest.param(
         [
             fetch_template,
-            string.Template("scons . ${unconditional_build} --jobs=4 ${abaqus_command}"),
+            string.Template("scons . --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"),
             string.Template(
                 "${waves_command} visualize rectangle_compression-nominal --output-file nominal.png ${abaqus_command}"  # noqa: E501
             ),
@@ -579,11 +579,12 @@ require_third_party_system_tests = [
             ),
             pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
         ],
+        id="modsim_template_full",
     ),
     pytest.param(
         [
             fetch_template,
-            string.Template("scons . ${unconditional_build} --jobs=4 ${abaqus_command}"),
+            string.Template("scons . --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"),
             string.Template(
                 "${waves_command} visualize rectangle_compression-nominal --output-file nominal.png ${abaqus_command}"  # noqa: E501
             ),
@@ -600,6 +601,7 @@ require_third_party_system_tests = [
             ),
             pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
         ],
+        id="modsim_template_2_full",
     ),
 ]
 
