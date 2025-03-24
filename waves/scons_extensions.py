@@ -2804,7 +2804,7 @@ def sphinx_scanner() -> SCons.Scanner.Scanner:
 
     inside ``.rst`` and ``.txt`` files
 
-    :return: Abaqus input file dependency Scanner
+    :return: Sphinx source file dependency Scanner
     :rtype: SCons.Scanner.Scanner
     """
     return _custom_scanner(r"^\s*\.\. (?:include|literalinclude|image|figure|bibliography)::\s*(.+)$", [".rst", ".txt"])
