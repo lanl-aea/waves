@@ -23,3 +23,5 @@ exclude SConstruct
 exclude style
 exclude mypy
 exclude pytest
+include waves/README.rst
+include waves/pyproject.toml
