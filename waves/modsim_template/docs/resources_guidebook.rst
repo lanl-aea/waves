@@ -8,15 +8,25 @@ Sphinx Documentation
 
 The modsim template uses Sphinx documentation. For more details on using Sphinx, see the main `Sphinx`_ documentation.
 
-The modsim template uses `Sphinx automodule`_ capability. This automatically reads the Sphinx-formatted docstrings
+This template uses `Sphinx automodule`_ capability. This automatically reads the Sphinx-formatted docstrings
 within Python files and adds it to the Sphinx pages where requested.
+
 
 
 ***
 Git
 ***
 
-The modsim template is already set up to use `Git`_ for version control: a ``.gitignore`` file is included in the main
-template directory. By default, it is set up to include file paths and extensions that are not expected to be tracked,
-such as the ``build/`` directory, Abaqus or `Cubit`_ journal files, and others.
+The modsim template is intended to use `Git`_ for version control: a ``.gitignore`` file is included in the main
+template directory. By default, it includes file paths and extensions that are not expected to be tracked,
+such as the ``build/`` directory, Abaqus and `Cubit`_ journal files, and others.
+
+******
+PyTest
+******
+
+For unit testing, `pytest`_ is implemented for the rectangle compression simulation. These tests can be found in
+``modsim_package/tests/``. The prepackaged tests currently include testing on inputs passed to argparse, mesh
+convergence, and helper functions used for the rectangle compression. There are 13 tests in total. Tests can be run
+using ``scons unit_testing``.
 
