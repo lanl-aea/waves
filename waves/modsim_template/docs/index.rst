@@ -40,6 +40,7 @@
    release_philosophy
    changelog
    zreferences
+   resources_guidebook
    glossary
 
 .. raw:: latex
