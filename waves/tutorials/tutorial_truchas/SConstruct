@@ -51,6 +51,7 @@ env = waves.scons_extensions.WAVESEnvironment(
     truchas_commands=GetOption("truchas_command"),
     cubit_commands=GetOption("cubit_command"),
 )
+env["parameter_study_directory"] = env["build_dir"] / "parameter_studies"
 
 # Always copy (no sym-links) when duplicating
 env.SetOption("duplicate", "copy")
@@ -98,10 +99,23 @@ nominal_parameters = {
     "global_seed": 1.0,
     "displacement": -0.01,
 }
+mesh_convergence_parameter_study_file = env["parameter_study_directory"] / "mesh_convergence.h5"
+mesh_convergence_parameter_generator = waves.parameter_generators.CartesianProduct(
+    {
+        "width": [1.0],
+        "height": [1.0],
+        "global_seed": [1.0, 0.5, 0.25, 0.125],
+        "displacement": [-0.01],
+    },
+    output_file=mesh_convergence_parameter_study_file,
+    previous_parameter_study=mesh_convergence_parameter_study_file,
+)
+mesh_convergence_parameter_generator.write()
 
 # Add workflow(s)
 workflow_configurations = [
     ("nominal", nominal_parameters),
+    ("mesh_convergence", mesh_convergence_parameter_generator),
 ]
 for study_name, study_definition in workflow_configurations:
     env.ParameterStudySConscript(
