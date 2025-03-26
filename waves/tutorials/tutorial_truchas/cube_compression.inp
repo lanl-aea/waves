@@ -106,8 +106,22 @@ direction.
 
 &SOLID_MECHANICS_BC
   name = 'displx'
-  face_set_ids = 1
+  face_set_ids = 3
   type = 'displacement-x'
+  displacement = 0
+/
+
+&SOLID_MECHANICS_BC
+  name = 'disply'
+  face_set_ids = 2
+  type = 'displacement-y'
+  displacement = 0
+/
+
+&SOLID_MECHANICS_BC
+  name = 'displz'
+  face_set_ids = 6
+  type = 'displacement-z'
   displacement = 0
 /
 
@@ -115,19 +129,5 @@ direction.
   name = 'disply'
   face_set_ids = 1
   type = 'displacement-y'
-  displacement = 0
-/
-
-&SOLID_MECHANICS_BC
-  name = 'displz'
-  face_set_ids = 1
-  type = 'displacement-z'
-  displacement = 0
-/
-
-&SOLID_MECHANICS_BC
-  name = 'displn'
-  face_set_ids = 2
-  type = 'displacement-n'
-  displacement = 1e-8
+  displacement = -0.01
 /
