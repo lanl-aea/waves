@@ -1,12 +1,13 @@
 #! /usr/bin/env python
 
-Import("env", "envCubit")
+Import("env", "envCubit", "alias", "parameters")
 
 # Geometry
 envCubit.PythonScript(
     target=["cube_geometry.cub"],
     source=["cube_geometry.py"],
-    subcommand_options="",
+    subcommand_options="--width ${width} --height ${height}",
+    **parameters,
 )
 
 # Partition
@@ -14,27 +15,35 @@ envCubit.PythonScript(
     target=["cube_partition.cub"],
     source=["cube_partition.py", "cube_geometry.cub"],
     subcommand_options="",
+    **parameters,
 )
 
 # Mesh
 envCubit.PythonScript(
     target=[f"cube_mesh.g", "cube_mesh.cub"],
     source=["cube_mesh.py", "cube_partition.cub"],
-    subcommand_options="--element-type ${element_type} --solver ${solver}",
+    subcommand_options="--global-seed ${global_seed} --element-type ${element_type} --solver ${solver}",
+    **parameters,
     element_type="HEX",
     solver="sierra",
 )
 
+# SolverPrep
+env.CopySubstfile(
+    ["#/cube_compression.inp.in"],
+    substitution_dictionary=env.SubstitutionSyntax(parameters),
+)
+
 # Solve
-stretch_hex_targets = env.Truchas(
+solve_targets = env.Truchas(
     target=[
         "cube_compression/cube_compression.log",
         "cube_compression/cube_compression.h5",
     ],
     source=["cube_compression.inp", "cube_mesh.g"],
 )
-env.Alias("cube_compression.inp", stretch_hex_targets)
+env.Alias(alias, solve_targets)
 
 if not env["TRUCHAS_PROGRAM"]:
     print(f"Program 'truchas' was not found in construction environment. Ignoring simulation target(s)")
-    Ignore([".", "cube_compression.inp"], stretch_hex_targets)
+    Ignore([".", "cube_compression.inp"], solve_targets)

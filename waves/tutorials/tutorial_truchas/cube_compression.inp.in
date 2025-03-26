@@ -129,5 +129,5 @@ direction.
   name = 'disply-load'
   face_set_ids = 1
   type = 'displacement-y'
-  displacement = -0.01
+  displacement = @displacement@
 /

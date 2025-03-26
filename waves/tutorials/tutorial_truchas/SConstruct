@@ -91,8 +91,27 @@ envCubit.Append(
 # Print captured STDOUT/STDERR for failed task(s)
 env.PrintBuildFailures()
 
+# Define parameter studies
+nominal_parameters = {
+    "width": 1.0,
+    "height": 1.0,
+    "global_seed": 1.0,
+    "displacement": -0.01,
+}
+
 # Add workflow(s)
-SConscript("SConscript", variant_dir=env["build_dir"], exports={"env": env, "envCubit": envCubit}, duplicate=True)
+workflow_configurations = [
+    ("nominal", nominal_parameters),
+]
+for study_name, study_definition in workflow_configurations:
+    env.ParameterStudySConscript(
+        "SConscript",
+        variant_dir=env["build_dir"] / study_name,
+        exports={"env": env, "envCubit": envCubit, "alias": study_name},
+        study=study_definition,
+        subdirectories=True,
+        duplicate=True
+    )
 
 # List all aliases in help message.
 # This must come *after* all expected Alias definitions and SConscript files.
