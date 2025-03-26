@@ -1,11 +1,37 @@
-Import("env")
+#! /usr/bin/env python
 
+Import("env", "envCubit")
+
+# Geometry
+envCubit.PythonScript(
+    target=["cube_geometry.cub"],
+    source=["cube_geometry.py"],
+    subcommand_options="",
+)
+
+# Partition
+envCubit.PythonScript(
+    target=["cube_partition.cub"],
+    source=["cube_partition.py", "cube_geometry.cub"],
+    subcommand_options="",
+)
+
+# Mesh
+envCubit.PythonScript(
+    target=[f"cube_mesh.g", "cube_mesh.cub"],
+    source=["cube_mesh.py", "cube_partition.cub"],
+    subcommand_options="--element-type ${element_type} --solver ${solver}",
+    element_type="HEX",
+    solver="sierra",
+)
+
+# Solve
 stretch_hex_targets = env.Truchas(
     target=[
         "stretch-hex/stretch-hex.log",
         "stretch-hex/stretch-hex.h5",
     ],
-    source=["stretch-hex.inp"],
+    source=["stretch-hex.inp", "cube_mesh.g"],
 )
 env.Alias("stretch-hex.inp", stretch_hex_targets)
 

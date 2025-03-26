@@ -62,12 +62,7 @@ exactly the same result as the version applying the displacement in the normal
 direction.
 
 &MESH
-  x_axis%coarse_grid = -2.0, 2.0
-  y_axis%coarse_grid = -0.5, 0.5
-  z_axis%coarse_grid = -0.5, 0.5
-  x_axis%intervals   = 40
-  y_axis%intervals   = 10
-  z_axis%intervals   = 10
+  mesh_file = 'cube_mesh.g'
 /
 
 &OUTPUTS

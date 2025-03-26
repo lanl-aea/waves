@@ -29,12 +29,27 @@ AddOption(
     metavar="COMMAND",
     help=f"Override for the Truchas command. Repeat to specify more than one (default: {default_truchas_commands})",
 )
+default_cubit_commands = [
+    "/apps/Cubit-16.12/cubit",
+    "/usr/projects/ea/Cubit/Cubit-16.12/cubit",
+    "cubit",
+]
+AddOption(
+    "--cubit-command",
+    dest="cubit_command",
+    nargs=1,
+    type="string",
+    action="append",
+    metavar="COMMAND",
+    help=f"Override for the Cubit command. Repeat to specify more than one (default: {default_cubit_commands})",
+)
 
 # Inherit user's full environment and set project options
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
     build_dir=pathlib.Path(GetOption("build_dir")),
     truchas_commands=GetOption("truchas_command"),
+    cubit_commands=GetOption("cubit_command"),
 )
 
 # Always copy (no sym-links) when duplicating
@@ -60,11 +75,24 @@ env.Append(
     }
 )
 
+# Cubit Python requires a separate construction environment to avoid putting Cubit distributed Python packages in the
+# parent Python 3 environment's PYTHONPATH
+envCubit = Environment(ENV=os.environ.copy())
+envCubit.AddMethod(waves.scons_extensions.add_cubit_python, "AddCubitPython")
+envCubit["python"] = envCubit.AddCubitPython(
+    env["cubit_commands"] if env["cubit_commands"] is not None else default_cubit_commands,
+)
+envCubit.Append(
+    BUILDERS={
+        "PythonScript": waves.scons_extensions.python_builder_factory(program=envCubit["python"]),
+    }
+)
+
 # Print captured STDOUT/STDERR for failed task(s)
 env.PrintBuildFailures()
 
 # Add workflow(s)
-SConscript("SConscript", variant_dir=env["build_dir"], exports={"env": env}, duplicate=True)
+SConscript("SConscript", variant_dir=env["build_dir"], exports={"env": env, "envCubit": envCubit}, duplicate=True)
 
 # List all aliases in help message.
 # This must come *after* all expected Alias definitions and SConscript files.
