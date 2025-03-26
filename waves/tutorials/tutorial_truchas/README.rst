@@ -54,40 +54,58 @@ https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/create-custom-ch
 Running simulations
 *******************
 
+Show available workflows
+
+.. code-block::
+
+   $ scons -h
+
 Simple execution if the Truchas executable is found by the ``SConstruct`` default search paths.
 
 .. code-block::
 
-   $ scons stretch-hex.inp
+   $ scons nominal
 
-Example build directory expectations
+Example build directory expectations for ``nominal`` workflow
 
 .. code-block::
 
    (waves-truchas) [roppenheimer@host waves-truchas]% find build -type f
-   build/stretch-hex/stretch-hex.h5
-   build/stretch-hex/stretch-hex.log
-   build/stretch-hex/stretch-hex.log.stdout
-   build/SConscript
-   build/stretch-hex.inp
+   build/nominal/SConscript
+   build/nominal/cube_compression.inp
+   build/nominal/cube_compression.inp.in
+   build/nominal/cube_compression/cube_compression.h5
+   build/nominal/cube_compression/cube_compression.log
+   build/nominal/cube_compression/cube_compression.log.stdout
+   build/nominal/cube_geometry.cub
+   build/nominal/cube_geometry.cub.stdout
+   build/nominal/cube_geometry.py
+   build/nominal/cube_mesh.cub
+   build/nominal/cube_mesh.g
+   build/nominal/cube_mesh.g.stdout
+   build/nominal/cube_mesh.py
+   build/nominal/cube_partition.cub
+   build/nominal/cube_partition.cub.stdout
+   build/nominal/cube_partition.py
+   build/parameter_studies/mesh_convergence.h5
 
 If you need to specify an absolute path to your local Truchas executable
 
 .. code-block::
 
-   $ scons stretch-hex.inp --truchas-command=/path/to/executable/truchas
+   $ scons nominal --truchas-command=/path/to/executable/truchas
 
 Trouble-shooting task definitions that rebuild when you don't expect it.
 
 .. code-block::
 
-   $ scons stretch-hex.inp --truchas-command=/path/to/executable/truchas --debug=explain
+   $ scons nominal --truchas-command=/path/to/executable/truchas --debug=explain
 
-Build everything
+Build all workflows
 
 .. code-block::
 
-   $ scons . --truchas-command=/path/to/executable/truchas --debug=explain
+   $ scons .
 
 ******************
 Adding simulations
