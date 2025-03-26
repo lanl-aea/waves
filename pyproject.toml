@@ -45,6 +45,9 @@ zip-safe = false
 [tool.setuptools.packages.find]
 where = ["."]
 
+[tool.setuptools.package-data]
+waves = ["pyproject.toml", "README.rst"]
+
 [project.scripts]
 odb_extract = "waves._abaqus.odb_extract:main"
 waves = "waves._main:main"
