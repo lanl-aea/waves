@@ -12,6 +12,11 @@ New Features
 ============
 - Experimental builder support for Truchas (:issue:`890`, :merge:`1140`). By `Kyle Brindley`_.
 
+Bug fixes
+=========
+- Include the README and pyproject.toml configuration in the Gitlab-Registry PyPI style pip package (:merge:`1146`). By
+  `Kyle Brindley`_.
+
 Documentation
 =============
 - Match work-in-progress Truchas tutorial source files more closely to the WAVES quickstart tutorial. Files may be
