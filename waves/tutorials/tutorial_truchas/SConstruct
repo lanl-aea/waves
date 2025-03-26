@@ -124,7 +124,7 @@ for study_name, study_definition in workflow_configurations:
         exports={"env": env, "envCubit": envCubit, "alias": study_name},
         study=study_definition,
         subdirectories=True,
-        duplicate=True
+        duplicate=True,
     )
 
 # List all aliases in help message.

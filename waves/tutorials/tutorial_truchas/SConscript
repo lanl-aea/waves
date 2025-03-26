@@ -45,5 +45,7 @@ solve_targets = env.Truchas(
 env.Alias(alias, solve_targets)
 
 if not env["TRUCHAS_PROGRAM"] or not envCubit["python"]:
-    print(f"Program 'truchas' or Cubit 'python' was not found in construction environment. Ignoring simulation target(s)")
+    print(
+        f"Program 'truchas' or Cubit 'python' was not found in construction environment. Ignoring simulation target(s)"
+    )
     Ignore([".", alias, "cube_compression.inp"], solve_targets)
