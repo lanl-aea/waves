@@ -12,6 +12,11 @@ New Features
 ============
 - Experimental builder support for Truchas (:issue:`890`, :merge:`1140`). By `Kyle Brindley`_.
 
+Documentation
+=============
+- Match work-in-progress Truchas tutorial source files more closely to the WAVES quickstart tutorial. Files may be
+  fetched with ``waves fetch tutorials/tutorial_truchas`` (:merge:`1145`). By `Kyle Brindley`_.
+
 *******************
 0.12.8 (2025-03-18)
 *******************
