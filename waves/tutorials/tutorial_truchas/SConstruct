@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+
 import os
 import pathlib
 
@@ -6,7 +8,7 @@ import waves
 # Accept command line options with fall back default values
 AddOption(
     "--build-dir",
-    dest="variant_dir_base",
+    dest="build_dir",
     default="build",
     nargs=1,
     type="string",
@@ -31,12 +33,15 @@ AddOption(
 # Inherit user's full environment and set project options
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
-    variant_dir_base=pathlib.Path(GetOption("variant_dir_base")),
+    build_dir=pathlib.Path(GetOption("build_dir")),
     truchas_commands=GetOption("truchas_command"),
 )
 
-# Always put a full copy of source files in build directory instead of links
+# Always copy (no sym-links) when duplicating
 env.SetOption("duplicate", "copy")
+
+# Empty defaults list to avoid building all simulation targets by default
+env.Default()
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env["TRUCHAS_PROGRAM"] = env.AddProgram(
@@ -55,17 +60,12 @@ env.Append(
     }
 )
 
-# Empty defaults list to avoid building all simulation targets by default
-env.Default()
-
 # Print captured STDOUT/STDERR for failed task(s)
 env.PrintBuildFailures()
 
-# Workflow configurations
-build_dir = env["variant_dir_base"]
-SConscript("SConscript", variant_dir=build_dir, exports={"env": env}, duplicate=True)
+# Add workflow(s)
+SConscript("SConscript", variant_dir=env["build_dir"], exports={"env": env}, duplicate=True)
 
-# Add default target list to help message
-# Add aliases to help message so users know what build target options are available
+# List all aliases in help message.
 # This must come *after* all expected Alias definitions and SConscript files.
 env.ProjectHelp()
