@@ -49,6 +49,7 @@ documentation_files = [
     "mesh_convergence.rst",
     "nominal.rst",
     "release_philosophy.rst",
+    "resources_guidebook.rst",
     "simulation_summary.rst",
     "user.rst",
     "zreferences.rst",
