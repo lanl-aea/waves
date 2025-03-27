@@ -10,6 +10,8 @@ test_modsim_template/
 .scons_autocomplete
 # Generated dynamically during some CI packaging opertions, e.g. PyPI style package
 waves/docs
+waves/README.rst
+waves/pyproject.toml
 
 # SCons files
 .sconsign.dblite
