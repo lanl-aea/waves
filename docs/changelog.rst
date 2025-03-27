@@ -22,6 +22,10 @@ Documentation
 - Match work-in-progress Truchas tutorial source files more closely to the WAVES quickstart tutorial. Files may be
   fetched with ``waves fetch tutorials/tutorial_truchas`` (:merge:`1145`). By `Kyle Brindley`_.
 
+Internal Changes
+================
+- Set minimum SALib version to match introduction of ``sample.sobol`` module (:merge:`1147`). By `Kyle Brindley`_.
+
 *******************
 0.12.8 (2025-03-18)
 *******************

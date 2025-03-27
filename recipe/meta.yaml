@@ -40,7 +40,7 @@ requirements:
     - networkx
     - numpy
     - pyyaml
-    - salib >=1
+    - salib >=1.4.6
     - scipy >=1.7
     - scons >=4
     - xarray

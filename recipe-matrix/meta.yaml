@@ -43,7 +43,7 @@ requirements:
     - networkx
     - numpy
     - pyyaml
-    - salib >=1
+    - salib >=1.4.6
     - scipy >=1.7
     # Force an SCons variant package build
     - scons {{ scons }}
