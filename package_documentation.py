@@ -99,7 +99,7 @@ def main():
     for destination, source in new_paths:
         try:
             copy_paths(destination, source)
-        except RuntimeError, FileNotFoundError as err:
+        except (RuntimeError, FileNotFoundError) as err:
             sys.exit(err)
 
 
