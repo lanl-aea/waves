@@ -14,8 +14,8 @@ New Features
 
 Bug fixes
 =========
-- Include the README and pyproject.toml configuration in the Gitlab-Registry PyPI style pip package (:merge:`1146`). By
-  `Kyle Brindley`_.
+- Include the README and pyproject.toml configuration in the Gitlab-Registry PyPI style pip package (:merge:`1146`,
+  :merge:`1148`). By `Kyle Brindley`_.
 
 Documentation
 =============
