@@ -3,6 +3,7 @@ import sys
 import shutil
 import pathlib
 import argparse
+import unittest.mock
 
 
 def get_parser() -> argparse.ArgumentParser:
@@ -114,3 +115,40 @@ def main():
 
 if __name__ == "__main__":
     main()  # pragma: no cover
+
+
+class TestPackageDocumentation(unittest.TestCase):
+
+    def test_validate_input(self):
+        with self.assertRaisesRegex(RuntimeError, "PREFIX"):
+            validate_input(None, pathlib.Path("."), pathlib.Path("."))
+        with self.assertRaisesRegex(FileNotFoundError, "PREFIX"):
+            validate_input(pathlib.Path("/doesnotexist"), pathlib.Path("."), pathlib.Path("."))
+        with self.assertRaisesRegex(RuntimeError, "SP_DIR"):
+            validate_input(pathlib.Path("."), None, pathlib.Path("."))
+        with self.assertRaisesRegex(FileNotFoundError, "SP_DIR"):
+            validate_input(pathlib.Path("."), pathlib.Path("/doesnotexist"), pathlib.Path("."))
+        with self.assertRaisesRegex(RuntimeError, "PKG_NAME"):
+            validate_input(pathlib.Path("."), pathlib.Path("."), None)
+
+    def test_copy_paths(self):
+        with self.assertRaises(FileNotFoundError):
+            copy_paths(pathlib.Path("."), pathlib.Path("/doesnotexist"))
+        with (
+            unittest.mock.patch("pathlib.Path.mkdir") as mock_mkdir,
+            unittest.mock.patch("shutil.copy2") as mock_copy2,
+            unittest.mock.patch("shutil.copytree") as mock_copytree,
+        ):
+            copy_paths(pathlib.Path("."), pathlib.Path(__file__))
+            mock_mkdir.assert_called_once()
+            mock_copy2.assert_called_once()
+            mock_copytree.assert_not_called()
+        with (
+            unittest.mock.patch("pathlib.Path.mkdir") as mock_mkdir,
+            unittest.mock.patch("shutil.copy2") as mock_copy2,
+            unittest.mock.patch("shutil.copytree") as mock_copytree,
+        ):
+            copy_paths(pathlib.Path("."), pathlib.Path(__file__).parent)
+            mock_mkdir.assert_called_once()
+            mock_copy2.assert_not_called()
+            mock_copytree.assert_called_once()
