@@ -134,6 +134,8 @@ aea-pip-deploy:
   extends:
     - .linux_before_script
   stage: deploy
+  variables:
+    GIT_STRATEGY: clone
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
       when: never
