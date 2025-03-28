@@ -1,5 +1,6 @@
 # Project files
 build*/
+install*/
 quickstart_test/
 test_quickstart/
 modsim_template_test/

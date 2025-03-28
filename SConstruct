@@ -45,6 +45,16 @@ AddOption(
     help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')",
 )
 AddOption(
+    "--prefix",
+    dest="prefix",
+    default="install",
+    nargs=1,
+    type="string",
+    action="store",
+    metavar="DIR",
+    help="SCons installation pip prefix ``--prefix``. Relative or absolute path. (default: '%default')",
+)
+AddOption(
     "--unconditional-build",
     dest="unconditional_build",
     default=False,
@@ -88,11 +98,13 @@ AddOption(
 env = Environment(
     ENV=os.environ.copy(),
     build_dir=pathlib.Path(GetOption("build_dir")),
+    prefix=pathlib.Path(GetOption("prefix")),
     unconditional_build=GetOption("unconditional_build"),
     abaqus_commands=GetOption("abaqus_command"),
     cubit_commands=GetOption("cubit_command"),
 )
 build_directory = pathlib.Path(env["build_dir"])
+prefix = pathlib.Path(env["prefix"])
 # Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
 env["abaqus_commands"] = env["abaqus_commands"] if env["abaqus_commands"] is not None else default_abaqus_commands
 env["cubit_commands"] = env["cubit_commands"] if env["cubit_commands"] is not None else default_cubit_commands
@@ -132,7 +144,7 @@ for key, value in project_variables.items():
     project_substitution_dictionary[f"@{key}@"] = value
 
 # ========================================================================================================== TARGETS ===
-# Build and Install
+# Build
 build = []
 copy_files = (
     ("waves/README.rst", "README.rst"),
@@ -169,6 +181,24 @@ env.AlwaysBuild(packages)
 build.extend(packages)
 env.Alias("build", build)
 env.Clean("build", Dir(build_directory / "dist"))
+
+# Install
+install = []
+install.extend(
+    env.Command(
+        target=[build_directory / "install.log"],
+        source=[packages[0]],
+        action=[
+            (
+                "python -m pip install ${SOURCE.abspath} --prefix ${prefix} --log ${TARGET.abspath} "
+                "--no-deps --ignore-installed -v --no-build-isolation"
+            )
+        ],
+        prefix=prefix,
+    )
+)
+env.AlwaysBuild(install)
+env.Alias("install", install)
 
 # Add documentation target
 variant_directory = build_directory / documentation_source_dir
