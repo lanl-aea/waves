@@ -166,6 +166,7 @@ packages = env.Command(
     action=[
         Delete(Dir(installed_documentation)),
         Copy(Dir(installed_documentation), Dir(env["variant_dir_base"] / "docs/html")),
+        Copy(Dir(installed_documentation), env["variant_dir_base"] / f"docs/man/{project_name}.1"),
         Delete(Dir(installed_documentation / ".doctrees")),
         Delete(installed_documentation / ".buildinfo"),
         "python -m build --outdir=${TARGET.dir.abspath}",
@@ -173,10 +174,11 @@ packages = env.Command(
         Delete(Dir(f"{project_name}.egg-info")),
     ],
 )
+env.Depends(packages, [Alias("html"), Alias("man")])
 env.AlwaysBuild(packages)
 build.extend(packages)
 env.Alias("build", build)
-env.Depends(packages, Alias("html"))
+env.Clean("build", Dir(env["variant_dir_base"] / "dist"))
 
 # Add documentation target
 if not env["ignore_documentation"]:
