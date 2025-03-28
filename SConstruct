@@ -156,6 +156,7 @@ for target, source in copy_files:
             action=Copy("${TARGET}", "${SOURCE}"),
         )
     )
+installed_documentation = pathlib.Path(project_name) / "docs"
 packages = env.Command(
     target=[
         env["variant_dir_base"] / f"dist/{package_specification}.tar.gz",
@@ -163,6 +164,10 @@ packages = env.Command(
     ],
     source=["pyproject.toml"],
     action=[
+        Delete(Dir(installed_documentation)),
+        Copy(Dir(installed_documentation), Dir(env["variant_dir_base"] / "docs/html")),
+        Delete(Dir(installed_documentation / ".doctrees")),
+        Delete(installed_documentation / ".buildinfo"),
         "python -m build --outdir=${TARGET.dir.abspath}",
         Delete(Dir(package_specification)),
         Delete(Dir(f"{project_name}.egg-info")),
@@ -171,6 +176,7 @@ packages = env.Command(
 env.AlwaysBuild(packages)
 build.extend(packages)
 env.Alias("build", build)
+env.Depends(packages, Alias("html"))
 
 # Add documentation target
 if not env["ignore_documentation"]:
