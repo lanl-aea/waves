@@ -15,7 +15,6 @@ recursive-exclude .github *
 global-exclude *.pyc
 global-exclude config.log
 global-exclude .sconsign.dblite
-exclude package_documentation.py
 exclude find_shebang.py
 exclude .git*
 exclude .pipeline*.yml

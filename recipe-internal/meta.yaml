@@ -14,6 +14,15 @@ build:
   number: 0
   script_env:
     - SETUPTOOLS_SCM_PRETEND_VERSION={{ version }}
+  script:
+    - scons install --prefix=${PREFIX}  # [unix]
+    - scons install --prefix=%PREFIX%  # [win]
+    # Post-pip-install documentation update
+    - scons html-internal
+    - rm -r ${SP_DIR}/${PKG_NAME}/docs  # [unix]
+    - cp -r build/docs/html-internal ${SP_DIR}/${PKG_NAME}/docs  # [unix]
+    - Remove-Item -Recurse %SP_DIR%\%PKG_NAME%\docs  # [win]
+    - Copy-Item -Recurse build\docs\html-internal %SP_DIR%\%PKG_NAME%\docs  # [win]
   entry_points:
     - odb_extract = waves._abaqus.odb_extract:main
     - waves = waves._main:main
