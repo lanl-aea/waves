@@ -84,7 +84,7 @@ win-conda-build:
     - powershell
     - aea
 
-mac-pip-build:
+win-pip-build:
   extends:
     - .pip-build
   stage: test
