@@ -191,7 +191,8 @@ install.extend(
         action=[
             (
                 "python -m pip install ${SOURCE.abspath} --prefix ${prefix} --log ${TARGET.abspath} "
-                "--no-deps --ignore-installed -v --no-build-isolation"
+                "--verbose --no-input --no-cache-dir --disable-pip-version-check --no-deps --ignore-installed "
+                "--no-build-isolation --no-warn-script-location --no-index"
             )
         ],
         prefix=prefix,
