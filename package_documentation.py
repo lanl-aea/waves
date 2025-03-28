@@ -1,4 +1,7 @@
-"""Post pip-install script to package project documentation
+"""Multi-OS friendly post pip-install script to package project documentation
+
+Intended to aid in recipes for package managers that support data files in non-package locations, e.g. putting man pages
+in ``PREFIX/man/man1``, such as Conda and spack.
 
 Argparse command line interface. See options with ``python package_documentation.py --help``.
 
