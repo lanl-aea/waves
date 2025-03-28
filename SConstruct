@@ -147,8 +147,8 @@ for key, value in project_variables.items():
 # Build
 build = []
 copy_files = (
-    ("waves/README.rst", "README.rst"),
-    ("waves/pyproject.toml", "pyproject.toml"),
+    (f"{package_source_dir}/README.rst", "README.rst"),
+    (f"{package_source_dir}/pyproject.toml", "pyproject.toml"),
 )
 for target, source in copy_files:
     build.extend(
@@ -187,7 +187,7 @@ install = []
 install.extend(
     env.Command(
         target=[build_directory / "install.log"],
-        source=[packages[0]],
+        source=build,
         action=[
             (
                 "python -m pip install ${SOURCE.abspath} --prefix ${prefix} --log ${TARGET.abspath} "
