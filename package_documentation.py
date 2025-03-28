@@ -1,3 +1,9 @@
+"""Post pip-install script to package project documentation
+
+Argparse command line interface. See options with ``python package_documentation.py --help``.
+
+Minimal unit tests with ``python -m unittest package_documentation.py``
+"""
 import os
 import sys
 import shutil
@@ -13,7 +19,8 @@ def get_parser() -> argparse.ArgumentParser:
         type=pathlib.Path,
         default=None,
         help=(
-            "Installation environment prefix. "
+            "Installation prefix absolute path. "
+            "Corresponds to pip ``--prefix``, a Conda recipe ``PREFIX`` or a spack recipe ``self.prefix``. "
             "If 'None', will try to use environment variable 'PREFIX' (default: %(default)s)",
         ),
     )
@@ -22,14 +29,19 @@ def get_parser() -> argparse.ArgumentParser:
         type=pathlib.Path,
         default=None,
         help=(
-            "Installation environment site-packages full path, including prefix. "
+            "Installation site-packages absolute path including prefix. "
+            "Corresponds to a Conda recipe ``SP_DIR``. "
             "If 'None', will try to use environment variable 'SP_DIR' (default: %(default)s)"
         ),
     )
     parser.add_argument(
         "--pkg-name",
         default=None,
-        help="Package name. If 'None', will try to use environment variable 'PKG_NAME' (default: %(default)s)",
+        help=(
+            "Python package name as defined in ``site-packages`` directory. "
+            "Corresponds to a Conda recipe ``PKG_NAME``. "
+            "If 'None', will try to use environment variable 'PKG_NAME' (default: %(default)s)",
+        ),
     )
     parser.add_argument(
         "--man-page",
@@ -40,8 +52,15 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def validate_input(prefix, sp_dir, pkg_name):
+def validate_input(prefix: pathlib.Path, sp_dir: pathlib.Path, pkg_name: str) -> None:
     """Validate arguments and raise exceptions when
+
+    :param prefix: Installation prefix absolute path. Corresponds to pip ``--prefix``, a Conda recipe ``PREFIX`` or a
+        spack recipe ``self.prefix``.
+    :param sp_dir: The installation site-packages absolute path including prefix. Corresponds to a Conda recipe
+        ``SP_DIR``.
+    :param pkg_name: The Python package name as defined in ``site-packages`` directory. Corresponds to a Conda recipe
+        ``PKG_NAME``.
 
     :raises RuntimeError: prefix, sp_dir, or pkg_name are None or empty
     :raises FileNotFoundError: prefix or sp_dir directories do not exist
@@ -58,8 +77,13 @@ def validate_input(prefix, sp_dir, pkg_name):
         raise RuntimeError("PKG_NAME not specified or not found in the environment variable 'PKG_NAME'")
 
 
-def copy_paths(destination, source):
-    """Copy files and recursively copy directories
+def copy_paths(destination: pathlib.Path, source: pathlib.Path) -> None:
+    """Copy files or directories to destination directory.
+
+    Destination directory is created if necessary. It's ok if the destination directory exists.
+
+    :param destination: Destination directory
+    :param source: Source file or directory. Directories are recursively copied.
 
     :raises FileNotFoundError: if source does not exist
     """
@@ -81,6 +105,7 @@ def copy_paths(destination, source):
 
 
 def main():
+    """Main function converts script internal function exceptions to error codes"""
     parser = get_parser()
     args = parser.parse_args()
 
