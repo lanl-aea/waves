@@ -9,8 +9,8 @@ package:
 source:
   path: '..'
 
-# NOTE: CANNOT use noarch builds. conda-build will not use python variants if the package is marked "noarch: python"
 build:
+  # NOTE: CANNOT use noarch builds. conda-build will not use python variants if the package is marked "noarch: python"
   number: 0
   script_env:
     - SETUPTOOLS_SCM_PRETEND_VERSION={{ version }}
@@ -23,11 +23,9 @@ build:
 
 requirements:
   host:
-    # Force consistency in the Python build version
     - python {{ python }}
     - python-build
     - pip
-    # Force consistency in the Python build version
     - scons {{ scons }}
     - setuptools >=64
     - setuptools_scm >=8
@@ -38,7 +36,6 @@ requirements:
     - sphinx-design
     - sphinxcontrib-bibtex
   run:
-    # Force a Python variant package build
     - python {{ python }}
     - h5netcdf
     - h5py
@@ -48,13 +45,11 @@ requirements:
     - pyyaml
     - salib >=1.4.6
     - scipy >=1.7
-    # Force an SCons variant package build
     - scons {{ scons }}
     - xarray
 
 test:
   requires:
-    # Force a Python variant package test
     - python {{ python }}
     - pip
     - pytest>=6
