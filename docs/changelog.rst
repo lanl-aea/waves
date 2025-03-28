@@ -27,6 +27,8 @@ Internal Changes
 - Set minimum SALib version to match introduction of ``sample.sobol`` module (:merge:`1147`). By `Kyle Brindley`_.
 - Add command line interface for greater package recipe support to documentation packaging post-pip-install utility
   (:issue:`896`, :merge:`1149`). By `Kyle Brindley`_.
+- Create build and install aliases to make packaging operations more consistent across multiple package managers: pip,
+  conda, spack (:issue:`893`, :merge:`1150`). By `Kyle Brindley`_.
 
 *******************
 0.12.8 (2025-03-18)
