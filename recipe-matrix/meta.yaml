@@ -60,7 +60,7 @@ test:
     - sphinxcontrib-bibtex
   imports:
     - waves
-  script:
+  commands:
     - pip check
     - working_directory=${PWD}  # [unix]
     - set working_directory=%CD%  # [win]
