@@ -128,13 +128,8 @@ pypi-deploy:
     - tag=$(git tag --points-at HEAD)
     - echo ${tag}
     - if [[ -z ${tag} ]]; then exit 0; fi
-    - cp README.rst waves/
-    - cp pyproject.toml waves/
-    - scons html-internal man --unconditional-build
-    - cp -r build/docs/html-internal waves/docs
-    - cp build/docs/man/*.1 waves/docs
-    - python -m build
-    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
+    - scons build
+    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi build/dist/*
   tags:
     - shell
     - aea
