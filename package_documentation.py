@@ -11,7 +11,10 @@ def get_parser() -> argparse.ArgumentParser:
         "--prefix",
         type=pathlib.Path,
         default=None,
-        help="Installation environment prefix. If 'None', use environment variable 'PREFIX' (default: %(default)s)",
+        help=(
+            "Installation environment prefix. "
+            "If 'None', will try to use environment variable 'PREFIX' (default: %(default)s)",
+        ),
     )
     parser.add_argument(
         "--sp-dir",
@@ -19,13 +22,13 @@ def get_parser() -> argparse.ArgumentParser:
         default=None,
         help=(
             "Installation environment site-packages full path, including prefix. "
-            "If 'None', use environment variable 'SP_DIR' (default: %(default)s)"
+            "If 'None', will try to use environment variable 'SP_DIR' (default: %(default)s)"
         ),
     )
     parser.add_argument(
         "--pkg-name",
         default=None,
-        help="Package name. If 'None', use environment variable 'PKG_NAME' (default: %(default)s)",
+        help="Package name. If 'None', will try to use environment variable 'PKG_NAME' (default: %(default)s)",
     )
     parser.add_argument(
         "--man-page",
