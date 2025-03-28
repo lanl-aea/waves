@@ -193,7 +193,7 @@ install.extend(
                 "python -m pip install ${SOURCE.abspath} --prefix ${prefix} --log ${TARGET.abspath} "
                 "--verbose --no-input --no-cache-dir --disable-pip-version-check --no-deps --ignore-installed "
                 "--no-build-isolation --no-warn-script-location --no-index"
-            )
+            ),
         ],
         prefix=prefix,
     )
