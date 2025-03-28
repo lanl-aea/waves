@@ -25,6 +25,8 @@ Documentation
 Internal Changes
 ================
 - Set minimum SALib version to match introduction of ``sample.sobol`` module (:merge:`1147`). By `Kyle Brindley`_.
+- Add command line interface for greater package recipe support to documentation packaging post-pip-install utility
+  (:issue:`896`, :merge:`1149`). By `Kyle Brindley`_.
 
 *******************
 0.12.8 (2025-03-18)
