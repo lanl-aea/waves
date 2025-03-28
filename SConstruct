@@ -141,6 +141,22 @@ for key, value in project_variables.items():
     project_substitution_dictionary[f"@{key}@"] = value
 
 # ========================================================================================================== TARGETS ===
+# Build and Install
+build_targets = []
+copy_files = (
+    ("waves/README.rst", "README.rst"),
+    ("waves/pyproject.toml", "pyproject.toml"),
+)
+for target, source in copy_files:
+    build_targets.extend(
+        env.Command(
+            target=target,
+            source=source,
+            action=Copy("${TARGET}", "${SOURCE}"),
+        )
+    )
+env.Alias("build", build_targets)
+
 # Add documentation target
 if not env["ignore_documentation"]:
     build_dir = env["variant_dir_base"] / documentation_source_dir
