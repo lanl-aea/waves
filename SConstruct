@@ -147,26 +147,27 @@ for key, value in project_variables.items():
 
 # ========================================================================================================== TARGETS ===
 # Build
-build = []
+copies = []
 copy_files = (
     (f"{package_source_dir}/README.rst", "README.rst"),
     (f"{package_source_dir}/pyproject.toml", "pyproject.toml"),
 )
 for target, source in copy_files:
-    build.extend(
+    copies.extend(
         env.Command(
             target=target,
             source=source,
             action=Copy("${TARGET}", "${SOURCE}"),
         )
     )
+build = []
 installed_documentation = pathlib.Path(project_name) / "docs"
 packages = env.Command(
     target=[
         build_directory / f"dist/{package_specification}.tar.gz",
         build_directory / f"dist/{package_specification}-py3-none-any.whl",
     ],
-    source=["pyproject.toml"],
+    source=["pyproject.toml"] + copies,
     action=[
         Delete(Dir(installed_documentation)),
         Copy(Dir(installed_documentation), Dir(build_directory / "docs/html")),
@@ -189,7 +190,7 @@ install = []
 install.extend(
     env.Command(
         target=[build_directory / "install.log"],
-        source=[packages[0], list(zip(*copy_files))[0]],
+        source=[packages[0]],
         action=[
             (
                 "python -m pip install ${SOURCE.abspath} --prefix ${prefix} --log ${TARGET.abspath} "
