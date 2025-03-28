@@ -122,6 +122,12 @@
   script:
     - scons flake8 black-check
 
+.pip-build: &pip-build
+  variables:
+    GIT_STRATEGY: clone
+  script:
+    - scons build
+
 .conda-build: &conda-build
   variables:
     GIT_STRATEGY: clone

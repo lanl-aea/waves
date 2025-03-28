@@ -113,12 +113,27 @@ aea-conda-deploy:
     branch: main
     strategy: depend
 
-pypi-deploy:
+aea-pip-build:
+  extends:
+    - .linux_before_script
+    - .pip-build
+  stage: test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
+  artifacts:
+    expire_in: '2 hrs'
+    paths:
+      - build/dist/waves-*.tar.gz
+      - build/dist/waves-*.whl
+  tags:
+    - shell
+    - aea
+    - linux
+
+aea-pip-deploy:
   extends:
     - .linux_before_script
   stage: deploy
-  variables:
-    GIT_STRATEGY: clone
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
       when: never
@@ -128,7 +143,6 @@ pypi-deploy:
     - tag=$(git tag --points-at HEAD)
     - echo ${tag}
     - if [[ -z ${tag} ]]; then exit 0; fi
-    - scons build
     - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi build/dist/*
   tags:
     - shell
