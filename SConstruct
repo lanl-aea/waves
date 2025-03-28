@@ -197,6 +197,12 @@ install.extend(
         prefix=prefix,
     )
 )
+install.extend(
+    env.Install(
+        target=[prefix / "man/man1", prefix / "share/man/man1"],
+        source=[build_directory / f"docs/man/{project_name}.1"],
+    )
+)
 env.AlwaysBuild(install)
 env.Alias("install", install)
 
