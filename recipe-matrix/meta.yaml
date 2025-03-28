@@ -65,6 +65,14 @@ test:
     - sphinxcontrib-bibtex
   imports:
     - waves
+  script:
+    - pip check
+    - working_directory=${PWD}  # [unix]
+    - set working_directory=%CD%  # [win]
+    - cd ${SP_DIR}/${PKG_NAME}  # [unix]
+    - cd %SP_DIR%/%PKG_NAME%  # [unix]
+    - pytest -vvv -n 4 -m "not require_third_party" --system-test-dir=${working_directory}  # [unix]
+    - pytest -vvv -n 4 -m "not require_third_party" --system-test-dir=%working_directory%  # [win]
 
 about:
   home: https://github.com/lanl-aea/waves

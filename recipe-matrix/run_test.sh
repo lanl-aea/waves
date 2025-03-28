@@ -1,1 +1,0 @@
-../recipe/run_test.sh
