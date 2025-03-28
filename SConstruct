@@ -45,16 +45,6 @@ AddOption(
     help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')",
 )
 AddOption(
-    "--ignore-documentation",
-    dest="ignore_documentation",
-    default=False,
-    action="store_true",
-    # fmt: off
-    help="Boolean to ignore the documentation build, e.g. during Conda package build and testing. Unaffected by the "
-         "'--unconditional-build' option. (default: '%default')"
-    # fmt: on
-)
-AddOption(
     "--unconditional-build",
     dest="unconditional_build",
     default=False,
@@ -98,7 +88,6 @@ AddOption(
 env = Environment(
     ENV=os.environ.copy(),
     variant_dir_base=pathlib.Path(GetOption("variant_dir_base")),
-    ignore_documentation=GetOption("ignore_documentation"),
     unconditional_build=GetOption("unconditional_build"),
     abaqus_commands=GetOption("abaqus_command"),
     cubit_commands=GetOption("cubit_command"),
@@ -181,16 +170,12 @@ env.Alias("build", build)
 env.Clean("build", Dir(env["variant_dir_base"] / "dist"))
 
 # Add documentation target
-if not env["ignore_documentation"]:
-    build_dir = env["variant_dir_base"] / documentation_source_dir
-    source_dir = documentation_source_dir
-    SConscript(
-        dirs=documentation_source_dir,
-        variant_dir=str(build_dir),
-        exports={"env": env, "project_substitution_dictionary": project_substitution_dictionary},
-    )
-else:
-    print(f"The 'ignore_documentation' option was set to 'True'. Skipping documentation SConscript file(s)")
+build_dir = env["variant_dir_base"] / documentation_source_dir
+SConscript(
+    dirs=documentation_source_dir,
+    variant_dir=str(build_dir),
+    exports={"env": env, "project_substitution_dictionary": project_substitution_dictionary},
+)
 
 # Add pytests, style checks, and static type checking
 workflow_configurations = ["pytest", "style", "mypy"]
