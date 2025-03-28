@@ -83,3 +83,14 @@ win-conda-build:
   tags:
     - powershell
     - aea
+
+mac-pip-build:
+  extends:
+    - .pip-build
+  stage: test
+  rules:
+    - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
+    - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
+  tags:
+    - powershell
+    - aea

@@ -67,3 +67,14 @@ mac-conda-build:
   tags:
     - macos
     - pn2301275
+
+mac-pip-build:
+  extends:
+    - .pip-build
+  stage: test
+  rules:
+    - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
+    - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
+  tags:
+    - macos
+    - pn2301275
