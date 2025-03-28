@@ -27,6 +27,12 @@ def get_parser() -> argparse.ArgumentParser:
         default=None,
         help="Package name. If 'None', use environment variable 'PKG_NAME' (default: %(default)s)",
     )
+    parser.add_argument(
+        "--man-page",
+        type=pathlib.Path,
+        default=pathlib.Path("build/docs/man/waves.1"),
+        help="Path to man page (default: %(default)s)",
+    )
     return parser
 
 
@@ -80,7 +86,7 @@ def main():
 
     validate_input(prefix, sp_dir, pkg_name)
 
-    man_path = pathlib.Path("build/docs/man/waves.1").resolve()
+    man_page = args.man_page.resolve()
     html_path_external = pathlib.Path("build/docs/html").resolve()
     html_path_internal = pathlib.Path("build/docs/html-internal").resolve()
     html_path = html_path_external if html_path_external.exists() else html_path_internal
@@ -90,8 +96,8 @@ def main():
     pyproject = pathlib.Path("pyproject.toml").resolve()
 
     new_paths = [
-        (prefix / "share/man/man1", man_path),
-        (prefix / "man/man1", man_path),
+        (prefix / "share/man/man1", man_page),
+        (prefix / "man/man1", man_page),
         (sp_dir / pkg_name / "docs", html_path),
         (sp_dir / pkg_name / "README.rst", readme_path),
         (sp_dir / pkg_name / "pyproject.toml", pyproject),
