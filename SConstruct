@@ -36,7 +36,7 @@ project_variables = {
 # ============================================================================================= COMMAND LINE OPTIONS ===
 AddOption(
     "--build-dir",
-    dest="variant_dir_base",
+    dest="build_dir",
     default="build",
     nargs=1,
     type="string",
@@ -87,11 +87,12 @@ AddOption(
 # Inherit user's full environment and set project options
 env = Environment(
     ENV=os.environ.copy(),
-    variant_dir_base=pathlib.Path(GetOption("variant_dir_base")),
+    build_dir=pathlib.Path(GetOption("build_dir")),
     unconditional_build=GetOption("unconditional_build"),
     abaqus_commands=GetOption("abaqus_command"),
     cubit_commands=GetOption("cubit_command"),
 )
+build_directory = pathlib.Path(env["build_dir"])
 # Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
 env["abaqus_commands"] = env["abaqus_commands"] if env["abaqus_commands"] is not None else default_abaqus_commands
 env["cubit_commands"] = env["cubit_commands"] if env["cubit_commands"] is not None else default_cubit_commands
@@ -148,14 +149,14 @@ for target, source in copy_files:
 installed_documentation = pathlib.Path(project_name) / "docs"
 packages = env.Command(
     target=[
-        env["variant_dir_base"] / f"dist/{package_specification}.tar.gz",
-        env["variant_dir_base"] / f"dist/{package_specification}-py3-none-any.whl",
+        build_directory / f"dist/{package_specification}.tar.gz",
+        build_directory / f"dist/{package_specification}-py3-none-any.whl",
     ],
     source=["pyproject.toml"],
     action=[
         Delete(Dir(installed_documentation)),
-        Copy(Dir(installed_documentation), Dir(env["variant_dir_base"] / "docs/html")),
-        Copy(Dir(installed_documentation), env["variant_dir_base"] / f"docs/man/{project_name}.1"),
+        Copy(Dir(installed_documentation), Dir(build_directory / "docs/html")),
+        Copy(Dir(installed_documentation), build_directory / f"docs/man/{project_name}.1"),
         Delete(Dir(installed_documentation / ".doctrees")),
         Delete(installed_documentation / ".buildinfo"),
         "python -m build --outdir=${TARGET.dir.abspath}",
@@ -167,21 +168,21 @@ env.Depends(packages, [Alias("html"), Alias("man")])
 env.AlwaysBuild(packages)
 build.extend(packages)
 env.Alias("build", build)
-env.Clean("build", Dir(env["variant_dir_base"] / "dist"))
+env.Clean("build", Dir(build_directory / "dist"))
 
 # Add documentation target
-build_dir = env["variant_dir_base"] / documentation_source_dir
+variant_directory = build_directory / documentation_source_dir
 SConscript(
     dirs=documentation_source_dir,
-    variant_dir=str(build_dir),
+    variant_dir=variant_directory,
     exports={"env": env, "project_substitution_dictionary": project_substitution_dictionary},
 )
 
 # Add pytests, style checks, and static type checking
 workflow_configurations = ["pytest", "style", "mypy"]
 for workflow in workflow_configurations:
-    build_dir = env["variant_dir_base"] / workflow
-    SConscript(build_dir.name, variant_dir=build_dir, exports={"env": env}, duplicate=False)
+    variant_directory = build_directory / workflow
+    SConscript(variant_directory.name, variant_dir=variant_directory, exports={"env": env}, duplicate=False)
 
 # ============================================================================================= PROJECT HELP MESSAGE ===
 # Add aliases to help message so users know what build target options are available
