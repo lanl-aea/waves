@@ -18,11 +18,12 @@ documentation_source_dir = "docs"
 package_source_dir = "waves"
 project_name = "waves"
 version = setuptools_scm.get_version()
+package_specification = pathlib.Path(f"{project_name}-{version}")
 project_variables = {
     "project_dir": project_dir,
     "package_dir": project_dir / package_source_dir,
     "version": version,
-    "documentation_pdf": f"{project_name}-{version}.pdf",
+    "documentation_pdf": package_specification.with_suffix(".pdf"),
     "tutorials_dir": project_dir / "waves/tutorials",
     "modsim_dir": "modsim_package",
     "abaqus_dir": "modsim_package/abaqus",
@@ -142,26 +143,34 @@ for key, value in project_variables.items():
 
 # ========================================================================================================== TARGETS ===
 # Build and Install
+build = []
 copy_files = (
     ("waves/README.rst", "README.rst"),
     ("waves/pyproject.toml", "pyproject.toml"),
 )
 for target, source in copy_files:
-    env.Command(
-        target=target,
-        source=source,
-        action=Copy("${TARGET}", "${SOURCE}"),
+    build.extend(
+        env.Command(
+            target=target,
+            source=source,
+            action=Copy("${TARGET}", "${SOURCE}"),
+        )
     )
 packages = env.Command(
     target=[
-        f"build/dist/{project_name}-{version}.tar.gz",
-        f"build/dist/{project_name}-{version}-py3-none-any.whl",
+        env["variant_dir_base"] / f"dist/{package_specification}.tar.gz",
+        env["variant_dir_base"] / f"dist/{package_specification}-py3-none-any.whl",
     ],
     source=["pyproject.toml"],
-    action=["python -m build --outdir=${TARGET.dir.abspath}"],
+    action=[
+        "python -m build --outdir=${TARGET.dir.abspath}",
+        Delete(Dir(package_specification)),
+        Delete(Dir(f"{project_name}.egg-info")),
+    ],
 )
 env.AlwaysBuild(packages)
-env.Alias("build", packages)
+build.extend(packages)
+env.Alias("build", build)
 
 # Add documentation target
 if not env["ignore_documentation"]:
