@@ -17,6 +17,11 @@ build:
   script:
     - scons install --prefix=${PREFIX}  # [unix]
     - scons install --prefix=%PREFIX%  # [win]
+    # FIXME: Figure out why local builds install these files correctly, but CI builds to not
+    - cp README.rst ${SP_DIR}/${PKG_NAME}/README.rst  # [unix]
+    - cp README.rst %SP_DIR%\%PKG_NAME%\README.rst  # [win]
+    - cp pyproject.toml ${SP_DIR}/${PKG_NAME}/pyproject.toml  # [unix]
+    - cp pyproject.toml %SP_DIR%\%PKG_NAME%\pyproject.toml  # [win]
   entry_points:
     - odb_extract = waves._abaqus.odb_extract:main
     - waves = waves._main:main
