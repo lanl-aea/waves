@@ -104,7 +104,9 @@ env = Environment(
     cubit_commands=GetOption("cubit_command"),
 )
 build_directory = pathlib.Path(env["build_dir"])
+print(f"Using build directory...{build_directory}")
 prefix = pathlib.Path(env["prefix"])
+print(f"Using install prefix directory...{prefix}")
 # Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
 env["abaqus_commands"] = env["abaqus_commands"] if env["abaqus_commands"] is not None else default_abaqus_commands
 env["cubit_commands"] = env["cubit_commands"] if env["cubit_commands"] is not None else default_cubit_commands
