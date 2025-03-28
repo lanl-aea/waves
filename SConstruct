@@ -173,7 +173,7 @@ packages = env.Command(
         Copy(Dir(installed_documentation), build_directory / f"docs/man/{project_name}.1"),
         Delete(Dir(installed_documentation / ".doctrees")),
         Delete(installed_documentation / ".buildinfo"),
-        "python -m build --outdir=${TARGET.dir.abspath} --no-isolation",
+        "python -m build --verbose --outdir=${TARGET.dir.abspath} --no-isolation .",
         Delete(Dir(package_specification)),
         Delete(Dir(f"{project_name}.egg-info")),
     ],
