@@ -187,7 +187,7 @@ install = []
 install.extend(
     env.Command(
         target=[build_directory / "install.log"],
-        source=build,
+        source=[packages[0], list(zip(*copy_files))[0]],
         action=[
             (
                 "python -m pip install ${SOURCE.abspath} --prefix ${prefix} --log ${TARGET.abspath} "
