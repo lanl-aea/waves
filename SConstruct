@@ -142,20 +142,26 @@ for key, value in project_variables.items():
 
 # ========================================================================================================== TARGETS ===
 # Build and Install
-build_targets = []
 copy_files = (
     ("waves/README.rst", "README.rst"),
     ("waves/pyproject.toml", "pyproject.toml"),
 )
 for target, source in copy_files:
-    build_targets.extend(
-        env.Command(
-            target=target,
-            source=source,
-            action=Copy("${TARGET}", "${SOURCE}"),
-        )
+    env.Command(
+        target=target,
+        source=source,
+        action=Copy("${TARGET}", "${SOURCE}"),
     )
-env.Alias("build", build_targets)
+packages = env.Command(
+    target=[
+        f"build/dist/{project_name}-{version}.tar.gz",
+        f"build/dist/{project_name}-{version}-py3-none-any.whl",
+    ],
+    source=["pyproject.toml"],
+    action=["python -m build --outdir=${TARGET.dir.abspath}"],
+)
+env.AlwaysBuild(packages)
+env.Alias("build", packages)
 
 # Add documentation target
 if not env["ignore_documentation"]:
