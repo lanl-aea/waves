@@ -1,1 +1,0 @@
-../recipe/bld.bat
