@@ -2,6 +2,7 @@ recursive-include waves/docs *
 recursive-include waves/tutorials *
 recursive-include waves/modsim_template *
 recursive-include waves/modsim_template_2 *
+recursive-exclude waves/docs/.doctrees *
 recursive-exclude build *
 recursive-exclude */*/build *
 recursive-exclude */*/*/build* *
@@ -15,6 +16,7 @@ recursive-exclude .github *
 global-exclude *.pyc
 global-exclude config.log
 global-exclude .sconsign.dblite
+exclude waves/docs/.buildinfo*
 exclude find_shebang.py
 exclude .git*
 exclude .pipeline*.yml
