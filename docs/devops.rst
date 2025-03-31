@@ -249,6 +249,12 @@ https://aea.re-pages.lanl.gov/python-projects/waves/coverage/index.html.
    build/pytest/coverage.xml
    build/pytest/coverage/index.html
 
+.. warning::
+
+   Since a v0.12.9 pre-release, it is not possible to run ``pytest`` directly from the source directory without first
+   generating a ``pyproject.toml`` file. Run ``scons pyproject.toml`` manually if you want to run pytests directly with
+   the ``pytest`` command
+
 The tutorials and modsim template are run as system tests and require third-party software not available on conda-forge.
 To run the system tests, install the third-party software and make them available in your ``PATH``, activate a conda
 environment and run
