@@ -14,7 +14,6 @@ warnings.filterwarnings(action="ignore", message="tag", category=UserWarning, mo
 # ========================================================================================================= SETTINGS ===
 # Set project meta variables
 project_dir = pathlib.Path(Dir(".").abspath)
-documentation_source_dir = "docs"
 project_name = "waves"
 package_dir = "waves"
 distribution_name_default = "waves"
@@ -234,9 +233,9 @@ env.AlwaysBuild(install)
 env.Alias("install", install)
 
 # Add documentation target
-variant_directory = build_directory / documentation_source_dir
+variant_directory = build_directory / "docs"
 SConscript(
-    dirs=documentation_source_dir,
+    dirs="docs",
     variant_dir=variant_directory,
     exports={"env": env, "project_substitution_dictionary": project_substitution_dictionary},
 )
