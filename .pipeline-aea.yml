@@ -135,6 +135,7 @@ aea-pip-build:
 pypi-pip-build:
   extends:
     - .linux_before_script
+    - .pip-build
   stage: test
   variables:
     DISTRIBUTION_NAME: "--distribution-name=py_waves"
