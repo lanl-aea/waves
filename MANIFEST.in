@@ -18,6 +18,7 @@ global-exclude config.log
 global-exclude .sconsign.dblite
 exclude waves/docs/.buildinfo*
 exclude find_shebang.py
+exclude .flake8
 exclude .git*
 exclude .pipeline*.yml
 exclude SConstruct
