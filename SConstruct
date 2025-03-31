@@ -182,10 +182,10 @@ packages = env.Command(
     action=[
         Delete(Dir(installed_documentation)),
         Copy(Dir(installed_documentation), Dir(build_directory / "docs/html")),
-        Copy(Dir(installed_documentation), build_directory / f"docs/man/{project_name}.1"),
         Delete(Dir(installed_documentation / ".doctrees")),
         Delete(installed_documentation / ".buildinfo"),
         Delete(installed_documentation / ".buildinfo.bak"),
+        Copy(Dir(installed_documentation), build_directory / f"docs/man/{project_name}.1"),
         "python -m build --verbose --outdir=${TARGET.dir.abspath} --no-isolation .",
         Delete(Dir(package_specification)),
         Delete(Dir(f"{distribution_name}.egg-info")),
