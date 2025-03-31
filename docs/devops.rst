@@ -212,11 +212,12 @@ software, so the CI tests on this server require the full build as
    $ scons regression --unconditional-build
 
 The continuous integration server also performs a separate style guide check using ``flake8`` and ``black`` with
-associated aliases.
+associated aliases or the collector alias ``style``.
 
 .. code-block::
 
    $ scons flake8 black-check
+   $ scons style
 
 If ``black`` reports files that should be formatted, the following alias will format files using the same command line
 options as the check alias. ``black`` can also be run directly, but this may miss files without the ``.py`` extension,
