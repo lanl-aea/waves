@@ -191,6 +191,7 @@ packages = env.Command(
         Copy(Dir(installed_documentation), build_directory / f"docs/man/{project_name}.1"),
         "sed -i 's/name = \"waves\"/name = \"${distribution_name}\"/g' pyproject.toml",
         "python -m build --verbose --outdir=${TARGET.dir.abspath} --no-isolation .",
+        "sed -i 's/name = \"${distribution_name}\"/name = \"waves\"/g' pyproject.toml",
         Delete(Dir(package_specification)),
         Delete(Dir(f"{distribution_name}.egg-info")),
     ],
