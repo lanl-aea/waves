@@ -7,8 +7,9 @@ Import("env")
 
 build_directory = pathlib.Path(Dir(".").abspath)
 
+pyproject = env.FindFile("pyproject.toml", "#")
 pytest_source_list = [
-    "pyproject.toml",
+    pyproject,
 ]
 
 # Common task options

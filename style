@@ -3,6 +3,8 @@
 # Inherit the parent construction environment
 Import("env")
 
+pyproject = env.FindFile("pyproject.toml", "#")
+
 target = env.Command(
     target=["flake8.txt"],
     source=[".flake8"],
@@ -13,7 +15,7 @@ env.Alias("flake8", target)
 
 target = env.Command(
     target=["black-check.txt"],
-    source=["pyproject.toml"],
+    source=[pyproject],
     action=["black . $$(python find_shebang.py .) --check --verbose ${action_suffix}"],
     action_suffix=env["tee_suffix"],
 )
@@ -24,7 +26,7 @@ env.Alias("black-check", target)
 # https://github.com/psf/black/issues/491
 target = env.Command(
     target=["black-format.txt"],
-    source=["pyproject.toml"],
+    source=[pyproject],
     action=["black . $$(python find_shebang.py .) ${action_suffix}"],
     action_suffix=env["tee_suffix"],
 )

@@ -3,9 +3,11 @@
 # Inherit the parent construction environment
 Import("env")
 
+pyproject = env.FindFile("pyproject.toml", "#")
+
 target = env.Command(
     target=["mypy.txt", "any-exprs.txt", "types-of-anys.txt"],
-    source=["pyproject.toml"],
+    source=[pyproject],
     action=["set -o pipefail; mypy --any-exprs-report ${TARGET.dir} | tee ${TARGET.abspath}"],
 )
 env.AlwaysBuild(target)
