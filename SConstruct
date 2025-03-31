@@ -15,13 +15,14 @@ warnings.filterwarnings(action="ignore", message="tag", category=UserWarning, mo
 # Set project meta variables
 project_dir = pathlib.Path(Dir(".").abspath)
 documentation_source_dir = "docs"
-package_source_dir = "waves"
 project_name = "waves"
+package_dir = "waves"
+distribution_name = "waves"
 version = setuptools_scm.get_version()
-package_specification = pathlib.Path(f"{project_name}-{version}")
+package_specification = pathlib.Path(f"{distribution_name}-{version}")
 project_variables = {
     "project_dir": project_dir,
-    "package_dir": project_dir / package_source_dir,
+    "package_dir": project_dir / package_dir,
     "version": version,
     "documentation_pdf": package_specification.with_suffix(".pdf"),
     "tutorials_dir": project_dir / "waves/tutorials",
@@ -55,12 +56,22 @@ AddOption(
     help="SCons installation pip prefix ``--prefix``. Relative or absolute path. (default: '%default')",
 )
 AddOption(
+    "--distribution-name",
+    dest="distribution_name",
+    default=distribution_name,
+    nargs=1,
+    type="string",
+    action="store",
+    help="Package pip distribution name. Set to ``py_waves`` for PyPI builds (default: '%default')",
+)
+AddOption(
     "--unconditional-build",
     dest="unconditional_build",
     default=False,
     action="store_true",
     # fmt: off
-    help="Boolean to force building of conditionally ignored targets, e.g. if the target's action program is missing "
+    help="Pass through argument used by system test configuration. "
+         "Boolean to force building of conditionally ignored targets, e.g. if the target's action program is missing "
          "and it would normally be ignored. (default: '%default')"
     # fmt: on
 )
@@ -149,8 +160,8 @@ for key, value in project_variables.items():
 # Build
 copies = []
 copy_files = (
-    (f"{package_source_dir}/README.rst", "README.rst"),
-    (f"{package_source_dir}/pyproject.toml", "pyproject.toml"),
+    (f"{package_dir}/README.rst", "README.rst"),
+    (f"{package_dir}/pyproject.toml", "pyproject.toml"),
 )
 for target, source in copy_files:
     copies.extend(
@@ -161,7 +172,7 @@ for target, source in copy_files:
         )
     )
 build = []
-installed_documentation = pathlib.Path(project_name) / "docs"
+installed_documentation = pathlib.Path(package_dir) / "docs"
 packages = env.Command(
     target=[
         build_directory / f"dist/{package_specification}.tar.gz",
@@ -177,7 +188,7 @@ packages = env.Command(
         Delete(installed_documentation / ".buildinfo.bak"),
         "python -m build --verbose --outdir=${TARGET.dir.abspath} --no-isolation .",
         Delete(Dir(package_specification)),
-        Delete(Dir(f"{project_name}.egg-info")),
+        Delete(Dir(f"{distribution_name}.egg-info")),
     ],
 )
 env.Depends(packages, [Alias("html"), Alias("man")])
