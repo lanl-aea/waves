@@ -120,7 +120,7 @@
   variables:
     GIT_STRATEGY: clone
   script:
-    - scons flake8 black-check
+    - scons style
 
 .pip-build: &pip-build
   variables:

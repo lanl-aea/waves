@@ -5,30 +5,32 @@ Import("env")
 
 pyproject = env.FindFile("pyproject.toml", "#")
 
-target = env.Command(
+flake8 = env.Command(
     target=["flake8.txt"],
     source=[".flake8"],
     action=["flake8 . $$(python find_shebang.py .) --jobs=4 --tee --output-file=${TARGET.abspath}"],
 )
-env.AlwaysBuild(target)
-env.Alias("flake8", target)
+env.AlwaysBuild(flake8)
+env.Alias("flake8", flake8)
+env.Alias("style", flake8)
 
-target = env.Command(
+black_check = env.Command(
     target=["black-check.txt"],
     source=[pyproject],
     action=["black . $$(python find_shebang.py .) --check --verbose ${action_suffix}"],
     action_suffix=env["tee_suffix"],
 )
-env.AlwaysBuild(target)
-env.Alias("black-check", target)
+env.AlwaysBuild(black_check)
+env.Alias("black-check", black_check)
+env.Alias("style", black_check)
 
 # TODO: Remove custom python script if/when black supports magic file type searches
 # https://github.com/psf/black/issues/491
-target = env.Command(
+black_format = env.Command(
     target=["black-format.txt"],
     source=[pyproject],
     action=["black . $$(python find_shebang.py .) ${action_suffix}"],
     action_suffix=env["tee_suffix"],
 )
-env.AlwaysBuild(target)
-env.Alias("black-format", target)
+env.AlwaysBuild(black_format)
+env.Alias("black-format", black_format)
