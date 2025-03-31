@@ -189,6 +189,7 @@ packages = env.Command(
         Delete(installed_documentation / ".buildinfo"),
         Delete(installed_documentation / ".buildinfo.bak"),
         Copy(Dir(installed_documentation), build_directory / f"docs/man/{project_name}.1"),
+        # File modification makes the repository 'dirty'. Force version to match the pre-modification repository state.
         "sed -i 's/name = \"waves\"/name = \"${distribution_name}\"/g' pyproject.toml",
         "SETUPTOOLS_SCM_PRETEND_VERSION=${version} python -m build --verbose --outdir=${TARGET.dir.abspath} --no-isolation .",
         "sed -i 's/name = \"${distribution_name}\"/name = \"waves\"/g' pyproject.toml",
