@@ -88,6 +88,8 @@ win-pip-build:
   extends:
     - .pip-build
   stage: test
+  variables:
+    DISTRIBUTION_NAME: ""
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
