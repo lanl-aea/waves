@@ -118,6 +118,8 @@ aea-pip-build:
     - .linux_before_script
     - .pip-build
   stage: test
+  variables:
+    DISTRIBUTION_NAME: ""
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
   artifacts:
@@ -125,6 +127,20 @@ aea-pip-build:
     paths:
       - build/dist/waves-*.tar.gz
       - build/dist/waves-*.whl
+  tags:
+    - shell
+    - aea
+    - linux
+
+pypi-pip-build:
+  extends:
+    - .linux_before_script
+  stage: test
+  variables:
+    DISTRIBUTION_NAME: "--distribution-name=py_waves"
+  rules:
+    - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
+    - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
   tags:
     - shell
     - aea

@@ -126,7 +126,7 @@
   variables:
     GIT_STRATEGY: clone
   script:
-    - scons build
+    - scons build ${DISTRIBUTION_NAME}
 
 .conda-build: &conda-build
   variables:
