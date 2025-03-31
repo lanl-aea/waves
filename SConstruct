@@ -17,14 +17,13 @@ project_dir = pathlib.Path(Dir(".").abspath)
 documentation_source_dir = "docs"
 project_name = "waves"
 package_dir = "waves"
-distribution_name = "waves"
+distribution_name_default = "waves"
 version = setuptools_scm.get_version()
-package_specification = pathlib.Path(f"{distribution_name}-{version}")
 project_variables = {
     "project_dir": project_dir,
     "package_dir": project_dir / package_dir,
     "version": version,
-    "documentation_pdf": package_specification.with_suffix(".pdf"),
+    "documentation_pdf": f"{project_name}-{version}.pdf",
     "tutorials_dir": project_dir / "waves/tutorials",
     "modsim_dir": "modsim_package",
     "abaqus_dir": "modsim_package/abaqus",
@@ -58,7 +57,7 @@ AddOption(
 AddOption(
     "--distribution-name",
     dest="distribution_name",
-    default=distribution_name,
+    default=distribution_name_default,
     nargs=1,
     type="string",
     action="store",
@@ -110,6 +109,7 @@ env = Environment(
     ENV=os.environ.copy(),
     build_dir=pathlib.Path(GetOption("build_dir")),
     prefix=pathlib.Path(GetOption("prefix")),
+    distribution_name=pathlib.Path(GetOption("distribution_name")),
     unconditional_build=GetOption("unconditional_build"),
     abaqus_commands=GetOption("abaqus_command"),
     cubit_commands=GetOption("cubit_command"),
@@ -118,6 +118,9 @@ build_directory = pathlib.Path(env["build_dir"])
 print(f"Using build directory...{build_directory}")
 prefix = pathlib.Path(env["prefix"])
 print(f"Using install prefix directory...{prefix}")
+distribution_name = env["distribution_name"]
+package_specification = pathlib.Path(f"{distribution_name}-{version}")
+print(f"Using distribution name...{distribution_name}")
 # Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
 env["abaqus_commands"] = env["abaqus_commands"] if env["abaqus_commands"] is not None else default_abaqus_commands
 env["cubit_commands"] = env["cubit_commands"] if env["cubit_commands"] is not None else default_cubit_commands
@@ -186,10 +189,12 @@ packages = env.Command(
         Delete(installed_documentation / ".buildinfo"),
         Delete(installed_documentation / ".buildinfo.bak"),
         Copy(Dir(installed_documentation), build_directory / f"docs/man/{project_name}.1"),
+        "sed -i 's/name = \"waves\"/name = \"${distribution_name}\"/g' pyproject.toml",
         "python -m build --verbose --outdir=${TARGET.dir.abspath} --no-isolation .",
         Delete(Dir(package_specification)),
         Delete(Dir(f"{distribution_name}.egg-info")),
     ],
+    distribution_name=distribution_name,
 )
 env.Depends(packages, [Alias("html"), Alias("man")])
 env.AlwaysBuild(packages)
