@@ -190,12 +190,13 @@ packages = env.Command(
         Delete(installed_documentation / ".buildinfo.bak"),
         Copy(Dir(installed_documentation), build_directory / f"docs/man/{project_name}.1"),
         "sed -i 's/name = \"waves\"/name = \"${distribution_name}\"/g' pyproject.toml",
-        "python -m build --verbose --outdir=${TARGET.dir.abspath} --no-isolation .",
+        "SETUPTOOLS_SCM_PRETEND_VERSION=${version} python -m build --verbose --outdir=${TARGET.dir.abspath} --no-isolation .",
         "sed -i 's/name = \"${distribution_name}\"/name = \"waves\"/g' pyproject.toml",
         Delete(Dir(package_specification)),
         Delete(Dir(f"{distribution_name}.egg-info")),
     ],
     distribution_name=distribution_name,
+    version=version,
 )
 env.Depends(packages, [Alias("html"), Alias("man")])
 env.AlwaysBuild(packages)
