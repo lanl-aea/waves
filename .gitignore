@@ -1,4 +1,5 @@
 # Project files
+pyproject.toml
 build*/
 install*/
 quickstart_test/
