@@ -5,7 +5,7 @@ Import("env")
 
 target = env.Command(
     target=["flake8.txt"],
-    source=["style"],
+    source=[".flake8"],
     action=["flake8 . $$(python find_shebang.py .) --jobs=4 --tee --output-file=${TARGET.abspath}"],
 )
 env.AlwaysBuild(target)
@@ -13,7 +13,7 @@ env.Alias("flake8", target)
 
 target = env.Command(
     target=["black-check.txt"],
-    source=["style"],
+    source=["pyproject.toml"],
     action=["black . $$(python find_shebang.py .) --check --verbose ${action_suffix}"],
     action_suffix=env["tee_suffix"],
 )
@@ -24,7 +24,7 @@ env.Alias("black-check", target)
 # https://github.com/psf/black/issues/491
 target = env.Command(
     target=["black-format.txt"],
-    source=["style"],
+    source=["pyproject.toml"],
     action=["black . $$(python find_shebang.py .) ${action_suffix}"],
     action_suffix=env["tee_suffix"],
 )
