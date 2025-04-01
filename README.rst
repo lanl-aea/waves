@@ -3,6 +3,8 @@
 .. _Conda: https://docs.conda.io/en/latest/
 .. _Conda installation: https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html
 .. _Conda environment management: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
+.. _PyPI: https://pypi.org/
+.. _pip: https://pip.pypa.io/en/stable/
 .. _SCons: https://scons.org/
 .. _SCons documentation: https://scons.org/documentation.html
 .. _SCons manpage: https://scons.org/doc/production/HTML/scons-man.html
@@ -37,6 +39,12 @@ WAVES
 .. image:: https://img.shields.io/conda/dn/conda-forge/waves.svg?label=Conda%20downloads
    :target: https://anaconda.org/conda-forge/waves
 
+.. image:: https://img.shields.io/pypi/v/waves-workflows?label=PyPI%20package
+   :target: https://pypi.org/project/waves-workflows/
+
+.. image:: https://img.shields.io/pypi/dm/waves-workflows?label=PyPI%20downloads
+   :target: https://pypi.org/project/waves-workflows/
+
 .. image:: https://zenodo.org/badge/591388602.svg
    :target: https://zenodo.org/badge/latestdoi/591388602
 
@@ -69,12 +77,26 @@ Installation
 
 .. installation-start-do-not-remove
 
+Conda
+=====
+
 `WAVES`_ can be installed in a `Conda`_ environment with the `Conda`_ package manager. See the `Conda installation`_ and
 `Conda environment management`_ documentation for more details about using `Conda`_.
 
 .. code-block::
 
    $ conda install --channel conda-forge waves
+
+pip
+===
+
+`WAVES`_ may also be installed from `PyPI`_ with `pip`_ under the distribution name ``waves-workflows``:
+https://pypi.org/project/waves-workflows/. The package installs and imports as ``waves``, so care must be taken to avoid
+name clashes with similarly named `PyPI`_ packages.
+
+.. code-block::
+
+   $ pip install waves-workflows
 
 .. installation-end-do-not-remove
 
