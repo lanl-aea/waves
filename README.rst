@@ -75,10 +75,10 @@ modsim_template`` after installation.
 Installation
 ************
 
-.. installation-start-do-not-remove
-
 Conda
 =====
+
+.. installation-conda-start-do-not-remove
 
 `WAVES`_ can be installed in a `Conda`_ environment with the `Conda`_ package manager. See the `Conda installation`_ and
 `Conda environment management`_ documentation for more details about using `Conda`_.
@@ -87,8 +87,12 @@ Conda
 
    $ conda install --channel conda-forge waves
 
+.. installation-conda-end-do-not-remove
+
 pip
 ===
+
+.. installation-pip-start-do-not-remove
 
 `WAVES`_ may also be installed from `PyPI`_ with `pip`_ under the distribution name ``waves-workflows``:
 https://pypi.org/project/waves-workflows/. The package installs and imports as ``waves``, so care must be taken to avoid
@@ -98,7 +102,7 @@ name clashes with similarly named `PyPI`_ packages.
 
    $ pip install waves-workflows
 
-.. installation-end-do-not-remove
+.. installation-pip-end-do-not-remove
 
 *************
 Documentation
