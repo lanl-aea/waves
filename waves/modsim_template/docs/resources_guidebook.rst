@@ -24,7 +24,7 @@ The modsim template is intended to use `Git`_ for version control: a ``.gitignor
 template directory. By default, it includes file paths and extensions that are not expected to be tracked,
 such as the ``build/`` directory, Abaqus and `Cubit`_ journal files, and others.
 
-This template uses `setuptools_scm`_ to assist with version numbering using Git metadata. A WIP tutorial on its usage
+This template uses `setuptools_scm`_ :cite:`setuptools_scm` to assist with version numbering using Git metadata. A WIP tutorial on its usage
 can be found as part of the `setuptools_scm WAVES Tutorial`_.
 
 ******
