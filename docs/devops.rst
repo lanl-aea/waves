@@ -105,6 +105,54 @@ this to create a local development environment that closely mirrors the linux CI
 Build
 *****
 
+This project may be built as a Conda or pip package. The Conda package is the preferred distribution and takes the
+default distribution name ``waves``. The Conda recipe(s) will call the pip build commands directly, so it is not
+necessary to build the pip package first.
+
+pip
+===
+
+To build the pip package, use the ``build`` alias. The package artifacts will live in ``build/dist``.
+
+.. code-block::
+
+   $ scons build
+
+The package distribution name may be changed from the default ``waves`` to something else. For instance, on PyPI the
+distribution name ``waves`` is taken by another project, so the PyPI distribution name of this project is
+``waves_workflows``.
+
+.. code-block::
+
+   $ scons build --distribution-name=waves_workflows
+
+For this reason the ``pyproject.toml`` file has been templated in the source tree as ``pyproject.toml.in``. The
+necessary ``pyproject.toml`` file will be generated as necessary with the specified distribution name by the SCons
+``build``, ``install``, ``style``, and test aliases.
+
+The ``install`` alias is provided for packaging in ecosystems which support data file installation outside the package
+directory, e.g. man pages. By default, this alias installs to a local ``install/`` directory, but the prefix may
+be set to match the recipe's installation prefix. For instance, the Conda recipe must install to the ``${PREFIX}``
+variable managed by ``conda-build``.
+
+.. code-block::
+
+   $ scons install --prefix=${PREFIX}
+
+If a ``pyproject.toml`` file has been generated, the package may be built with the usual ``py-build`` and ``pip``
+commands, as well. The installation will not include the man pages or HTML documentation when building and installing
+without the ``build`` or ``install`` aliases. This should be avoided as general practice, but may be desirable for
+package maintainers that require more direct control over the build and install options.
+
+.. code-block::
+
+   $ scons pyproject.toml
+   $ python -m build .
+   $ python -m pip install dist/waves-*.tar.gz
+
+Conda
+=====
+
 To build the Conda package activate the development environment and run the conda build command found in the
 CI configuration file. The current command may be found as
 
@@ -251,9 +299,16 @@ https://aea.re-pages.lanl.gov/python-projects/waves/coverage/index.html.
 
 .. warning::
 
-   Since a v0.12.9 pre-release, it is not possible to run ``pytest`` directly from the source directory without first
-   generating a ``pyproject.toml`` file. Run ``scons pyproject.toml`` manually if you want to run pytests directly with
-   the ``pytest`` command
+   Since a v0.12.9 pre-release, the ``pyproject.toml`` file is templated from ``pyproject.toml.in`` to allow
+   distribution name changes during packaging with ``scons build``. The SCons aliases which depend on ``pyproject.toml``
+   will automatically create this templated file as necessary. However, if this file has not yet been generated, it is
+   not possible to run the ``pytest`` executable directly. Run ``scons pyproject.toml`` or any of the testing aliases
+   before running the test suite directly with the ``pytest`` command.
+
+   .. code-block::
+
+      $ scons pyproject.toml
+      $ pytest -v -n 4 waves/_tests/test_scons_extensions.py
 
 The tutorials and modsim template are run as system tests and require third-party software not available on conda-forge.
 To run the system tests, install the third-party software and make them available in your ``PATH``, activate a conda
