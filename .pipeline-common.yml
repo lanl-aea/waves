@@ -125,8 +125,9 @@
 .pip-build: &pip-build
   variables:
     GIT_STRATEGY: clone
+    DISTRIBUTION_OPTION: ""
   script:
-    - scons build ${DISTRIBUTION_NAME}
+    - scons build ${DISTRIBUTION_OPTION}
 
 .conda-build: &conda-build
   variables:
