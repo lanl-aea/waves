@@ -60,7 +60,7 @@ AddOption(
     nargs=1,
     type="string",
     action="store",
-    help="Package pip distribution name. Set to ``py_waves`` for PyPI builds (default: '%default')",
+    help="Package pip distribution name. Set to ``waves_workflows`` for PyPI builds (default: '%default')",
 )
 AddOption(
     "--unconditional-build",
