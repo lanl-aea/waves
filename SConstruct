@@ -199,8 +199,6 @@ packages = env.Command(
         Delete(Dir(package_specification)),
         Delete(Dir(f"{distribution_filename}.egg-info")),
     ],
-    distribution_name=distribution_name,
-    version=version,
 )
 env.Depends(packages, [Alias("html"), Alias("man")])
 env.AlwaysBuild(packages)
