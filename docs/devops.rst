@@ -140,9 +140,10 @@ variable managed by ``conda-build``.
    $ scons install --prefix=${PREFIX}
 
 If a ``pyproject.toml`` file has been generated, the package may be built with the usual ``py-build`` and ``pip``
-commands, as well. The installation will not include the man pages or HTML documentation when building and installing
-without the ``build`` or ``install`` aliases. This should be avoided as general practice, but may be desirable for
-package maintainers that require more direct control over the build and install options.
+commands, as well. Such an installation will not include the man pages or HTML documentation and the ``waves docs``
+subcommand will not work to launch locally installed documentation. Direct pip builds should be avoided as general
+practice, but may be desirable for package maintainers that require more direct control over the build and install
+options.
 
 .. code-block::
 
