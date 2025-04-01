@@ -1,0 +1,1 @@
+../../modsim_template/docs/resources_guidebook.rst
