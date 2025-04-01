@@ -127,6 +127,7 @@
     GIT_STRATEGY: clone
     DISTRIBUTION_OPTION: ""
   script:
+    - echo ${DISTRIBUTION_OPTION}
     - scons build ${DISTRIBUTION_OPTION}
 
 .conda-build: &conda-build
