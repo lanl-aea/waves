@@ -6,20 +6,26 @@ External Resources
 Sphinx Documentation
 ********************
 
+*
+
 The modsim template uses Sphinx documentation. For more details on using Sphinx, see the main `Sphinx`_ documentation.
 
 This template uses `Sphinx automodule`_ capability. This automatically reads the Sphinx-formatted docstrings
 within Python files and adds it to the Sphinx pages where requested.
 
-
-
 ***
 Git
 ***
 
+* ``./.gitignore``
+* ``./pyproject.toml``
+
 The modsim template is intended to use `Git`_ for version control: a ``.gitignore`` file is included in the main
 template directory. By default, it includes file paths and extensions that are not expected to be tracked,
 such as the ``build/`` directory, Abaqus and `Cubit`_ journal files, and others.
+
+This template uses `setuptools_scm`_ to assist with version numbering using Git metadata. A WIP tutorial on its usage
+can be found as part of the `setuptools_scm WAVES Tutorial`_.
 
 ******
 PyTest
