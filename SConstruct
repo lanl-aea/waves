@@ -60,7 +60,7 @@ AddOption(
     nargs=1,
     type="string",
     action="store",
-    help="Package pip distribution name. Set to ``waves_workflows`` for PyPI builds (default: '%default')",
+    help="Package pip distribution name. Set to ``waves-workflows`` for PyPI builds (default: '%default')",
 )
 AddOption(
     "--unconditional-build",
@@ -108,7 +108,7 @@ env = Environment(
     ENV=os.environ.copy(),
     build_dir=pathlib.Path(GetOption("build_dir")),
     prefix=pathlib.Path(GetOption("prefix")),
-    distribution_name=pathlib.Path(GetOption("distribution_name")),
+    distribution_name=GetOption("distribution_name"),
     unconditional_build=GetOption("unconditional_build"),
     abaqus_commands=GetOption("abaqus_command"),
     cubit_commands=GetOption("cubit_command"),
@@ -118,7 +118,8 @@ print(f"Using build directory...{build_directory}")
 prefix = pathlib.Path(env["prefix"])
 print(f"Using install prefix directory...{prefix}")
 distribution_name = env["distribution_name"]
-package_specification = pathlib.Path(f"{distribution_name}-{version}")
+distribution_filename = distribution_name.replace("-", "_")
+package_specification = f"{distribution_filename}-{version}"
 print(f"Using distribution name...{distribution_name}")
 # Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
 env["abaqus_commands"] = env["abaqus_commands"] if env["abaqus_commands"] is not None else default_abaqus_commands
@@ -196,7 +197,7 @@ packages = env.Command(
         Copy(Dir(installed_documentation), build_directory / f"docs/man/{project_name}.1"),
         "python -m build --verbose --outdir=${TARGET.dir.abspath} --no-isolation .",
         Delete(Dir(package_specification)),
-        Delete(Dir(f"{distribution_name}.egg-info")),
+        Delete(Dir(f"{distribution_filename}.egg-info")),
     ],
     distribution_name=distribution_name,
     version=version,

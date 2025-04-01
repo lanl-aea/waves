@@ -120,11 +120,11 @@ To build the pip package, use the ``build`` alias. The package artifacts will li
 
 The package distribution name may be changed from the default ``waves`` to something else. For instance, on PyPI the
 distribution name ``waves`` is taken by another project, so the PyPI distribution name of this project is
-``waves_workflows``.
+``waves-workflows``.
 
 .. code-block::
 
-   $ scons build --distribution-name=waves_workflows
+   $ scons build --distribution-name=waves-workflows
 
 For this reason the ``pyproject.toml`` file has been templated in the source tree as ``pyproject.toml.in``. The
 necessary ``pyproject.toml`` file will be generated as necessary with the specified distribution name by the SCons
