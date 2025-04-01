@@ -17,11 +17,14 @@ This template uses `Sphinx automodule`_ capability. This automatically reads the
 within Python files and adds it to the Sphinx pages where requested.
 
 The Sphinx configuration file ``conf.py.in`` is set up with the modsim template metadata, variables, extensions, and
-settings required to build the documentation. It also includes definition of mock modules required to run the
-`Sphinx automodule`_ on functions expecting specific environment configurations. For the rectangle simulation, mock
-modules for Abaqus and `Cubit`_ :cite:`cubit` are required to parse all dosctrings. A custom theme is defined in the
-configuration file: ``_static/custom.css``. The theme is defined in HTML format and, for the template, simply defines
-the max width of the generated pages.
+settings required to build the documentation. Note the added ``.in`` extension for parameter substitution compatibility.
+It also includes definition of mock modules required to run the `Sphinx automodule`_ on functions expecting specific
+environment configurations. For the rectangle simulation, mock modules for Abaqus and `Cubit`_ :cite:`cubit` are
+required to parse all dosctrings. A custom theme is defined in the configuration file: ``_static/custom.css``. The
+theme is defined in HTML format and, for the template, simply defines the max width of the generated pages.
+
+The modsim template sets up separate building of the documentation and the report. The report uses its own shorter
+``conf.py.in``. Note the lack of the Sphinx automodule and mock modules due to its focus on results reporting.
 
 ***
 Git
@@ -41,8 +44,8 @@ WIP tutorial on its usage can be found as part of the `setuptools_scm WAVES Tuto
 PyTest
 ******
 
-* ``./pyproject.toml``
 * ``modsim_package/tests/test_*.py``
+* ``./pyproject.toml``
 
 For unit testing, `pytest`_ :cite:`pytest` is implemented for the rectangle compression simulation. These tests can be
 found in ``modsim_package/tests/``. The prepackaged tests currently include testing on inputs passed to argparse, mesh
