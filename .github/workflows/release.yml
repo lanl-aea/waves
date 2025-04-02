@@ -6,11 +6,53 @@ on:
     tags:
       - "[0-9]+.[0-9]+.[0-9]+"
 
-permissions:
-  contents: write
-
 jobs:
-  release:
+
+  pip-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: 'true'
+          fetch-depth: 0
+      - name: MiniConda setup
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-activate-base: true
+          activate-environment: ""
+          miniforge-version: latest
+      - name: Conda environment
+        shell: bash -el {0}
+        run: conda install py-build pip 'scons>=4' 'setuptools>=64' 'setuptools_scm>=8' 'sphinx>=7.1' sphinx-argparse 'sphinx-copybutton>=0.5.1' sphinx-book-theme sphinx-design sphinxcontrib-bibtex --yes
+      - name: pip build
+        shell: bash -el {0}
+        run: scons build --distribution-name=waves-workflows
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-package-distribution-artifacts
+          path: dist/
+
+  publish-to-pypi:
+    runs-on: ubuntu-latest
+    needs:
+      - pip-build
+    environment:
+      name: pypi
+      url: https://pypi.org/p/waves-workflows
+    permissions:
+      id-token: write
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: python-package-distribution-artifacts
+          path: dist/
+      - name: Publish PyPI distribution
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+  pdf-build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -28,18 +70,31 @@ jobs:
           miniforge-version: latest
       - name: Conda environment
         shell: bash -el {0}
-        run: conda install py-build pip 'scons>=4' 'setuptools>=64' 'setuptools_scm>=8' 'sphinx>=7.1' sphinx-argparse 'sphinx-copybutton>=0.5.1' sphinx-book-theme sphinx-design sphinxcontrib-bibtex --yes
-      - name: Build documentation
+        run: conda install 'scons>=4' 'setuptools>=64' 'setuptools_scm>=8' 'sphinx>=7.1' sphinx-argparse 'sphinx-copybutton>=0.5.1' sphinx-book-theme sphinx-design sphinxcontrib-bibtex --yes
+      - name: Build PDF documentation
         shell: bash -el {0}
         run: scons latexpdf
-      - name: pip build
-        shell: bash -el {0}
-        run: scons build --distribution-name=waves-workflows
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pdf-documentation-artifact
+          path: build/docs/latex/waves-${{ github.ref_name }}.pdf
+
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    needs:
+      - pdf-build
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: pdf-documentation-artifact
+          path: build/docs/latex/waves-${{ github.ref_name }}.pdf
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
             build/docs/latex/waves-${{ github.ref_name }}.pdf
-            build/dist/waves_workflows-${{ github.ref_name }}.tar.gz
-            build/dist/waves_workflows-${{ github.ref_name }}-py3-none-any.whl
           body: "Changelog: https://lanl-aea.github.io/waves/changelog.html. Installation: https://lanl-aea.github.io/waves/installation.html"
