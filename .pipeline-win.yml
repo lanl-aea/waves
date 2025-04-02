@@ -94,6 +94,11 @@ win-pip-build:
     - Write-Output $DISTRIBUTION_OPTION
     # Job commands
     - scons install ${DISTRIBUTION_OPTION}
+    - python -m venv pip-build-test
+    - pip-build-test\Scripts\Activate.ps1
+    - python -m pip install --no-cache-dir build\dist\waves-*.tar.gz pytest pytest-xdist
+    - cd pip-build-test\lib\python*\site-packages\waves
+    - python -m pytest -vvv -n 4 -m "not systemtest"
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"

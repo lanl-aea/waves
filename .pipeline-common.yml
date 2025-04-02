@@ -127,8 +127,15 @@
     GIT_STRATEGY: clone
     DISTRIBUTION_OPTION: ""
   script:
+    # Job variables
     - echo ${DISTRIBUTION_OPTION}
+    # Job commands
     - scons install ${DISTRIBUTION_OPTION}
+    - python -m venv pip-build-test
+    - source pip-build-test/bin/activate
+    - python -m pip install --no-cache-dir build/dist/waves-*.tar.gz pytest pytest-xdist
+    - cd pip-build-test/lib/python*/site-packages/waves
+    - python -m pytest -vvv -n 4 -m "not systemtest"
 
 .conda-build: &conda-build
   variables:
