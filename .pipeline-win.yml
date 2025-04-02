@@ -88,15 +88,17 @@ win-pip-build:
   stage: test
   variables:
     GIT_STRATEGY: clone
-    DISTRIBUTION_OPTION: ""
+    distribution_name: "waves"
   script:
     # Job variables
-    - Write-Output $DISTRIBUTION_OPTION
+    - Write-Output $distribution_name
     # Job commands
-    - scons install ${DISTRIBUTION_OPTION}
+    # Conda CI environment active
+    - scons install --distribution-name=${distribution_name}
     - python -m venv pip-build-test
     - pip-build-test\Scripts\Activate.ps1
-    - python -m pip install --no-cache-dir build\dist\waves-*.tar.gz pytest pytest-xdist
+    # Python virtualenv environment active
+    - python -m pip install --verbose --require-virtualenv --no-cache-dir build\dist\$distribution_name-*.tar.gz pytest pytest-xdist
     - cd pip-build-test\lib\python*\site-packages\waves
     - python -m pytest -vvv -n 4 -m "not systemtest"
   rules:

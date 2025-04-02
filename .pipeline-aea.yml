@@ -136,7 +136,7 @@ pypi-pip-build:
     - .pip-build
   stage: test
   variables:
-    DISTRIBUTION_OPTION: "--distribution-name=waves-workflows"
+    distribution_name: "waves-workflows"
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
