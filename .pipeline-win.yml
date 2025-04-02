@@ -91,12 +91,13 @@ win-pip-build:
     distribution_name: "waves"
   script:
     # Job variables
+    - scons pyproject.toml
+    - $version=python -m setuptools_scm
     - Write-Output $distribution_name
+    - Write-Output $version
     # Job commands
     # Conda CI environment active
     - scons install --distribution-name=${distribution_name}
-    - $version=python -m setuptools_scm
-    - Write-Output $version
     - python -m venv pip-build-test
     - pip-build-test\Scripts\Activate.ps1
     # Python virtualenv environment active

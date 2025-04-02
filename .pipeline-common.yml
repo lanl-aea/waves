@@ -129,14 +129,14 @@
   script:
     # Job variables
     - distribution_filename=$(echo ${distribution_name} | tr - _)
+    - scons pyproject.toml
+    - version=$(python -m setuptools_scm)
     - echo ${distribution_name}
     - echo ${distribution_filename}
     - echo ${version}
     # Job commands
     # Conda CI environment active
     - scons install --distribution-name=${distribution_name}
-    - version=$(python -m setuptools_scm)
-    - echo ${version}
     - python -m venv pip-build-test
     # Python virtualenv environment active
     - source pip-build-test/bin/activate
