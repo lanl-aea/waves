@@ -32,6 +32,8 @@ Internal Changes
 - Re-organize GitHub Actions around a conda-build test workflow and a release workflow. Include automated PyPI
   publication in the release workflow and remove the conda package from the release artifacts (:issue:`897`,
   :merge:`1155`). By `Kyle Brindley`_.
+- Add a CI job for testing the as-installed pip package in a Python virtualenv (:issue:`898`, :merge:`1156`). By `Kyle
+  Brindley`_.
 
 *******************
 0.12.8 (2025-03-18)
