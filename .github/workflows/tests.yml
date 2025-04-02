@@ -1,4 +1,4 @@
-name: Windows build and test on new tags
+name: conda-build tests
 
 on:
   push:
@@ -9,6 +9,7 @@ permissions:
   contents: read
 
 jobs:
+
   windows:
     runs-on: windows-latest
     steps:
@@ -29,3 +30,24 @@ jobs:
       - name: Conda build
         shell: powershell
         run: $env:VERSION=(python -m setuptools_scm); conda mambabuild recipe --channel conda-forge --no-anaconda-upload --output-folder conda-bld
+
+  ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: 'true'
+          fetch-depth: 0
+      - name: MiniConda setup
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-activate-base: true
+          activate-environment: ""
+          miniforge-version: latest
+      - name: Conda environment
+        shell: bash -el {0}
+        run: conda install boa conda-build 'setuptools>=64' 'setuptools_scm>=8' --yes
+      - name: Conda build
+        shell: bash -el {0}
+        run: VERSION=$(python -m setuptools_scm) conda mambabuild recipe --channel conda-forge --no-anaconda-upload --output-folder conda-bld

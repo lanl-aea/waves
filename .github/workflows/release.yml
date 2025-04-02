@@ -28,13 +28,10 @@ jobs:
           miniforge-version: latest
       - name: Conda environment
         shell: bash -el {0}
-        run: conda install boa conda-build py-build pip 'scons>=4' 'setuptools>=64' 'setuptools_scm>=8' 'sphinx>=7.1' sphinx-argparse 'sphinx-copybutton>=0.5.1' sphinx-book-theme sphinx-design sphinxcontrib-bibtex --yes
+        run: conda install py-build pip 'scons>=4' 'setuptools>=64' 'setuptools_scm>=8' 'sphinx>=7.1' sphinx-argparse 'sphinx-copybutton>=0.5.1' sphinx-book-theme sphinx-design sphinxcontrib-bibtex --yes
       - name: Build documentation
         shell: bash -el {0}
         run: scons latexpdf
-      - name: Conda build
-        shell: bash -el {0}
-        run: VERSION=$(python -m setuptools_scm) conda mambabuild recipe --channel conda-forge --no-anaconda-upload --output-folder conda-bld
       - name: pip build
         shell: bash -el {0}
         run: scons build --distribution-name=waves-workflows
@@ -43,7 +40,6 @@ jobs:
         with:
           files: |
             build/docs/latex/waves-${{ github.ref_name }}.pdf
-            conda-bld/noarch/waves-${{ github.ref_name }}-py_0.tar.bz2
             build/dist/waves_workflows-${{ github.ref_name }}.tar.gz
             build/dist/waves_workflows-${{ github.ref_name }}-py3-none-any.whl
           body: "Changelog: https://lanl-aea.github.io/waves/changelog.html. Installation: https://lanl-aea.github.io/waves/installation.html"
