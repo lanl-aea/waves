@@ -40,7 +40,7 @@
    release_philosophy
    changelog
    zreferences
-   resources_guidebook
+   external_resources
    glossary
 
 .. raw:: latex
