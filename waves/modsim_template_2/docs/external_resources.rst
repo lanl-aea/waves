@@ -1,0 +1,1 @@
+../../modsim_template/docs/external_resources.rst

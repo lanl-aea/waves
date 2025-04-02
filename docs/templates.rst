@@ -95,3 +95,9 @@ recommended. The purpose and benefits of using version control for modsim files 
 :ref:`computational_tools` :ref:`version_control` discussion. The modsim template can be updated to use dynamic
 versioning with the :ref:`tutorial_setuptools_scm`, where `setuptools_scm`_ :cite:`setuptools_scm` is a software
 package that can retrieve a project version number from version control software, such as `git`_ :cite:`git`.
+
+##################
+External Resources
+##################
+
+.. include:: external_resources.txt

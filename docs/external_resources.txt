@@ -1,0 +1,60 @@
+********************
+Sphinx Documentation
+********************
+
+* ``docs/conf.py.in``
+* ``docs/SConscript``
+* ``docs/_static/custom.css``
+* ``report/conf.py.in``
+* ``report/SConscript``
+
+The modsim templates makes use of Sphinx documentation, which uses compiled `reStructuredText`_ :cite:`rst`. For more
+details on using Sphinx, see the main `Sphinx`_ documentation :cite:`sphinx`.
+
+The Sphinx configuration file ``conf.py.in`` is set up with the modsim template metadata, variables, extensions, and
+settings required to build the documentation. Note the added ``.in`` extension for parameter substitution
+compatibility.
+
+The templates use `Sphinx automodule`_ capability. This automatically reads the Sphinx-formatted docstrings
+within Python files and adds it to the Sphinx pages. The ``conf.py.in`` file includes definition of mock modules
+required to run the `Sphinx automodule`_ on functions importing modules that are unavailable in the Conda Python 3
+environment. By default, the templates include Abaqus and `Cubit`_ :cite:`cubit` mock module imports.
+
+The ``docs/SConscript`` file includes a list of the documentation files to construct both the source file list and the
+``.html`` targets list.
+
+A custom theme is defined in the configuration file: ``_static/custom.css``. The theme is defined in CSS format and,
+for the templates, simply defines the max width of the generated pages.
+
+The modsim templates set up separate building of the documentation and the report. The report uses its own shorter
+``conf.py.in`` and separate ``index.rst``. The tasks defined in ``report/SConscript`` copy files from the ``docs/``
+directory to build the report, allowing both the report and the documentation to share documentation text, reference,
+and target files.
+
+***
+Git
+***
+
+* ``.gitignore``
+* ``pyproject.toml``
+
+The modsim templates are designed to use `Git`_ :cite:`git` for version control: a ``.gitignore`` file is included in
+each template root directory. By default, it includes common build artifacts that are not usually tracked with version
+control, such as the ``build/`` directory, Abaqus and `Cubit`_ :cite:`cubit` journal files, and others.
+
+The templates use `setuptools_scm`_ :cite:`setuptools_scm` to assist with version numbering using Git metadata. A
+tutorial on its usage can be found as part of the WAVES `Tutorial: setuptools_scm`_.
+
+******
+pytest
+******
+
+* ``modsim_package/tests/test_*.py``
+* ``pyproject.toml``
+
+For unit testing, `pytest`_ :cite:`pytest` is implemented for the rectangle compression workflow. These tests can be
+found in ``modsim_package/tests/``. The prepackaged tests currently include testing on inputs passed to argparse, mesh
+convergence, and helper functions used for the rectangle compression simulation. There are 13 tests in total. Tests can
+be run using ``scons unit_testing``.
+
+Within the ``pyproject.toml`` file, pytest configuration options are set to use the default pytest options.

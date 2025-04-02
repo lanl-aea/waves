@@ -1,0 +1,1 @@
+../../../docs/external_resources.txt
