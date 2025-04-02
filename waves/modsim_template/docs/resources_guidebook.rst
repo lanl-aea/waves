@@ -47,7 +47,7 @@ main template directory. By default, it includes file paths and extensions that 
 such as the ``build/`` directory, Abaqus and `Cubit`_ :cite:`cubit` journal files, and others.
 
 This template utilizes `setuptools_scm`_ :cite:`setuptools_scm` to assist with version numbering using Git metadata. A
-WIP tutorial on its usage can be found as part of the :ref:`tutorial_setuptools_scm`.
+WIP tutorial on its usage can be found as part of the `setuptools_scm WAVES Tutorial`_.
 
 ******
 PyTest
