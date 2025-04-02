@@ -47,7 +47,7 @@ main template directory. By default, it includes common build artifacts that are
 control, such as the ``build/`` directory, Abaqus and `Cubit`_ :cite:`cubit` journal files, and others.
 
 This template uses `setuptools_scm`_ :cite:`setuptools_scm` to assist with version numbering using Git metadata. A
-tutorial on its usage can be found as part of the `setuptools_scm WAVES Tutorial`_.
+tutorial on its usage can be found as part of the WAVES `Tutorial: setuptools_scm`_.
 
 ******
 pytest
