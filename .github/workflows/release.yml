@@ -52,6 +52,7 @@ jobs:
       - name: Publish PyPI distribution
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
+          verbose: true
           packages-dir: build/dist/
 
   pdf-build:
