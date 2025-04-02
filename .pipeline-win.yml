@@ -92,10 +92,11 @@ win-pip-build:
   script:
     # Job variables
     - Write-Output $distribution_name
-    - $version=python -m setuptools_scm
     # Job commands
     # Conda CI environment active
     - scons install --distribution-name=${distribution_name}
+    - $version=python -m setuptools_scm
+    - Write-Output $version
     - python -m venv pip-build-test
     - pip-build-test\Scripts\Activate.ps1
     # Python virtualenv environment active
