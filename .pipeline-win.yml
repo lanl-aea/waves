@@ -85,9 +85,15 @@ win-conda-build:
     - aea
 
 win-pip-build:
-  extends:
-    - .pip-build
   stage: test
+  variables:
+    GIT_STRATEGY: clone
+    DISTRIBUTION_OPTION: ""
+  script:
+    # Job variables
+    - Write-Output $DISTRIBUTION_OPTION
+    # Job commands
+    - scons install ${DISTRIBUTION_OPTION}
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
