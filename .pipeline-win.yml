@@ -102,7 +102,7 @@ win-pip-build:
     - pip-build-test\Scripts\Activate.ps1
     # Python venv environment active
     - python -m pip install --verbose --disable-pip-version-check --require-virtualenv --no-cache-dir build\dist\$distribution_name-$version.tar.gz pytest pytest-xdist
-    - cd pip-build-test\lib\python*\site-packages\waves
+    - cd pip-build-test\Lib\site-packages\waves
     - python -m pytest -vvv -n 4 -m "not systemtest"
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
