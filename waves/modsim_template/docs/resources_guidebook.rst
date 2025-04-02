@@ -7,8 +7,10 @@ Sphinx Documentation
 ********************
 
 * ``docs/conf.py.in``
-* ``report/conf.py.in``
+* ``docs/SConscript``
 * ``docs/_static/custom.css``
+* ``report/conf.py.in``
+* ``report/SConscript``
 
 The modsim template makes use of Sphinx documentation, which uses complied `reStructuredText`_ :cite:`rst`. For more
 details on using Sphinx, see the main `Sphinx`_ documentation :cite:`sphinx`.
@@ -22,11 +24,16 @@ within Python files and adds it to the Sphinx pages. The ``conf.py.in`` file inc
 required to run the `Sphinx automodule`_ on functions importing modules that are unavailable in the Conda Python 3
 environment. By default, the template includes Abaqus and `Cubit`_ :cite:`cubit` mock module imports.
 
+The ``docs/SConscript`` file includes a list of the documentation files to construct both the source file list and the
+``.html`` targets list.
+
 A custom theme is defined in the configuration file: ``_static/custom.css``. The theme is defined in CSS format and,
 for the template, simply defines the max width of the generated pages.
 
 The modsim template sets up separate building of the documentation and the report. The report uses its own shorter
-``conf.py.in`` and separate ``index.rst``. However, it copies files from the ``docs/`` directory to build the report.
+``conf.py.in`` and separate ``index.rst``. The ``report/SConscript`` file copies files from the ``docs/`` directory to
+build the report, allowing both the report and the documentation to share documentation text, reference, and target
+files.
 
 ***
 Git
