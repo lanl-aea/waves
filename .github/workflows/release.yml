@@ -1,4 +1,3 @@
-# Reference: https://github.com/softprops/action-gh-release
 name: Release on new tags
 
 on:
