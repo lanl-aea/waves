@@ -138,7 +138,7 @@
     # Conda CI environment active
     - scons install --distribution-name=${distribution_name}
     - python -m venv pip-build-test
-    # Python virtualenv environment active
+    # Python venv environment active
     - source pip-build-test/bin/activate
     - python -m pip install --verbose --disable-pip-version-check --require-virtualenv --no-cache-dir build/dist/${distribution_filename}-${version}.tar.gz pytest pytest-xdist
     - cd pip-build-test/lib/python*/site-packages/waves
