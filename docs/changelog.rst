@@ -23,6 +23,7 @@ Bug fixes
 
 Documentation
 =============
+- Add external resource documentation to modsim templates (:issue:`846`, :merge:`1139`). By  `Chris Johnson`_.
 - Match work-in-progress Truchas tutorial source files more closely to the WAVES quickstart tutorial. Files may be
   fetched with ``waves fetch tutorials/tutorial_truchas`` (:merge:`1145`). By `Kyle Brindley`_.
 - Add Spack to installation instructions and compute environment management discussion (:issue:`894`, :merge:`1157`). By
@@ -70,7 +71,6 @@ Bug fixes
 
 Documentation
 =============
-- Add external resource documentation to modsim templates (:issue:`846`, :merge:`1139`). By  `Chris Johnson`_.
 - Add completed parameter lists, returns, and typing hints to parameter generator private functions
   (:issue:`882`, :merge:`1134`). By  `Chris Johnson`_.
 - Use the WAVES construction environment Abaqus solve builder factory in the tutorials (:issue:`876`, :merge:`1118`). By
