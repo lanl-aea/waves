@@ -15,7 +15,7 @@ warnings.filterwarnings(action="ignore", message="tag", category=UserWarning, mo
 # Set project meta variables
 project_dir = pathlib.Path(Dir(".").abspath)
 project_name = "waves"
-package_dir = "waves"
+package_dir = pathlib.Path("waves")
 distribution_name_default = "waves"
 version = setuptools_scm.get_version()
 project_variables = {
@@ -167,28 +167,16 @@ env.Substfile(
 )
 
 # Build
-copies = []
-copy_files = (
-    (f"{package_dir}/README.rst", "README.rst"),
-    (f"{package_dir}/pyproject.toml", "pyproject.toml"),
-)
-for target, source in copy_files:
-    copies.extend(
-        env.Command(
-            target=target,
-            source=source,
-            action=Copy("${TARGET}", "${SOURCE}"),
-        )
-    )
-build = []
-installed_documentation = pathlib.Path(package_dir) / "docs"
+installed_documentation = package_dir / "docs"
 packages = env.Command(
     target=[
         build_directory / f"dist/{package_specification}.tar.gz",
         build_directory / f"dist/{package_specification}-py3-none-any.whl",
     ],
-    source=["pyproject.toml"] + copies,
+    source=["pyproject.toml"],
     action=[
+        Copy(package_dir / "README.rst", "README.rst"),
+        Copy(package_dir / "pyproject.toml", "pyproject.toml"),
         Delete(Dir(installed_documentation)),
         Copy(Dir(installed_documentation), Dir(build_directory / "docs/html")),
         Delete(Dir(installed_documentation / ".doctrees")),
@@ -198,12 +186,14 @@ packages = env.Command(
         "python -m build --verbose --outdir=${TARGET.dir.abspath} --no-isolation .",
         Delete(Dir(package_specification)),
         Delete(Dir(f"{distribution_filename}.egg-info")),
+        Delete(Dir(installed_documentation)),
+        Delete(package_dir / "README.rst"),
+        Delete(package_dir / "pyproject.toml"),
     ],
 )
 env.Depends(packages, [Alias("html"), Alias("man")])
 env.AlwaysBuild(packages)
-build.extend(packages)
-env.Alias("build", build)
+env.Alias("build", packages)
 env.Clean("build", Dir(build_directory / "dist"))
 
 # Install
