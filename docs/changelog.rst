@@ -36,6 +36,8 @@ Internal Changes
   :merge:`1155`). By `Kyle Brindley`_.
 - Add a CI job for testing the as-installed pip package in a Python venv (:issue:`898`, :merge:`1156`). By `Kyle
   Brindley`_.
+- Add SCons, Sphinx, and CLI markers for pytest control while system testing (:issue:`900`, :merge:`1158`). By `Kyle
+  Brindley`_.
 
 *******************
 0.12.8 (2025-03-18)
