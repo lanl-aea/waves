@@ -8,6 +8,7 @@
 .. _SCons: https://scons.org/
 .. _SCons documentation: https://scons.org/documentation.html
 .. _SCons manpage: https://scons.org/doc/production/HTML/scons-man.html
+.. _Spack: https://spack.io/
 .. _WAVES: https://lanl-aea.github.io/waves/index.html
 .. _WAVES repository: https://github.com/lanl-aea/waves
 .. _WAVES releases: https://github.com/lanl-aea/waves/releases/
@@ -103,6 +104,20 @@ name clashes with similarly named `PyPI`_ packages.
    $ pip install waves-workflows
 
 .. installation-pip-end-do-not-remove
+
+Spack
+=====
+
+.. installation-spack-start-do-not-remove
+
+`WAVES`_ may be installed with the `Spack`_ package manager under the distribution name ``py-waves``:
+https://packages.spack.io/package.html?name=py-waves. The package installs and imports as ``waves``.
+
+.. code-block::
+
+   $ spack install py-waves
+
+.. installation-spack-end-do-not-remove
 
 *************
 Documentation

@@ -68,3 +68,11 @@ administrators to provide multiple, conflicting versions of software side by sid
 ``module`` software help users manage a project-specific environment on a multi-user compute server. For collaborative
 efforts and version-controlled consistency, system ``PATH`` management with a project-specific module file can help tie
 together system resources and a virtual environment in a common way for all contributors.
+
+There is also an HPC focused package manager, `Spack`_, which can create targeted software installations optimized for
+your system :cite:`spack`. `Spack`_ supports Linux and macOS, so it can be used for workflow development on local
+machines before simulations are executed on HPCs. Like `Conda`_, `Spack`_ supports user environment installation so
+project environments can be created on systems where the project and users do not have administration privileges.
+
+`WAVES`_ is deployed on `conda-forge`_, `PyPI`, and `Spack`_ to provide users with more flexible choices in compute
+environment management tools.

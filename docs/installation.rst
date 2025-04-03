@@ -22,6 +22,14 @@ Installation
       :start-after: installation-pip-start-do-not-remove
       :end-before: installation-pip-end-do-not-remove
 
+   *****
+   Spack
+   *****
+
+   .. include:: README.txt
+      :start-after: installation-spack-start-do-not-remove
+      :end-before: installation-spack-end-do-not-remove
+
 .. only:: aea
 
    ***********
@@ -41,6 +49,13 @@ Installation
    .. include:: README.txt
       :start-after: installation-pip-start-do-not-remove
       :end-before: installation-pip-end-do-not-remove
+
+   Spack
+   =====
+
+   .. include:: README.txt
+      :start-after: installation-spack-start-do-not-remove
+      :end-before: installation-spack-end-do-not-remove
 
    *************
    LANL internal

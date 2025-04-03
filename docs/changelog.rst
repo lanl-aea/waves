@@ -21,6 +21,8 @@ Documentation
 =============
 - Match work-in-progress Truchas tutorial source files more closely to the WAVES quickstart tutorial. Files may be
   fetched with ``waves fetch tutorials/tutorial_truchas`` (:merge:`1145`). By `Kyle Brindley`_.
+- Add Spack to installation instructions and compute environment management discussion (:issue:`894`, :merge:`1157`). By
+  `Kyle Brindley`_.
 
 Internal Changes
 ================
