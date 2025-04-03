@@ -63,22 +63,25 @@ if not installed:
 fetch_template = string.Template("${waves_command} fetch ${fetch_options} --destination ${temp_directory}")
 system_tests = [
     # CLI sign-of-life and help/usage
-    ([string.Template("${waves_command} --help")], None),
-    ([string.Template("${waves_command} docs --help")], None),
-    ([string.Template("${waves_command} fetch --help")], None),
-    ([string.Template("${waves_command} visualize --help")], None),
-    ([string.Template("${waves_command} build --help")], None),
-    ([string.Template("${waves_command} cartesian_product --help")], None),
-    ([string.Template("${waves_command} custom_study --help")], None),
-    ([string.Template("${waves_command} latin_hypercube --help")], None),
-    ([string.Template("${waves_command} sobol_sequence --help")], None),
-    ([string.Template("${waves_command} one_at_a_time --help")], None),
-    ([string.Template("${waves_command} print_study --help")], None),
-    ([string.Template("${odb_extract_command} --help")], None),
+    pytest.param([string.Template("${waves_command} --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} docs --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} fetch --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} visualize --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} build --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} cartesian_product --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} custom_study --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} latin_hypercube --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} sobol_sequence --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} one_at_a_time --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} print_study --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${odb_extract_command} --help")], None, marks=[pytest.mark.cli]),
     pytest.param(
         [string.Template("${waves_command} docs --print-local-path")],
         None,
-        marks=[pytest.mark.skipif(not installed, reason="The HTML docs path only exists in the as-installed package")],
+        marks=[
+            pytest.mark.cli,
+            pytest.mark.skipif(not installed, reason="The HTML docs path only exists in the as-installed package"),
+        ],
     ),
     # Real fetch operations and file I/O
     ([fetch_template], "tutorials"),
@@ -89,6 +92,7 @@ system_tests = [
             string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png"),
         ],
         "modsim_template",
+        marks=[pytest.mark.scons],
         id="modsim_template_visualize_operations",
     ),
     pytest.param(
@@ -97,7 +101,11 @@ system_tests = [
             string.Template("scons html ${unconditional_build} --jobs=4 ${abaqus_command}"),
         ],
         "modsim_template",
-        marks=pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
+        marks=[
+            pytest.mark.scons,
+            pytest.mark.sphinx,
+            pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
+        ],
         id="modsim_template_scons_html",
     ),
     pytest.param(
@@ -106,24 +114,32 @@ system_tests = [
             string.Template("scons html ${unconditional_build} --jobs=4 ${abaqus_command}"),
         ],
         "modsim_template_2",
-        marks=pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
+        marks=[
+            pytest.mark.scons,
+            pytest.mark.sphinx,
+            pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
+        ],
         id="modsim_template_2_scons_html",
     ),
     pytest.param(
         [fetch_template, "scons . --jobs=4"],
         "tutorials/tutorial_ParameterStudySConscript",
+        marks=[pytest.mark.scons],
     ),
     pytest.param(
         [fetch_template, "scons . --jobs=4"],
         "tutorials/tutorial_ParameterStudyTask",
+        marks=[pytest.mark.scons],
     ),
     pytest.param(
         [fetch_template, "scons . --jobs=4"],
         "tutorials/tutorial_ParameterStudyWrite",
+        marks=[pytest.mark.scons],
     ),
     pytest.param(
         [fetch_template, "scons ."],
         "tutorials/tutorial_writing_builders",
+        marks=[pytest.mark.scons],
     ),
 ]
 
