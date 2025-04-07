@@ -257,7 +257,7 @@ def return_environment(
         )
     except subprocess.CalledProcessError as err:
         print(err.output.decode(), file=sys.stderr)
-        raise(err)
+        raise err
     stdout = result.stdout.decode()
     variables = stdout.split("\x00")
     first_key, first_value = variables[0].rsplit("=", 1)
