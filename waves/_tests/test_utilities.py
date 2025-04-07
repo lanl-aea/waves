@@ -1,3 +1,4 @@
+import sys
 import copy
 import pathlib
 import warnings
@@ -299,11 +300,28 @@ def test_return_environment(command, kwargs, stdout, expected):
     )
 
     mock_run_return = subprocess.CompletedProcess(args=command, returncode=0, stdout=stdout)
-    with patch("subprocess.run", return_value=mock_run_return) as mock_run:
+    with (
+        patch("subprocess.run", return_value=mock_run_return) as mock_run,
+        patch("builtins.print") as mock_print,
+    ):
         environment_dictionary = _utilities.return_environment(command, **kwargs)
 
     assert environment_dictionary == expected
     mock_run.assert_called_once_with(expected_command, check=True, capture_output=True, shell=True)
+    mock_print.assert_not_called()
+
+
+def test_return_environment_exception():
+    with (
+        patch("subprocess.run", side_effect=subprocess.CalledProcessError(1, "command", output=b"output")),
+        patch("builtins.print") as mock_print,
+        pytest.raises(subprocess.CalledProcessError),
+    ):
+        try:
+            _utilities.return_environment("dummy")
+        finally:
+            mock_print.assert_called_once_with("output", file=sys.stderr)
+
 
 
 cache_environment = {
