@@ -45,6 +45,7 @@ win-conda-build:
     - Write-Output $recipe_directory
     - if ([string]::IsNullOrEmpty($recipe_directory)) { exit 1 }
     # Job commands
+    - scons pyproject.toml
     - $env:VERSION=python -m setuptools_scm
     - conda mambabuild $recipe_directory --channel fierromechanics --channel conda-forge --no-anaconda-upload
   tags:

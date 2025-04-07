@@ -162,5 +162,6 @@
     # Override default permissions. Set group to rx with no write permissions.
     - umask 0022
     - mkdir ${conda_artifacts_directory}
+    - scons pyproject.toml
     - VERSION=$(python -m setuptools_scm) conda mambabuild ${recipe_directory} --channel fierromechanics --channel conda-forge --no-anaconda-upload --croot ${croot_recipe} --output-folder ${conda_artifacts_directory}
     - conda build purge --croot ${croot_recipe}
