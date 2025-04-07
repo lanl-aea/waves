@@ -8,9 +8,19 @@ Changelog
 0.12.10 (unreleased)
 ********************
 
+Documentation
+=============
+- Avoid module conflicts with common AEA modulefiles in the Quinoa tutorial (:issue:`902`, :merge:`1162`). By `Kyle
+  Brindley`_.
+
 Internal Changes
 ================
 - Explicitly limit VTK version that crashes on macOS (:issue:`899`, :merge:`1161`). By `Kyle Brindley`_.
+
+Enhancements
+============
+- Print shell command STDERR message on exceptions when using the construction shell environment method (:issue:`902`,
+  :merge:`1162`). By `Kyle Brindley`_.
 
 *******************
 0.12.9 (2025-04-03)
