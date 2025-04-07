@@ -7,13 +7,12 @@ before_script:
   # Common job variables
   - conda_installation="${HOME}/anaconda3"
   - conda_environments="${conda_installation}/envs"
-  - prefix="$PWD/environment"
+  - prefix="$PWD/conda-environment"
   - conda_pkgs_dirs="$PWD/pkgs"
   - conda_artifacts_directory="conda-bld"
   - echo ${conda_installation}
   - echo ${conda_environments}
   - echo ${prefix}
-  - echo ${prefix_basename}
   - echo ${conda_pkgs_dirs}
   - echo ${conda_artifacts_directory}
   - if [[ ! -d ${conda_installation} ]]; then exit 1; fi
