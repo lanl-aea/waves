@@ -7,7 +7,7 @@ package:
   version: {{ version }}
 
 source:
-  path: '..'
+  git_url: '..'
 
 build:
   # NOTE: CANNOT use noarch builds. conda-build will not use python variants if the package is marked "noarch: python"
