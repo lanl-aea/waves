@@ -8,6 +8,10 @@ Changelog
 0.12.10 (unreleased)
 ********************
 
+Internal Changes
+================
+- Explicitly limit VTK version that crashes on macOS (:issue:`899`, :merge:`1161`). By `Kyle Brindley`_.
+
 *******************
 0.12.9 (2025-04-03)
 *******************
