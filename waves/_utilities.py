@@ -248,16 +248,12 @@ def return_environment(
 
     :raises subprocess.CalledProcessError: When the shell command returns a non-zero exit status
     """
-    try:
-        result = subprocess.run(
-            f'{shell} {string_option} "{command} {separator} {environment}"',
-            check=True,
-            capture_output=True,
-            shell=True,
-        )
-    except subprocess.CalledProcessError as err:
-        print(err.output.decode(), file=sys.stderr)
-        raise err
+    result = subprocess.run(
+        f'{shell} {string_option} "{command} {separator} {environment}"',
+        check=True,
+        capture_output=True,
+        shell=True,
+    )
     stdout = result.stdout.decode()
     variables = stdout.split("\x00")
     first_key, first_value = variables[0].rsplit("=", 1)
@@ -321,7 +317,11 @@ def cache_environment(
     else:
         if verbose:
             print(f"Sourcing the shell environment with command '{command}' ...")
-        environment = return_environment(command, shell=shell)
+        try:
+            environment = return_environment(command, shell=shell)
+        except subprocess.CalledProcessError as err:
+            print(err.output.decode(), file=sys.stderr)
+            raise err
 
     if cache:
         with open(cache, "w") as cache_file:

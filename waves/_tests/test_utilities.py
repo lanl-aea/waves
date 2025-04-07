@@ -300,27 +300,11 @@ def test_return_environment(command, kwargs, stdout, expected):
     )
 
     mock_run_return = subprocess.CompletedProcess(args=command, returncode=0, stdout=stdout)
-    with (
-        patch("subprocess.run", return_value=mock_run_return) as mock_run,
-        patch("builtins.print") as mock_print,
-    ):
+    with patch("subprocess.run", return_value=mock_run_return) as mock_run:
         environment_dictionary = _utilities.return_environment(command, **kwargs)
 
     assert environment_dictionary == expected
     mock_run.assert_called_once_with(expected_command, check=True, capture_output=True, shell=True)
-    mock_print.assert_not_called()
-
-
-def test_return_environment_exception_handling():
-    with (
-        patch("subprocess.run", side_effect=subprocess.CalledProcessError(1, "command", output=b"output")),
-        patch("builtins.print") as mock_print,
-        pytest.raises(subprocess.CalledProcessError),
-    ):
-        try:
-            _utilities.return_environment("dummy")
-        finally:
-            mock_print.assert_called_once_with("output", file=sys.stderr)
 
 
 cache_environment = {
@@ -377,6 +361,21 @@ def test_cache_environment(kwargs, cache, overwrite_cache, verbose, expected, fi
         else:
             mock_print.assert_not_called()
     assert environment_dictionary == expected
+
+
+def test_cache_environment_exception_handling():
+    with (
+        patch(
+            "waves._utilities.return_environment",
+            side_effect=subprocess.CalledProcessError(1, "command", output=b"output"),
+        ),
+        patch("builtins.print") as mock_print,
+        pytest.raises(subprocess.CalledProcessError),
+    ):
+        try:
+            _utilities.cache_environment("dummy command")
+        finally:
+            mock_print.assert_called_once_with("output", file=sys.stderr)
 
 
 create_valid_identifier = {
