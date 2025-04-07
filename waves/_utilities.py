@@ -292,8 +292,10 @@ def cache_environment(
        away from stdout if this causes problems, e.g. ``command = 'command > /dev/null && command two > /dev/null'`` in
        most shells.
 
-    If the environment is created successfully and a cache file is requested, the cache file is _always_ written. The
-    ``overwrite_cache`` behavior forces the shell ``command`` execution, even when the cache file is present.
+    If the environment is created successfully and a cache file is requested, the cache file is *always* written. The
+    ``overwrite_cache`` behavior forces the shell ``command`` execution, even when the cache file is present. If the
+    ``command`` fails (raising a ``subprocess.CalledProcessError``) the captured output is printed to STDERR before
+    re-raising the exception.
 
     :param command: the shell command to execute
     :param shell: the shell to use when executing command by absolute or relative path
@@ -304,7 +306,8 @@ def cache_environment(
 
     :returns: shell environment dictionary
 
-    :raises subprocess.CalledProcessError: When the shell command returns a non-zero exit status
+    :raises subprocess.CalledProcessError: Print the captured output and re-raise exception when the shell command
+        returns a non-zero exit status.
     """
     if cache:
         cache = pathlib.Path(cache).resolve()
