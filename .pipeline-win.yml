@@ -8,7 +8,7 @@ before_script:
   # Common job variables
   - $conda_installation="C:\ProgramData\anaconda3"
   - $prefix="$pwd\conda-environment"
-  - $conda_pkgs_dirs="$pwd\pkgs"
+  - $conda_pkgs_dirs="$pwd\conda-pkgs"
   - Write-Output $conda_installation
   - Write-Output $prefix
   - Write-Output $conda_pkgs_dirs

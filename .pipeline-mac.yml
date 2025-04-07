@@ -8,7 +8,7 @@ before_script:
   - conda_installation="${HOME}/anaconda3"
   - conda_environments="${conda_installation}/envs"
   - prefix="$PWD/conda-environment"
-  - conda_pkgs_dirs="$PWD/pkgs"
+  - conda_pkgs_dirs="$PWD/conda-pkgs"
   - conda_artifacts_directory="conda-bld"
   - echo ${conda_installation}
   - echo ${conda_environments}
