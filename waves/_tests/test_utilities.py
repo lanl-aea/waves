@@ -311,7 +311,7 @@ def test_return_environment(command, kwargs, stdout, expected):
     mock_print.assert_not_called()
 
 
-def test_return_environment_exception():
+def test_return_environment_exception_handling():
     with (
         patch("subprocess.run", side_effect=subprocess.CalledProcessError(1, "command", output=b"output")),
         patch("builtins.print") as mock_print,
@@ -321,7 +321,6 @@ def test_return_environment_exception():
             _utilities.return_environment("dummy")
         finally:
             mock_print.assert_called_once_with("output", file=sys.stderr)
-
 
 
 cache_environment = {
