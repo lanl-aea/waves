@@ -9,6 +9,7 @@ message and non-zero exit codes.
 
 import os
 import re
+import sys
 import shutil
 import string
 import typing
@@ -247,12 +248,16 @@ def return_environment(
 
     :raises subprocess.CalledProcessError: When the shell command returns a non-zero exit status
     """
-    result = subprocess.run(
-        f'{shell} {string_option} "{command} {separator} {environment}"',
-        check=True,
-        capture_output=True,
-        shell=True,
-    )
+    try:
+        result = subprocess.run(
+            f'{shell} {string_option} "{command} {separator} {environment}"',
+            check=True,
+            capture_output=True,
+            shell=True,
+        )
+    except subprocess.CalledProcessError as err:
+        print(err.output.decode(), file=sys.stderr)
+        raise(err)
     stdout = result.stdout.decode()
     variables = stdout.split("\x00")
     first_key, first_value = variables[0].rsplit("=", 1)
