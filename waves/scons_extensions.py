@@ -800,7 +800,9 @@ def shell_environment(
     """Return an SCons shell environment from a cached file or by running a shell command
 
     If the environment is created successfully and a cache file is requested, the cache file is _always_ written. The
-    ``overwrite_cache`` behavior forces the shell ``command`` execution, even when the cache file is present.
+    ``overwrite_cache`` behavior forces the shell ``command`` execution, even when the cache file is present. If the
+    ``command`` fails (raising a ``subprocess.CalledProcessError``) the captured output is printed to STDERR before
+    re-raising the exception.
 
     .. warning::
 
@@ -829,7 +831,8 @@ def shell_environment(
 
     :returns: SCons shell environment
 
-    :raises subprocess.CalledProcessError: When the shell command returns a non-zero exit status
+    :raises subprocess.CalledProcessError: Print the captured output and re-raise exception when the shell command
+        returns a non-zero exit status.
     """
     shell_environment = _utilities.cache_environment(
         command,
