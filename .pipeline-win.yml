@@ -7,43 +7,19 @@ before_script:
   - $PSVersionTable
   # Common job variables
   - $conda_installation="C:\ProgramData\anaconda3"
-  - $conda_environments="$conda_installation\envs"
-  - $prefix=python -c 'import tempfile; print(tempfile.mkdtemp(prefix=r"C:\ProgramData\anaconda3\envs\waves-dev-"))'
-  - Set-Content -Path prefix.txt -Value $prefix
-  - $prefix_basename=Split-Path -Path $prefix -Leaf
-  - $conda_pkgs_dirs="$conda_installation\pkgs-$prefix_basename"
-  - Set-Content -Path conda_pkgs_dirs.txt -Value $conda_pkgs_dirs
-  - $conda_artifacts_directory="conda-bld"
+  - $prefix="$pwd\conda-environment"
+  - $conda_pkgs_dirs="$pwd\pkgs"
   - Write-Output $conda_installation
-  - Write-Output $conda_environments
   - Write-Output $prefix
-  - Write-Output $prefix_basename
   - Write-Output $conda_pkgs_dirs
-  - Write-Output $conda_artifacts_directory
   - if (!(Test-Path -Path $conda_installation -PathType Container)) { exit 1 }
-  - if (!(Test-Path -Path $conda_environments -PathType Container)) { exit 1 }
   - if ([string]::IsNullOrEmpty($prefix)) { exit 1 }
-  - if ([string]::IsNullOrEmpty($conda_artifacts_directory)) { exit 1 }
   # Environment creation
   - $env:CONDA_PKGS_DIRS=$conda_pkgs_dirs
   - (& "$conda_installation\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | ?{$_} | Invoke-Expression
   - conda info
   - conda env create --prefix $prefix --file environment-win.yml --yes
   - conda activate $prefix
-  # Common job variables
-  - $croot="$Env:CONDA_PREFIX\$conda_artifacts_directory"
-  - Write-Output $croot
-  - if ([string]::IsNullOrEmpty($croot)) { exit 1 }
-
-after_script:
-  - $prefix=Get-Content -Path prefix.txt
-  - $conda_pkgs_dirs=Get-Content -Path conda_pkgs_dirs.txt
-  - Write-Output $prefix
-  - Write-Output $conda_pkgs_dirs
-  - if ([string]::IsNullOrEmpty($prefix)) { exit 1 }
-  - if ([string]::IsNullOrEmpty($conda_pkgs_dirs)) { exit 1 }
-  - if (Test-Path -Path $prefix -PathType Container) {Remove-Item -Recurse $prefix -ErrorAction Continue}
-  - if (Test-Path -Path $conda_pkgs_dirs -PathType Container) {Remove-Item -Recurse $conda_pkgs_dirs -ErrorAction Continue}
 
 win-fast-test:
   extends:
@@ -66,20 +42,11 @@ win-conda-build:
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
   script:
     # Job variables
-    - Write-Output $croot
     - Write-Output $recipe_directory
-    - Write-Output $conda_artifacts_directory
-    - $croot_recipe="$croot\$recipe_directory"
-    - Write-Output $croot_recipe
-    - if ([string]::IsNullOrEmpty($croot)) { exit 1 }
     - if ([string]::IsNullOrEmpty($recipe_directory)) { exit 1 }
-    - if ([string]::IsNullOrEmpty($conda_artifacts_directory)) { exit 1 }
-    - if ([string]::IsNullOrEmpty($croot_recipe)) { exit 1 }
     # Job commands
-    - New-Item -Name $conda_artifacts_directory -ItemType "directory"
     - $env:VERSION=python -m setuptools_scm
-    - conda mambabuild $recipe_directory --channel fierromechanics --channel conda-forge --no-anaconda-upload --croot $croot_recipe --output-folder $conda_artifacts_directory
-    - conda build purge --croot $croot_recipe
+    - conda mambabuild $recipe_directory --channel fierromechanics --channel conda-forge --no-anaconda-upload
   tags:
     - powershell
     - aea
