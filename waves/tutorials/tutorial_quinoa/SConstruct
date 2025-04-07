@@ -116,7 +116,9 @@ env.Append(
 # Source the Quinoa environment and store it separately from the Conda/Cubit environment to avoid PATH interference
 if quinoa_modulefile:
     envQuinoa = waves.scons_extensions.shell_environment(
-        f"module use {quinoa_modulefile.parent} && module load {quinoa_modulefile.name}"
+        "module unload aea-nightly aea-weekly aea-quarterly aea-release && "
+        f"module use {quinoa_modulefile.parent} && "
+        f"module load {quinoa_modulefile.name}"
     )
 else:
     envQuinoa = Environment()
