@@ -5,18 +5,25 @@ default:
       aud: https://re-git.lanl.gov
 
 stages:
+  - environment
   - test
 
 include: ".pipeline-common.yml"
 
-hpc-fast-test:
+hpc-environment:
   extends:
-    - .nix-before-script
-  stage: test
+    - .linux_before_script
+    - .environment
+  stage: environment
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
-  variables:
-    conda_installation: "/usr/projects/hpcsoft/common/x86_64/anaconda/2023.07-python-3.11"
+  tags:
+    - rocinante
+    - shell
+
+hpc-fast-test:
+  extends:
+    - .linux_before_script
   script:
     # TODO: Remove HPC specific fast-test script when HPC CI TeXLive builds are fixed
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
@@ -29,6 +36,9 @@ hpc-fast-test:
     # Job commands
     - scons pytest systemtest --keep-going --unconditional-build --abaqus-command=${abaqus_command_prefix}/abq2024 --cubit-command=${cubit_command_prefix}/Cubit-16.16/cubit
     - if [[ $PARENT_CI_PIPELINE_SOURCE == "schedule" ]]; then scons systemtest --keep-going --unconditional-build --abaqus-command=${abaqus_command_prefix}/abq2023 --cubit-command=${cubit_command_prefix}/Cubit-16.12/cubit; fi
+  stage: test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
   tags:
     - rocinante
     - batch
