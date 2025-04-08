@@ -6,17 +6,14 @@ include: ".pipeline-common.yml"
 before_script:
   # Common job variables
   - conda_installation="${HOME}/anaconda3"
-  - conda_environments="${conda_installation}/envs"
   - prefix="$PWD/conda-environment"
   - conda_pkgs_dirs="$PWD/conda-pkgs"
   - conda_artifacts_directory="conda-bld"
   - echo ${conda_installation}
-  - echo ${conda_environments}
   - echo ${prefix}
   - echo ${conda_pkgs_dirs}
   - echo ${conda_artifacts_directory}
   - if [[ ! -d ${conda_installation} ]]; then exit 1; fi
-  - if [[ ! -d ${conda_environments} ]]; then exit 1; fi
   - if [[ -z ${prefix} ]]; then exit 1; fi
   - if [[ -z ${conda_artifacts_directory} ]]; then exit 1; fi
   # Environment creation
