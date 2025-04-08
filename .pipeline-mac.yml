@@ -3,61 +3,45 @@ stages:
 
 include: ".pipeline-common.yml"
 
-before_script:
-  # Common job variables
-  - conda_installation="${HOME}/anaconda3"
-  - prefix="$PWD/conda-environment"
-  - conda_pkgs_dirs="$PWD/conda-pkgs"
-  - conda_artifacts_directory="conda-bld"
-  - echo ${conda_installation}
-  - echo ${prefix}
-  - echo ${conda_pkgs_dirs}
-  - echo ${conda_artifacts_directory}
-  - if [[ ! -d ${conda_installation} ]]; then exit 1; fi
-  - if [[ -z ${prefix} ]]; then exit 1; fi
-  - if [[ -z ${conda_artifacts_directory} ]]; then exit 1; fi
-  # Environment creation
-  - export CONDA_PKGS_DIRS="${conda_pkgs_dirs}"
-  - source ${conda_installation}/etc/profile.d/conda.sh
-  - conda info
-  - conda env create --prefix ${prefix} --file environment.yml --yes
-  - conda activate ${prefix}
-  # Common job variables
-  - croot=${CONDA_PREFIX}/${conda_artifacts_directory}
-  - echo ${croot}
-  - if [[ -z ${croot} ]]; then exit 1; fi
-
 mac-fast-test:
   extends:
+    - .nix-before-script
     - .fast-test-no-third-party
   stage: test
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
+  variables:
+    conda_installation: "/Users/gitlab-runner/anaconda3"
   tags:
     - macos
     - pn2301275
 
 mac-conda-build:
   extends:
+    - .nix-before-script
     - .conda-build
   stage: test
-  variables:
-    recipe_directory: "recipe"
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
+  variables:
+    conda_installation: "/Users/gitlab-runner/anaconda3"
+    recipe_directory: "recipe"
   tags:
     - macos
     - pn2301275
 
 mac-pip-build:
   extends:
+    - .nix-before-script
     - .pip-build
   stage: test
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
+  variables:
+    conda_installation: "/Users/gitlab-runner/anaconda3"
   tags:
     - macos
     - pn2301275

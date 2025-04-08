@@ -50,6 +50,31 @@
     - echo ${conda_artifacts_directory}
     - echo ${croot}
 
+.nix-before-script: &nix-before-script
+  before_script:
+    - if [[ ! -d ${conda_installation} ]]; then exit 1; fi
+    # Common job variables
+    - prefix="$PWD/conda-environment"
+    - conda_pkgs_dirs="$PWD/conda-pkgs"
+    - conda_artifacts_directory="conda-bld"
+    - echo ${conda_installation}
+    - echo ${prefix}
+    - echo ${conda_pkgs_dirs}
+    - echo ${conda_artifacts_directory}
+    - if [[ -z ${prefix} ]]; then exit 1; fi
+    - if [[ -z ${conda_artifacts_directory} ]]; then exit 1; fi
+    # Environment creation
+    - export CONDA_PKGS_DIRS="${conda_pkgs_dirs}"
+    - source ${conda_installation}/etc/profile.d/conda.sh
+    - conda info
+    - conda env create --prefix ${prefix} --file environment.yml --yes
+    - conda activate ${prefix}
+    - conda info
+    # Common job variables
+    - croot=${CONDA_PREFIX}/${conda_artifacts_directory}
+    - echo ${croot}
+    - if [[ -z ${croot} ]]; then exit 1; fi
+
 .environment: &environment
   variables:
     GIT_STRATEGY: clone
