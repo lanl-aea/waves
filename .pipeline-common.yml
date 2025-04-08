@@ -134,6 +134,9 @@
     - echo ${distribution_name}
     - echo ${distribution_filename}
     - echo ${version}
+    - if [[ -z ${distribution_name} ]]; then exit 1; fi
+    - if [[ -z ${distribution_filename} ]]; then exit 1; fi
+    - if [[ -z ${version} ]]; then exit 1; fi
     # Job commands
     # Conda CI environment active
     - scons install --distribution-name=${distribution_name}
