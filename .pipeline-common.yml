@@ -1,4 +1,4 @@
-.linux_before_script: &linux_before_script
+.linux-cached-environment: &linux-cached-environment
   before_script:
     # Remove when AEA RHEL ``all_proxy`` environment variable is removed or set to empty
     - export all_proxy=''
@@ -50,7 +50,7 @@
     - echo ${conda_artifacts_directory}
     - echo ${croot}
 
-.nix-before-script: &nix-before-script
+.nix-job-environment: &nix-job-environment
   before_script:
     - if [[ ! -d ${conda_installation} ]]; then exit 1; fi
     # Common job variables

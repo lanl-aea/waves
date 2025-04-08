@@ -5,7 +5,7 @@ include: ".pipeline-common.yml"
 
 mac-fast-test:
   extends:
-    - .nix-before-script
+    - .nix-job-environment
     - .fast-test-no-third-party
   stage: test
   rules:
@@ -19,7 +19,7 @@ mac-fast-test:
 
 mac-conda-build:
   extends:
-    - .nix-before-script
+    - .nix-job-environment
     - .conda-build
   stage: test
   rules:
@@ -34,7 +34,7 @@ mac-conda-build:
 
 mac-pip-build:
   extends:
-    - .nix-before-script
+    - .nix-job-environment
     - .pip-build
   stage: test
   rules:

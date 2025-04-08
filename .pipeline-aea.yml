@@ -7,7 +7,7 @@ stages:
 
 aea-environment:
   extends:
-    - .linux_before_script
+    - .linux-cached-environment
     - .environment
   stage: environment
   rules:
@@ -19,7 +19,7 @@ aea-environment:
 
 aea-fast-test:
   extends:
-    - .linux_before_script
+    - .linux-cached-environment
     - .fast-test
   stage: test
   rules:
@@ -32,7 +32,7 @@ aea-fast-test:
 
 aea-style-guide:
   extends:
-    - .linux_before_script
+    - .linux-cached-environment
     - .style-guide
   stage: test
   rules:
@@ -45,7 +45,7 @@ aea-style-guide:
 
 aea-conda-build-internal:
   extends:
-    - .linux_before_script
+    - .linux-cached-environment
     - .conda-build
   stage: test
   variables:
@@ -63,7 +63,7 @@ aea-conda-build-internal:
 
 aea-conda-build:
   extends:
-    - .linux_before_script
+    - .linux-cached-environment
     - .conda-build
   stage: test
   variables:
@@ -78,7 +78,7 @@ aea-conda-build:
 
 aea-conda-build-matrix:
   extends:
-    - .linux_before_script
+    - .linux-cached-environment
   stage: test
   variables:
     GIT_STRATEGY: clone
@@ -115,7 +115,7 @@ aea-conda-deploy:
 
 aea-pip-build:
   extends:
-    - .linux_before_script
+    - .linux-cached-environment
     - .pip-build
   stage: test
   rules:
@@ -132,7 +132,7 @@ aea-pip-build:
 
 pypi-pip-build:
   extends:
-    - .linux_before_script
+    - .linux-cached-environment
     - .pip-build
   stage: test
   variables:
@@ -147,7 +147,7 @@ pypi-pip-build:
 
 aea-pip-deploy:
   extends:
-    - .linux_before_script
+    - .linux-cached-environment
   stage: deploy
   variables:
     GIT_STRATEGY: clone
@@ -168,7 +168,7 @@ aea-pip-deploy:
 
 release:
   extends:
-    - .linux_before_script
+    - .linux-cached-environment
   stage: deploy
   variables:
     GIT_STRATEGY: clone
@@ -216,7 +216,7 @@ release:
 # It MUST be called pages
 pages:
   extends:
-    - .linux_before_script
+    - .linux-cached-environment
   stage: deploy
   variables:
     GIT_STRATEGY: clone

@@ -12,7 +12,7 @@ include: ".pipeline-common.yml"
 
 hpc-environment:
   extends:
-    - .linux_before_script
+    - .linux-cached-environment
     - .environment
   stage: environment
   rules:
@@ -23,7 +23,7 @@ hpc-environment:
 
 hpc-fast-test:
   extends:
-    - .linux_before_script
+    - .linux-cached-environment
   script:
     # TODO: Remove HPC specific fast-test script when HPC CI TeXLive builds are fixed
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
