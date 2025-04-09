@@ -39,7 +39,7 @@
     - project_environment='waves-env'
     - environment_path="${ci_environment_path}/${project_environment}"
     - echo ${environment_path}
-    - if [[ -d ${environment_path} ]]; module load ${project_environment}; else source ${conda_installation}/etc/profile.d/conda.sh; fi
+    - if [[ -d ${environment_path} ]]; then module load ${project_environment}; else source ${conda_installation}/etc/profile.d/conda.sh; fi
     - conda info
     - conda_artifacts_directory='conda-bld'
     - croot="${scratch_path}/$(basename $PWD)/${conda_artifacts_directory}"
