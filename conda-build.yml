@@ -1,0 +1,7 @@
+channels:
+  - conda-forge
+
+dependencies:
+  - boa
+  - setuptools >=64
+  - setuptools_scm >=8

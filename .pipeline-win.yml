@@ -3,8 +3,12 @@ stages:
 
 include: ".pipeline-common.yml"
 
-before_script:
+.win-job-environment: &win-job-environment
+  variables:
+    environment_file: "environment.yml"
+  before_script:
   - $PSVersionTable
+  - if ([string]::IsNullOrEmpty($environment_file)) { exit 1 }
   # Common job variables
   - $conda_installation="C:\ProgramData\anaconda3"
   - $prefix="$pwd\conda-environment"
@@ -18,11 +22,12 @@ before_script:
   - $env:CONDA_PKGS_DIRS=$conda_pkgs_dirs
   - (& "$conda_installation\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | ?{$_} | Invoke-Expression
   - conda info
-  - conda env create --prefix $prefix --file environment-win.yml --yes
+  - conda env create --prefix $prefix --file $environment_file --yes
   - conda activate $prefix
 
 win-fast-test:
   extends:
+    - .win-job-environment
     - .fast-test-no-third-party
   stage: test
   rules:
@@ -33,13 +38,16 @@ win-fast-test:
     - aea
 
 win-conda-build:
+  extends:
+    - .win-job-environment
   stage: test
-  variables:
-    GIT_STRATEGY: clone
-    recipe_directory: "recipe"
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
+  variables:
+    GIT_STRATEGY: clone
+    environment_file: "conda-build.yml"
+    recipe_directory: "recipe"
   script:
     # Job variables
     - Write-Output $recipe_directory
@@ -47,13 +55,18 @@ win-conda-build:
     # Job commands
     - scons pyproject.toml
     - $env:VERSION=python -m setuptools_scm
-    - conda mambabuild $recipe_directory --channel fierromechanics --channel conda-forge --no-anaconda-upload
+    - conda mambabuild $recipe_directory --channel conda-forge --no-anaconda-upload
   tags:
     - powershell
     - aea
 
 win-pip-build:
+  extends:
+    - .win-job-environment
   stage: test
+  rules:
+    - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
+    - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
   variables:
     GIT_STRATEGY: clone
     distribution_name: "waves"
@@ -75,9 +88,6 @@ win-pip-build:
     - python -m pip install --verbose --disable-pip-version-check --require-virtualenv --no-cache-dir build\dist\$distribution_name-$version.tar.gz pytest pytest-xdist
     - cd pip-build-test\Lib\site-packages\waves
     - python -m pytest -vvv -n 4 -m "not systemtest"
-  rules:
-    - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
-    - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
   tags:
     - powershell
     - aea

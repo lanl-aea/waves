@@ -27,6 +27,7 @@ mac-conda-build:
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
   variables:
     conda_installation: "/Users/gitlab-runner/anaconda3"
+    environment_file: "conda-build.yml"
     recipe_directory: "recipe"
   tags:
     - macos

@@ -51,8 +51,13 @@
     - echo ${croot}
 
 .nix-job-environment: &nix-job-environment
+  variables:
+    conda_installation: ""
+    environment_file: "environment.yml"
   before_script:
+    - if [[ -z ${conda_installation} ]]; then exit 1; fi
     - if [[ ! -d ${conda_installation} ]]; then exit 1; fi
+    - if [[ -z ${environment_file} ]]; then exit 1; fi
     # Common job variables
     - prefix="$PWD/conda-environment"
     - conda_pkgs_dirs="$PWD/conda-pkgs"
@@ -67,7 +72,7 @@
     - export CONDA_PKGS_DIRS="${conda_pkgs_dirs}"
     - source ${conda_installation}/etc/profile.d/conda.sh
     - conda info
-    - conda env create --prefix ${prefix} --file environment.yml --yes
+    - conda env create --prefix ${prefix} --file ${environment_file} --yes
     - conda activate ${prefix}
     - conda info
     # Common job variables

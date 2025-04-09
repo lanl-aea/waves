@@ -45,10 +45,12 @@ aea-style-guide:
 
 aea-conda-build-internal:
   extends:
-    - .linux-cached-environment
+    - .nix-job-environment
     - .conda-build
   stage: test
   variables:
+    conda_installation: "/apps/anaconda/3.12-anaconda-2024.10"
+    environment_file: "conda-build.yml"
     recipe_directory: "recipe-internal"
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
@@ -71,6 +73,7 @@ aea-conda-build:
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
   variables:
     conda_installation: "/apps/anaconda/3.12-anaconda-2024.10"
+    environment_file: "conda-build.yml"
     recipe_directory: "recipe"
   tags:
     - shell
@@ -79,10 +82,12 @@ aea-conda-build:
 
 aea-conda-build-matrix:
   extends:
-    - .linux-cached-environment
+    - .nix-job-environment
   stage: test
   variables:
     GIT_STRATEGY: clone
+    conda_installation: "/apps/anaconda/3.12-anaconda-2024.10"
+    environment_file: "conda-build.yml"
   timeout: 4h
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
