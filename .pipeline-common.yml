@@ -30,11 +30,8 @@
     - echo ${ci_environment_path}
     - echo ${abaqus_command_prefix}
     - echo ${cubit_command_prefix}
-    - if [[ ! -d ${aea_compute_path} ]]; then exit 1; fi
     - if [[ ! -d ${scratch_path} ]]; then exit 1; fi
     - if [[ ! -d ${ci_environment_path} ]]; then exit 1; fi
-    - if [[ ! -d ${abaqus_command_prefix} ]]; then exit 1; fi
-    - if [[ ! -d ${cubit_command_prefix} ]]; then exit 1; fi
     # Prep module command and load system module(s)
     - module load texlive
     # Activate CI environment if available. If not, rely on environment job running before other jobs.
