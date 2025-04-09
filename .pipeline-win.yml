@@ -5,6 +5,7 @@ include: ".pipeline-common.yml"
 
 .win-job-environment: &win-job-environment
   variables:
+    GIT_STRATEGY: clone
     environment_file: "environment.yml"
   before_script:
   - $PSVersionTable
@@ -46,7 +47,6 @@ win-conda-build:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
   variables:
-    GIT_STRATEGY: clone
     environment_file: "conda-build.yml"
     recipe_directory: "recipe"
   script:
@@ -69,7 +69,6 @@ win-pip-build:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
   variables:
-    GIT_STRATEGY: clone
     distribution_name: "waves"
   script:
     # Job variables

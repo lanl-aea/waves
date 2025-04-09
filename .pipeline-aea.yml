@@ -48,12 +48,12 @@ aea-conda-build-internal:
     - .nix-job-environment
     - .conda-build
   stage: test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
   variables:
     conda_installation: "/apps/anaconda/3.12-anaconda-2024.10"
     environment_file: "conda-build.yml"
     recipe_directory: "recipe-internal"
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
   artifacts:
     expire_in: '2 hrs'
     paths:
@@ -84,13 +84,11 @@ aea-conda-build-matrix:
   extends:
     - .nix-job-environment
   stage: test
-  variables:
-    GIT_STRATEGY: clone
-    conda_installation: "/apps/anaconda/3.12-anaconda-2024.10"
-    environment_file: "conda-build.yml"
-  timeout: 4h
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
+  variables:
+    conda_installation: "/apps/anaconda/3.12-anaconda-2024.10"
+    environment_file: "conda-build.yml"
   script:
     # Override default permissions. Set group to rx with no write permissions.
     - umask 0022
@@ -101,6 +99,7 @@ aea-conda-build-matrix:
     - shell
     - aea
     - linux
+  timeout: 4h
 
 # https://re-git.lanl.gov/aea/developer-operations/aea-conda
 aea-conda-deploy:
@@ -141,11 +140,11 @@ pypi-pip-build:
     - .linux-cached-environment
     - .pip-build
   stage: test
-  variables:
-    distribution_name: "waves-workflows"
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
+  variables:
+    distribution_name: "waves-workflows"
   tags:
     - shell
     - aea
@@ -155,8 +154,6 @@ aea-pip-deploy:
   extends:
     - .linux-cached-environment
   stage: deploy
-  variables:
-    GIT_STRATEGY: clone
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
       when: never
@@ -176,8 +173,6 @@ release:
   extends:
     - .linux-cached-environment
   stage: deploy
-  variables:
-    GIT_STRATEGY: clone
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
       when: never
@@ -224,8 +219,6 @@ pages:
   extends:
     - .linux-cached-environment
   stage: deploy
-  variables:
-    GIT_STRATEGY: clone
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
       when: never

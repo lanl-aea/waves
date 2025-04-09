@@ -1,4 +1,6 @@
 .linux-cached-environment: &linux-cached-environment
+  variables:
+    GIT_STRATEGY: clone
   before_script:
     # Remove when AEA RHEL ``all_proxy`` environment variable is removed or set to empty
     - export all_proxy=''
@@ -52,6 +54,7 @@
 
 .nix-job-environment: &nix-job-environment
   variables:
+    GIT_STRATEGY: clone
     conda_installation: ""
     environment_file: "environment.yml"
   before_script:
@@ -118,8 +121,6 @@
     - cp ${PWD}/modulefiles/* ${aea_modulefiles} || true
 
 .fast-test: &fast-test
-  variables:
-    GIT_STRATEGY: clone
   script:
     # Job variables
     - echo ${abaqus_command_prefix}
@@ -138,8 +139,6 @@
         path: build/pytest/coverage.xml
 
 .fast-test-no-third-party: &fast-test-no-third-party
-  variables:
-    GIT_STRATEGY: clone
   script:
     - scons regression --keep-going
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
@@ -150,14 +149,11 @@
         path: build/pytest/coverage.xml
 
 .style-guide: &style-guide
-  variables:
-    GIT_STRATEGY: clone
   script:
     - scons style
 
 .pip-build: &pip-build
   variables:
-    GIT_STRATEGY: clone
     distribution_name: "waves"
   script:
     # Job variables
@@ -181,8 +177,6 @@
     - python -m pytest -vvv -n 4 -m "not systemtest"
 
 .conda-build: &conda-build
-  variables:
-    GIT_STRATEGY: clone
   script:
     # Job variables
     - echo ${croot}
