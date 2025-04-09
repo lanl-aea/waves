@@ -49,40 +49,6 @@
     - echo ${conda_artifacts_directory}
     - echo ${croot}
 
-.nix-job-environment: &nix-job-environment
-  variables:
-    GIT_STRATEGY: clone
-    conda_installation: "/apps/anaconda/3.12-anaconda-2024.10"
-    environment_file: "environment.yml"
-  before_script:
-    - if [[ -z ${conda_installation} ]]; then exit 1; fi
-    - if [[ ! -d ${conda_installation} ]]; then exit 1; fi
-    - if [[ -z ${environment_file} ]]; then exit 1; fi
-    # Common job variables
-    - prefix="$PWD/conda-environment"
-    - conda_pkgs_dirs="$PWD/conda-pkgs"
-    - conda_artifacts_directory="conda-bld"
-    - echo ${conda_installation}
-    - echo ${environment_file}
-    - echo ${prefix}
-    - echo ${conda_pkgs_dirs}
-    - echo ${conda_artifacts_directory}
-    - if [[ -z ${prefix} ]]; then exit 1; fi
-    - if [[ -z ${conda_artifacts_directory} ]]; then exit 1; fi
-    # Put texlive on PATH for AEA/HPC
-    - module load texlive || true
-    # Environment creation
-    - export CONDA_PKGS_DIRS="${conda_pkgs_dirs}"
-    - source ${conda_installation}/etc/profile.d/conda.sh
-    - conda info
-    - conda env create --prefix ${prefix} --file ${environment_file} --yes
-    - conda activate ${prefix}
-    - conda info
-    # Common job variables
-    - croot=${CONDA_PREFIX}/${conda_artifacts_directory}
-    - echo ${croot}
-    - if [[ -z ${croot} ]]; then exit 1; fi
-
 .build-cached-environment: &build-cached-environment
   variables:
     GIT_STRATEGY: clone
@@ -117,6 +83,40 @@
     - chmod -R 755 ${environment_path}
     # place the common modulefiles in an accessible location
     - cp ${PWD}/modulefiles/* ${aea_modulefiles} || true
+
+.nix-job-environment: &nix-job-environment
+  variables:
+    GIT_STRATEGY: clone
+    conda_installation: "/apps/anaconda/3.12-anaconda-2024.10"
+    environment_file: "environment.yml"
+  before_script:
+    - if [[ -z ${conda_installation} ]]; then exit 1; fi
+    - if [[ ! -d ${conda_installation} ]]; then exit 1; fi
+    - if [[ -z ${environment_file} ]]; then exit 1; fi
+    # Common job variables
+    - prefix="$PWD/conda-environment"
+    - conda_pkgs_dirs="$PWD/conda-pkgs"
+    - conda_artifacts_directory="conda-bld"
+    - echo ${conda_installation}
+    - echo ${environment_file}
+    - echo ${prefix}
+    - echo ${conda_pkgs_dirs}
+    - echo ${conda_artifacts_directory}
+    - if [[ -z ${prefix} ]]; then exit 1; fi
+    - if [[ -z ${conda_artifacts_directory} ]]; then exit 1; fi
+    # Put texlive on PATH for AEA/HPC
+    - module load texlive || true
+    # Environment creation
+    - export CONDA_PKGS_DIRS="${conda_pkgs_dirs}"
+    - source ${conda_installation}/etc/profile.d/conda.sh
+    - conda info
+    - conda env create --prefix ${prefix} --file ${environment_file} --yes
+    - conda activate ${prefix}
+    - conda info
+    # Common job variables
+    - croot=${CONDA_PREFIX}/${conda_artifacts_directory}
+    - echo ${croot}
+    - if [[ -z ${croot} ]]; then exit 1; fi
 
 .fast-test: &fast-test
   script:
