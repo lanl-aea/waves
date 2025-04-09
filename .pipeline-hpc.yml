@@ -13,10 +13,16 @@ include: ".pipeline-common.yml"
 hpc-environment:
   extends:
     - .linux-cached-environment
-    - .environment
+    - .build-cached-environment
   stage: environment
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
+  variables:
+    conda_installation: "/udsl/udsl1/hpcsoft/common/x86_64/anaconda/2024.10-python-3.12"
+    aea_compute_path: "/usr/projects/ea/aea_compute"
+    scratch_root: "/lustre/roscratch1"
+    abaqus_command_prefix: "/usr/projects/ea/abaqus/Commands"
+    cubit_command_prefix: "/usr/projects/ea/Cubit"
   tags:
     - rocinante
     - shell
@@ -27,6 +33,12 @@ hpc-fast-test:
   stage: test
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
+  variables:
+    conda_installation: "/udsl/udsl1/hpcsoft/common/x86_64/anaconda/2024.10-python-3.12"
+    aea_compute_path: "/usr/projects/ea/aea_compute"
+    scratch_root: "/lustre/roscratch1"
+    abaqus_command_prefix: "/usr/projects/ea/abaqus/Commands"
+    cubit_command_prefix: "/usr/projects/ea/Cubit"
   script:
     # TODO: Remove HPC specific fast-test script when HPC CI TeXLive builds are fixed
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891

@@ -8,7 +8,7 @@ stages:
 aea-environment:
   extends:
     - .linux-cached-environment
-    - .environment
+    - .build-cached-environment
   stage: environment
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
@@ -51,7 +51,6 @@ aea-conda-build-internal:
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
   variables:
-    conda_installation: "/apps/anaconda/3.12-anaconda-2024.10"
     environment_file: "conda-build.yml"
     recipe_directory: "recipe-internal"
   artifacts:
@@ -72,7 +71,6 @@ aea-conda-build:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
   variables:
-    conda_installation: "/apps/anaconda/3.12-anaconda-2024.10"
     environment_file: "conda-build.yml"
     recipe_directory: "recipe"
   tags:
@@ -87,7 +85,6 @@ aea-conda-build-matrix:
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
   variables:
-    conda_installation: "/apps/anaconda/3.12-anaconda-2024.10"
     environment_file: "conda-build.yml"
   script:
     # Override default permissions. Set group to rx with no write permissions.

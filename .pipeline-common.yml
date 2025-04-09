@@ -1,25 +1,30 @@
 .linux-cached-environment: &linux-cached-environment
   variables:
     GIT_STRATEGY: clone
+    conda_installation: "/apps/anaconda/3.12-anaconda-2024.10"
+    aea_compute_path: "/projects/aea_compute"
+    scratch_root: "/scratch"
+    abaqus_command_prefix: "/apps/abaqus/Commands"
+    cubit_command_prefix: "/apps"
   before_script:
+    - if [[ -z ${conda_installation} ]]; then exit 1; fi
+    - if [[ ! -d ${conda_installation} ]]; then exit 1; fi
+    - if [[ -z ${aea_compute_path} ]]; then exit 1; fi
+    - if [[ ! -d ${aea_compute_path} ]]; then exit 1; fi
+    - if [[ -z ${scratch_root} ]]; then exit 1; fi
+    - if [[ ! -d ${scratch_root} ]]; then exit 1; fi
+    - if [[ -z ${abaqus_command_prefix} ]]; then exit 1; fi
+    - if [[ ! -d ${abaqus_command_prefix} ]]; then exit 1; fi
+    - if [[ -z ${cubit_command_prefix} ]]; then exit 1; fi
+    - if [[ ! -d ${cubit_command_prefix} ]]; then exit 1; fi
     # Remove when AEA RHEL ``all_proxy`` environment variable is removed or set to empty
     - export all_proxy=''
     # Handle mixed AEA/HPC jobs
-    - aea_compute_path="/projects/aea_compute"
-    - scratch_path="/scratch/${USER}"
+    - scratch_path="${scratch_root}/${USER}"
     - ci_environment_path="${aea_compute_path}"
-    - abaqus_command_prefix="/apps/abaqus/Commands"
-    - cubit_command_prefix="/apps"
     - hostname=$(hostname -f)
     # Handle HPC specific configuration
-    - |
-       if [[ ${hostname} == *.localdomain ]] || [[ ${hostname} == ??-rfe?.lanl.gov ]] || [[ ${hostname} == ??-fe?.lanl.gov ]]  || [[ "$hostname" == nid[0-9]* ]]; then
-           aea_compute_path="/usr/projects/ea/aea_compute";
-           scratch_path="/lustre/roscratch1/${USER}";
-           ci_environment_path=${scratch_path};
-           abaqus_command_prefix="/usr/projects/ea/abaqus/Commands"
-           cubit_command_prefix="/usr/projects/ea/Cubit"
-       fi
+    - if [[ ${hostname} == *.localdomain ]] || [[ ${hostname} == ??-rfe?.lanl.gov ]] || [[ ${hostname} == ??-fe?.lanl.gov ]]  || [[ "$hostname" == nid[0-9]* ]]; then ci_environment_path=${scratch_path}; fi
     - echo ${aea_compute_path}
     - echo ${scratch_path}
     - echo ${ci_environment_path}
@@ -31,21 +36,13 @@
     - if [[ ! -d ${abaqus_command_prefix} ]]; then exit 1; fi
     - if [[ ! -d ${cubit_command_prefix} ]]; then exit 1; fi
     # Prep module command and load system module(s)
-    - aea_modulefiles="${aea_compute_path}/modulefiles"
-    - module use ${aea_modulefiles}
     - module load texlive
-    # Start with an AEA environment to put Conda on PATH
-    - environment_choices="aea-nightly aea-quarterly aea-release"
-    - for env in ${environment_choices}; do if [[ -d "${aea_compute_path}/${env}" ]]; then base_environment=${env}; break; fi; done
-    - echo ${base_environment}
-    - if [[ -z ${base_environment} ]]; then exit 1; fi
-    - module load ${base_environment}
     # Activate CI environment if available. If not, rely on environment job running before other jobs.
     - module use ${PWD}/modulefiles
     - project_environment='waves-env'
     - environment_path="${ci_environment_path}/${project_environment}"
     - echo ${environment_path}
-    - if [[ -d ${environment_path} ]]; then module unload ${base_environment}; module load ${project_environment}; fi
+    - if [[ -d ${environment_path} ]]; module load ${project_environment}; else source ${conda_installation}/etc/profile.d/conda.sh; fi
     - conda info
     - conda_artifacts_directory='conda-bld'
     - croot="${scratch_path}/$(basename $PWD)/${conda_artifacts_directory}"
@@ -55,7 +52,7 @@
 .nix-job-environment: &nix-job-environment
   variables:
     GIT_STRATEGY: clone
-    conda_installation: ""
+    conda_installation: "/apps/anaconda/3.12-anaconda-2024.10"
     environment_file: "environment.yml"
   before_script:
     - if [[ -z ${conda_installation} ]]; then exit 1; fi
@@ -86,35 +83,36 @@
     - echo ${croot}
     - if [[ -z ${croot} ]]; then exit 1; fi
 
-.environment: &environment
+.build-cached-environment: &build-cached-environment
   variables:
     GIT_STRATEGY: clone
+    environment_file: "environment.yml"
   script:
-    # Job variables
-    - echo ${project_environment}
-    - echo ${base_environment}
-    - echo ${environment_path}
-    - echo ${aea_modulefiles}
-    - if [[ -z ${project_environment} ]]; then exit 1; fi
-    - if [[ -z ${base_environment} ]]; then exit 1; fi
+    - if [[ -z ${aea_compute_path} ]]; then exit 1; fi
+    - if [[ ! -d ${aea_compute_path} ]]; then exit 1; fi
     - if [[ -z ${environment_path} ]]; then exit 1; fi
+    - if [[ -z ${environment_file} ]]; then exit 1; fi
+    - if [[ -z ${project_environment} ]]; then exit 1; fi
+    # Job variables
+    - aea_modulefiles="${aea_compute_path}/modulefiles"
+    - echo ${aea_modulefiles}
     - if [[ -z ${aea_modulefiles} ]]; then exit 1; fi
+    - if [[ ! -d ${aea_modulefiles} ]]; then exit 1; fi
     - echo ${CI_MERGE_REQUEST_ID}
     - echo ${CI_COMMIT_BEFORE_SHA}
     - echo ${CI_COMMIT_BRANCH}
-    # Always build from the base/aea compute environment with boa/libmamba
+    # Always build from the system anaconda installation
     - module unload ${project_environment}
-    - module load ${base_environment}
     # Don't rebuild environment for merge request pipelines unless the environment is missing
     - if [[ -d "${environment_path}" ]]; then exists=true; else exists=false; fi
     - if [[ $CI_MERGE_REQUEST_ID ]] && ${exists}; then exit 0; fi
     # Don't rebuild environment for main unless the environment file has changed or the environment doesn't exist
     - files=$(git diff --name-only ${CI_COMMIT_SHA} ${CI_COMMIT_BEFORE_SHA}) || true
     - if [[ $CI_COMMIT_BRANCH == "main" ]]; then production=true; else production=false; fi
-    - if [[ "${files}" == *"environment.yml"* ]]; then modified=true; else modified=false; fi
+    - if [[ "${files}" == *"${environment_file}"* ]]; then modified=true; else modified=false; fi
     - if ${production} && ${exists} && ! ${modified}; then exit 0; fi
     # Re-build the Conda environment on changes to environment files
-    - conda env create --prefix ${environment_path} --file environment.yml --solver=libmamba --force
+    - conda env create --prefix ${environment_path} --file ${environment_file} --solver=libmamba --force
     # Remove write permissions from group to avoid accidental environment changes
     - chmod -R 755 ${environment_path}
     # place the common modulefiles in an accessible location
