@@ -30,8 +30,8 @@
     - project_environment='waves-env'
     - if [[ -z ${project_environment} ]]; then exit 1; fi
     - environment_path="${ci_environment_path}/${project_environment}"
-    - if [[ -z ${environment_path} ]]; then exit 1; fi
     - echo ${environment_path}
+    - if [[ -z ${environment_path} ]]; then exit 1; fi
     - if [[ -d ${environment_path} ]]; then module load ${project_environment}; else source ${conda_installation}/etc/profile.d/conda.sh; fi
     - conda info
     - conda_artifacts_directory='conda-bld'
@@ -45,6 +45,7 @@
     GIT_STRATEGY: clone
     environment_file: "environment.yml"
   script:
+    - echo ${environment_file}
     - if [[ -z ${environment_file} ]]; then exit 1; fi
     # Job variables
     - aea_modulefiles="${aea_compute_path}/modulefiles"
@@ -87,6 +88,7 @@
     - echo ${conda_pkgs_dirs}
     - echo ${conda_artifacts_directory}
     - if [[ -z ${prefix} ]]; then exit 1; fi
+    - if [[ -z ${conda_pkgs_dirs} ]]; then exit 1; fi
     - if [[ -z ${conda_artifacts_directory} ]]; then exit 1; fi
     # Put texlive on PATH for AEA/HPC
     - module load texlive || true
@@ -104,11 +106,9 @@
 
 .fast-test: &fast-test
   script:
-    # Job variables
-    - echo ${abaqus_command_prefix}
-    - echo ${cubit_command_prefix}
-    - if [[ -z ${abaqus_command_prefix} ]]; then exit 1; fi
-    - if [[ -z ${cubit_command_prefix} ]]; then exit 1; fi
+    - function check_directory_variable () { echo "$1"; if [[ -z $1 ]] || [[ ! -d $1 ]]; then exit 1; fi; }
+    - check_directory_variable "${abaqus_command_prefix}"
+    - check_directory_variable "${cubit_command_prefix}"
     - echo ${PARENT_CI_PIPELINE_SOURCE}
     # Job commands
     - scons regression --keep-going --unconditional-build --abaqus-command=${abaqus_command_prefix}/abq2024 --cubit-command=${cubit_command_prefix}/Cubit-16.16/cubit
