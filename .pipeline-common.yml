@@ -32,9 +32,6 @@
     - if [[ -d ${environment_path} ]]; then module load ${project_environment}; else source ${conda_installation}/etc/profile.d/conda.sh; fi
     - conda info
     - conda_artifacts_directory='conda-bld'
-    - croot="${scratch_path}/$(basename $PWD)/${conda_artifacts_directory}"
-    - echo ${conda_artifacts_directory}
-    - echo ${croot}
 
 # Jobs using this template *must* include the .linux-cached-environment before script.
 .build-cached-environment: &build-cached-environment
@@ -96,10 +93,6 @@
     - conda env create --prefix ${prefix} --file ${environment_file} --yes
     - conda activate ${prefix}
     - conda info
-    # Common job variables
-    - croot=${CONDA_PREFIX}/${conda_artifacts_directory}
-    - echo ${croot}
-    - if [[ -z ${croot} ]]; then exit 1; fi
 
 .fast-test: &fast-test
   script:
@@ -158,19 +151,13 @@
 .conda-build: &conda-build
   script:
     # Job variables
-    - echo ${croot}
     - echo ${recipe_directory}
     - echo ${conda_artifacts_directory}
-    - croot_recipe="${croot}/${recipe_directory}"
-    - echo ${croot_recipe}
-    - if [[ -z ${croot} ]]; then exit 1; fi
     - if [[ -z ${recipe_directory} ]]; then exit 1; fi
     - if [[ -z ${conda_artifacts_directory} ]]; then exit 1; fi
-    - if [[ -z ${croot_recipe} ]]; then exit 1; fi
     # Job commands
     # Override default permissions. Set group to rx with no write permissions.
     - umask 0022
     - mkdir ${conda_artifacts_directory}
     - scons pyproject.toml
-    - VERSION=$(python -m setuptools_scm) conda mambabuild ${recipe_directory} --channel fierromechanics --channel conda-forge --no-anaconda-upload --croot ${croot_recipe} --output-folder ${conda_artifacts_directory}
-    - conda build purge --croot ${croot_recipe}
+    - VERSION=$(python -m setuptools_scm) conda mambabuild ${recipe_directory} --channel fierromechanics --channel conda-forge --no-anaconda-upload --output-folder ${conda_artifacts_directory}
