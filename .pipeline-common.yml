@@ -69,6 +69,8 @@
     - echo ${conda_artifacts_directory}
     - if [[ -z ${prefix} ]]; then exit 1; fi
     - if [[ -z ${conda_artifacts_directory} ]]; then exit 1; fi
+    # Put texlive on PATH for AEA/HPC
+    - module load texlive || true
     # Environment creation
     - export CONDA_PKGS_DIRS="${conda_pkgs_dirs}"
     - source ${conda_installation}/etc/profile.d/conda.sh
