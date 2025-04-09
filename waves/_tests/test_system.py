@@ -446,6 +446,7 @@ require_third_party_system_tests = [
         ],
         "--tutorial 7",
         marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        id="tutorial_07_cartesian_product",
     ),
     pytest.param(
         [
