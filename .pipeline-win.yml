@@ -14,6 +14,7 @@ include: ".pipeline-common.yml"
   - $prefix="$pwd\conda-environment"
   - $conda_pkgs_dirs="$pwd\conda-pkgs"
   - Write-Output $conda_installation
+  - Write-Output $environment_file
   - Write-Output $prefix
   - Write-Output $conda_pkgs_dirs
   - if (!(Test-Path -Path $conda_installation -PathType Container)) { exit 1 }

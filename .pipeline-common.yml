@@ -63,6 +63,7 @@
     - conda_pkgs_dirs="$PWD/conda-pkgs"
     - conda_artifacts_directory="conda-bld"
     - echo ${conda_installation}
+    - echo ${environment_file}
     - echo ${prefix}
     - echo ${conda_pkgs_dirs}
     - echo ${conda_artifacts_directory}
