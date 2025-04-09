@@ -3,6 +3,7 @@
     GIT_STRATEGY: clone
     conda_installation: "/apps/anaconda/3.12-anaconda-2024.10"
     aea_compute_path: "/projects/aea_compute"
+    ci_environment_path: "/projects_aea_compute"
     scratch_root: "/scratch"
     abaqus_command_prefix: "/apps/abaqus/Commands"
     cubit_command_prefix: "/apps"
@@ -10,6 +11,7 @@
     - function check_directory_variable () { echo "$1"; if [[ -z $1 ]] || [[ ! -d $1 ]]; then exit 1; fi; }
     - check_directory_variable "${conda_installation}"
     - check_directory_variable "${aea_compute_path}"
+    - check_directory_variable "${ci_environment_path}"
     - check_directory_variable "${scratch_root}"
     - check_directory_variable "${abaqus_command_prefix}"
     - check_directory_variable "${cubit_command_prefix}"
@@ -18,11 +20,6 @@
     # Handle mixed AEA/HPC jobs
     - scratch_path="${scratch_root}/${USER}"
     - check_directory_variable "${scratch_path}"
-    - ci_environment_path="${aea_compute_path}"
-    - hostname=$(hostname -f)
-    # Handle HPC specific configuration
-    - if [[ ${hostname} == *.localdomain ]] || [[ ${hostname} == ??-rfe?.lanl.gov ]] || [[ ${hostname} == ??-fe?.lanl.gov ]]  || [[ "$hostname" == nid[0-9]* ]]; then ci_environment_path=${scratch_path}; fi
-    - check_directory_variable "${ci_environment_path}"
     # Prep module command and load system module(s)
     - module load texlive
     # Activate CI environment if available. If not, rely on environment job running before other jobs.
