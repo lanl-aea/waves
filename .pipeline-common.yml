@@ -7,40 +7,28 @@
     abaqus_command_prefix: "/apps/abaqus/Commands"
     cubit_command_prefix: "/apps"
   before_script:
-    - if [[ -z ${conda_installation} ]]; then exit 1; fi
-    - echo ${conda_installation}
-    - if [[ ! -d ${conda_installation} ]]; then exit 1; fi
-    - if [[ -z ${aea_compute_path} ]]; then exit 1; fi
-    - echo ${aea_compute_path}
-    - if [[ ! -d ${aea_compute_path} ]]; then exit 1; fi
-    - if [[ -z ${scratch_root} ]]; then exit 1; fi
-    - echo ${scratch_root}
-    - if [[ ! -d ${scratch_root} ]]; then exit 1; fi
-    - if [[ -z ${abaqus_command_prefix} ]]; then exit 1; fi
-    - echo ${abaqus_command_prefix}
-    - if [[ ! -d ${abaqus_command_prefix} ]]; then exit 1; fi
-    - if [[ -z ${cubit_command_prefix} ]]; then exit 1; fi
-    - echo ${cubit_command_prefix}
-    - if [[ ! -d ${cubit_command_prefix} ]]; then exit 1; fi
+    - function check_directory_variable () { echo "$1"; if [[ -z $1 ]] || [[ ! -d $1 ]]; then exit 1; fi; }
+    - check_directory_variable "${conda_installation}"
+    - check_directory_variable "${aea_compute_path}"
+    - check_directory_variable "${scratch_root}"
+    - check_directory_variable "${abaqus_command_prefix}"
+    - check_directory_variable "${cubit_command_prefix}"
     # Remove when AEA RHEL ``all_proxy`` environment variable is removed or set to empty
     - export all_proxy=''
     # Handle mixed AEA/HPC jobs
     - scratch_path="${scratch_root}/${USER}"
-    - if [[ -z ${scratch_path} ]]; then exit 1; fi
-    - echo ${scratch_path}
-    - if [[ ! -d ${scratch_path} ]]; then exit 1; fi
+    - check_directory_variable "${scratch_path}"
     - ci_environment_path="${aea_compute_path}"
     - hostname=$(hostname -f)
     # Handle HPC specific configuration
     - if [[ ${hostname} == *.localdomain ]] || [[ ${hostname} == ??-rfe?.lanl.gov ]] || [[ ${hostname} == ??-fe?.lanl.gov ]]  || [[ "$hostname" == nid[0-9]* ]]; then ci_environment_path=${scratch_path}; fi
-    - if [[ -z ${ci_environment_path} ]]; then exit 1; fi
-    - echo ${ci_environment_path}
-    - if [[ ! -d ${ci_environment_path} ]]; then exit 1; fi
+    - check_directory_variable "${ci_environment_path}"
     # Prep module command and load system module(s)
     - module load texlive
     # Activate CI environment if available. If not, rely on environment job running before other jobs.
     - module use ${PWD}/modulefiles
     - project_environment='waves-env'
+    - if [[ -z ${project_environment} ]]; then exit 1; fi
     - environment_path="${ci_environment_path}/${project_environment}"
     - if [[ -z ${environment_path} ]]; then exit 1; fi
     - echo ${environment_path}
@@ -51,21 +39,16 @@
     - echo ${conda_artifacts_directory}
     - echo ${croot}
 
+# Jobs using this template *must* include the .linux-cached-environment before script.
 .build-cached-environment: &build-cached-environment
   variables:
     GIT_STRATEGY: clone
     environment_file: "environment.yml"
   script:
-    - if [[ -z ${aea_compute_path} ]]; then exit 1; fi
-    - if [[ ! -d ${aea_compute_path} ]]; then exit 1; fi
-    - if [[ -z ${environment_path} ]]; then exit 1; fi
     - if [[ -z ${environment_file} ]]; then exit 1; fi
-    - if [[ -z ${project_environment} ]]; then exit 1; fi
     # Job variables
     - aea_modulefiles="${aea_compute_path}/modulefiles"
-    - if [[ -z ${aea_modulefiles} ]]; then exit 1; fi
-    - echo ${aea_modulefiles}
-    - if [[ ! -d ${aea_modulefiles} ]]; then exit 1; fi
+    - check_directory_variable "${aea_modulefiles}"
     - echo ${CI_MERGE_REQUEST_ID}
     - echo ${CI_COMMIT_BEFORE_SHA}
     - echo ${CI_COMMIT_BRANCH}
@@ -92,15 +75,14 @@
     conda_installation: "/apps/anaconda/3.12-anaconda-2024.10"
     environment_file: "environment.yml"
   before_script:
-    - if [[ -z ${conda_installation} ]]; then exit 1; fi
-    - if [[ ! -d ${conda_installation} ]]; then exit 1; fi
+    - function check_directory_variable () { echo "$1"; if [[ -z $1 ]] || [[ ! -d $1 ]]; then exit 1; fi; }
+    - check_directory_variable "${conda_installation}"
+    - echo ${environment_file}
     - if [[ -z ${environment_file} ]]; then exit 1; fi
     # Common job variables
     - prefix="$PWD/conda-environment"
     - conda_pkgs_dirs="$PWD/conda-pkgs"
     - conda_artifacts_directory="conda-bld"
-    - echo ${conda_installation}
-    - echo ${environment_file}
     - echo ${prefix}
     - echo ${conda_pkgs_dirs}
     - echo ${conda_artifacts_directory}
