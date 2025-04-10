@@ -3,7 +3,6 @@ import pathlib
 import typing
 import subprocess
 import functools
-import re
 import itertools
 
 import numpy
@@ -12,38 +11,6 @@ import pandas
 import click
 import matplotlib.pyplot
 from matplotlib.backends.backend_pdf import PdfPages
-
-
-def extract_set_name(
-    input_file: pathlib.Path,
-    regex: str = r"parameter_set_?[0-9]+|set_?[0-9]+",
-    index: int = -1,
-) -> str:
-    """Extract a set name from a file path by regular expression.
-
-    If more than one match is found, use the index. Defaults to right most set name pattern in the file path (closest to
-    basename).
-
-    Parameters
-    ----------
-    input_file
-        pathlib.Path object to search for a set name
-    regex
-        the regular expression to use when searching for a set name
-    index
-        the index of the preferred set name if more than one is found. Expected to be ``0`` for the first (left most)
-        and ``-1`` for the last (right most). Other indices are accepted, but will result in exceptions if the provided
-        path does not have a matching number of set name patterns.
-
-    :raises RuntimeError: if no set name pattern is found
-    """
-    matches = re.findall(regex, str(input_file))
-    if len(matches) > 0:
-        return matches[index]
-    else:
-        raise RuntimeError(
-            f"Could not extract set name from '{input_file}' with regex '{regex}'"
-        )
 
 
 def create_qoi(
@@ -158,13 +125,12 @@ def create_qoi_study(
 
     This function combines multiple QOIs (``xarray.DataArray``s) into a single "QOI Study" (``xarray.Dataset``) using
     ``xarray.merge()``.
-    Each QOI must have an attribute named "group", which will be added as a new dimension to the resulting Dataset.
-    QOIs with the same name will be merged into a single data variable with the added "group" dimension.
+    Each QOI must have an attribute named "set_name", which will be added as a new dimension to the resulting Dataset.
+    QOIs with the same name will be merged into a single data variable with the added "set_name" dimension.
     This requires that all QOIs with the same name have the same dimensions and attributes.
     If the QOIs are collected as part of a parameter study, it is useful to associate the input parameter values with
     the parameter set names.
-    To do so, include the parameter set name in the "group" attribute (e.g. "Assembly XYZ Preload parameter_set0") and
-    pass the parameter study definition (an ``xarray.Dataset``) as ``parameter_study``.
+    To do so, pass the parameter study definition (an ``xarray.Dataset``) as ``parameter_study``.
 
     Parameters
     ----------
@@ -177,27 +143,15 @@ def create_qoi_study(
     # Move "group" from attribute to dimension for each DataArray, and merge
     try:
         qoi_study = xarray.merge(
-            [qoi.expand_dims(group=[qoi.attrs["group"]]) for qoi in qois],
+            [qoi.expand_dims(set_name=[qoi.attrs["set_name"]]) for qoi in qois],
             combine_attrs="drop_conflicts",
         )
     except KeyError:
         raise RuntimeError(
-            "Each DataArray in `qois` must have an attribute named 'group'."
+            "Each DataArray in `qois` must have an attribute named 'set_name'."
         )
     # Merge in parameter study definition
     if parameter_study:
-        # Use "group" attribute to determine set names
-        try:
-            set_names = [extract_set_name(group) for group in qoi_study.group]
-            qoi_study = qoi_study.assign_coords(
-                set_name=("group", set_names)
-            ).swap_dims(group="set_name")
-        except RuntimeError:
-            # Groups may not be valid set names.
-            raise RuntimeError(
-                "Could not determine a set name based on the QOI's 'group' attribute."
-                "Unable to merge with parameter study."
-            )
         # Convert parameter study variables to coordinates
         parameter_study = parameter_study.set_coords(parameter_study)
         qoi_study = xarray.merge(
