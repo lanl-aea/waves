@@ -12,6 +12,8 @@ Breaking changes
 ================
 - Remove the parameter generator ``scons_write`` action from the public API in favor of the full
   ``parameter_study_write`` pseudo-builder (:issue:`883`, :merge:`1167`). By `Kyle Brindley`_.
+- Remove the parameter generator class dry run API option in favor of the write method API (:issue:`859`,
+  :merge:`1166`). By `Kyle Brindley`_.
 
 ********************
 0.12.10 (2025-04-10)

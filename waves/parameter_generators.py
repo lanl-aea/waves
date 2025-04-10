@@ -86,7 +86,6 @@ class ParameterGenerator(ABC):
         previous_parameter_study: typing.Optional[str] = _settings._default_previous_parameter_study,
         require_previous_parameter_study: bool = _settings._default_require_previous_parameter_study,
         overwrite: bool = _settings._default_overwrite,
-        dry_run: bool = _settings._default_dry_run,
         write_meta: bool = _settings._default_write_meta,
         **kwargs,
     ) -> None:
@@ -98,15 +97,6 @@ class ParameterGenerator(ABC):
         self.previous_parameter_study = previous_parameter_study
         self.require_previous_parameter_study = require_previous_parameter_study
         self.overwrite = overwrite
-        # TODO: move the dry run option out of the parameter generator and into the write API
-        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
-        self.dry_run = dry_run
-        if self.dry_run is not _settings._default_dry_run:
-            warnings.warn(
-                "The dry run behavior has moved to the :meth:`waves.scons_extensions.ParameterGenerator.write` method "
-                "and will be removed from the ParameterGenerator initialization in v1. Please move dry run behavior to "
-                "the `write` method API call"
-            )
         self.write_meta = write_meta
 
         if self.output_file_template is not None and self.output_file is not None:
@@ -232,7 +222,7 @@ class ParameterGenerator(ABC):
     def write(
         self,
         output_file_type: typing.Union[_settings._allowable_output_file_typing, None] = None,
-        dry_run: typing.Optional[bool] = None,
+        dry_run: typing.Optional[bool] = _settings._default_dry_run,
     ) -> None:
         """Write the parameter study to STDOUT or an output file.
 
@@ -258,12 +248,6 @@ class ParameterGenerator(ABC):
         """
         if output_file_type is None:
             output_file_type = self.output_file_type
-        # TODO: move the dry run option out of the parameter generator and into the write API
-        # Drop the None default, use the ``_settings._default_dry_run`` default, and stop performing the ``self.``
-        # assignment.
-        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
-        if dry_run is None:
-            dry_run = self.dry_run
 
         self.output_directory.mkdir(parents=True, exist_ok=True)
 
@@ -327,14 +311,8 @@ class ParameterGenerator(ABC):
                 if isinstance(parameter_study_object, dict)
                 else f"{parameter_study_object}\n"
             )
-            # TODO: move the dry run option out of the parameter generator and into the write API
-            # e.g. drop the ``self.``
-            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
             if self.output_file and not dry_run:
                 conditional_write_function(self.output_file, parameter_study_object)
-            # TODO: move the dry run option out of the parameter generator and into the write API
-            # e.g. drop the ``self.``
-            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
             elif self.output_file and dry_run:
                 sys.stdout.write(f"{self.output_file.resolve()}\n{output_text}")
             else:
@@ -346,9 +324,6 @@ class ParameterGenerator(ABC):
                 text = yaml.safe_dump(parameters) if isinstance(parameters, dict) else f"{parameters}\n"
                 if self.overwrite or not set_path.is_file():
                     # If dry run is specified, print the files that would have been written to stdout
-                    # TODO: move the dry run option out of the parameter generator and into the write API
-                    # e.g. drop the ``self.``
-                    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
                     if dry_run:
                         sys.stdout.write(f"{set_path.resolve()}\n{text}")
                     else:

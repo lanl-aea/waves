@@ -2534,15 +2534,6 @@ parameter_study_write_cases = {
         ["actually_a_yaml_file0.h5", "actually_a_yaml_file1.h5"],
         does_not_raise(),
     ),
-    # TODO: move the dry run option out of the parameter generator and into the write API
-    # Change to move dry run into write kwargs
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/859
-    "dry run is set": (
-        parameter_generators.CartesianProduct({"one": [1, 2]}, dry_run=True),
-        {},
-        [],
-        pytest.raises(RuntimeError),
-    ),
 }
 
 
