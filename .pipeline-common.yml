@@ -96,7 +96,7 @@
     - conda activate ${prefix}
     - conda info
   after_script:
-    - rm -r $PWD/conda-environment $PWD/conda-pkgs $PWD/${conda_artifacts_directory} || true
+    - rm -r $PWD/conda-environment $PWD/conda-pkgs || true
 
 .developer-test: &developer-test
   script:
