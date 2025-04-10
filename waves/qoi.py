@@ -584,7 +584,7 @@ def _get_commit_date(commit):
 def _add_commit_date(ds):
     try:
         return ds.assign_coords(
-            date=("commit", list(map(_get_commit_date, ds["commit"].values)))
+            date=("commit", (_get_commit_date(commit) for commit in  ds["commit"]))
         )
     except KeyError:
         return ds
