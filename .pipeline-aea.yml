@@ -116,11 +116,13 @@ aea-conda-deploy:
 
 aea-pip-build:
   extends:
-    - .linux-cached-environment
+    - .nix-job-environment
     - .pip-build
   stage: test
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
+  variables:
+    environment_file: "pip-build.yml"
   artifacts:
     expire_in: '2 hrs'
     paths:
@@ -133,13 +135,14 @@ aea-pip-build:
 
 pypi-pip-build:
   extends:
-    - .linux-cached-environment
+    - .nix-job-environment
     - .pip-build
   stage: test
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
   variables:
+    environment_file: "pip-build.yml"
     distribution_name: "waves-workflows"
   tags:
     - shell
