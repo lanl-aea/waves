@@ -27,10 +27,10 @@ include: ".pipeline-common.yml"
   - conda env create --prefix $prefix --file $environment_file --yes
   - conda activate $prefix
 
-win-fast-test:
+win-developer-test:
   extends:
     - .win-job-environment
-    - .fast-test-no-third-party
+    - .developer-test-no-third-party
   stage: test
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"

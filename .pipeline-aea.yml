@@ -17,10 +17,10 @@ aea-environment:
     - aea
     - linux
 
-aea-fast-test:
+aea-developer-test:
   extends:
     - .linux-cached-environment
-    - .fast-test
+    - .developer-test
   stage: test
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"

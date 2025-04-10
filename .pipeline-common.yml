@@ -94,7 +94,7 @@
     - conda activate ${prefix}
     - conda info
 
-.fast-test: &fast-test
+.developer-test: &developer-test
   script:
     - function check_directory_variable () { echo "$1"; if [[ -z $1 ]] || [[ ! -d $1 ]]; then exit 1; fi; }
     - check_directory_variable "${abaqus_command_prefix}"
@@ -110,7 +110,7 @@
         coverage_format: cobertura
         path: build/pytest/coverage.xml
 
-.fast-test-no-third-party: &fast-test-no-third-party
+.developer-test-no-third-party: &developer-no-third-party
   script:
     - scons regression --keep-going
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'

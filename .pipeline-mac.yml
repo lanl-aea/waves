@@ -3,10 +3,10 @@ stages:
 
 include: ".pipeline-common.yml"
 
-mac-fast-test:
+mac-developer-test:
   extends:
     - .nix-job-environment
-    - .fast-test-no-third-party
+    - .developer-test-no-third-party
   stage: test
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"

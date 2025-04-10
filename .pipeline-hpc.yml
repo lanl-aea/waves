@@ -28,7 +28,7 @@ hpc-environment:
     - rocinante
     - shell
 
-hpc-fast-test:
+hpc-developer-test:
   extends:
     - .linux-cached-environment
   stage: test
@@ -42,7 +42,7 @@ hpc-fast-test:
     abaqus_command_prefix: "/usr/projects/ea/abaqus/Commands"
     cubit_command_prefix: "/usr/projects/ea/Cubit"
   script:
-    # TODO: Remove HPC specific fast-test script when HPC CI TeXLive builds are fixed
+    # TODO: Remove HPC specific developer-test script when HPC CI TeXLive builds are fixed
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
     # Job variables
     - echo ${abaqus_command_prefix}
