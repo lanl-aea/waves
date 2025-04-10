@@ -14,6 +14,8 @@ Breaking changes
   ``parameter_study_write`` pseudo-builder (:issue:`883`, :merge:`1167`). By `Kyle Brindley`_.
 - Remove the parameter generator class dry run API option in favor of the write method API (:issue:`859`,
   :merge:`1166`). By `Kyle Brindley`_.
+- Deprecate old naming convention for project help messages in favor of ``project_help_`` naming convention
+  (:issue:`862`, :merge:`1168`). By `Kyle Brindley`_.
 
 ********************
 0.12.10 (2025-04-10)
