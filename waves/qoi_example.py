@@ -11,7 +11,7 @@ load = qoi.create_qoi(
     long_name="Axial Load",
     description="Axial load through component XYZ",
     group="Assembly ABC Preload",
-    commit="abcdef",
+    version="abcdef",
 )
 gap = qoi.create_qoi(
     name="gap",
@@ -20,7 +20,7 @@ gap = qoi.create_qoi(
     long_name="Radial gap",
     description="Radial gap between components A and B",
     group="Assembly ABC Preload",
-    commit="abcdef",
+    version="abcdef",
 )
 
 # Combine QOIs into calculated QOIs set
@@ -58,7 +58,7 @@ load_2 = qoi.create_qoi(
     long_name="Transverse load",
     description="Transverse load through component D",
     group="Assembly DEF Preload",
-    commit="abcdef",
+    version="abcdef",
 )
 stress = qoi.create_qoi(
     name="stress",
@@ -67,7 +67,7 @@ stress = qoi.create_qoi(
     long_name="Membrane stress",
     description="Membrane stress in component E",
     group="Assembly DEF Preload",
-    commit="abcdef",
+    version="abcdef",
 )
 sim_2_qois = qoi.create_qoi_set((load_2, stress))
 
@@ -95,7 +95,7 @@ commit_2_qois = qoi.create_qoi_archive(
             long_name="Axial Load",
             description="Axial load through component XYZ",
             group="Assembly ABC Preload",
-            commit="ghijkl",
+            version="ghijkl",
         ),
         qoi.create_qoi(
             name="gap",
@@ -107,7 +107,7 @@ commit_2_qois = qoi.create_qoi_archive(
             long_name="Radial gap",
             description="Radial gap between components A and B",
             group="Assembly ABC Preload",
-            commit="ghijkl",
+            version="ghijkl",
         ),
         qoi.create_qoi(
             name="load",
@@ -116,7 +116,7 @@ commit_2_qois = qoi.create_qoi_archive(
             long_name="Transverse load",
             description="Transverse load through component D",
             group="Assembly DEF Preload",
-            commit="ghijkl",
+            version="ghijkl",
         ),
         qoi.create_qoi(
             name="stress",
@@ -125,7 +125,7 @@ commit_2_qois = qoi.create_qoi_archive(
             long_name="Membrane stress",
             description="Membrane stress in component E",
             group="Assembly DEF Preload",
-            commit="ghijkl",
+            version="ghijkl",
         )
     )
 )
@@ -133,7 +133,7 @@ commit_2_qois.to_netcdf("commit_2_qois.h5")
 
 # Merge archives
 all_commit_qois = qoi.merge_qoi_archives((commit_1_qois, commit_2_qois))
-all_commit_qois
+print(all_commit_qois)
 
 # Create QOI history report
 #qoi.qoi_history_report(all_commit_qois, "qoi_history.pdf")
@@ -148,7 +148,7 @@ set_0_qoi = qoi.create_qoi(
     description="Axial load through component XYZ",
     group="Assembly ABC Preload set_0",
     set_name="set_0",
-    commit="abcdef",
+    version="abcdef",
 )
 set_1_qoi = qoi.create_qoi(
     name="load",
@@ -158,7 +158,7 @@ set_1_qoi = qoi.create_qoi(
     description="Axial load through component XYZ",
     group="Assembly ABC Preload set_1",
     set_name="set_1",
-    commit="abcdef",
+    version="abcdef",
 )
 set_2_qoi = qoi.create_qoi(
     name="load",
@@ -168,7 +168,7 @@ set_2_qoi = qoi.create_qoi(
     description="Axial load through component XYZ",
     group="Assembly ABC Preload set_2",
     set_name="set_2",
-    commit="abcdef",
+    version="abcdef",
 )
 set_3_qoi = qoi.create_qoi(
     name="load",
@@ -178,7 +178,7 @@ set_3_qoi = qoi.create_qoi(
     description="Axial load through component XYZ",
     group="Assembly ABC Preload set_3",
     set_name="set_3",
-    commit="abcdef",
+    version="abcdef",
 )
 
 study = waves.parameter_generators.CartesianProduct(

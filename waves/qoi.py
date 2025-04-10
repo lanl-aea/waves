@@ -48,7 +48,7 @@ def create_qoi(
         If no tolerances are specified, the calculated QOI will always be considered within tolerance.
     **attrs
         Attributes to associate with the QOI.
-        Recommended attributes are: group, units, description, long_name, commit.
+        Recommended attributes are: group, units, description, long_name, version.
         Together ``name`` and ``attrs['group']`` should distinguish each QOI from every other QOI in the Mod/Sim
         repository.
         In other words, ``group`` should be as specific as possible, e.g., "Local Test XYZ Assembly Preload" instead of
@@ -166,12 +166,12 @@ def _qoi_group(qoi):
 
 
 def create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataTree:
-    """Create a QOI DataTree spanning multiple simulations and git commits.
+    """Create a QOI DataTree spanning multiple simulations and versions.
 
     Parameters
     ----------
     qois
-        Sequence of QOIs. Each QOI must have a "commit" and "group" attribute.
+        Sequence of QOIs. Each QOI must have a "version" and "group" attribute.
 
     Returns
     -------
@@ -181,20 +181,20 @@ def create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataTr
     dt = xarray.DataTree()
     # Creates a group for each "group" attribute
     for group, qois in itertools.groupby(sorted(qois, key=_qoi_group), key=_qoi_group):
-        # Move "commit" from attribute to dimension for each DataArray and merge to Dataset
-        ds = xarray.merge((qoi.expand_dims(commit=[qoi.attrs["commit"]]) for qoi in qois), combine_attrs="drop_conflicts")
+        # Move "version" from attribute to dimension for each DataArray and merge to Dataset
+        ds = xarray.merge((qoi.expand_dims(version=[qoi.attrs["version"]]) for qoi in qois), combine_attrs="drop_conflicts")
         # Add dataset as a node in the DataTree
         dt[group] = ds
     return dt
 
 
 def merge_qoi_archives(qoi_archives: typing.Iterable[xarray.DataTree]) -> xarray.DataTree:
-    """Merge QOI archives by concatenating leaf datasets along the "commit" dimension.
+    """Merge QOI archives by concatenating leaf datasets along the "version" dimension.
 
     Parameters
     ----------
     qoi_archives
-        QOI archives. Each leaf dataset must have a "commit" dimension.
+        QOI archives. Each leaf dataset must have a "version" dimension.
 
     Returns
     -------
@@ -404,7 +404,7 @@ def write_qoi_report(qoi_archive, output, plots_per_page=16):
     """Write a QOI report to a PDF.
 
     QOI archive must contain QOIs with only the "value_type" dimension. Multi-dimensional QOIs and QOI values across
-    multiple commits cannot be plotted using this function.
+    multiple versions cannot be plotted using this function.
     """
     with PdfPages(output) as pdf:
         for qoi_group in qoi_archive.leaves:
@@ -469,7 +469,7 @@ def plot_scalar_qoi_history(qoi, ax, date_min, date_max):
 def qoi_history_report(qoi_archive, output, plots_per_page=8):
     """Plot history of QOI values from QOI archive"""
     qoi_archive = qoi_archive.map_over_datasets(_add_commit_date)
-    qoi_archive = qoi_archive.map_over_datasets(_sort_by_commit_date)
+    qoi_archive = qoi_archive.map_over_datasets(_sort_by_date)
     open_figure = False
     date_min = min(node.ds.date.min() for node in qoi_archive.leaves)
     date_max = max(node.ds.date.max() for node in qoi_archive.leaves)
@@ -478,7 +478,7 @@ def qoi_history_report(qoi_archive, output, plots_per_page=8):
             plot_num = 0
             for qoi in qoi_group.ds.data_vars.values():
                 if (
-                    qoi.where(numpy.isfinite(qoi)).dropna("commit", how="all").size == 0
+                    qoi.where(numpy.isfinite(qoi)).dropna("version", how="all").size == 0
                 ):  # Would be an empty plot
                     continue  # Don't increment plot_num
                 ax_num = (
@@ -531,13 +531,13 @@ def _get_commit_date(commit):
 def _add_commit_date(ds):
     try:
         return ds.assign_coords(
-            date=("commit", (_get_commit_date(commit) for commit in  ds["commit"]))
+            date=("version", (_get_commit_date(commit) for commit in  ds["version"]))
         )
     except KeyError:
         return ds
 
 
-def _sort_by_commit_date(ds):
+def _sort_by_date(ds):
     try:
         return ds.sortby("date")
     except KeyError:
@@ -664,8 +664,8 @@ def plot_archive(output, qoi_archive_h5):
 @cli.command()
 @click.option("--output", help="Report file", type=click.Path())
 @click.option(
-    "--commit",
-    help="override existing QOI 'commit' attributes with this commit hash.",
+    "--version",
+    help="override existing QOI 'version' attributes with this text (e.g. a git commit hash).",
     type=str,
     default="",
 )
@@ -675,12 +675,12 @@ def plot_archive(output, qoi_archive_h5):
     nargs=-1,
     type=click.Path(exists=True, path_type=pathlib.Path),
 )
-def archive(output, commit, qoi_set_files):
-    """Archive QOI sets from a single commit to an H5 file."""
+def archive(output, version, qoi_set_files):
+    """Archive QOI sets from a single version to an H5 file."""
     qoi_sets = (read_qoi_set(qoi_set_file) for qoi_set_file in qoi_set_files)
     qois = (qoi for qoi_set in qoi_sets for qoi in qoi_set.values())
-    if commit:
-        qois = (qoi.assign_attrs(commit=commit) for qoi in qois)
+    if version:
+        qois = (qoi.assign_attrs(version=version) for qoi in qois)
     create_qoi_archive(qois).to_netcdf(output, engine="h5netcdf")
 
 
