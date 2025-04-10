@@ -26,7 +26,7 @@ jobs:
           miniforge-version: latest
       - name: Conda environment
         shell: powershell
-        run: conda install boa conda-build 'setuptools>=64' 'setuptools_scm>=8' --yes
+        run: conda env update --file conda-build.yml
       - name: Conda build
         shell: powershell
         run: $env:VERSION=(python -m setuptools_scm); conda mambabuild recipe --channel conda-forge --no-anaconda-upload --output-folder conda-bld
@@ -47,7 +47,7 @@ jobs:
           miniforge-version: latest
       - name: Conda environment
         shell: bash -el {0}
-        run: conda install boa conda-build 'setuptools>=64' 'setuptools_scm>=8' --yes
+        run: conda env update --file conda-build.yml
       - name: Conda build
         shell: bash -el {0}
         run: VERSION=$(python -m setuptools_scm) conda mambabuild recipe --channel conda-forge --no-anaconda-upload --output-folder conda-bld

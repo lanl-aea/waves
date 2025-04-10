@@ -23,7 +23,7 @@ jobs:
           miniforge-version: latest
       - name: Conda environment
         shell: bash -el {0}
-        run: conda install python-build pip 'scons>=4' 'setuptools>=64' 'setuptools_scm>=8' 'sphinx>=7.1' sphinx-argparse 'sphinx-copybutton>=0.5.1' sphinx-book-theme sphinx-design sphinxcontrib-bibtex --yes
+        run: conda env update --file pip-build.yml --yes
       - name: pip build
         shell: bash -el {0}
         run: scons build --distribution-name=waves-workflows
@@ -72,7 +72,7 @@ jobs:
           miniforge-version: latest
       - name: Conda environment
         shell: bash -el {0}
-        run: conda install 'scons>=4' 'setuptools>=64' 'setuptools_scm>=8' 'sphinx>=7.1' sphinx-argparse 'sphinx-copybutton>=0.5.1' sphinx-book-theme sphinx-design sphinxcontrib-bibtex --yes
+        run: conda env update --file pip-build.yml --yes
       - name: Build PDF documentation
         shell: bash -el {0}
         run: scons latexpdf
