@@ -1,6 +1,7 @@
 import xarray
 
 import qoi
+import waves
 
 # Create multiple QOIs
 load = qoi.create_qoi(
@@ -135,5 +136,62 @@ all_commit_qois = qoi.merge_qoi_archives((commit_1_qois, commit_2_qois))
 all_commit_qois
 
 # Create QOI history report
-qoi.qoi_history_report(all_commit_qois, "qoi_history.pdf")
+#qoi.qoi_history_report(all_commit_qois, "qoi_history.pdf")
+
+# Create QOI set with set_name attribute for parameter studies
+# Group must still be unique
+set_0_qoi = qoi.create_qoi(
+    name="load",
+    calculated=5.0,
+    units="N",
+    long_name="Axial Load",
+    description="Axial load through component XYZ",
+    group="Assembly ABC Preload set_0",
+    set_name="set_0",
+    commit="abcdef",
+)
+set_1_qoi = qoi.create_qoi(
+    name="load",
+    calculated=6.0,
+    units="N",
+    long_name="Axial Load",
+    description="Axial load through component XYZ",
+    group="Assembly ABC Preload set_1",
+    set_name="set_1",
+    commit="abcdef",
+)
+set_2_qoi = qoi.create_qoi(
+    name="load",
+    calculated=7.0,
+    units="N",
+    long_name="Axial Load",
+    description="Axial load through component XYZ",
+    group="Assembly ABC Preload set_2",
+    set_name="set_2",
+    commit="abcdef",
+)
+set_3_qoi = qoi.create_qoi(
+    name="load",
+    calculated=8.0,
+    units="N",
+    long_name="Axial Load",
+    description="Axial load through component XYZ",
+    group="Assembly ABC Preload set_3",
+    set_name="set_3",
+    commit="abcdef",
+)
+
+study = waves.parameter_generators.CartesianProduct(
+    {"height": [1.0, 2.0], "width": [0.2, 0.4]},
+    output_file="study.h5",
+    set_name_template="set_@number",
+)
+study.parameter_study
+qoi_study = qoi.create_qoi_study((set_0_qoi, set_1_qoi, set_2_qoi, set_3_qoi), study.parameter_study)
+qoi_study
+
+# Reindex on independent parameters
+qoi_study = qoi_study.set_index(set_name=("height", "width")).unstack("set_name")
+qoi_study
+qoi_study.sel(height=2.0)
 

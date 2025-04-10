@@ -16,7 +16,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 
 def extract_set_name(
     input_file: pathlib.Path,
-    regex: str = r"parameter_set[0-9]+|set[0-9]+",
+    regex: str = r"parameter_set_?[0-9]+|set_?[0-9]+",
     index: int = -1,
 ) -> str:
     """Extract a set name from a file path by regular expression.
