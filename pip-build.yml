@@ -1,0 +1,15 @@
+channels:
+  - conda-forge
+
+dependencies:
+  - pip
+  - python-build
+  - scons >=4
+  - setuptools >=64
+  - setuptools_scm >=8
+  - sphinx >=7.1
+  - sphinx-argparse
+  - sphinx-book-theme
+  - sphinx-copybutton >=0.5.1
+  - sphinx-design
+  - sphinxcontrib-bibtex
