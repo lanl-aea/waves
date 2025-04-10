@@ -1,17 +1,17 @@
 from __future__ import annotations
-from pathlib import Path
-from typing import Literal, Iterable, Any
+import pathlib
+import typing
 import shlex
 import subprocess
 import functools
 import re
-from itertools import groupby
+import itertools
 
-import numpy as np
-import xarray as xr
-import pandas as pd
+import numpy
+import xarray
+import pandas
 import click
-import matplotlib.pyplot as plt
+import matplotlib.pyplot
 from matplotlib.backends.backend_pdf import PdfPages
 import seaborn
 
@@ -29,7 +29,7 @@ def extract_set_name(
     Parameters
     ----------
     input_file
-        pathlib Path object to search for a set name
+        pathlib.Path object to search for a set name
     regex
         the regular expression to use when searching for a set name
     index
@@ -50,16 +50,16 @@ def extract_set_name(
 
 def create_qoi(
     name: str,
-    calculated: float = np.nan,
-    expected: float = np.nan,
-    lower_rtol: float = np.nan,
-    upper_rtol: float = np.nan,
-    lower_atol: float = np.nan,
-    upper_atol: float = np.nan,
-    lower_limit: float = np.nan,
-    upper_limit: float = np.nan,
+    calculated: float = numpy.nan,
+    expected: float = numpy.nan,
+    lower_rtol: float = numpy.nan,
+    upper_rtol: float = numpy.nan,
+    lower_atol: float = numpy.nan,
+    upper_atol: float = numpy.nan,
+    lower_limit: float = numpy.nan,
+    upper_limit: float = numpy.nan,
     **attrs,
-) -> xr.DataArray:
+) -> xarray.DataArray:
     """Create a QOI DataArray.
 
     If you create a QOI with calculated values, and a separate QOI with only expected values, you can combine them with
@@ -90,8 +90,8 @@ def create_qoi(
         just "Preload".
     """
     if (
-        np.isnan(expected)
-        & np.isfinite([lower_rtol, upper_rtol, lower_atol, upper_atol]).any()
+        numpy.isnan(expected)
+        & numpy.isfinite([lower_rtol, upper_rtol, lower_atol, upper_atol]).any()
     ):
         raise ValueError(
             "Relative and absolute tolerances were specified without an expected value."
@@ -102,8 +102,8 @@ def create_qoi(
         expected + abs(expected * upper_rtol),
     ]
     upper = min(
-        [candidate for candidate in upper_candidates if not np.isnan(candidate)],
-        default=np.nan,
+        [candidate for candidate in upper_candidates if not numpy.isnan(candidate)],
+        default=numpy.nan,
     )
     lower_candidates = [
         lower_limit,
@@ -111,12 +111,12 @@ def create_qoi(
         expected - abs(expected * lower_rtol),
     ]
     lower = max(
-        [candidate for candidate in lower_candidates if not np.isnan(candidate)],
-        default=np.nan,
+        [candidate for candidate in lower_candidates if not numpy.isnan(candidate)],
+        default=numpy.nan,
     )
     if lower > upper:
         raise ValueError(f"Upper limit is lower than the lower limit.")
-    return xr.DataArray(
+    return xarray.DataArray(
         data=[calculated, expected, lower, upper],
         coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
         name=name,
@@ -124,7 +124,7 @@ def create_qoi(
     )
 
 
-def create_qoi_set(qois: Iterable[xr.DataArray]) -> xr.Dataset:
+def create_qoi_set(qois: typing.Iterable[xarray.DataArray]) -> xarray.Dataset:
     """Create a QOI dataset containing multiple QOIs from a single simulation.
 
     This operation combines multiple QOIs (``xarray.DataArray``s) into a single "QOI Set" (``xarray.Dataset``) using
@@ -147,15 +147,15 @@ def create_qoi_set(qois: Iterable[xr.DataArray]) -> xr.Dataset:
     qoi_set
         QOI Set containing each QOI as a separate data variable.
     """
-    qoi_set = xr.merge(qois, combine_attrs="drop_conflicts")
+    qoi_set = xarray.merge(qois, combine_attrs="drop_conflicts")
     # Keep all attributes at the data variable level
     qoi_set.attrs = dict()
     return qoi_set
 
 
 def create_qoi_study(
-    qois: Iterable[xr.DataArray], parameter_study: xr.Dataset = None
-) -> xr.Dataset:
+    qois: typing.Iterable[xarray.DataArray], parameter_study: xarray.Dataset = None
+) -> xarray.Dataset:
     """Create a QOI Dataset spanning multiple simulations.
 
     This function combines multiple QOIs (``xarray.DataArray``s) into a single "QOI Study" (``xarray.Dataset``) using
@@ -178,7 +178,7 @@ def create_qoi_study(
     """
     # Move "group" from attribute to dimension for each DataArray, and merge
     try:
-        qoi_study = xr.merge(
+        qoi_study = xarray.merge(
             [qoi.expand_dims(group=[qoi.attrs["group"]]) for qoi in qois],
             combine_attrs="drop_conflicts",
         )
@@ -202,7 +202,7 @@ def create_qoi_study(
             )
         # Convert parameter study variables to coordinates
         parameter_study = parameter_study.set_coords(parameter_study)
-        qoi_study = xr.merge(
+        qoi_study = xarray.merge(
             (qoi_study, parameter_study), combine_attrs="drop_conflicts"
         )
     return qoi_study
@@ -213,7 +213,7 @@ def _qoi_group(qoi):
     return qoi.attrs["group"]
 
 
-def create_qoi_archive(qois: Iterable[xr.DataArray]) -> xr.DataTree:
+def create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataTree:
     """Create a QOI DataTree spanning multiple simulations and git commits.
 
     Parameters
@@ -224,19 +224,19 @@ def create_qoi_archive(qois: Iterable[xr.DataArray]) -> xr.DataTree:
     Returns
     -------
     qoi_archive
-        xr.DataTree
+        xarray.DataTree
     """
-    dt = xr.DataTree()
+    dt = xarray.DataTree()
     # Creates a group for each "group" attribute
-    for group, qois in groupby(sorted(qois, key=_qoi_group), key=_qoi_group):
+    for group, qois in itertools.groupby(sorted(qois, key=_qoi_group), key=_qoi_group):
         # Move "commit" from attribute to dimension for each DataArray and merge to Dataset
-        ds = xr.merge((qoi.expand_dims(commit=[qoi.attrs["commit"]]) for qoi in qois))
+        ds = xarray.merge((qoi.expand_dims(commit=[qoi.attrs["commit"]]) for qoi in qois))
         # Add dataset as a node in the DataTree
         dt[group] = ds
     return dt
 
 
-def merge_qoi_archives(qoi_archives: Iterable[xr.DataTree]) -> xr.DataTree:
+def merge_qoi_archives(qoi_archives: typing.Iterable[xarray.DataTree]) -> xarray.DataTree:
     """Merge QOI archives by concatenating leaf datasets along the "commit" dimension.
 
     Parameters
@@ -255,15 +255,15 @@ def merge_qoi_archives(qoi_archives: Iterable[xr.DataTree]) -> xr.DataTree:
     attribute of each QOI.
     """
     leaves = [qoi.ds for archive in qoi_archives for qoi in archive.leaves]
-    dt = xr.DataTree()
+    dt = xarray.DataTree()
     # Create a group for each "group" attribute
-    for group, qois in groupby(sorted(leaves, key=_qoi_group), key=_qoi_group):
+    for group, qois in itertools.groupby(sorted(leaves, key=_qoi_group), key=_qoi_group):
         # Merge dataset as a node in the DataTree
-        dt[group] = xr.merge(qois)
+        dt[group] = xarray.merge(qois)
     return dt
 
 
-def read_qoi_set(from_file: Path) -> xr.Dataset:
+def read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
     """Create a QOI Dataset from a CSV or H5 file.
 
     Parameters
@@ -280,23 +280,23 @@ def read_qoi_set(from_file: Path) -> xr.Dataset:
         Empty entries (or anything read as ``nan``) will not be included in ``kwargs``.
         All QOIs will be merged into a single ``xarray.Dataset`` using ``create_qoi_set()``.
     """
-    if not isinstance(from_file, Path):
-        from_file = Path(from_file)
+    if not isinstance(from_file, pathlib.Path):
+        from_file = pathlib.Path(from_file)
     if from_file.suffix.lower() == ".csv":
-        df = pd.read_csv(from_file)
+        df = pandas.read_csv(from_file)
         # Empty entries in the CSV end up as NaN in the DataFrame.
         # Drop NaNs so they aren't passed as kwargs to `create_qoi()`
         qoi_kwargs = [row.dropna().to_dict() for idx, row in df.iterrows()]
         return create_qoi_set([create_qoi(**kwargs) for kwargs in qoi_kwargs])
     if from_file.suffix.lower() == ".h5":
-        return xr.open_dataset(from_file)
+        return xarray.open_dataset(from_file)
 
 
-def add_tolerance_attribute(qoi_set: xr.Dataset) -> None:
+def add_tolerance_attribute(qoi_set: xarray.Dataset) -> None:
     """Adds a "within_tolerance" attribute to each QOI in a QOI Dataset in place."""
     for qoi in qoi_set.data_vars.values():
-        lower_limit = qoi.sel(value_type="lower_limit").fillna(-np.inf)
-        upper_limit = qoi.sel(value_type="upper_limit").fillna(np.inf)
+        lower_limit = qoi.sel(value_type="lower_limit").fillna(-numpy.inf)
+        upper_limit = qoi.sel(value_type="upper_limit").fillna(numpy.inf)
         calculated = qoi.sel(value_type="calculated")
         # netcdf4 doesn't support bool, so make it an int
         qoi.attrs["within_tolerance"] = int(
@@ -304,7 +304,7 @@ def add_tolerance_attribute(qoi_set: xr.Dataset) -> None:
         )
 
 
-def write_qoi_set_to_csv(qoi_set: xr.Dataset, output: Path) -> None:
+def write_qoi_set_to_csv(qoi_set: xarray.Dataset, output: pathlib.Path) -> None:
     """Writes a QOI Dataset to a CSV file.
 
     Parameters
@@ -316,11 +316,11 @@ def write_qoi_set_to_csv(qoi_set: xr.Dataset, output: Path) -> None:
     """
     df = qoi_set.to_dataarray("name").to_pandas()
     # Convert attributes to data variables so they end up as columns in the CSV
-    attrs = pd.DataFrame.from_dict(
+    attrs = pandas.DataFrame.from_dict(
         {qoi: qoi_set[qoi].attrs for qoi in qoi_set}, orient="index"
     )
     attrs.index.name = "name"
-    pd.concat((df, attrs), axis="columns").to_csv(output)
+    pandas.concat((df, attrs), axis="columns").to_csv(output)
 
 
 def plot_qoi_tolerance_check(qoi, ax):
@@ -335,7 +335,7 @@ def plot_qoi_tolerance_check(qoi, ax):
         try:
             calculated = qoi.sel(value_type="calculated").item()
         except KeyError:
-            calculated = np.nan
+            calculated = numpy.nan
         try:
             within_tolerance = qoi.attrs["within_tolerance"]
         except KeyError:
@@ -343,15 +343,15 @@ def plot_qoi_tolerance_check(qoi, ax):
         try:
             lower_limit = qoi.sel(value_type="lower_limit").item()
         except KeyError:
-            lower_limit = -np.inf
+            lower_limit = -numpy.inf
         try:
             upper_limit = qoi.sel(value_type="upper_limit").item()
         except KeyError:
-            upper_limit = np.inf
+            upper_limit = numpy.inf
         try:
             expected = qoi.sel(value_type="expected").item()
         except KeyError:
-            expected = np.nan
+            expected = numpy.nan
         try:
             name = qoi.attrs["long_name"]
         except KeyError:
@@ -374,17 +374,17 @@ def plot_scalar_tolerance_check(
         # Bar color is always green if within tolerance, red otherwise
         bar_color = "green" if within_tolerance else "red"
         # If tolerance on both sides, within_tolerance is good, out of tolerance is bad
-        if np.isfinite([lower_limit, upper_limit]).all():
+        if numpy.isfinite([lower_limit, upper_limit]).all():
             lower_line = lower_limit
             upper_line = upper_limit
             colors = ["black", "black"]
         # If unbounded upper, assume convergence to 0 is good
-        elif not np.isfinite(upper_limit):
+        elif not numpy.isfinite(upper_limit):
             lower_line = lower_limit
             upper_line = 0.0
             colors = ["black", "blue"]
         # If unbounded lower, assume convergence to 0 is good
-        elif not np.isfinite(lower_limit):
+        elif not numpy.isfinite(lower_limit):
             lower_line = 0.0
             upper_line = upper_limit
             colors = ["blue", "black"]
@@ -417,7 +417,7 @@ def plot_scalar_tolerance_check(
         ax.annotate(
             f"{calculated:.3e}",
             xy=(calculated, 0.555),
-            xytext=(np.clip(calculated, xmin, xmax), 0.55),
+            xytext=(numpy.clip(calculated, xmin, xmax), 0.55),
             annotation_clip=False,
             ha="center",
             fontsize=8,
@@ -469,7 +469,7 @@ def write_qoi_report(qoi_archive, output, plots_per_page=16):
                 )  # ax_num goes from 0 to (plots_per_page - 1)
                 if ax_num == 0:  # starting new page
                     open_figure = True
-                    fig, axes = plt.subplots(  # create a new figure for a new page
+                    fig, axes = matplotlib.pyplot.subplots(  # create a new figure for a new page
                         plots_per_page,
                         figsize=(8.5, 11),
                         gridspec_kw=dict(
@@ -488,14 +488,14 @@ def write_qoi_report(qoi_archive, output, plots_per_page=16):
                 plot_qoi_tolerance_check(qoi, axes[ax_num])
                 if ax_num == plots_per_page - 1:  # ending a page
                     pdf.savefig()  # save current figure to a page
-                    plt.close()
+                    matplotlib.pyplot.close()
                     open_figure = False
             if open_figure:  # If a figure is still open (hasn't been saved to a page)
                 for ax in axes[ax_num + 1 :]:  # Clear remaining empty plots on the page
                     ax.clear()
                     ax.axis("off")
                 pdf.savefig()
-                plt.close()
+                matplotlib.pyplot.close()
 
 
 def _get_plotting_name(qoi):
@@ -533,7 +533,7 @@ def qoi_history_report(qoi_archive, output, plots_per_page=8):
             plot_num = 0
             for qoi in qoi_group.ds.data_vars.values():
                 if (
-                    qoi.where(np.isfinite(qoi)).dropna("commit", how="all").size == 0
+                    qoi.where(numpy.isfinite(qoi)).dropna("commit", how="all").size == 0
                 ):  # Would be an empty plot
                     continue  # Don't increment plot_num
                 ax_num = (
@@ -541,7 +541,7 @@ def qoi_history_report(qoi_archive, output, plots_per_page=8):
                 )  # ax_num goes from 0 to (plots_per_page - 1)
                 if ax_num == 0:  # Starting new page
                     open_figure = True
-                    fig, axes = plt.subplots(  # Create a new figure for a new page
+                    fig, axes = matplotlib.pyplot.subplots(  # Create a new figure for a new page
                         plots_per_page,
                         figsize=(8.5, 11),
                         gridspec_kw=dict(
@@ -560,7 +560,7 @@ def qoi_history_report(qoi_archive, output, plots_per_page=8):
                 plot_scalar_qoi_history(qoi, axes[ax_num], date_min, date_max)
                 if ax_num == plots_per_page - 1:  # Ending a page
                     pdf.savefig()  # save current figure to a page
-                    plt.close()
+                    matplotlib.pyplot.close()
                     open_figure = False
                 plot_num += 1
             if open_figure:  # If a figure is still open (hasn't been saved to a page)
@@ -568,10 +568,10 @@ def qoi_history_report(qoi_archive, output, plots_per_page=8):
                     ax.clear()
                     ax.axis("off")
                 pdf.savefig()
-                plt.close()
+                matplotlib.pyplot.close()
 
 
-def plot_qoi_study(qoi_study: xr.Dataset, output_prefix: str) -> None:
+def plot_qoi_study(qoi_study: xarray.Dataset, output_prefix: str) -> None:
     """Generates histograms and pairplots for each QOI.
 
     Parameters
@@ -584,16 +584,16 @@ def plot_qoi_study(qoi_study: xr.Dataset, output_prefix: str) -> None:
     """
     for qoi in qoi_study.values():
         qoi.plot.hist()
-        plt.savefig(f"{output_prefix}_{qoi.name}_histogram.png")
-        plt.close()
+        matplotlib.pyplot.savefig(f"{output_prefix}_{qoi.name}_histogram.png")
+        matplotlib.pyplot.close()
         seaborn.pairplot(qoi.reset_coords().to_dataframe(), corner=True)
-        plt.savefig(f"{output_prefix}_{qoi.name}_pairplot.png")
-        plt.close()
+        matplotlib.pyplot.savefig(f"{output_prefix}_{qoi.name}_pairplot.png")
+        matplotlib.pyplot.close()
 
 
 @functools.cache
 def _get_commit_date(commit):
-    return pd.to_datetime(
+    return pandas.to_datetime(
         subprocess.run(
             shlex.split(f"git show --no-patch --no-notes --pretty='%cs' {commit}"),
             capture_output=True,
@@ -628,19 +628,19 @@ def cli():
 @click.option(
     "--calculated",
     help="Calculated value CSV",
-    type=click.Path(exists=True, path_type=Path),
+    type=click.Path(exists=True, path_type=pathlib.Path),
 )
 @click.option(
     "--expected",
     help="Expected value CSV",
-    type=click.Path(exists=True, path_type=Path),
+    type=click.Path(exists=True, path_type=pathlib.Path),
 )
 def accept(calculated, expected):
     """Update expected QOI values to match the currently calculated values."""
     qoi_set = read_qoi_set(calculated)
     calculated_df = qoi_set.to_dataarray("name").to_pandas()
     # Use str data type to avoid all numerical rounding
-    expected_df = pd.read_csv(expected, header=0, index_col=0, dtype=str)
+    expected_df = pandas.read_csv(expected, header=0, index_col=0, dtype=str)
     # Add/drop expected QOIs to match calculated QOIs
     new = expected_df.reindex(calculated_df.index)
     # Update expected values
@@ -654,7 +654,7 @@ def accept(calculated, expected):
 @click.option(
     "--diff",
     help="Calculated vs expected diff CSV file",
-    type=click.Path(path_type=Path),
+    type=click.Path(path_type=pathlib.Path),
 )
 def check(diff):
     """Check results of calculated vs expected QOI comparison"""
@@ -665,19 +665,19 @@ def check(diff):
 
 @cli.command()
 @click.option(
-    "--expected", help="Expected values", type=click.Path(exists=True, path_type=Path)
+    "--expected", help="Expected values", type=click.Path(exists=True, path_type=pathlib.Path)
 )
 @click.option(
     "--calculated",
     help="Calculated values",
-    type=click.Path(exists=True, path_type=Path),
+    type=click.Path(exists=True, path_type=pathlib.Path),
 )
 @click.option(
-    "--output", help="Difference from expected values", type=click.Path(path_type=Path)
+    "--output", help="Difference from expected values", type=click.Path(path_type=pathlib.Path)
 )
 def diff(calculated, expected, output):
     """Compare calculated QOIs to expected values."""
-    qoi_set = xr.merge((read_qoi_set(calculated), read_qoi_set(expected)))
+    qoi_set = xarray.merge((read_qoi_set(calculated), read_qoi_set(expected)))
     add_tolerance_attribute(qoi_set)
     write_qoi_set_to_csv(qoi_set, output)
 
@@ -686,23 +686,23 @@ def diff(calculated, expected, output):
 @click.option(
     "--parameter-study-file",
     help="Path to parameter study definition file",
-    type=click.Path(exists=True, path_type=Path),
+    type=click.Path(exists=True, path_type=pathlib.Path),
 )
 @click.option(
-    "--output-file", help="post-processing output file", type=click.Path(path_type=Path)
+    "--output-file", help="post-processing output file", type=click.Path(path_type=pathlib.Path)
 )
 @click.option("--plot", help="Generate simple QOI plots", is_flag=True)
 @click.argument(
     "qoi-set-files",
     required=True,
     nargs=-1,
-    type=click.Path(exists=True, path_type=Path),
+    type=click.Path(exists=True, path_type=pathlib.Path),
 )
 def aggregate(parameter_study_file, output_file, plot, qoi_set_files):
     """Aggregate QOIs across multiple simulations, e.g. across sets in a parameter study."""
     qoi_sets = (read_qoi_set(qoi_set_file) for qoi_set_file in qoi_set_files)
     qois = (qoi for qoi_set in qoi_sets for qoi in qoi_set.values())
-    parameter_study = xr.open_dataset(parameter_study_file)
+    parameter_study = xarray.open_dataset(parameter_study_file)
     qoi_study = create_qoi_study(qois, parameter_study=parameter_study)
     qoi_study.to_netcdf(output_file)
     if plot:
@@ -715,11 +715,11 @@ def aggregate(parameter_study_file, output_file, plot, qoi_set_files):
     "qoi-archive-h5",
     required=True,
     nargs=1,
-    type=click.Path(exists=True, path_type=Path),
+    type=click.Path(exists=True, path_type=pathlib.Path),
 )
 def report(output, qoi_archive_h5):
     """Generate a QOI test report."""
-    qoi_archive = xr.open_datatree(qoi_archive_h5, engine="h5netcdf")
+    qoi_archive = xarray.open_datatree(qoi_archive_h5, engine="h5netcdf")
     write_qoi_report(qoi_archive, output)
 
 
@@ -731,11 +731,11 @@ def report(output, qoi_archive_h5):
     "qoi-archive-h5",
     required=True,
     nargs=-1,
-    type=click.Path(exists=True, path_type=Path),
+    type=click.Path(exists=True, path_type=pathlib.Path),
 )
 def plot_archive(output, qoi_archive_h5):
     """Plot QOI values over the Mod/Sim history."""
-    qoi_archive = merge_qoi_archives((xr.open_datatree(f) for f in qoi_archive_h5))
+    qoi_archive = merge_qoi_archives((xarray.open_datatree(f) for f in qoi_archive_h5))
     qoi_history_report(qoi_archive, output)
 
 
@@ -751,7 +751,7 @@ def plot_archive(output, qoi_archive_h5):
     "qoi-set-files",
     required=True,
     nargs=-1,
-    type=click.Path(exists=True, path_type=Path),
+    type=click.Path(exists=True, path_type=pathlib.Path),
 )
 def archive(output, commit, qoi_set_files):
     """Archive QOI sets from a single commit to an H5 file."""
