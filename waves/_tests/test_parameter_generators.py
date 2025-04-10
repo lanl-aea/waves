@@ -551,7 +551,7 @@ class TestParameterGenerator:
         """
         kwargs = {"sets": sets}
         for output_file_type in _settings._allowable_output_file_types:
-            WriteNoDryRun = DummyGenerator(
+            WriteParameterGenerator = DummyGenerator(
                 schema,
                 output_file_template=template,
                 output_file_type=output_file_type,
