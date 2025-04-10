@@ -17,6 +17,8 @@ Breaking changes
 - Deprecate old naming convention for project help messages in favor of ``project_help_`` naming convention
   (:issue:`862`, :merge:`1168`). By `Kyle Brindley`_.
 - Remove deprecated set and hash coordinate keys (:issue:`855`, :merge:`1169`). By `Kyle Brindley`_.
+- Remove duplicate Abaqus option handling and convert to flag style options in AbaqusPseudoBuilder (:issue:`867`,
+  :merge:`1170`). By `Kyle Brindley`_.
 
 ********************
 0.12.10 (2025-04-10)

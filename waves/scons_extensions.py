@@ -1971,7 +1971,7 @@ class AbaqusPseudoBuilder:
 
     # TODO: address Explicit-specific restart files: ['abq', 'pac', 'sel']
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/821
-    # TODO: allow for import jobs that don't execute Abaqus with oldjob=
+    # TODO: allow for import jobs that don't execute Abaqus with ``-oldjob {}``
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/822
     def __call__(
         self,
@@ -2007,7 +2007,7 @@ class AbaqusPseudoBuilder:
         :param oldjob: Name of job to restart/import.
         :param write_restart: If True, add restart files to target list. This is required if you want to use these
             restart files for a restart job.
-        :param double: Passthrough option for Abaqus' `double=`.
+        :param double: Passthrough option for Abaqus' ``-double ${double}``.
         :param extra_sources: Additional sources to supply to builder.
         :param extra_targets: Additional targets to supply to builder.
         :param extra_options: Additional Abaqus options to supply to builder. Should not include any Abaqus options
@@ -2088,29 +2088,26 @@ class AbaqusPseudoBuilder:
 
         # Specify job name
         job_option = pathlib.Path(job).name
-        options += f" job={job_option}"
 
         # Specify "double" option, if requested
         if double:
-            options += f" double={double}"
+            options += f" -double {double}"
 
         # Like Abaqus, assume input file is <job>.inp unless otherwise specified
-        if inp:
-            options += f" input={pathlib.Path(inp).name}"
-        else:
+        if inp is None:
             inp = f"{job}.inp"
-        # Include input file as first source
+        # Include input file as first source. Root input file *must* be first file is sources list.
         sources.append(inp)
 
         targets.extend([f"{job}{extension}" for extension in _settings._abaqus_standard_extensions])
 
         # Always allow user to override CPUs with CLI option and exclude CPUs from build signature
-        options += f" $(cpus={self.override_cpus or cpus}$)"
+        options += f" $(-cpus {self.override_cpus or cpus}$)"
 
         # If restarting a job, add old job restart files to sources
         if oldjob:
             sources.extend([f"{oldjob}{extension}" for extension in _settings._abaqus_standard_restart_extensions])
-            options += f" oldjob={oldjob}"
+            options += f" -oldjob {oldjob}"
 
         # If writing restart files, add restart files to targets
         if write_restart:
@@ -2119,7 +2116,7 @@ class AbaqusPseudoBuilder:
         # If user subroutine is specified, add user subroutine to sources
         if user:
             sources.append(user)
-            options += f" user={user}"
+            options += f" -user {user}"
 
         # Append user-specified arguments for builder
         if extra_sources is not None:
