@@ -7,6 +7,7 @@
     scratch_root: "/scratch"
     abaqus_command_prefix: "/apps/abaqus/Commands"
     cubit_command_prefix: "/apps"
+    conda_artifacts_directory: "conda-bld"
   before_script:
     - function check_directory_variable () { echo "$1"; if [[ -z $1 ]] || [[ ! -d $1 ]]; then exit 1; fi; }
     - check_directory_variable "${conda_installation}"
@@ -15,6 +16,8 @@
     - check_directory_variable "${scratch_root}"
     - check_directory_variable "${abaqus_command_prefix}"
     - check_directory_variable "${cubit_command_prefix}"
+    - echo ${conda_artifacts_directory}
+    - if [[ -z ${conda_artifacts_directory} ]]; then exit 1; fi
     # Remove when AEA RHEL ``all_proxy`` environment variable is removed or set to empty
     - export all_proxy=''
     # Handle mixed AEA/HPC jobs
@@ -31,7 +34,6 @@
     - if [[ -z ${environment_path} ]]; then exit 1; fi
     - if [[ -d ${environment_path} ]]; then module load ${project_environment}; else source ${conda_installation}/etc/profile.d/conda.sh; fi
     - conda info
-    - conda_artifacts_directory='conda-bld'
 
 # Jobs using this template *must* include the .linux-cached-environment before script.
 .build-cached-environment: &build-cached-environment
@@ -69,21 +71,21 @@
     GIT_STRATEGY: clone
     conda_installation: "/apps/anaconda/3.12-anaconda-2024.10"
     environment_file: "environment.yml"
+    conda_artifacts_directory: "conda-bld"
   before_script:
     - function check_directory_variable () { echo "$1"; if [[ -z $1 ]] || [[ ! -d $1 ]]; then exit 1; fi; }
     - check_directory_variable "${conda_installation}"
     - echo ${environment_file}
     - if [[ -z ${environment_file} ]]; then exit 1; fi
+    - echo ${conda_artifacts_directory}
+    - if [[ -z ${conda_artifacts_directory} ]]; then exit 1; fi
     # Common job variables
     - prefix="$PWD/conda-environment"
     - conda_pkgs_dirs="$PWD/conda-pkgs"
-    - conda_artifacts_directory="conda-bld"
     - echo ${prefix}
     - echo ${conda_pkgs_dirs}
-    - echo ${conda_artifacts_directory}
     - if [[ -z ${prefix} ]]; then exit 1; fi
     - if [[ -z ${conda_pkgs_dirs} ]]; then exit 1; fi
-    - if [[ -z ${conda_artifacts_directory} ]]; then exit 1; fi
     # Put texlive on PATH for AEA/HPC
     - module load texlive || true
     # Environment creation
@@ -93,6 +95,8 @@
     - conda env create --prefix ${prefix} --file ${environment_file} --yes
     - conda activate ${prefix}
     - conda info
+  after_script:
+    - rm -r $PWD/conda-environment $PWD/conda-pkgs $PWD/${conda_artifacts_directory} || true
 
 .developer-test: &developer-test
   script:

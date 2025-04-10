@@ -8,24 +8,27 @@ include: ".pipeline-common.yml"
     GIT_STRATEGY: clone
     environment_file: "environment-win.yml"
   before_script:
-  - $PSVersionTable
-  - if ([string]::IsNullOrEmpty($environment_file)) { exit 1 }
-  # Common job variables
-  - $conda_installation="C:\ProgramData\anaconda3"
-  - $prefix="$pwd\conda-environment"
-  - $conda_pkgs_dirs="$pwd\conda-pkgs"
-  - Write-Output $conda_installation
-  - Write-Output $environment_file
-  - Write-Output $prefix
-  - Write-Output $conda_pkgs_dirs
-  - if (!(Test-Path -Path $conda_installation -PathType Container)) { exit 1 }
-  - if ([string]::IsNullOrEmpty($prefix)) { exit 1 }
-  # Environment creation
-  - $env:CONDA_PKGS_DIRS=$conda_pkgs_dirs
-  - (& "$conda_installation\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | ?{$_} | Invoke-Expression
-  - conda info
-  - conda env create --prefix $prefix --file $environment_file --yes
-  - conda activate $prefix
+    - $PSVersionTable
+    - if ([string]::IsNullOrEmpty($environment_file)) { exit 1 }
+    # Common job variables
+    - $conda_installation="C:\ProgramData\anaconda3"
+    - $prefix="$pwd\conda-environment"
+    - $conda_pkgs_dirs="$pwd\conda-pkgs"
+    - Write-Output $conda_installation
+    - Write-Output $environment_file
+    - Write-Output $prefix
+    - Write-Output $conda_pkgs_dirs
+    - if (!(Test-Path -Path $conda_installation -PathType Container)) { exit 1 }
+    - if ([string]::IsNullOrEmpty($prefix)) { exit 1 }
+    # Environment creation
+    - $env:CONDA_PKGS_DIRS=$conda_pkgs_dirs
+    - (& "$conda_installation\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | ?{$_} | Invoke-Expression
+    - conda info
+    - conda env create --prefix $prefix --file $environment_file --yes
+    - conda activate $prefix
+  after_script:
+    - Remove-Item -Recurse $pwd\conda-environment -ErrorAction Continue
+    - Remove-Item -Recurse $pwd\conda-pkgs -ErrorAction Continue
 
 win-developer-test:
   extends:
