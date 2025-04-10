@@ -1,7 +1,6 @@
 from __future__ import annotations
 import pathlib
 import typing
-import shlex
 import subprocess
 import functools
 import re
@@ -574,7 +573,7 @@ def qoi_history_report(qoi_archive, output, plots_per_page=8):
 def _get_commit_date(commit):
     return pandas.to_datetime(
         subprocess.run(
-            shlex.split(f"git show --no-patch --no-notes --pretty='%cs' {commit}"),
+            ["git", "show", "--no-patch", "--no-notes", "--pretty='%cs'", commit],
             capture_output=True,
         )
         .stdout.decode()
