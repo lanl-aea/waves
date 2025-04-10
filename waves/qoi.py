@@ -161,7 +161,7 @@ def create_qoi_study(
 
 
 def _qoi_group(qoi):
-    """Function for sorting and grouping QOIs."""
+    """Return "group" attribute of a QOI (xarray.Dataset)."""
     return qoi.attrs["group"]
 
 
