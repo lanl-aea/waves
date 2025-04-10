@@ -350,14 +350,7 @@ def plot_qoi_tolerance_check(qoi, ax):
             expected = qoi.sel(value_type="expected").item()
         except KeyError:
             expected = numpy.nan
-        try:
-            name = qoi.attrs["long_name"]
-        except KeyError:
-            name = qoi.name
-        try:
-            name = f"{name} [{qoi.attrs['units']}]"
-        except KeyError:
-            pass
+        name = _get_plotting_name(qoi)
         plot_scalar_tolerance_check(
             name, calculated, expected, lower_limit, upper_limit, within_tolerance, ax
         )
