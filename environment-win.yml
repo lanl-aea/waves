@@ -35,6 +35,5 @@ dependencies:
   - sphinx-book-theme
   - sphinx-copybutton >=0.5.1
   - sphinx-design
-  - sphinx_rtd_theme >=3
   - sphinxcontrib-bibtex
   - xarray

@@ -43,7 +43,6 @@ dependencies:
   - sphinx-book-theme
   - sphinx-copybutton >=0.5.1
   - sphinx-design
-  - sphinx_rtd_theme >=3
   - sphinxcontrib-bibtex
   - twine >=5
   # Remove explicit dependency on VTK and rely on ccx2paraview when a VTK >=9.4 version fixes the macOS crash
