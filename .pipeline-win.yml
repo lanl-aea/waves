@@ -27,8 +27,8 @@ include: ".pipeline-common.yml"
     - conda env create --prefix $prefix --file $environment_file --yes
     - conda activate $prefix
   after_script:
-    - Remove-Item -Recurse $pwd\conda-environment -ErrorAction Continue
-    - Remove-Item -Recurse $pwd\conda-pkgs -ErrorAction Continue
+    - Remove-Item -Force -Recurse $pwd\conda-environment -ErrorAction Continue
+    - Remove-Item -Force -Recurse $pwd\conda-pkgs -ErrorAction Continue
 
 win-developer-test:
   extends:
