@@ -118,7 +118,7 @@ def create_qoi_set(qois: typing.Iterable[xarray.DataArray]) -> xarray.Dataset:
     return qoi_set
 
 
-def create_qoi_study(
+def _create_qoi_study(
     qois: typing.Iterable[xarray.DataArray], parameter_study: xarray.Dataset = None
 ) -> xarray.Dataset:
     """Create a QOI Dataset spanning multiple simulations.
@@ -165,7 +165,7 @@ def _qoi_group(qoi):
     return qoi.attrs["group"]
 
 
-def create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataTree:
+def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataTree:
     """Create a QOI DataTree spanning multiple simulations and versions.
 
     Parameters
@@ -194,7 +194,7 @@ def create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataTr
     return dt
 
 
-def merge_qoi_archives(qoi_archives: typing.Iterable[xarray.DataTree]) -> xarray.DataTree:
+def _merge_qoi_archives(qoi_archives: typing.Iterable[xarray.DataTree]) -> xarray.DataTree:
     """Merge QOI archives by concatenating leaf datasets along the "version" dimension.
 
     Parameters
@@ -221,7 +221,7 @@ def merge_qoi_archives(qoi_archives: typing.Iterable[xarray.DataTree]) -> xarray
     return dt
 
 
-def read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
+def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
     """Create a QOI Dataset from a CSV or H5 file.
 
     Parameters
@@ -250,7 +250,7 @@ def read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
         return xarray.open_dataset(from_file)
 
 
-def add_tolerance_attribute(qoi_set: xarray.Dataset) -> None:
+def _add_tolerance_attribute(qoi_set: xarray.Dataset) -> None:
     """Adds a "within_tolerance" attribute to each QOI in a QOI Dataset in place."""
     for qoi in qoi_set.data_vars.values():
         lower_limit = qoi.sel(value_type="lower_limit").fillna(-numpy.inf)
@@ -262,7 +262,7 @@ def add_tolerance_attribute(qoi_set: xarray.Dataset) -> None:
         )
 
 
-def write_qoi_set_to_csv(qoi_set: xarray.Dataset, output: pathlib.Path) -> None:
+def _write_qoi_set_to_csv(qoi_set: xarray.Dataset, output: pathlib.Path) -> None:
     """Writes a QOI Dataset to a CSV file.
 
     Parameters
@@ -281,7 +281,7 @@ def write_qoi_set_to_csv(qoi_set: xarray.Dataset, output: pathlib.Path) -> None:
     pandas.concat((df, attrs), axis="columns").to_csv(output)
 
 
-def plot_qoi_tolerance_check(qoi, ax):
+def _plot_qoi_tolerance_check(qoi, ax):
     """Plot QOI tolerance check."""
     if "value_type" not in qoi.dims:
         ax.clear()
@@ -311,12 +311,12 @@ def plot_qoi_tolerance_check(qoi, ax):
         except KeyError:
             expected = numpy.nan
         name = _get_plotting_name(qoi)
-        plot_scalar_tolerance_check(
+        _plot_scalar_tolerance_check(
             name, calculated, expected, lower_limit, upper_limit, within_tolerance, ax
         )
 
 
-def plot_scalar_tolerance_check(
+def _plot_scalar_tolerance_check(
     name, calculated, expected, lower_limit, upper_limit, within_tolerance, ax
 ):
     """Plots a tolerance check for a scalar QOI DataArray."""
@@ -406,7 +406,7 @@ def plot_scalar_tolerance_check(
     )
 
 
-def write_qoi_report(qoi_archive, output, plots_per_page=16):
+def _write_qoi_report(qoi_archive, output, plots_per_page=16):
     """Write a QOI report to a PDF.
 
     QOI archive must contain QOIs with only the "value_type" dimension. Multi-dimensional QOIs and QOI values across
@@ -436,7 +436,7 @@ def write_qoi_report(qoi_archive, output, plots_per_page=16):
                         ),
                     )
                 fig.suptitle(qoi_group.name)
-                plot_qoi_tolerance_check(qoi, axes[ax_num])
+                _plot_qoi_tolerance_check(qoi, axes[ax_num])
                 if ax_num == plots_per_page - 1:  # ending a page
                     pdf.savefig()  # save current figure to a page
                     matplotlib.pyplot.close()
@@ -461,7 +461,7 @@ def _get_plotting_name(qoi):
     return name
 
 
-def plot_scalar_qoi_history(qoi, ax, date_min, date_max):
+def _plot_scalar_qoi_history(qoi, ax, date_min, date_max):
     """Plot Scalar QOI history."""
     name = _get_plotting_name(qoi)
     group = qoi.attrs["group"]
@@ -472,7 +472,7 @@ def plot_scalar_qoi_history(qoi, ax, date_min, date_max):
     ax.set_title(name)
 
 
-def qoi_history_report(qoi_archive, output, plots_per_page=8, add_git_commit_date=True):
+def _qoi_history_report(qoi_archive, output, plots_per_page=8, add_git_commit_date=True):
     """Plot history of QOI values from QOI archive.
     """
     if add_git_commit_date:
@@ -510,7 +510,7 @@ def qoi_history_report(qoi_archive, output, plots_per_page=8, add_git_commit_dat
                         ),
                     )
                     fig.suptitle(qoi_group.name, fontweight="bold")
-                plot_scalar_qoi_history(qoi, axes[ax_num], date_min, date_max)
+                _plot_scalar_qoi_history(qoi, axes[ax_num], date_min, date_max)
                 if ax_num == plots_per_page - 1:  # Ending a page
                     pdf.savefig()  # save current figure to a page
                     matplotlib.pyplot.close()
@@ -570,7 +570,7 @@ def cli():
 )
 def accept(calculated, expected):
     """Update expected QOI values to match the currently calculated values."""
-    qoi_set = read_qoi_set(calculated)
+    qoi_set = _read_qoi_set(calculated)
     calculated_df = qoi_set.to_dataarray("name").to_pandas()
     # Use str data type to avoid all numerical rounding
     expected_df = pandas.read_csv(expected, header=0, index_col=0, dtype=str)
@@ -591,7 +591,7 @@ def accept(calculated, expected):
 )
 def check(diff):
     """Check results of calculated vs expected QOI comparison"""
-    qoi_set = read_qoi_set(diff)
+    qoi_set = _read_qoi_set(diff)
     if qoi_set.filter_by_attrs(within_tolerance=0):
         raise ValueError(f"Not all QOIs are within tolerance. See {diff}.")
 
@@ -610,9 +610,9 @@ def check(diff):
 )
 def diff(calculated, expected, output):
     """Compare calculated QOIs to expected values."""
-    qoi_set = xarray.merge((read_qoi_set(calculated), read_qoi_set(expected)))
-    add_tolerance_attribute(qoi_set)
-    write_qoi_set_to_csv(qoi_set, output)
+    qoi_set = xarray.merge((_read_qoi_set(calculated), _read_qoi_set(expected)))
+    _add_tolerance_attribute(qoi_set)
+    _write_qoi_set_to_csv(qoi_set, output)
 
 
 @cli.command()
@@ -632,10 +632,10 @@ def diff(calculated, expected, output):
 )
 def aggregate(parameter_study_file, output_file, qoi_set_files):
     """Aggregate QOIs across multiple simulations, e.g. across sets in a parameter study."""
-    qoi_sets = (read_qoi_set(qoi_set_file) for qoi_set_file in qoi_set_files)
+    qoi_sets = (_read_qoi_set(qoi_set_file) for qoi_set_file in qoi_set_files)
     qois = (qoi for qoi_set in qoi_sets for qoi in qoi_set.values())
     parameter_study = xarray.open_dataset(parameter_study_file)
-    qoi_study = create_qoi_study(qois, parameter_study=parameter_study)
+    qoi_study = _create_qoi_study(qois, parameter_study=parameter_study)
     qoi_study.to_netcdf(output_file)
 
 
@@ -650,7 +650,7 @@ def aggregate(parameter_study_file, output_file, qoi_set_files):
 def report(output, qoi_archive_h5):
     """Generate a QOI test report."""
     qoi_archive = xarray.open_datatree(qoi_archive_h5, engine="h5netcdf")
-    write_qoi_report(qoi_archive, output)
+    _write_qoi_report(qoi_archive, output)
 
 
 @cli.command()
@@ -665,8 +665,8 @@ def report(output, qoi_archive_h5):
 )
 def plot_archive(output, qoi_archive_h5):
     """Plot QOI values over the Mod/Sim history."""
-    qoi_archive = merge_qoi_archives((xarray.open_datatree(f) for f in qoi_archive_h5))
-    qoi_history_report(qoi_archive, output)
+    qoi_archive = _merge_qoi_archives((xarray.open_datatree(f) for f in qoi_archive_h5))
+    _qoi_history_report(qoi_archive, output)
 
 
 @cli.command()
@@ -685,11 +685,11 @@ def plot_archive(output, qoi_archive_h5):
 )
 def archive(output, version, qoi_set_files):
     """Archive QOI sets from a single version to an H5 file."""
-    qoi_sets = (read_qoi_set(qoi_set_file) for qoi_set_file in qoi_set_files)
+    qoi_sets = (_read_qoi_set(qoi_set_file) for qoi_set_file in qoi_set_files)
     qois = (qoi for qoi_set in qoi_sets for qoi in qoi_set.values())
     if version:
         qois = (qoi.assign_attrs(version=version) for qoi in qois)
-    create_qoi_archive(qois).to_netcdf(output, engine="h5netcdf")
+    _create_qoi_archive(qois).to_netcdf(output, engine="h5netcdf")
 
 
 if __name__ == "__main__":
