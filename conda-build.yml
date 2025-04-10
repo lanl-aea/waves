@@ -3,6 +3,6 @@ channels:
 
 dependencies:
   - boa
-  - scons
+  - scons >=4
   - setuptools >=64
   - setuptools_scm >=8

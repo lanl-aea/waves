@@ -6,7 +6,7 @@ include: ".pipeline-common.yml"
 .win-job-environment: &win-job-environment
   variables:
     GIT_STRATEGY: clone
-    environment_file: "environment.yml"
+    environment_file: "environment-win.yml"
   before_script:
   - $PSVersionTable
   - if ([string]::IsNullOrEmpty($environment_file)) { exit 1 }
@@ -70,6 +70,7 @@ win-pip-build:
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
   variables:
     distribution_name: "waves"
+    environment_file: "pip-build.yml"
   script:
     # Job variables
     - scons pyproject.toml

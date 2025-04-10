@@ -43,6 +43,7 @@ mac-pip-build:
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
   variables:
     conda_installation: "/Users/gitlab-runner/anaconda3"
+    environment_file: "pip-build.yml"
   tags:
     - macos
     - pn2301275
