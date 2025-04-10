@@ -12,6 +12,7 @@ load = qoi.create_qoi(
     description="Axial load through component XYZ",
     group="Assembly ABC Preload",
     version="abcdef",
+    date="2025-01-01",
 )
 gap = qoi.create_qoi(
     name="gap",
@@ -21,6 +22,7 @@ gap = qoi.create_qoi(
     description="Radial gap between components A and B",
     group="Assembly ABC Preload",
     version="abcdef",
+    date="2025-01-01",
 )
 
 # Combine QOIs into calculated QOIs set
@@ -59,6 +61,7 @@ load_2 = qoi.create_qoi(
     description="Transverse load through component D",
     group="Assembly DEF Preload",
     version="abcdef",
+    date="2025-01-01",
 )
 stress = qoi.create_qoi(
     name="stress",
@@ -68,6 +71,7 @@ stress = qoi.create_qoi(
     description="Membrane stress in component E",
     group="Assembly DEF Preload",
     version="abcdef",
+    date="2025-01-01",
 )
 sim_2_qois = qoi.create_qoi_set((load_2, stress))
 
@@ -96,6 +100,7 @@ commit_2_qois = qoi.create_qoi_archive(
             description="Axial load through component XYZ",
             group="Assembly ABC Preload",
             version="ghijkl",
+            date="2025-02-01",
         ),
         qoi.create_qoi(
             name="gap",
@@ -108,6 +113,7 @@ commit_2_qois = qoi.create_qoi_archive(
             description="Radial gap between components A and B",
             group="Assembly ABC Preload",
             version="ghijkl",
+            date="2025-02-01",
         ),
         qoi.create_qoi(
             name="load",
@@ -117,6 +123,7 @@ commit_2_qois = qoi.create_qoi_archive(
             description="Transverse load through component D",
             group="Assembly DEF Preload",
             version="ghijkl",
+            date="2025-02-01",
         ),
         qoi.create_qoi(
             name="stress",
@@ -126,6 +133,7 @@ commit_2_qois = qoi.create_qoi_archive(
             description="Membrane stress in component E",
             group="Assembly DEF Preload",
             version="ghijkl",
+            date="2025-02-01",
         )
     )
 )
@@ -136,7 +144,7 @@ all_commit_qois = qoi.merge_qoi_archives((commit_1_qois, commit_2_qois))
 print(all_commit_qois)
 
 # Create QOI history report
-#qoi.qoi_history_report(all_commit_qois, "qoi_history.pdf")
+qoi.qoi_history_report(all_commit_qois, "qoi_history.pdf", add_git_commit_date=False)
 
 # Create QOI set with set_name attribute for parameter studies
 # Group must still be unique

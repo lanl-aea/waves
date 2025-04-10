@@ -182,7 +182,13 @@ def create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataTr
     # Creates a group for each "group" attribute
     for group, qois in itertools.groupby(sorted(qois, key=_qoi_group), key=_qoi_group):
         # Move "version" from attribute to dimension for each DataArray and merge to Dataset
-        ds = xarray.merge((qoi.expand_dims(version=[qoi.attrs["version"]]) for qoi in qois), combine_attrs="drop_conflicts")
+        qois = [qoi.expand_dims(version=[qoi.attrs["version"]]) for qoi in qois]
+        # Try to add date as a coordinate if available
+        try:
+            qois = [qoi.assign_coords(date=("version", [qoi.attrs["date"]])) for qoi in qois]
+        except KeyError:
+            pass  # date coordinate is not needed
+        ds = xarray.merge(qois, combine_attrs="drop_conflicts")
         # Add dataset as a node in the DataTree
         dt[group] = ds
     return dt
@@ -466,9 +472,11 @@ def plot_scalar_qoi_history(qoi, ax, date_min, date_max):
     ax.set_title(name)
 
 
-def qoi_history_report(qoi_archive, output, plots_per_page=8):
-    """Plot history of QOI values from QOI archive"""
-    qoi_archive = qoi_archive.map_over_datasets(_add_commit_date)
+def qoi_history_report(qoi_archive, output, plots_per_page=8, add_git_commit_date=True):
+    """Plot history of QOI values from QOI archive.
+    """
+    if add_git_commit_date:
+        qoi_archive = qoi_archive.map_over_datasets(_add_commit_date)
     qoi_archive = qoi_archive.map_over_datasets(_sort_by_date)
     open_figure = False
     date_min = min(node.ds.date.min() for node in qoi_archive.leaves)
@@ -531,7 +539,7 @@ def _get_commit_date(commit):
 def _add_commit_date(ds):
     try:
         return ds.assign_coords(
-            date=("version", (_get_commit_date(commit) for commit in  ds["version"]))
+            date=("version", (_get_commit_date(commit) for commit in ds["version"]))
         )
     except KeyError:
         return ds
