@@ -8,6 +8,11 @@ Changelog
 0.13.0 (unreleased)
 *******************
 
+Breaking changes
+================
+- Remove the parameter generator ``scons_write`` action from the public API in favor of the full
+  ``parameter_study_write`` pseudo-builder (:issue:`883`, :merge:`1167`). By `Kyle Brindley`_.
+
 ********************
 0.12.10 (2025-04-10)
 ********************

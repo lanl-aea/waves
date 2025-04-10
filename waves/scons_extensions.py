@@ -4011,7 +4011,7 @@ def parameter_study_write(
     targets = env.Command(
         target=output_files,
         source=[env.Value(yaml.dump(parameter_generator.parameter_study.to_dict()))],
-        action=[SCons.Action.Action(parameter_generator.scons_write, varlist=["output_file_type"])],
+        action=[SCons.Action.Action(parameter_generator._scons_write, varlist=["output_file_type"])],
         **kwargs,
     )
 

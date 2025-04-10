@@ -290,9 +290,7 @@ class ParameterGenerator(ABC):
             dry_run=dry_run,
         )
 
-    # TODO: Make this a semi-private, internal API function by adding a leading underscore
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/883
-    def scons_write(self, target: list, source: list, env) -> None:
+    def _scons_write(self, target: list, source: list, env) -> None:
         """`SCons Python build function`_ wrapper for the parameter generator's write() function.
 
         Reference: https://scons.org/doc/production/HTML/scons-user/ch17s04.html
@@ -305,11 +303,6 @@ class ParameterGenerator(ABC):
         :param source: The source file list of SCons.Node.FS.File objects
         :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
         """
-        warnings.warn(
-            "Calling the ``waves.parameter_generators.ParameterGenerator.scons_write` method directly will be "
-            "deprecated in favor of a full pseudo-builder in v1. Please use "
-            "``waves.scons_extensions.parameter_study_write`` instead."
-        )
         kwargs = {}
         if "output_file_type" in env:
             kwargs.update({"output_file_type": env["output_file_type"]})

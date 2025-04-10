@@ -424,7 +424,7 @@ class TestParameterGenerator:
         sconsWrite = DummyGenerator({})
         with patch("waves.parameter_generators.ParameterGenerator.write") as mock_write:
             # Fake an SCons environment with a dictionary. SCons environment object not required for unit testing
-            sconsWrite.scons_write([], [], env)
+            sconsWrite._scons_write([], [], env)
         mock_write.assert_called_once_with(**expected_kwargs)
 
     # fmt: off
