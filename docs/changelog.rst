@@ -16,6 +16,8 @@ Documentation
 Internal Changes
 ================
 - Explicitly limit VTK version that crashes on macOS (:issue:`899`, :merge:`1161`). By `Kyle Brindley`_.
+- Overhaul CI environment handling to reduce collisions in Conda operations and simplify CI job cleanup (:merge:`1163`).
+  By `Kyle Brindley`_.
 
 Enhancements
 ============
