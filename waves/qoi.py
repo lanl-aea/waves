@@ -13,7 +13,6 @@ import pandas
 import click
 import matplotlib.pyplot
 from matplotlib.backends.backend_pdf import PdfPages
-import seaborn
 
 
 def extract_set_name(
@@ -571,26 +570,6 @@ def qoi_history_report(qoi_archive, output, plots_per_page=8):
                 matplotlib.pyplot.close()
 
 
-def plot_qoi_study(qoi_study: xarray.Dataset, output_prefix: str) -> None:
-    """Generates histograms and pairplots for each QOI.
-
-    Parameters
-    ----------
-    qoi_study
-        Scalar QOIs indexed on the "set_name" dimension.
-    output_prefix
-        Save plots to ``f"{output_prefix}_{qoi}_histogram.png"`` and ``f"{output_prefix}_{qoi}_pairplot.png"`` for each
-        QOI.
-    """
-    for qoi in qoi_study.values():
-        qoi.plot.hist()
-        matplotlib.pyplot.savefig(f"{output_prefix}_{qoi.name}_histogram.png")
-        matplotlib.pyplot.close()
-        seaborn.pairplot(qoi.reset_coords().to_dataframe(), corner=True)
-        matplotlib.pyplot.savefig(f"{output_prefix}_{qoi.name}_pairplot.png")
-        matplotlib.pyplot.close()
-
-
 @functools.cache
 def _get_commit_date(commit):
     return pandas.to_datetime(
@@ -691,22 +670,19 @@ def diff(calculated, expected, output):
 @click.option(
     "--output-file", help="post-processing output file", type=click.Path(path_type=pathlib.Path)
 )
-@click.option("--plot", help="Generate simple QOI plots", is_flag=True)
 @click.argument(
     "qoi-set-files",
     required=True,
     nargs=-1,
     type=click.Path(exists=True, path_type=pathlib.Path),
 )
-def aggregate(parameter_study_file, output_file, plot, qoi_set_files):
+def aggregate(parameter_study_file, output_file, qoi_set_files):
     """Aggregate QOIs across multiple simulations, e.g. across sets in a parameter study."""
     qoi_sets = (read_qoi_set(qoi_set_file) for qoi_set_file in qoi_set_files)
     qois = (qoi for qoi_set in qoi_sets for qoi in qoi_set.values())
     parameter_study = xarray.open_dataset(parameter_study_file)
     qoi_study = create_qoi_study(qois, parameter_study=parameter_study)
     qoi_study.to_netcdf(output_file)
-    if plot:
-        plot_qoi_study(qoi_study, output_file.stem)
 
 
 @cli.command()
