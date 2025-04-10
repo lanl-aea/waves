@@ -556,6 +556,11 @@ def _sort_by_date(ds):
 def cli():
     pass
 
+def get_parser() -> argparse.ArgumentParser:
+    parser = argparse.Argumentparser(add_help=False)
+    qoi_subparsers = parser.add_subparsers(help="QOI tools")
+    args, unknown = parser.parse_known_args()
+
 
 @cli.command()
 @click.option(
