@@ -110,7 +110,7 @@
         coverage_format: cobertura
         path: build/pytest/coverage.xml
 
-.developer-test-no-third-party: &developer-no-third-party
+.developer-test-no-third-party: &developer-test-no-third-party
   script:
     - scons regression --keep-going
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
