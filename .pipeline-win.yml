@@ -78,7 +78,6 @@ win-pip-build:
     - Write-Output $distribution_name
     - Write-Output $version
     - if ([string]::IsNullOrEmpty($distribution_name)) { exit 1 }
-    - if ([string]::IsNullOrEmpty($distribution_filename)) { exit 1 }
     - if ([string]::IsNullOrEmpty($version)) { exit 1 }
     # Job commands
     # Conda CI environment active
