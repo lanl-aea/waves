@@ -213,6 +213,11 @@ Local development environments
 
       $ conda activate waves-env
 
+In addition to the primary development environment file ``environment.yml``, several other environment files are
+maintained for CI jobs. For Windows developers, ``environment-win.yml`` removes packages that are not available for
+Windows and packages that are only necessary for deployment jobs. The ``conda-build.yml`` and ``pip-build.yml`` are
+stripped down to the bare essentials for building `Conda`_ and `pip`_ packages, respectively.
+
 .. env-end-do-not-remove
 
 Documentation
@@ -220,7 +225,8 @@ Documentation
 
 .. docs-start-do-not-remove
 
-The documentation build is automated with SCons as the ``documentation`` target.
+The documentation build is automated with SCons as the ``documentation`` target. The HTML documentation builds to
+``waves/build/docs/html/index.html``
 
 - Build the `WAVES`_ documentation
 

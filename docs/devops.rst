@@ -28,7 +28,7 @@ Local development environments
 AEA CI server environment
 =========================
 
-A minimal development environment for the waves project Gitlab-CI pipelines is maintained on AEA servers.
+A full development environment for the project Gitlab-CI pipelines is maintained on AEA servers.
 
 1. Add the AEA modulefiles directory
 
@@ -77,11 +77,13 @@ the Conda environment.
 
 * Git
 * Git-LFS
+* TeXLive
 * Anaconda/Miniconda/Miniforge
 
-The Windows CI server environment is created under the default Gitlab-Runner user and may not be available for
-developers. There is an ``environment-win.yml`` file maintained under version control for the Windows CI job. Windows
-developers may use this to create a local development environment that closely mirrors the linux CI environment.
+The Windows CI server environment is created under the default Gitlab-Runner user in the Gitlab-Runner build directory
+and is not be available for developers. The Windows CI jobs use a mix of the ``environment-win.yml``,
+``conda-build.yml``, and ``pip-build.yml`` files. Windows developers may use ``environment-win.yml`` to create a local
+development environment that closely mirrors the linux CI environment.
 
 MacOS CI environment
 ====================
@@ -91,11 +93,13 @@ the Conda environment.
 
 * Git
 * Git-LFS
+* TeXLive
 * Anaconda/Miniconda/Miniforge
 
-The MacOS CI server environment is created under the default Gitlab-Runner user and is not be available for developers.
-The MacOS CI server uses the full ``environment.yml`` file maintained under version control. MacOS developers may use
-this to create a local development environment that closely mirrors the linux CI environment.
+The MacOS CI server environment is created under the default Gitlab-Runner user in the Gitlab-Runner build directory and
+is not available for developers. The MacOS CI jobs use a mix of the ``environment.yml``, ``conda-build.yml``, and
+``pip-build.yml`` files. MacOS developers may use the full ``environment.yml`` file to create a local development
+environment that closely mirrors the linux CI environment.
 
 .. include:: contribution.txt
 
@@ -104,6 +108,41 @@ this to create a local development environment that closely mirrors the linux CI
 *****
 Build
 *****
+
+This project uses the `SCons`_ build system. This section will discuss some common build operations. For a full list of
+`SCons`_ command-line options and target build behavior, see the `SCons manpage`_. The `SCons manpage`_ is also
+installed with `Scons`_ in the environment and can be opened from the command-line as ``man scons`` in the `AEA Compute
+environment`_.
+
+- View project specific command-line options, default targets, and aliases
+
+  .. code-block::
+
+     $ scons -h
+
+- Build all default targets
+
+  .. code-block::
+
+     $ scons
+
+- Build a specific target
+
+  .. code-block::
+
+     $ scons <target name>
+
+- Remove the default targets' artifacts
+
+  .. code-block::
+
+     $ scons --clean
+
+- Remove *all* targets' artifacts
+
+  .. code-block::
+
+     $ scons . --clean
 
 This project may be built as a Conda or pip package. The Conda package is the preferred distribution and takes the
 default distribution name ``waves``. The Conda recipe(s) will call the pip build commands directly, so it is not
@@ -166,34 +205,13 @@ CI configuration file. The current command may be found as
 
    $ output_folder='conda-bld'
    $ mkdir ${output_folder}
-   $ VERSION=$(python -m setuptools_scm) conda build recipe --channel conda-forge --no-anaconda-upload --croot /scratch/${USER}/conda-build --output-folder ${output_folder}
+   $ VERSION=$(python -m setuptools_scm) conda build recipe --channel conda-forge --no-anaconda-upload --output-folder ${output_folder}
 
 A second recipe that bundles the LANL internally linked documentation is found in ``waves/recipe-internal`` and can be
 built similarly by replacing ``recipe`` with ``recipe-internal`` in the above command.
 
-This project uses the `SCons`_ build system. This section will discuss some common build operations. For a full list of
-`SCons`_ command-line options and target build behavior, see the `SCons manpage`_. The `SCons manpage`_ is also
-installed with `Scons`_ in the environment and can be opened from the command-line as ``man scons`` in the `AEA Compute
-environment`_. In local environments, the manpage may not be in the ``MANPATH``. You can find the manpage file and
-make them available with something similar to any of the following, in increasing order of required background
-knowledge.
-
-.. code-block::
-
-   # Activate the environment
-   $ conda activate waves-env
-
-   # Find the scons manpage file
-   $ find $CONDA_PREFIX -name scons.1
-   /path/to/waves-env/scons.1
-
-   # Open manpage directly
-   $ man $CONDA_PREFIX/scons.1
-
-   # Link SCons manpage to expected path and update MANPATH
-   $ ln -s $CONDA_PREFIX/scons.1 $CONDA_PREFIX/man/man1/scons.1
-   $ export MANPATH=$MANPATH:$CONDA_PREFIX/man
-   $ man scons
+Tutorials
+=========
 
 This project contains several, separate `SCons`_ project configurations, where the ``SConstruct`` file name indicates an
 `SCons`_ project by convention. The |PROJECT| package and documentation are defined in the ``waves/SConstruct`` file.
@@ -205,39 +223,14 @@ build commands apply to each, but must be run from their respective project conf
 When executing the tutorials or modsim template build commands directly in the repository, the |PROJECT| project root
 repository must be put on ``PYTHONPATH``. In personal (*but not shared*) virtual environments, the preferred method is
 to run ``conda develop .`` once from the project root directory. See the `Conda`_ documentation for more information
-about "development" mode installs. For shared environments, the preferred solution is to prefix the following commands
+about "development" mode installs. For shared environments, the preferred solution is to prefix the build commands
 with ``PYTHONPATH=.. ``, where it is assumed that the ``PWD`` is the tutorial or modsim template root directory.
 
-- View project specific command-line options, default targets, and aliases
+.. code-block::
 
-  .. code-block::
-
-     $ scons -h
-     ...
-
-- Build all default targets
-
-  .. code-block::
-
-     $ scons
-
-- Build a specific target
-
-  .. code-block::
-
-     $ scons <target name>
-
-- Remove the default targets' artifacts
-
-  .. code-block::
-
-     $ scons --clean
-
-- Remove *all* targets' artifacts
-
-  .. code-block::
-
-     $ scons . --clean
+   $ pwd
+   /home/roppenheimer/repos/waves/waves/modsim_template
+   $ PYTHONPATH=/home/roppenheimer/repos/waves scons -h
 
 ****
 Test
@@ -265,7 +258,6 @@ associated aliases or the collector alias ``style``.
 
 .. code-block::
 
-   $ scons flake8 black-check
    $ scons style
 
 If ``black`` reports files that should be formatted, the following alias will format files using the same command line
