@@ -1405,7 +1405,7 @@ abaqus_pseudobuilder_input = {
         {"job": "job", "user": "user.f"},
         ["job.inp"] + ["user.f"],
         [f"job{ext}" for ext in _abaqus_standard_extensions],
-        " -double both $(-cpus 1$) user=user.f",
+        " -double both $(-cpus 1$) -user user.f",
         {"job": "job"},
     ),
     "oldjob": (
@@ -1413,7 +1413,7 @@ abaqus_pseudobuilder_input = {
         {"job": "job", "oldjob": "oldjob"},
         ["job.inp"] + [f"oldjob{ext}" for ext in _abaqus_standard_restart_extensions],
         [f"job{ext}" for ext in _abaqus_standard_extensions],
-        " -double both $(-cpus 1$) oldjob=oldjob",
+        " -double both $(-cpus 1$) -oldjob oldjob",
         {"job": "job"},
     ),
     "write restart": (
@@ -1429,7 +1429,7 @@ abaqus_pseudobuilder_input = {
         {"job": "job", "double": "constraint"},
         ["job.inp"],
         [f"job{ext}" for ext in _abaqus_standard_extensions],
-        "  double=constraint $(-cpus 1$)",
+        " -double constraint $(-cpus 1$)",
         {"job": "job"},
     ),
     "extras": (
@@ -1465,7 +1465,7 @@ abaqus_pseudobuilder_input = {
         },
         ["input.inp"] + [f"oldjob{ext}" for ext in _abaqus_standard_restart_extensions] + ["user.f", "extra.inp"],
         [f"job{ext}" for ext in (_abaqus_standard_extensions + _abaqus_standard_restart_extensions)] + ["extra.odb"],
-        " -double constraint $(-cpus 2$) oldjob=oldjob user=user.f --extra-opt",
+        " -double constraint $(-cpus 2$) -oldjob oldjob -user user.f --extra-opt",
         {"job": "job", "kwarg_1": "value_1"},
     ),
 }
