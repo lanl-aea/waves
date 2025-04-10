@@ -1999,7 +1999,7 @@ class AbaqusPseudoBuilder:
             ``extra_sources`` and ``extra_targets`` to manually add them when needed.
 
         :param job: Abaqus job name *without* file extension.
-        :param inp: Abaqus input file name. Defaults to ``job``.inp.
+        :param inp: Abaqus input file name *with* file extension. Defaults to ``job``.inp.
         :param user: User subroutine.
         :param cpus: CPUs to use for simulation. Is superceded by ``override_cpus`` if provided during object
             instantiation.  The CPUs option is escaped in the action string, i.e. changing the number of CPUs will not
@@ -2097,7 +2097,7 @@ class AbaqusPseudoBuilder:
         if inp is None:
             inp = f"{job}.inp"
         # Include input file as first source. Root input file *must* be first file is sources list.
-        sources.append(inp)
+        sources.insert(0, inp)
 
         targets.extend([f"{job}{extension}" for extension in _settings._abaqus_standard_extensions])
 
