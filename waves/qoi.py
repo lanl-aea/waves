@@ -228,7 +228,7 @@ def create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataTr
     # Creates a group for each "group" attribute
     for group, qois in itertools.groupby(sorted(qois, key=_qoi_group), key=_qoi_group):
         # Move "commit" from attribute to dimension for each DataArray and merge to Dataset
-        ds = xarray.merge((qoi.expand_dims(commit=[qoi.attrs["commit"]]) for qoi in qois))
+        ds = xarray.merge((qoi.expand_dims(commit=[qoi.attrs["commit"]]) for qoi in qois), combine_attrs="drop_conflicts")
         # Add dataset as a node in the DataTree
         dt[group] = ds
     return dt
