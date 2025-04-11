@@ -90,7 +90,7 @@ win-pip-build:
     # Python venv environment active
     - python -m pip install --verbose --disable-pip-version-check --require-virtualenv --no-cache-dir build\dist\$distribution_name-$version.tar.gz pytest pytest-xdist
     - cd pip-build-test\Lib\site-packages\waves
-    - python -m pytest -vvv -n 4 -m "not systemtest"
+    - python -m pytest -vvv -n 4 -m "not require_third_party and not sphinx"
   tags:
     - powershell
     - aea

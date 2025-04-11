@@ -150,7 +150,7 @@
     - source pip-build-test/bin/activate
     - python -m pip install --verbose --disable-pip-version-check --require-virtualenv --no-cache-dir build/dist/${distribution_filename}-${version}.tar.gz pytest pytest-xdist
     - cd pip-build-test/lib/python*/site-packages/waves
-    - python -m pytest -vvv -n 4 -m "not systemtest"
+    - python -m pytest -vvv -n 4 -m "not require_third_party and not sphinx"
 
 .conda-build: &conda-build
   script:
