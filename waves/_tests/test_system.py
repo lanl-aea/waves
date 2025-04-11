@@ -695,6 +695,7 @@ def test_system(
     if system_test_directory is not None:
         system_test_directory.mkdir(parents=True, exist_ok=True)
 
+    # TODO: Move to common test utility VVV
     kwargs = {}
     temporary_directory_arguments = inspect.getfullargspec(tempfile.TemporaryDirectory).args
     if "ignore_cleanup_errors" in temporary_directory_arguments and system_test_directory is not None:
@@ -702,6 +703,7 @@ def test_system(
     temp_directory = tempfile.TemporaryDirectory(dir=system_test_directory, prefix=test_prefix, **kwargs)
     temp_path = pathlib.Path(temp_directory.name)
     temp_path.mkdir(parents=True, exist_ok=True)
+    # Move to common test utility ^^^
     template_substitution = {
         "waves_command": waves_command,
         "odb_extract_command": odb_extract_command,
