@@ -84,6 +84,32 @@ class TestCartesianProduct:
             ),
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
         ),
+        "ints and bools": (
+            {"parameter_1": [1, 2], "parameter_2": [True, False]},
+            numpy.array(
+                [
+                    [1, True],
+                    [1, False],
+                    [2, True],
+                    [2, False],
+                ],
+                dtype=object,
+            ),
+            {"parameter_1": numpy.int64, "parameter_2": bool},
+        ),
+        "float and bool": (
+            {"parameter_1": [1.0, 2.0], "parameter_2": [True, False]},
+            numpy.array(
+                [
+                    [1.0, True],
+                    [1.0, False],
+                    [2.0, True],
+                    [2.0, False],
+                ],
+                dtype=object,
+            ),
+            {"parameter_1": numpy.float64, "parameter_2": bool},
+        ),
     }
 
     @pytest.mark.parametrize(
