@@ -6,6 +6,7 @@ from contextlib import nullcontext as does_not_raise
 import pytest
 import numpy
 
+from waves import parameter_generators
 from waves.parameter_generators import CartesianProduct
 from waves._settings import _set_coordinate_key
 from waves.exceptions import SchemaValidationError
@@ -102,6 +103,15 @@ class TestCartesianProduct:
         expected_set_names = [f"parameter_set{num}" for num in range(len(expected_array))]
         set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
         assert numpy.all(set_names == expected_set_names)
+
+    @pytest.mark.parametrize(
+        "parameter_schema, expected_array, expected_types",
+        generate_io.values(),
+        ids=generate_io.keys(),
+    )
+    def test_verify_parameter_study(self, parameter_schema, expected_array, expected_types):
+        TestGenerate = CartesianProduct(parameter_schema)
+        parameter_generators._verify_parameter_study(TestGenerate.parameter_study)
 
     merge_test = {
         "single set unchanged": (
