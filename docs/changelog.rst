@@ -8,6 +8,12 @@ Changelog
 0.13.0 (unreleased)
 *******************
 
+Bug fixes
+=========
+- Remove type casting for combinations of ints/floats, ints/bools, and floats/bools during parameter study merge
+  operations. Add unit tests for set hash calculation and system tests for read from disk operations to catch more type
+  casting errors (:issue:`907`, :merge:`1173`). By `Kyle Brindley`_.
+
 Breaking changes
 ================
 - Remove the parameter generator ``scons_write`` action from the public API in favor of the full
