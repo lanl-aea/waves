@@ -9,9 +9,17 @@ from waves import parameter_generators
 
 
 test_previous_parameter_study_cases = {
-    "ints": {"ints": [1]},
-    "floats": {"floats": [1.]},
-    "ints and floats": {"ints": [1], "floats": [1.]},
+    "int": {"int": [1]},
+    "float": {"float": [1.]},
+    "str": {"str": ["a"]},
+    "bool": {"bool": [True]},
+    "int and float": {"int": [1], "float": [1.]},
+    "int and str": {"int": [1], "str": ["a"]},
+    "int and bool": {"int": [1], "bool": [True]},
+    "float and str": {"float": [1.], "str": ["a"]},
+    "float and bool": {"float": [1.], "bool": [True]},
+    "str and bool": {"str": ["a"], "bool": [True]},
+    "int, float, str, bool": {"int": [1], "float": [1.], "str": ["a"], "bool": [True]},
 }
 
 
