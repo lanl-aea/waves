@@ -35,7 +35,15 @@ def test_previous_parameter_study(
     request,
     schema,
 ) -> None:
+    """Run real system I/O from the waves.parameter_generators API and check parameter study merge behaviors
 
+    Test directory name is constructed from test ID string, with character replacements to create a valid Python
+    identifier as a conservative estimate of a valid directory name. Failed tests persist on disk.
+
+    :param system_test_directory: custom pytest decorator defined in conftest.py
+    :param request: pytest decorator with test case meta data
+    :param schema: waves.parameter_generators.CartesianProduct schema
+    """
     module_name = pathlib.Path(__file__).stem
     test_id = request.node.callspec.id
     test_prefix = _utilities.create_valid_identifier(test_id)
