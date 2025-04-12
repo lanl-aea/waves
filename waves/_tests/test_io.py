@@ -5,6 +5,7 @@ import tempfile
 import pytest
 import xarray
 
+from waves import _utilities
 from waves import parameter_generators
 
 
@@ -31,15 +32,18 @@ test_previous_parameter_study_cases = {
 )
 def test_previous_parameter_study(
     system_test_directory,
+    request,
     schema,
 ) -> None:
 
-    # TODO: construct test prefix from module basename and test name
-    test_prefix = f"test_io.test_open_parameter_study."
-    # TODO: Move to common test utility VVV
+    module_name = pathlib.Path(__file__).stem
+    test_id = request.node.callspec.id
+    test_prefix = _utilities.create_valid_identifier(test_id)
+    test_prefix = f"{module_name}.test_previous_parameter_study.{test_prefix}."
     if system_test_directory is not None:
         system_test_directory.mkdir(parents=True, exist_ok=True)
 
+    # TODO: Move to common test utility VVV
     kwargs = {}
     temporary_directory_arguments = inspect.getfullargspec(tempfile.TemporaryDirectory).args
     if "ignore_cleanup_errors" in temporary_directory_arguments and system_test_directory is not None:
