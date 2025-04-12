@@ -688,9 +688,10 @@ def test_system(
     :param commands: list of command strings for the system test
     :param fetch_options: the fetch arguments for replacement in string templates
     """
+    module_name = pathlib.Path(__file__).stem
     test_id = request.node.callspec.id
     test_prefix = _utilities.create_valid_identifier(test_id)
-    test_prefix = f"{test_prefix}."
+    test_prefix = f"{module_name}.{test_prefix}."
 
     if system_test_directory is not None:
         system_test_directory.mkdir(parents=True, exist_ok=True)
