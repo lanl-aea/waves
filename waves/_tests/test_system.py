@@ -697,6 +697,8 @@ def test_system(
         system_test_directory.mkdir(parents=True, exist_ok=True)
 
     # TODO: Move to common test utility VVV
+    # Naive move to waves/_tests/common.py resulted in every test failing with FileNotFoundError.
+    # Probably tempfile is handling some scope existence that works when inside the function but not when it's outside.
     kwargs = {}
     temporary_directory_arguments = inspect.getfullargspec(tempfile.TemporaryDirectory).args
     if "ignore_cleanup_errors" in temporary_directory_arguments and system_test_directory is not None:
