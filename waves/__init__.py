@@ -38,6 +38,7 @@ from importlib.metadata import version, PackageNotFoundError
 
 from waves import scons_extensions
 from waves import parameter_generators
+from waves import qoi
 
 
 warnings.filterwarnings(
