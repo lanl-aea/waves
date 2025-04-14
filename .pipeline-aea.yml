@@ -23,12 +23,15 @@ aea-developer-test:
     - .developer-test
   stage: test
   rules:
-    - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
-    - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
   tags:
     - shell
     - aea
     - linux
+  artifacts:
+    expire_in: '2 hrs'
+    paths:
+      - build/pytest/coverage
 
 aea-style-guide:
   extends:
@@ -222,10 +225,10 @@ pages:
     - if: $PARENT_CI_COMMIT_BRANCH == "main"
   script:
     - project_root=$PWD
-    - rm -rf public && mkdir -p public/modsim-template
-    # Ensure the ``_version.py`` file is created
-    - scons html-internal --clean && scons html-internal --unconditional-build
-    - scons pytest --clean && scons pytest
+    - rm -rf public
+    - mkdir -p public/modsim-template
+    - scons html-internal --clean
+    - scons html-internal --unconditional-build
     - cp -r build/docs/html-internal/* public/
     - cp -r build/pytest/coverage public/coverage
     # Build modsim template documentation
