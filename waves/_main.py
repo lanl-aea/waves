@@ -185,8 +185,8 @@ def get_parser() -> argparse.ArgumentParser:
 
     subparsers.add_parser(
         "qoi",
-        help="QOI tools",
-        description="QOI tools",
+        help="Quantity of interest (QOI) tools",
+        description="Quantity of interest (QOI) tools",
         parents=[_qoi.get_parser()],
     )
 
