@@ -97,10 +97,16 @@
    .. |conda-forge downloads| image:: https://img.shields.io/conda/dn/conda-forge/waves.svg?label=Conda%20downloads
       :target: https://anaconda.org/conda-forge/waves
 
+   .. |pypi version| image:: https://img.shields.io/pypi/v/waves-workflows?label=PyPI%20package
+      :target: https://pypi.org/project/waves-workflows/
+
+   .. |pypi downloads| image:: https://img.shields.io/pypi/dm/waves-workflows?label=PyPI%20downloads
+      :target: https://pypi.org/project/waves-workflows/
+
    .. |zenodo| image:: https://zenodo.org/badge/591388602.svg
       :target: https://zenodo.org/badge/latestdoi/591388602
 
-   |github-pages| |github-release| |conda-forge version| |conda-forge downloads| |zenodo|
+   |github-pages| |github-release| |conda-forge version| |conda-forge downloads| |pypi version| |pypi downloads| |zenodo|
 
    |
 
