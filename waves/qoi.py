@@ -43,7 +43,7 @@ def create_qoi(
         ``min((upper_limit, expected + upper_atol, expected + abs(expected * upper_rtol))``.
         Unspecified tolerances are not considered in the tolerance check.
         If no tolerances are specified, the calculated QOI will always be considered within tolerance.
-    :param **attrs: Attributes to associate with the QOI.
+    :param attrs: Attributes to associate with the QOI.
         Recommended attributes are: group, units, description, long_name, version.
         Together ``name`` and ``attrs['group']`` should distinguish each QOI from every other QOI in the Mod/Sim
         repository.
