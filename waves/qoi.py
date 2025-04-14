@@ -228,7 +228,7 @@ def _add_tolerance_attribute(qoi_set: xarray.Dataset) -> None:
         qoi.attrs["within_tolerance"] = int(((calculated >= lower_limit) & (calculated <= upper_limit)).all().item())
 
 
-def _write_qoi_set_to_csv(qoi_set: xarray.Dataset, output: pathlib.Path) -> None:
+def write_qoi_set_to_csv(qoi_set: xarray.Dataset, output: pathlib.Path) -> None:
     """Writes a QOI Dataset to a CSV file.
 
     :param qoi_set: QOI set.
@@ -515,7 +515,7 @@ def _diff(calculated, expected, output):
     """Compare calculated QOIs to expected values."""
     qoi_set = xarray.merge((_read_qoi_set(calculated), _read_qoi_set(expected)))
     _add_tolerance_attribute(qoi_set)
-    _write_qoi_set_to_csv(qoi_set, output)
+    write_qoi_set_to_csv(qoi_set, output)
 
 
 def _aggregate(parameter_study_file, output_file, qoi_set_files):
