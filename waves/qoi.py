@@ -150,7 +150,7 @@ def create_qoi_set(qois: typing.List[xarray.DataArray]) -> xarray.Dataset:
         ...     version="abcdef",
         ...     date="2025-01-01",
         ... )
-        ... 
+        ...
         ... # Combine QOIs into calculated QOIs set
         ... sim_1_qois = waves.qoi.create_qoi_set((load, gap))
         ... sim_1_qois
@@ -203,25 +203,25 @@ def _create_qoi_study(qois: typing.List[xarray.DataArray], parameter_study: xarr
     .. code-block::
 
         >>> set_0_qoi = waves.qoi.create_qoi(
-        ...     name="load",           
-        ...     calculated=5.0,                                
-        ...     units="N",                         
+        ...     name="load",
+        ...     calculated=5.0,
+        ...     units="N",
         ...     long_name="Axial Load",
         ...     description="Axial load through component XYZ",
         ...     group="Assembly ABC Preload set_0",
         ...     set_name="set_0",
-        ...     version="abcdef",                               
-        ... )                                               
+        ...     version="abcdef",
+        ... )
         ... set_1_qoi = waves.qoi.create_qoi(
-        ...     name="load",                    
+        ...     name="load",
         ...     calculated=6.0,
-        ...     units="N",       
+        ...     units="N",
         ...     long_name="Axial Load",
         ...     description="Axial load through component XYZ",
         ...     group="Assembly ABC Preload set_1",
-        ...     set_name="set_1",  
-        ...     version="abcdef",        
-        ... )       
+        ...     set_name="set_1",
+        ...     version="abcdef",
+        ... )
         ... set_2_qoi = waves.qoi.create_qoi(
         ...     name="load",
         ...     calculated=7.0,
@@ -242,7 +242,7 @@ def _create_qoi_study(qois: typing.List[xarray.DataArray], parameter_study: xarr
         ...     set_name="set_3",
         ...     version="abcdef",
         ... )
-        ... 
+        ...
         ... study = waves.parameter_generators.CartesianProduct(
         ...     {"height": [1.0, 2.0], "width": [0.2, 0.4]},
         ...     output_file="study.h5",
@@ -304,21 +304,21 @@ def _create_qoi_archive(qois: typing.List[xarray.DataArray]) -> xarray.DataTree:
     :param qois: Sequence of QOIs. Each QOI must have a "version" and "group" attribute.
 
     :returns: QOI archive
-    
+
     Example
 
     .. code-block::
 
         >>> archive = waves.qoi._create_qoi_archive(
-        ...     (                                    
+        ...     (
         ...         waves.qoi.create_qoi(
-        ...             name="load",      
+        ...             name="load",
         ...             calculated=5.3,
-        ...             expected=4.5,    
+        ...             expected=4.5,
         ...             lower_limit=3.5,
-        ...             upper_limit=5.5, 
-        ...             units="N",  
-        ...             long_name="Axial Load",     
+        ...             upper_limit=5.5,
+        ...             units="N",
+        ...             long_name="Axial Load",
         ...             description="Axial load through component XYZ",
         ...             group="Assembly ABC Preload",
         ...             version="ghijkl",
@@ -330,27 +330,27 @@ def _create_qoi_archive(qois: typing.List[xarray.DataArray]) -> xarray.DataTree:
         ...             expected=0.95,
         ...             lower_limit=0.85,
         ...             upper_limit=1.05,
-        ...             units="mm",                        
+        ...             units="mm",
         ...             long_name="Radial gap",
         ...             description="Radial gap between components A and B",
-        ...             group="Assembly ABC Preload",                                           
-        ...             version="ghijkl",                      
+        ...             group="Assembly ABC Preload",
+        ...             version="ghijkl",
         ...             date="2025-02-01",
-        ...         ),                                                           
-        ...         waves.qoi.create_qoi(                                           
+        ...         ),
+        ...         waves.qoi.create_qoi(
         ...             name="load",
-        ...             calculated=35.0,          
+        ...             calculated=35.0,
         ...             units="lbf",
         ...             long_name="Transverse load",
         ...             description="Transverse load through component D",
-        ...             group="Assembly DEF Preload",      
+        ...             group="Assembly DEF Preload",
         ...             version="ghijkl",
-        ...             date="2025-02-01",                  
-        ...         ),                                                                          
-        ...         waves.qoi.create_qoi(                      
+        ...             date="2025-02-01",
+        ...         ),
+        ...         waves.qoi.create_qoi(
         ...             name="stress",
-        ...             calculated=110.0,                                         
-        ...             units="MPa",                                               
+        ...             calculated=110.0,
+        ...             units="MPa",
         ...             long_name="Membrane stress",
         ...             description="Membrane stress in component E",
         ...             group="Assembly DEF Preload",
@@ -669,7 +669,7 @@ def _write_qoi_report(qoi_archive, output, plots_per_page=16):
                     matplotlib.pyplot.close()
                     open_figure = False
             if open_figure:  # If a figure is still open (hasn't been saved to a page)
-                for ax in axes[ax_num + 1:]:  # Clear remaining empty plots on the page
+                for ax in axes[ax_num + 1 :]:  # Clear remaining empty plots on the page
                     ax.clear()
                     ax.axis("off")
                 pdf.savefig()
@@ -735,7 +735,7 @@ def _qoi_history_report(qoi_archive, output, plots_per_page=8, add_git_commit_da
                     open_figure = False
                 plot_num += 1
             if open_figure:  # If a figure is still open (hasn't been saved to a page)
-                for ax in axes[ax_num + 1:]:
+                for ax in axes[ax_num + 1 :]:
                     ax.clear()
                     ax.axis("off")
                 pdf.savefig()
@@ -819,8 +819,7 @@ def _plot_archive(output, qoi_archive_h5):
 
 
 def _archive(output, version, qoi_set_files):
-    """Archive QOI sets from a single version to an H5 file.
-    """
+    """Archive QOI sets from a single version to an H5 file."""
     qoi_sets = (_read_qoi_set(qoi_set_file) for qoi_set_file in qoi_set_files)
     qois = (qoi for qoi_set in qoi_sets for qoi in qoi_set.values())
     if version:

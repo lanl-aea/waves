@@ -4030,10 +4030,10 @@ class QOIPseudoBuilder:
                 target=[f"{expected}.stdout"],
                 source=[calculated, expected],
                 action=(
-                    "waves qoi accept" +
-                    f" --calculated {calculated}" +
-                    f" --expected {expected_source}" +
-                    " > ${TARGETS[-1].abspath} 2>&1"
+                    "waves qoi accept"
+                    + f" --calculated {calculated}"
+                    + f" --expected {expected_source}"
+                    + " > ${TARGETS[-1].abspath} 2>&1"
                 ),
             )
             # Because SCons doesn't know the real target (the expected CSV file in the source tree), it can't know if
@@ -4057,10 +4057,7 @@ class QOIPseudoBuilder:
             check_target = env.Command(
                 target=[f"{name}_check.stdout"],
                 source=[diff],
-                action=(
-                    f"waves qoi check --diff {diff}" +
-                    " > ${TARGETS[-1].abspath} 2>&1"
-                ),
+                action=(f"waves qoi check --diff {diff}" + " > ${TARGETS[-1].abspath} 2>&1"),
             )
             targets.extend(check_target)
 
