@@ -4,7 +4,6 @@ import typing
 import subprocess
 import functools
 import itertools
-import argparse
 
 import numpy
 import xarray
@@ -555,79 +554,6 @@ def _sort_by_date(ds):
         return ds
 
 
-def get_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(add_help=False)
-    qoi_subparsers = parser.add_subparsers(dest="qoi_subcommand")
-    qoi_subparsers.add_parser(
-        "accept",
-        help="Update expected values to match calculated values",
-        parents=[_get_accept_parser()],
-    )
-    qoi_subparsers.add_parser(
-        "diff",
-        help="Compare expected values to calculated values",
-        parents=[_get_diff_parser()],
-    )
-    qoi_subparsers.add_parser(
-        "check",
-        help="Raise error if expected values do not match calculated values",
-        parents=[_get_check_parser()],
-    )
-    qoi_subparsers.add_parser(
-        "aggregate",
-        help="Combine parameter study QOIs",
-        parents=[_get_aggregate_parser()],
-    )
-    qoi_subparsers.add_parser(
-        "report",
-        help="Generate QOI tolerance check report",
-        parents=[_get_report_parser()],
-    )
-    qoi_subparsers.add_parser(
-        "archive",
-        help="Combine QOIs across multiple simulations",
-        parents=[_get_archive_parser()],
-    )
-    qoi_subparsers.add_parser(
-        "plot-archive",
-        help="Generate QOI history report",
-        parents=[_get_plot_archive_parser()],
-    )
-    return parser
-
-
-def main(args) -> None:
-    if args.qoi_subcommand == "accept":
-        accept(args.calculated, args.expected)
-    elif args.qoi_subcommand == "diff":
-        diff(args.calculated, args.expected, args.output)
-    elif args.qoi_subcommand == "check":
-        check(args.diff)
-    elif args.qoi_subcommand == "aggregate":
-        aggregate(args.parameter_study_file, args.output_file, args.qoi_set_files)
-    elif args.qoi_subcommand == "report":
-        report(args.output, args.qoi_archive_h5)
-    elif args.qoi_subcommand == "archive":
-        archive(args.output, args.version, args.qoi_set_files)
-    elif args.qoi_subcommand == "plot-archive":
-        plot_archive(args.output, args.qoi_archive_h5)
-    
-
-def _get_accept_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument(
-        "--calculated",
-        help="Calculated QOI file",
-        type=pathlib.Path,
-    )
-    parser.add_argument(
-        "--expected",
-        help="Expected QOI file",
-        type=pathlib.Path,
-    )
-    return parser
-
-
 def accept(calculated, expected):
     """Update expected QOI values to match the currently calculated values."""
     qoi_set = _read_qoi_set(calculated)
@@ -643,16 +569,6 @@ def accept(calculated, expected):
     return
 
 
-def _get_check_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument(
-        "--diff",
-        help="Calculated vs expected diff CSV file",
-        type=pathlib.Path,
-    )
-    return parser
-
-
 def check(diff):
     """Check results of calculated vs expected QOI comparison"""
     qoi_set = _read_qoi_set(diff)
@@ -660,51 +576,11 @@ def check(diff):
         raise ValueError(f"Not all QOIs are within tolerance. See {diff}.")
 
 
-def _get_diff_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument(
-        "--expected",
-        help="Expected values",
-        type=pathlib.Path,
-    )
-    parser.add_argument(
-        "--calculated",
-        help="Calculated values",
-        type=pathlib.Path,
-    )
-    parser.add_argument(
-        "--output",
-        help="Difference from expected values",
-        type=pathlib.Path,
-    )
-    return parser
-
-
 def diff(calculated, expected, output):
     """Compare calculated QOIs to expected values."""
     qoi_set = xarray.merge((_read_qoi_set(calculated), _read_qoi_set(expected)))
     _add_tolerance_attribute(qoi_set)
     _write_qoi_set_to_csv(qoi_set, output)
-
-
-def _get_aggregate_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument(
-        "--parameter-study-file",
-        help="Path to parameter study definition file",
-        type=pathlib.Path,
-    )
-    parser.add_argument(
-        "--output-file",
-        help="post-processing output file",
-        type=pathlib.Path,
-    )
-    parser.add_argument(
-        "QOI-SET-FILE",
-        nargs="*",
-        type=pathlib.Path,
-    )
-    return parser
 
 
 def aggregate(parameter_study_file, output_file, qoi_set_files):
@@ -716,73 +592,16 @@ def aggregate(parameter_study_file, output_file, qoi_set_files):
     qoi_study.to_netcdf(output_file)
 
 
-def _get_report_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument(
-        "--output",
-        help="Report file",
-        type=pathlib.Path,
-    )
-    parser.add_argument(
-        "--output-file",
-        help="post-processing output file",
-        type=pathlib.Path,
-    )
-    parser.add_argument(
-        "QOI-ARCHIVE-H5",
-        nargs=1,
-        type=pathlib.Path,
-    )
-    return parser
-
-
 def report(output, qoi_archive_h5):
     """Generate a QOI test report."""
     qoi_archive = xarray.open_datatree(qoi_archive_h5, engine="h5netcdf")
     _write_qoi_report(qoi_archive, output)
 
 
-def _get_plot_archive_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument(
-        "--output",
-        help="output file",
-        default="QOI_history.pdf",
-        type=pathlib.Path,
-    )
-    parser.add_argument(
-        "QOI-ARCHIVE-H5",
-        nargs="*",
-        type=pathlib.Path,
-    )
-    return parser
-
-
 def plot_archive(output, qoi_archive_h5):
     """Plot QOI values over the Mod/Sim history."""
     qoi_archive = _merge_qoi_archives((xarray.open_datatree(f) for f in qoi_archive_h5))
     _qoi_history_report(qoi_archive, output)
-
-
-def _get_archive_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument(
-        "--output",
-        help="Report file",
-        type=pathlib.Path,
-    )
-    parser.add_argument(
-        "--version",
-        help="override existing QOI 'version' attributes with this text (e.g. a git commit hash).",
-        type=str,
-        default="",
-    )
-    parser.add_argument(
-        "QOI-SET-FILE",
-        nargs="*",
-        type=pathlib.Path,
-    )
-    return parser
 
 
 def archive(output, version, qoi_set_files):

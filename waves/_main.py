@@ -16,7 +16,7 @@ from waves import _visualize
 from waves import _build
 from waves import _parameter_study
 from waves import _print_study
-from waves import qoi
+from waves import _qoi
 from waves.exceptions import WAVESError
 
 
@@ -92,7 +92,7 @@ def main() -> None:
         elif args.subcommand == "print_study":
             _print_study.main(args.PARAMETER_STUDY_FILE)
         elif args.subcommand == "qoi":
-            qoi.main(args)
+            _qoi.main(args)
         else:
             parser.print_help()
     except (WAVESError, RuntimeError) as err:
@@ -187,7 +187,7 @@ def get_parser() -> argparse.ArgumentParser:
         "qoi",
         help="QOI tools",
         description="QOI tools",
-        parents=[qoi.get_parser()],
+        parents=[_qoi.get_parser()],
     )
 
     return main_parser
