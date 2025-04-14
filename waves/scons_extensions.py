@@ -4032,10 +4032,15 @@ class QOIPseudoBuilder:
             # should ever be cached.
             # Get expected CSV file in source directory
             expected_source = env.File(expected).srcnode().abspath
-            accept_qoi_target = env.PythonScript(
+            accept_qoi_target = env.Command(
                 target=[f"{expected}.stdout"],
-                source=["#/python/qoi.py", calculated, expected],
-                subcommand_options=f"accept --calculated {calculated} --expected {expected_source}",
+                source=[calculated, expected],
+                action=(
+                    f"waves qoi accept"
+                    " --calculated {calculated}"
+                    " --expected {expected_source}"
+                    " > ${TARGETS[-1].abspath} 2>&1"
+                ),
             )
             # Because SCons doesn't know the real target (the expected CSV file in the source tree), it can't know if
             # the target is out of date, so use AlwaysBuild().
@@ -4048,17 +4053,17 @@ class QOIPseudoBuilder:
             diff = f"{name}_diff.csv"
             file_to_archive = diff
             # Do the comparison and write results to file
-            comparison_target = env.PythonScript(
+            comparison_target = env.Command(
                 target=[diff],
-                source=["#/python/qoi.py", calculated, expected],
-                subcommand_options=f"diff --expected {expected} --calculated {calculated} --output {diff}",
+                source=[calculated, expected],
+                action=f"waves qoi diff --expected {expected} --calculated {calculated} --output {diff}",
             )
             targets.extend(comparison_target)
             # Check the comparison results and raise error if not all QOIs are within tolerance
-            check_target = env.PythonScript(
+            check_target = env.Command(
                 target=[f"{name}_check.stdout"],
-                source=["#/python/qoi.py", diff],
-                subcommand_options=f"check --diff {diff}",
+                source=[diff],
+                action=f"waves qoi check --diff {diff} > ${TARGETS[-1].abspath} 2>&1",
             )
             targets.extend(check_target)
 
