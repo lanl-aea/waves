@@ -4019,11 +4019,11 @@ class QOIPseudoBuilder:
         file_to_archive = calculated
         if expected and self.update_expected:
             # If requested, update expected values with calculated values
-            # This overwrites the expected values in the source tree. Don't tell SCons we're modifying the source because
-            # that would create a dependency cycle. AFter this operation, the user needs to manually stage and commit these
-            # changes to the expected values.
-            # The action signature contains an absolute path (which interferes with caching), but this is not something that
-            # should ever be cached.
+            # This overwrites the expected values in the source tree. Don't tell SCons we're modifying the source
+            # because that would create a dependency cycle. AFter this operation, the user needs to manually stage and
+            # commit these changes to the expected values.
+            # The action signature contains an absolute path (which interferes with caching), but this is not something
+            # that should ever be cached.
             # Get expected CSV file in source directory
             expected_source = env.File(expected).srcnode().abspath
             accept_qoi_target = env.Command(

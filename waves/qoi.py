@@ -390,7 +390,7 @@ def _write_qoi_report(qoi_archive, output, plots_per_page=16):
                     matplotlib.pyplot.close()
                     open_figure = False
             if open_figure:  # If a figure is still open (hasn't been saved to a page)
-                for ax in axes[ax_num + 1 :]:  # Clear remaining empty plots on the page
+                for ax in axes[ax_num + 1:]:  # Clear remaining empty plots on the page
                     ax.clear()
                     ax.axis("off")
                 pdf.savefig()
@@ -456,7 +456,7 @@ def _qoi_history_report(qoi_archive, output, plots_per_page=8, add_git_commit_da
                     open_figure = False
                 plot_num += 1
             if open_figure:  # If a figure is still open (hasn't been saved to a page)
-                for ax in axes[ax_num + 1 :]:
+                for ax in axes[ax_num + 1:]:
                     ax.clear()
                     ax.axis("off")
                 pdf.savefig()
