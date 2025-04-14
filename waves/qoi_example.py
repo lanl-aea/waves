@@ -31,23 +31,23 @@ sim_1_qois
 sim_1_qois['load']
 
 # Save calculated QOIs to CSV
-qoi.write_qoi_set_to_csv(sim_1_qois, "sim_1_qois.csv")
+qoi._write_qoi_set_to_csv(sim_1_qois, "sim_1_qois.csv")
 
 # Save calculated QOIs to h5
 sim_1_qois.to_netcdf("sim_1_qois.h5")
 
 # Read expected QOIs from CSV
-sim_1_expected_qois = qoi.read_qoi_set("sim_1_expected_qois.csv")
+sim_1_expected_qois = qoi._read_qoi_set("sim_1_expected_qois.csv")
 sim_1_expected_qois
 
 # Compare calculated to expected values
 # TODO: write function for CLI subcommand
 sim_1_qois = xarray.merge((sim_1_qois, sim_1_expected_qois))
-qoi.add_tolerance_attribute(sim_1_qois)
+qoi._add_tolerance_attribute(sim_1_qois)
 sim_1_qois
 
 # Write comparison result to CSV
-qoi.write_qoi_set_to_csv(sim_1_qois, "sim_1_qois_diff.csv")
+qoi._write_qoi_set_to_csv(sim_1_qois, "sim_1_qois_diff.csv")
 
 # Accept new calculated values
 # TODO: write function for CLI subcommand
@@ -76,7 +76,7 @@ stress = qoi.create_qoi(
 sim_2_qois = qoi.create_qoi_set((load_2, stress))
 
 # Combine QOIs into archive
-commit_1_qois = qoi.create_qoi_archive((*sim_1_qois.values(), *sim_2_qois.values()))
+commit_1_qois = qoi._create_qoi_archive((*sim_1_qois.values(), *sim_2_qois.values()))
 # TODO: avoid writing attributes at dataset level
 commit_1_qois['Assembly ABC Preload']['load']
 
@@ -84,10 +84,10 @@ commit_1_qois['Assembly ABC Preload']['load']
 commit_1_qois.to_netcdf("commit_1_qois.h5")
 
 # Create tolerance report from archive
-qoi.write_qoi_report(commit_1_qois, "commit_1_report.pdf")
+qoi._write_qoi_report(commit_1_qois, "commit_1_report.pdf")
 
 # Create QOIs for different commit
-commit_2_qois = qoi.create_qoi_archive(
+commit_2_qois = qoi._create_qoi_archive(
     (
         qoi.create_qoi(
             name="load",
@@ -140,11 +140,11 @@ commit_2_qois = qoi.create_qoi_archive(
 commit_2_qois.to_netcdf("commit_2_qois.h5")
 
 # Merge archives
-all_commit_qois = qoi.merge_qoi_archives((commit_1_qois, commit_2_qois))
+all_commit_qois = qoi._merge_qoi_archives((commit_1_qois, commit_2_qois))
 print(all_commit_qois)
 
 # Create QOI history report
-qoi.qoi_history_report(all_commit_qois, "qoi_history.pdf", add_git_commit_date=False)
+qoi._qoi_history_report(all_commit_qois, "qoi_history.pdf", add_git_commit_date=False)
 
 # Create QOI set with set_name attribute for parameter studies
 # Group must still be unique
@@ -195,7 +195,7 @@ study = waves.parameter_generators.CartesianProduct(
     set_name_template="set_@number",
 )
 study.parameter_study
-qoi_study = qoi.create_qoi_study((set_0_qoi, set_1_qoi, set_2_qoi, set_3_qoi), study.parameter_study)
+qoi_study = qoi._create_qoi_study((set_0_qoi, set_1_qoi, set_2_qoi, set_3_qoi), study.parameter_study)
 qoi_study
 
 # Reindex on independent parameters
