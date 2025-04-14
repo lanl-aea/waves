@@ -32,14 +32,10 @@ def create_qoi(
     If you create a QOI with calculated values, and a separate QOI with only expected values, you can combine them with
     ``xarray.merge([calculated, expected])``.
 
-    Parameters
-    ----------
-    name
-        QOI name
-    calculated, expected
-        Calculated and expected QOI values, respectively.
-    lower_rtol, lower_atol, lower_limit, upper_rtol, upper_atol, upper_limit
-        Tolerance values which set the acceptable range of calculated QOI values.
+    :param name: QOI name
+    :param calculated, expected: Calculated and expected QOI values, respectively.
+    :param lower_rtol, lower_atol, lower_limit, upper_rtol, upper_atol, upper_limit: Tolerance values which set the
+        acceptable range of calculated QOI values.
         Any or all of these tolerances may be specified.
         If ``lower_rtol`` or ``upper_rtol`` are specified, ``expected`` must also be specified.
         The calculated QOI value will be considered within tolerance if it is greater than or equal to
@@ -48,13 +44,14 @@ def create_qoi(
         ``min((upper_limit, expected + upper_atol, expected + abs(expected * upper_rtol))``.
         Unspecified tolerances are not considered in the tolerance check.
         If no tolerances are specified, the calculated QOI will always be considered within tolerance.
-    **attrs
-        Attributes to associate with the QOI.
+    :param **attrs: Attributes to associate with the QOI.
         Recommended attributes are: group, units, description, long_name, version.
         Together ``name`` and ``attrs['group']`` should distinguish each QOI from every other QOI in the Mod/Sim
         repository.
         In other words, ``group`` should be as specific as possible, e.g., "Local Test XYZ Assembly Preload" instead of
         just "Preload".
+
+    :returns: QOI
     """
     if (
         numpy.isnan(expected)
@@ -104,15 +101,9 @@ def create_qoi_set(qois: typing.Iterable[xarray.DataArray]) -> xarray.Dataset:
     No attributes will be set at the top-level Dataset, but QOI attributes will be preserved at the data variable
     level.
 
-    Parameters
-    ----------
-    qois
-        Sequence of QOIs.
+    :param qois: Sequence of QOIs.
 
-    Returns
-    -------
-    qoi_set
-        QOI Set containing each QOI as a separate data variable.
+    :returns: QOI Set containing each QOI as a separate data variable.
     """
     qoi_set = xarray.merge(qois, combine_attrs="drop_conflicts")
     # Keep all attributes at the data variable level
@@ -134,13 +125,11 @@ def _create_qoi_study(
     the parameter set names.
     To do so, pass the parameter study definition (an ``xarray.Dataset``) as ``parameter_study``.
 
-    Parameters
-    ----------
-    qois
-        Sequence of QOIs.
-    parameter_study
-        Parameter study definition. The indexed dimension should be "set_name". The data variables and coordinates
-        should be parameter values.
+    :param qois: Sequence of QOIs.
+    :param parameter_study: Parameter study definition. The indexed dimension should be "set_name". The data variables
+        and coordinates should be parameter values.
+
+    :returns: QOI study
     """
     # Move "group" from attribute to dimension for each DataArray, and merge
     try:
@@ -170,15 +159,9 @@ def _qoi_group(qoi):
 def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataTree:
     """Create a QOI DataTree spanning multiple simulations and versions.
 
-    Parameters
-    ----------
-    qois
-        Sequence of QOIs. Each QOI must have a "version" and "group" attribute.
+    :param qois: Sequence of QOIs. Each QOI must have a "version" and "group" attribute.
 
-    Returns
-    -------
-    qoi_archive
-        xarray.DataTree
+    :returns: QOI archive
     """
     dt = xarray.DataTree()
     # Creates a group for each "group" attribute
@@ -199,20 +182,13 @@ def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataT
 def _merge_qoi_archives(qoi_archives: typing.Iterable[xarray.DataTree]) -> xarray.DataTree:
     """Merge QOI archives by concatenating leaf datasets along the "version" dimension.
 
-    Parameters
-    ----------
-    qoi_archives
-        QOI archives. Each leaf dataset must have a "version" dimension.
+    :param qoi_archives: QOI archives. Each leaf dataset must have a "version" dimension.
+    :returns: Merged QOI archive.
 
-    Returns
-    -------
-    merged_archive
-        Merged QOI archive.
-
-    Note
-    ----
-    Technically this does not preserve the original DataTree structure. It creates a new structure based on the "group"
-    attribute of each QOI.
+    .. note::
+     
+        Technically this does not preserve the original DataTree structure. It creates a new structure based on the
+        "group" attribute of each QOI.
     """
     leaves = [qoi.ds for archive in qoi_archives for qoi in archive.leaves]
     dt = xarray.DataTree()
@@ -226,10 +202,7 @@ def _merge_qoi_archives(qoi_archives: typing.Iterable[xarray.DataTree]) -> xarra
 def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
     """Create a QOI Dataset from a CSV or H5 file.
 
-    Parameters
-    ----------
-    from_file
-        File containing QOIs. Either a ``.csv`` or ``.h5`` file.
+    :param from_file: File containing QOIs. Either a ``.csv`` or ``.h5`` file.
 
         ``.h5`` files will be read with ``xarray.open_dataset(from_file)``.
 
@@ -239,6 +212,8 @@ def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
         ``kwargs`` keys are column names and ``kwargs`` values are the row entries.
         Empty entries (or anything read as ``nan``) will not be included in ``kwargs``.
         All QOIs will be merged into a single ``xarray.Dataset`` using ``create_qoi_set()``.
+
+    :returns: QOI set
     """
     if not isinstance(from_file, pathlib.Path):
         from_file = pathlib.Path(from_file)
@@ -253,7 +228,10 @@ def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
 
 
 def _add_tolerance_attribute(qoi_set: xarray.Dataset) -> None:
-    """Adds a "within_tolerance" attribute to each QOI in a QOI Dataset in place."""
+    """Adds a "within_tolerance" attribute to each QOI in a QOI Dataset in place.
+    
+    :param qoi_set: QOI set.
+    """
     for qoi in qoi_set.data_vars.values():
         lower_limit = qoi.sel(value_type="lower_limit").fillna(-numpy.inf)
         upper_limit = qoi.sel(value_type="upper_limit").fillna(numpy.inf)
@@ -267,12 +245,8 @@ def _add_tolerance_attribute(qoi_set: xarray.Dataset) -> None:
 def _write_qoi_set_to_csv(qoi_set: xarray.Dataset, output: pathlib.Path) -> None:
     """Writes a QOI Dataset to a CSV file.
 
-    Parameters
-    ----------
-    qoi_set
-        QOI set.
-    output
-        Output CSV file.
+    :param qoi_set: QOI set.
+    :param output: Output CSV file.
     """
     df = qoi_set.to_dataarray("name").to_pandas()
     # Convert attributes to data variables so they end up as columns in the CSV
@@ -475,8 +449,7 @@ def _plot_scalar_qoi_history(qoi, ax, date_min, date_max):
 
 
 def _qoi_history_report(qoi_archive, output, plots_per_page=8, add_git_commit_date=True):
-    """Plot history of QOI values from QOI archive.
-    """
+    """Plot history of QOI values from QOI archive."""
     if add_git_commit_date:
         qoi_archive = qoi_archive.map_over_datasets(_add_commit_date)
     qoi_archive = qoi_archive.map_over_datasets(_sort_by_date)
@@ -554,7 +527,7 @@ def _sort_by_date(ds):
         return ds
 
 
-def accept(calculated, expected):
+def _accept(calculated, expected):
     """Update expected QOI values to match the currently calculated values."""
     qoi_set = _read_qoi_set(calculated)
     calculated_df = qoi_set.to_dataarray("name").to_pandas()
@@ -569,21 +542,21 @@ def accept(calculated, expected):
     return
 
 
-def check(diff):
+def _check(diff):
     """Check results of calculated vs expected QOI comparison"""
     qoi_set = _read_qoi_set(diff)
     if qoi_set.filter_by_attrs(within_tolerance=0):
         raise ValueError(f"Not all QOIs are within tolerance. See {diff}.")
 
 
-def diff(calculated, expected, output):
+def _diff(calculated, expected, output):
     """Compare calculated QOIs to expected values."""
     qoi_set = xarray.merge((_read_qoi_set(calculated), _read_qoi_set(expected)))
     _add_tolerance_attribute(qoi_set)
     _write_qoi_set_to_csv(qoi_set, output)
 
 
-def aggregate(parameter_study_file, output_file, qoi_set_files):
+def _aggregate(parameter_study_file, output_file, qoi_set_files):
     """Aggregate QOIs across multiple simulations, e.g. across sets in a parameter study."""
     qoi_sets = (_read_qoi_set(qoi_set_file) for qoi_set_file in qoi_set_files)
     qois = (qoi for qoi_set in qoi_sets for qoi in qoi_set.values())
@@ -592,19 +565,19 @@ def aggregate(parameter_study_file, output_file, qoi_set_files):
     qoi_study.to_netcdf(output_file)
 
 
-def report(output, qoi_archive_h5):
+def _report(output, qoi_archive_h5):
     """Generate a QOI test report."""
     qoi_archive = xarray.open_datatree(qoi_archive_h5, engine="h5netcdf")
     _write_qoi_report(qoi_archive, output)
 
 
-def plot_archive(output, qoi_archive_h5):
+def _plot_archive(output, qoi_archive_h5):
     """Plot QOI values over the Mod/Sim history."""
     qoi_archive = _merge_qoi_archives((xarray.open_datatree(f) for f in qoi_archive_h5))
     _qoi_history_report(qoi_archive, output)
 
 
-def archive(output, version, qoi_set_files):
+def _archive(output, version, qoi_set_files):
     """Archive QOI sets from a single version to an H5 file."""
     qoi_sets = (_read_qoi_set(qoi_set_file) for qoi_set_file in qoi_set_files)
     qois = (qoi for qoi_set in qoi_sets for qoi in qoi_set.values())

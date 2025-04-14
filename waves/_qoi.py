@@ -13,59 +13,59 @@ def get_parser() -> argparse.ArgumentParser:
     qoi_subparsers.add_parser(
         "accept",
         help="Update expected values to match calculated values",
-        parents=[_get_accept_parser()],
+        parents=[get_accept_parser()],
     )
     qoi_subparsers.add_parser(
         "diff",
         help="Compare expected values to calculated values",
-        parents=[_get_diff_parser()],
+        parents=[get_diff_parser()],
     )
     qoi_subparsers.add_parser(
         "check",
         help="Raise error if expected values do not match calculated values",
-        parents=[_get_check_parser()],
+        parents=[get_check_parser()],
     )
     qoi_subparsers.add_parser(
         "aggregate",
         help="Combine parameter study QOIs",
-        parents=[_get_aggregate_parser()],
+        parents=[get_aggregate_parser()],
     )
     qoi_subparsers.add_parser(
         "report",
         help="Generate QOI tolerance check report",
-        parents=[_get_report_parser()],
+        parents=[get_report_parser()],
     )
     qoi_subparsers.add_parser(
         "archive",
         help="Combine QOIs across multiple simulations",
-        parents=[_get_archive_parser()],
+        parents=[get_archive_parser()],
     )
     qoi_subparsers.add_parser(
         "plot-archive",
         help="Generate QOI history report",
-        parents=[_get_plot_archive_parser()],
+        parents=[get_plot_archive_parser()],
     )
     return parser
 
 
 def main(args) -> None:
     if args.qoi_subcommand == "accept":
-        qoi.accept(args.calculated, args.expected)
+        qoi._accept(args.calculated, args.expected)
     elif args.qoi_subcommand == "diff":
-        qoi.diff(args.calculated, args.expected, args.output)
+        qoi._diff(args.calculated, args.expected, args.output)
     elif args.qoi_subcommand == "check":
-        qoi.check(args.diff)
+        qoi._check(args.diff)
     elif args.qoi_subcommand == "aggregate":
-        qoi.aggregate(args.parameter_study_file, args.output_file, args.qoi_set_files)
+        qoi._aggregate(args.parameter_study_file, args.output_file, args.qoi_set_files)
     elif args.qoi_subcommand == "report":
-        qoi.report(args.output, args.qoi_archive_h5)
+        qoi._report(args.output, args.qoi_archive_h5)
     elif args.qoi_subcommand == "archive":
-        qoi.archive(args.output, args.version, args.qoi_set_files)
+        qoi._archive(args.output, args.version, args.qoi_set_files)
     elif args.qoi_subcommand == "plot-archive":
-        qoi.plot_archive(args.output, args.qoi_archive_h5)
+        qoi._plot_archive(args.output, args.qoi_archive_h5)
     
 
-def _get_accept_parser() -> argparse.ArgumentParser:
+def get_accept_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument(
         "--calculated",
@@ -80,7 +80,7 @@ def _get_accept_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _get_check_parser() -> argparse.ArgumentParser:
+def get_check_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument(
         "--diff",
@@ -90,7 +90,7 @@ def _get_check_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _get_diff_parser() -> argparse.ArgumentParser:
+def get_diff_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument(
         "--expected",
@@ -110,7 +110,7 @@ def _get_diff_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _get_aggregate_parser() -> argparse.ArgumentParser:
+def get_aggregate_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument(
         "--parameter-study-file",
@@ -130,7 +130,7 @@ def _get_aggregate_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _get_report_parser() -> argparse.ArgumentParser:
+def get_report_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument(
         "--output",
@@ -150,7 +150,7 @@ def _get_report_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _get_plot_archive_parser() -> argparse.ArgumentParser:
+def get_plot_archive_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument(
         "--output",
@@ -166,7 +166,7 @@ def _get_plot_archive_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _get_archive_parser() -> argparse.ArgumentParser:
+def get_archive_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument(
         "--output",
