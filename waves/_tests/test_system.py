@@ -75,6 +75,7 @@ system_tests = [
     pytest.param([string.Template("${waves_command} sobol_sequence --help")], None, marks=[pytest.mark.cli]),
     pytest.param([string.Template("${waves_command} one_at_a_time --help")], None, marks=[pytest.mark.cli]),
     pytest.param([string.Template("${waves_command} print_study --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} qoi --help")], None, marks=[pytest.mark.cli]),
     pytest.param([string.Template("${odb_extract_command} --help")], None, marks=[pytest.mark.cli]),
     pytest.param(
         [string.Template("${waves_command} docs --print-local-path")],
@@ -142,6 +143,11 @@ system_tests = [
     pytest.param(
         [fetch_template, "scons ."],
         "tutorials/tutorial_writing_builders",
+        marks=[pytest.mark.scons],
+    ),
+    pytest.param(
+        [fetch_template, "scons ."],
+        "tutorials/tutorial_qoi",
         marks=[pytest.mark.scons],
     ),
 ]
