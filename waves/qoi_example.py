@@ -28,7 +28,7 @@ gap = qoi.create_qoi(
 # Combine QOIs into calculated QOIs set
 sim_1_qois = qoi.create_qoi_set((load, gap))
 sim_1_qois
-sim_1_qois['load']
+sim_1_qois["load"]
 
 # Save calculated QOIs to CSV
 qoi._write_qoi_set_to_csv(sim_1_qois, "sim_1_qois.csv")
@@ -78,7 +78,7 @@ sim_2_qois = qoi.create_qoi_set((load_2, stress))
 # Combine QOIs into archive
 commit_1_qois = qoi._create_qoi_archive((*sim_1_qois.values(), *sim_2_qois.values()))
 # TODO: avoid writing attributes at dataset level
-commit_1_qois['Assembly ABC Preload']['load']
+commit_1_qois["Assembly ABC Preload"]["load"]
 
 # Write archive to H5
 commit_1_qois.to_netcdf("commit_1_qois.h5")
@@ -134,7 +134,7 @@ commit_2_qois = qoi._create_qoi_archive(
             group="Assembly DEF Preload",
             version="ghijkl",
             date="2025-02-01",
-        )
+        ),
     )
 )
 commit_2_qois.to_netcdf("commit_2_qois.h5")
@@ -202,4 +202,3 @@ qoi_study
 qoi_study = qoi_study.set_index(set_name=("height", "width")).unstack("set_name")
 qoi_study
 qoi_study.sel(height=2.0)
-

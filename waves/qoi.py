@@ -52,13 +52,8 @@ def create_qoi(
 
     :returns: QOI
     """
-    if (
-        numpy.isnan(expected)
-        & numpy.isfinite([lower_rtol, upper_rtol, lower_atol, upper_atol]).any()
-    ):
-        raise ValueError(
-            "Relative and absolute tolerances were specified without an expected value."
-        )
+    if numpy.isnan(expected) & numpy.isfinite([lower_rtol, upper_rtol, lower_atol, upper_atol]).any():
+        raise ValueError("Relative and absolute tolerances were specified without an expected value.")
     upper_candidates = [
         upper_limit,
         expected + upper_atol,
@@ -110,9 +105,7 @@ def create_qoi_set(qois: typing.List[xarray.DataArray]) -> xarray.Dataset:
     return qoi_set
 
 
-def _create_qoi_study(
-    qois: typing.List[xarray.DataArray], parameter_study: xarray.Dataset = None
-) -> xarray.Dataset:
+def _create_qoi_study(qois: typing.List[xarray.DataArray], parameter_study: xarray.Dataset = None) -> xarray.Dataset:
     """Create a QOI Dataset spanning multiple simulations.
 
     This function combines multiple QOIs (``xarray.DataArray``s) into a single "QOI Study" (``xarray.Dataset``) using
@@ -137,16 +130,12 @@ def _create_qoi_study(
             combine_attrs="drop_conflicts",
         )
     except KeyError:
-        raise RuntimeError(
-            "Each DataArray in `qois` must have an attribute named 'set_name'."
-        )
+        raise RuntimeError("Each DataArray in `qois` must have an attribute named 'set_name'.")
     # Merge in parameter study definition
     if parameter_study:
         # Convert parameter study variables to coordinates
         parameter_study = parameter_study.set_coords(parameter_study)
-        qoi_study = xarray.merge(
-            (qoi_study, parameter_study), combine_attrs="drop_conflicts"
-        )
+        qoi_study = xarray.merge((qoi_study, parameter_study), combine_attrs="drop_conflicts")
     return qoi_study
 
 
@@ -185,7 +174,7 @@ def _merge_qoi_archives(qoi_archives: typing.List[xarray.DataTree]) -> xarray.Da
     :returns: Merged QOI archive.
 
     .. note::
-     
+
         Technically this does not preserve the original DataTree structure. It creates a new structure based on the
         "group" attribute of each QOI.
     """
@@ -228,7 +217,7 @@ def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
 
 def _add_tolerance_attribute(qoi_set: xarray.Dataset) -> None:
     """Adds a "within_tolerance" attribute to each QOI in a QOI Dataset in place.
-    
+
     :param qoi_set: QOI set.
     """
     for qoi in qoi_set.data_vars.values():
@@ -236,9 +225,7 @@ def _add_tolerance_attribute(qoi_set: xarray.Dataset) -> None:
         upper_limit = qoi.sel(value_type="upper_limit").fillna(numpy.inf)
         calculated = qoi.sel(value_type="calculated")
         # netcdf4 doesn't support bool, so make it an int
-        qoi.attrs["within_tolerance"] = int(
-            ((calculated >= lower_limit) & (calculated <= upper_limit)).all().item()
-        )
+        qoi.attrs["within_tolerance"] = int(((calculated >= lower_limit) & (calculated <= upper_limit)).all().item())
 
 
 def _write_qoi_set_to_csv(qoi_set: xarray.Dataset, output: pathlib.Path) -> None:
@@ -249,9 +236,7 @@ def _write_qoi_set_to_csv(qoi_set: xarray.Dataset, output: pathlib.Path) -> None
     """
     df = qoi_set.to_dataarray("name").to_pandas()
     # Convert attributes to data variables so they end up as columns in the CSV
-    attrs = pandas.DataFrame.from_dict(
-        {qoi: qoi_set[qoi].attrs for qoi in qoi_set}, orient="index"
-    )
+    attrs = pandas.DataFrame.from_dict({qoi: qoi_set[qoi].attrs for qoi in qoi_set}, orient="index")
     attrs.index.name = "name"
     pandas.concat((df, attrs), axis="columns").to_csv(output)
 
@@ -286,14 +271,10 @@ def _plot_qoi_tolerance_check(qoi, ax):
         except KeyError:
             expected = numpy.nan
         name = _get_plotting_name(qoi)
-        _plot_scalar_tolerance_check(
-            name, calculated, expected, lower_limit, upper_limit, within_tolerance, ax
-        )
+        _plot_scalar_tolerance_check(name, calculated, expected, lower_limit, upper_limit, within_tolerance, ax)
 
 
-def _plot_scalar_tolerance_check(
-    name, calculated, expected, lower_limit, upper_limit, within_tolerance, ax
-):
+def _plot_scalar_tolerance_check(name, calculated, expected, lower_limit, upper_limit, within_tolerance, ax):
     """Plots a tolerance check for a scalar QOI DataArray."""
     # TODO: draw arrow if bar is clipped by xmin, xmax
     try:
@@ -316,9 +297,7 @@ def _plot_scalar_tolerance_check(
             colors = ["blue", "black"]
 
         # Draw vertical lines at lower and upper tolerance limits
-        container = ax.barh(
-            0.0, width=(calculated - expected), left=expected, color=bar_color
-        )
+        container = ax.barh(0.0, width=(calculated - expected), left=expected, color=bar_color)
         ax.vlines([lower_line, upper_line], *ax.get_ylim(), colors=colors)
         ax.vlines([expected], *ax.get_ylim(), colors="black", linestyle="dashed")
 
@@ -390,9 +369,7 @@ def _write_qoi_report(qoi_archive, output, plots_per_page=16):
     with PdfPages(output) as pdf:
         for qoi_group in qoi_archive.leaves:
             for plot_num, qoi in enumerate(qoi_group.ds.data_vars.values()):
-                ax_num = (
-                    plot_num % plots_per_page
-                )  # ax_num goes from 0 to (plots_per_page - 1)
+                ax_num = plot_num % plots_per_page  # ax_num goes from 0 to (plots_per_page - 1)
                 if ax_num == 0:  # starting new page
                     open_figure = True
                     fig, axes = matplotlib.pyplot.subplots(  # create a new figure for a new page
@@ -401,12 +378,8 @@ def _write_qoi_report(qoi_archive, output, plots_per_page=16):
                         gridspec_kw=dict(
                             left=0.6,  # plot on right half of page because text will go on left side
                             right=0.9,  # leave margin on right edge
-                            top=(
-                                1.0 - 1.0 / plots_per_page
-                            ),  # top margin equal to single plot height
-                            bottom=(
-                                0.5 / plots_per_page
-                            ),  # bottom margin equal to half of single plot height
+                            top=(1.0 - 1.0 / plots_per_page),  # top margin equal to single plot height
+                            bottom=(0.5 / plots_per_page),  # bottom margin equal to half of single plot height
                             hspace=1.0,
                         ),
                     )
@@ -459,13 +432,9 @@ def _qoi_history_report(qoi_archive, output, plots_per_page=8, add_git_commit_da
         for qoi_group in qoi_archive.leaves:
             plot_num = 0
             for qoi in qoi_group.ds.data_vars.values():
-                if (
-                    qoi.where(numpy.isfinite(qoi)).dropna("version", how="all").size == 0
-                ):  # Would be an empty plot
+                if qoi.where(numpy.isfinite(qoi)).dropna("version", how="all").size == 0:  # Would be an empty plot
                     continue  # Don't increment plot_num
-                ax_num = (
-                    plot_num % plots_per_page
-                )  # ax_num goes from 0 to (plots_per_page - 1)
+                ax_num = plot_num % plots_per_page  # ax_num goes from 0 to (plots_per_page - 1)
                 if ax_num == 0:  # Starting new page
                     open_figure = True
                     fig, axes = matplotlib.pyplot.subplots(  # Create a new figure for a new page
@@ -474,12 +443,8 @@ def _qoi_history_report(qoi_archive, output, plots_per_page=8, add_git_commit_da
                         gridspec_kw=dict(
                             left=0.1,  # leave margin on left edge
                             right=0.9,  # leave margin on right edge
-                            top=(
-                                1.0 - 0.5 / plots_per_page
-                            ),  # top margin equal to half of single plot height
-                            bottom=(
-                                0.5 / plots_per_page
-                            ),  # bottom margin equal to half of single plot height
+                            top=(1.0 - 0.5 / plots_per_page),  # top margin equal to half of single plot height
+                            bottom=(0.5 / plots_per_page),  # bottom margin equal to half of single plot height
                             hspace=1.0,
                         ),
                     )
@@ -512,9 +477,7 @@ def _get_commit_date(commit):
 
 def _add_commit_date(ds):
     try:
-        return ds.assign_coords(
-            date=("version", (_get_commit_date(commit) for commit in ds["version"]))
-        )
+        return ds.assign_coords(date=("version", (_get_commit_date(commit) for commit in ds["version"])))
     except KeyError:
         return ds
 

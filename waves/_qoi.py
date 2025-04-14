@@ -63,7 +63,7 @@ def main(args) -> None:
         qoi._archive(args.output, args.version, args.qoi_set_files)
     elif args.qoi_subcommand == "plot-archive":
         qoi._plot_archive(args.output, args.qoi_archive_h5)
-    
+
 
 def get_accept_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(add_help=False)
