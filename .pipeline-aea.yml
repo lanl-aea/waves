@@ -158,6 +158,8 @@ aea-pip-deploy:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
       when: never
     - if: $PARENT_CI_COMMIT_BRANCH == "main"
+  dependencies:
+    - "aea-pip-build"
   script:
     # Only deploy to Gitlab PyPI registry for clean version tags
     - tag=$(git tag --points-at HEAD)
@@ -223,6 +225,8 @@ pages:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
       when: never
     - if: $PARENT_CI_COMMIT_BRANCH == "main"
+  dependencies:
+    - "aea-developer-test"
   script:
     - project_root=$PWD
     - rm -rf public
