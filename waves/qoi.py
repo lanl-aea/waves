@@ -88,7 +88,7 @@ def create_qoi(
     )
 
 
-def create_qoi_set(qois: typing.Iterable[xarray.DataArray]) -> xarray.Dataset:
+def create_qoi_set(qois: typing.List[xarray.DataArray]) -> xarray.Dataset:
     """Create a QOI dataset containing multiple QOIs from a single simulation.
 
     This operation combines multiple QOIs (``xarray.DataArray``s) into a single "QOI Set" (``xarray.Dataset``) using
@@ -112,7 +112,7 @@ def create_qoi_set(qois: typing.Iterable[xarray.DataArray]) -> xarray.Dataset:
 
 
 def _create_qoi_study(
-    qois: typing.Iterable[xarray.DataArray], parameter_study: xarray.Dataset = None
+    qois: typing.List[xarray.DataArray], parameter_study: xarray.Dataset = None
 ) -> xarray.Dataset:
     """Create a QOI Dataset spanning multiple simulations.
 
@@ -156,7 +156,7 @@ def _qoi_group(qoi):
     return qoi.attrs["group"]
 
 
-def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataTree:
+def _create_qoi_archive(qois: typing.List[xarray.DataArray]) -> xarray.DataTree:
     """Create a QOI DataTree spanning multiple simulations and versions.
 
     :param qois: Sequence of QOIs. Each QOI must have a "version" and "group" attribute.
@@ -179,7 +179,7 @@ def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataT
     return dt
 
 
-def _merge_qoi_archives(qoi_archives: typing.Iterable[xarray.DataTree]) -> xarray.DataTree:
+def _merge_qoi_archives(qoi_archives: typing.List[xarray.DataTree]) -> xarray.DataTree:
     """Merge QOI archives by concatenating leaf datasets along the "version" dimension.
 
     :param qoi_archives: QOI archives. Each leaf dataset must have a "version" dimension.

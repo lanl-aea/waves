@@ -3965,9 +3965,9 @@ def parameter_study_write(
 class QOIPseudoBuilder:
     def __init__(
         self,
-        collection_dir=None,
-        build_dir=None,
-        update_expected=False,
+        collection_dir: pathlib.Path,
+        build_dir: pathlib.Path,
+        update_expected: bool = False,
     ) -> None:
         self.collection_dir = collection_dir
         self.build_dir = build_dir
@@ -3976,9 +3976,9 @@ class QOIPseudoBuilder:
     def __call__(
         self,
         env: SCons.Environment.Environment,
-        calculated,
-        expected,
-        archive,
+        calculated: pathlib.Path,
+        expected: typing.Optional[pathlib.Path],
+        archive: bool = False,
     ) -> SCons.Node.NodeList:
         """SCons Pseudo-Builder for regression testing and archiving quantities of interest (QOIs).
 
@@ -3989,15 +3989,12 @@ class QOIPseudoBuilder:
         raised. If ``self.update_expected`` is ``True``, the expected CSV files (in the source tree)
         will be updated to match the calculated QOI values, and no comparison between the two will be performed.
 
-        Parameters
-        ----------
-        calculated : pathlib.Path
-            Path to CSV file containing calculated QOIs. See :py:func:`qoi.read_qoi_set` for the CSV format.
+        :param calculated: Path to CSV file containing calculated QOIs. See :py:func:`qoi.read_qoi_set` for the CSV
+            format.
 
-        expected : pathlib.Path, optional
-            Path to CSV file containing expected QOI values and tolerances. See :py:func:`qoi.read_qoi_set` for the CSV
-            format. See :py:func:`qoi.create_qoi` for the types of tolerances allowed. See :ref:`qoi_cli` for how
-            tolerances are checked.
+        :param expected: Path to CSV file containing expected QOI values and tolerances. See :py:func:`qoi.read_qoi_set`
+            for the CSV format. See :py:func:`qoi.create_qoi` for the types of tolerances allowed. See :ref:`qoi_cli`
+            for how tolerances are checked.
 
             Each of the tolerances are checked independently. If any fail, an error is raised.
 
@@ -4005,14 +4002,11 @@ class QOIPseudoBuilder:
             ``expected`` or ``archive=True`` must be specified. An expected QOI file without tolerances is meaningless;
             the regression test will always pass.
 
-        archive : bool, optional
-            If True, add the calculated QOIs to ``self.collection_dir`` alongside other archived QOIs. To complete the
-            archive, the QOI files collected in ``self.collection_dir`` should be copied to a read-only central location
-            using ``waves qoi archive``
+        :param archive: If True, add the calculated QOIs to ``self.collection_dir`` alongside other archived QOIs. To
+            complete the archive, the QOI files collected in ``self.collection_dir`` should be copied to a read-only
+            central location using ``waves qoi archive``
 
-        Returns
-        -------
-        targets : list of SCons Target
+        :returns: list of SCons Target.
             The list of targets associated with regression testing and archiving the QOIs. Building these targets will
             regression test the QOIs and output a CSV file which contains the exact differences between calculated and
             expected values. If ``archive == True``, these targets will also include moving the calculated QOIs CSV file
