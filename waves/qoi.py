@@ -556,48 +556,42 @@ def _sort_by_date(ds):
 
 
 def get_parser() -> argparse.ArgumentParser:
-    parser = argparse.Argumentparser(add_help=False)
+    parser = argparse.ArgumentParser(add_help=False)
     qoi_subparsers = parser.add_subparsers(dest="qoi_subcommand")
     qoi_subparsers.add_parser(
         "accept",
         help="Update expected values to match calculated values",
-        metavar="{qoi_subcommand}",
         parents=[_get_accept_parser()],
     )
     qoi_subparsers.add_parser(
         "diff",
         help="Compare expected values to calculated values",
-        metavar="{qoi_subcommand}",
         parents=[_get_diff_parser()],
     )
     qoi_subparsers.add_parser(
         "check",
         help="Raise error if expected values do not match calculated values",
-        metavar="{qoi_subcommand}",
         parents=[_get_check_parser()],
     )
     qoi_subparsers.add_parser(
         "aggregate",
         help="Combine parameter study QOIs",
-        metavar="{qoi_subcommand}",
         parents=[_get_aggregate_parser()],
     )
     qoi_subparsers.add_parser(
         "report",
         help="Generate QOI tolerance check report",
-        metavar="{qoi_subcommand}",
         parents=[_get_report_parser()],
     )
     qoi_subparsers.add_parser(
         "archive",
         help="Combine QOIs across multiple simulations",
-        metavar="{qoi_subcommand}",
         parents=[_get_archive_parser()],
     )
     qoi_subparsers.add_parser(
         "plot-archive",
-        help="Generate QOI history report
-        parents=[_get_plot_achive_parser()],
+        help="Generate QOI history report",
+        parents=[_get_plot_archive_parser()],
     )
     return parser
 
@@ -620,7 +614,7 @@ def main(args) -> None:
     
 
 def _get_accept_parser() -> argparse.ArgumentParser:
-    parser = argparse.Argumentparser(add_help=False)
+    parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument(
         "--calculated",
         help="Calculated QOI file",
@@ -650,7 +644,7 @@ def accept(calculated, expected):
 
 
 def _get_check_parser() -> argparse.ArgumentParser:
-    parser = argparse.Argumentparser(add_help=False)
+    parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument(
         "--diff",
         help="Calculated vs expected diff CSV file",
@@ -667,7 +661,7 @@ def check(diff):
 
 
 def _get_diff_parser() -> argparse.ArgumentParser:
-    parser = argparse.Argumentparser(add_help=False)
+    parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument(
         "--expected",
         help="Expected values",
@@ -694,20 +688,19 @@ def diff(calculated, expected, output):
 
 
 def _get_aggregate_parser() -> argparse.ArgumentParser:
-    parser = argparse.Argumentparser(add_help=False)
+    parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument(
         "--parameter-study-file",
         help="Path to parameter study definition file",
         type=pathlib.Path,
     )
-    parser.add_parser(
+    parser.add_argument(
         "--output-file",
         help="post-processing output file",
         type=pathlib.Path,
     )
-    parser.add_parser(
+    parser.add_argument(
         "QOI-SET-FILE",
-        required=True,
         nargs="*",
         type=pathlib.Path,
     )
@@ -724,20 +717,19 @@ def aggregate(parameter_study_file, output_file, qoi_set_files):
 
 
 def _get_report_parser() -> argparse.ArgumentParser:
-    parser = argparse.Argumentparser(add_help=False)
+    parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument(
         "--output",
         help="Report file",
         type=pathlib.Path,
     )
-    parser.add_parser(
+    parser.add_argument(
         "--output-file",
         help="post-processing output file",
         type=pathlib.Path,
     )
-    parser.add_parser(
+    parser.add_argument(
         "QOI-ARCHIVE-H5",
-        required=True,
         nargs=1,
         type=pathlib.Path,
     )
@@ -751,8 +743,8 @@ def report(output, qoi_archive_h5):
 
 
 def _get_plot_archive_parser() -> argparse.ArgumentParser:
-    parser = argparse.Argumentparser(add_help=False)
-    parser.add_parser(
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument(
         "--output",
         help="output file",
         default="QOI_history.pdf",
@@ -760,9 +752,8 @@ def _get_plot_archive_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "QOI-ARCHIVE-H5",
-        required=True,
         nargs="*",
-        type=click.Path(exists=True, path_type=pathlib.Path),
+        type=pathlib.Path,
     )
     return parser
 
@@ -774,13 +765,13 @@ def plot_archive(output, qoi_archive_h5):
 
 
 def _get_archive_parser() -> argparse.ArgumentParser:
-    parser = argparse.Argumentparser(add_help=False)
-    parser.add_parser(
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument(
         "--output",
         help="Report file",
         type=pathlib.Path,
     )
-    parser.add_parser(
+    parser.add_argument(
         "--version",
         help="override existing QOI 'version' attributes with this text (e.g. a git commit hash).",
         type=str,
@@ -788,7 +779,6 @@ def _get_archive_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "QOI-SET-FILE",
-        required=True,
         nargs="*",
         type=pathlib.Path,
     )

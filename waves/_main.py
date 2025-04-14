@@ -16,6 +16,7 @@ from waves import _visualize
 from waves import _build
 from waves import _parameter_study
 from waves import _print_study
+from waves import qoi
 from waves.exceptions import WAVESError
 
 
