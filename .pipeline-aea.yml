@@ -32,6 +32,7 @@ aea-developer-test:
     expire_in: '2 hrs'
     paths:
       - build/pytest/coverage
+      - build/docs/html-internal
 
 aea-style-guide:
   extends:
@@ -231,8 +232,6 @@ pages:
     - project_root=$PWD
     - rm -rf public
     - mkdir -p public/modsim-template
-    - scons html-internal --clean
-    - scons html-internal --unconditional-build
     - cp -r build/docs/html-internal/* public/
     - cp -r build/pytest/coverage public/coverage
     # Build modsim template documentation
