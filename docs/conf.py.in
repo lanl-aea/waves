@@ -54,7 +54,6 @@ mock_modules = [
 for mod_name in mock_modules:
     sys.modules[mod_name] = unittest.mock.Mock()
 
-from waves import __version__
 from waves._settings import _project_name, _project_name_short
 
 project = _project_name_short
