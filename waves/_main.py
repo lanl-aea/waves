@@ -92,7 +92,7 @@ def main() -> None:
         elif args.subcommand == "print_study":
             _print_study.main(args.PARAMETER_STUDY_FILE)
         elif args.subcommand == "qoi":
-            _qoi.main(args)
+            _qoi.main(args, parser)
         else:
             parser.print_help()
     except (WAVESError, RuntimeError) as err:

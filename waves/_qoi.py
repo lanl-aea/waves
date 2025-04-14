@@ -9,7 +9,11 @@ _exclude_from_namespace = set(globals().keys())
 
 def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(add_help=False)
-    qoi_subparsers = parser.add_subparsers(dest="qoi_subcommand")
+    qoi_subparsers = parser.add_subparsers(
+        title="QOI subcommands",
+        metavar="{qoi_subcommand}",
+        dest="qoi_subcommand",
+    )
     qoi_subparsers.add_parser(
         "accept",
         help="Update expected values to match calculated values",
@@ -48,7 +52,7 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main(args) -> None:
+def main(args, parser) -> None:
     if args.qoi_subcommand == "accept":
         qoi._accept(args.calculated, args.expected)
     elif args.qoi_subcommand == "diff":
@@ -63,6 +67,8 @@ def main(args) -> None:
         qoi._archive(args.output, args.version, args.QOI_SET_FILE)
     elif args.qoi_subcommand == "plot-archive":
         qoi._plot_archive(args.output, args.QOI_ARCHIVE_H5)
+    else:
+        parser.print_help()
 
 
 def get_accept_parser() -> argparse.ArgumentParser:
