@@ -445,7 +445,6 @@ def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
 
     .. csv-table::
         :header-rows: 1
-        :name: sim_1_expected.csv
 
         name,expected,lower_atol,upper_atol
         load,4.5,1.0,1.0
@@ -509,7 +508,6 @@ def write_qoi_set_to_csv(qoi_set: xarray.Dataset, output: pathlib.Path) -> None:
 
     .. csv-table::
         :header-rows: 1
-        :name: sim_1_qois.csv
 
         name,calculated,expected,lower_limit,upper_limit,units,long_name,description,group,version,date
         load,5.0,4.5,3.5,5.5,N,Axial Load,Axial load through component XYZ,Assembly ABC Preload,abcdef,2025-01-01
