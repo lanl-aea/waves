@@ -129,13 +129,6 @@ env["ENV"]["PYTHONDONTWRITEBYTECODE"] = 1
 # Empty defaults list to avoid building all simulation targets by default
 env.Default()
 
-# Handle OS-aware tee output
-system = platform.system().lower()
-if system == "windows":  # Assume PowerShell
-    env["tee_suffix"] = "$(| Tee-Object -FilePath ${TARGETS[-1].abspath}$)"
-else:  # *Nix style tee
-    env["tee_suffix"] = "$(2>&1 | tee ${TARGETS[-1].abspath}$)"
-
 # Find required programs for conditional target ignoring
 required_programs = ["pytest", "sphinx-build", "latexmk", "flake8", "black", "mypy"]
 for program in required_programs:
