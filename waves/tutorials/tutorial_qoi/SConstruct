@@ -63,7 +63,7 @@ env.QOI(calculated=build_dir / "sim_1_qois.csv", expected="sim_1_expected_qois.c
 # Create parameter study
 study = waves.parameter_generators.CartesianProduct(
     {"height": [1.0, 2.0], "width": [0.2, 0.4]},
-    output_file="study.h5",
+    output_file=build_dir / "study.h5",
     set_name_template="set_@number",
 )
 
@@ -109,7 +109,7 @@ env.PythonScript(
 # Archive version 1 QOIs
 env.Command(
     target=[build_dir / "version_1_qois.h5"],
-    source=[build_dir / "sim_1_qois.csv", build_dir / "sim_2_qois.csv"],
+    source=[build_dir / "sim_1_qois_diff.csv", build_dir / "sim_2_qois.csv"],
     action="waves qoi archive --output ${TARGET.abspath} ${SOURCES.abspath}",
 )
 

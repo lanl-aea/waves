@@ -420,7 +420,7 @@ def _plot_scalar_qoi_history(qoi, ax, date_min, date_max):
     ax.set_title(name)
 
 
-def _qoi_history_report(qoi_archive, output, plots_per_page=8, add_git_commit_date=True):
+def _qoi_history_report(qoi_archive, output, plots_per_page=8, add_git_commit_date=False):
     """Plot history of QOI values from QOI archive."""
     if add_git_commit_date:
         qoi_archive = qoi_archive.map_over_datasets(_add_commit_date)

@@ -56,7 +56,7 @@ def main(args) -> None:
     elif args.qoi_subcommand == "check":
         qoi._check(args.diff)
     elif args.qoi_subcommand == "aggregate":
-        qoi._aggregate(args.parameter_study_file, args.output_file, args.QOI_SET_FILES)
+        qoi._aggregate(args.parameter_study_file, args.output_file, args.QOI_SET_FILE)
     elif args.qoi_subcommand == "report":
         qoi._report(args.output, args.QOI_ARCHIVE_H5)
     elif args.qoi_subcommand == "archive":
@@ -124,7 +124,7 @@ def get_aggregate_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "QOI_SET_FILE",
-        nargs="*",
+        nargs="+",
         type=pathlib.Path,
     )
     return parser
@@ -139,7 +139,6 @@ def get_report_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "QOI_ARCHIVE_H5",
-        nargs=1,
         type=pathlib.Path,
     )
     return parser
@@ -155,7 +154,7 @@ def get_plot_archive_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "QOI_ARCHIVE_H5",
-        nargs="*",
+        nargs="+",
         type=pathlib.Path,
     )
     return parser
