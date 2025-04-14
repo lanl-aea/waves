@@ -4030,9 +4030,9 @@ class QOIPseudoBuilder:
                 target=[f"{expected}.stdout"],
                 source=[calculated, expected],
                 action=(
-                    f"waves qoi accept"
-                    " --calculated {calculated}"
-                    " --expected {expected_source}"
+                    "waves qoi accept" +
+                    f" --calculated {calculated}" +
+                    f" --expected {expected_source}" +
                     " > ${TARGETS[-1].abspath} 2>&1"
                 ),
             )
@@ -4044,7 +4044,7 @@ class QOIPseudoBuilder:
         # Only perform the comparison if not updating expected values to match the calculated values
         elif expected:
             name = pathlib.Path(calculated).stem
-            diff = f"{name}_diff.csv"
+            diff = pathlib.Path(calculated).parent / f"{name}_diff.csv"
             file_to_archive = diff
             # Do the comparison and write results to file
             comparison_target = env.Command(
@@ -4057,11 +4057,14 @@ class QOIPseudoBuilder:
             check_target = env.Command(
                 target=[f"{name}_check.stdout"],
                 source=[diff],
-                action=f"waves qoi check --diff {diff} > ${TARGETS[-1].abspath} 2>&1",
+                action=(
+                    f"waves qoi check --diff {diff}" +
+                    " > ${TARGETS[-1].abspath} 2>&1"
+                ),
             )
             targets.extend(check_target)
 
-        # Add to build/qoi if requested
+        # Add to collection_dir if requested
         if archive:
             # Archive the QOI diff results if it's available, otherwise archive the calculated values
             # Keep directory hierarchy within build/qoi to avoid name conflicts

@@ -56,13 +56,13 @@ def main(args) -> None:
     elif args.qoi_subcommand == "check":
         qoi._check(args.diff)
     elif args.qoi_subcommand == "aggregate":
-        qoi._aggregate(args.parameter_study_file, args.output_file, args.qoi_set_files)
+        qoi._aggregate(args.parameter_study_file, args.output_file, args.QOI_SET_FILES)
     elif args.qoi_subcommand == "report":
-        qoi._report(args.output, args.qoi_archive_h5)
+        qoi._report(args.output, args.QOI_ARCHIVE_H5)
     elif args.qoi_subcommand == "archive":
-        qoi._archive(args.output, args.version, args.qoi_set_files)
+        qoi._archive(args.output, args.version, args.QOI_SET_FILE)
     elif args.qoi_subcommand == "plot-archive":
-        qoi._plot_archive(args.output, args.qoi_archive_h5)
+        qoi._plot_archive(args.output, args.QOI_ARCHIVE_H5)
 
 
 def get_accept_parser() -> argparse.ArgumentParser:
@@ -123,7 +123,7 @@ def get_aggregate_parser() -> argparse.ArgumentParser:
         type=pathlib.Path,
     )
     parser.add_argument(
-        "QOI-SET-FILE",
+        "QOI_SET_FILE",
         nargs="*",
         type=pathlib.Path,
     )
@@ -138,12 +138,7 @@ def get_report_parser() -> argparse.ArgumentParser:
         type=pathlib.Path,
     )
     parser.add_argument(
-        "--output-file",
-        help="post-processing output file",
-        type=pathlib.Path,
-    )
-    parser.add_argument(
-        "QOI-ARCHIVE-H5",
+        "QOI_ARCHIVE_H5",
         nargs=1,
         type=pathlib.Path,
     )
@@ -159,7 +154,7 @@ def get_plot_archive_parser() -> argparse.ArgumentParser:
         type=pathlib.Path,
     )
     parser.add_argument(
-        "QOI-ARCHIVE-H5",
+        "QOI_ARCHIVE_H5",
         nargs="*",
         type=pathlib.Path,
     )
@@ -180,8 +175,8 @@ def get_archive_parser() -> argparse.ArgumentParser:
         default="",
     )
     parser.add_argument(
-        "QOI-SET-FILE",
-        nargs="*",
+        "QOI_SET_FILE",
+        nargs="+",
         type=pathlib.Path,
     )
     return parser
