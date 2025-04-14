@@ -51,6 +51,33 @@ def create_qoi(
         just "Preload".
 
     :returns: QOI
+
+    Example
+
+    .. code-block::
+
+        >>> load = waves.qoi.create_qoi(
+        ...     name="load",
+        ...     calculated=5.0,
+        ...     units="N",
+        ...     long_name="Axial Load",
+        ...     description="Axial load through component XYZ",
+        ...     group="Assembly ABC Preload",
+        ...     version="abcdef",
+        ...     date="2025-01-01",
+        ... )
+        >>> load
+        <xarray.DataArray 'load' (value_type: 4)> Size: 32B
+        array([ 5., nan, nan, nan])
+        Coordinates:
+          * value_type  (value_type) <U11 176B 'calculated' 'expected' ... 'upper_limit'
+        Attributes:
+            units:        N
+            long_name:    Axial Load
+            description:  Axial load through component XYZ
+            group:        Assembly ABC Preload
+            version:      abcdef
+            date:         2025-01-01
     """
     if numpy.isnan(expected) & numpy.isfinite([lower_rtol, upper_rtol, lower_atol, upper_atol]).any():
         raise ValueError("Relative and absolute tolerances were specified without an expected value.")
@@ -98,6 +125,54 @@ def create_qoi_set(qois: typing.List[xarray.DataArray]) -> xarray.Dataset:
     :param qois: Sequence of QOIs.
 
     :returns: QOI Set containing each QOI as a separate data variable.
+
+    Example
+
+    .. code-block::
+
+        >>> load = waves.qoi.create_qoi(
+        ...     name="load",
+        ...     calculated=5.0,
+        ...     units="N",
+        ...     long_name="Axial Load",
+        ...     description="Axial load through component XYZ",
+        ...     group="Assembly ABC Preload",
+        ...     version="abcdef",
+        ...     date="2025-01-01",
+        ... )
+        ... gap = waves.qoi.create_qoi(
+        ...     name="gap",
+        ...     calculated=1.0,
+        ...     units="mm",
+        ...     long_name="Radial gap",
+        ...     description="Radial gap between components A and B",
+        ...     group="Assembly ABC Preload",
+        ...     version="abcdef",
+        ...     date="2025-01-01",
+        ... )
+        ... 
+        ... # Combine QOIs into calculated QOIs set
+        ... sim_1_qois = waves.qoi.create_qoi_set((load, gap))
+        ... sim_1_qois
+        <xarray.Dataset> Size: 240B
+        Dimensions:     (value_type: 4)
+        Coordinates:
+          * value_type  (value_type) <U11 176B 'calculated' 'expected' ... 'upper_limit'
+        Data variables:
+            load        (value_type) float64 32B 5.0 nan nan nan
+            gap         (value_type) float64 32B 1.0 nan nan nan
+        >>> sim_1_qois["load"]
+        <xarray.DataArray 'load' (value_type: 4)> Size: 32B
+        array([ 5., nan, nan, nan])
+        Coordinates:
+          * value_type  (value_type) <U11 176B 'calculated' 'expected' ... 'upper_limit'
+        Attributes:
+            units:        N
+            long_name:    Axial Load
+            description:  Axial load through component XYZ
+            group:        Assembly ABC Preload
+            version:      abcdef
+            date:         2025-01-01
     """
     qoi_set = xarray.merge(qois, combine_attrs="drop_conflicts")
     # Keep all attributes at the data variable level
@@ -122,6 +197,85 @@ def _create_qoi_study(qois: typing.List[xarray.DataArray], parameter_study: xarr
         and coordinates should be parameter values.
 
     :returns: QOI study
+
+    Example
+
+    .. code-block::
+
+        >>> set_0_qoi = waves.qoi.create_qoi(
+        ...     name="load",           
+        ...     calculated=5.0,                                
+        ...     units="N",                         
+        ...     long_name="Axial Load",
+        ...     description="Axial load through component XYZ",
+        ...     group="Assembly ABC Preload set_0",
+        ...     set_name="set_0",
+        ...     version="abcdef",                               
+        ... )                                               
+        ... set_1_qoi = waves.qoi.create_qoi(
+        ...     name="load",                    
+        ...     calculated=6.0,
+        ...     units="N",       
+        ...     long_name="Axial Load",
+        ...     description="Axial load through component XYZ",
+        ...     group="Assembly ABC Preload set_1",
+        ...     set_name="set_1",  
+        ...     version="abcdef",        
+        ... )       
+        ... set_2_qoi = waves.qoi.create_qoi(
+        ...     name="load",
+        ...     calculated=7.0,
+        ...     units="N",
+        ...     long_name="Axial Load",
+        ...     description="Axial load through component XYZ",
+        ...     group="Assembly ABC Preload set_2",
+        ...     set_name="set_2",
+        ...     version="abcdef",
+        ... )
+        ... set_3_qoi = waves.qoi.create_qoi(
+        ...     name="load",
+        ...     calculated=8.0,
+        ...     units="N",
+        ...     long_name="Axial Load",
+        ...     description="Axial load through component XYZ",
+        ...     group="Assembly ABC Preload set_3",
+        ...     set_name="set_3",
+        ...     version="abcdef",
+        ... )
+        ... 
+        ... study = waves.parameter_generators.CartesianProduct(
+        ...     {"height": [1.0, 2.0], "width": [0.2, 0.4]},
+        ...     output_file="study.h5",
+        ...     set_name_template="set_@number",
+        ... )
+        ... study.parameter_study
+        <xarray.Dataset> Size: 736B
+        Dimensions:         (set_name: 4)
+        Coordinates:
+            set_hash        (set_name) <U32 512B '8f1f75de634dfa73a8f2a3feaa4562c3' ....
+          * set_name        (set_name) <U5 80B 'set_0' 'set_1' 'set_2' 'set_3'
+            parameter_sets  (set_name) <U5 80B 'set_0' 'set_1' 'set_2' 'set_3'
+        Data variables:
+            height          (set_name) float64 32B 1.0 1.0 2.0 2.0
+            width           (set_name) float64 32B 0.2 0.4 0.2 0.4
+        >>> qoi_study = waves.qoi._create_qoi_study((set_0_qoi, set_1_qoi, set_2_qoi, set_3_qoi), study.parameter_study)
+        >>> qoi_study
+        <xarray.Dataset> Size: 992B
+        Dimensions:         (value_type: 4, set_name: 4)
+        Coordinates:
+          * value_type      (value_type) <U11 176B 'calculated' ... 'upper_limit'
+          * set_name        (set_name) object 32B 'set_0' 'set_1' 'set_2' 'set_3'
+            set_hash        (set_name) <U32 512B '8f1f75de634dfa73a8f2a3feaa4562c3' ....
+            height          (set_name) float64 32B 1.0 1.0 2.0 2.0
+            width           (set_name) float64 32B 0.2 0.4 0.2 0.4
+            parameter_sets  (set_name) <U5 80B 'set_0' 'set_1' 'set_2' 'set_3'
+        Data variables:
+            load            (set_name, value_type) float64 128B 5.0 nan nan ... nan nan
+        Attributes:
+            units:        N
+            long_name:    Axial Load
+            description:  Axial load through component XYZ
+            version:      abcdef
     """
     # Move "group" from attribute to dimension for each DataArray, and merge
     try:
@@ -150,6 +304,90 @@ def _create_qoi_archive(qois: typing.List[xarray.DataArray]) -> xarray.DataTree:
     :param qois: Sequence of QOIs. Each QOI must have a "version" and "group" attribute.
 
     :returns: QOI archive
+    
+    Example
+
+    .. code-block::
+
+        >>> archive = waves.qoi._create_qoi_archive(
+        ...     (                                    
+        ...         waves.qoi.create_qoi(
+        ...             name="load",      
+        ...             calculated=5.3,
+        ...             expected=4.5,    
+        ...             lower_limit=3.5,
+        ...             upper_limit=5.5, 
+        ...             units="N",  
+        ...             long_name="Axial Load",     
+        ...             description="Axial load through component XYZ",
+        ...             group="Assembly ABC Preload",
+        ...             version="ghijkl",
+        ...             date="2025-02-01",
+        ...         ),
+        ...         waves.qoi.create_qoi(
+        ...             name="gap",
+        ...             calculated=1.0,
+        ...             expected=0.95,
+        ...             lower_limit=0.85,
+        ...             upper_limit=1.05,
+        ...             units="mm",                        
+        ...             long_name="Radial gap",
+        ...             description="Radial gap between components A and B",
+        ...             group="Assembly ABC Preload",                                           
+        ...             version="ghijkl",                      
+        ...             date="2025-02-01",
+        ...         ),                                                           
+        ...         waves.qoi.create_qoi(                                           
+        ...             name="load",
+        ...             calculated=35.0,          
+        ...             units="lbf",
+        ...             long_name="Transverse load",
+        ...             description="Transverse load through component D",
+        ...             group="Assembly DEF Preload",      
+        ...             version="ghijkl",
+        ...             date="2025-02-01",                  
+        ...         ),                                                                          
+        ...         waves.qoi.create_qoi(                      
+        ...             name="stress",
+        ...             calculated=110.0,                                         
+        ...             units="MPa",                                               
+        ...             long_name="Membrane stress",
+        ...             description="Membrane stress in component E",
+        ...             group="Assembly DEF Preload",
+        ...             version="ghijkl",
+        ...             date="2025-02-01",
+        ...         ),
+        ...     )
+        ... )
+        ... archive
+        <xarray.DataTree>
+        Group: /
+        ├── Group: /Assembly ABC Preload
+        │       Dimensions:     (version: 1, value_type: 4)
+        │       Coordinates:
+        │         * version     (version) object 8B 'ghijkl'
+        │         * value_type  (value_type) <U11 176B 'calculated' 'expected' ... 'upper_limit'
+        │           date        (version) <U10 40B '2025-02-01'
+        │       Data variables:
+        │           load        (version, value_type) float64 32B 5.3 4.5 3.5 5.5
+        │           gap         (version, value_type) float64 32B 1.0 0.95 0.85 1.05
+        │       Attributes:
+        │           group:    Assembly ABC Preload
+        │           version:  ghijkl
+        │           date:     2025-02-01
+        └── Group: /Assembly DEF Preload
+                Dimensions:     (version: 1, value_type: 4)
+                Coordinates:
+                  * version     (version) object 8B 'ghijkl'
+                  * value_type  (value_type) <U11 176B 'calculated' 'expected' ... 'upper_limit'
+                    date        (version) <U10 40B '2025-02-01'
+                Data variables:
+                    load        (version, value_type) float64 32B 35.0 nan nan nan
+                    stress      (version, value_type) float64 32B 110.0 nan nan nan
+                Attributes:
+                    group:    Assembly DEF Preload
+                    version:  ghijkl
+                    date:     2025-02-01
     """
     dt = xarray.DataTree()
     # Creates a group for each "group" attribute
@@ -202,6 +440,27 @@ def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
         All QOIs will be merged into a single ``xarray.Dataset`` using ``create_qoi_set()``.
 
     :returns: QOI set
+
+    Example
+
+    .. csv-table::
+        :header-rows: 1
+        :name: sim_1_expected.csv
+
+        name,expected,lower_atol,upper_atol
+        load,4.5,1.0,1.0
+        gap,0.8,0.1,0.1
+
+    .. code-block::
+
+        >>> waves.qoi._read_qoi_set("sim_1_expected_qois.csv")
+        <xarray.Dataset> Size: 240B
+        Dimensions:     (value_type: 4)
+        Coordinates:
+          * value_type  (value_type) <U11 176B 'calculated' 'expected' ... 'upper_limit'
+        Data variables:
+            load        (value_type) float64 32B nan 4.5 3.5 5.5
+            gap         (value_type) float64 32B nan 0.8 0.7 0.9
     """
     if not isinstance(from_file, pathlib.Path):
         from_file = pathlib.Path(from_file)
@@ -233,6 +492,28 @@ def write_qoi_set_to_csv(qoi_set: xarray.Dataset, output: pathlib.Path) -> None:
 
     :param qoi_set: QOI set.
     :param output: Output CSV file.
+
+    Example
+
+    .. code-block::
+
+        >>> sim_1_qois
+        <xarray.Dataset> Size: 240B
+        Dimensions:     (value_type: 4)
+        Coordinates:
+          * value_type  (value_type) <U11 176B 'calculated' 'expected' ... 'upper_limit'
+        Data variables:
+            load        (value_type) float64 32B 5.0 4.5 3.5 5.5
+            gap         (value_type) float64 32B 1.0 0.8 0.7 0.9
+        >>> waves.qoi.write_qoi_set_to_csv(sim_1_qois, "sim_1_qois.csv")
+
+    .. csv-table::
+        :header-rows: 1
+        :name: sim_1_qois.csv
+
+        name,calculated,expected,lower_limit,upper_limit,units,long_name,description,group,version,date
+        load,5.0,4.5,3.5,5.5,N,Axial Load,Axial load through component XYZ,Assembly ABC Preload,abcdef,2025-01-01
+        gap,1.0,0.8,0.7000000000000001,0.9,mm,Radial gap,Radial gap between components A and B,Assembly ABC Preload,abcdef,2025-01-01
     """
     df = qoi_set.to_dataarray("name").to_pandas()
     # Convert attributes to data variables so they end up as columns in the CSV
@@ -540,7 +821,8 @@ def _plot_archive(output, qoi_archive_h5):
 
 
 def _archive(output, version, qoi_set_files):
-    """Archive QOI sets from a single version to an H5 file."""
+    """Archive QOI sets from a single version to an H5 file.
+    """
     qoi_sets = (_read_qoi_set(qoi_set_file) for qoi_set_file in qoi_set_files)
     qois = (qoi for qoi_set in qoi_sets for qoi in qoi_set.values())
     if version:
