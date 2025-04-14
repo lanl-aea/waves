@@ -1,0 +1,128 @@
+#! /usr/bin/env python
+import pathlib
+import os
+
+import waves
+
+
+AddOption(
+    "--build-dir",
+    dest="variant_dir_base",
+    default="build",
+    nargs=1,
+    type="string",
+    action="store",
+    metavar="DIR",
+    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')",
+)
+AddOption(
+    "--update-expected-qois",
+    default=False,
+    action="store_true",
+    help="Update expected QOI values to match currently calculated values. (default: '%default')",
+)
+
+env = Environment(
+    ENV=os.environ.copy(),
+)
+build_dir = pathlib.Path(env.GetOption("variant_dir_base"))
+env.AddMethod(
+    waves.scons_extensions.QOIPseudoBuilder(
+        collection_dir=(build_dir / "qoi").absolute(),
+        build_dir=build_dir.absolute(),
+        update_expected=env.GetOption("update_expected_qois"),
+    ),
+    "QOI",
+)
+env.AddMethod(waves.scons_extensions.parameter_study_write, "ParameterStudyWrite")
+env.Append(BUILDERS={"PythonScript": waves.scons_extensions.python_builder_factory()})
+
+################################################################################
+# QOI testing
+################################################################################
+
+# Calculate QOIs from Simulation 1
+env.PythonScript(
+    target=[build_dir / "sim_1_qois.csv", build_dir / "sim_1_qois.h5"],
+    source=["#/sim_1_post.py"],
+)
+
+# Calculate QOIs from Simulation 2
+env.PythonScript(
+    target=[build_dir / "sim_2_qois.csv", build_dir / "sim_2_qois.h5"],
+    source=["#/sim_2_post.py"],
+)
+
+# Compare to expected QOIs and archive
+env.QOI(calculated=build_dir / "sim_1_qois.csv", expected="sim_1_expected_qois.csv", archive=True)
+
+################################################################################
+# Parameter study QOI aggregation
+################################################################################
+
+# Create parameter study
+study = waves.parameter_generators.CartesianProduct(
+    {"height": [1.0, 2.0], "width": [0.2, 0.4]},
+    output_file="study.h5",
+    set_name_template="set_@number",
+)
+
+# Write parameter study definition to file
+env.ParameterStudyWrite(study)
+
+# Generate QOIs for each set in the parameter study
+study_qoi_targets = list()
+for name, config in study.parameter_study_to_dict().items():
+    # Calculate QOIs from parameter study
+    qoi_target = build_dir / f"{name}_qois.csv"
+    env.PythonScript(
+        target=[qoi_target],
+        source=["#/study_qois.py"],
+        subcommand_options=f"--height {config['height']} --width {config['width']} --set {name}",
+    )
+    study_qoi_targets.append(qoi_target)
+
+# Aggregate QOIs across parameter study and write to file
+env.Command(
+    target=[build_dir / "study_qois.h5"],
+    source=[build_dir / "study.h5"] + study_qoi_targets,
+    action=(
+        "waves qoi aggregate"
+        " --parameter-study-file ${SOURCES[0].abspath}"
+        " --output-file ${TARGETS[0].abspath}"
+        " ${SOURCES[2:].abspath}"
+    ),
+)
+
+################################################################################
+# QOI archival and reporting
+################################################################################
+# The following would typically be done either manually or in a CI job, instead of defined as SCons tasks
+
+# Fabricate simulation 1 and 2 QOIs from a different "version" of the repo
+# This would typically be done in the same process by which version 1 QOIs were generated
+env.PythonScript(
+    target=[build_dir / "version_2_qois.h5"],
+    source=["#/version_2_qois.py"],
+)
+
+# Archive version 1 QOIs
+env.Command(
+    target=[build_dir / "version_1_qois.h5"],
+    source=[build_dir / "sim_1_qois.csv", build_dir / "sim_2_qois.csv"],
+    action="waves qoi archive --output ${TARGET.abspath} ${SOURCES.abspath}",
+)
+
+# Create tolerance report from archive
+env.Command(
+    target=[build_dir / "tolerance_report.pdf"],
+    source=[build_dir / "version_1_qois.h5"],
+    action="waves qoi report --output ${TARGET.abspath} ${SOURCE.abspath}",
+)
+
+# Create QOI history report
+env.Command(
+    target=[build_dir / "history_report.pdf"],
+    source=[build_dir / "version_1_qois.h5", build_dir / "version_2_qois.h5"],
+    action="waves qoi plot-archive --output ${TARGET.abspath} ${SOURCES.abspath}",
+)
