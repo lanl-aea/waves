@@ -79,7 +79,7 @@ addopts = "--ignore='build' --ignore='install' --ignore='waves/modsim_template/'
 [tool.black]
 target-version = ["py39", "py310", "py311", "py312", "py313"]
 extend-exclude = ".txt|.toml|.yaml|.csv"
-force-exclude = "build*/|install*/"
+force-exclude = "build*/|install*/|conda-environment*/|conda-pkgs*/"
 line-length = 120
 include = "SConstruct|SConscript|.py"
 
