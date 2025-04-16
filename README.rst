@@ -144,6 +144,7 @@ Developers
 * `Thomas Roberts`_
 * `Sergio Cordova`_
 * `Matthew Fister`_
+* `Chris Johnson`_
 * `Scott Ouellette`_
 
 ****************
