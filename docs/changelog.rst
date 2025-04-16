@@ -8,6 +8,10 @@ Changelog
 0.13.2 (unreleased)
 *******************
 
+Documentation
+=============
+- Add `Chris Johnson`_ to authors list (:issue:`906`, :merge:`1181`). By  `Chris Johnson`_.
+
 *******************
 0.13.1 (2025-04-16)
 *******************
