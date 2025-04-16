@@ -5,8 +5,16 @@ Changelog
 #########
 
 *******************
-0.13.1 (unreleased)
+0.13.2 (unreleased)
 *******************
+
+*******************
+0.13.1 (2025-04-16)
+*******************
+
+Bug fixes
+=========
+- Fix the GitHub-Actions Conda environment creation options. By `Kyle Brindley`_.
 
 *******************
 0.13.0 (2025-04-14)

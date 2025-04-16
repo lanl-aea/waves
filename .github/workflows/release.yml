@@ -23,7 +23,7 @@ jobs:
           miniforge-version: latest
       - name: Conda environment
         shell: bash -el {0}
-        run: conda env update --file pip-build.yml --yes
+        run: conda env update --file pip-build.yml
       - name: pip build
         shell: bash -el {0}
         run: scons build --distribution-name=waves-workflows
@@ -72,7 +72,7 @@ jobs:
           miniforge-version: latest
       - name: Conda environment
         shell: bash -el {0}
-        run: conda env update --file pip-build.yml --yes
+        run: conda env update --file pip-build.yml
       - name: Build PDF documentation
         shell: bash -el {0}
         run: scons latexpdf
