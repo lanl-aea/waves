@@ -87,6 +87,7 @@ author_list = [
     "Thomas Roberts",
     "Sergio Cordova",
     "Matthew Fister",
+    "Chris Johnson",
     "Scott Ouellette",
 ]
 author_latex = r" \and ".join(author_list)

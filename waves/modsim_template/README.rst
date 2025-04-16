@@ -17,6 +17,7 @@
 .. _`Prabhu Khalsa`: pkhalsa@lanl.gov
 .. _`Scott Ouellette`: souellette@lanl.gov
 .. _`Matthew Fister`: mwfister@lanl.gov
+.. _`Chris Johnson`: clj@lanl.gov
 
 .. target-end-do-not-remove
 
