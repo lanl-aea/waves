@@ -10,6 +10,7 @@ authors = [
     {name = "Thomas Roberts", email = "tproberts@lanl.gov"},
     {name = "Sergio Cordova", email = "sergioc@lanl.gov"},
     {name = "Matthew Fister", email = "mwfister@lanl.gov"},
+    {name = "Chris Johnson", email = "clj@lanl.gov"},
     {name = "Scott Ouellette", email = "souellette@lanl.gov"}
 ]
 description = "Computational science and engineering parameteric study workflows"
