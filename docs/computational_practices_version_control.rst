@@ -29,7 +29,7 @@ integration of requirements, product configuration, and modeling are valuable to
 version control is typically limited to whole sale file changes with a check-in/check-out lock on changes. This works
 well for CAD files, which are typically binary formats where even small changes result in a completely new file.
 Granular change tracking of binary formats, and especially proprietary formats, rely on the owning software vendor to
-provide a change tracker and interpretter where such change tracking is practical or meaningful.
+provide a change tracker and interpreter where such change tracking is practical or meaningful.
 
 For text files, such as modeling and simulation input files and scripted post-processing files, greater change control
 and collaboration can be provided by version control software (VCS). Version control software is also referred to as
