@@ -19,6 +19,7 @@ author_contact = [
     ("Thomas Roberts", "<tproberts@lanl.gov>"),
     ("Sergio Cordova", "<sergioc@lanl.gov>"),
     ("Matthew Fister", "<mwfister@lanl.gov>"),
+    ("Chris Johnson", "<clj@lanl.gov>"),
     ("Scott Ouellette", "<souellette@lanl.gov>"),
 ]
 author = ", ".join(author for author, email in author_contact[:-1])
