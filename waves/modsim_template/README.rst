@@ -106,26 +106,7 @@ Build Simulations
 This project uses the `SCons`_ build system. This section will discuss some common build operations. An abbreviated
 options description can be displayed with ``scons -H``. For a full list of `SCons`_ command line options and target
 build behavior, see the `SCons manpage`_. The `SCons manpage`_ is also installed with `Scons`_ in the environment and
-can be opened from the command line as ``man scons`` in the `AEA Compute environment`_. In local environments, the
-manpage may not be in the ``man`` program's search path, ``MANPATH``. You can find the manpage file and make them
-available with something similar to any of the following, in increasing order of required background knowledge.
-
-.. code-block::
-
-   # Activate the environment
-   conda activate modsim-template-env
-
-   # Find the scons manpage file
-   $ find $CONDA_PREFIX -name scons.1
-   /path/to/modsim-template-env/scons.1
-
-   # Open manpage directly
-   $ man $CONDA_PREFIX/scons.1
-
-   # Link SCons manpage to expected path and update MANPATH
-   $ ln -s $CONDA_PREFIX/scons.1 $CONDA_PREFIX/man/man1/scons.1
-   $ export MANPATH=$MANPATH:$CONDA_PREFIX/man
-   $ man scons
+can be opened from the command line as ``man scons``
 
 - View project specific command line options
 
