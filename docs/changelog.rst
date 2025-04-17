@@ -8,6 +8,10 @@ Changelog
 0.13.2 (unreleased)
 *******************
 
+Documentation
+=============
+- Replace GNU Make lesson plan reference with SCons lesson plan (:issue:`913`, :merge:`1183`). By `Kyle Brindley`_.
+
 *******************
 0.13.1 (2025-04-16)
 *******************
