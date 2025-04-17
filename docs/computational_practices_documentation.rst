@@ -27,8 +27,7 @@ similar complexity to a large software project, and many of the same documentati
 Of course, no documentation for an analysis project would be complete without a discussion of the engineering analysis
 reports as well.
 
-Analysis reports
-----------------
+* Analysis reports
 
 The documentation should include everything required for new developers to begin contributing to the project, as well as
 the necessary elements of a technical report. The user manual should explain what simulations are available, what
