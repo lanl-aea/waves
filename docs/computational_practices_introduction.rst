@@ -74,12 +74,12 @@ Recommended Practical Curriculum
 Beyond the reading in this document, the following is a recommended curriculum to learn a practical implementation of
 these practices. This curriculum should be supplemented with lessons in the numeric solvers used in your engineering
 organization. For the practical implementation found in the `WAVES`_ :ref:`user_manual`, the shell, Git, Python, and
-GNU Make tutorials are considered prerequisites.
+SCons tutorials are considered prerequisites.
 
 #. Software Carpentry: Shell Novice - http://swcarpentry.github.io/shell-novice/ :cite:`swc-shell`
 #. Software Carpentry: Git Novice - https://swcarpentry.github.io/git-novice/index.html :cite:`swc-git`
 #. Software Carpentry: Python Novice - https://swcarpentry.github.io/python-novice-inflammation/ :cite:`swc-python`
-#. Software Carpentry: GNU Make - https://swcarpentry.github.io/make-novice/ :cite:`swc-make`
+#. Software Carpentry: SCons Novice - https://carpentries-incubator.github.io/scons-novice/ :cite:`swc-scons`
 #. Conda environments - https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html
    :cite:`conda,conda-gettingstarted`
 #. Sphinx tutorial - https://www.sphinx-doc.org/en/master/tutorial/index.html :cite:`sphinx,sphinx-tutorial`

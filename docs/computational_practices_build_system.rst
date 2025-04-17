@@ -6,7 +6,8 @@ Build System
 
 .. note:: Related curriculum
 
-   Software Carpentry: GNU Make - https://swcarpentry.github.io/make-novice/ :cite:`SoftwareCarpentry`
+   Software Carpentry: SCons-Novice - https://carpentries-incubator.github.io/scons-novice/
+   :cite:`SoftwareCarpentry,swc-scons`
 
 .. _build_system_directed_graphs:
 
