@@ -249,10 +249,10 @@ and they are upstream of the mesh task. But the tasks after the mesh task did no
 somewhat surprising. The simulation itself depends on the mesh file, so why didn't the workflow re-execute all tasks
 from mesh to post-processing?
 
-Many software build systems, such as `GNU Make`_ use file system modification time stamps to track DAG state. By default
-the `SCons`_ state machine uses file signatures built from md5 hashes to identify task state. If the contents of the
-``rectangle_mesh.inp`` file do not change, then the md5 signature on re-execution still matches the build state for the
-rest of the downstream tasks, which do not need to rebuild.
+Many software build systems, such as `GNU Make`_ use file system modification time stamps to track DAG state
+:cite:`gnu-make`. By default the `SCons`_ state machine uses file signatures built from md5 hashes to identify task
+state. If the contents of the ``rectangle_mesh.inp`` file do not change, then the md5 signature on re-execution still
+matches the build state for the rest of the downstream tasks, which do not need to rebuild.
 
 This default behavior of `SCons`_ makes it desirable for computational science and engineering workflows where
 downstream tasks may be computationally expensive. The added cost of computing md5 signatures during configuration is
