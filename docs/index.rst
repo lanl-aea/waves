@@ -130,7 +130,7 @@
          :link: installation
          :link-type: ref
 
-         Installation with conda-forge
+         Installation with conda-forge or PyPI
 
       .. grid-item-card:: :octicon:`rocket` Quickstart
          :link: waves_quickstart

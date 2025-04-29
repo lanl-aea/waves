@@ -3,6 +3,8 @@ channels:
 
 dependencies:
   - pip
+  - pytest-xdist
+  - pytest>=6
   - python-build
   - scons >=4.6
   - setuptools >=64
