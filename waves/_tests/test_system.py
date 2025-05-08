@@ -66,6 +66,7 @@ system_tests = [
     pytest.param([string.Template("${waves_command} --help")], None, marks=[pytest.mark.cli]),
     pytest.param([string.Template("${waves_command} docs --help")], None, marks=[pytest.mark.cli]),
     pytest.param([string.Template("${waves_command} fetch --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} fetch --print-available")], None, marks=[pytest.mark.cli]),
     pytest.param([string.Template("${waves_command} visualize --help")], None, marks=[pytest.mark.cli]),
     pytest.param([string.Template("${waves_command} build --help")], None, marks=[pytest.mark.cli]),
     pytest.param([string.Template("${waves_command} cartesian_product --help")], None, marks=[pytest.mark.cli]),
