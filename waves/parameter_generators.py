@@ -496,27 +496,9 @@ class ParameterGenerator(ABC):
         if self.previous_parameter_study is None:
             raise RuntimeError("Called without a previous parameter study")
 
-        # Swap dimensions from the set name to the set hash to merge identical sets
-        swap_to_hash_index = {_set_coordinate_key: _hash_coordinate_key}
         previous_parameter_study = _open_parameter_study(self.previous_parameter_study)
-        previous_parameter_study = previous_parameter_study.swap_dims(swap_to_hash_index)
-        self.parameter_study = self.parameter_study.swap_dims(swap_to_hash_index)
-
-        # Verify type equality and record types prior to merge.
-        coerce_types = _return_dataset_types(self.parameter_study, previous_parameter_study)
-
-        # Favor the set names of the prior study. Leaves new set names as NaN.
-        self.parameter_study = xarray.merge(
-            [previous_parameter_study, self.parameter_study.drop_vars(_set_coordinate_key)]
-        )
+        self.parameter_study = _merge_parameter_studies([previous_parameter_study, self.parameter_study]
         previous_parameter_study.close()
-
-        # Coerce types back to their original type.
-        # Particularly necessary for ints, which are coerced to float by xarray.merge
-        for key, old_dtype in coerce_types.items():
-            new_dtype = self.parameter_study[key].dtype
-            if new_dtype != old_dtype:
-                self.parameter_study[key] = self.parameter_study[key].astype(old_dtype)
 
         # Recover parameter study numpy array(s) to match merged study
         self._samples = self._parameter_study_to_numpy()
@@ -1498,6 +1480,43 @@ def _coerce_values(values: typing.Iterable, name: typing.Optional[str] = None) -
             f" '{type(values_coerced[0])}'."
         )
     return values_coerced
+
+
+def _merge_parameter_studies(studies: typing.List[xarray.Dataset]) -> xarray.Dataset:
+    """Merge a list of parameter studies into one study. Set hashes are not resolved by this function at the moment.
+
+    Preserve the first given parameter study set name to set contents associations by dropping subsequent studies' set
+    names during merge.
+
+    :param studies: list of parameter study xarray Datasets where the first study is considered the 'base' study
+
+    :return: parameter study xarray Dataset
+    """
+    # Swap dimensions from the set name to the set hash to merge identical sets
+    swap_to_hash_index = {_set_coordinate_key: _hash_coordinate_key}
+    studies = [study.swap_dims(swap_to_hash_index) for study in studies]
+
+    # Split the list of studies into one 'base' study and the remainder
+    study_base = studies.pop(0)
+
+    # Verify type equality and record types prior to merge.
+    types_dictionary = {}
+    for study in studies:
+        coerce_types = _return_dataset_types(study_base, study)
+        types_dictionary.update(coerce_types)
+
+    # Combine all studies by dropping almost all set names
+    studies = [study_base] + [study.drop_vars(_set_coordinate_key) for study in studies]
+    study_combined = xarray.merge(studies)
+
+    # Coerce types back to their original type.
+    # Particularly necessary for ints, which are coerced to float by xarray.merge
+    for key, old_dtype in types_dictionary.items():
+        new_dtype = study_combined[key].dtype
+        if new_dtype != old_dtype:
+            study_combined[key] = study_combined[key].astype(old_dtype)
+
+    return study_combined
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace
