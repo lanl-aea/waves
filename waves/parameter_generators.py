@@ -497,7 +497,7 @@ class ParameterGenerator(ABC):
             raise RuntimeError("Called without a previous parameter study")
 
         previous_parameter_study = _open_parameter_study(self.previous_parameter_study)
-        self.parameter_study = _merge_parameter_studies([previous_parameter_study, self.parameter_study]
+        self.parameter_study = _merge_parameter_studies([previous_parameter_study, self.parameter_study])
         previous_parameter_study.close()
 
         # Recover parameter study numpy array(s) to match merged study
