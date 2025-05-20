@@ -101,6 +101,12 @@ def main(
 
 
 def time_points_from_file(time_points_file: pathlib.Path) -> numpy.array:
+    """Return time points array from CalculiX ``*TIME POINTS`` CSV file
+
+    :param time_points_file: A CalculiX ``*TIME POINTS`` CSV file
+
+    :returns: 1D numpy array of time points
+    """
     time_points = numpy.genfromtxt(time_points_file)
     time_points = time_points.flatten()
     # Either calculix or ccx2paraview doesn't write the t0 increment
@@ -110,6 +116,14 @@ def time_points_from_file(time_points_file: pathlib.Path) -> numpy.array:
 
 
 def existing_file(argument: str) -> pathlib.Path:
+    """Argparse existing pathlib.Path custom type
+
+    :param argument: string argument from command line argument
+
+    :returns: string converted to pathlib.Path object
+
+    :raises argparse.ArgumentTypeError: If the file does not exist
+    """
     path = pathlib.Path(argument)
     if not path.exists():
         raise argparse.ArgumentTypeError(f"file '{path}' does not exist")
