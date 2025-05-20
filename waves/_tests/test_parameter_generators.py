@@ -320,8 +320,10 @@ def test_coerce_values(values, name, expected_output_type, should_warn):
 
 merge_parameter_studies_cases = {
     "concatenate along one parameter": (
-        [parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
-         parameter_generators.OneAtATime({"parameter_1": [2]}).parameter_study],
+        [
+            parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
+            parameter_generators.OneAtATime({"parameter_1": [2]}).parameter_study,
+        ],
         {"parameter_1": [2, 1]},
         does_not_raise(),
     ),
