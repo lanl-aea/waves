@@ -1,74 +1,92 @@
-import sys
 import typing
 import pathlib
 import argparse
 import warnings
 
+import numpy
 import meshio
 import xarray
 
 
 def main(
-    input_file: pathlib.Path,
+    input_files: typing.Tuple[pathlib.Path],
     output_file: pathlib.Path,
     mesh_file: typing.Optional[pathlib.Path] = None,
+    time_points_file: typing.Optional[pathlib.Path] = None,
 ) -> None:
-    """Read VTU file provided by ``ccx2paraview`` and write an Xarray H5 file
+    """Open a ``ccx2paraview`` CalculiX-to-VTU output file and convert to Xarray
 
     Assumes
 
     1. Nodes are numbered sequentially from one in the CalculiX input file
     2. Nodes will be converted to zero index by ``meshio``
 
-    :param input_file: VTU file created by ``ccx2paraview``
+    :param input_files: VTU file(s) created by ``ccx2paraview``
     :param output_file: Xarray H5 output file
     :param mesh_file: CalculiX input file containing node sets
+    :param time_points_file: Calculix time points CSV data. If the first time point is 0.0, it will be stripped because
+        CalculiX and ccx2paraview do not write the initial, time zero increment.
     """
-    results = meshio.read(input_file)
-    coordinate = ["x", "y", "z"]
-    components = ["11", "22", "33", "12", "13", "23"]
-    point_numbers = list(range(0, len(results.points)))
-    data_arrays = [
-        xarray.DataArray(
-            data=results.points,
-            dims=["point", "coordinate"],
-            coords={"point": point_numbers, "coordinate": coordinate},
-            name="original_location",
-        )
-    ]
-    for key, value in results.point_data.items():
-        if len(value.shape) == 1:
-            data_arrays.append(
-                xarray.DataArray(
-                    data=value,
-                    dims=["point"],
-                    coords={"point": point_numbers},
-                    name=key,
+    if time_points_file is not None and time_points_file.is_file():
+        time_points = numpy.genfromtxt(time_points_file)
+        time_points = time_points.flatten()
+        # Either calculix or ccx2paraview doesn't write the t0 increment
+        if numpy.isclose(time_points[0], 0.0):
+            time_points = time_points[1:]
+    else:
+        time_points = numpy.array([numpy.nan] * len(input_files))
+    if len(time_points) != len(input_files):
+        raise RuntimeError("If time points are provided, the length must match the number of VTU files provided")
+
+    data_arrays = []
+    for infile, time in zip(input_files, time_points):
+        increment_data = []
+        results = meshio.read(infile)
+        coordinate = ["x", "y", "z"]
+        components = ["11", "22", "33", "12", "13", "23"]
+        point_numbers = list(range(0, len(results.points)))
+        increment_data = [
+            xarray.DataArray(
+                data=results.points,
+                dims=["point", "coordinate"],
+                coords={"point": point_numbers, "coordinate": coordinate},
+                name="original_location",
+            )
+        ]
+        for key, value in results.point_data.items():
+            if len(value.shape) == 1:
+                increment_data.append(
+                    xarray.DataArray(
+                        data=value,
+                        dims=["point"],
+                        coords={"point": point_numbers},
+                        name=key,
+                    ).expand_dims({"time": [time]})
                 )
-            )
-        elif len(value.shape) == 2 and value.shape[1] == len(components):
-            data_arrays.append(
-                xarray.DataArray(
-                    data=value,
-                    dims=["point", "component"],
-                    coords={"point": point_numbers, "component": components},
-                    name=key,
+            elif len(value.shape) == 2 and value.shape[1] == len(components):
+                increment_data.append(
+                    xarray.DataArray(
+                        data=value,
+                        dims=["point", "component"],
+                        coords={"point": point_numbers, "component": components},
+                        name=key,
+                    ).expand_dims({"time": [time]})
                 )
-            )
-        elif len(value.shape) == 2 and value.shape[1] == len(coordinate):
-            data_arrays.append(
-                xarray.DataArray(
-                    data=value,
-                    dims=["point", "coordinate"],
-                    coords={"point": point_numbers, "coordinate": coordinate},
-                    name=key,
+            elif len(value.shape) == 2 and value.shape[1] == len(coordinate):
+                increment_data.append(
+                    xarray.DataArray(
+                        data=value,
+                        dims=["point", "coordinate"],
+                        coords={"point": point_numbers, "coordinate": coordinate},
+                        name=key,
+                    ).expand_dims({"time": [time]})
                 )
-            )
-        else:
-            warnings.warn(
-                f"Do not know how to handle '{key}' data '{value}'. "
-                "Data variable will not be saved in the xarray dataset"
-            )
+            else:
+                warnings.warn(
+                    f"Do not know how to handle '{key}' data '{value}'. "
+                    "Data variable will not be saved in the xarray dataset"
+                )
+        data_arrays.extend(increment_data)
 
     # TODO: Find a better way to add the node set information
     if mesh_file is not None and mesh_file.is_file():
@@ -115,6 +133,11 @@ def get_parser():
         type=existing_file,
         help="CalculiX input file. When provided, try to merge the point/node sets with the results VTU file.",
     )
+    parser.add_argument(
+        "--time-points-file",
+        type=existing_file,
+        help="CalculiX ``*TIME POINTS`` CSV data.",
+    )
     return parser
 
 
@@ -125,4 +148,5 @@ if __name__ == "__main__":
         input_file=args.input_file,
         output_file=args.output_file,
         mesh_file=args.mesh_file,
+        time_points_file=args.time_points_file,
     )
