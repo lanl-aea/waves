@@ -15,3 +15,6 @@ dependencies:
   - sphinx-copybutton >=0.5.1
   - sphinx-design
   - sphinxcontrib-bibtex
+  # TODO: Remove openssl spec when openssl>=3.5.0 is compatible with macos/pip again
+  # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/916
+  - openssl !=3.5.0
