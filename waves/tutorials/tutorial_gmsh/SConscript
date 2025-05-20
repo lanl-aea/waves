@@ -36,9 +36,12 @@ artifacts.extend(
 )
 
 # Extract
+# TODO: Recover the expected time point count from the time points file
+time_point_indices = range(1, 11, 1)
+vtu_files = [f"uniaxial_calculix.{increment:02}.vtu" for increment in time_point_indices]
 artifacts.extend(
     env.Command(
-        target=["rectangle_compression.vtu", "rectangle_compression.vtu.stdout"],
+        target=vtu_files + ["uniaxial_calculix.vtu.stdout"],
         source=["rectangle_compression.frd"],
         action=["cd ${TARGET.dir.abspath} && ccx2paraview ${SOURCES[0].abspath} vtu ${action_suffix}"],
         action_suffix=env["action_suffix"],
@@ -47,20 +50,23 @@ artifacts.extend(
 workflow.extend(
     env.PythonScript(
         target=["rectangle_compression.h5"],
-        source=["vtu2xarray.py", "rectangle_compression.vtu"],
-        subcommand_options="--input-file ${SOURCES[1].abspath} --output-file ${TARGET.abspath}",
+        source=["vtu2xarray.py", "time_points.inp", vtu_files],
+        subcommand_options=(
+            "--input-file ${SOURCES[1].abspath} --output-file ${TARGET.abspath}"
+            " --time-points-file ${SOURCES[1].abspath}"
+        ),
         action_suffix=env["action_suffix"],
     )
 )
 
 # Post-processing
-script_options = "--input-file ${SOURCES[1:].abspath}"
-script_options += " --output-file ${TARGET.file} --x-units mm/mm --y-units MPa"
 workflow.extend(
     env.PythonScript(
         target=["stress_strain_comparison.pdf", "stress_strain_comparison.csv"],
         source=["post_processing.py", "rectangle_compression.h5"],
-        subcommand_options=script_options,
+        subcommand_options=(
+            "--input-file ${SOURCES[1:].abspath} --output-file ${TARGET.abspath} --x-units mm/mm --y-units MPa"
+        ),
     )
 )
 artifacts.extend(workflow)
