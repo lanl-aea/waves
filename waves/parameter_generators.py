@@ -1505,7 +1505,7 @@ def _merge_parameter_studies(studies: typing.List[xarray.Dataset]) -> xarray.Dat
         coerce_types = _return_dataset_types(study_base, study)
         types_dictionary.update(coerce_types)
 
-    # Combine all studies by dropping almost all set names
+    # Combine all studies after dropping set names from all but `study_base`
     studies = [study_base] + [study.drop_vars(_set_coordinate_key) for study in studies]
     study_combined = xarray.merge(studies)
 
