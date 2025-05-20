@@ -318,6 +318,36 @@ def test_coerce_values(values, name, expected_output_type, should_warn):
             mock_warn.assert_not_called()
 
 
+merge_parameter_studies_cases = {
+    "concatenate along one parameter": (
+        [parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
+         parameter_generators.OneAtATime({"parameter_1": [2]}).parameter_study],
+        {"parameter_1": [2, 1]},
+        does_not_raise(),
+    ),
+    "too few parameter studies input": (
+        [parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study],
+        [1],
+        pytest.raises(RuntimeError),
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "studies, expected_values, outcome",
+    merge_parameter_studies_cases.values(),
+    ids=merge_parameter_studies_cases.keys(),
+)
+def test_merge_parameter_studies(studies, expected_values, outcome):
+    with outcome:
+        try:
+            merged_study = parameter_generators._merge_parameter_studies(studies)
+            for key in expected_values.keys():
+                assert [_ for _ in merged_study[key].values] == [_ for _ in expected_values[key]]
+        finally:
+            pass
+
+
 def test_open_parameter_study():
     mock_file = "dummy.h5"
     with (
