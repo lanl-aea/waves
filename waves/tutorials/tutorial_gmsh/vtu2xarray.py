@@ -9,7 +9,7 @@ import xarray
 
 
 def main(
-    input_files: typing.Tuple[pathlib.Path],
+    input_file: typing.Tuple[pathlib.Path],
     output_file: pathlib.Path,
     mesh_file: typing.Optional[pathlib.Path] = None,
     time_points_file: typing.Optional[pathlib.Path] = None,
@@ -21,7 +21,7 @@ def main(
     1. Nodes are numbered sequentially from one in the CalculiX input file
     2. Nodes will be converted to zero index by ``meshio``
 
-    :param input_files: VTU file(s) created by ``ccx2paraview``
+    :param input_file: VTU file(s) created by ``ccx2paraview``
     :param output_file: Xarray H5 output file
     :param mesh_file: CalculiX input file containing node sets
     :param time_points_file: Calculix time points CSV data. If the first time point is 0.0, it will be stripped because
@@ -34,12 +34,12 @@ def main(
         if numpy.isclose(time_points[0], 0.0):
             time_points = time_points[1:]
     else:
-        time_points = numpy.array([numpy.nan] * len(input_files))
-    if len(time_points) != len(input_files):
+        time_points = numpy.array([numpy.nan] * len(input_file))
+    if len(time_points) != len(input_file):
         raise RuntimeError("If time points are provided, the length must match the number of VTU files provided")
 
     data_arrays = []
-    for infile, time in zip(input_files, time_points):
+    for infile, time in zip(input_file, time_points):
         increment_data = []
         results = meshio.read(infile)
         coordinate = ["x", "y", "z"]
@@ -118,6 +118,7 @@ def get_parser():
     parser = argparse.ArgumentParser(description=cli_description, prog=prog)
     parser.add_argument(
         "--input-file",
+        nargs="+",
         type=existing_file,
         required=True,
         help="VTU input file",
