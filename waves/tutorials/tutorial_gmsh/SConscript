@@ -1,6 +1,8 @@
 #! /usr/bin/env python
 import waves
 
+import vtu2xarray
+
 Import("env")
 
 # Collect the target nodes to build concise target alias(es)
@@ -36,8 +38,9 @@ artifacts.extend(
 )
 
 # Extract
-# TODO: Recover the expected time point count from the time points file
-time_point_indices = range(1, 11, 1)
+time_points_source_file = env["project_directory"] / "time_points.inp"
+time_points = vtu2xarray.time_points_from_file(time_points_source_file)
+time_point_indices = range(1, len(time_points) + 1, 1)
 vtu_files = [f"rectangle_compression.{increment:02}.vtu" for increment in time_point_indices]
 artifacts.extend(
     env.Command(

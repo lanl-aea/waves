@@ -28,11 +28,7 @@ def main(
         CalculiX and ccx2paraview do not write the initial, time zero increment.
     """
     if time_points_file is not None and time_points_file.is_file():
-        time_points = numpy.genfromtxt(time_points_file)
-        time_points = time_points.flatten()
-        # Either calculix or ccx2paraview doesn't write the t0 increment
-        if numpy.isclose(time_points[0], 0.0):
-            time_points = time_points[1:]
+        time_points = time_points_from_file(time_points_file)
     else:
         time_points = numpy.array([numpy.nan] * len(input_file))
     if len(time_points) != len(input_file):
@@ -104,14 +100,23 @@ def main(
     data.to_netcdf(output_file)
 
 
-def existing_file(argument):
+def time_points_from_file(time_points_file: pathlib.Path) -> numpy.array:
+    time_points = numpy.genfromtxt(time_points_file)
+    time_points = time_points.flatten()
+    # Either calculix or ccx2paraview doesn't write the t0 increment
+    if numpy.isclose(time_points[0], 0.0):
+        time_points = time_points[1:]
+    return time_points
+
+
+def existing_file(argument: str) -> pathlib.Path:
     path = pathlib.Path(argument)
     if not path.exists():
         raise argparse.ArgumentTypeError(f"file '{path}' does not exist")
     return path
 
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
     script_name = pathlib.Path(__file__)
     prog = f"python {script_name.name} "
     cli_description = "Open a CalculiX-to-VTU output file produced by ``ccx2paraview`` and convert to Xarray"

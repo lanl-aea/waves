@@ -1,5 +1,8 @@
 #! /usr/bin/env python
 import os
+import sys
+import inspect
+import pathlib
 import platform
 
 import waves
@@ -31,12 +34,18 @@ AddOption(
 )
 
 # Inherit user's full environment
+project_configuration = pathlib.Path(inspect.getfile(lambda: None))
+project_directory = project_configuration.parent
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
+    project_directory = project_directory,
     build_dir=GetOption("build_dir"),
     unconditional_build=GetOption("unconditional_build"),
     verbose_tasks=GetOption("verbose_tasks"),
 )
+
+# Make the project package importable for: (1) SConscript files
+sys.path.insert(0, str(project_directory))
 
 # Action suffix
 system = platform.system().lower()
