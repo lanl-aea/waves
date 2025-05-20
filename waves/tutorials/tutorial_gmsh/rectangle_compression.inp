@@ -1,4 +1,3 @@
-**
 *HEADING
 Compressing a rectangle
 **
@@ -7,31 +6,27 @@ Compressing a rectangle
 **
 *MATERIAL, NAME=mock
 *ELASTIC
-100, .3
+100, 0.3
 *DENSITY
-.27000E-08,
-*SPECIFIC HEAT
-8.96E+08
-*CONDUCTIVITY
-132, 200
+0.3E-08,
 *EXPANSION,ZERO=293.15
-23.58E-06
+10.0E-06
 **
-*************************************************************************
-**  STEP-1 LOAD STEP
-*************************************************************************
-*STEP, NLGEOM=NO, INC=100, AMPLITUDE=RAMP
+*TIME POINTS, NAME=output
+*INCLUDE, INPUT=time_points.inp
+**
+*STEP, NLGEOM=YES, INC=100, AMPLITUDE=RAMP
 *STATIC
 .1, 1.0, 0.01, 0.5
 **
 *BOUNDARY
-bottom_left, 1,3
-bottom, 2,2
-top,2,2,-0.01
+bottom_left, 1, 3
+bottom, 2, 2
+top, 2, 2, -0.01
 **
-*EL FILE
-E, S
-*NODE FILE
+*NODE FILE, TIME POINTS=output
 U
+*EL FILE, TIME POINTS=output
+E, S
 **
 *END STEP
