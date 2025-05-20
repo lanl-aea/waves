@@ -38,10 +38,10 @@ artifacts.extend(
 # Extract
 # TODO: Recover the expected time point count from the time points file
 time_point_indices = range(1, 11, 1)
-vtu_files = [f"uniaxial_calculix.{increment:02}.vtu" for increment in time_point_indices]
+vtu_files = [f"rectangle_compression.{increment:02}.vtu" for increment in time_point_indices]
 artifacts.extend(
     env.Command(
-        target=vtu_files + ["uniaxial_calculix.vtu.stdout"],
+        target=vtu_files + ["rectangle_compression.vtu.stdout"],
         source=["rectangle_compression.frd"],
         action=["cd ${TARGET.dir.abspath} && ccx2paraview ${SOURCES[0].abspath} vtu ${action_suffix}"],
         action_suffix=env["action_suffix"],
@@ -52,7 +52,7 @@ workflow.extend(
         target=["rectangle_compression.h5"],
         source=["vtu2xarray.py", "time_points.inp", vtu_files],
         subcommand_options=(
-            "--input-file ${SOURCES[1].abspath} --output-file ${TARGET.abspath}"
+            "--input-file ${SOURCES[2:].abspath} --output-file ${TARGET.abspath}"
             " --time-points-file ${SOURCES[1].abspath}"
         ),
         action_suffix=env["action_suffix"],
