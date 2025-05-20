@@ -1492,6 +1492,9 @@ def _merge_parameter_studies(studies: typing.List[xarray.Dataset]) -> xarray.Dat
 
     :return: parameter study xarray Dataset
     """
+    if len(studies) < 2:
+        raise RuntimeError("Not enough parameter studies provided for merge operation")
+
     # Swap dimensions from the set name to the set hash to merge identical sets
     swap_to_hash_index = {_set_coordinate_key: _hash_coordinate_key}
     studies = [study.swap_dims(swap_to_hash_index) for study in studies]
