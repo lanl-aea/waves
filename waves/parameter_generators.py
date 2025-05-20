@@ -1491,6 +1491,8 @@ def _merge_parameter_studies(studies: typing.List[xarray.Dataset]) -> xarray.Dat
     :param studies: list of parameter study xarray Datasets where the first study is considered the 'base' study
 
     :return: parameter study xarray Dataset
+
+    :raises RuntimeError: if fewer than two parameter studies are in the input parameter `studies`
     """
     if len(studies) < 2:
         raise RuntimeError("Not enough parameter studies provided for merge operation")
