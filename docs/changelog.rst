@@ -17,6 +17,7 @@ Documentation
 Internal Changes
 ================
 - System test for printing available fetch files. By `Kyle Brindley`_.
+- Gitlab-CI job specific environment for HPC CI job. By `Kyle Brindley`_.
 
 *******************
 0.13.1 (2025-04-16)
