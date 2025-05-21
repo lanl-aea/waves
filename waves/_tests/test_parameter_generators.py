@@ -319,7 +319,7 @@ def test_coerce_values(values, name, expected_output_type, should_warn):
 
 
 merge_parameter_studies_cases = {
-    "concatenate along one parameter": (
+    "concatenate along one parameter: int": (
         [
             parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_1": [2]}).parameter_study,
@@ -327,9 +327,33 @@ merge_parameter_studies_cases = {
         {"parameter_1": [2, 1]},
         does_not_raise(),
     ),
+    "concatenate along one parameter: float": (
+        [
+            parameter_generators.CartesianProduct({"parameter_1": [1.0]}).parameter_study,
+            parameter_generators.CartesianProduct({"parameter_1": [2.0]}).parameter_study,
+        ],
+        {"parameter_1": [1.0, 2.0]},
+        does_not_raise(),
+    ),
+    "concatenate along one parameter: bool": (
+        [
+            parameter_generators.CartesianProduct({"parameter_1": [True]}).parameter_study,
+            parameter_generators.CartesianProduct({"parameter_1": [False]}).parameter_study,
+        ],
+        {"parameter_1": [False, True]},
+        does_not_raise(),
+    ),
+    "concatenate along one parameter: int/float": (
+        [
+            parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
+            parameter_generators.CartesianProduct({"parameter_1": [2.0]}).parameter_study,
+        ],
+        {"parameter_1": [1, 2.0]},
+        pytest.raises(RuntimeError),
+    ),
     "too few parameter studies input": (
         [parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study],
-        [1],
+        {"parameter_1": [1]},
         pytest.raises(RuntimeError),
     ),
 }
@@ -345,7 +369,7 @@ def test_merge_parameter_studies(studies, expected_values, outcome):
         try:
             merged_study = parameter_generators._merge_parameter_studies(studies)
             for key in expected_values.keys():
-                assert [_ for _ in merged_study[key].values] == [_ for _ in expected_values[key]]
+                numpy.testing.assert_allclose(merged_study[key].values, expected_values[key])
         finally:
             pass
 
