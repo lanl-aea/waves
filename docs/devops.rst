@@ -48,9 +48,10 @@ HPC CI server environment
 =========================
 
 For computing policy reasons, HPC CI pipelines are owned by the launching user and launched with the user's account. The
-HPC CI server environment must be created in the launching user's scratch space. For merge request pipelines, this means
-a project development environment will be created in the submitting developer's scratch space, e.g.
-``${system_scratch}/$USER/waves-env``.
+HPC CI server environment is created in the user owned CI job directory, which is cleaned out for each CI job. This
+means there is no shared environment available on HPC and developers must create and mantain their own development
+environment. It is strongly recommended that developers create this environment in their scratch space, e.g.
+``${system_scratch}/$USER/conda/envs/waves-env``.
 
 Because the CI pipeline runs as the launching user, Conda will create a package and environment cache according to the
 user's HPC Conda configuration. By default, Conda creates ``~/.conda/pkgs`` for the package cache, which can grow quite

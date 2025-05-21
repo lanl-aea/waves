@@ -19,6 +19,7 @@ Internal Changes
 - Move `_merge_parameter_studies` logic out of class and generalize for arbitrary number of studies 
   (:issue:`841`, :merge:`1184`). By `Chris Johnson`_.
 - System test for printing available fetch files. By `Kyle Brindley`_.
+- Gitlab-CI job specific environment for HPC CI job. By `Kyle Brindley`_.
 
 *******************
 0.13.1 (2025-04-16)
