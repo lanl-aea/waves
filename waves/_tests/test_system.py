@@ -328,6 +328,9 @@ require_third_party_system_tests = [
             pytest.mark.skipif(
                 testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
             ),
+            # TODO: Remove this skip when Cubit python interpretter search is fixed
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/917
+            pytest.mark.skipif(testing_hpc, reason="Cubit Python interpretter search fails on HPC"),
         ],
     ),
     pytest.param(
