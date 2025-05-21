@@ -86,6 +86,9 @@ test:
     - sphinx-argparse
     - sphinx-book-theme
     - sphinxcontrib-bibtex
+    # Remove explicit dependency on VTK and rely on ccx2paraview when a VTK >=9.4 version fixes the macOS crash
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/901
+    - vtk <=9.3
     - xarray
   imports:
     - waves
