@@ -1,14 +1,17 @@
-# Required for HPC Jacamar Runner
-default:
-  id_tokens:
-    SITE_ID_TOKEN:
-      aud: https://re-git.lanl.gov
+include: ".pipeline-common.yml"
 
 stages:
   - environment
   - test
 
-include: ".pipeline-common.yml"
+default:
+  # Required for HPC Jacamar Runner
+  id_tokens:
+    SITE_ID_TOKEN:
+      aud: https://re-git.lanl.gov
+  tags:
+    - rocinante
+    - shell
 
 hpc-developer-test:
   extends:
@@ -32,6 +35,3 @@ hpc-developer-test:
     # Job commands
     - scons pytest systemtest --keep-going --unconditional-build --abaqus-command=${abaqus_command_prefix}/abq2024 --cubit-command=${cubit_command_prefix}/Cubit-16.16/cubit
     - if [[ $PARENT_CI_PIPELINE_SOURCE == "schedule" ]]; then scons systemtest --keep-going --unconditional-build --abaqus-command=${abaqus_command_prefix}/abq2023 --cubit-command=${cubit_command_prefix}/Cubit-16.12/cubit; fi
-  tags:
-    - rocinante
-    - shell

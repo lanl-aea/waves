@@ -5,6 +5,12 @@ stages:
   - test
   - deploy
 
+default:
+  tags:
+    - shell
+    - aea
+    - linux
+
 aea-environment:
   extends:
     - .linux-cached-environment
@@ -12,10 +18,6 @@ aea-environment:
   stage: environment
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
-  tags:
-    - shell
-    - aea
-    - linux
 
 aea-developer-test:
   extends:
@@ -24,10 +26,6 @@ aea-developer-test:
   stage: test
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
-  tags:
-    - shell
-    - aea
-    - linux
   artifacts:
     expire_in: '2 hrs'
     paths:
@@ -42,10 +40,6 @@ aea-style-guide:
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
-  tags:
-    - shell
-    - aea
-    - linux
 
 aea-conda-build-internal:
   extends:
@@ -61,10 +55,6 @@ aea-conda-build-internal:
     expire_in: '2 hrs'
     paths:
       - conda-bld/noarch/waves-*-*.tar.bz2
-  tags:
-    - shell
-    - aea
-    - linux
 
 aea-conda-build:
   extends:
@@ -77,10 +67,6 @@ aea-conda-build:
   variables:
     environment_file: "conda-build.yml"
     recipe_directory: "recipe"
-  tags:
-    - shell
-    - aea
-    - linux
 
 aea-conda-build-matrix:
   extends:
@@ -93,10 +79,6 @@ aea-conda-build-matrix:
     - umask 0022
     - mkdir ${conda_artifacts_directory}
     - pytest recipe-matrix/matrix.py -v --no-showlocals --tb=short
-  tags:
-    - shell
-    - aea
-    - linux
   timeout: 4h
 
 # https://re-git.lanl.gov/aea/developer-operations/aea-conda
@@ -130,10 +112,6 @@ aea-pip-build:
     paths:
       - build/dist/waves-*.tar.gz
       - build/dist/waves-*.whl
-  tags:
-    - shell
-    - aea
-    - linux
 
 pypi-pip-build:
   extends:
@@ -146,10 +124,6 @@ pypi-pip-build:
   variables:
     environment_file: "pip-build.yml"
     distribution_name: "waves-workflows"
-  tags:
-    - shell
-    - aea
-    - linux
 
 aea-pip-deploy:
   extends:
@@ -167,10 +141,6 @@ aea-pip-deploy:
     - echo ${tag}
     - if [[ -z ${tag} ]]; then exit 0; fi
     - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi build/dist/*
-  tags:
-    - shell
-    - aea
-    - linux
 
 release:
   extends:
@@ -212,11 +182,6 @@ release:
     - glab auth login --job-token ${CI_JOB_TOKEN} --hostname ${CI_SERVER_HOST} --api-protocol ${CI_SERVER_PROTOCOL}
     - GITLAB_HOST=${CI_SERVER_URL} glab release create ${tag} -R ${CI_PROJECT_PATH} --ref ${CI_COMMIT_SHA} --notes-file ${notes_file} --no-update --no-close-milestone
 
-  tags:
-    - shell
-    - aea
-    - linux
-
 # It MUST be called pages
 pages:
   extends:
@@ -242,7 +207,3 @@ pages:
     paths:
       # It MUST be called public
       - public
-  tags:
-    - shell
-    - aea
-    - linux
