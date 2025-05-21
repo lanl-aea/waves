@@ -385,11 +385,14 @@ merge_parameter_studies_cases = {
     "concatenate along one parameter across multiple studies: float": (
         [
             parameter_generators.OneAtATime(
-                {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": ["a"]}).parameter_study,
+                {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": ["a"]}
+            ).parameter_study,
             parameter_generators.OneAtATime(
-                {"parameter_1": [1, 2], "parameter_2": [3.0, 4.0], "parameter_3": ["a"]}).parameter_study,
+                {"parameter_1": [1, 2], "parameter_2": [3.0, 4.0], "parameter_3": ["a"]}
+            ).parameter_study,
             parameter_generators.OneAtATime(
-                {"parameter_1": [1, 2], "parameter_2": [3.0, 5.0], "parameter_3": ["a"]}).parameter_study,
+                {"parameter_1": [1, 2], "parameter_2": [3.0, 5.0], "parameter_3": ["a"]}
+            ).parameter_study,
         ],
         numpy.array(
             [
@@ -406,11 +409,14 @@ merge_parameter_studies_cases = {
     "concatenate along two parameters across multiple studies: int/bool": (
         [
             parameter_generators.CartesianProduct(
-                {"parameter_1": [1], "parameter_2": [3.0], "parameter_3": [True]}).parameter_study,
+                {"parameter_1": [1], "parameter_2": [3.0], "parameter_3": [True]}
+            ).parameter_study,
             parameter_generators.CartesianProduct(
-                {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True]}).parameter_study,
+                {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True]}
+            ).parameter_study,
             parameter_generators.CartesianProduct(
-                {"parameter_1": [2], "parameter_2": [3.0], "parameter_3": [False]}).parameter_study,
+                {"parameter_1": [2], "parameter_2": [3.0], "parameter_3": [False]}
+            ).parameter_study,
         ],
         numpy.array(
             [
@@ -426,11 +432,14 @@ merge_parameter_studies_cases = {
     "concatenate along unchanged parameters across multiple studies": (
         [
             parameter_generators.CartesianProduct(
-                {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}).parameter_study,
+                {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}
+            ).parameter_study,
             parameter_generators.CartesianProduct(
-                {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}).parameter_study,
+                {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}
+            ).parameter_study,
             parameter_generators.CartesianProduct(
-                {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}).parameter_study,
+                {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}
+            ).parameter_study,
         ],
         numpy.array(
             [
