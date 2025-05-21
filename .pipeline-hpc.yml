@@ -34,4 +34,4 @@ hpc-developer-test:
     - if [[ $PARENT_CI_PIPELINE_SOURCE == "schedule" ]]; then scons systemtest --keep-going --unconditional-build --abaqus-command=${abaqus_command_prefix}/abq2023 --cubit-command=${cubit_command_prefix}/Cubit-16.12/cubit; fi
   tags:
     - rocinante
-    - batch
+    - shell
