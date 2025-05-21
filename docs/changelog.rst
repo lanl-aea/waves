@@ -16,6 +16,8 @@ Documentation
 
 Internal Changes
 ================
+- Move `_merge_parameter_studies` logic out of class and generalize for arbitrary number of studies 
+  (:issue:`841`, :merge:`1184`). By `Chris Johnson`_.
 - System test for printing available fetch files. By `Kyle Brindley`_.
 
 *******************
