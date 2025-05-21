@@ -351,6 +351,22 @@ merge_parameter_studies_cases = {
         {"parameter_1": [1, 2.0]},
         pytest.raises(RuntimeError),
     ),
+    "concatenate along one parameter: int/bool": (
+        [
+            parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
+            parameter_generators.CartesianProduct({"parameter_1": [True]}).parameter_study,
+        ],
+        {"parameter_1": [1, True]},
+        pytest.raises(RuntimeError),
+    ),
+    "concatenate along one parameter: float/bool": (
+        [
+            parameter_generators.OneAtATime({"parameter_1": [1.0]}).parameter_study,
+            parameter_generators.OneAtATime({"parameter_1": [True]}).parameter_study,
+        ],
+        {"parameter_1": [1.0, True]},
+        pytest.raises(RuntimeError),
+    ),
     "too few parameter studies input": (
         [parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study],
         {"parameter_1": [1]},
