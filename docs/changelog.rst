@@ -25,6 +25,8 @@ Internal Changes
   (:issue:`841`, :merge:`1184`). By `Chris Johnson`_.
 - System test for printing available fetch files. By `Kyle Brindley`_.
 - Gitlab-CI job specific environment for HPC CI job. By `Kyle Brindley`_.
+- Skip fragile modsim template documentation build system tests with regular, intermittent failures (:merge:`1192`). By
+  `Kyle Brindley`_.
 
 *******************
 0.13.1 (2025-04-16)

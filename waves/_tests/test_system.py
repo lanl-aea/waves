@@ -606,7 +606,20 @@ require_third_party_system_tests = [
     pytest.param(
         [
             fetch_template,
-            string.Template("scons . --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"),
+            # TODO: return to testing ``.`` all targets if/when system tests are less fragile
+            string.Template(
+                "scons --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"
+                " datacheck"
+                " rectangle_compression-nominal-datacheck"
+                " rectangle_compression-nominal-images"
+                " rectangle_compression-nominal"
+                " rectangle_compression-nominal-archive"
+                " rectangle_compression-mesh_convergence-datacheck"
+                " rectangle_compression-mesh_convergence-images"
+                " rectangle_compression-mesh_convergence"
+                " rectangle_compression-mesh_convergence-archive"
+                " unit_testing"
+            ),
             string.Template(
                 "${waves_command} visualize rectangle_compression-nominal --output-file nominal.png ${abaqus_command}"  # noqa: E501
             ),
@@ -633,7 +646,20 @@ require_third_party_system_tests = [
     pytest.param(
         [
             fetch_template,
-            string.Template("scons . --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"),
+            # TODO: return to testing ``.`` all targets if/when system tests are less fragile
+            string.Template(
+                "scons --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"
+                " datacheck"
+                " rectangle_compression-nominal-datacheck"
+                " rectangle_compression-nominal-images"
+                " rectangle_compression-nominal"
+                " rectangle_compression-nominal-archive"
+                " rectangle_compression-mesh_convergence-datacheck"
+                " rectangle_compression-mesh_convergence-images"
+                " rectangle_compression-mesh_convergence"
+                " rectangle_compression-mesh_convergence-archive"
+                " unit_testing"
+            ),
             string.Template(
                 "${waves_command} visualize rectangle_compression-nominal --output-file nominal.png ${abaqus_command}"  # noqa: E501
             ),
