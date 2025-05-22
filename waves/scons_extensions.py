@@ -3985,7 +3985,7 @@ class QOIPseudoBuilder:
         This SCons Pseudo-Builder provides a convenient method for archiving and regression testing QOIs (such as
         critical simulation outputs). When requested, it aggregates the calculated values in a directory for easy
         archival. If expected values are specified, it compares them to the calculated values and reports any
-        differences to a CSV file.  If there are differences which exceed the user-specified tolerances, an error is
+        differences to a CSV file. If there are differences which exceed the user-specified tolerances, an error is
         raised. If ``self.update_expected`` is ``True``, the expected CSV files (in the source tree)
         will be updated to match the calculated QOI values, and no comparison between the two will be performed.
 
