@@ -15,6 +15,8 @@ from waves import _settings
 
 _exclude_from_namespace = set(globals().keys())
 
+_version_key = "version"
+
 
 def create_qoi(
     name: str,
@@ -395,10 +397,10 @@ def _create_qoi_archive(qois: typing.List[xarray.DataArray]) -> xarray.DataTree:
     # Creates a group for each "group" attribute
     for group, qois in itertools.groupby(sorted(qois, key=_qoi_group), key=_qoi_group):
         # Move "version" from attribute to dimension for each DataArray and merge to Dataset
-        qois = [qoi.expand_dims(version=[qoi.attrs["version"]]) for qoi in qois]
+        qois = [qoi.expand_dims(version=[qoi.attrs[_version_key]]) for qoi in qois]
         # Try to add date as a coordinate if available
         try:
-            qois = [qoi.assign_coords(date=("version", [qoi.attrs["date"]])) for qoi in qois]
+            qois = [qoi.assign_coords(date=(_version_key, [qoi.attrs["date"]])) for qoi in qois]
         except KeyError:
             pass  # date coordinate is not needed
         ds = xarray.merge(qois, combine_attrs="drop_conflicts")
@@ -714,7 +716,7 @@ def _qoi_history_report(qoi_archive, output, plots_per_page=8, add_git_commit_da
         for qoi_group in qoi_archive.leaves:
             plot_num = 0
             for qoi in qoi_group.ds.data_vars.values():
-                if qoi.where(numpy.isfinite(qoi)).dropna("version", how="all").size == 0:  # Would be an empty plot
+                if qoi.where(numpy.isfinite(qoi)).dropna(_version_key, how="all").size == 0:  # Would be an empty plot
                     continue  # Don't increment plot_num
                 ax_num = plot_num % plots_per_page  # ax_num goes from 0 to (plots_per_page - 1)
                 if ax_num == 0:  # Starting new page
@@ -759,7 +761,7 @@ def _get_commit_date(commit):
 
 def _add_commit_date(ds):
     try:
-        return ds.assign_coords(date=("version", (_get_commit_date(commit) for commit in ds["version"])))
+        return ds.assign_coords(date=(_version_key, (_get_commit_date(commit) for commit in ds[_version_key])))
     except KeyError:
         return ds
 
