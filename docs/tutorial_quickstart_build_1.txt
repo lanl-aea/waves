@@ -1,0 +1,5 @@
+In ``SConstruct``, the workflows were provided aliases matching the study names for more convenient execution. First,
+run the ``nominal`` workflow and observe the task command output as below. The default behavior of `SCons`_ is to report
+each task's action as it is executed. |PROJECT| builders capture the STDOUT and STDERR into per-task log files to aid in
+troubleshooting and to remove clutter from the terminal output. On first execution you may see a warning message as a
+previous parameter study is being requested which will only exist on subsequent executions.

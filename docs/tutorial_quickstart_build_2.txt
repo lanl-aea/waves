@@ -1,0 +1,2 @@
+You will find the output files in the build directory. The final post-processing image of the uniaxial compression
+stress-strain curve is found in ``stress_strain.pdf``.
