@@ -82,6 +82,7 @@ SConscript
 **********
 SConstruct
 **********
+
 .. include:: tutorial_quickstart_sconstruct_1.txt
 
 .. admonition:: waves-tutorials/tutorial_gmsh/SConstruct
