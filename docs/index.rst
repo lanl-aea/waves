@@ -133,10 +133,10 @@
          Installation with conda-forge or PyPI
 
       .. grid-item-card:: :octicon:`rocket` Quickstart
-         :link: waves_quickstart
+         :link: tutorial_quickstart
          :link-type: ref
 
-         Explore a minimal working example
+         Minimal working examples of build system integration with parameter studies
 
       .. grid-item-card:: :octicon:`mortar-board` Tutorials
          :link: tutorial_introduction
