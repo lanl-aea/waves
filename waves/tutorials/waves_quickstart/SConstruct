@@ -54,6 +54,9 @@ env["parameter_study_directory"] = env["build_dir"] / "parameter_studies"
 # Always copy (no sym-links) when duplicating
 env.SetOption("duplicate", "copy")
 
+# Always print failed task *.stdout files
+env.PrintBuildFailures(print_stdout=True)
+
 # Empty defaults list to avoid building all simulation targets by default
 env.Default()
 
