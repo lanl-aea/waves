@@ -1,26 +1,13 @@
 .. _waves_quickstart:
 
-##########
-Quickstart
-##########
+##################
+Quickstart: Abaqus
+##################
 
-This quickstart will create a minimal, two file project configuration combining elements of the tutorials listed below.
+This tutorial is also available with a fully open-source, conda-forge based compute environment using the `Gmsh`_ mesher
+and `CalculiX`_ FEA solver in :ref:`tutorial_gmsh_calculix`.
 
-* :ref:`tutorialsconstruct`
-* :ref:`tutorial_geometry`
-* :ref:`tutorial_partition_mesh`
-* :ref:`tutorial_solverprep`
-* :ref:`tutorial_simulation`
-* :ref:`tutorial_parameter_substitution`
-* :ref:`tutorial_cartesian_product`
-* :ref:`tutorial_data_extraction`
-* :ref:`tutorial_post_processing`
-
-These tutorials and this quickstart describe the computational engineering workflow through simulation execution and
-post-processing. This tutorial will use a different working directory and directory structure than the rest of the
-tutorials to avoid filename clashes. The quickstart also uses a flat directory structure to simplify the project
-configuration. Larger projects, like the :ref:`modsim_templates`, may require a hierarchical directory structure to
-separate files with identical basenames.
+.. include:: tutorial_quickstart_introduction.txt
 
 ***********
 Environment
@@ -50,42 +37,7 @@ Directory Structure
 SConscript
 **********
 
-Managing digital data and workflows in modern computational science and engineering is a difficult and error-prone task.
-The large number of steps in the workflow and complex web of interactions between data files results in non-intuitive
-dependencies that are difficult to manage by hand. This complexity grows substantially when the workflow includes
-parameter studies. |PROJECT| enables the use of traditional software build systems in computational science and
-engineering workflows with support for common engineering software and parameter study management.
-
-Build systems construct a `directed acyclic graph`_ (DAG) from small, individual task definitions. Each task is defined by
-the developer and subsequently linked by the build system. Tasks are composed of targets, sources, and actions. A target
-is the output of the task. Sources are the required direct-dependency files used by the task and may be files tracked by
-the version control system for the project or files produced by other tasks. Actions are the executable commands that
-produce the target files. In pseudocode, this might look like a dictionary:
-
-.. code-block:: YAML
-
-   task1:
-       target: output1
-       source: source1
-       action: action1 --input source1 --output output1
-
-   task2:
-       target: output2
-       source: output1
-       action: action2 --input output1 --output output2
-
-As the number of discrete tasks increases, and as cross-dependencies grow, an automated tool to construct the build
-order becomes more important. Besides simplifying the process of constructing the workflow DAG, most build systems also
-incorporate a state machine. The build system tracks the execution state of the DAG and will only re-build out-of-date
-portions of the DAG. This is especially valuable when trouble-shooting or expanding a workflow. For instance, when
-adding or modifying the post-processing step, the build system will not re-run simulation tasks that are computationally
-expensive and require significant wall time to solve.
-
-The ``SConscript`` file below contains the workflow task definitions. Review the source and target files defining the
-workflow tasks. As discussed briefly above and in detail in :ref:`build_system`, a task definition also requires an
-action. For convenience, |PROJECT| provides builders for common engineering software with pre-defined task actions. See
-the :meth:`waves.scons_extensions.abaqus_journal_builder_factory` and
-:meth:`waves.scons_extensions.abaqus_solver_builder_factory` for more complete descriptions of the builder actions.
+.. include:: tutorial_quickstart_sconscript.txt
 
 .. admonition:: waves_quickstart/SConscript
 

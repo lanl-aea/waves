@@ -9,23 +9,7 @@ geometry is created and meshed with `Gmsh`_. The finite element simulation is pe
 data is extracted with `ccx2paraview`_ and `meshio`_ for scripted quantity of interest (QoI) calculations and
 post-processing.
 
-This quickstart will create a minimal, two file project configuration combining elements of the tutorials listed below.
-
-* :ref:`tutorialsconstruct`
-* :ref:`tutorial_geometry`
-* :ref:`tutorial_partition_mesh`
-* :ref:`tutorial_solverprep`
-* :ref:`tutorial_simulation`
-* :ref:`tutorial_parameter_substitution`
-* :ref:`tutorial_cartesian_product`
-* :ref:`tutorial_data_extraction`
-* :ref:`tutorial_post_processing`
-
-These tutorials and this quickstart describe the computational engineering workflow through simulation execution and
-post-processing. This tutorial will use a different working directory and directory structure than the rest of the
-tutorials to avoid filename clashes. The quickstart also uses a flat directory structure to simplify the project
-configuration. Larger projects, like the :ref:`modsim_templates`, may require a hierarchical directory structure to
-separate files with identical basenames.
+.. include:: tutorial_quickstart_introduction.txt
 
 **********
 References
@@ -87,10 +71,7 @@ Directory Structure
 SConscript
 **********
 
-4. Review the ``SConscript`` workflow configuration file.
-
-The structure is sufficiently different from the core tutorials that a diff view is not as useful. Instead the contents
-of the new SConscript files are duplicated below.
+.. include:: tutorial_quickstart_sconscript.txt
 
 .. admonition:: waves-tutorials/tutorial_gmsh/SConscript
 
