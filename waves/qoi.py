@@ -512,7 +512,7 @@ def write_qoi_set_to_csv(qoi_set: xarray.Dataset, output: pathlib.Path) -> None:
         name,calculated,expected,lower_limit,upper_limit,units,long_name,description,group,version,date
         load,5.0,4.5,3.5,5.5,N,Axial Load,Axial load through component XYZ,Assembly ABC Preload,abcdef,2025-01-01
         gap,1.0,0.8,0.7000000000000001,0.9,mm,Radial gap,Radial gap between components A and B,Assembly ABC Preload,abcdef,2025-01-01
-    """
+    """  # noqa: E501
     df = qoi_set.to_dataarray("name").to_pandas()
     # Convert attributes to data variables so they end up as columns in the CSV
     attrs = pandas.DataFrame.from_dict({qoi: qoi_set[qoi].attrs for qoi in qoi_set}, orient="index")
@@ -669,7 +669,8 @@ def _write_qoi_report(qoi_archive, output, plots_per_page=16):
                     matplotlib.pyplot.close()
                     open_figure = False
             if open_figure:  # If a figure is still open (hasn't been saved to a page)
-                for ax in axes[ax_num + 1 :]:  # Clear remaining empty plots on the page
+                # Clear remaining empty plots on the page
+                for ax in axes[ax_num + 1 :]:  # noqa: E203
                     ax.clear()
                     ax.axis("off")
                 pdf.savefig()
@@ -735,7 +736,7 @@ def _qoi_history_report(qoi_archive, output, plots_per_page=8, add_git_commit_da
                     open_figure = False
                 plot_num += 1
             if open_figure:  # If a figure is still open (hasn't been saved to a page)
-                for ax in axes[ax_num + 1 :]:
+                for ax in axes[ax_num + 1 :]:  # noqa: E203
                     ax.clear()
                     ax.axis("off")
                 pdf.savefig()

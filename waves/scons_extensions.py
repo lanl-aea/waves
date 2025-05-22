@@ -4031,9 +4031,9 @@ class QOIPseudoBuilder:
                 source=[calculated, expected],
                 action=(
                     "waves qoi accept"
-                    + f" --calculated {calculated}"
-                    + f" --expected {expected_source}"
-                    + " > ${TARGETS[-1].abspath} 2>&1"
+                    + f" --calculated {calculated}"  # noqa: W503
+                    + f" --expected {expected_source}"  # noqa: W503
+                    + " > ${TARGETS[-1].abspath} 2>&1"  # noqa: W503
                 ),
             )
             # Because SCons doesn't know the real target (the expected CSV file in the source tree), it can't know if
