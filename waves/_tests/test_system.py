@@ -171,7 +171,11 @@ require_third_party_system_tests = [
         marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
     ),
     pytest.param(
-        [fetch_template, string.Template("scons rectangle ${unconditional_build}")],
+        [
+            fetch_template,
+            string.Template("scons nominal mesh_convergence ${unconditional_build}"),
+            string.Template("${waves_command} print_study build/parameter_studies/mesh_convergence.h5"),
+        ],
         "tutorials/tutorial_gmsh",
         marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.gmsh, pytest.mark.calculix],
     ),
