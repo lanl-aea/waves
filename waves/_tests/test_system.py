@@ -76,6 +76,13 @@ system_tests = [
     pytest.param([string.Template("${waves_command} one_at_a_time --help")], None, marks=[pytest.mark.cli]),
     pytest.param([string.Template("${waves_command} print_study --help")], None, marks=[pytest.mark.cli]),
     pytest.param([string.Template("${waves_command} qoi --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} qoi accept --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} qoi diff --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} qoi check --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} qoi aggregate --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} qoi report --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} qoi archive --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} qoi plot-archive --help")], None, marks=[pytest.mark.cli]),
     pytest.param([string.Template("${odb_extract_command} --help")], None, marks=[pytest.mark.cli]),
     pytest.param(
         [string.Template("${waves_command} docs --print-local-path")],
