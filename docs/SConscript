@@ -167,6 +167,7 @@ documentation_file_list = [
     "tutorial_sbatch.rst",
     "tutorial_task_reuse.rst",
     "tutorial_part_image.rst",
+    "tutorial_quickstart.rst",
     "waves_quickstart.rst",
     "tutorial_abaqus_cae.rst",
     "zreferences.rst",
