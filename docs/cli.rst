@@ -121,7 +121,7 @@ print_study
 .. _qoi_cli:
 
 qoi
------------
+---
 
 .. argparse::
    :ref: waves._main.get_parser
