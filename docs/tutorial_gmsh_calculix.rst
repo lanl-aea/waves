@@ -173,32 +173,47 @@ below.
 .. code-block:: bash
 
    $ pwd
-   /home/roppenheimer/waves-tutorials/tutorial_cubit
+   /home/roppenheimer/waves-tutorials/tutorial_gmsh
    $ find build/nominal -type f
-   build/nominal/rectangle_compression.h5
-   build/nominal/rectangle_compression.inp
-   build/nominal/rectangle_compression.h5.stdout
-   build/nominal/rectangle_compression.sta
-   build/nominal/rectangle_compression.dat
-   build/nominal/rectangle_mesh.inp
-   build/nominal/rectangle_compression.vtu.stdout
-   build/nominal/rectangle_compression.12d
-   build/nominal/spooles.out
-   build/nominal/rectangle_gmsh.inp
-   build/nominal/rectangle_compression.cvg
-   build/nominal/stress_strain_comparison.pdf.stdout
-   build/nominal/rectangle_compression.frd.stdout
-   build/nominal/rectangle_compression.vtu
-   build/nominal/rectangle.py
-   build/nominal/stress_strain_comparison.pdf
-   build/nominal/post_processing.py
-   build/nominal/rectangle_gmsh.inp.stdout
    build/nominal/SConscript
+   build/nominal/__pycache__/vtu2xarray.cpython-312.pyc
+   build/nominal/post_processing.py
+   build/nominal/rectangle.py
+   build/nominal/rectangle_compression.01.vtu
+   build/nominal/rectangle_compression.02.vtu
+   build/nominal/rectangle_compression.03.vtu
+   build/nominal/rectangle_compression.04.vtu
+   build/nominal/rectangle_compression.05.vtu
+   build/nominal/rectangle_compression.06.vtu
+   build/nominal/rectangle_compression.07.vtu
+   build/nominal/rectangle_compression.08.vtu
+   build/nominal/rectangle_compression.09.vtu
+   build/nominal/rectangle_compression.10.vtu
+   build/nominal/rectangle_compression.12d
+   build/nominal/rectangle_compression.cvg
+   build/nominal/rectangle_compression.dat
    build/nominal/rectangle_compression.frd
-   build/nominal/strip_heading.py
-   build/nominal/vtu2xarray.py
-   build/nominal/stress_strain_comparison.csv
+   build/nominal/rectangle_compression.frd.stdout
+   build/nominal/rectangle_compression.h5
+   build/nominal/rectangle_compression.h5.stdout
+   build/nominal/rectangle_compression.inp
+   build/nominal/rectangle_compression.inp.in
+   build/nominal/rectangle_compression.pvd
+   build/nominal/rectangle_compression.sta
+   build/nominal/rectangle_compression.vtu.stdout
+   build/nominal/rectangle_gmsh.inp
+   build/nominal/rectangle_gmsh.inp.stdout
+   build/nominal/rectangle_mesh.inp
    build/nominal/rectangle_mesh.inp.stdout
+   build/nominal/spooles.out
+   build/nominal/stress_strain.csv
+   build/nominal/stress_strain.pdf
+   build/nominal/stress_strain.pdf.stdout
+   build/nominal/stress_strain.png
+   build/nominal/stress_strain.png.stdout
+   build/nominal/strip_heading.py
+   build/nominal/time_points.inp
+   build/nominal/vtu2xarray.py
 
 **********************
 Workflow Visualization
