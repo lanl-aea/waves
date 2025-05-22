@@ -1,12 +1,31 @@
 .. _tutorial_gmsh_calculix:
 
-#######################
-Tutorial: Gmsh+CalculiX
-#######################
+#########################
+Quickstart: Gmsh+CalculiX
+#########################
 
-This tutorial mirrors the Abaqus-based core tutorials with a fully open-source, conda-forge workflow. The geometry is
-created and meshed with `Gmsh`_. The finite element simulation is performed with `CalculiX`_. Finally, the data is
-extracted with `ccx2paraview`_ and `meshio`_ for scripted quantity of interest (QoI) calculations and post-processing.
+This tutorial mirrors the Abaqus-based :ref:`waves_quickstart` with a fully open-source, conda-forge workflow. The
+geometry is created and meshed with `Gmsh`_. The finite element simulation is performed with `CalculiX`_. Finally, the
+data is extracted with `ccx2paraview`_ and `meshio`_ for scripted quantity of interest (QoI) calculations and
+post-processing.
+
+This quickstart will create a minimal, two file project configuration combining elements of the tutorials listed below.
+
+* :ref:`tutorialsconstruct`
+* :ref:`tutorial_geometry`
+* :ref:`tutorial_partition_mesh`
+* :ref:`tutorial_solverprep`
+* :ref:`tutorial_simulation`
+* :ref:`tutorial_parameter_substitution`
+* :ref:`tutorial_cartesian_product`
+* :ref:`tutorial_data_extraction`
+* :ref:`tutorial_post_processing`
+
+These tutorials and this quickstart describe the computational engineering workflow through simulation execution and
+post-processing. This tutorial will use a different working directory and directory structure than the rest of the
+tutorials to avoid filename clashes. The quickstart also uses a flat directory structure to simplify the project
+configuration. Larger projects, like the :ref:`modsim_templates`, may require a hierarchical directory structure to
+separate files with identical basenames.
 
 **********
 References
@@ -31,7 +50,7 @@ All of the software required for this tutorial can be installed in a `Conda`_ en
 manager. See the `Conda installation`_ and `Conda environment management`_ documentation for more details about using
 `Conda`_.
 
-1. Create the Gmsh+ tutorial environment if it doesn't exist
+1. Create the Gmsh+CalculiX tutorial environment if it doesn't exist
 
    .. code-block::
 
@@ -43,39 +62,32 @@ manager. See the `Conda installation`_ and `Conda environment management`_ docum
 
       $ conda activate waves-gmsh-env
 
+.. include:: version_check_warning.txt
+
 *******************
 Directory Structure
 *******************
 
 .. include:: tutorial_directory_setup.txt
 
-4. Create a new ``tutorial_gmsh`` directory with the ``waves fetch`` command below
+3. Create a new ``tutorial_gmsh`` directory with the ``waves fetch`` command below
 
 .. code-block:: bash
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ waves fetch --destination tutorial_gmsh tutorials/tutorial_gmsh
-   $ ls tutorial_gmsh
-   SConscript  SConstruct  environment.yml  post_processing.py  rectangle.py  rectangle_compression.inp  strip_heading.py  vtu2xarray.py
-
-5. Make the new ``tutorial_gmsh`` directory the current working directory
-
-.. code-block:: bash
-
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ cd tutorial_gmsh
+   $ waves fetch tutorials/tutorial_gmsh --destination ~/waves-tutorials/tutorial_gmsh
+   WAVES fetch
+   Destination directory: '/home/roppenheimer/waves-tutorials/tutorial_gmsh'
+   $ cd ~/waves-tutorials/tutorial_gmsh
    $ pwd
    /home/roppenheimer/waves-tutorials/tutorial_gmsh
-   $ ls
+   $ ls tutorial_gmsh
    SConscript  SConstruct  environment.yml  post_processing.py  rectangle.py  rectangle_compression.inp  strip_heading.py  vtu2xarray.py
 
 **********
 SConscript
 **********
 
-6. Review the ``SConscript`` workflow configuration file.
+4. Review the ``SConscript`` workflow configuration file.
 
 The structure is sufficiently different from the core tutorials that a diff view is not as useful. Instead the contents
 of the new SConscript files are duplicated below.
@@ -90,7 +102,7 @@ of the new SConscript files are duplicated below.
 Gmsh Python script
 ******************
 
-7. Review the Gmsh Python script ``rectangle.py``.
+5. Review the Gmsh Python script ``rectangle.py``.
 
 The Gmsh script differs from the Abaqus journal files introduced in :ref:`tutorial_partition_mesh`. Besides the
 differences in Abaqus and Gmsh commands, one major difference between the Abaqus and Gmsh scripts is the
@@ -111,7 +123,7 @@ or discussed in greater depth in other tutorials.
 CalculiX Input File
 *******************
 
-8. Create or review the `CalculiX`_ input file from the contents below
+6. Create or review the `CalculiX`_ input file from the contents below
 
 .. admonition:: waves-tutorials/tutorial_gmsh/rectangle_compression.inp
 
@@ -138,7 +150,7 @@ SConstruct file is duplicated below.
 Build Targets
 *************
 
-9. Build the new targets
+7. Build the workflow targets
 
 .. code-block:: bash
 
