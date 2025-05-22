@@ -63,6 +63,9 @@ Glossary
    PEP
      Python enhancement proposals
 
+   QOI
+     Quantity of interest
+
    VCS
      version control software
 
