@@ -13,6 +13,7 @@ Documentation
 - Add `Chris Johnson`_ to authors list (:issue:`906`, :merge:`1181`). By `Chris Johnson`_.
 - Replace GNU Make lesson plan reference with SCons lesson plan (:issue:`913`, :merge:`1183`). By `Kyle Brindley`_.
 - Handle time increments in Gmsh+Calculix tutorial (:issue:`915`, :merge:`1187`). By `Kyle Brindley`_.
+- Update copyright year range. By `Kyle Brindley`_.
 
 Internal Changes
 ================
