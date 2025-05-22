@@ -16,6 +16,8 @@ Documentation
 - Update copyright year range. By `Kyle Brindley`_.
 - Remove Gmsh+CacluliX tee behavior because it results in false positives during workflow execution (:issue:`912`,
   :merge:`1190`). By `Kyle Brindley`_.
+- Rewrite the Gmsh+Calculix tutorial as a fully open-source workflow equivalent to the existing quickstart with Abaqus
+  (:merge:`1191`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
