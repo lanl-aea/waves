@@ -10,6 +10,8 @@ import pandas
 import matplotlib.pyplot
 from matplotlib.backends.backend_pdf import PdfPages
 
+from waves import _settings
+
 
 _exclude_from_namespace = set(globals().keys())
 
@@ -284,7 +286,7 @@ def _create_qoi_study(qois: typing.List[xarray.DataArray], parameter_study: xarr
             combine_attrs="drop_conflicts",
         )
     except KeyError:
-        raise RuntimeError("Each DataArray in `qois` must have an attribute named 'set_name'.")
+        raise RuntimeError("Each DataArray in ``qois`` must have an attribute named '{_settings._set_coordinate_key}'.")
     # Merge in parameter study definition
     if parameter_study:
         # Convert parameter study variables to coordinates
