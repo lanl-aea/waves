@@ -49,27 +49,7 @@ SConscript
 SConstruct
 **********
 
-For this quickstart, we will not discuss the main SCons configuration file, named ``SConstruct``, in detail.
-:ref:`tutorialsconstruct` has a more complete discussion about the contents of the ``SConstruct`` file.
-
-One of the primary benefits to |PROJECT| is the ability to robustly integrate the conditional re-building behavior of a
-build system with computational parameter studies. Because most build systems consist of exactly two steps:
-configuration and execution, the full DAG must be fixed at configuration time. To avoid hardcoding the parameter study
-tasks, it is desirable to re-use the existing workflow or task definitions. This could be accomplished with a simple
-for-loop and naming convention; however, it is common to run a small, scoping parameter study prior to exploring the
-full parameter space which would require careful set re-numbering to preserve previous work.
-
-To avoid out-of-sync errors in parameter set definitions when updating a previously executed parameter study, |PROJECT|
-provides a parameter study generator utility that uniquely identifies parameter sets by contents, assigns a unique index
-to each parameter set, and guarantees that previously executed sets are matched to their unique identifier. When
-expanding or re-executing a parameter study, |PROJECT| enforces set name/content consistency which in turn ensures that
-the build system can correctly identify previous work and only re-build the new or changed sets.
-
-In the configuration snippet below, the workflow parameterization is performed in the root configuration file,
-``SConstruct``. This allows us to re-use the entire workflow file, ``SConscript``, with more than one parameter study.
-First, we define a nominal workflow. Nominal workflows can be defined as a simple dictionary. This can be useful for
-trouble-shooting the workflow, simulation definition, and simulation convergence prior to running a larger parameter
-study. Second, we define a small mesh convergence study where the only parameter that changes is the mesh global seed.
+.. include:: tutorial_quickstart_sconstruct_1.txt
 
 .. admonition:: waves_quickstart/SConstruct
 
@@ -79,10 +59,7 @@ study. Second, we define a small mesh convergence study where the only parameter
        :start-at: # Define parameter studies
        :end-before: # Add workflow(s)
 
-Finally, we call the workflow ``SConscript`` file in a loop where the study names and definitions are unpacked into the
-workflow call. The ``ParameterStudySConscript`` method handles the differences between a nominal parameter set
-dictionary and the mesh convergence parameter study object. The ``SConscript`` file has been written to accept the
-``parameters`` variable that will be unpacked by this function.
+.. include:: tutorial_quickstart_sconstruct_2.txt
 
 .. admonition:: waves_quickstart/SConstruct
 
@@ -92,19 +69,7 @@ dictionary and the mesh convergence parameter study object. The ``SConscript`` f
        :start-at: # Add workflow(s)
        :end-before: # List all aliases in help message
 
-In this tutorial, the entire workflow is re-run from scratch for each parameter set. This simplifies the parameter study
-construction and enables the geometric parameterization hinted at in the ``width`` and ``height`` parameters. Not all
-workflows require the same level of granularity and re-use. There are resource trade-offs to workflow construction, task
-definition granularity, and computational resources. For instance, if the geometry and partition tasks required
-significant wall time, but are not part of the mesh convergence study, it might be desirable to parameterize within the
-``SConscript`` file where the geometry and partition tasks could be excluded from the parameter study.
-
-|PROJECT| provides several solutions for parameterizing at the level of workflow files, task definitions, or in
-arbitrary locations and methods, depending on the needs of the project.
-
-* workflow files: :meth:`waves.scons_extensions.parameter_study_sconscript`
-* task definitions: :meth:`waves.scons_extensions.parameter_study_task`
-* anywhere: :meth:`waves.parameter_generators.ParameterGenerator.parameter_study_to_dict`
+.. include:: tutorial_quickstart_sconstruct_3.txt
 
 ****************
 Building targets

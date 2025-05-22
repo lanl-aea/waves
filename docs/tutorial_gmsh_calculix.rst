@@ -79,78 +79,74 @@ SConscript
       :language: Python
       :lineno-match:
 
-******************
-Gmsh Python script
-******************
-
-5. Review the Gmsh Python script ``rectangle.py``.
-
-The Gmsh script differs from the Abaqus journal files introduced in :ref:`tutorial_partition_mesh`. Besides the
-differences in Abaqus and Gmsh commands, one major difference between the Abaqus and Gmsh scripts is the
-opportunity to use Python 3 with Gmsh, where Abaqus journal files must use the Abaqus controlled installation of Python
-2. The Gmsh script creates the geometry, partition (sets), and mesh in a single script because the output formats used
-by Gmsh can not contain both the geometry definition and the mesh information.
-
-.. admonition:: waves-tutorials/tutorial_gmsh/rectangle.py
-
-   .. literalinclude:: tutorial_gmsh_rectangle.py
-       :language: Python
-       :lineno-match:
-
-The other Python scripts will not be discussed in detail. They are small content handling and data conversion utilities
-or discussed in greater depth in other tutorials.
-
-*******************
-CalculiX Input File
-*******************
-
-6. Create or review the `CalculiX`_ input file from the contents below
-
-.. admonition:: waves-tutorials/tutorial_gmsh/rectangle_compression.inp
-
-   .. literalinclude:: tutorial_gmsh_rectangle_compression.inp
-      :lineno-match:
-
 **********
 SConstruct
 **********
-
-Note that CalculiX differs from other solvers in the tutorials. CalculiX is deployed as a Conda package and is available in
-the launching Conda environment. It is still good practice to check if the executable is available and provide helpful
-feedback to developers about the excutable status and workflow configuration.
-
-The structure has changed enough from the core tutorials that a diff view is not as useful. Instead the contents of the
-SConstruct file is duplicated below.
+.. include:: tutorial_quickstart_sconstruct_1.txt
 
 .. admonition:: waves-tutorials/tutorial_gmsh/SConstruct
 
-   .. literalinclude:: tutorial_gmsh_SConstruct
-      :language: Python
+    .. literalinclude:: tutorial_gmsh_SConstruct
+       :language: Python
+       :lineno-match:
+       :start-at: # Define parameter studies
+       :end-before: # Add workflow(s)
+
+.. include:: tutorial_quickstart_sconstruct_2.txt
+
+.. admonition:: waves-tutorials/tutorial_gmsh/SConstruct
+
+    .. literalinclude:: tutorial_gmsh_SConstruct
+       :language: Python
+       :lineno-match:
+       :start-at: # Add workflow(s)
+       :end-before: # List all aliases in help message
+
+.. include:: tutorial_quickstart_sconstruct_3.txt
 
 *************
 Build Targets
 *************
 
-7. Build the workflow targets
+In ``SConstruct``, the workflows were provided aliases matching the study names for more convenient execution. First,
+run the ``nominal`` workflow and observe the task command output as below. The default behavior of `SCons`_ is to report
+each task's action as it is executed. |PROJECT| builders capture the STDOUT and STDERR into per-task log files to aid in
+troubleshooting and to remove clutter from the terminal output. On first execution you may see a warning message as a
+previous parameter study is being requested which will only exist on subsequent executions.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials/tutorial_gmsh
-   $ scons fierro
+   /home/roppenheimer/waves-tutorials/tutorial_gmsh
+   $ scons nominal
    scons: Reading SConscript files ...
-   Checking whether 'ccx' program exists.../home/roppenheimer/anaconda3/envs/waves-gmsh-env/bin/ccx
-   Checking whether 'ccx2paraview' program exists.../home/roppenheimer/anaconda3/envs/waves-gmsh-env/bin/ccx2paraview
+   Checking whether 'ccx' program exists.../projects/aea_compute/waves-env/bin/ccx
+   Checking whether 'ccx2paraview' program exists.../projects/aea_compute/waves-env/bin/ccx2paraview
    scons: done reading SConscript files.
    scons: Building targets ...
-   cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build && python /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle.py --output-file=/home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_gmsh.inp > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_gmsh.inp.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build && python /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/strip_heading.py --input-file=/home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_gmsh.inp --output-file=/home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_mesh.inp > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_mesh.inp.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build && /home/roppenheimer/anaconda3/envs/waves-gmsh-env/bin/ccx -i rectangle_compression > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_compression.frd.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build && ccx2paraview /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_compression.frd > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_compression.vtu.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build && python /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/vtu2xarray.py --input-file /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_compression.vtu --output-file /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_compression.h5 > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_compression.h5.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build && python /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/post_processing.py --input-file /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/rectangle_compression.h5 --output-file stress_strain_comparison.pdf --x-units mm/mm --y-units MPa > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/stress_strain_comparison.pdf.stdout 2>&1
+   Copy("build/nominal/rectangle_compression.inp.in", "rectangle_compression.inp.in")
+   Creating 'build/nominal/rectangle_compression.inp'
+   cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal && python /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/rectangle.py --output-file=/home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/rectangle_gmsh.inp > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/rectangle_gmsh.inp.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal && python /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/strip_heading.py --input-file=/home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/rectangle_gmsh.inp --output-file=/home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/rectangle_mesh.inp > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/rectangle_mesh.inp.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal && /projects/aea_compute/waves-env/bin/ccx -i rectangle_compression > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/rectangle_compression.frd.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal && ccx2paraview /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/rectangle_compression.frd vtu > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/rectangle_compression.vtu.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal && python /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/vtu2xarray.py --input-file /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/rectangle_compression.01.vtu /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/rectangle_compression.02.vtu /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/rectangle_compression.03.vtu /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/rectangle_compression.04.vtu /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/rectangle_compression.05.vtu /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/rectangle_compression.06.vtu /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/rectangle_compression.07.vtu /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/rectangle_compression.08.vtu /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/rectangle_compression.09.vtu /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/rectangle_compression.10.vtu --output-file /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/rectangle_compression.h5 --time-points-file /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/time_points.inp > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/rectangle_compression.h5.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal && python /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/post_processing.py --input-file /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/rectangle_compression.h5 --output-file /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/stress_strain_comparison.pdf --x-units mm/mm --y-units MPa > /home/roppenheimer/waves-tutorials/tutorial_gmsh/build/nominal/stress_strain_comparison.pdf.stdout 2>&1
    scons: done building targets.
 
+You will find the output files in the build directory. The final post-processing image of the uniaxial compression
+stress-strain curve is found in ``stress_strain.pdf``.
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials/waves_quickstart
+   $ ls build/nominal/stress_strain.pdf
+   build/nominal/stress_strain.pdf
+
+.. figure:: tutorial_gmsh_stress_strain.png
+   :align: center
+   :width: 50%
 
 ************
 Output Files
