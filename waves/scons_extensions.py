@@ -4020,7 +4020,7 @@ class QOIPseudoBuilder:
         if expected and self.update_expected:
             # If requested, update expected values with calculated values
             # This overwrites the expected values in the source tree. Don't tell SCons we're modifying the source
-            # because that would create a dependency cycle. AFter this operation, the user needs to manually stage and
+            # because that would create a dependency cycle. After this operation, the user needs to manually stage and
             # commit these changes to the expected values.
             # The action signature contains an absolute path (which interferes with caching), but this is not something
             # that should ever be cached.
