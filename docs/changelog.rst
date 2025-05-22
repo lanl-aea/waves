@@ -14,10 +14,12 @@ Documentation
 - Replace GNU Make lesson plan reference with SCons lesson plan (:issue:`913`, :merge:`1183`). By `Kyle Brindley`_.
 - Handle time increments in Gmsh+Calculix tutorial (:issue:`915`, :merge:`1187`). By `Kyle Brindley`_.
 - Update copyright year range. By `Kyle Brindley`_.
+- Remove Gmsh+CacluliX tee behavior because it results in false positives during workflow execution (:issue:`912`,
+  :merge:`1190`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
-- Move `_merge_parameter_studies` logic out of class and generalize for arbitrary number of studies 
+- Move `_merge_parameter_studies` logic out of class and generalize for arbitrary number of studies
   (:issue:`841`, :merge:`1184`). By `Chris Johnson`_.
 - System test for printing available fetch files. By `Kyle Brindley`_.
 - Gitlab-CI job specific environment for HPC CI job. By `Kyle Brindley`_.
