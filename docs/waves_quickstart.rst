@@ -323,8 +323,7 @@ set because the workflow definitions are identical for each parameter set.
 Workflow Visualization
 **********************
 
-To visualize the workflow, you can use the |project| :ref:`waves_visualize_cli` command. The ``--output-file`` allows
-you to save the visualization file non-interactively. Without this option, you'll enter an interactive matplotlib window.
+.. include:: tutorial_quickstart_visualization_1.txt
 
 .. code-block::
 
@@ -332,12 +331,7 @@ you to save the visualization file non-interactively. Without this option, you'l
    /home/roppenheimer/waves-tutorials/waves_quickstart
    $ waves visualize nominal --output-file waves_quickstart.png --width=30 --height=6
 
-The workflow visualization should look similar to the image below, which is a representation of the directed graph
-constructed by `SCons`_ from the task definitions. The image starts with the final workflow target on the left, in this
-case the ``nominal`` simulation target alias. Moving left to right, the files required to complete the workflow are
-shown until we reach the original source file(s) on the far right of the image. The arrows represent actions and are
-drawn from a required source to the produced target. The :ref:`computational_tools` introduction discusses the
-relationship of a :ref:`build_system` task and :ref:`build_system_directed_graphs`.
+.. include:: tutorial_quickstart_visualization_2.txt
 
 .. raw:: latex
 

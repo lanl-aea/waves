@@ -1,0 +1,2 @@
+To visualize the workflow, you can use the |project| :ref:`waves_visualize_cli` command. The ``--output-file`` allows
+you to save the visualization file non-interactively. Without this option, you'll enter an interactive matplotlib window.
