@@ -46,9 +46,9 @@ Parameter Generators
       :inherited-members:
       :show-inheritance:
 
-********************
-QOI Tools
-********************
+**************************
+Quantity of Interest (QOI)
+**************************
 
 .. only:: html or epub
 
