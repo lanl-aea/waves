@@ -282,7 +282,7 @@ def _create_qoi_study(qois: typing.List[xarray.DataArray], parameter_study: xarr
     # Move "group" from attribute to dimension for each DataArray, and merge
     try:
         qoi_study = xarray.merge(
-            [qoi.expand_dims(set_name=[qoi.attrs["set_name"]]) for qoi in qois],
+            [qoi.expand_dims(set_name=[qoi.attrs[_settings._set_coordinate_key]]) for qoi in qois],
             combine_attrs="drop_conflicts",
         )
     except KeyError:
