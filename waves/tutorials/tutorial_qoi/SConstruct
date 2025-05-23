@@ -21,6 +21,31 @@ AddOption(
     action="store_true",
     help="Update expected QOI values to match currently calculated values. (default: '%default')",
 )
+# Allow synthetic "simulation post-processing" data to be changed dynamically from CLI
+AddOption(
+    "--sim-1-post-load",
+    type=float,
+    default=5.0,
+    help="The synthetic 'simulation post-processing' load calculation used by ``sim_1_post.py``",
+)
+AddOption(
+    "--sim-1-post-gap",
+    type=float,
+    default=0.85,
+    help="The synthetic 'simulation post-processing' gap calculation used by ``sim_1_post.py``",
+)
+AddOption(
+    "--sim-2-post-load",
+    type=float,
+    default=30.0,
+    help="The synthetic 'simulation post-processing' load calculation used by ``sim_2_post.py``",
+)
+AddOption(
+    "--sim-2-post-stress",
+    type=float,
+    default=100.0,
+    help="The synthetic 'simulation post-processing' stress calculation used by ``sim_2_post.py``",
+)
 # Enable CLI executable name change for system testing the tutorials in the repository, ``python -m waves._main``
 AddOption(
     "--waves-command",
@@ -53,10 +78,10 @@ env.PrintBuildFailures()
 # QOI testing
 ################################################################################
 synthetic_calculated_values = {
-    "sim_1_post_load": 5.0,
-    "sim_1_post_gap": 0.85,
-    "sim_2_post_load": 30.0,
-    "sim_2_post_stress": 100.0,
+    "sim_1_post_load": GetOption("sim_1_post_load"),
+    "sim_1_post_gap": GetOption("sim_1_post_gap"),
+    "sim_2_post_load": GetOption("sim_2_post_load"),
+    "sim_2_post_stress": GetOption("sim_2_post_stress"),
 }
 
 # Calculate QOIs from Simulation 1
