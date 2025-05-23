@@ -20,7 +20,7 @@ def main():
         set_name=args.set,
         version="abcdef",
     )
-    qoi._write_qoi_set_to_csv(
+    qoi.write_qoi_set_to_csv(
         qoi.create_qoi_set(
             [
                 load,

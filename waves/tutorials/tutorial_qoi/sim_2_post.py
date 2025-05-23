@@ -24,7 +24,7 @@ stress = qoi.create_qoi(
 sim_2_qois = qoi.create_qoi_set((load_2, stress))
 
 # Save calculated QOIs to CSV
-qoi._write_qoi_set_to_csv(sim_2_qois, "sim_2_qois.csv")
+qoi.write_qoi_set_to_csv(sim_2_qois, "sim_2_qois.csv")
 
 # Save calculated QOIs to h5
 sim_2_qois.to_netcdf("sim_2_qois.h5")
