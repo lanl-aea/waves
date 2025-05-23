@@ -79,6 +79,16 @@ test_create_qoi_cases = {
         ),
         does_not_raise(),
     ),
+    "custom attrs": (
+        {"name": "qoi1", "someotherattr": "someotherattrvalue"},
+        xarray.DataArray(
+            [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={"someotherattr": "someotherattrvalue"},
+        ),
+        does_not_raise(),
+    ),
     "relative tolerance determines lower limit": (
         {"name": "qoi1", "expected": 1.0, "lower_rtol": 0.1, "lower_atol": 0.2, "lower_limit": 0.5},
         xarray.DataArray(
