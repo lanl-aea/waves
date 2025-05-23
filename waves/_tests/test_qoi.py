@@ -211,7 +211,17 @@ test_create_qoi_set_cases = {
                 attrs={},
             ),
         ],
-        None,
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                    attrs={},
+                ),
+            },
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            attrs={},
+        ),
         does_not_raise()
     ),
     "two qoi": (
@@ -229,7 +239,22 @@ test_create_qoi_set_cases = {
                 attrs={},
             ),
         ],
-        None,
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                    attrs={},
+                ),
+                "qoi2": xarray.DataArray(
+                    [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                    attrs={},
+                ),
+            },
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            attrs={},
+        ),
         does_not_raise()
     ),
 }
@@ -241,7 +266,12 @@ test_create_qoi_set_cases = {
     ids=test_create_qoi_set_cases.keys(),
 )
 def test_create_qoi_set(qoi_list, expected, outcome):
-    output = qoi.create_qoi_set(qoi_list)
+    with outcome:
+        try:
+            output = qoi.create_qoi_set(qoi_list)
+            assert expected.identical(output)
+        finally:
+            pass
 
 
 def test__create_qoi_study():
