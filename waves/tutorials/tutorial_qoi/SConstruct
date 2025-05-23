@@ -52,17 +52,27 @@ env.PrintBuildFailures()
 ################################################################################
 # QOI testing
 ################################################################################
+synthetic_calculated_values = {
+    "sim_1_post_load": 5.0,
+    "sim_1_post_gap": 0.85,
+    "sim_2_post_load": 30.0,
+    "sim_2_post_stress": 100.0,
+}
 
 # Calculate QOIs from Simulation 1
 env.PythonScript(
     target=[build_dir / "sim_1_qois.csv", build_dir / "sim_1_qois.h5"],
     source=["#/sim_1_post.py"],
+    subcommand_options="--load ${sim_1_post_load} --gap ${sim_1_post_gap}",
+    **synthetic_calculated_values,
 )
 
 # Calculate QOIs from Simulation 2
 env.PythonScript(
     target=[build_dir / "sim_2_qois.csv", build_dir / "sim_2_qois.h5"],
     source=["#/sim_2_post.py"],
+    subcommand_options="--load ${sim_2_post_load} --stress ${sim_2_post_stress}",
+    **synthetic_calculated_values,
 )
 
 # Compare to expected QOIs and archive
