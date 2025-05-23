@@ -22,10 +22,30 @@ test_create_qoi_cases = {
         ),
         does_not_raise(),
     ),
-    "expected": (
+    "calculated": (
         {"name": "qoi1", "calculated": 5.0},
         xarray.DataArray(
             [5.0, numpy.nan, numpy.nan, numpy.nan],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={},
+        ),
+        does_not_raise(),
+    ),
+    "expected": (
+        {"name": "qoi1", "expected": 5.0},
+        xarray.DataArray(
+            [numpy.nan, 5.0, numpy.nan, numpy.nan],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={},
+        ),
+        does_not_raise(),
+    ),
+    "full": (
+        {"name": "qoi1", "calculated": 5.1, "expected": 5.0, "lower_limit": 4.0, "upper_limit": 6.0},
+        xarray.DataArray(
+            [5.1, 5.0, 4.0, 6.0],
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             name="qoi1",
             attrs={},
