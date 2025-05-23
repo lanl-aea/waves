@@ -12,26 +12,66 @@ from waves import qoi
 
 
 test_create_qoi_cases = {
-    "no tolerances": (
+    "minimum input": (
+        {"name": "qoi1"},
+        xarray.DataArray(
+            [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={},
+        ),
+        does_not_raise(),
+    ),
+    "expected": (
         {"name": "qoi1", "calculated": 5.0},
         xarray.DataArray(
             [5.0, numpy.nan, numpy.nan, numpy.nan],
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             name="qoi1",
             attrs={},
-        )
+        ),
+        does_not_raise(),
+    ),
+    "lower_rtol, missing expected: should raise ValueError": (
+        {"name": "qoi1", "lower_rtol": 1.0e-2},
+        None,
+        pytest.raises(ValueError),
+    ),
+    "upper_rtol, missing expected: should raise ValueError": (
+        {"name": "qoi1", "upper_rtol": 1.0e-2},
+        None,
+        pytest.raises(ValueError),
+    ),
+    "lower_atol, missing expected: should raise ValueError": (
+        {"name": "qoi1", "lower_atol": 1.0e-2},
+        None,
+        pytest.raises(ValueError),
+    ),
+    "upper_atol, missing expected: should raise ValueError": (
+        {"name": "qoi1", "upper_atol": 1.0e-2},
+        None,
+        pytest.raises(ValueError),
+    ),
+    "lower > upper: should raise ValueError": (
+        {"name": "qoi1", "lower_limit": 1.0, "upper_limit": -1.0},
+        None,
+        pytest.raises(ValueError),
     ),
 }
 
 
 @pytest.mark.parametrize(
-    "kwargs, expected",
+    "kwargs, expected, outcome",
     test_create_qoi_cases.values(),
     ids=test_create_qoi_cases.keys(),
 )
-def test_create_qoi(kwargs, expected):
-    output = qoi.create_qoi(**kwargs)
-    assert expected.identical(output)
+def test_create_qoi(kwargs, expected, outcome):
+    with outcome:
+        try:
+            output = qoi.create_qoi(**kwargs)
+            assert expected.identical(output)
+        finally:
+            pass
 
 
 def test_create_qoi_set():
