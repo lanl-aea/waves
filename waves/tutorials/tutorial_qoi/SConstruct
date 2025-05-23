@@ -43,6 +43,7 @@ env.AddMethod(
         collection_dir=(build_dir / "qoi").absolute(),
         build_dir=build_dir.absolute(),
         update_expected=env.GetOption("update_expected_qois"),
+        program=env["waves_command"],
     ),
     "QOI",
 )

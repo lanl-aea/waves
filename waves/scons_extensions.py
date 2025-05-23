@@ -3968,10 +3968,12 @@ class QOIPseudoBuilder:
         collection_dir: pathlib.Path,
         build_dir: pathlib.Path,
         update_expected: bool = False,
+        program: str = "waves",
     ) -> None:
         self.collection_dir = collection_dir
         self.build_dir = build_dir
         self.update_expected = update_expected
+        self.program = program
 
     def __call__(
         self,
@@ -4030,7 +4032,7 @@ class QOIPseudoBuilder:
                 target=[f"{expected}.stdout"],
                 source=[calculated, expected],
                 action=(
-                    "waves qoi accept"
+                    f"{self.program} qoi accept"
                     + f" --calculated {calculated}"  # noqa: W503
                     + f" --expected {expected_source}"  # noqa: W503
                     + " > ${TARGETS[-1].abspath} 2>&1"  # noqa: W503
@@ -4050,14 +4052,14 @@ class QOIPseudoBuilder:
             comparison_target = env.Command(
                 target=[diff],
                 source=[calculated, expected],
-                action=f"waves qoi diff --expected {expected} --calculated {calculated} --output {diff}",
+                action=f"{self.program} qoi diff --expected {expected} --calculated {calculated} --output {diff}",
             )
             targets.extend(comparison_target)
             # Check the comparison results and raise error if not all QOIs are within tolerance
             check_target = env.Command(
                 target=[f"{name}_check.stdout"],
                 source=[diff],
-                action=(f"waves qoi check --diff {diff}" + " > ${TARGETS[-1].abspath} 2>&1"),
+                action=(f"{self.program} qoi check --diff {diff}" + " > ${TARGETS[-1].abspath} 2>&1"),
             )
             targets.extend(check_target)
 
