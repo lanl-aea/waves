@@ -28,7 +28,7 @@ print(sim_1_qois)
 print(sim_1_qois["load"])
 
 # Save calculated QOIs to CSV
-qoi._write_qoi_set_to_csv(sim_1_qois, "sim_1_qois.csv")
+qoi.write_qoi_set_to_csv(sim_1_qois, "sim_1_qois.csv")
 
 # Save calculated QOIs to h5
 sim_1_qois.to_netcdf("sim_1_qois.h5")

@@ -21,9 +21,21 @@ AddOption(
     action="store_true",
     help="Update expected QOI values to match currently calculated values. (default: '%default')",
 )
+# Enable CLI executable name change for system testing the tutorials in the repository, ``python -m waves._main``
+AddOption(
+    "--waves-command",
+    dest="waves_command",
+    default="waves",
+    nargs=1,
+    type="string",
+    action="store",
+    metavar="COMMAND",
+    help="Override for the WAVES command (default: '%default')",
+)
 
-env = Environment(
+env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
+    waves_command=env.GetOption("waves_command"),
 )
 build_dir = pathlib.Path(env.GetOption("variant_dir_base"))
 env.AddMethod(
@@ -34,8 +46,6 @@ env.AddMethod(
     ),
     "QOI",
 )
-env.AddMethod(waves.scons_extensions.parameter_study_write, "ParameterStudyWrite")
-env.Append(BUILDERS={"PythonScript": waves.scons_extensions.python_builder_factory()})
 
 ################################################################################
 # QOI testing
@@ -87,7 +97,7 @@ env.Command(
     target=[build_dir / "study_qois.h5"],
     source=[build_dir / "study.h5"] + study_qoi_targets,
     action=(
-        "waves qoi aggregate"
+        "${waves_command} qoi aggregate"
         " --parameter-study-file ${SOURCES[0].abspath}"
         " --output-file ${TARGETS[0].abspath}"
         " ${SOURCES[2:].abspath}"
@@ -110,19 +120,21 @@ env.PythonScript(
 env.Command(
     target=[build_dir / "version_1_qois.h5"],
     source=[build_dir / "sim_1_qois_diff.csv", build_dir / "sim_2_qois.csv"],
-    action="waves qoi archive --output ${TARGET.abspath} ${SOURCES.abspath}",
+    action="${waves_command} qoi archive --output ${TARGET.abspath} ${SOURCES.abspath}",
 )
 
 # Create tolerance report from archive
 env.Command(
     target=[build_dir / "tolerance_report.pdf"],
     source=[build_dir / "version_1_qois.h5"],
-    action="waves qoi report --output ${TARGET.abspath} ${SOURCE.abspath}",
+    action="${waves_command} qoi report --output ${TARGET.abspath} ${SOURCE.abspath}",
 )
 
 # Create QOI history report
 env.Command(
     target=[build_dir / "history_report.pdf"],
     source=[build_dir / "version_1_qois.h5", build_dir / "version_2_qois.h5"],
-    action="waves qoi plot-archive --output ${TARGET.abspath} ${SOURCES.abspath}",
+    action="${waves_command} qoi plot-archive --output ${TARGET.abspath} ${SOURCES.abspath}",
 )
+
+env.ProjectHelp()
