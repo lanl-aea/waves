@@ -386,8 +386,72 @@ def test__write_qoi_report():
     pass
 
 
-def test__get_plotting_name():
-    pass
+test__get_plotting_name_cases = {
+    "only name available": (
+        xarray.DataArray(
+            [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={},
+        ),
+        "qoi1",
+    ),
+    "only name available units": (
+        xarray.DataArray(
+            [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={"units": "units1"},
+        ),
+        "qoi1 [units1]",
+    ),
+    "standard_name available": (
+        xarray.DataArray(
+            [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={"standard_name": "standard_name1"},
+        ),
+        "standard_name1",
+    ),
+    "standard_name units": (
+        xarray.DataArray(
+            [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={"units": "units1", "standard_name": "standard_name1"},
+        ),
+        "standard_name1 [units1]",
+    ),
+    "long_name available": (
+        xarray.DataArray(
+            [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={"long_name": "long_name1", "standard_name": "standard_name1"},
+        ),
+        "long_name1",
+    ),
+    "units available": (
+        xarray.DataArray(
+            [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={"units": "units1", "long_name": "long_name1", "standard_name": "standard_name1"},
+        ),
+        "long_name1 [units1]",
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "qoi_array, expected",
+    test__get_plotting_name_cases.values(),
+    ids=test__get_plotting_name_cases.keys(),
+)
+def test__get_plotting_name(qoi_array, expected):
+    output = qoi._get_plotting_name(qoi_array)
+    assert output == expected
 
 
 def test__plot_scalar_qoi_history():
