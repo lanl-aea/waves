@@ -306,8 +306,52 @@ def test__create_qoi_study():
     pass
 
 
-def test__qoi_group():
-    pass
+test__qoi_group_cases = {
+    "expected use": (
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                    attrs={"attr1": "value1"},
+                ),
+            },
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            attrs={"group": "group1"},
+        ),
+        "group1",
+        does_not_raise(),
+    ),
+    "missing dataset 'group' attr: should raise KeyError": (
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                    attrs={"attr1": "value1", "group": "group1"},
+                ),
+            },
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            attrs={},
+        ),
+        None,
+        pytest.raises(KeyError),
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "qoi_set, expected, outcome",
+    test__qoi_group_cases.values(),
+    ids=test__qoi_group_cases.keys(),
+)
+def test__qoi_group(qoi_set, expected, outcome):
+    with outcome:
+        try:
+            group = qoi._qoi_group(qoi_set)
+            assert group == expected
+        finally:
+            pass
 
 
 def test__create_qoi_archive():
