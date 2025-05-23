@@ -52,6 +52,36 @@ test_create_qoi_cases = {
         ),
         does_not_raise(),
     ),
+    "relative tolerance determines lower limit": (
+        {"name": "qoi1", "expected": 1.0, "lower_rtol": 0.1, "lower_atol": 0.2, "lower_limit": 0.5},
+        xarray.DataArray(
+            [numpy.nan, 1.0, 0.9, numpy.nan],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={},
+        ),
+        does_not_raise(),
+    ),
+    "direct limit determines lower limit": (
+        {"name": "qoi1", "expected": 1.0, "lower_rtol": 0.1, "lower_atol": 0.2, "lower_limit": 0.95},
+        xarray.DataArray(
+            [numpy.nan, 1.0, 0.95, numpy.nan],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={},
+        ),
+        does_not_raise(),
+    ),
+    "absolute tolerance determines lower limit": (
+        {"name": "qoi1", "expected": 1.0, "lower_rtol": 0.3, "lower_atol": 0.2, "lower_limit": 0.5},
+        xarray.DataArray(
+            [numpy.nan, 1.0, 0.8, numpy.nan],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={},
+        ),
+        does_not_raise(),
+    ),
     "lower_rtol, missing expected: should raise ValueError": (
         {"name": "qoi1", "lower_rtol": 1.0e-2},
         None,
