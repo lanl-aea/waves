@@ -263,7 +263,7 @@ test_create_qoi_set_cases = {
                 [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
                 coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
                 name="qoi1",
-                attrs={"conflict": "value1"},
+                attrs={"conflict": "value1", "noconflict": "shouldexist"},
             ),
             xarray.DataArray(
                 [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
@@ -277,7 +277,7 @@ test_create_qoi_set_cases = {
                 "qoi1": xarray.DataArray(
                     [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
                     coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
-                    attrs={},
+                    attrs={"noconflict": "shouldexist"},
                 ),
             },
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
