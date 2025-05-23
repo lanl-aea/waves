@@ -27,6 +27,7 @@ Internal Changes
 - Gitlab-CI job specific environment for HPC CI job. By `Kyle Brindley`_.
 - Skip fragile modsim template documentation build system tests with regular, intermittent failures (:merge:`1192`). By
   `Kyle Brindley`_.
+- Add an option to keep the system test build artifacts for troubleshooting (:merge:`1194`). By `Kyle Brindley`_.
 
 *******************
 0.13.1 (2025-04-16)

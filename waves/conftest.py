@@ -12,6 +12,12 @@ def pytest_addoption(parser):
         help="system test build directory root",
     )
     parser.addoption(
+        "--keep-system-tests",
+        action="store_true",
+        default=False,
+        help="flag to skip system test directory cleanup",
+    )
+    parser.addoption(
         "--unconditional-build",
         action="store_true",
         default=False,
@@ -36,6 +42,11 @@ def pytest_addoption(parser):
 @pytest.fixture
 def system_test_directory(request):
     return request.config.getoption("--system-test-dir")
+
+
+@pytest.fixture
+def keep_system_tests(request):
+    return request.config.getoption("--keep-system-tests")
 
 
 @pytest.fixture

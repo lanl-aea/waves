@@ -691,11 +691,12 @@ require_third_party_system_tests = [
 @pytest.mark.systemtest
 @pytest.mark.parametrize("commands, fetch_options", system_tests + require_third_party_system_tests)
 def test_system(
-    system_test_directory,
-    unconditional_build,
-    abaqus_command,
-    cubit_command,
-    request,
+    system_test_directory: typing.Optional[pathlib.Path],
+    keep_system_tests: bool,
+    unconditional_build: bool,
+    abaqus_command: typing.Optional[pathlib.Path],
+    cubit_command: typing.Optional[pathlib.Path],
+    request: pytest.FixtureRequest,
     commands: typing.Iterable[str],
     fetch_options: typing.Optional[str],
 ) -> None:
@@ -722,7 +723,11 @@ def test_system(
 
        pytest --system-test-dir=/my/systemtest/output --abaqus-command /my/system/abaqus --cubit-command /my/system/cubit
 
+    An optional ``--keep-system-tests`` flag can be added to avoid temporary directory cleanup, e.g. to keep the test
+    artifacts in the ``--systemt-test-dir`` for troubleshooting.
+
     :param system_test_directory: custom pytest decorator defined in conftest.py
+    :param keep_system_tests: custom pytest decorator defined in conftest.py
     :param unconditional_build: custom pytest decorator defined in conftest.py
     :param abaqus_command: string absolute path to Abaqus executable
     :param cubit_command: string absolute path to Cubit executable
@@ -742,9 +747,19 @@ def test_system(
     # Naive move to waves/_tests/common.py resulted in every test failing with FileNotFoundError.
     # Probably tempfile is handling some scope existence that works when inside the function but not when it's outside.
     kwargs = {}
-    temporary_directory_arguments = inspect.getfullargspec(tempfile.TemporaryDirectory).args
+    temporary_directory_inspection = inspect.getfullargspec(tempfile.TemporaryDirectory)
+    temporary_directory_arguments = temporary_directory_inspection.args + temporary_directory_inspection.kwonlyargs
     if "ignore_cleanup_errors" in temporary_directory_arguments and system_test_directory is not None:
         kwargs.update({"ignore_cleanup_errors": True})
+    if keep_system_tests:
+        if "delete" in temporary_directory_arguments:
+            kwargs.update({"delete": False})
+        else:
+            print(
+                "``--keep-system-tests`` requested, but Python version does not support ``delete=False`` in"
+                " tempfile.TemporaryDirectory. System test directories will be deleted on cleanup.",
+                file=sys.stderr,
+            )
     temp_directory = tempfile.TemporaryDirectory(dir=system_test_directory, prefix=test_prefix, **kwargs)
     temp_path = pathlib.Path(temp_directory.name)
     temp_path.mkdir(parents=True, exist_ok=True)
@@ -767,4 +782,5 @@ def test_system(
     except Exception as err:
         raise err
     else:
-        temp_directory.cleanup()
+        if not keep_system_tests:
+            temp_directory.cleanup()
