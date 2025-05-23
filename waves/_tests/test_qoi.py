@@ -208,7 +208,7 @@ test_create_qoi_set_cases = {
                 [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
                 coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
                 name="qoi1",
-                attrs={},
+                attrs={"attr1": "value1"},
             ),
         ],
         xarray.Dataset(
@@ -216,7 +216,7 @@ test_create_qoi_set_cases = {
                 "qoi1": xarray.DataArray(
                     [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
                     coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
-                    attrs={},
+                    attrs={"attr1": "value1"},
                 ),
             },
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
@@ -230,13 +230,13 @@ test_create_qoi_set_cases = {
                 [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
                 coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
                 name="qoi1",
-                attrs={},
+                attrs={"attr1": "value1"},
             ),
             xarray.DataArray(
                 [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
                 coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
                 name="qoi2",
-                attrs={},
+                attrs={"attr1": "value2"},
             ),
         ],
         xarray.Dataset(
@@ -244,12 +244,12 @@ test_create_qoi_set_cases = {
                 "qoi1": xarray.DataArray(
                     [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
                     coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
-                    attrs={},
+                    attrs={"attr1": "value1"},
                 ),
                 "qoi2": xarray.DataArray(
                     [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
                     coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
-                    attrs={},
+                    attrs={"attr1": "value2"},
                 ),
             },
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
