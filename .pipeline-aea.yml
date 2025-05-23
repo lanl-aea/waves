@@ -191,12 +191,14 @@ release:
 # It MUST be called pages
 pages:
   extends:
-    - .linux-cached-environment
+    - .nix-job-environment
   stage: deploy
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
       when: never
     - if: $PARENT_CI_COMMIT_BRANCH == "main"
+  variables:
+    environment_file: "pip-build.yml"
   dependencies:
     - "aea-developer-test"
   script:
