@@ -3,6 +3,7 @@ channels:
 
 dependencies:
   - boa
+  - pytest
   - scons >=4.6
   - setuptools >=64
   - setuptools_scm >=8

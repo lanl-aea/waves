@@ -72,10 +72,12 @@ aea-conda-build:
 
 aea-conda-build-matrix:
   extends:
-    - .linux-cached-environment
+    - .nix-job-environment
   stage: test
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
+  variables:
+    environment_file: "conda-build.yml"
   script:
     # Override default permissions. Set group to rx with no write permissions.
     - umask 0022
