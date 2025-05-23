@@ -10,6 +10,7 @@ test_modsim_template/
 *.zip
 *.h5
 .scons_autocomplete
+*.stdout
 # Generated dynamically during some CI packaging opertions, e.g. PyPI style package
 waves/docs
 waves/README.rst
