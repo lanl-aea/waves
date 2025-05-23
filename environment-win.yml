@@ -28,7 +28,7 @@ dependencies:
   - scipy >=1
   - scons >=4.6
   - seaborn
-  - setuptools >=64
+  - setuptools >=77
   - setuptools_scm >=8
   - sphinx >=7.1
   - sphinx-argparse

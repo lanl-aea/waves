@@ -5,7 +5,7 @@ dependencies:
   - boa
   - pytest
   - scons >=4.6
-  - setuptools >=64
+  - setuptools >=77
   - setuptools_scm >=8
   # TODO: Remove openssl spec when openssl>=3.5.0 is compatible with macos/pip again
   # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/916

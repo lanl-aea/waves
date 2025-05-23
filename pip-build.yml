@@ -16,7 +16,7 @@ dependencies:
   - scipy >=1.7
   - scons >=4
   - scons >=4.6
-  - setuptools >=64
+  - setuptools >=77
   - setuptools_scm >=8
   - sphinx >=7.1
   - sphinx-argparse

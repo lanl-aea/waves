@@ -35,7 +35,7 @@ requirements:
     - salib >=1.4.6
     - scipy >=1.7
     - scons {{ scons }}
-    - setuptools >=64
+    - setuptools >=77
     - setuptools_scm >=8
     - sphinx >=7.1
     - sphinx-argparse
