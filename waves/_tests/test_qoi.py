@@ -8,11 +8,30 @@ import pytest
 import numpy
 import xarray
 
-import waves.qoi
+from waves import qoi
 
 
-def test_create_qoi():
-    pass
+test_create_qoi_cases = {
+    "no tolerances": (
+        {"name": "qoi1", "calculated": 5.0},
+        xarray.DataArray(
+            [5.0, numpy.nan, numpy.nan, numpy.nan],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={},
+        )
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "kwargs, expected",
+    test_create_qoi_cases.values(),
+    ids=test_create_qoi_cases.keys(),
+)
+def test_create_qoi(kwargs, expected):
+    output = qoi.create_qoi(**kwargs)
+    assert expected.identical(output)
 
 
 def test_create_qoi_set():
