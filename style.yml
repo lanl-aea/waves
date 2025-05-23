@@ -1,0 +1,7 @@
+channels:
+  - conda-forge
+
+dependencies:
+  - python
+  - flake8
+  - black

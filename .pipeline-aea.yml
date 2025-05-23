@@ -34,12 +34,14 @@ aea-developer-test:
 
 aea-style-guide:
   extends:
-    - .linux-cached-environment
+    - .nix-job-environment
     - .style-guide
   stage: test
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
+  variables:
+    environment_file: "style.yml"
 
 aea-conda-build-internal:
   extends:
