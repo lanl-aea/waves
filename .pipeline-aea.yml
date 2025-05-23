@@ -127,12 +127,14 @@ pypi-pip-build:
 
 aea-pip-deploy:
   extends:
-    - .linux-cached-environment
+    - .nix-job-environment
   stage: deploy
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
       when: never
     - if: $PARENT_CI_COMMIT_BRANCH == "main"
+  variables:
+    environment_file: "pip-deploy.yml"
   dependencies:
     - "aea-pip-build"
   script:
@@ -144,12 +146,14 @@ aea-pip-deploy:
 
 release:
   extends:
-    - .linux-cached-environment
+    - .nix-job-environment
   stage: deploy
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
       when: never
     - if: $PARENT_CI_COMMIT_BRANCH == "main"
+  variables:
+    environment_file: "release.yml"
   script:
     # Only create a release for clean version tags
     - tag=$(git tag --points-at HEAD)
