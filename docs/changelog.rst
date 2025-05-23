@@ -18,6 +18,7 @@ Documentation
   :merge:`1190`). By `Kyle Brindley`_.
 - Rewrite the Gmsh+Calculix tutorial as a fully open-source workflow equivalent to the existing quickstart with Abaqus
   (:merge:`1191`). By `Kyle Brindley`_.
+- Build documentation with full runtime dependencies for resolved type hints (:merge:`1195`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
@@ -28,6 +29,8 @@ Internal Changes
 - Skip fragile modsim template documentation build system tests with regular, intermittent failures (:merge:`1192`). By
   `Kyle Brindley`_.
 - Add an option to keep the system test build artifacts for troubleshooting (:merge:`1194`). By `Kyle Brindley`_.
+- Add more minimal CI job environments to reduce collisions in cached environment jobs (:merge:`1195`). By `Kyle
+  Brindley`_.
 
 *******************
 0.13.1 (2025-04-16)
