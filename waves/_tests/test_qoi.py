@@ -222,7 +222,7 @@ test_create_qoi_set_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        does_not_raise()
+        does_not_raise(),
     ),
     "two qoi": (
         [
@@ -255,7 +255,7 @@ test_create_qoi_set_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        does_not_raise()
+        does_not_raise(),
     ),
     "drop_conflicts": (
         [
@@ -283,7 +283,7 @@ test_create_qoi_set_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        does_not_raise()
+        does_not_raise(),
     ),
 }
 
