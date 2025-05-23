@@ -257,6 +257,34 @@ test_create_qoi_set_cases = {
         ),
         does_not_raise()
     ),
+    "drop_conflicts": (
+        [
+            xarray.DataArray(
+                [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+                coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                name="qoi1",
+                attrs={"conflict": "value1"},
+            ),
+            xarray.DataArray(
+                [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+                coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                name="qoi1",
+                attrs={"conflict": "value2"},
+            ),
+        ],
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                    attrs={},
+                ),
+            },
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            attrs={},
+        ),
+        does_not_raise()
+    ),
 }
 
 
