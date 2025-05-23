@@ -52,6 +52,33 @@ test_create_qoi_cases = {
         ),
         does_not_raise(),
     ),
+    "recommended attrs": (
+        {
+            "name": "qoi1",
+            "calculated": 5.1,
+            "expected": 5.0,
+            "lower_limit": 4.0,
+            "upper_limit": 6.0,
+            "group": "group1",
+            "units": "units1",
+            "description": "description1",
+            "long_name": "long_name",
+            "version": "version",
+        },
+        xarray.DataArray(
+            [5.1, 5.0, 4.0, 6.0],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={
+                "group": "group1",
+                "units": "units1",
+                "description": "description1",
+                "long_name": "long_name",
+                "version": "version",
+            },
+        ),
+        does_not_raise(),
+    ),
     "relative tolerance determines lower limit": (
         {"name": "qoi1", "expected": 1.0, "lower_rtol": 0.1, "lower_atol": 0.2, "lower_limit": 0.5},
         xarray.DataArray(
