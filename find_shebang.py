@@ -4,6 +4,7 @@
 # https://github.com/psf/black/issues/491
 
 import re
+import typing
 import pathlib
 import argparse
 
@@ -26,10 +27,17 @@ def get_parser():
         default=default_shebang,
         help="Shebang text to search for on the first line of the file(s) (default %(default)s)",
     )
+    parser.add_argument(
+        "--exclude-dir",
+        nargs="+",
+        type=str,
+        default=("build", "install", "conda-environment", "conda-pkgs", "pip-build-test"),
+        help="Directories to exclude from search (default %(default)s)",
+    )
     return parser
 
 
-def recurse_files(paths: list[pathlib.Path]) -> list[pathlib.Path]:
+def recurse_files(paths: typing.Iterable[pathlib.Path], exclude_dir: typing.Iterable[str]) -> list[pathlib.Path]:
     """Recursively search provided path(s) and return list of files that aren't symlinks
 
     :param paths: list of paths to search
@@ -41,7 +49,15 @@ def recurse_files(paths: list[pathlib.Path]) -> list[pathlib.Path]:
         if path.is_file() and not path.is_symlink():
             files.append(path)
         elif path.is_dir():
-            files.extend([path for path in path.rglob("*") if path.is_file() and not path.is_symlink()])
+            files.extend(
+                [
+                    path
+                    for path in path.rglob("*")
+                    if path.is_file()
+                    and not path.is_symlink()  # noqa: W503
+                    and not any(exclude in str(path) for exclude in exclude_dir)  # noqa: W503
+                ]
+            )
         else:
             pass
     return files
@@ -65,7 +81,7 @@ def find_shebang(path: pathlib.Path, shebang: str = default_shebang) -> None:
 def main():
     parser = get_parser()
     args = parser.parse_args()
-    files = recurse_files(args.PATH)
+    files = recurse_files(args.PATH, args.exclude_dir)
     files.sort()
     for path in files:
         find_shebang(path, args.shebang)
