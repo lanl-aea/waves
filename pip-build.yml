@@ -2,10 +2,19 @@ channels:
   - conda-forge
 
 dependencies:
+  - h5netcdf
+  - h5py
+  - matplotlib-base
+  - networkx
+  - numpy
   - pip
+  - pytest >=6
   - pytest-xdist
-  - pytest>=6
   - python-build
+  - pyyaml
+  - salib >=1.4.6
+  - scipy >=1.7
+  - scons >=4
   - scons >=4.6
   - setuptools >=64
   - setuptools_scm >=8
@@ -15,6 +24,7 @@ dependencies:
   - sphinx-copybutton >=0.5.1
   - sphinx-design
   - sphinxcontrib-bibtex
+  - xarray
   # TODO: Remove openssl spec when openssl>=3.5.0 is compatible with macos/pip again
   # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/916
   - openssl !=3.5.0

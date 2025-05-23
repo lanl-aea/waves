@@ -40,17 +40,6 @@ mock_modules = [
     "abaqusConstants",
     "mesh",
     "cubit",
-    "SALib",
-    "scipy",
-    "scipy.stats",
-    "xarray",
-    "pyyaml",
-    "h5py",
-    "networkx",
-    "numpy",
-    "matplotlib",
-    "matplotlib.pyplot",
-    "pandas",
 ]
 for mod_name in mock_modules:
     sys.modules[mod_name] = unittest.mock.Mock()

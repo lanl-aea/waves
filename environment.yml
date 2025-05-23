@@ -25,7 +25,7 @@ dependencies:
   - numpy >=2
   - pandas
   - pip
-  - pytest>=6
+  - pytest >=6
   - pytest-cov
   - pytest-xdist
   - python-build
