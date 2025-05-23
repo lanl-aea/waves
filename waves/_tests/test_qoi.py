@@ -201,8 +201,47 @@ def test_create_qoi(kwargs, expected, outcome):
             pass
 
 
-def test_create_qoi_set():
-    pass
+test_create_qoi_set_cases = {
+    "one qoi": (
+        [
+            xarray.DataArray(
+                [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+                coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                name="qoi1",
+                attrs={},
+            ),
+        ],
+        None,
+        does_not_raise()
+    ),
+    "two qoi": (
+        [
+            xarray.DataArray(
+                [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+                coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                name="qoi1",
+                attrs={},
+            ),
+            xarray.DataArray(
+                [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+                coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                name="qoi2",
+                attrs={},
+            ),
+        ],
+        None,
+        does_not_raise()
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "qoi_list, expected, outcome",
+    test_create_qoi_set_cases.values(),
+    ids=test_create_qoi_set_cases.keys(),
+)
+def test_create_qoi_set(qoi_list, expected, outcome):
+    output = qoi.create_qoi_set(qoi_list)
 
 
 def test__create_qoi_study():
