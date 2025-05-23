@@ -89,6 +89,16 @@ test_create_qoi_cases = {
         ),
         does_not_raise(),
     ),
+    "date attrs": (
+        {"name": "qoi1", "date": "2025-05-23"},
+        xarray.DataArray(
+            [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={"date": "2025-05-23"},
+        ),
+        does_not_raise(),
+    ),
     "relative tolerance determines lower limit": (
         {"name": "qoi1", "expected": 1.0, "lower_rtol": 0.1, "lower_atol": 0.2, "lower_limit": 0.5},
         xarray.DataArray(
