@@ -62,6 +62,16 @@ test_create_qoi_cases = {
         ),
         does_not_raise(),
     ),
+    "absolute tolerance determines lower limit": (
+        {"name": "qoi1", "expected": 1.0, "lower_rtol": 0.3, "lower_atol": 0.2, "lower_limit": 0.5},
+        xarray.DataArray(
+            [numpy.nan, 1.0, 0.8, numpy.nan],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={},
+        ),
+        does_not_raise(),
+    ),
     "direct limit determines lower limit": (
         {"name": "qoi1", "expected": 1.0, "lower_rtol": 0.1, "lower_atol": 0.2, "lower_limit": 0.95},
         xarray.DataArray(
@@ -72,10 +82,30 @@ test_create_qoi_cases = {
         ),
         does_not_raise(),
     ),
-    "absolute tolerance determines lower limit": (
-        {"name": "qoi1", "expected": 1.0, "lower_rtol": 0.3, "lower_atol": 0.2, "lower_limit": 0.5},
+    "relative tolerance determines upper limit": (
+        {"name": "qoi1", "expected": 1.0, "upper_rtol": 0.1, "upper_atol": 0.2, "upper_limit": 1.5},
         xarray.DataArray(
-            [numpy.nan, 1.0, 0.8, numpy.nan],
+            [numpy.nan, 1.0, numpy.nan, 1.1],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={},
+        ),
+        does_not_raise(),
+    ),
+    "absolute tolerance determines upper limit": (
+        {"name": "qoi1", "expected": 1.0, "upper_rtol": 0.3, "upper_atol": 0.2, "upper_limit": 1.5},
+        xarray.DataArray(
+            [numpy.nan, 1.0, numpy.nan, 1.2],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={},
+        ),
+        does_not_raise(),
+    ),
+    "direct limit determines upper limit": (
+        {"name": "qoi1", "expected": 1.0, "upper_rtol": 0.1, "upper_atol": 0.2, "upper_limit": 1.05},
+        xarray.DataArray(
+            [numpy.nan, 1.0, numpy.nan, 1.05],
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             name="qoi1",
             attrs={},
