@@ -156,6 +156,7 @@ system_tests = [
         [fetch_template, "scons ."],
         "tutorials/tutorial_qoi",
         marks=[pytest.mark.scons],
+        id="tutorial_qoi",
     ),
 ]
 
