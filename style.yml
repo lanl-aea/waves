@@ -2,6 +2,9 @@ channels:
   - conda-forge
 
 dependencies:
-  - python
-  - flake8
   - black
+  - flake8
+  - python
+  - scons >=4.6
+  - setuptools >=77
+  - setuptools_scm >=8
