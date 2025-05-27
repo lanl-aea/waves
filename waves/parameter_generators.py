@@ -495,7 +495,8 @@ class ParameterGenerator(ABC):
             raise RuntimeError("Called without a previous parameter study")
 
         previous_parameter_study = _open_parameter_study(self.previous_parameter_study)
-        self.parameter_study = _merge_parameter_studies([previous_parameter_study, self.parameter_study])
+        self.parameter_study = _merge_parameter_studies([previous_parameter_study, self.parameter_study], self.set_name_template)
+        self.parameter_study = self.parameter_study.swap_dims({_set_coordinate_key: _hash_coordinate_key})
         previous_parameter_study.close()
 
         # Recover parameter study numpy array(s) to match merged study
@@ -503,7 +504,7 @@ class ParameterGenerator(ABC):
 
         # Recalculate attributes with lengths matching the number of parameter sets
         self._set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
-        self._update_set_names()
+        self._set_names = self.parameter_study[_set_coordinate_key].to_series().to_dict()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
 
@@ -1480,7 +1481,8 @@ def _coerce_values(values: typing.Iterable, name: typing.Optional[str] = None) -
     return values_coerced
 
 
-def _merge_parameter_studies(studies: typing.List[xarray.Dataset]) -> xarray.Dataset:
+def _merge_parameter_studies(studies: typing.List[xarray.Dataset],
+                             template: typing.Optional[_utilities._AtSignTemplate] = None) -> xarray.Dataset:
     """Merge a list of parameter studies into one study. Set hashes are not resolved by this function at the moment.
 
     Preserve the first given parameter study set name to set contents associations by dropping subsequent studies' set
@@ -1519,10 +1521,22 @@ def _merge_parameter_studies(studies: typing.List[xarray.Dataset]) -> xarray.Dat
         if new_dtype != old_dtype:
             study_combined[key] = study_combined[key].astype(old_dtype)
 
+    # Recalculate attributes with lengths matching the number of parameter sets
+    set_hashes = list(study_combined.coords[_hash_coordinate_key].values)
+    # self._update_set_names()
+    set_names = _create_set_names(set_hashes, template)
+    new_set_names = set(set_names.values()) - set(study_combined.coords[_set_coordinate_key].values)
+    null_set_names = study_combined.coords[_set_coordinate_key].isnull()
+    if any(null_set_names):
+        study_combined.coords[_set_coordinate_key][null_set_names] = list(new_set_names)
+
+    study_combined = study_combined.swap_dims({_hash_coordinate_key: _set_coordinate_key})
+
     return study_combined
 
 
-def _create_set_names(set_hashes: typing.List[str], template: typing.Optional[_utilities._AtSignTemplate]) -> dict:
+def _create_set_names(set_hashes: typing.List[str],
+                      template: typing.Optional[_utilities._AtSignTemplate] = None) -> dict:
     """Construct parameter set names from the set name template and number of parameter set hashes.
 
     :param set_hashes: parameter set content hashes identifying rows of parameter study
