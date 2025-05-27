@@ -416,6 +416,30 @@ test__add_tolerance_attribute_cases = {
             attrs={},
         ),
     ),
+    "one qoi: in tolerance: preserve attributes": (
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [1.0, numpy.nan, 0.9, 1.0],
+                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                    attrs={"custom_attr": "custom_attr1"},
+                ),
+            },
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            attrs={},
+        ),
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [1.0, numpy.nan, 0.9, 1.0],
+                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                    attrs={"custom_attr": "custom_attr1", "within_tolerance": int(True)},
+                ),
+            },
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            attrs={},
+        ),
+    ),
     "one qoi: out of tolerance": (
         xarray.Dataset(
             {
