@@ -24,25 +24,25 @@ AddOption(
 # Allow synthetic "simulation post-processing" data to be changed dynamically from CLI
 AddOption(
     "--sim-1-post-load",
-    type=float,
+    type="float",
     default=5.0,
     help="The synthetic 'simulation post-processing' load calculation used by ``sim_1_post.py``",
 )
 AddOption(
     "--sim-1-post-gap",
-    type=float,
+    type="float",
     default=0.85,
     help="The synthetic 'simulation post-processing' gap calculation used by ``sim_1_post.py``",
 )
 AddOption(
     "--sim-2-post-load",
-    type=float,
+    type="float",
     default=30.0,
     help="The synthetic 'simulation post-processing' load calculation used by ``sim_2_post.py``",
 )
 AddOption(
     "--sim-2-post-stress",
-    type=float,
+    type="float",
     default=100.0,
     help="The synthetic 'simulation post-processing' stress calculation used by ``sim_2_post.py``",
 )
