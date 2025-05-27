@@ -584,10 +584,10 @@ def _plot_scalar_tolerance_check(
     :param name: QOI plotting label
     :param calculated: QOI calculated value
     :param expected: QOI expected value
-    :param lower_limit: lower limit to QOI tolerance. If equal to ``numpy.nan``, then the lower limit is assigned as
-        zero.
-    :param upper_limit: upper limit to QOI tolerance. If equal to ``numpy.nan``, then the upper limit is assigned as
-        zero.
+    :param lower_limit: lower limit to QOI tolerance. If unbounded (e.g. NaN or Inf), then the lower limit is assigned
+        as zero.
+    :param upper_limit: upper limit to QOI tolerance. If unbounded (e.g. NaN or Inf), then the upper limit is assigned
+        as zero.
     :param within_tolerance: plot QOI in green (good) if True, else plot QOI in red (bad)
     :param axes: Matplotlib axes for plotting
     """

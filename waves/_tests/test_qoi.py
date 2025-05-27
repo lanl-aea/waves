@@ -367,8 +367,42 @@ def test__read_qoi_set():
     pass
 
 
-def test__add_tolerance_attribute():
-    pass
+test__add_tolerance_attribute_cases = {
+    "one qoi: minimum api use": (
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                    attrs={},
+                ),
+            },
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            attrs={},
+        ),
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                    attrs={"within_tolerance": int(False)},
+                ),
+            },
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            attrs={},
+        ),
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "qoi_set, expected",
+    test__add_tolerance_attribute_cases.values(),
+    ids=test__add_tolerance_attribute_cases.keys(),
+)
+def test__add_tolerance_attribute(qoi_set, expected):
+    qoi._add_tolerance_attribute(qoi_set)
+    assert expected.identical(qoi_set)
 
 
 test_write_qoi_set_to_csv_cases = {
