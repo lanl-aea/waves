@@ -707,8 +707,19 @@ def _plot_scalar_qoi_history(qoi, ax, date_min, date_max):
     ax.set_title(name)
 
 
-def _qoi_history_report(qoi_archive, output, plots_per_page=8, add_git_commit_date=False):
-    """Plot history of QOI values from QOI archive."""
+def _qoi_history_report(
+    qoi_archive: xarray.DataTree,
+    output,
+    plots_per_page: int = 8,
+    add_git_commit_date: bool = False
+) -> None:
+    """Plot history of QOI values from QOI archive.
+
+    :param qoi_archive: collection of QOI datasets stored as a datatree
+    :param output: history report output path
+    :param plots_per_page: the number of plots on each page of the output
+    :param add_git_commit_date: Call :meth:`_add_commit_date` for every dataset in the QOI archive
+    """
     if add_git_commit_date:
         qoi_archive = qoi_archive.map_over_datasets(_add_commit_date)
     qoi_archive = qoi_archive.map_over_datasets(_sort_by_date)
@@ -752,7 +763,7 @@ def _qoi_history_report(qoi_archive, output, plots_per_page=8, add_git_commit_da
 
 @functools.cache
 def _get_commit_date(commit: str) -> pandas.Timestamp:
-    """Call ``git`` as a subprocess to return a timestamp of a specified commit
+    """Call ``git show`` as a subprocess to return a timestamp of a specified commit
 
     :param commit: commit or commit-like string for the ``git show`` command
 
