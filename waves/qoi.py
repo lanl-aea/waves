@@ -484,7 +484,7 @@ def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
 
 
 def _add_tolerance_attribute(qoi_set: xarray.Dataset) -> None:
-    """Adds a "within_tolerance" attribute to each QOI in a QOI Dataset in place.
+    """Adds a ``"within_tolerance"`` attribute to each QOI in a QOI Dataset in place.
 
     :param qoi_set: QOI set.
     """
@@ -631,7 +631,7 @@ def _plot_scalar_tolerance_check(
         tolerance_width = upper_line - lower_line
         xmin = lower_line - 0.25 * tolerance_width
         xmax = upper_line + 0.25 * tolerance_width
-        axes.set_xlim([xmin, xmax])
+        axes.set_xlim((xmin, xmax))
 
         # Add calculated value as annotation above bar
         axes.annotate(
