@@ -769,11 +769,20 @@ def _add_commit_date(ds):
         return ds
 
 
-def _sort_by_date(ds):
+def _sort_by_date(dataset: xarray.Dataset) -> xarray.Dataset:
+    """Return an Xarray dataset sorted by the ``date`` variable
+
+    Intended for use with ``xarray.map_over_dataset`` method:
+    https://docs.xarray.dev/en/latest/generated/xarray.map_over_datasets.html
+
+    :param dataset: Xarray Dataset containing the ``date`` variable
+
+    :returns: The same Xarray Dataset after sorting
+    """
     try:
-        return ds.sortby("date")
+        return dataset.sortby("date")
     except KeyError:
-        return ds
+        return dataset
 
 
 def _accept(calculated: pathlib.Path, expected: pathlib.Path) -> None:
