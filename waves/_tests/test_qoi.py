@@ -655,10 +655,7 @@ test_write_qoi_set_to_csv_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        (
-            f"name,calculated,expected,lower_limit,upper_limit{os.linesep}"
-            f"qoi1,,,,{os.linesep}"
-        ),
+        f"name,calculated,expected,lower_limit,upper_limit{os.linesep}qoi1,,,,{os.linesep}",
     ),
     "one qoi: recommended attributes": (
         xarray.Dataset(
@@ -671,7 +668,7 @@ test_write_qoi_set_to_csv_cases = {
                         "units": "units1",
                         "description": "description1",
                         "long_name": "long_name1",
-                        "version": "version1"
+                        "version": "version1",
                     },
                 ),
             },
@@ -717,7 +714,7 @@ test_write_qoi_set_to_csv_cases = {
                         "units": "units1",
                         "description": "description1",
                         "long_name": "long_name1",
-                        "version": "version1"
+                        "version": "version1",
                     },
                 ),
                 "qoi2": xarray.DataArray(
@@ -728,7 +725,7 @@ test_write_qoi_set_to_csv_cases = {
                         "units": "units2",
                         "description": "description2",
                         "long_name": "long_name2",
-                        "version": "version2"
+                        "version": "version2",
                     },
                 ),
             },
