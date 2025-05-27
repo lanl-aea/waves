@@ -791,7 +791,7 @@ def test_system(
         for command in commands:
             if isinstance(command, string.Template):
                 command = command.substitute(template_substitution)
-            command = shlex.split(command, posix=not testing_windows)
+            command = shlex.split(command, posix=True)
             subprocess.check_output(command, env=env, cwd=temp_path, text=True)
     except Exception as err:
         raise err
