@@ -153,7 +153,7 @@ system_tests = [
         marks=[pytest.mark.scons],
     ),
     pytest.param(
-        [fetch_template, "scons . --waves-command='${waves_command}'"],
+        [fetch_template, string.Template("scons . --waves-command='${waves_command}'")],
         "tutorials/tutorial_qoi",
         marks=[pytest.mark.scons],
         id="tutorial_qoi",
