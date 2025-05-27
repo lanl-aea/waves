@@ -470,14 +470,17 @@ def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
     """
     if not isinstance(from_file, pathlib.Path):
         from_file = pathlib.Path(from_file)
-    if from_file.suffix.lower() == ".csv":
+    suffix = from_file.suffix.lower()
+    if suffix == ".csv":
         df = pandas.read_csv(from_file)
         # Empty entries in the CSV end up as NaN in the DataFrame.
         # Drop NaNs so they aren't passed as kwargs to `create_qoi()`
         qoi_kwargs = [row.dropna().to_dict() for idx, row in df.iterrows()]
         return create_qoi_set([create_qoi(**kwargs) for kwargs in qoi_kwargs])
-    if from_file.suffix.lower() == ".h5":
+    elif suffix == ".h5":
         return xarray.open_dataset(from_file, engine="h5netcdf")
+    else:
+        raise ValueError(f"Unknown file suffix '{suffix}'")
 
 
 def _add_tolerance_attribute(qoi_set: xarray.Dataset) -> None:
@@ -527,12 +530,19 @@ def write_qoi_set_to_csv(qoi_set: xarray.Dataset, output: pathlib.Path) -> None:
     pandas.concat((df, attrs), axis="columns").to_csv(output)
 
 
-def _plot_qoi_tolerance_check(qoi, ax):
-    """Plot QOI tolerance check."""
+def _plot_qoi_tolerance_check(qoi: xarray.DataArray, axes: matplotlib.axes.Axes) -> None:
+    """Plot QOI tolerance check.
+
+    Handle differences in scalar and vector (not yet implemented) QOI tolerance plots. Handle missing required
+    attributes and dimensions.
+
+    :param qoi: Quantity of interest data array as built by :meth:`create_qoi`
+    :param axes: Matplotlib axes for plotting
+    """
     if "value_type" not in qoi.dims:
-        ax.clear()
-        ax.annotate(f"Incorrect QOI format for {qoi.name}.", (0.0, 0.0))
-        ax.axis("off")
+        axes.clear()
+        axes.annotate(f"Incorrect QOI format for {qoi.name}.", (0.0, 0.0))
+        axes.axis("off")
         return
     qoi_dim = len(qoi.squeeze().dims)  # Count includes the "value_type" dim
     if qoi_dim == 1:  # Scalar QOI
@@ -557,7 +567,7 @@ def _plot_qoi_tolerance_check(qoi, ax):
         except KeyError:
             expected = numpy.nan
         name = _get_plotting_name(qoi)
-        _plot_scalar_tolerance_check(name, calculated, expected, lower_limit, upper_limit, within_tolerance, ax)
+        _plot_scalar_tolerance_check(name, calculated, expected, lower_limit, upper_limit, within_tolerance, axes)
 
 
 def _plot_scalar_tolerance_check(
