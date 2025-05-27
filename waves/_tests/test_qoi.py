@@ -1,6 +1,7 @@
 """Test QOI module"""
 
 import io
+import os
 import pathlib
 from unittest.mock import patch, mock_open, Mock
 from contextlib import nullcontext as does_not_raise
@@ -655,8 +656,8 @@ test_write_qoi_set_to_csv_cases = {
             attrs={},
         ),
         (
-            "name,calculated,expected,lower_limit,upper_limit\n"
-            "qoi1,,,,\n"
+            f"name,calculated,expected,lower_limit,upper_limit{os.linesep}"
+            f"qoi1,,,,{os.linesep}"
         ),
     ),
     "one qoi: recommended attributes": (
@@ -678,8 +679,8 @@ test_write_qoi_set_to_csv_cases = {
             attrs={},
         ),
         (
-            "name,calculated,expected,lower_limit,upper_limit,group,units,description,long_name,version\n"
-            "qoi1,5.1,5.0,4.0,6.0,group1,units1,description1,long_name1,version1\n"
+            f"name,calculated,expected,lower_limit,upper_limit,group,units,description,long_name,version{os.linesep}"
+            f"qoi1,5.1,5.0,4.0,6.0,group1,units1,description1,long_name1,version1{os.linesep}"
         ),
     ),
     "two qoi: minimum api use": (
@@ -700,9 +701,9 @@ test_write_qoi_set_to_csv_cases = {
             attrs={},
         ),
         (
-            "name,calculated,expected,lower_limit,upper_limit\n"
-            "qoi1,,,,\n"
-            "qoi2,,,,\n"
+            f"name,calculated,expected,lower_limit,upper_limit{os.linesep}"
+            f"qoi1,,,,{os.linesep}"
+            f"qoi2,,,,{os.linesep}"
         ),
     ),
     "two qoi: recommended attributes": (
@@ -735,9 +736,9 @@ test_write_qoi_set_to_csv_cases = {
             attrs={},
         ),
         (
-            "name,calculated,expected,lower_limit,upper_limit,group,units,description,long_name,version\n"
-            "qoi1,5.1,5.0,4.0,6.0,group1,units1,description1,long_name1,version1\n"
-            "qoi2,0.8,1.0,0.9,1.1,group2,units2,description2,long_name2,version2\n"
+            f"name,calculated,expected,lower_limit,upper_limit,group,units,description,long_name,version{os.linesep}"
+            f"qoi1,5.1,5.0,4.0,6.0,group1,units1,description1,long_name1,version1{os.linesep}"
+            f"qoi2,0.8,1.0,0.9,1.1,group2,units2,description2,long_name2,version2{os.linesep}"
         ),
     ),
 }
