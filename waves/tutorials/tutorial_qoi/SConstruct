@@ -46,7 +46,8 @@ AddOption(
     default=100.0,
     help="The synthetic 'simulation post-processing' stress calculation used by ``sim_2_post.py``",
 )
-# Enable CLI executable name change for system testing the tutorials in the repository, ``python -m waves._main``
+# Enable CLI executable name change for system testing the tutorials in the repository, ``python -m waves._main``.
+# End users may remove this option and all uses of this option.
 AddOption(
     "--waves-command",
     dest="waves_command",
@@ -68,7 +69,7 @@ env.AddMethod(
         collection_dir=(build_dir / "qoi").absolute(),
         build_dir=build_dir.absolute(),
         update_expected=env.GetOption("update_expected_qois"),
-        program=env["waves_command"],
+        _program=env["waves_command"],
     ),
     "QOI",
 )

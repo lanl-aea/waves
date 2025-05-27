@@ -3968,12 +3968,21 @@ class QOIPseudoBuilder:
         collection_dir: pathlib.Path,
         build_dir: pathlib.Path,
         update_expected: bool = False,
-        program: str = "waves",
+        _program: str = "waves",
     ) -> None:
+        """SCons Pseudo-Builder class which allows users to customize the QOI Pseudo-Builder.
+
+        :param collection_dir: Root directory of QOI archive artifacts.
+        :param build_dir: Root directory of SCons project build artifacts.
+        :param updated_expected: Update the expected QOI CSV source files to match the calculated QOI values instead of
+            comparing the calculated and expected values.
+        :param _program: The WAVES command line program call. Intended for internal use by developers to perform
+            in-repository system testing. End users should not change the default value of this argument.
+        """
         self.collection_dir = collection_dir
         self.build_dir = build_dir
         self.update_expected = update_expected
-        self.program = program
+        self._program = _program
 
     def __call__(
         self,
@@ -4032,7 +4041,7 @@ class QOIPseudoBuilder:
                 target=[f"{expected}.stdout"],
                 source=[calculated, expected],
                 action=(
-                    f"{self.program} qoi accept"
+                    f"{self._program} qoi accept"
                     + f" --calculated {calculated}"  # noqa: W503
                     + f" --expected {expected_source}"  # noqa: W503
                     + " > ${TARGETS[-1].abspath} 2>&1"  # noqa: W503
@@ -4052,14 +4061,14 @@ class QOIPseudoBuilder:
             comparison_target = env.Command(
                 target=[diff],
                 source=[calculated, expected],
-                action=f"{self.program} qoi diff --expected {expected} --calculated {calculated} --output {diff}",
+                action=f"{self._program} qoi diff --expected {expected} --calculated {calculated} --output {diff}",
             )
             targets.extend(comparison_target)
             # Check the comparison results and raise error if not all QOIs are within tolerance
             check_target = env.Command(
                 target=[f"{name}_check.stdout"],
                 source=[diff],
-                action=(f"{self.program} qoi check --diff {diff}" + " > ${TARGETS[-1].abspath} 2>&1"),
+                action=(f"{self._program} qoi check --diff {diff}" + " > ${TARGETS[-1].abspath} 2>&1"),
             )
             targets.extend(check_target)
 
