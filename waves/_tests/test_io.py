@@ -70,7 +70,7 @@ def test_previous_parameter_study(
     parameter_generator.write()
 
     # Check that xarray thinks the datasets are identical as a sanity check
-    disk = xarray.open_dataset(parameter_study_file)
+    disk = xarray.open_dataset(parameter_study_file, engine="h5netcdf")
     assert disk.identical(parameter_generator.parameter_study)
 
     # Check that the verify function does not raise an exception

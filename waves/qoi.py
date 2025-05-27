@@ -474,7 +474,7 @@ def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
         qoi_kwargs = [row.dropna().to_dict() for idx, row in df.iterrows()]
         return create_qoi_set([create_qoi(**kwargs) for kwargs in qoi_kwargs])
     if from_file.suffix.lower() == ".h5":
-        return xarray.open_dataset(from_file)
+        return xarray.open_dataset(from_file, engine="h5netcdf")
 
 
 def _add_tolerance_attribute(qoi_set: xarray.Dataset) -> None:
@@ -806,7 +806,7 @@ def _aggregate(parameter_study_file, output_file, qoi_set_files):
     """Aggregate QOIs across multiple simulations, e.g. across sets in a parameter study."""
     qoi_sets = (_read_qoi_set(qoi_set_file) for qoi_set_file in qoi_set_files)
     qois = (qoi for qoi_set in qoi_sets for qoi in qoi_set.values())
-    parameter_study = xarray.open_dataset(parameter_study_file)
+    parameter_study = xarray.open_dataset(parameter_study_file, engine="h5netcdf")
     qoi_study = _create_qoi_study(qois, parameter_study=parameter_study)
     qoi_study.to_netcdf(output_file, engine="h5netcdf")
 
@@ -819,7 +819,7 @@ def _report(output, qoi_archive_h5):
 
 def _plot_archive(output, qoi_archive_h5):
     """Plot QOI values over the Mod/Sim history."""
-    qoi_archive = _merge_qoi_archives((xarray.open_datatree(f) for f in qoi_archive_h5))
+    qoi_archive = _merge_qoi_archives((xarray.open_datatree(f, engine="h5netcdf") for f in qoi_archive_h5))
     _qoi_history_report(qoi_archive, output)
 
 

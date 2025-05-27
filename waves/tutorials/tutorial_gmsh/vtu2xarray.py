@@ -97,10 +97,10 @@ def main(
             )
 
     data = xarray.merge(data_arrays)
-    data.to_netcdf(output_file)
+    data.to_netcdf(output_file, engine="h5netcdf")
 
 
-def time_points_from_file(time_points_file: pathlib.Path) -> numpy.array:
+def time_points_from_file(time_points_file: pathlib.Path) -> numpy.ndarray:
     """Return time points array from CalculiX ``*TIME POINTS`` CSV file
 
     :param time_points_file: A CalculiX ``*TIME POINTS`` CSV file

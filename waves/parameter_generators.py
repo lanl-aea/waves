@@ -1450,7 +1450,7 @@ def _open_parameter_study(parameter_study_file: typing.Union[pathlib.Path, str])
     path = pathlib.Path(parameter_study_file)
     if not path.is_file():
         raise RuntimeError("File '{parameter_study_file}' is not a file")
-    parameter_study = xarray.open_dataset(parameter_study_file)
+    parameter_study = xarray.open_dataset(parameter_study_file, engine="h5netcdf")
 
     try:
         _verify_parameter_study(parameter_study)

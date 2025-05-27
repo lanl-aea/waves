@@ -33,7 +33,7 @@ sim_1_qois["load"]
 waves.qoi.write_qoi_set_to_csv(sim_1_qois, "sim_1_qois.csv")
 
 # Save calculated QOIs to h5
-sim_1_qois.to_netcdf("sim_1_qois.h5")
+sim_1_qois.to_netcdf("sim_1_qois.h5", engine="h5netcdf")
 
 # Read expected QOIs from CSV
 sim_1_expected_qois = waves.qoi._read_qoi_set("sim_1_expected_qois.csv")
@@ -80,7 +80,7 @@ commit_1_qois = waves.qoi._create_qoi_archive((*sim_1_qois.values(), *sim_2_qois
 commit_1_qois["Assembly ABC Preload"]["load"]
 
 # Write archive to H5
-commit_1_qois.to_netcdf("commit_1_qois.h5")
+commit_1_qois.to_netcdf("commit_1_qois.h5", engine="h5netcdf")
 
 # Create tolerance report from archive
 waves.qoi._write_qoi_report(commit_1_qois, "commit_1_report.pdf")
@@ -136,7 +136,7 @@ commit_2_qois = waves.qoi._create_qoi_archive(
         ),
     )
 )
-commit_2_qois.to_netcdf("commit_2_qois.h5")
+commit_2_qois.to_netcdf("commit_2_qois.h5", engine="h5netcdf")
 
 # Merge archives
 all_commit_qois = waves.qoi._merge_qoi_archives((commit_1_qois, commit_2_qois))
