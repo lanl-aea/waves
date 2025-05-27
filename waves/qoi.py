@@ -560,8 +560,27 @@ def _plot_qoi_tolerance_check(qoi, ax):
         _plot_scalar_tolerance_check(name, calculated, expected, lower_limit, upper_limit, within_tolerance, ax)
 
 
-def _plot_scalar_tolerance_check(name, calculated, expected, lower_limit, upper_limit, within_tolerance, ax):
-    """Plots a tolerance check for a scalar QOI DataArray."""
+def _plot_scalar_tolerance_check(
+    name: str,
+    calculated: float,
+    expected: float,
+    lower_limit: float,
+    upper_limit: float,
+    within_tolerance: bool,
+    axes: matplotlib.axes.Axes,
+) -> None:
+    """Plots a tolerance check for a scalar QOI DataArray.
+
+    :param name: QOI plotting label
+    :param calculated: QOI calculated value
+    :param expected: QOI expected value
+    :param lower_limit: lower limit to QOI tolerance. If equal to ``numpy.nan``, then the lower limit is assigned as
+        zero.
+    :param upper_limit: upper limit to QOI tolerance. If equal to ``numpy.nan``, then the upper limit is assigned as
+        zero.
+    :param within_tolerance: plot QOI in green (good) if True, else plot QOI in red (bad)
+    :param axes: Matplotlib axes for plotting
+    """
     # TODO: draw arrow if bar is clipped by xmin, xmax
     try:
         # Bar color is always green if within tolerance, red otherwise
@@ -583,29 +602,29 @@ def _plot_scalar_tolerance_check(name, calculated, expected, lower_limit, upper_
             colors = ["blue", "black"]
 
         # Draw vertical lines at lower and upper tolerance limits
-        container = ax.barh(0.0, width=(calculated - expected), left=expected, color=bar_color)
-        ax.vlines([lower_line, upper_line], *ax.get_ylim(), colors=colors)
-        ax.vlines([expected], *ax.get_ylim(), colors="black", linestyle="dashed")
+        container = axes.barh(0.0, width=(calculated - expected), left=expected, color=bar_color)
+        axes.vlines([lower_line, upper_line], *axes.get_ylim(), colors=colors)
+        axes.vlines([expected], *axes.get_ylim(), colors="black", linestyle="dashed")
 
         # Turn ticks and labels off, except for tolerances and expected value
-        ax.tick_params(axis="x", bottom=False, pad=-1, labelsize=8)
-        ax.tick_params(axis="y", left=False, labelleft=False)
-        ax.set_xticks([lower_line, expected, upper_line])
+        axes.tick_params(axis="x", bottom=False, pad=-1, labelsize=8)
+        axes.tick_params(axis="y", left=False, labelleft=False)
+        axes.set_xticks([lower_line, expected, upper_line])
 
         # Turn off plot borders
-        ax.spines["bottom"].set_visible(False)
-        ax.spines["top"].set_visible(False)
-        ax.spines["left"].set_visible(False)
-        ax.spines["right"].set_visible(False)
+        axes.spines["bottom"].set_visible(False)
+        axes.spines["top"].set_visible(False)
+        axes.spines["left"].set_visible(False)
+        axes.spines["right"].set_visible(False)
 
         # Extend plot past upper and lower tolerances
         tolerance_width = upper_line - lower_line
         xmin = lower_line - 0.25 * tolerance_width
         xmax = upper_line + 0.25 * tolerance_width
-        ax.set_xlim([xmin, xmax])
+        axes.set_xlim([xmin, xmax])
 
         # Add calculated value as annotation above bar
-        ax.annotate(
+        axes.annotate(
             f"{calculated:.3e}",
             xy=(calculated, 0.555),
             xytext=(numpy.clip(calculated, xmin, xmax), 0.55),
@@ -616,9 +635,9 @@ def _plot_scalar_tolerance_check(name, calculated, expected, lower_limit, upper_
 
     # ValueError could mean calculated value is inf
     except ValueError:
-        ax.clear()
-        ax.annotate("Failed to plot.", (0.0, 0.0))
-        ax.axis("off")
+        axes.clear()
+        axes.annotate("Failed to plot.", (0.0, 0.0))
+        axes.axis("off")
 
     # Add QOI name and values to left of plot
     if not within_tolerance:
@@ -627,7 +646,7 @@ def _plot_scalar_tolerance_check(name, calculated, expected, lower_limit, upper_
     else:
         color = "black"
         fontweight = "normal"
-    ax.annotate(
+    axes.annotate(
         text=(
             f"{name}\n"
             f" min: {lower_limit:.2e},"
@@ -646,11 +665,15 @@ def _plot_scalar_tolerance_check(name, calculated, expected, lower_limit, upper_
     )
 
 
-def _write_qoi_report(qoi_archive, output, plots_per_page=16):
+def _write_qoi_report(qoi_archive: xarray.DataTree, output: pathlib.Path, plots_per_page: int = 16) -> None:
     """Write a QOI report to a PDF.
 
     QOI archive must contain QOIs with only the "value_type" dimension. Multi-dimensional QOIs and QOI values across
     multiple versions cannot be plotted using this function.
+
+    :param qoi_archive: collection of QOI datasets stored as a datatree
+    :param output: history report output path
+    :param plots_per_page: the number of plots on each page of the output
     """
     with PdfPages(output) as pdf:
         for qoi_group in qoi_archive.leaves:
@@ -738,7 +761,7 @@ def _plot_scalar_qoi_history(
 
 def _qoi_history_report(
     qoi_archive: xarray.DataTree,
-    output,
+    output: pathlib.Path,
     plots_per_page: int = 8,
     add_git_commit_date: bool = False,
 ) -> None:
