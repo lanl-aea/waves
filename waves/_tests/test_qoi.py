@@ -1,5 +1,6 @@
 """Test QOI module"""
 
+import io
 import pathlib
 from unittest.mock import patch, mock_open, Mock
 from contextlib import nullcontext as does_not_raise
@@ -62,8 +63,8 @@ test_create_qoi_cases = {
             "group": "group1",
             "units": "units1",
             "description": "description1",
-            "long_name": "long_name",
-            "version": "version",
+            "long_name": "long_name1",
+            "version": "version1",
         },
         xarray.DataArray(
             [5.1, 5.0, 4.0, 6.0],
@@ -73,8 +74,8 @@ test_create_qoi_cases = {
                 "group": "group1",
                 "units": "units1",
                 "description": "description1",
-                "long_name": "long_name",
-                "version": "version",
+                "long_name": "long_name1",
+                "version": "version1",
             },
         ),
         does_not_raise(),
@@ -370,8 +371,118 @@ def test__add_tolerance_attribute():
     pass
 
 
-def test_write_qoi_set_to_csv():
-    pass
+test_write_qoi_set_to_csv_cases = {
+    "one qoi: minimum api use": (
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                    attrs={},
+                ),
+            },
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            attrs={},
+        ),
+        (
+            "name,calculated,expected,lower_limit,upper_limit\n"
+            "qoi1,,,,\n"
+        ),
+    ),
+    "one qoi: recommended attributes": (
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [5.1, 5.0, 4.0, 6.0],
+                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                    attrs={
+                        "group": "group1",
+                        "units": "units1",
+                        "description": "description1",
+                        "long_name": "long_name1",
+                        "version": "version1"
+                    },
+                ),
+            },
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            attrs={},
+        ),
+        (
+            "name,calculated,expected,lower_limit,upper_limit,group,units,description,long_name,version\n"
+            "qoi1,5.1,5.0,4.0,6.0,group1,units1,description1,long_name1,version1\n"
+        ),
+    ),
+    "two qoi: minimum api use": (
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                    attrs={},
+                ),
+                "qoi2": xarray.DataArray(
+                    [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                    attrs={},
+                ),
+            },
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            attrs={},
+        ),
+        (
+            "name,calculated,expected,lower_limit,upper_limit\n"
+            "qoi1,,,,\n"
+            "qoi2,,,,\n"
+        ),
+    ),
+    "two qoi: recommended attributes": (
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [5.1, 5.0, 4.0, 6.0],
+                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                    attrs={
+                        "group": "group1",
+                        "units": "units1",
+                        "description": "description1",
+                        "long_name": "long_name1",
+                        "version": "version1"
+                    },
+                ),
+                "qoi2": xarray.DataArray(
+                    [0.8, 1.0, 0.9, 1.1],
+                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                    attrs={
+                        "group": "group2",
+                        "units": "units2",
+                        "description": "description2",
+                        "long_name": "long_name2",
+                        "version": "version2"
+                    },
+                ),
+            },
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            attrs={},
+        ),
+        (
+            "name,calculated,expected,lower_limit,upper_limit,group,units,description,long_name,version\n"
+            "qoi1,5.1,5.0,4.0,6.0,group1,units1,description1,long_name1,version1\n"
+            "qoi2,0.8,1.0,0.9,1.1,group2,units2,description2,long_name2,version2\n"
+        ),
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "qoi_set, expected",
+    test_write_qoi_set_to_csv_cases.values(),
+    ids=test_write_qoi_set_to_csv_cases.keys(),
+)
+def test_write_qoi_set_to_csv(qoi_set, expected):
+    buffer = io.StringIO()
+    qoi.write_qoi_set_to_csv(qoi_set, buffer)
+    csv_text = buffer.getvalue()
+    assert csv_text == expected
 
 
 def test__plot_qoi_tolerance_check():
