@@ -488,7 +488,7 @@ def test_open_parameter_study():
         does_not_raise(),
     ):
         parameter_generators._open_parameter_study(mock_file)
-        mock_open_dataset.assert_called_once_with(mock_file)
+        mock_open_dataset.assert_called_once_with(mock_file, engine="h5netcdf")
 
     # Test missing file failure
     with (
@@ -512,7 +512,7 @@ def test_open_parameter_study():
         try:
             parameter_generators._open_parameter_study(mock_file)
         finally:
-            mock_open_dataset.assert_called_once_with(mock_file)
+            mock_open_dataset.assert_called_once_with(mock_file, engine="h5netcdf")
 
 
 class TestParameterGenerator:
