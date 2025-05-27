@@ -3963,6 +3963,16 @@ def parameter_study_write(
 
 
 class QOIPseudoBuilder:
+    """SCons Pseudo-Builder class which allows users to customize the QOI Pseudo-Builder.
+
+    :param collection_dir: Root directory of QOI archive artifacts.
+    :param build_dir: Root directory of SCons project build artifacts.
+    :param updated_expected: Update the expected QOI CSV source files to match the calculated QOI values instead of
+        comparing the calculated and expected values.
+    :param _program: The WAVES command line program call. Intended for internal use by developers to perform
+        in-repository system testing. End users should not change the default value of this argument.
+    """
+
     def __init__(
         self,
         collection_dir: pathlib.Path,
@@ -3970,15 +3980,6 @@ class QOIPseudoBuilder:
         update_expected: bool = False,
         _program: str = "waves",
     ) -> None:
-        """SCons Pseudo-Builder class which allows users to customize the QOI Pseudo-Builder.
-
-        :param collection_dir: Root directory of QOI archive artifacts.
-        :param build_dir: Root directory of SCons project build artifacts.
-        :param updated_expected: Update the expected QOI CSV source files to match the calculated QOI values instead of
-            comparing the calculated and expected values.
-        :param _program: The WAVES command line program call. Intended for internal use by developers to perform
-            in-repository system testing. End users should not change the default value of this argument.
-        """
         self.collection_dir = collection_dir
         self.build_dir = build_dir
         self.update_expected = update_expected
