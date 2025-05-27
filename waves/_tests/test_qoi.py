@@ -224,7 +224,6 @@ test_create_qoi_set_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        does_not_raise(),
     ),
     "one qoi: using ``create_qoi``": (
         [qoi.create_qoi(name="qoi1", attr1="value1")],
@@ -239,7 +238,6 @@ test_create_qoi_set_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        does_not_raise(),
     ),
     "two qoi": (
         [
@@ -272,7 +270,6 @@ test_create_qoi_set_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        does_not_raise(),
     ),
     "two qoi: using ``create_qoi``": (
         [qoi.create_qoi(name="qoi1", attr1="value1"), qoi.create_qoi(name="qoi2", attr1="value2")],
@@ -292,7 +289,6 @@ test_create_qoi_set_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        does_not_raise(),
     ),
     "drop_conflicts": (
         [
@@ -320,23 +316,18 @@ test_create_qoi_set_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        does_not_raise(),
     ),
 }
 
 
 @pytest.mark.parametrize(
-    "qoi_list, expected, outcome",
+    "qoi_list, expected",
     test_create_qoi_set_cases.values(),
     ids=test_create_qoi_set_cases.keys(),
 )
-def test_create_qoi_set(qoi_list, expected, outcome):
-    with outcome:
-        try:
-            output = qoi.create_qoi_set(qoi_list)
-            assert expected.identical(output)
-        finally:
-            pass
+def test_create_qoi_set(qoi_list, expected):
+    output = qoi.create_qoi_set(qoi_list)
+    assert expected.identical(output)
 
 
 def test__create_qoi_study():
