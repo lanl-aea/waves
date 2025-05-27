@@ -51,4 +51,4 @@ version_2_qois = qoi._create_qoi_archive(
         ),
     )
 )
-version_2_qois.to_netcdf("version_2_qois.h5")
+version_2_qois.to_netcdf("version_2_qois.h5", engine="h5netcdf")

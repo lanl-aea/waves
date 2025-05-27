@@ -808,7 +808,7 @@ def _aggregate(parameter_study_file, output_file, qoi_set_files):
     qois = (qoi for qoi_set in qoi_sets for qoi in qoi_set.values())
     parameter_study = xarray.open_dataset(parameter_study_file)
     qoi_study = _create_qoi_study(qois, parameter_study=parameter_study)
-    qoi_study.to_netcdf(output_file)
+    qoi_study.to_netcdf(output_file, engine="h5netcdf")
 
 
 def _report(output, qoi_archive_h5):

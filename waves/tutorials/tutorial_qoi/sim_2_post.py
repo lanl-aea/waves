@@ -38,7 +38,7 @@ def main():
     qoi.write_qoi_set_to_csv(sim_2_qois, "sim_2_qois.csv")
 
     # Save calculated QOIs to h5
-    sim_2_qois.to_netcdf("sim_2_qois.h5")
+    sim_2_qois.to_netcdf("sim_2_qois.h5", engine="h5netcdf")
 
 
 if __name__ == "__main__":
