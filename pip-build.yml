@@ -25,4 +25,4 @@ dependencies:
   - sphinx-design
   - sphinxcontrib-bibtex
   - twine >=5
-  - xarray
+  - xarray >=2024.10.0

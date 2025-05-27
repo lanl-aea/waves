@@ -43,7 +43,7 @@ requirements:
     - sphinx-copybutton >=0.5.1
     - sphinx-design
     - sphinxcontrib-bibtex
-    - xarray
+    - xarray >=2024.10.0
   run:
     - python {{ python }}
     - h5netcdf
@@ -55,7 +55,7 @@ requirements:
     - salib >=1.4.6
     - scipy >=1.7
     - scons {{ scons }}
-    - xarray
+    - xarray >=2024.10.0
 
 test:
   requires:

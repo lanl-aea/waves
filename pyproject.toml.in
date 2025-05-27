@@ -37,7 +37,7 @@ dependencies = [
     "salib >=1.4.6",
     "scipy >=1.7",
     "scons >=4",
-    "xarray"
+    "xarray >=2024.10.0"
 ]
 
 [tool.setuptools]
