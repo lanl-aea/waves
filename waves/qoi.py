@@ -300,8 +300,8 @@ def _create_qoi_study(
     return qoi_study
 
 
-def _qoi_group(qoi):
-    """Return "group" attribute of a QOI (xarray.Dataset)."""
+def _qoi_group(qoi: xarray.Dataset) -> str:
+    """Return ``"group"`` attribute of a QOI (xarray.Dataset)."""
     return qoi.attrs["group"]
 
 
