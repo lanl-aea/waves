@@ -751,7 +751,13 @@ def _qoi_history_report(qoi_archive, output, plots_per_page=8, add_git_commit_da
 
 
 @functools.cache
-def _get_commit_date(commit):
+def _get_commit_date(commit: str) -> pandas.Timestamp:
+    """Call ``git`` as a subprocess to return a timestamp of a specified commit
+
+    :param commit: commit or commit-like string for the ``git show`` command
+
+    :returns: commit timestamp
+    """
     return pandas.to_datetime(
         subprocess.run(
             ["git", "show", "--no-patch", "--no-notes", "--pretty='%cs'", commit],
