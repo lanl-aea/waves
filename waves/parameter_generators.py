@@ -385,10 +385,7 @@ class ParameterGenerator(ABC):
 
         * ``self._set_names``: Dictionary mapping parameter set hash to parameter set name
         """
-        self._set_names = {}
-        for number, set_hash in enumerate(self._set_hashes):
-            template = self.set_name_template
-            self._set_names[set_hash] = template.substitute({"number": number})
+        self._set_names = _create_set_names(self._set_hashes, self.set_name_template)
 
     def _update_set_names(self) -> None:
         """Update the parameter set names after a parameter study dataset merge operation.
@@ -1522,6 +1519,25 @@ def _merge_parameter_studies(studies: typing.List[xarray.Dataset]) -> xarray.Dat
             study_combined[key] = study_combined[key].astype(old_dtype)
 
     return study_combined
+
+
+def _create_set_names(set_hashes: typing.List[str], template: typing.Optional[_utilities._AtSignTemplate]) -> dict:
+    """Construct parameter set names from the set name template and number of parameter set hashes.
+
+    :param set_hashes: parameter set content hashes identifying rows of parameter study
+    :param template: parameter set naming template utilizing the '@' sign to mark substitution. If none is provided upon
+        call, fetch it from the WAVES settings.
+
+    :return: Dictionary mapping parameter set hash to parameter set name
+    """
+    if not template:
+        template = _utilities._AtSignTemplate(_settings._default_set_name_template)
+
+    set_names = {}
+    for number, set_hash in enumerate(set_hashes):
+        set_names[set_hash] = template.substitute({"number": number})
+
+    return set_names
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace
