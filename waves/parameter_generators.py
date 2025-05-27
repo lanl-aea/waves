@@ -1489,6 +1489,8 @@ def _merge_parameter_studies(studies: typing.List[xarray.Dataset],
     names during merge.
 
     :param studies: list of parameter study xarray Datasets where the first study is considered the 'base' study
+    :param template: parameter set naming template utilizing the '@' sign to mark substitution. If none is provided upon
+        call, fetch it from the WAVES settings.
 
     :return: parameter study xarray Dataset
 
