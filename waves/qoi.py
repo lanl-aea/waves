@@ -762,17 +762,28 @@ def _get_commit_date(commit):
     )
 
 
-def _add_commit_date(ds):
+def _add_commit_date(dataset: xarray.Dataset) -> xarray.Dataset:
+    """Return an Xarray dataset sorted by the ``date`` variable
+
+    Intended for use with ``xarray.map_over_datasets`` method:
+    https://docs.xarray.dev/en/latest/generated/xarray.map_over_datasets.html
+
+    :param dataset: Xarray Dataset containing the ``date`` variable
+
+    :returns: The same Xarray Dataset after sorting
+    """
     try:
-        return ds.assign_coords(date=(_version_key, (_get_commit_date(commit) for commit in ds[_version_key])))
+        return dataset.assign_coords(
+            date=(_version_key, (_get_commit_date(commit) for commit in dataset[_version_key]))
+        )
     except KeyError:
-        return ds
+        return dataset
 
 
 def _sort_by_date(dataset: xarray.Dataset) -> xarray.Dataset:
     """Return an Xarray dataset sorted by the ``date`` variable
 
-    Intended for use with ``xarray.map_over_dataset`` method:
+    Intended for use with ``xarray.map_over_datasets`` method:
     https://docs.xarray.dev/en/latest/generated/xarray.map_over_datasets.html
 
     :param dataset: Xarray Dataset containing the ``date`` variable
