@@ -184,7 +184,10 @@ def create_qoi_set(qois: typing.List[xarray.DataArray]) -> xarray.Dataset:
     return qoi_set
 
 
-def _create_qoi_study(qois: typing.List[xarray.DataArray], parameter_study: xarray.Dataset = None) -> xarray.Dataset:
+def _create_qoi_study(
+    qois: typing.Iterable[xarray.DataArray],
+    parameter_study: xarray.Dataset = None,
+) -> xarray.Dataset:
     """Create a QOI Dataset spanning multiple simulations.
 
     This function combines multiple QOIs (``xarray.DataArray``s) into a single "QOI Study" (``xarray.Dataset``) using
@@ -302,7 +305,7 @@ def _qoi_group(qoi):
     return qoi.attrs["group"]
 
 
-def _create_qoi_archive(qois: typing.List[xarray.DataArray]) -> xarray.DataTree:
+def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataTree:
     """Create a QOI DataTree spanning multiple simulations and versions.
 
     :param qois: Sequence of QOIs. Each QOI must have a "version" and "group" attribute.
@@ -409,7 +412,7 @@ def _create_qoi_archive(qois: typing.List[xarray.DataArray]) -> xarray.DataTree:
     return dt
 
 
-def _merge_qoi_archives(qoi_archives: typing.List[xarray.DataTree]) -> xarray.DataTree:
+def _merge_qoi_archives(qoi_archives: typing.Iterable[xarray.DataTree]) -> xarray.DataTree:
     """Merge QOI archives by concatenating leaf datasets along the "version" dimension.
 
     :param qoi_archives: QOI archives. Each leaf dataset must have a "version" dimension.
@@ -773,8 +776,12 @@ def _sort_by_date(ds):
         return ds
 
 
-def _accept(calculated, expected):
-    """Update expected QOI values to match the currently calculated values."""
+def _accept(calculated: pathlib.Path, expected: pathlib.Path) -> None:
+    """Update expected QOI values to match the currently calculated values.
+
+    :param calculated: path to source file containing calculated QOI values
+    :param expected: path to source file containing expected QOI values
+    """
     qoi_set = _read_qoi_set(calculated)
     calculated_df = qoi_set.to_dataarray("name").to_pandas()
     # Use str data type to avoid all numerical rounding
@@ -788,22 +795,41 @@ def _accept(calculated, expected):
     return
 
 
-def _check(diff):
-    """Check results of calculated vs expected QOI comparison"""
+def _check(diff: pathlib.Path) -> None:
+    """Check results of calculated vs expected QOI comparison
+
+    :param diff: path for differences between calculated and expected QOI values
+
+    :raises ValueError: If any QOIs are out of specified tolerance in the diff file
+    """
     qoi_set = _read_qoi_set(diff)
     if qoi_set.filter_by_attrs(within_tolerance=0):
         raise ValueError(f"Not all QOIs are within tolerance. See {diff}.")
 
 
-def _diff(calculated, expected, output):
-    """Compare calculated QOIs to expected values."""
+def _diff(calculated: pathlib.Path, expected: pathlib.Path, output: pathlib.Path):
+    """Compare calculated QOIs to expected values.
+
+    :param calculated: path to source file containing calculated QOI values
+    :param expected: path to source file containing expected QOI values
+    :param output: output path for differences between calculated and expected QOI values
+    """
     qoi_set = xarray.merge((_read_qoi_set(calculated), _read_qoi_set(expected)))
     _add_tolerance_attribute(qoi_set)
     write_qoi_set_to_csv(qoi_set, output)
 
 
-def _aggregate(parameter_study_file, output_file, qoi_set_files):
-    """Aggregate QOIs across multiple simulations, e.g. across sets in a parameter study."""
+def _aggregate(
+    parameter_study_file: pathlib.Path,
+    output_file: pathlib.Path,
+    qoi_set_files: typing.Iterable[pathlib.Path],
+) -> None:
+    """Aggregate QOIs across multiple simulations, e.g. across sets in a parameter study.
+
+    :param parameter_study_file: WAVES parameter study H5 file
+    :param output_file: post-processing output file
+    :param qoi_set_files: QOI file paths
+    """
     qoi_sets = (_read_qoi_set(qoi_set_file) for qoi_set_file in qoi_set_files)
     qois = (qoi for qoi_set in qoi_sets for qoi in qoi_set.values())
     parameter_study = xarray.open_dataset(parameter_study_file, engine="h5netcdf")
@@ -811,20 +837,33 @@ def _aggregate(parameter_study_file, output_file, qoi_set_files):
     qoi_study.to_netcdf(output_file, engine="h5netcdf")
 
 
-def _report(output, qoi_archive_h5):
-    """Generate a QOI test report."""
+def _report(output: pathlib.Path, qoi_archive_h5: pathlib.Path) -> None:
+    """Generate a QOI test report.
+
+    :param output: report output file path
+    :param qoi_archive_h5: QOI archive file
+    """
     qoi_archive = xarray.open_datatree(qoi_archive_h5, engine="h5netcdf")
     _write_qoi_report(qoi_archive, output)
 
 
-def _plot_archive(output, qoi_archive_h5):
-    """Plot QOI values over the Mod/Sim history."""
-    qoi_archive = _merge_qoi_archives((xarray.open_datatree(f, engine="h5netcdf") for f in qoi_archive_h5))
+def _plot_archive(output: pathlib.Path, qoi_archive_h5: typing.Iterable[pathlib.Path]) -> None:
+    """Plot QOI values over the Mod/Sim history.
+
+    :param output: report output file path
+    :param qoi_archive_h5: QOI archive file(s)
+    """
+    qoi_archive = _merge_qoi_archives((xarray.open_datatree(archive, engine="h5netcdf") for archive in qoi_archive_h5))
     _qoi_history_report(qoi_archive, output)
 
 
-def _archive(output, version, qoi_set_files):
-    """Archive QOI sets from a single version to an H5 file."""
+def _archive(output: pathlib.Path, version: str, qoi_set_files: typing.Iterable[pathlib.Path]) -> None:
+    """Archive QOI sets from a single version to an H5 file.
+
+    :param output: report output file path
+    :param version: version string to override existing QOI version attribute
+    :param qoi_set_files: QOI file paths
+    """
     qoi_sets = (_read_qoi_set(qoi_set_file) for qoi_set_file in qoi_set_files)
     qois = (qoi for qoi_set in qoi_sets for qoi in qoi_set.values())
     if version:
