@@ -380,6 +380,7 @@ class ParameterGenerator(ABC):
         requires:
 
         * ``self._set_hashes``: parameter set content hashes identifying rows of parameter study
+        * ``self.set_name_template``: Parameter set name template. Overridden by ``output_file_template``, if provided
 
         creates attribute:
 
