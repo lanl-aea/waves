@@ -440,6 +440,54 @@ test__add_tolerance_attribute_cases = {
             attrs={},
         ),
     ),
+    "one qoi: infinite upper bound": (
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [1.0e6, numpy.nan, 0.0, numpy.inf],
+                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                    attrs={},
+                ),
+            },
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            attrs={},
+        ),
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [1.0e6, numpy.nan, 0.0, numpy.inf],
+                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                    attrs={"within_tolerance": int(True)},
+                ),
+            },
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            attrs={},
+        ),
+    ),
+    "one qoi: infinite lower bound": (
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [-1.0e6, numpy.nan, -numpy.inf, 0.0],
+                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                    attrs={},
+                ),
+            },
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            attrs={},
+        ),
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [-1.0e6, numpy.nan, -numpy.inf, 0.0],
+                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                    attrs={"within_tolerance": int(True)},
+                ),
+            },
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            attrs={},
+        ),
+    ),
     "two qoi: in tolerance": (
         xarray.Dataset(
             {
