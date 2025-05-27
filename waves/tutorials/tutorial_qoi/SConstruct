@@ -60,7 +60,7 @@ AddOption(
 
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
-    waves_command=GetOption("waves_command"),
+    waves_command=GetOption("waves_command").strip("'"),
 )
 build_dir = pathlib.Path(env.GetOption("variant_dir_base"))
 env.AddMethod(
