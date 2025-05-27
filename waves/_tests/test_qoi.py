@@ -226,6 +226,21 @@ test_create_qoi_set_cases = {
         ),
         does_not_raise(),
     ),
+    "one qoi: using ``create_qoi``": (
+        [qoi.create_qoi(name="qoi1", attr1="value1")],
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                    attrs={"attr1": "value1"},
+                ),
+            },
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            attrs={},
+        ),
+        does_not_raise(),
+    ),
     "two qoi": (
         [
             xarray.DataArray(
@@ -241,6 +256,26 @@ test_create_qoi_set_cases = {
                 attrs={"attr1": "value2"},
             ),
         ],
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                    attrs={"attr1": "value1"},
+                ),
+                "qoi2": xarray.DataArray(
+                    [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                    attrs={"attr1": "value2"},
+                ),
+            },
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            attrs={},
+        ),
+        does_not_raise(),
+    ),
+    "two qoi: using ``create_qoi``": (
+        [qoi.create_qoi(name="qoi1", attr1="value1"), qoi.create_qoi(name="qoi2", attr1="value2")],
         xarray.Dataset(
             {
                 "qoi1": xarray.DataArray(
