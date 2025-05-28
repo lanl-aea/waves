@@ -845,9 +845,8 @@ def _get_commit_date(commit: str) -> pandas.Timestamp:
         subprocess.run(
             ["git", "show", "--no-patch", "--no-notes", "--pretty='%cs'", commit],
             capture_output=True,
-        )
-        .stdout.decode()
-        .strip()
+            text=True,
+        ).stdout.strip()
     )
 
 

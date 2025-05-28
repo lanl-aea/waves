@@ -1151,12 +1151,12 @@ def test__qoi_history_report():
 
 def test__get_commit_date():
     mock_completed_process = Mock()
-    Mock.stdout = b"2025-05-28\n"
+    Mock.stdout = "2025-05-28\n"
     with patch("subprocess.run", return_value=mock_completed_process) as mock_run:
         output = qoi._get_commit_date("commit")
     assert output == datetime.datetime(2025, 5, 28)
     mock_run.assert_called_once_with(
-        ["git", "show", "--no-patch", "--no-notes", "--pretty='%cs'", "commit"], capture_output=True
+        ["git", "show", "--no-patch", "--no-notes", "--pretty='%cs'", "commit"], capture_output=True, text=True
     )
 
 
