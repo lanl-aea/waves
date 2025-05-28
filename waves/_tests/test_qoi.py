@@ -4,7 +4,7 @@ import io
 import os
 import pathlib
 import datetime
-from unittest.mock import patch, mock_open, Mock
+from unittest.mock import patch, Mock
 from contextlib import nullcontext as does_not_raise
 
 import pytest
@@ -1150,7 +1150,14 @@ def test__qoi_history_report():
 
 
 def test__get_commit_date():
-    pass
+    mock_completed_process = Mock()
+    Mock.stdout = b"2025-05-28\n"
+    with patch("subprocess.run", return_value=mock_completed_process) as mock_run:
+        output = qoi._get_commit_date("commit")
+    assert output == datetime.datetime(2025, 5, 28)
+    mock_run.assert_called_once_with(
+        ["git", "show", "--no-patch", "--no-notes", "--pretty='%cs'", "commit"], capture_output=True
+    )
 
 
 test__add_commit_date_cases = {
