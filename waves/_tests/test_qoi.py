@@ -358,6 +358,7 @@ test__create_qoi_study_cases = {
             },
             attrs={},
         ),
+        does_not_raise(),
     ),
     "one qoi: using ``create_qoi``": (
         [qoi.create_qoi(name="qoi1", attr1="value1", set_name="set_0")],
@@ -378,6 +379,7 @@ test__create_qoi_study_cases = {
             },
             attrs={},
         ),
+        does_not_raise(),
     ),
     "one qoi and a parameter study": (
         [qoi.create_qoi(name="qoi1", attr1="value1", set_name="set_0")],
@@ -405,6 +407,7 @@ test__create_qoi_study_cases = {
             },
             attrs={},
         ).set_coords(["set_hash", "parameter_1", "parameter_2"]),
+        does_not_raise(),
     ),
     "two qoi: different names, same set": (
         [
@@ -446,6 +449,7 @@ test__create_qoi_study_cases = {
             },
             attrs={},
         ),
+        does_not_raise(),
     ),
     "two qoi: different names, same set: using ``create_qoi``": (
         [
@@ -477,6 +481,7 @@ test__create_qoi_study_cases = {
             },
             attrs={},
         ),
+        does_not_raise(),
     ),
     "two qoi: same names, different sets": (
         [
@@ -513,6 +518,7 @@ test__create_qoi_study_cases = {
             },
             attrs={},
         ),
+        does_not_raise(),
     ),
     "two qoi: same names, different sets: and a parameter study": (
         [
@@ -558,18 +564,37 @@ test__create_qoi_study_cases = {
             },
             attrs={},
         ).set_coords(["set_hash", "parameter_1", "parameter_2"]),
+        does_not_raise(),
+    ),
+    "one qoi: missing ``set_name`` attribute should raise RuntimeError": (
+        [
+            xarray.DataArray(
+                [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+                coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                name="qoi1",
+                attrs={"attr1": "value1"},
+            ),
+        ],
+        None,
+        None,
+        pytest.raises(RuntimeError),
     ),
 }
 
 
 @pytest.mark.parametrize(
-    "qoi_list, parameter_study, expected",
+    "qoi_list, parameter_study, expected, outcome",
     test__create_qoi_study_cases.values(),
     ids=test__create_qoi_study_cases.keys(),
 )
-def test__create_qoi_study(qoi_list, parameter_study, expected) -> None:
-    qoi_study = qoi._create_qoi_study(qoi_list, parameter_study)
-    assert expected.identical(qoi_study)
+def test__create_qoi_study(qoi_list, parameter_study, expected, outcome) -> None:
+    with outcome:
+        try:
+            qoi_study = qoi._create_qoi_study(qoi_list, parameter_study)
+            assert expected.identical(qoi_study)
+        finally:
+            pass
+
 
 
 test__qoi_group_cases = {
