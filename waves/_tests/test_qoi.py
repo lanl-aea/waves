@@ -1150,6 +1150,11 @@ def test__qoi_history_report():
 
 
 def test__get_commit_date():
+    # Special test handling for the ``@functools.cache`` decorator.
+    # Always start the test with a clear cache 
+    qoi._get_commit_date.cache_clear()
+
+    # First call should always run the full function
     mock_completed_process = Mock()
     Mock.stdout = "2025-05-28\n"
     with patch("subprocess.run", return_value=mock_completed_process) as mock_run:
@@ -1159,8 +1164,7 @@ def test__get_commit_date():
         ["git", "show", "--no-patch", "--no-notes", "--pretty='%cs'", "commit"], capture_output=True, text=True
     )
 
-    # Function is wrapped with ``@functools.cache``. Subsequent calls with identical input arguments should perform a
-    # cache lookup without re-running the function.
+    # Subsequent calls with identical input arguments should perform a cache lookup without re-running the function.
     with patch("subprocess.run", return_value=mock_completed_process) as mock_run:
         output = qoi._get_commit_date("commit")
     assert output == datetime.datetime(2025, 5, 28)
