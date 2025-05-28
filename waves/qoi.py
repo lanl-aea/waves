@@ -278,11 +278,6 @@ def _create_qoi_study(
             parameter_sets  (set_name) <U5 80B 'set_0' 'set_1' 'set_2' 'set_3'
         Data variables:
             load            (set_name, value_type) float64 128B 5.0 nan nan ... nan nan
-        Attributes:
-            units:        N
-            long_name:    Axial Load
-            description:  Axial load through component XYZ
-            version:      abcdef
     """
     # Move "group" from attribute to dimension for each DataArray, and merge
     try:
