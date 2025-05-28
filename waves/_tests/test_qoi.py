@@ -358,6 +358,26 @@ test__create_qoi_study_cases = {
             attrs={"set_name": "set_0", "attr1": "value1"},
         ),
     ),
+    "one qoi: using ``create_qoi``": (
+        [qoi.create_qoi(name="qoi1", attr1="value1", set_name="set_0")],
+        None,
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [[numpy.nan, numpy.nan, numpy.nan, numpy.nan]],
+                    coords={
+                        "set_name": ["set_0"],
+                        "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                    },
+                    attrs={"set_name": "set_0", "attr1": "value1"},
+                ),
+            },
+            coords={
+                "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+            },
+            attrs={"set_name": "set_0", "attr1": "value1"},
+        ),
+    ),
 }
 
 
