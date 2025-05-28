@@ -7,8 +7,9 @@ import datetime
 from unittest.mock import patch, Mock
 from contextlib import nullcontext as does_not_raise
 
-import pytest
 import numpy
+import pandas
+import pytest
 import xarray
 
 from waves import qoi
@@ -673,7 +674,39 @@ def test__merge_qoi_archives():
 
 
 def test__read_qoi_set():
-    pass
+    # Test CSV read with mock CSV data
+    from_file = pathlib.Path("test.csv")
+    mock_csv_data = pandas.read_csv(
+        io.StringIO(
+            f"name,calculated,expected,lower_limit,upper_limit,group,units,description,long_name,version{os.linesep}"
+            f"qoi1,5.1,5.0,4.0,6.0,group1,units1,description1,long_name1,version1{os.linesep}"
+        )
+    )
+    expected = xarray.Dataset(
+        {
+            "qoi1": xarray.DataArray(
+                [5.1, 5.0, 4.0, 6.0],
+                coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                attrs={
+                    "group": "group1",
+                    "units": "units1",
+                    "description": "description1",
+                    "long_name": "long_name1",
+                    "version": "version1",
+                },
+            ),
+        },
+        coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+        attrs={},
+    )
+    with (
+        patch("pandas.read_csv", return_value=mock_csv_data) as mock_read_csv,
+        patch("xarray.open_dataset") as mock_open_dataset,
+    ):
+        qoi_set = qoi._read_qoi_set(from_file)
+        mock_read_csv.assert_called_once_with(from_file)
+        mock_open_dataset.assert_not_called()
+        assert expected.identical(qoi_set)
 
 
 test__add_tolerance_attribute_cases = {
@@ -1151,7 +1184,7 @@ def test__qoi_history_report():
 
 def test__get_commit_date():
     # Special test handling for the ``@functools.cache`` decorator.
-    # Always start the test with a clear cache 
+    # Always start the test with a clear cache
     qoi._get_commit_date.cache_clear()
 
     # First call should always run the full function
