@@ -11,6 +11,7 @@ import numpy
 import xarray
 
 from waves import qoi
+from waves import parameter_generators
 
 
 test_create_qoi_cases = {
@@ -377,6 +378,33 @@ test__create_qoi_study_cases = {
             },
             attrs={"set_name": "set_0", "attr1": "value1"},
         ),
+    ),
+    "one qoi and a parameter study": (
+        [qoi.create_qoi(name="qoi1", attr1="value1", set_name="set_0")],
+        parameter_generators.CustomStudy(
+            {"parameter_samples": [[1.0, 2.0]], "parameter_names": ["parameter_1", "parameter_2"]},
+            set_name_template="set_@number",
+        ).parameter_study,
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [[numpy.nan, numpy.nan, numpy.nan, numpy.nan]],
+                    coords={
+                        "set_name": ["set_0"],
+                        "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                    },
+                    attrs={"set_name": "set_0", "attr1": "value1"},
+                ),
+                "set_hash": xarray.DataArray(["30b1b83a463b6ec2a285675a02b6c303"], coords={"set_name": ["set_0"]}),
+                "parameter_1": xarray.DataArray([1.0], coords={"set_name": ["set_0"]}),
+                "parameter_2": xarray.DataArray([2.0], coords={"set_name": ["set_0"]}),
+            },
+            coords={
+                "set_name": ["set_0"],
+                "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+            },
+            attrs={"set_name": "set_0", "attr1": "value1"},
+        ).set_coords(["set_hash", "parameter_1", "parameter_2"]),
     ),
     "two qoi: different names, same set": (
         [
