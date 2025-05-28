@@ -1,3 +1,12 @@
+"""Quantity of Interest (QOI) tools
+
+.. warning::
+
+   This module is considered experimental pending early adopter end user trial and feedback.
+
+   The QOI xarray data array and dataset handling of :meth:`create_qoi` and :meth:`create_qoi_set` should be stable, but
+   the output plotting and reporting formatting is subject to change.
+"""
 import pathlib
 import typing
 import subprocess

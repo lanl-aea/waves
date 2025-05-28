@@ -3965,6 +3965,13 @@ def parameter_study_write(
 class QOIPseudoBuilder:
     """SCons Pseudo-Builder class which allows users to customize the QOI Pseudo-Builder.
 
+    .. warning::
+    
+       This pseudo-builder is considered experimental pending early adopter end user trial and feedback.
+    
+       The QOI xarray data array and dataset handling for expected/calculated comparisons should be stable, but the
+       output plotting and reporting formatting is subject to change.
+
     :param collection_dir: Root directory of QOI archive artifacts.
     :param build_dir: Root directory of SCons project build artifacts.
     :param updated_expected: Update the expected QOI CSV source files to match the calculated QOI values instead of
