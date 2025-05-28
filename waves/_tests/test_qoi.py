@@ -755,7 +755,77 @@ def test__create_qoi_archive():
 
 
 def test__merge_qoi_archives():
-    pass
+    qoi_archives = [
+        qoi._create_qoi_archive(
+            (
+                qoi.create_qoi(
+                    name="load",
+                    calculated=5.3,
+                    expected=4.5,
+                    lower_limit=3.5,
+                    upper_limit=5.5,
+                    group="Assembly ABC Preload",
+                    version="ghijkl",
+                ),
+                qoi.create_qoi(
+                    name="gap",
+                    calculated=1.0,
+                    expected=0.95,
+                    lower_limit=0.85,
+                    upper_limit=1.05,
+                    group="Assembly ABC Preload",
+                    version="ghijkl",
+                ),
+                qoi.create_qoi(
+                    name="load",
+                    calculated=35.0,
+                    group="Assembly DEF Preload",
+                    version="ghijkl",
+                ),
+                qoi.create_qoi(
+                    name="stress",
+                    calculated=110.0,
+                    group="Assembly DEF Preload",
+                    version="ghijkl",
+                ),
+            )
+        ),
+        qoi._create_qoi_archive(
+            (
+                qoi.create_qoi(
+                    name="load",
+                    calculated=5.4,
+                    expected=4.5,
+                    lower_limit=3.5,
+                    upper_limit=5.5,
+                    group="Assembly ABC Preload",
+                    version="abcdef",
+                ),
+                qoi.create_qoi(
+                    name="gap",
+                    calculated=1.1,
+                    expected=0.95,
+                    lower_limit=0.85,
+                    upper_limit=1.05,
+                    group="Assembly ABC Preload",
+                    version="abcdef",
+                ),
+                qoi.create_qoi(
+                    name="load",
+                    calculated=36.0,
+                    group="Assembly DEF Preload",
+                    version="abcdef",
+                ),
+                qoi.create_qoi(
+                    name="stress",
+                    calculated=111.0,
+                    group="Assembly DEF Preload",
+                    version="abcdef",
+                ),
+            )
+        ),
+    ]
+    merged_archive = qoi._merge_qoi_archives(qoi_archives)
 
 
 test__read_qoi_set_cases = {
