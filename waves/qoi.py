@@ -488,7 +488,7 @@ def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
     elif suffix == ".h5":
         return xarray.open_dataset(from_file, engine="h5netcdf")
     else:
-        raise ValueError(f"Unknown file suffix '{suffix}'")
+        raise RuntimeError(f"Unknown file suffix '{suffix}'")
 
 
 def _add_tolerance_attribute(qoi_set: xarray.Dataset) -> None:

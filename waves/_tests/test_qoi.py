@@ -725,7 +725,7 @@ def test__read_qoi_set_unknown():
     with (
         patch("pandas.read_csv") as mock_read_csv,
         patch("xarray.open_dataset") as mock_open_dataset,
-        pytest.raises(ValueError),
+        pytest.raises(RuntimeError),
     ):
         try:
             qoi_set = qoi._read_qoi_set(from_file)
