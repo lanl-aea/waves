@@ -16,6 +16,7 @@ from waves import _settings
 _exclude_from_namespace = set(globals().keys())
 
 _version_key = "version"
+_merge_constants = {"combine_attrs": "drop_conflicts"}
 
 
 def create_qoi(
@@ -178,7 +179,7 @@ def create_qoi_set(qois: typing.List[xarray.DataArray]) -> xarray.Dataset:
             version:      abcdef
             date:         2025-01-01
     """
-    qoi_set = xarray.merge(qois, combine_attrs="drop_conflicts")
+    qoi_set = xarray.merge(qois, **_merge_constants)
     # Keep all attributes at the data variable level
     qoi_set.attrs = dict()
     return qoi_set
@@ -283,7 +284,7 @@ def _create_qoi_study(
     try:
         qoi_study = xarray.merge(
             [qoi.expand_dims(set_name=[qoi.attrs[_settings._set_coordinate_key]]) for qoi in qois],
-            combine_attrs="drop_conflicts",
+            **_merge_constants,
         )
     except KeyError:
         raise RuntimeError(
@@ -295,7 +296,7 @@ def _create_qoi_study(
     if parameter_study:
         # Convert parameter study variables to coordinates
         parameter_study = parameter_study.set_coords(parameter_study)
-        qoi_study = xarray.merge((qoi_study, parameter_study), combine_attrs="drop_conflicts")
+        qoi_study = xarray.merge((qoi_study, parameter_study), **_merge_constants)
     return qoi_study
 
 
@@ -405,7 +406,7 @@ def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataT
             qois = [qoi.assign_coords(date=(_version_key, [qoi.attrs["date"]])) for qoi in qois]
         except KeyError:
             pass  # date coordinate is not needed
-        ds = xarray.merge(qois, combine_attrs="drop_conflicts")
+        ds = xarray.merge(qois, **_merge_constants)
         # Add dataset as a node in the DataTree
         archive[group] = ds
     return archive
