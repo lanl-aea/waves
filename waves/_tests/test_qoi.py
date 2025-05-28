@@ -673,7 +673,7 @@ def test__merge_qoi_archives():
     pass
 
 
-def test__read_qoi_set():
+def test__read_qoi_set_csv():
     # Test CSV read with mock CSV data
     from_file = pathlib.Path("test.csv")
     mock_csv_data = pandas.read_csv(
@@ -707,6 +707,31 @@ def test__read_qoi_set():
         mock_read_csv.assert_called_once_with(from_file)
         mock_open_dataset.assert_not_called()
         assert expected.identical(qoi_set)
+
+
+def test__read_qoi_set_h5():
+    from_file = pathlib.Path("test.h5")
+    with (
+        patch("pandas.read_csv") as mock_read_csv,
+        patch("xarray.open_dataset") as mock_open_dataset,
+    ):
+        qoi_set = qoi._read_qoi_set(from_file)
+        mock_read_csv.assert_not_called()
+        mock_open_dataset.assert_called_once_with(from_file, engine="h5netcdf")
+
+
+def test__read_qoi_set_unknown():
+    from_file = pathlib.Path("test.unknownsuffix")
+    with (
+        patch("pandas.read_csv") as mock_read_csv,
+        patch("xarray.open_dataset") as mock_open_dataset,
+        pytest.raises(ValueError),
+    ):
+        try:
+            qoi_set = qoi._read_qoi_set(from_file)
+        finally:
+            mock_read_csv.assert_not_called()
+            mock_open_dataset.assert_not_called()
 
 
 test__add_tolerance_attribute_cases = {
