@@ -666,39 +666,6 @@ def test__qoi_group(qoi_set, expected, outcome):
 
 
 def test__create_qoi_archive():
-    expected = xarray.DataTree()
-    expected["Assembly ABC Preload"] = xarray.Dataset(
-        {
-            "load": xarray.DataArray(
-                [5.3, 4.5, 3.5, 5.5],
-                coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
-                attrs={"group": "Assembly ABC Preload", "version": "ghijkl"},
-            ),
-            "gap": xarray.DataArray(
-                [1.0, 0.95, 0.85, 1.05],
-                coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
-                attrs={"group": "Assembly ABC Preload", "version": "ghijkl"},
-            ),
-        },
-        coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
-        attrs={"group": "Assembly ABC Preload"},
-    )
-    expected["Assembly DEF Preload"] = xarray.Dataset(
-        {
-            "load": xarray.DataArray(
-                [35.0, numpy.nan, numpy.nan, numpy.nan],
-                coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
-                attrs={"group": "Assembly DEF Preload", "version": "ghijkl"},
-            ),
-            "stress": xarray.DataArray(
-                [110.0, numpy.nan, numpy.nan, numpy.nan],
-                coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
-                attrs={"group": "Assembly DEF Preload", "version": "ghijkl"},
-            ),
-        },
-        coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
-        attrs={"group": "Assembly DEF Preload"},
-    )
     archive = qoi._create_qoi_archive(
         (
             qoi.create_qoi(
@@ -732,6 +699,57 @@ def test__create_qoi_archive():
                 version="ghijkl",
             ),
         )
+    )
+    expected = xarray.DataTree()
+    expected["Assembly ABC Preload"] = xarray.Dataset(
+        {
+            "load": xarray.DataArray(
+                [[5.3, 4.5, 3.5, 5.5]],
+                coords={
+                    "version": ["ghijkl"],
+                    "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                },
+                attrs={"group": "Assembly ABC Preload", "version": "ghijkl"},
+            ),
+            "gap": xarray.DataArray(
+                [[1.0, 0.95, 0.85, 1.05]],
+                coords={
+                    "version": ["ghijkl"],
+                    "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                },
+                attrs={"group": "Assembly ABC Preload", "version": "ghijkl"},
+            ),
+        },
+        coords={
+            "version": ["ghijkl"],
+            "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+        },
+        attrs={"group": "Assembly ABC Preload"},
+    )
+    expected["Assembly DEF Preload"] = xarray.Dataset(
+        {
+            "load": xarray.DataArray(
+                [[35.0, numpy.nan, numpy.nan, numpy.nan]],
+                coords={
+                    "version": ["ghijkl"],
+                    "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                },
+                attrs={"group": "Assembly DEF Preload", "version": "ghijkl"},
+            ),
+            "stress": xarray.DataArray(
+                [[110.0, numpy.nan, numpy.nan, numpy.nan]],
+                coords={
+                    "version": ["ghijkl"],
+                    "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                },
+                attrs={"group": "Assembly DEF Preload", "version": "ghijkl"},
+            ),
+        },
+        coords={
+            "version": ["ghijkl"],
+            "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+        },
+        attrs={"group": "Assembly DEF Preload"},
     )
     assert expected.identical(archive)
 
