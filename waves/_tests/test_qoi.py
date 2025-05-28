@@ -478,6 +478,87 @@ test__create_qoi_study_cases = {
             attrs={"set_name": "set_0"},
         ),
     ),
+    "two qoi: same names, different sets": (
+        [
+            xarray.DataArray(
+                [1.0, numpy.nan, numpy.nan, numpy.nan],
+                coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                name="qoi1",
+                attrs={"set_name": "set_0", "attr1": "value1"},
+            ),
+            xarray.DataArray(
+                [10.0, numpy.nan, numpy.nan, numpy.nan],
+                coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                name="qoi1",
+                attrs={"set_name": "set_1", "attr1": "value2"},
+            ),
+        ],
+        None,
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [
+                        [1.0, numpy.nan, numpy.nan, numpy.nan],
+                        [10.0, numpy.nan, numpy.nan, numpy.nan],
+                    ],
+                    coords={
+                        "set_name": ["set_0", "set_1"],
+                        "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                    },
+                    attrs={},
+                ),
+            },
+            coords={
+                "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+            },
+            attrs={},
+        ),
+    ),
+    "two qoi: same names, different sets: and a parameter study": (
+        [
+            xarray.DataArray(
+                [1.0, numpy.nan, numpy.nan, numpy.nan],
+                coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                name="qoi1",
+                attrs={"set_name": "set_0", "attr1": "value1"},
+            ),
+            xarray.DataArray(
+                [10.0, numpy.nan, numpy.nan, numpy.nan],
+                coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                name="qoi1",
+                attrs={"set_name": "set_1", "attr1": "value2"},
+            ),
+        ],
+        parameter_generators.CustomStudy(
+            {"parameter_samples": [[1.0, 2.0], [10.0, 20.0]], "parameter_names": ["parameter_1", "parameter_2"]},
+            set_name_template="set_@number",
+        ).parameter_study,
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [
+                        [1.0, numpy.nan, numpy.nan, numpy.nan],
+                        [10.0, numpy.nan, numpy.nan, numpy.nan],
+                    ],
+                    coords={
+                        "set_name": ["set_0", "set_1"],
+                        "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                    },
+                    attrs={},
+                ),
+                "set_hash": xarray.DataArray(
+                    ["30b1b83a463b6ec2a285675a02b6c303", "5394e4ab1f5becd55700e840244214d5"],
+                    coords={"set_name": ["set_0", "set_1"]},
+                ),
+                "parameter_1": xarray.DataArray([1.0, 10.0], coords={"set_name": ["set_0", "set_1"]}),
+                "parameter_2": xarray.DataArray([2.0, 20.0], coords={"set_name": ["set_0", "set_1"]}),
+            },
+            coords={
+                "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+            },
+            attrs={},
+        ).set_coords(["set_hash", "parameter_1", "parameter_2"]),
+    ),
 }
 
 
