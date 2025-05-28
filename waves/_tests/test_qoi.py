@@ -795,37 +795,91 @@ def test__merge_qoi_archives():
                 qoi.create_qoi(
                     name="load",
                     calculated=5.4,
-                    expected=4.5,
-                    lower_limit=3.5,
-                    upper_limit=5.5,
+                    expected=4.6,
+                    lower_limit=3.4,
+                    upper_limit=5.6,
                     group="Assembly ABC Preload",
-                    version="abcdef",
+                    version="mnopqr",
                 ),
                 qoi.create_qoi(
                     name="gap",
-                    calculated=1.1,
-                    expected=0.95,
-                    lower_limit=0.85,
-                    upper_limit=1.05,
+                    calculated=1.05,
+                    expected=1.0,
+                    lower_limit=0.90,
+                    upper_limit=1.1,
                     group="Assembly ABC Preload",
-                    version="abcdef",
+                    version="mnopqr",
                 ),
                 qoi.create_qoi(
                     name="load",
                     calculated=36.0,
                     group="Assembly DEF Preload",
-                    version="abcdef",
+                    version="mnopqr",
                 ),
                 qoi.create_qoi(
                     name="stress",
                     calculated=111.0,
                     group="Assembly DEF Preload",
-                    version="abcdef",
+                    version="mnopqr",
                 ),
             )
         ),
     ]
     merged_archive = qoi._merge_qoi_archives(qoi_archives)
+    expected = xarray.DataTree()
+    expected["Assembly ABC Preload"] = xarray.Dataset(
+        {
+            "load": xarray.DataArray(
+                [[5.3, 4.5, 3.5, 5.5], [5.4, 4.6, 3.4, 5.6]],
+                coords={
+                    "version": ["ghijkl", "mnopqr"],
+                    "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                },
+                # FIXME: The version attribute of the merged datasets is incorrect
+                # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/927
+                attrs={"group": "Assembly ABC Preload", "version": "ghijkl"},
+            ),
+            "gap": xarray.DataArray(
+                [[1.0, 0.95, 0.85, 1.05], [1.05, 1.0, 0.9, 1.1]],
+                coords={
+                    "version": ["ghijkl", "mnopqr"],
+                    "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                },
+                attrs={"group": "Assembly ABC Preload", "version": "ghijkl"},
+            ),
+        },
+        coords={
+            "version": ["ghijkl", "mnopqr"],
+            "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+        },
+        attrs={"group": "Assembly ABC Preload"},
+    )
+    expected["Assembly DEF Preload"] = xarray.Dataset(
+        {
+            "load": xarray.DataArray(
+                [[35.0, numpy.nan, numpy.nan, numpy.nan], [36.0, numpy.nan, numpy.nan, numpy.nan]],
+                coords={
+                    "version": ["ghijkl", "mnopqr"],
+                    "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                },
+                attrs={"group": "Assembly DEF Preload", "version": "ghijkl"},
+            ),
+            "stress": xarray.DataArray(
+                [[110.0, numpy.nan, numpy.nan, numpy.nan], [111.0, numpy.nan, numpy.nan, numpy.nan]],
+                coords={
+                    "version": ["ghijkl", "mnopqr"],
+                    "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                },
+                attrs={"group": "Assembly DEF Preload", "version": "ghijkl"},
+            ),
+        },
+        coords={
+            "version": ["ghijkl", "mnopqr"],
+            "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+        },
+        attrs={"group": "Assembly DEF Preload"},
+    )
+    assert expected.identical(merged_archive)
 
 
 test__read_qoi_set_cases = {

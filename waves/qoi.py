@@ -432,6 +432,8 @@ def _merge_qoi_archives(qoi_archives: typing.Iterable[xarray.DataTree]) -> xarra
         Technically this does not preserve the original DataTree structure. It creates a new structure based on the
         "group" attribute of each QOI.
     """
+    # FIXME: The "version" attribute of the merged datasets incorrectly keeps the original dataset's value
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/927
     leaves = [qoi.ds for archive in qoi_archives for qoi in archive.leaves]
     merged_archive = xarray.DataTree()
     # TODO: use the leaf's dataset path instead of ``"group"`` attribute
