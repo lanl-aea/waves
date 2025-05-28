@@ -395,7 +395,7 @@ def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataT
                     version:  ghijkl
                     date:     2025-02-01
     """
-    dt = xarray.DataTree()
+    archive = xarray.DataTree()
     # Creates a group for each "group" attribute
     for group, qois in itertools.groupby(sorted(qois, key=_qoi_group), key=_qoi_group):
         # Move "version" from attribute to dimension for each DataArray and merge to Dataset
@@ -407,8 +407,8 @@ def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataT
             pass  # date coordinate is not needed
         ds = xarray.merge(qois, combine_attrs="drop_conflicts")
         # Add dataset as a node in the DataTree
-        dt[group] = ds
-    return dt
+        archive[group] = ds
+    return archive
 
 
 def _merge_qoi_archives(qoi_archives: typing.Iterable[xarray.DataTree]) -> xarray.DataTree:
