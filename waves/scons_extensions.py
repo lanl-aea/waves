@@ -3966,9 +3966,9 @@ class QOIPseudoBuilder:
     """SCons Pseudo-Builder class which allows users to customize the QOI Pseudo-Builder.
 
     .. warning::
-    
+
        This pseudo-builder is considered experimental pending early adopter end user trial and feedback.
-    
+
        The QOI xarray data array and dataset handling for expected/calculated comparisons should be stable, but the
        output plotting and reporting formatting is subject to change.
 
