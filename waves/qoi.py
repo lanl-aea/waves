@@ -870,7 +870,9 @@ def _add_commit_date(dataset: xarray.Dataset) -> xarray.Dataset:
 
 
 def _sort_by_date(dataset: xarray.Dataset) -> xarray.Dataset:
-    """Return an Xarray dataset sorted by the ``date`` variable
+    """Return an Xarray dataset sorted by the ``date`` coordinate
+
+    If the ``date`` coordinate does not exist, return the original dataset.
 
     Intended for use with ``xarray.map_over_datasets`` method:
     https://docs.xarray.dev/en/latest/generated/xarray.map_over_datasets.html
