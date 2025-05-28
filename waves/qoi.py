@@ -413,6 +413,8 @@ def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataT
         except KeyError:
             pass  # date coordinate is not needed
         qoi_set = create_qoi_set(qois)
+        # TODO: remove the dataset attributes when :meth:`_merge_qoi_archives` uses the leaf's dataset path
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/926
         qoi_set.attrs = {"group": group}
         # Add dataset as a node in the DataTree
         archive[group] = qoi_set
@@ -432,6 +434,8 @@ def _merge_qoi_archives(qoi_archives: typing.Iterable[xarray.DataTree]) -> xarra
     """
     leaves = [qoi.ds for archive in qoi_archives for qoi in archive.leaves]
     merged_archive = xarray.DataTree()
+    # TODO: use the leaf's dataset path instead of ``"group"`` attribute
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/926
     # Create a group for each "group" attribute
     for group, qois in itertools.groupby(sorted(leaves, key=_qoi_group), key=_qoi_group):
         # Merge dataset as a node in the DataTree
