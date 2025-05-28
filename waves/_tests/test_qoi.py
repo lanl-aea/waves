@@ -1252,32 +1252,28 @@ test__sort_by_date_cases = {
         xarray.Dataset(
             {
                 "data1": xarray.DataArray(
-                    [1.0, 2.0],
-                    coords={"date": [datetime.datetime(2025, 1, 2), datetime.datetime(2025, 1, 1)]}
+                    [1.0, 2.0], coords={"date": [datetime.datetime(2025, 1, 2), datetime.datetime(2025, 1, 1)]}
                 ),
             },
-            coords={"date": [datetime.datetime(2025, 1, 2), datetime.datetime(2025, 1, 1)]}
+            coords={"date": [datetime.datetime(2025, 1, 2), datetime.datetime(2025, 1, 1)]},
         ),
         xarray.Dataset(
             {
                 "data1": xarray.DataArray(
-                    [2.0, 1.0],
-                    coords={"date": [datetime.datetime(2025, 1, 1), datetime.datetime(2025, 1, 2)]}
+                    [2.0, 1.0], coords={"date": [datetime.datetime(2025, 1, 1), datetime.datetime(2025, 1, 2)]}
                 ),
             },
-            coords={"date": [datetime.datetime(2025, 1, 1), datetime.datetime(2025, 1, 2)]}
+            coords={"date": [datetime.datetime(2025, 1, 1), datetime.datetime(2025, 1, 2)]},
         ),
     ),
     "multi variable dataset out of order": (
         xarray.Dataset(
             {
                 "data1": xarray.DataArray(
-                    [2.0, 1.0],
-                    coords={"date": [datetime.datetime(2025, 1, 2), datetime.datetime(2025, 1, 1)]}
+                    [2.0, 1.0], coords={"date": [datetime.datetime(2025, 1, 2), datetime.datetime(2025, 1, 1)]}
                 ),
                 "data2": xarray.DataArray(
-                    [4.0, 3.0],
-                    coords={"date": [datetime.datetime(2025, 1, 4), datetime.datetime(2025, 1, 3)]}
+                    [4.0, 3.0], coords={"date": [datetime.datetime(2025, 1, 4), datetime.datetime(2025, 1, 3)]}
                 ),
             },
             coords={
