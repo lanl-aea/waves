@@ -615,7 +615,6 @@ def test__create_qoi_study(qoi_list, parameter_study, expected, outcome) -> None
             pass
 
 
-
 test__qoi_group_cases = {
     "expected use": (
         xarray.Dataset(
