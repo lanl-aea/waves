@@ -434,12 +434,12 @@ def _merge_qoi_archives(qoi_archives: typing.Iterable[xarray.DataTree]) -> xarra
         "group" attribute of each QOI.
     """
     leaves = [qoi.ds for archive in qoi_archives for qoi in archive.leaves]
-    dt = xarray.DataTree()
+    merged_archive = xarray.DataTree()
     # Create a group for each "group" attribute
     for group, qois in itertools.groupby(sorted(leaves, key=_qoi_group), key=_qoi_group):
         # Merge dataset as a node in the DataTree
-        dt[group] = xarray.merge(qois)
-    return dt
+        merged_archive[group] = xarray.merge(qois)
+    return merged_archive 
 
 
 def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
