@@ -289,13 +289,13 @@ def _create_qoi_study(
         raise RuntimeError(
             f"Each DataArray in ``qois`` must have an attribute named '{_settings._set_coordinate_key}'."
         )
+    # Keep all attributes at the data variable level
+    qoi_study.attrs = dict()
     # Merge in parameter study definition
     if parameter_study:
         # Convert parameter study variables to coordinates
         parameter_study = parameter_study.set_coords(parameter_study)
         qoi_study = xarray.merge((qoi_study, parameter_study), combine_attrs="drop_conflicts")
-    # Keep all attributes at the data variable level
-    qoi_study.attrs = dict()
     return qoi_study
 
 

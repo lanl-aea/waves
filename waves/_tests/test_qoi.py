@@ -579,6 +579,25 @@ test__create_qoi_study_cases = {
         None,
         pytest.raises(RuntimeError),
     ),
+    "two qoi: one is missing ``set_name`` attribute should raise RuntimeError": (
+        [
+            xarray.DataArray(
+                [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+                coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                name="qoi1",
+                attrs={"set_name": "set_0", "attr1": "value1"},
+            ),
+            xarray.DataArray(
+                [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+                coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                name="qoi1",
+                attrs={"attr1": "value1"},
+            ),
+        ],
+        None,
+        None,
+        pytest.raises(RuntimeError),
+    ),
 }
 
 
