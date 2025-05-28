@@ -409,6 +409,7 @@ def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataT
         except KeyError:
             pass  # date coordinate is not needed
         qoi_set = create_qoi_set(qois)
+        qoi_set.attrs = {"group": group}
         # Add dataset as a node in the DataTree
         archive[group] = qoi_set
     return archive
