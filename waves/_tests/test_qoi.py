@@ -1160,29 +1160,36 @@ def test__sort_by_date():
     pass
 
 
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/919
 def test__accept():
     pass
 
 
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/920
 def test__check():
     pass
 
 
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/921
 def test__diff():
     pass
 
 
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/922
 def test__aggregate():
     pass
 
 
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/923
 def test__report():
     pass
 
 
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/924
 def test__plot_archive():
     pass
 
 
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/925
 def test__archive():
     pass
