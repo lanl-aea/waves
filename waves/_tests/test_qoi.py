@@ -356,7 +356,7 @@ test__create_qoi_study_cases = {
             coords={
                 "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
             },
-            attrs={"set_name": "set_0", "attr1": "value1"},
+            attrs={},
         ),
     ),
     "one qoi: using ``create_qoi``": (
@@ -376,7 +376,7 @@ test__create_qoi_study_cases = {
             coords={
                 "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
             },
-            attrs={"set_name": "set_0", "attr1": "value1"},
+            attrs={},
         ),
     ),
     "one qoi and a parameter study": (
@@ -403,7 +403,7 @@ test__create_qoi_study_cases = {
                 "set_name": ["set_0"],
                 "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
             },
-            attrs={"set_name": "set_0", "attr1": "value1"},
+            attrs={},
         ).set_coords(["set_hash", "parameter_1", "parameter_2"]),
     ),
     "two qoi: different names, same set": (
@@ -444,7 +444,7 @@ test__create_qoi_study_cases = {
             coords={
                 "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
             },
-            attrs={"set_name": "set_0"},
+            attrs={},
         ),
     ),
     "two qoi: different names, same set: using ``create_qoi``": (
@@ -475,7 +475,7 @@ test__create_qoi_study_cases = {
             coords={
                 "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
             },
-            attrs={"set_name": "set_0"},
+            attrs={},
         ),
     ),
     "two qoi: same names, different sets": (
