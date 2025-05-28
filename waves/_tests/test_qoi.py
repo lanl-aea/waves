@@ -1153,8 +1153,56 @@ def test__get_commit_date():
     pass
 
 
-def test__add_commit_date():
-    pass
+test__add_commit_date_cases = {
+    "minimally correct dataset": (
+        xarray.Dataset(
+            {
+                "data1": xarray.DataArray([1.0, 2.0], coords={"version": ["commit1", "commit2"]}),
+            },
+            coords={"version": ["commit1", "commit2"]},
+        ),
+        [datetime.datetime(2025, 1, 1), datetime.datetime(2025, 1, 2)],
+        xarray.Dataset(
+            {
+                "data1": xarray.DataArray(
+                    [1.0, 2.0],
+                    coords={"version": ["commit1", "commit2"]},
+                ),
+                "date": xarray.DataArray(
+                    [datetime.datetime(2025, 1, 1), datetime.datetime(2025, 1, 2)],
+                    coords={"version": ["commit1", "commit2"]},
+                ),
+            },
+            coords={"version": ["commit1", "commit2"]},
+        ).set_coords(["date"]),
+    ),
+    "missing version key should return original dataset": (
+        xarray.Dataset(
+            {
+                "data1": xarray.DataArray([1.0, 2.0], coords={"coord1": ["commit1", "commit2"]}),
+            },
+            coords={"coord1": ["commit1", "commit2"]},
+        ),
+        [datetime.datetime(2025, 1, 1), datetime.datetime(2025, 1, 2)],
+        xarray.Dataset(
+            {
+                "data1": xarray.DataArray([1.0, 2.0], coords={"coord1": ["commit1", "commit2"]}),
+            },
+            coords={"coord1": ["commit1", "commit2"]},
+        ),
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "qoi_set, mock_commit_dates, expected",
+    test__add_commit_date_cases.values(),
+    ids=test__add_commit_date_cases.keys(),
+)
+def test__add_commit_date(qoi_set, mock_commit_dates, expected):
+    with patch("waves.qoi._get_commit_date", side_effect=mock_commit_dates):
+        output = qoi._add_commit_date(qoi_set)
+    assert expected.identical(output)
 
 
 test__sort_by_date_cases = {
