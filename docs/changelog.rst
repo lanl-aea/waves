@@ -19,6 +19,8 @@ Documentation
 - Rewrite the Gmsh+Calculix tutorial as a fully open-source workflow equivalent to the existing quickstart with Abaqus
   (:merge:`1191`). By `Kyle Brindley`_.
 - Build documentation with full runtime dependencies for resolved type hints (:merge:`1195`). By `Kyle Brindley`_.
+- Minor updates to the pure SCons quickstart for better use of executable program path environment variable. By `Kyle
+  Brindley`_.
 
 Internal Changes
 ================

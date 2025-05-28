@@ -6,7 +6,7 @@
    behavior. You can learn more about writing your own `SCons Builders`_ in the `SCons`_ user manual :cite:`scons-user`
    and :ref:`tutorial_writing_builders`.
 
-This quickstart will create a pure `SCons`_, minimal, single file project configuration matching the tutorials listed below.
+This quickstart will create a pure `SCons`_, minimal, two file project configuration matching the tutorials listed below.
 
 * :ref:`tutorialsconstruct`
 * :ref:`tutorial_geometry`
