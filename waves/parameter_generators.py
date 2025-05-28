@@ -1482,7 +1482,7 @@ def _coerce_values(values: typing.Iterable, name: typing.Optional[str] = None) -
 def _merge_parameter_studies(
     studies: typing.List[xarray.Dataset], template: typing.Optional[_utilities._AtSignTemplate] = None
 ) -> xarray.Dataset:
-    """Merge a list of parameter studies into one study. Set hashes are not resolved by this function at the moment.
+    """Merge a list of parameter studies into one study.
 
     Preserve the first given parameter study set name to set contents associations by dropping subsequent studies' set
     names during merge.
