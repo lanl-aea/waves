@@ -1159,6 +1159,23 @@ def test__get_commit_date():
         ["git", "show", "--no-patch", "--no-notes", "--pretty='%cs'", "commit"], capture_output=True, text=True
     )
 
+    # Function is wrapped with ``@functools.cache``. Subsequent calls with identical input arguments should perform a
+    # cache lookup without re-running the function.
+    with patch("subprocess.run", return_value=mock_completed_process) as mock_run:
+        output = qoi._get_commit_date("commit")
+    assert output == datetime.datetime(2025, 5, 28)
+    mock_run.assert_not_called()
+
+    # New function arguments should prompt a full function call
+    mock_completed_process = Mock()
+    Mock.stdout = "2025-01-01\n"
+    with patch("subprocess.run", return_value=mock_completed_process) as mock_run:
+        output = qoi._get_commit_date("differentcommit")
+    assert output == datetime.datetime(2025, 1, 1)
+    mock_run.assert_called_once_with(
+        ["git", "show", "--no-patch", "--no-notes", "--pretty='%cs'", "differentcommit"], capture_output=True, text=True
+    )
+
 
 test__add_commit_date_cases = {
     "minimally correct dataset": (
