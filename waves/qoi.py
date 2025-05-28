@@ -439,7 +439,7 @@ def _merge_qoi_archives(qoi_archives: typing.Iterable[xarray.DataTree]) -> xarra
     for group, qois in itertools.groupby(sorted(leaves, key=_qoi_group), key=_qoi_group):
         # Merge dataset as a node in the DataTree
         merged_archive[group] = xarray.merge(qois)
-    return merged_archive 
+    return merged_archive
 
 
 def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
@@ -469,7 +469,7 @@ def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
 
     .. code-block::
 
-        >>> waves.qoi._read_qoi_set("sim_1_expected_qois.csv")
+        >>> waves.qoi._read_qoi_set(pathlib.Path("sim_1_expected_qois.csv"))
         <xarray.Dataset> Size: 240B
         Dimensions:     (value_type: 4)
         Coordinates:
@@ -478,8 +478,6 @@ def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
             load        (value_type) float64 32B nan 4.5 3.5 5.5
             gap         (value_type) float64 32B nan 0.8 0.7 0.9
     """
-    if not isinstance(from_file, pathlib.Path):
-        from_file = pathlib.Path(from_file)
     suffix = from_file.suffix.lower()
     if suffix == ".csv":
         df = pandas.read_csv(from_file)

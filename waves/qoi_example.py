@@ -36,7 +36,7 @@ waves.qoi.write_qoi_set_to_csv(sim_1_qois, "sim_1_qois.csv")
 sim_1_qois.to_netcdf("sim_1_qois.h5", engine="h5netcdf")
 
 # Read expected QOIs from CSV
-sim_1_expected_qois = waves.qoi._read_qoi_set("sim_1_expected_qois.csv")
+sim_1_expected_qois = waves.qoi._read_qoi_set(pathlib.Path("sim_1_expected_qois.csv"))
 sim_1_expected_qois
 
 # Compare calculated to expected values
