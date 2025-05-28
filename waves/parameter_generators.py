@@ -396,11 +396,7 @@ class ParameterGenerator(ABC):
         * ``self.parameter_study``
         * ``self._set_names``
         """
-        self._create_set_names()
-        new_set_names = set(self._set_names.values()) - set(self.parameter_study.coords[_set_coordinate_key].values)
-        null_set_names = self.parameter_study.coords[_set_coordinate_key].isnull()
-        if any(null_set_names):
-            self.parameter_study.coords[_set_coordinate_key][null_set_names] = list(new_set_names)
+        self.parameter_study = _update_set_names(self.parameter_study, self.set_name_template)
         self._set_names = self.parameter_study[_set_coordinate_key].to_series().to_dict()
 
     def _create_set_names_array(self) -> xarray.DataArray:
@@ -495,7 +491,9 @@ class ParameterGenerator(ABC):
             raise RuntimeError("Called without a previous parameter study")
 
         previous_parameter_study = _open_parameter_study(self.previous_parameter_study)
-        self.parameter_study = _merge_parameter_studies([previous_parameter_study, self.parameter_study], self.set_name_template)
+        self.parameter_study = _merge_parameter_studies(
+            [previous_parameter_study, self.parameter_study], self.set_name_template
+        )
         self.parameter_study = self.parameter_study.swap_dims({_set_coordinate_key: _hash_coordinate_key})
         previous_parameter_study.close()
 
@@ -1481,8 +1479,9 @@ def _coerce_values(values: typing.Iterable, name: typing.Optional[str] = None) -
     return values_coerced
 
 
-def _merge_parameter_studies(studies: typing.List[xarray.Dataset],
-                             template: typing.Optional[_utilities._AtSignTemplate] = None) -> xarray.Dataset:
+def _merge_parameter_studies(
+    studies: typing.List[xarray.Dataset], template: typing.Optional[_utilities._AtSignTemplate] = None
+) -> xarray.Dataset:
     """Merge a list of parameter studies into one study. Set hashes are not resolved by this function at the moment.
 
     Preserve the first given parameter study set name to set contents associations by dropping subsequent studies' set
@@ -1530,8 +1529,9 @@ def _merge_parameter_studies(studies: typing.List[xarray.Dataset],
     return study_combined
 
 
-def _create_set_names(set_hashes: typing.List[str],
-                      template: typing.Optional[_utilities._AtSignTemplate] = None) -> dict:
+def _create_set_names(
+    set_hashes: typing.List[str], template: typing.Optional[_utilities._AtSignTemplate] = None
+) -> dict:
     """Construct parameter set names from the set name template and number of parameter set hashes.
 
     :param set_hashes: parameter set content hashes identifying rows of parameter study
@@ -1550,7 +1550,9 @@ def _create_set_names(set_hashes: typing.List[str],
     return set_names
 
 
-def _update_set_names(parameter_study: xarray.Dataset, template: typing.Optional[_utilities._AtSignTemplate] = None) -> xarray.Dataset:
+def _update_set_names(
+    parameter_study: xarray.Dataset, template: typing.Optional[_utilities._AtSignTemplate] = None
+) -> xarray.Dataset:
     """Update the parameter set names after a parameter study dataset merge operation.
 
     :param parameter_study: A :class:`ParameterGenerator` parameter study Xarray Dataset with swapped set hash and set name dimensions
