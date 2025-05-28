@@ -330,8 +330,45 @@ def test_create_qoi_set(qoi_list, expected):
     assert expected.identical(output)
 
 
-def test__create_qoi_study():
-    pass
+test__create_qoi_study_cases = {
+    "one qoi": (
+        [
+            xarray.DataArray(
+                [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+                coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+                name="qoi1",
+                attrs={"set_name": "set_0", "attr1": "value1"},
+            ),
+        ],
+        None,
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [[numpy.nan, numpy.nan, numpy.nan, numpy.nan]],
+                    coords={
+                        "set_name": ["set_0"],
+                        "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                    },
+                    attrs={"set_name": "set_0", "attr1": "value1"},
+                ),
+            },
+            coords={
+                "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+            },
+            attrs={"set_name": "set_0", "attr1": "value1"},
+        ),
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "qoi_list, parameter_study, expected",
+    test__create_qoi_study_cases.values(),
+    ids=test__create_qoi_study_cases.keys(),
+)
+def test__create_qoi_study(qoi_list, parameter_study, expected) -> None:
+    qoi_study = qoi._create_qoi_study(qoi_list, parameter_study)
+    assert expected.identical(qoi_study)
 
 
 test__qoi_group_cases = {

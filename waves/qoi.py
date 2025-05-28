@@ -291,7 +291,7 @@ def _create_qoi_study(
             combine_attrs="drop_conflicts",
         )
     except KeyError:
-        raise RuntimeError("Each DataArray in ``qois`` must have an attribute named '{_settings._set_coordinate_key}'.")
+        raise RuntimeError(f"Each DataArray in ``qois`` must have an attribute named '{_settings._set_coordinate_key}'.")
     # Merge in parameter study definition
     if parameter_study:
         # Convert parameter study variables to coordinates
