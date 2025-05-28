@@ -388,10 +388,6 @@ def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataT
         │       Data variables:
         │           load        (version, value_type) float64 32B 5.3 4.5 3.5 5.5
         │           gap         (version, value_type) float64 32B 1.0 0.95 0.85 1.05
-        │       Attributes:
-        │           group:    Assembly ABC Preload
-        │           version:  ghijkl
-        │           date:     2025-02-01
         └── Group: /Assembly DEF Preload
                 Dimensions:     (version: 1, value_type: 4)
                 Coordinates:
@@ -401,10 +397,6 @@ def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataT
                 Data variables:
                     load        (version, value_type) float64 32B 35.0 nan nan nan
                     stress      (version, value_type) float64 32B 110.0 nan nan nan
-                Attributes:
-                    group:    Assembly DEF Preload
-                    version:  ghijkl
-                    date:     2025-02-01
     """
     archive = xarray.DataTree()
     # Creates a group for each "group" attribute
@@ -416,9 +408,9 @@ def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataT
             qois = [qoi.assign_coords(date=(_version_key, [qoi.attrs["date"]])) for qoi in qois]
         except KeyError:
             pass  # date coordinate is not needed
-        ds = xarray.merge(qois, **_merge_constants)
+        qoi_set = create_qoi_set(qois)
         # Add dataset as a node in the DataTree
-        archive[group] = ds
+        archive[group] = qoi_set
     return archive
 
 
