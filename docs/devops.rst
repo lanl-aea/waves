@@ -18,6 +18,8 @@ Clone
 Activate Environment
 ********************
 
+The Conda packages found in ``environment.yml`` are reproduced in the :ref:`modsim_dependencies` section.
+
 Local development environments
 ==============================
 
@@ -41,8 +43,6 @@ A full development environment for the project Gitlab-CI pipelines is maintained
    .. code-block::
 
       $ module load waves-env
-
-The Conda packages found in ``environment.yml`` are reproduced in the :ref:`modsim_dependencies` section.
 
 HPC CI server environment
 =========================
