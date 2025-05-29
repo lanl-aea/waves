@@ -1,3 +1,5 @@
+import sys
+import typing
 import inspect
 import pathlib
 import tempfile
@@ -58,6 +60,15 @@ def test_previous_parameter_study(
     temporary_directory_arguments = inspect.getfullargspec(tempfile.TemporaryDirectory).args
     if "ignore_cleanup_errors" in temporary_directory_arguments and system_test_directory is not None:
         kwargs.update({"ignore_cleanup_errors": True})
+    if keep_system_tests:
+        if "delete" in temporary_directory_arguments:
+            kwargs.update({"delete": False})
+        else:
+            print(
+                "``--keep-system-tests`` requested, but Python version does not support ``delete=False`` in"
+                " tempfile.TemporaryDirectory. System test directories will be deleted on cleanup.",
+                file=sys.stderr,
+            )
     temp_directory = tempfile.TemporaryDirectory(dir=system_test_directory, prefix=test_prefix, **kwargs)
     temp_path = pathlib.Path(temp_directory.name)
     temp_path.mkdir(parents=True, exist_ok=True)
