@@ -8,6 +8,11 @@ Changelog
 0.13.5 (unreleased)
 *******************
 
+New Features
+============
+- Experimental Quantity of Intereset (QOI) module for advanced post-processing and regression testing (:issue:`904`,
+  :merge:`1164`). By `Matthew Fister`_ and `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Skip ``twine check`` test on macOS until shell kill error is fixed. By `Kyle Brindley`_.
