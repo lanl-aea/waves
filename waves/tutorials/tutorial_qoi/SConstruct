@@ -23,28 +23,28 @@ AddOption(
 )
 # Allow synthetic "simulation post-processing" data to be changed dynamically from CLI
 AddOption(
-    "--sim-1-post-load",
+    "--simulation-1-post-load",
     type="float",
     default=5.0,
-    help="The synthetic 'simulation post-processing' load calculation used by ``sim_1_post.py``",
+    help="The synthetic 'simulation post-processing' load calculation used by ``simulation_1_post.py``",
 )
 AddOption(
-    "--sim-1-post-gap",
+    "--simulation-1-post-gap",
     type="float",
     default=0.85,
-    help="The synthetic 'simulation post-processing' gap calculation used by ``sim_1_post.py``",
+    help="The synthetic 'simulation post-processing' gap calculation used by ``simulation_1_post.py``",
 )
 AddOption(
-    "--sim-2-post-load",
+    "--simulation-2-post-load",
     type="float",
     default=30.0,
-    help="The synthetic 'simulation post-processing' load calculation used by ``sim_2_post.py``",
+    help="The synthetic 'simulation post-processing' load calculation used by ``simulation_2_post.py``",
 )
 AddOption(
-    "--sim-2-post-stress",
+    "--simulation-2-post-stress",
     type="float",
     default=100.0,
-    help="The synthetic 'simulation post-processing' stress calculation used by ``sim_2_post.py``",
+    help="The synthetic 'simulation post-processing' stress calculation used by ``simulation_2_post.py``",
 )
 # Enable CLI executable name change for system testing the tutorials in the repository, ``python -m waves._main``.
 # End users may remove this option and all uses of this option.
@@ -79,30 +79,30 @@ env.PrintBuildFailures()
 # QOI testing
 ################################################################################
 synthetic_calculated_values = {
-    "sim_1_post_load": GetOption("sim_1_post_load"),
-    "sim_1_post_gap": GetOption("sim_1_post_gap"),
-    "sim_2_post_load": GetOption("sim_2_post_load"),
-    "sim_2_post_stress": GetOption("sim_2_post_stress"),
+    "simulation_1_post_load": GetOption("simulation_1_post_load"),
+    "simulation_1_post_gap": GetOption("simulation_1_post_gap"),
+    "simulation_2_post_load": GetOption("simulation_2_post_load"),
+    "simulation_2_post_stress": GetOption("simulation_2_post_stress"),
 }
 
 # Calculate QOIs from Simulation 1
 env.PythonScript(
-    target=[build_dir / "sim_1_qois.csv", build_dir / "sim_1_qois.h5"],
-    source=["#/sim_1_post.py"],
-    subcommand_options="--load ${sim_1_post_load} --gap ${sim_1_post_gap}",
+    target=[build_dir / "simulation_1_qois.csv", build_dir / "simulation_1_qois.h5"],
+    source=["#/simulation_1_post.py"],
+    subcommand_options="--load ${simulation_1_post_load} --gap ${simulation_1_post_gap}",
     **synthetic_calculated_values,
 )
 
 # Calculate QOIs from Simulation 2
 env.PythonScript(
-    target=[build_dir / "sim_2_qois.csv", build_dir / "sim_2_qois.h5"],
-    source=["#/sim_2_post.py"],
-    subcommand_options="--load ${sim_2_post_load} --stress ${sim_2_post_stress}",
+    target=[build_dir / "simulation_2_qois.csv", build_dir / "simulation_2_qois.h5"],
+    source=["#/simulation_2_post.py"],
+    subcommand_options="--load ${simulation_2_post_load} --stress ${simulation_2_post_stress}",
     **synthetic_calculated_values,
 )
 
 # Compare to expected QOIs and archive
-env.QOI(calculated=build_dir / "sim_1_qois.csv", expected="sim_1_expected_qois.csv", archive=True)
+env.QOI(calculated=build_dir / "simulation_1_qois.csv", expected="simulation_1_expected_qois.csv", archive=True)
 
 ################################################################################
 # Parameter study QOI aggregation
@@ -157,7 +157,7 @@ env.PythonScript(
 # Archive version 1 QOIs
 env.Command(
     target=[build_dir / "version_1_qois.h5"],
-    source=[build_dir / "sim_1_qois_diff.csv", build_dir / "sim_2_qois.csv"],
+    source=[build_dir / "simulation_1_qois_diff.csv", build_dir / "simulation_2_qois.csv"],
     action="${waves_command} qoi archive --output ${TARGET.abspath} ${SOURCES.abspath}",
 )
 

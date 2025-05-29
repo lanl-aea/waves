@@ -32,15 +32,15 @@ def main():
     )
 
     # Combine QOIs into calculated QOIs set
-    sim_1_qois = qoi.create_qoi_set((load, gap))
-    print(sim_1_qois)
-    print(sim_1_qois["load"])
+    simulation_1_qois = qoi.create_qoi_set((load, gap))
+    print(simulation_1_qois)
+    print(simulation_1_qois["load"])
 
     # Save calculated QOIs to CSV
-    qoi.write_qoi_set_to_csv(sim_1_qois, "sim_1_qois.csv")
+    qoi.write_qoi_set_to_csv(simulation_1_qois, "simulation_1_qois.csv")
 
     # Save calculated QOIs to h5
-    sim_1_qois.to_netcdf("sim_1_qois.h5", engine="h5netcdf")
+    simulation_1_qois.to_netcdf("simulation_1_qois.h5", engine="h5netcdf")
 
 
 if __name__ == "__main__":
