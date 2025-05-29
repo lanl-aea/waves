@@ -24,4 +24,5 @@ dependencies:
   - sphinx-copybutton >=0.5.1
   - sphinx-design
   - sphinxcontrib-bibtex
+  - twine >=5
   - xarray

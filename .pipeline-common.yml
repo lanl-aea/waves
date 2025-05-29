@@ -144,7 +144,8 @@
     - if [[ -z ${version} ]]; then exit 1; fi
     # Job commands
     # Conda CI environment active
-    - scons install --distribution-name=${distribution_name}
+    - scons build --distribution-name=${distribution_name}
+    - twine check build/dist/${distribution_filename}-${version}.tar.gz
     - python -m venv pip-build-test
     # Python venv environment active
     - source pip-build-test/bin/activate

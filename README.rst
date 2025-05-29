@@ -20,6 +20,7 @@
 .. _`Sergio Cordova`: sergioc@lanl.gov
 .. _`Prabhu Khalsa`: pkhalsa@lanl.gov
 .. _`Scott Ouellette`: souellette@lanl.gov
+.. _`Chris Johnson`: clj@lanl.gov
 .. _`Matthew Fister`: mwfister@lanl.gov
 
 .. target-end-do-not-remove
