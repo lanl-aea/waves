@@ -167,8 +167,8 @@ def create_qoi_set(qois: typing.Iterable[xarray.DataArray]) -> xarray.Dataset:
         ... )
         ...
         ... # Combine QOIs into calculated QOIs set
-        ... sim_1_qois = waves.qoi.create_qoi_set((load, gap))
-        ... sim_1_qois
+        ... simulation_1_qois = waves.qoi.create_qoi_set((load, gap))
+        ... simulation_1_qois
         <xarray.Dataset> Size: 240B
         Dimensions:     (value_type: 4)
         Coordinates:
@@ -176,7 +176,7 @@ def create_qoi_set(qois: typing.Iterable[xarray.DataArray]) -> xarray.Dataset:
         Data variables:
             load        (value_type) float64 32B 5.0 nan nan nan
             gap         (value_type) float64 32B 1.0 nan nan nan
-        >>> sim_1_qois["load"]
+        >>> simulation_1_qois["load"]
         <xarray.DataArray 'load' (value_type: 4)> Size: 32B
         array([ 5., nan, nan, nan])
         Coordinates:
@@ -472,7 +472,7 @@ def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
 
     .. code-block::
 
-        >>> waves.qoi._read_qoi_set(pathlib.Path("sim_1_expected_qois.csv"))
+        >>> waves.qoi._read_qoi_set(pathlib.Path("simulation_1_expected_qois.csv"))
         <xarray.Dataset> Size: 240B
         Dimensions:     (value_type: 4)
         Coordinates:
@@ -517,7 +517,7 @@ def write_qoi_set_to_csv(qoi_set: xarray.Dataset, output: pathlib.Path) -> None:
 
     .. code-block::
 
-        >>> sim_1_qois
+        >>> simulation_1_qois
         <xarray.Dataset> Size: 240B
         Dimensions:     (value_type: 4)
         Coordinates:
@@ -525,7 +525,7 @@ def write_qoi_set_to_csv(qoi_set: xarray.Dataset, output: pathlib.Path) -> None:
         Data variables:
             load        (value_type) float64 32B 5.0 4.5 3.5 5.5
             gap         (value_type) float64 32B 1.0 0.8 0.7 0.9
-        >>> waves.qoi.write_qoi_set_to_csv(sim_1_qois, "sim_1_qois.csv")
+        >>> waves.qoi.write_qoi_set_to_csv(simulation_1_qois, "simulation_1_qois.csv")
 
     .. csv-table::
         :header-rows: 1
