@@ -333,7 +333,7 @@ def cache_environment(
     return environment
 
 
-def create_valid_identifier(identifier: str) -> None:
+def create_valid_identifier(identifier: str) -> str:
     """Create a valid Python identifier from an arbitray string by replacing invalid characters with underscores
 
     :param identifier: String to convert to valid Python identifier
