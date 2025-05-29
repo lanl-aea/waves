@@ -16,6 +16,7 @@ New Features
 Internal Changes
 ================
 - Skip ``twine check`` test on macOS until shell kill error is fixed. By `Kyle Brindley`_.
+- Restructure internal deployment around Gitlab-CI tag pipelines. By `Kyle Brindley`_.
 
 *******************
 0.13.4 (2025-05-29)
