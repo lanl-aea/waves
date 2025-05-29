@@ -18,6 +18,9 @@ aea-developer-test:
   stage: test
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
+  variables:
+    abaqus_command_prefix: "/apps/abaqus/Commands"
+    cubit_command_prefix: "/apps"
   artifacts:
     expire_in: '2 hrs'
     paths:
