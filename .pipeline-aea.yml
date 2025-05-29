@@ -142,10 +142,6 @@ aea-pip-deploy:
   dependencies:
     - "aea-pip-build"
   script:
-    # Only deploy to Gitlab PyPI registry for clean version tags
-    - tag=$(git tag --points-at HEAD)
-    - echo ${tag}
-    - if [[ -z ${tag} ]]; then exit 0; fi
     - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi build/dist/*
 
 release:
@@ -159,10 +155,6 @@ release:
   variables:
     environment_file: "release.yml"
   script:
-    # Only create a release for clean version tags
-    - tag=$(git tag --points-at HEAD)
-    - echo ${tag}
-    - if [[ -z ${tag} ]]; then exit 0; fi
     # Create the release notes. Assumes changelog contains section headers with version number in reverse chronological
     # order as:
     #
