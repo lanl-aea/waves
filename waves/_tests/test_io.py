@@ -170,28 +170,28 @@ def test_qoi_example(
     )
 
     # Combine QOIs into calculated QOIs set
-    sim_1_qois = waves.qoi.create_qoi_set((load, gap))
-    print(sim_1_qois)
-    print(sim_1_qois["load"])
+    simulation_1_qois = waves.qoi.create_qoi_set((load, gap))
+    print(simulation_1_qois)
+    print(simulation_1_qois["load"])
 
     # Save calculated QOIs to CSV
-    waves.qoi.write_qoi_set_to_csv(sim_1_qois, temp_path / "sim_1_qois.csv")
+    waves.qoi.write_qoi_set_to_csv(simulation_1_qois, temp_path / "simulation_1_qois.csv")
 
     # Save calculated QOIs to h5
-    sim_1_qois.to_netcdf(temp_path / "sim_1_qois.h5", engine="h5netcdf")
+    simulation_1_qois.to_netcdf(temp_path / "simulation_1_qois.h5", engine="h5netcdf")
 
     # Read expected QOIs from CSV
-    sim_1_expected_qois = waves.qoi._read_qoi_set(module_path.parent / "sim_1_expected_qois.csv")
-    print(sim_1_expected_qois)
+    simulation_1_expected_qois = waves.qoi._read_qoi_set(module_path.parent / "simulation_1_expected_qois.csv")
+    print(simulation_1_expected_qois)
 
     # Compare calculated to expected values
     # TODO: write function for CLI subcommand
-    sim_1_qois = xarray.merge((sim_1_qois, sim_1_expected_qois))
-    waves.qoi._add_tolerance_attribute(sim_1_qois)
-    print(sim_1_qois)
+    simulation_1_qois = xarray.merge((simulation_1_qois, simulation_1_expected_qois))
+    waves.qoi._add_tolerance_attribute(simulation_1_qois)
+    print(simulation_1_qois)
 
     # Write comparison result to CSV
-    waves.qoi.write_qoi_set_to_csv(sim_1_qois, temp_path / "sim_1_qois_diff.csv")
+    waves.qoi.write_qoi_set_to_csv(simulation_1_qois, temp_path / "simulation_1_qois_diff.csv")
 
     # Accept new calculated values
     # TODO: write function for CLI subcommand
@@ -217,10 +217,10 @@ def test_qoi_example(
         version="abcdef",
         date="2025-01-01",
     )
-    sim_2_qois = waves.qoi.create_qoi_set((load_2, stress))
+    simulation_2_qois = waves.qoi.create_qoi_set((load_2, stress))
 
     # Combine QOIs into archive
-    commit_1_qois = waves.qoi._create_qoi_archive((*sim_1_qois.values(), *sim_2_qois.values()))
+    commit_1_qois = waves.qoi._create_qoi_archive((*simulation_1_qois.values(), *simulation_2_qois.values()))
     # TODO: avoid writing attributes at dataset level
     commit_1_qois["Assembly ABC Preload"]["load"]
 
