@@ -27,8 +27,6 @@ Local development environments
    :start-after: env-start-do-not-remove
    :end-before: env-end-do-not-remove
 
-The Conda packages found in ``environment.yml`` are reproduced in the :ref:`modsim_dependencies` section.
-
 AEA CI server environment
 =========================
 
@@ -36,6 +34,30 @@ The AEA CI server environment is created under the default Gitlab-Runner user in
 is not available for developers. The AEA CI jobs use a mix of the ``environment.yml``, ``conda-build.yml``, and
 ``pip-build.yml`` files. AEA RHEL developers may use the full ``environment.yml`` file to create a local development
 environment that closely mirrors the linux CI environment.
+
+By default, Conda creates ``~/.conda/pkgs`` for the package cache, which can grow quite
+large. If a user's home directory space is limited, developers are highly encouraged to configure Conda to use their
+projects space for the package cache, e.g. with a ``~/.condarc`` file using the template below, where the text
+``${user}`` is replaced by the user name.
+
+.. code-block::
+
+   envs_dirs:
+     - /projects/${user}/conda/envs
+
+   pkgs_dirs:
+     - /projects/${user}/conda/pkgs
+
+AEA developers may then create a local development environment with the following commands
+
+.. code-block::
+
+   $ source /apps/anaconda/3.12-anaconda-2024.10/etc/profile.d/conda.sh
+   $ conda env create --name waves-env --file environment.yml
+   $ conda activate waves-env
+
+See the CI job Anaconda ``conda_installation`` path in ``.pipeline-common.yml`` for the current AEA Anaconda path and
+version used by the AEA CI server.
 
 HPC CI server environment
 =========================
@@ -62,6 +84,17 @@ scratch space for the package cache, e.g. with a ``~/.condarc`` file using the t
 
 You can read more about managing the Conda package and environment cache configuration here:
 https://conda.io/projects/conda/en/latest/user-guide/configuration/custom-env-and-pkg-locations.html
+
+HPC developers may then create a local development environment with the following commands
+
+.. code-block::
+
+   $ source /udsl/udsl1/hpcsoft/common/x86_64/anaconda/2024.10-python-3.12/etc/profile.d/conda.sh
+   $ conda env create --name waves-env --file environment.yml
+   $ conda activate waves
+
+See the CI job Anaconda ``conda_installation`` path in ``.pipeline-hpc.yml`` for the current AEA Anaconda path and
+version used by the AEA CI server.
 
 Windows CI environment
 ======================
