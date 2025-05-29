@@ -57,7 +57,8 @@ def test_previous_parameter_study(
 
     # TODO: Move to common test utility VVV
     kwargs = {}
-    temporary_directory_arguments = inspect.getfullargspec(tempfile.TemporaryDirectory).args
+    temporary_directory_inspection = inspect.getfullargspec(tempfile.TemporaryDirectory)
+    temporary_directory_arguments = temporary_directory_inspection.args + temporary_directory_inspection.kwonlyargs
     if "ignore_cleanup_errors" in temporary_directory_arguments and system_test_directory is not None:
         kwargs.update({"ignore_cleanup_errors": True})
     if keep_system_tests:
