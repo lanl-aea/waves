@@ -5,7 +5,11 @@ Changelog
 #########
 
 *******************
-0.13.2 (unreleased)
+0.13.3 (unreleased)
+*******************
+
+*******************
+0.13.2 (2025-05-29)
 *******************
 
 Documentation
@@ -24,7 +28,7 @@ Documentation
 
 Internal Changes
 ================
-- Move `_merge_parameter_studies` logic out of class and generalize for arbitrary number of studies
+- Begin generalizing internal parameter study merge operations for a future merge arbitrary number of studies feature
   (:issue:`841`, :merge:`1184`). By `Chris Johnson`_.
 - System test for printing available fetch files. By `Kyle Brindley`_.
 - Gitlab-CI job specific environment for HPC CI job. By `Kyle Brindley`_.
