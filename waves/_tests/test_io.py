@@ -31,9 +31,10 @@ test_previous_parameter_study_cases = {
     ids=test_previous_parameter_study_cases.keys(),
 )
 def test_previous_parameter_study(
-    system_test_directory,
-    request,
-    schema,
+    system_test_directory: typing.Optional[pathlib.Path],
+    keep_system_tests: bool,
+    request: pytest.FixtureRequest,
+    schema: dict,
 ) -> None:
     """Run real system I/O from the waves.parameter_generators API and check parameter study merge behaviors
 
@@ -41,6 +42,7 @@ def test_previous_parameter_study(
     identifier as a conservative estimate of a valid directory name. Failed tests persist on disk.
 
     :param system_test_directory: custom pytest decorator defined in conftest.py
+    :param keep_system_tests: custom pytest decorator defined in conftest.py
     :param request: pytest decorator with test case meta data
     :param schema: waves.parameter_generators.CartesianProduct schema
     """
@@ -89,3 +91,6 @@ def test_previous_parameter_study(
         output_file_type="h5",
         previous_parameter_study=parameter_study_file,
     )
+
+    if not keep_system_tests:
+        temp_directory.cleanup()
