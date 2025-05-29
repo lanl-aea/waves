@@ -194,13 +194,12 @@ def test_qoi_example(
     waves.qoi._diff(
         calculated=temp_path / "simulation_1_qois.csv",
         expected=temp_path / "simulation_1_expected_qois.csv",
-        output=temp_path / "simulation_1_qois_diff.csv"
+        output=temp_path / "simulation_1_qois_diff.csv",
     )
 
     # Accept new calculated values
     waves.qoi._accept(
-        calculated=temp_path / "simulation_1_qois.csv",
-        expected=temp_path / "simulation_1_expected_qois.csv"
+        calculated=temp_path / "simulation_1_qois.csv", expected=temp_path / "simulation_1_expected_qois.csv"
     )
 
     # Create QOIs for different simulation
