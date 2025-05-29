@@ -136,7 +136,7 @@ aea-pip-deploy:
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
       when: never
-    - if: $PARENT_CI_COMMIT_BRANCH == "main"
+    - if: $PARENT_CI_COMMIT_TAG
   variables:
     environment_file: "pip-deploy.yml"
   dependencies:
@@ -151,7 +151,7 @@ release:
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
       when: never
-    - if: $PARENT_CI_COMMIT_BRANCH == "main"
+    - if: $PARENT_CI_COMMIT_TAG
   variables:
     environment_file: "release.yml"
   script:
@@ -190,7 +190,7 @@ pages:
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
       when: never
-    - if: $PARENT_CI_COMMIT_BRANCH == "main"
+    - if: $PARENT_CI_COMMIT_TAG
   variables:
     environment_file: "pip-build.yml"
   dependencies:
