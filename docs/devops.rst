@@ -27,22 +27,15 @@ Local development environments
    :start-after: env-start-do-not-remove
    :end-before: env-end-do-not-remove
 
+The Conda packages found in ``environment.yml`` are reproduced in the :ref:`modsim_dependencies` section.
+
 AEA CI server environment
 =========================
 
-A full development environment for the project Gitlab-CI pipelines is maintained on AEA servers.
-
-1. Add the AEA modulefiles directory
-
-   .. code-block::
-
-      $ module use /projects/aea_compute/modulefiles
-
-2. Load the project specific modulefile
-
-   .. code-block::
-
-      $ module load waves-env
+The AEA CI server environment is created under the default Gitlab-Runner user in the Gitlab-Runner build directory and
+is not available for developers. The AEA CI jobs use a mix of the ``environment.yml``, ``conda-build.yml``, and
+``pip-build.yml`` files. AEA RHEL developers may use the full ``environment.yml`` file to create a local development
+environment that closely mirrors the linux CI environment.
 
 HPC CI server environment
 =========================
@@ -82,7 +75,7 @@ the Conda environment.
 * Anaconda/Miniconda/Miniforge
 
 The Windows CI server environment is created under the default Gitlab-Runner user in the Gitlab-Runner build directory
-and is not be available for developers. The Windows CI jobs use a mix of the ``environment-win.yml``,
+and is not available for developers. The Windows CI jobs use a mix of the ``environment-win.yml``,
 ``conda-build.yml``, and ``pip-build.yml`` files. Windows developers may use ``environment-win.yml`` to create a local
 development environment that closely mirrors the linux CI environment.
 

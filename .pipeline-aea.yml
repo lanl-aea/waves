@@ -11,17 +11,9 @@ default:
     - aea
     - linux
 
-aea-environment:
-  extends:
-    - .linux-cached-environment
-    - .build-cached-environment
-  stage: environment
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
-
 aea-developer-test:
   extends:
-    - .linux-cached-environment
+    - .nix-job-environment
     - .developer-test
   stage: test
   rules:
