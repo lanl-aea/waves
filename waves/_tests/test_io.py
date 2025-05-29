@@ -1,6 +1,7 @@
 """System test API calls with real file I/O"""
 
 import sys
+import shutil
 import typing
 import inspect
 import pathlib
@@ -182,20 +183,25 @@ def test_qoi_example(
     simulation_1_qois.to_netcdf(temp_path / "simulation_1_qois.h5", engine="h5netcdf")
 
     # Read expected QOIs from CSV
-    simulation_1_expected_qois = waves.qoi._read_qoi_set(module_path.parent / "simulation_1_expected_qois.csv")
+    shutil.copy(
+        module_path.parent / "simulation_1_expected_qois.csv",
+        temp_path / "simulation_1_expected_qois.csv",
+    )
+    simulation_1_expected_qois = waves.qoi._read_qoi_set(temp_path / "simulation_1_expected_qois.csv")
     print(simulation_1_expected_qois)
 
     # Compare calculated to expected values
-    # TODO: write function for CLI subcommand
-    simulation_1_qois = xarray.merge((simulation_1_qois, simulation_1_expected_qois))
-    waves.qoi._add_tolerance_attribute(simulation_1_qois)
-    print(simulation_1_qois)
-
-    # Write comparison result to CSV
-    waves.qoi.write_qoi_set_to_csv(simulation_1_qois, temp_path / "simulation_1_qois_diff.csv")
+    waves.qoi._diff(
+        calculated=temp_path / "simulation_1_qois.csv",
+        expected=temp_path / "simulation_1_expected_qois.csv",
+        output=temp_path / "simulation_1_qois_diff.csv"
+    )
 
     # Accept new calculated values
-    # TODO: write function for CLI subcommand
+    waves.qoi._accept(
+        calculated=temp_path / "simulation_1_qois.csv",
+        expected=temp_path / "simulation_1_expected_qois.csv"
+    )
 
     # Create QOIs for different simulation
     load_2 = waves.qoi.create_qoi(
