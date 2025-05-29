@@ -66,8 +66,8 @@ env = waves.scons_extensions.WAVESEnvironment(
 build_directory = pathlib.Path(env.GetOption("variant_dir_base"))
 env.AddMethod(
     waves.scons_extensions.QOIPseudoBuilder(
-        collection_dir=(build_directory / "qoi").absolute(),
-        build_dir=build_directory.absolute(),
+        collection_dir=(build_directory / "qoi").resolve(),
+        build_dir=build_directory.resolve(),
         update_expected=env.GetOption("update_expected_qois"),
         _program=env["waves_command"],
     ),
