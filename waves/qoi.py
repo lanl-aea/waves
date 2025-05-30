@@ -316,6 +316,11 @@ def _create_qoi_study(
     return qoi_study
 
 
+def _node_path(node: xarray.DataTree) -> str:
+    """Return ``"path"`` of a QOI node (xarray.DataTree)."""
+    return node.path
+
+
 def _qoi_group(qoi: xarray.Dataset) -> str:
     """Return ``"group"`` attribute of a QOI (xarray.Dataset)."""
     return qoi.attrs["group"]
@@ -419,9 +424,6 @@ def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataT
         except KeyError:
             pass  # date coordinate is not needed
         qoi_set = create_qoi_set(qois)
-        # TODO: remove the dataset attributes when :meth:`_merge_qoi_archives` uses the leaf's dataset path
-        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/926
-        qoi_set.attrs = {"group": group}
         # Add dataset as a node in the DataTree
         archive[group] = qoi_set
     return archive
@@ -432,22 +434,15 @@ def _merge_qoi_archives(qoi_archives: typing.Iterable[xarray.DataTree]) -> xarra
 
     :param qoi_archives: QOI archives. Each leaf dataset must have a "version" dimension.
     :returns: Merged QOI archive.
-
-    .. note::
-
-        Technically this does not preserve the original DataTree structure. It creates a new structure based on the
-        "group" attribute of each QOI.
     """
     # FIXME: The "version" attribute of the merged datasets incorrectly keeps the original dataset's value
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/927
-    leaves = [qoi.ds for archive in qoi_archives for qoi in archive.leaves]
+    leaves = [qoi for archive in qoi_archives for qoi in archive.leaves]
     merged_archive = xarray.DataTree()
-    # TODO: use the leaf's dataset path instead of ``"group"`` attribute
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/926
-    # Create a group for each "group" attribute
-    for group, qois in itertools.groupby(sorted(leaves, key=_qoi_group), key=_qoi_group):
+    # Group by datatree node path, i.e. the QOI group
+    for group, qois in itertools.groupby(sorted(leaves, key=_node_path), key=_node_path):
         # Merge dataset as a node in the DataTree
-        merged_archive[group] = xarray.merge(qois)
+        merged_archive[group] = xarray.merge(node.ds for node in qois)
     return merged_archive
 
 
