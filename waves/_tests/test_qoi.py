@@ -665,6 +665,29 @@ def test__qoi_group(qoi_set, expected, outcome):
             pass
 
 
+test__node_path_cases = {
+    "expected use": (
+        xarray.DataTree(children={"path1": xarray.DataTree()}),
+        "path1",
+        does_not_raise(),
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "qoi_set, expected, outcome",
+    test__node_path_cases.values(),
+    ids=test__node_path_cases.keys(),
+)
+def test__node_path(qoi_set, expected, outcome):
+    with outcome:
+        try:
+            group = qoi._node_path(qoi_set)
+            assert group == expected
+        finally:
+            pass
+
+
 def test__create_qoi_archive():
     archive = qoi._create_qoi_archive(
         (
