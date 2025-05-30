@@ -747,7 +747,6 @@ def test__create_qoi_archive():
             "version": ["ghijkl"],
             "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
         },
-        attrs={"group": "Assembly ABC Preload"},
     )
     expected["Assembly DEF Preload"] = xarray.Dataset(
         {
@@ -772,7 +771,6 @@ def test__create_qoi_archive():
             "version": ["ghijkl"],
             "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
         },
-        attrs={"group": "Assembly DEF Preload"},
     )
     assert expected.identical(archive)
 
@@ -875,7 +873,6 @@ def test__merge_qoi_archives():
             "version": ["ghijkl", "mnopqr"],
             "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
         },
-        attrs={"group": "Assembly ABC Preload"},
     )
     expected["Assembly DEF Preload"] = xarray.Dataset(
         {
@@ -900,7 +897,6 @@ def test__merge_qoi_archives():
             "version": ["ghijkl", "mnopqr"],
             "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
         },
-        attrs={"group": "Assembly DEF Preload"},
     )
     assert expected.identical(merged_archive)
 
