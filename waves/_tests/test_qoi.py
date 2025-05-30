@@ -667,8 +667,8 @@ def test__qoi_group(qoi_set, expected, outcome):
 
 test__node_path_cases = {
     "expected use": (
-        xarray.DataTree(children={"path1": xarray.DataTree()}),
-        "path1",
+        xarray.DataTree(children={"path1": xarray.DataTree()})["path1"],
+        "/path1",
         does_not_raise(),
     ),
 }
