@@ -293,7 +293,7 @@ test_create_qoi_set_cases = {
             attrs={},
         ),
     ),
-    "drop_conflicts": (
+    "propagate_identical": (
         [
             xarray.DataArray(
                 [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
@@ -313,7 +313,7 @@ test_create_qoi_set_cases = {
                 "qoi1": xarray.DataArray(
                     [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
                     coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
-                    attrs={"noconflict": "shouldexist"},
+                    attrs={},
                 ),
             },
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
@@ -851,9 +851,7 @@ def test__merge_qoi_archives():
                     "version": ["ghijkl", "mnopqr"],
                     "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
                 },
-                # FIXME: The version attribute of the merged datasets is incorrect
-                # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/927
-                attrs={"group": "Assembly ABC Preload", "version": "ghijkl"},
+                attrs={"group": "Assembly ABC Preload"},
             ),
             "gap": xarray.DataArray(
                 [[1.0, 0.95, 0.85, 1.05], [1.05, 1.0, 0.9, 1.1]],
@@ -861,7 +859,7 @@ def test__merge_qoi_archives():
                     "version": ["ghijkl", "mnopqr"],
                     "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
                 },
-                attrs={"group": "Assembly ABC Preload", "version": "ghijkl"},
+                attrs={"group": "Assembly ABC Preload"},
             ),
         },
         coords={
@@ -877,7 +875,7 @@ def test__merge_qoi_archives():
                     "version": ["ghijkl", "mnopqr"],
                     "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
                 },
-                attrs={"group": "Assembly DEF Preload", "version": "ghijkl"},
+                attrs={"group": "Assembly DEF Preload"},
             ),
             "stress": xarray.DataArray(
                 [[110.0, numpy.nan, numpy.nan, numpy.nan], [111.0, numpy.nan, numpy.nan, numpy.nan]],
@@ -885,7 +883,7 @@ def test__merge_qoi_archives():
                     "version": ["ghijkl", "mnopqr"],
                     "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
                 },
-                attrs={"group": "Assembly DEF Preload", "version": "ghijkl"},
+                attrs={"group": "Assembly DEF Preload"},
             ),
         },
         coords={

@@ -25,7 +25,19 @@ from waves import _settings
 _exclude_from_namespace = set(globals().keys())
 
 _version_key = "version"
-_merge_constants = {"combine_attrs": "drop_conflicts"}
+
+
+def _propagate_identical_attrs(all_attrs, context):
+    # Convert each dictionary's items to a set of tuples
+    sets_of_items = [set(attrs.items()) for attrs in all_attrs]
+    # Find the intersection of all item sets
+    common_items = set.intersection(*sets_of_items)
+    # Convert the result back to a dictionary
+    return dict(common_items)
+
+
+_merge_constants = {"combine_attrs": _propagate_identical_attrs}
+
 
 
 def create_qoi(
@@ -437,7 +449,7 @@ def _merge_qoi_archives(qoi_archives: typing.Iterable[xarray.DataTree]) -> xarra
     # Group by datatree node path, i.e. the QOI group
     for group, qois in itertools.groupby(sorted(leaves, key=_node_path), key=_node_path):
         # Merge dataset as a node in the DataTree
-        merged_archive[group] = xarray.merge(node.ds for node in qois)
+        merged_archive[group] = xarray.merge((node.ds for node in qois), **_merge_constants)
     return merged_archive
 
 
