@@ -399,8 +399,6 @@ def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataT
         │       Data variables:
         │           load        (version, value_type) float64 32B 5.3 4.5 3.5 5.5
         │           gap         (version, value_type) float64 32B 1.0 0.95 0.85 1.05
-        │       Attributes:
-        │           group       Assembly ABC Preload
         └── Group: /Assembly DEF Preload
                 Dimensions:     (version: 1, value_type: 4)
                 Coordinates:
@@ -410,8 +408,6 @@ def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataT
                 Data variables:
                     load        (version, value_type) float64 32B 35.0 nan nan nan
                     stress      (version, value_type) float64 32B 110.0 nan nan nan
-                Attributes:
-                    group       Assembly DEF Preload
     """
     archive = xarray.DataTree()
     # Creates a group for each "group" attribute
