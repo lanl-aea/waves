@@ -700,9 +700,13 @@ test__propagate_identical_attrs_cases = {
         [{"a": 1, "b": 2}, {"a": 1.0, "b": 2}],
         {"b": 2},
     ),
-    "preserve_string": (
-        [{"a": 1, "b": 2, "c": "text"}, {"a": 1, "b": 2, "c": "text"}, {"a": 1.0, "b": 2, "c": "text"}],
-        {"b": 2, "c": "text"},
+    "string": (
+        [{"a": "text1", "b": "text2"}, {"a": "text1", "b": "text3"}],
+        {"a": "text1"},
+    ),
+    "datetime": (
+        [{"a": datetime.datetime(2025, 1, 1), "b": datetime.datetime(2025, 1, 1)}, {"a": datetime.datetime(2025, 1, 1), "b": datetime.datetime(2024, 1, 1)}],
+        {"a": datetime.datetime(2025, 1, 1)},
     ),
     "single_dict": (
         [{"a": 1, "b": 2}],
