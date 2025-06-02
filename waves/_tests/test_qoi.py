@@ -682,6 +682,7 @@ def test__node_path(qoi_set, expected):
     group = qoi._node_path(qoi_set)
     assert group == expected
 
+
 def test__create_qoi_archive():
     archive = qoi._create_qoi_archive(
         (
