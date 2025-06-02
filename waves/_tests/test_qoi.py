@@ -665,6 +665,24 @@ def test__qoi_group(qoi_set, expected, outcome):
             pass
 
 
+test__node_path_cases = {
+    "expected use": (
+        xarray.DataTree(children={"path1": xarray.DataTree()})["path1"],
+        "/path1",
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "qoi_set, expected",
+    test__node_path_cases.values(),
+    ids=test__node_path_cases.keys(),
+)
+def test__node_path(qoi_set, expected):
+    group = qoi._node_path(qoi_set)
+    assert group == expected
+
+
 def test__create_qoi_archive():
     archive = qoi._create_qoi_archive(
         (
@@ -724,7 +742,6 @@ def test__create_qoi_archive():
             "version": ["ghijkl"],
             "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
         },
-        attrs={"group": "Assembly ABC Preload"},
     )
     expected["Assembly DEF Preload"] = xarray.Dataset(
         {
@@ -749,7 +766,6 @@ def test__create_qoi_archive():
             "version": ["ghijkl"],
             "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
         },
-        attrs={"group": "Assembly DEF Preload"},
     )
     assert expected.identical(archive)
 
@@ -852,7 +868,6 @@ def test__merge_qoi_archives():
             "version": ["ghijkl", "mnopqr"],
             "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
         },
-        attrs={"group": "Assembly ABC Preload"},
     )
     expected["Assembly DEF Preload"] = xarray.Dataset(
         {
@@ -877,7 +892,6 @@ def test__merge_qoi_archives():
             "version": ["ghijkl", "mnopqr"],
             "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
         },
-        attrs={"group": "Assembly DEF Preload"},
     )
     assert expected.identical(merged_archive)
 
