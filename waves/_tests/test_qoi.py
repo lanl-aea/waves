@@ -700,7 +700,7 @@ test__propagate_identical_attrs_cases = {
         [{"a": 1, "b": 2}, {"a": 1, "b": 2}, {"a": 1.0, "b": 2, "c": "text"}],
         {"a": 1, "b": 2},
     ),
-    "singe_dict": (
+    "single_dict": (
         [{"a": 1, "b": 2}],
         {"a": 1, "b": 2},
     ),
