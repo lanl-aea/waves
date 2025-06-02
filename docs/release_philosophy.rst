@@ -73,11 +73,6 @@ Steps needed for a release include:
    use the new version number and release date.
 4. Commit changes and submit a merge request to the ``main`` branch at the `upstream repository`_.
 5. Solicit feedback and make any required changes.
-6. Immediately prior to merge, add the new version tag to the most recent commit.
-
-   .. code-block::
-
-      $ git tag 0.4.1
-      $ git push origin release-0-4-1 --tags
-
-7. Merge the release branch to ``main``
+6. Merge the release branch to ``main``.
+7. Create a new tag on the main branch from the CLI or web-interface:
+   https://re-git.lanl.gov/aea/python-projects/waves/-/tags.
