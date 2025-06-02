@@ -781,17 +781,13 @@ def _qoi_history_report(
     qoi_archive: xarray.DataTree,
     output: pathlib.Path,
     plots_per_page: int = 8,
-    add_git_commit_date: bool = False,
 ) -> None:
     """Plot history of QOI values from QOI archive.
 
     :param qoi_archive: collection of QOI datasets stored as a datatree
     :param output: history report output path
     :param plots_per_page: the number of plots on each page of the output
-    :param add_git_commit_date: Call :meth:`_add_commit_date` for every dataset in the QOI archive
     """
-    if add_git_commit_date:
-        qoi_archive = qoi_archive.map_over_datasets(_add_commit_date)
     qoi_archive = qoi_archive.map_over_datasets(_sort_by_date)
     open_figure = False
     date_min = min(node.ds.date.min() for node in qoi_archive.leaves)
@@ -967,17 +963,20 @@ def _plot_archive(output: pathlib.Path, qoi_archive_h5: typing.Iterable[pathlib.
     _qoi_history_report(qoi_archive, output)
 
 
-def _archive(output: pathlib.Path, version: str, qoi_set_files: typing.Iterable[pathlib.Path]) -> None:
+def _archive(output: pathlib.Path, version: str, add_git_commit_date: bool, qoi_set_files: typing.Iterable[pathlib.Path]) -> None:
     """Archive QOI sets from a single version to an H5 file.
 
     :param output: report output file path
-    :param version: version string to override existing QOI version attribute
+    :param version: version string to override existing QOI "version" attribute
+    :param add_git_commit_date: override existing QOI "date" attribute with the git commit date for `version`
     :param qoi_set_files: QOI file paths
     """
     qoi_sets = (_read_qoi_set(qoi_set_file) for qoi_set_file in qoi_set_files)
     qois = (qoi for qoi_set in qoi_sets for qoi in qoi_set.values())
     if version:
         qois = (qoi.assign_attrs(version=version) for qoi in qois)
+    if version and add_git_commit_date:
+        qois = (qoi.assign_attrs(date=_get_commit_date(version)) for qoi in qois)
     _create_qoi_archive(qois).to_netcdf(output, engine="h5netcdf")
 
 
