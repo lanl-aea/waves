@@ -683,6 +683,40 @@ def test__node_path(qoi_set, expected):
     assert group == expected
 
 
+test__propagate_identical_attrs_cases = {
+    "no_common": (
+        [{"a": 1, "b": 2}, {"a": 3, "c": 4}],
+        {},
+    ),
+    "all_common": (
+        [{"a": 1, "b": 2}, {"a": 1, "b": 2}, {"a": 1, "b": 2}],
+        {"a": 1, "b": 2},
+    ),
+    "some_common": (
+        [{"a": 1, "b": 2}, {"a": 1, "b": 2}, {"a": 3, "b": 2}],
+        {"b": 2},
+    ),
+    "mixed_int_float": (
+        [{"a": 1, "b": 2}, {"a": 1, "b": 2}, {"a": 1.0, "b": 2, "c": "text"}],
+        {"a": 1, "b": 2},
+    ),
+    "singe_dict": (
+        [{"a": 1, "b": 2}],
+        {"a": 1, "b": 2},
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "input_attrs, common_attrs",
+    test__propagate_identical_attrs_cases.values(),
+    ids=test__propagate_identical_attrs_cases.keys(),
+)
+def test__propagate_identical_attrs(input_attrs, common_attrs):
+    output_attrs = qoi._propagate_identical_attrs(input_attrs, None)
+    assert output_attrs == common_attrs
+
+
 def test__create_qoi_archive():
     archive = qoi._create_qoi_archive(
         (
