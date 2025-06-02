@@ -11,7 +11,6 @@
 import pathlib
 import typing
 import subprocess
-import functools
 import itertools
 
 import numpy
@@ -827,43 +826,6 @@ def _qoi_history_report(
                 matplotlib.pyplot.close()
 
 
-@functools.cache
-def _get_commit_date(commit: str) -> pandas.Timestamp:
-    """Call ``git show`` as a subprocess to return a timestamp of a specified commit
-
-    :param commit: commit or commit-like string for the ``git show`` command
-
-    :returns: commit timestamp
-    """
-    return pandas.to_datetime(
-        subprocess.run(
-            ["git", "show", "--no-patch", "--no-notes", "--pretty='%cs'", commit],
-            capture_output=True,
-            text=True,
-        ).stdout.strip()
-    )
-
-
-def _add_commit_date(dataset: xarray.Dataset) -> xarray.Dataset:
-    """Return an Xarray dataset with the added ``date`` variable built from the ``version`` coordinate values
-
-    If ``version`` coordinate does not exist, return the original dataset
-
-    Intended for use with ``xarray.map_over_datasets`` method:
-    https://docs.xarray.dev/en/latest/generated/xarray.map_over_datasets.html
-
-    :param dataset: Xarray Dataset containing the ``date`` variable
-
-    :returns: The same Xarray Dataset after sorting
-    """
-    try:
-        return dataset.assign_coords(
-            date=(_version_key, [_get_commit_date(commit) for commit in dataset[_version_key]])
-        )
-    except KeyError:
-        return dataset
-
-
 def _sort_by_date(dataset: xarray.Dataset) -> xarray.Dataset:
     """Return an Xarray dataset sorted by the ``date`` coordinate
 
@@ -963,20 +925,20 @@ def _plot_archive(output: pathlib.Path, qoi_archive_h5: typing.Iterable[pathlib.
     _qoi_history_report(qoi_archive, output)
 
 
-def _archive(output: pathlib.Path, version: str, add_git_commit_date: bool, qoi_set_files: typing.Iterable[pathlib.Path]) -> None:
+def _archive(output: pathlib.Path, version: str, date: str, qoi_set_files: typing.Iterable[pathlib.Path]) -> None:
     """Archive QOI sets from a single version to an H5 file.
 
     :param output: report output file path
-    :param version: version string to override existing QOI "version" attribute
-    :param add_git_commit_date: override existing QOI "date" attribute with the git commit date for `version`
+    :param version: version string to override existing QOI version attribute
+    :param date: date string to override existing QOI date attribute
     :param qoi_set_files: QOI file paths
     """
     qoi_sets = (_read_qoi_set(qoi_set_file) for qoi_set_file in qoi_set_files)
     qois = (qoi for qoi_set in qoi_sets for qoi in qoi_set.values())
     if version:
         qois = (qoi.assign_attrs(version=version) for qoi in qois)
-    if version and add_git_commit_date:
-        qois = (qoi.assign_attrs(date=_get_commit_date(version)) for qoi in qois)
+    if date:
+        qois = (qoi.assign_attrs(date=date) for qoi in qois)
     _create_qoi_archive(qois).to_netcdf(output, engine="h5netcdf")
 
 
