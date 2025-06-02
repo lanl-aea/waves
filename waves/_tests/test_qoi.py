@@ -696,9 +696,13 @@ test__propagate_identical_attrs_cases = {
         [{"a": 1, "b": 2}, {"a": 1, "b": 2}, {"a": 3, "b": 2}],
         {"b": 2},
     ),
-    "mixed_int_float": (
-        [{"a": 1, "b": 2}, {"a": 1, "b": 2}, {"a": 1.0, "b": 2, "c": "text"}],
-        {"a": 1, "b": 2},
+    "mixed_type": (
+        [{"a": 1, "b": 2}, {"a": 1.0, "b": 2}],
+        {"b": 2},
+    ),
+    "preserve_string": (
+        [{"a": 1, "b": 2, "c": "text"}, {"a": 1, "b": 2, "c": "text"}, {"a": 1.0, "b": 2, "c": "text"}],
+        {"b": 2, "c": "text"},
     ),
     "single_dict": (
         [{"a": 1, "b": 2}],

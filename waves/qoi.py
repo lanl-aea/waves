@@ -28,12 +28,14 @@ _version_key = "version"
 
 
 def _propagate_identical_attrs(all_attrs, context):
-    # Convert each dictionary's items to a set of tuples
-    sets_of_items = [set(attrs.items()) for attrs in all_attrs]
-    # Find the intersection of all item sets
-    common_items = set.intersection(*sets_of_items)
-    # Convert the result back to a dictionary
-    return dict(common_items)
+    first_attrs = all_attrs[0]
+    identical_pairs = {}
+
+    for key, value in first_attrs.items():
+        if all(key in attrs and attrs[key] == value and type(attrs[key]) == type(value) for attrs in all_attrs[1:]):
+            identical_pairs[key] = value
+
+    return identical_pairs
 
 
 _merge_constants = {"combine_attrs": _propagate_identical_attrs}
