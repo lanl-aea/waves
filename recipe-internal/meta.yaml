@@ -3,7 +3,6 @@
 
 package:
   name: {{ name|lower }}
-  # TODO: Figure out how to use pyproject.toml and a Conda build Jinja template
   version: {{ version }}
 
 source:
@@ -29,13 +28,13 @@ build:
 
 requirements:
   host:
+    - python
     - h5netcdf
     - h5py
     - matplotlib-base
     - networkx
     - numpy
     - pip
-    - python
     - python-build
     - pyyaml
     - salib >=1.4.6
@@ -80,7 +79,7 @@ test:
     - numpy >=2
     - pandas
     - pip
-    - pytest>=6
+    - pytest >=6
     - pytest-xdist
     - python-gmsh
     - pyyaml
