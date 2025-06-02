@@ -19,6 +19,7 @@ Internal Changes
 - Restructure internal deployment around Gitlab-CI tag pipelines. By `Kyle Brindley`_.
 - Preserve QOI datatree structure when merging (:merge:`1205`). By `Matthew Fister`_.
 - Allow a QOI date attribute to be specified via the ``archive`` subcommand (:merge:`1211`). By `Matthew Fister`_.
+- Only propagate common attributes when merging QOI xarray objects. (:merge:`1206`). By `Matthew Fister`_.
 
 *******************
 0.13.4 (2025-05-29)
