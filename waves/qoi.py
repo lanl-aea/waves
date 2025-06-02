@@ -39,7 +39,6 @@ def _propagate_identical_attrs(all_attrs, context):
 _merge_constants = {"combine_attrs": _propagate_identical_attrs}
 
 
-
 def create_qoi(
     name: str,
     calculated: float = numpy.nan,
