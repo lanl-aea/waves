@@ -294,7 +294,7 @@ def test_qoi_example(
     print(all_commit_qois)
 
     # Create QOI history report
-    waves.qoi._qoi_history_report(all_commit_qois, temp_path / "qoi_history.pdf", add_git_commit_date=False)
+    waves.qoi._qoi_history_report(all_commit_qois, temp_path / "qoi_history.pdf")
 
     # Create QOI set with set_name attribute for parameter studies
     # Group must still be unique

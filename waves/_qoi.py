@@ -64,7 +64,7 @@ def main(args, parser) -> None:
     elif args.qoi_subcommand == "report":
         qoi._report(args.output, args.QOI_ARCHIVE_H5)
     elif args.qoi_subcommand == "archive":
-        qoi._archive(args.output, args.version, args.QOI_SET_FILE)
+        qoi._archive(args.output, args.version, args.date, args.QOI_SET_FILE)
     elif args.qoi_subcommand == "plot-archive":
         qoi._plot_archive(args.output, args.QOI_ARCHIVE_H5)
     else:
@@ -176,6 +176,12 @@ def get_archive_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--version",
         help="override existing QOI 'version' attributes with this text (e.g. a git commit hash).",
+        type=str,
+        default="",
+    )
+    parser.add_argument(
+        "--date",
+        help="override existing QOI 'date' attributes with this text (e.g. a git commit date).",
         type=str,
         default="",
     )
