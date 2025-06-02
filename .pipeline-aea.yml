@@ -64,8 +64,7 @@ aea-conda-build:
     - .conda-build
   stage: test
   rules:
-    - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
-    - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
   variables:
     environment_file: "conda-build.yml"
     recipe_directory: "recipe"
@@ -91,7 +90,7 @@ aea-conda-deploy:
   rules:
     - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
       when: never
-    - if: $PARENT_CI_COMMIT_BRANCH == "main"
+    - if: $PARENT_CI_COMMIT_TAG
   variables:
     PARENT_CI_PROJECT_PATH: $CI_PROJECT_PATH
     PARENT_CI_COMMIT_BRANCH: $PARENT_CI_COMMIT_BRANCH
