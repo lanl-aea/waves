@@ -705,7 +705,10 @@ test__propagate_identical_attrs_cases = {
         {"a": "text1"},
     ),
     "datetime": (
-        [{"a": datetime.datetime(2025, 1, 1), "b": datetime.datetime(2025, 1, 1)}, {"a": datetime.datetime(2025, 1, 1), "b": datetime.datetime(2024, 1, 1)}],
+        [
+            {"a": datetime.datetime(2025, 1, 1), "b": datetime.datetime(2025, 1, 1)},
+            {"a": datetime.datetime(2025, 1, 1), "b": datetime.datetime(2024, 1, 1)},
+        ],
         {"a": datetime.datetime(2025, 1, 1)},
     ),
     "single_dict": (
