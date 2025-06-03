@@ -9,8 +9,10 @@ import numpy
 import xarray
 
 from waves import parameter_generators
+from waves._settings import _hash_coordinate_key
 from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
 from waves import _settings
+from waves import _utilities
 
 
 set_hashes = {
@@ -477,6 +479,35 @@ def test_merge_parameter_studies(studies, expected_samples, expected_types, outc
             assert numpy.all(samples == expected_samples)
         finally:
             pass
+
+
+test_create_set_names_cases = {
+    "custom template": (
+        parameter_generators.OneAtATime({"parameter_1": [1, 2]}).parameter_study,
+        _utilities._AtSignTemplate(f"out{_settings._template_placeholder}"),
+        ["out0", "out1"],
+    ),
+    "default template": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
+        None,
+        [
+            f"{_settings._default_set_name_template.rstrip(_settings._template_placeholder)}0",
+            f"{_settings._default_set_name_template.rstrip(_settings._template_placeholder)}1",
+        ],
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "parameter_study, template, expected_names",
+    test_create_set_names_cases.values(),
+    ids=test_create_set_names_cases.keys(),
+)
+def test_create_set_names(parameter_study, template, expected_names):
+    """Test the parameter set name generation"""
+    test_set_hashes = list(parameter_study.coords[_hash_coordinate_key].values)
+    test_set_names = parameter_generators._create_set_names(test_set_hashes, template)
+    assert list(test_set_names.values()) == expected_names
 
 
 def test_open_parameter_study():
