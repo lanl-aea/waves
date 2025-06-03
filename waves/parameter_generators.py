@@ -1555,7 +1555,8 @@ def _update_set_names(
 ) -> xarray.Dataset:
     """Update the parameter set names after a parameter study dataset merge operation.
 
-    :param parameter_study: A :class:`ParameterGenerator` parameter study Xarray Dataset with swapped set hash and set name dimensions
+    :param parameter_study: A :class:`ParameterGenerator` parameter study Xarray Dataset with swapped set hash and set
+        name dimensions
     :param template: parameter set naming template utilizing the '@' sign to mark substitution. If none is provided upon
         call, fetch it from the WAVES settings.
 
