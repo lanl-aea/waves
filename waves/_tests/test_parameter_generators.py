@@ -524,15 +524,16 @@ test_update_set_names_cases = {
         ],
     ),
     "nan parameter name": (
-        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
-        None,
-        [
-            f"{_settings._default_set_name_template.rstrip(_settings._template_placeholder)}0",
-            f"{_settings._default_set_name_template.rstrip(_settings._template_placeholder)}1",
-        ],
-    ),
-    "identical input/output": (
-        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
+        xarray.merge(
+            [
+                parameter_generators.OneAtATime({"parameter_1": [1, 2]}).parameter_study.swap_dims(
+                    {_settings._set_coordinate_key: _settings._hash_coordinate_key}
+                ),
+                parameter_generators.OneAtATime({"parameter_2": ["a"]})
+                .parameter_study.swap_dims({_settings._set_coordinate_key: _settings._hash_coordinate_key})
+                .drop_vars(_settings._set_coordinate_key),
+            ],
+        ),
         None,
         [
             f"{_settings._default_set_name_template.rstrip(_settings._template_placeholder)}0",
@@ -553,13 +554,9 @@ def test_update_set_names(parameter_study, template, expected_names):
     :param str set_template: user supplied string to be used as a template for parameter names
     :param list expected_names: list of expected parameter name strings
     """
-    assert list(TemplateGenerator._set_names.values()) == expected_names
-    assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected_names
-
-    # Test that the update function runs with only a single set. Check that the names don't change.
-    TemplateGenerator._update_set_names()
-    assert list(TemplateGenerator._set_names.values()) == expected_names
-    assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected_names
+    parameter_study = parameter_generators._update_set_names(parameter_study, template)
+    test_set_names = parameter_study[_settings._set_coordinate_key]
+    assert list(test_set_names.values) == expected_names
 
 
 def test_open_parameter_study():
