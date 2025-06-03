@@ -695,6 +695,10 @@ def _plot_scalar_tolerance_check(
     )
 
 
+def _can_plot_qoi_tolerance_check(qoi):
+    return True
+
+
 def _write_qoi_report(qoi_archive: xarray.DataTree, output: pathlib.Path, plots_per_page: int = 16) -> None:
     """Write a QOI report to a PDF.
 
@@ -705,36 +709,20 @@ def _write_qoi_report(qoi_archive: xarray.DataTree, output: pathlib.Path, plots_
     :param output: history report output path
     :param plots_per_page: the number of plots on each page of the output
     """
-    with PdfPages(output) as pdf:
-        for qoi_group in qoi_archive.leaves:
-            for plot_num, qoi in enumerate(qoi_group.ds.data_vars.values()):
-                ax_num = plot_num % plots_per_page  # ax_num goes from 0 to (plots_per_page - 1)
-                if ax_num == 0:  # starting new page
-                    open_figure = True
-                    fig, axes = matplotlib.pyplot.subplots(  # create a new figure for a new page
-                        plots_per_page,
-                        figsize=(8.5, 11),
-                        gridspec_kw=dict(
-                            left=0.6,  # plot on right half of page because text will go on left side
-                            right=0.9,  # leave margin on right edge
-                            top=(1.0 - 1.0 / plots_per_page),  # top margin equal to single plot height
-                            bottom=(0.5 / plots_per_page),  # bottom margin equal to half of single plot height
-                            hspace=1.0,
-                        ),
-                    )
-                fig.suptitle(qoi_group.name)
-                _plot_qoi_tolerance_check(qoi, axes[ax_num])
-                if ax_num == plots_per_page - 1:  # ending a page
-                    pdf.savefig()  # save current figure to a page
-                    matplotlib.pyplot.close()
-                    open_figure = False
-            if open_figure:  # If a figure is still open (hasn't been saved to a page)
-                # Clear remaining empty plots on the page
-                for ax in axes[ax_num + 1 :]:  # noqa: E203
-                    ax.clear()
-                    ax.axis("off")
-                pdf.savefig()
-                matplotlib.pyplot.close()
+    qois = [
+        qoi
+        for leaf in qoi_archive.leaves
+        for qoi in leaf.ds.data_vars.values()
+        if _can_plot_qoi_tolerance_check(qoi)
+    ]
+    page_margins = dict(
+        left=0.6,  # plot on right half of page because text will go on left side
+        right=0.9,  # leave margin on right edge
+        top=(1.0 - 1.0 / plots_per_page),  # top margin equal to single plot height
+        bottom=(0.5 / plots_per_page),  # bottom margin equal to half of single plot height
+        hspace=1.0,
+    )
+    _pdf_report(qois, output, page_margins, plots_per_page, _plot_qoi_tolerance_check, {})
 
 
 def _get_plotting_name(qoi: xarray.DataArray) -> str:
@@ -781,7 +769,6 @@ def _plot_scalar_qoi_history(
     :param date_max: maximum date to include on the x-axes
     """
     name = _get_plotting_name(qoi)
-    group = qoi.attrs["group"]
     axes.scatter(qoi.date, qoi.sel(value_type="calculated"))
     axes.plot(qoi.date, qoi.sel(value_type="lower_limit"), "--")
     axes.plot(qoi.date, qoi.sel(value_type="upper_limit"), "--")
@@ -801,31 +788,47 @@ def _qoi_history_report(
     :param plots_per_page: the number of plots on each page of the output
     """
     qoi_archive = qoi_archive.map_over_datasets(_sort_by_date)
+
+    qois = [
+        qoi.sortby("date")
+        for leaf in qoi_archive.leaves
+        for qoi in leaf.ds.data_vars.values()
+        if _can_plot_scalar_qoi_history(qoi)
+    ]
+    plotting_kwargs = dict(
+        date_min = min(node.ds.date.min() for node in qoi_archive.leaves),
+        date_max = max(node.ds.date.max() for node in qoi_archive.leaves)
+    )
+    page_margins = dict(
+        left=0.1,  # leave margin on left edge
+        right=0.9,  # leave margin on right edge
+        top=(1.0 - 0.5 / plots_per_page),  # top margin equal to half of single plot height
+        bottom=(0.5 / plots_per_page),  # bottom margin equal to half of single plot height
+        hspace=1.0,
+    )
+    _pdf_report(qois, output, page_margins, plots_per_page, _plot_scalar_qoi_history, plotting_kwargs)
+
+
+def _can_plot_scalar_qoi_history(qoi):
+    return qoi.where(numpy.isfinite(qoi)).dropna(_version_key, how="all").size > 0  # Avoid empty plots
+
+
+def _pdf_report(qois, output_pdf, page_margins, plots_per_page, plotting_method, plotting_kwargs, groupby=_qoi_group):
     open_figure = False
-    date_min = min(node.ds.date.min() for node in qoi_archive.leaves)
-    date_max = max(node.ds.date.max() for node in qoi_archive.leaves)
-    with PdfPages(output) as pdf:
-        for qoi_group in qoi_archive.leaves:
+    with PdfPages(output_pdf) as pdf:
+        for group, qois in itertools.groupby(sorted(qois, key=groupby), key=groupby):
             plot_num = 0
-            for qoi in qoi_group.ds.data_vars.values():
-                if qoi.where(numpy.isfinite(qoi)).dropna(_version_key, how="all").size == 0:  # Would be an empty plot
-                    continue  # Don't increment plot_num
+            for qoi in qois:
                 ax_num = plot_num % plots_per_page  # ax_num goes from 0 to (plots_per_page - 1)
                 if ax_num == 0:  # Starting new page
                     open_figure = True
                     fig, axes = matplotlib.pyplot.subplots(  # Create a new figure for a new page
                         plots_per_page,
                         figsize=(8.5, 11),
-                        gridspec_kw=dict(
-                            left=0.1,  # leave margin on left edge
-                            right=0.9,  # leave margin on right edge
-                            top=(1.0 - 0.5 / plots_per_page),  # top margin equal to half of single plot height
-                            bottom=(0.5 / plots_per_page),  # bottom margin equal to half of single plot height
-                            hspace=1.0,
-                        ),
+                        gridspec_kw=page_margins,
                     )
-                    fig.suptitle(qoi_group.name, fontweight="bold")
-                _plot_scalar_qoi_history(qoi, axes[ax_num], date_min, date_max)
+                    fig.suptitle(group, fontweight="bold")
+                plotting_method(qoi, axes[ax_num], **plotting_kwargs)
                 if ax_num == plots_per_page - 1:  # Ending a page
                     pdf.savefig()  # save current figure to a page
                     matplotlib.pyplot.close()
