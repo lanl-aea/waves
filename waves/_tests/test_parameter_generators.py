@@ -9,7 +9,6 @@ import numpy
 import xarray
 
 from waves import parameter_generators
-from waves._settings import _hash_coordinate_key
 from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
 from waves import _settings
 from waves import _utilities
@@ -505,9 +504,62 @@ test_create_set_names_cases = {
 )
 def test_create_set_names(parameter_study, template, expected_names):
     """Test the parameter set name generation"""
-    test_set_hashes = list(parameter_study.coords[_hash_coordinate_key].values)
+    test_set_hashes = list(parameter_study.coords[_settings._hash_coordinate_key].values)
     test_set_names = parameter_generators._create_set_names(test_set_hashes, template)
     assert list(test_set_names.values()) == expected_names
+
+
+test_update_set_names_cases = {
+    "custom template": (
+        parameter_generators.OneAtATime({"parameter_1": [1, 2]}).parameter_study,
+        _utilities._AtSignTemplate(f"out{_settings._template_placeholder}"),
+        ["out0", "out1"],
+    ),
+    "default template": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
+        None,
+        [
+            f"{_settings._default_set_name_template.rstrip(_settings._template_placeholder)}0",
+            f"{_settings._default_set_name_template.rstrip(_settings._template_placeholder)}1",
+        ],
+    ),
+    "nan parameter name": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
+        None,
+        [
+            f"{_settings._default_set_name_template.rstrip(_settings._template_placeholder)}0",
+            f"{_settings._default_set_name_template.rstrip(_settings._template_placeholder)}1",
+        ],
+    ),
+    "identical input/output": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
+        None,
+        [
+            f"{_settings._default_set_name_template.rstrip(_settings._template_placeholder)}0",
+            f"{_settings._default_set_name_template.rstrip(_settings._template_placeholder)}1",
+        ],
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "parameter_study, template, expected_names",
+    test_update_set_names_cases.values(),
+    ids=test_update_set_names_cases.keys(),
+)
+def test_update_set_names(parameter_study, template, expected_names):
+    """Check the generated and updated parameter set names against template arguments
+
+    :param str set_template: user supplied string to be used as a template for parameter names
+    :param list expected_names: list of expected parameter name strings
+    """
+    assert list(TemplateGenerator._set_names.values()) == expected_names
+    assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected_names
+
+    # Test that the update function runs with only a single set. Check that the names don't change.
+    TemplateGenerator._update_set_names()
+    assert list(TemplateGenerator._set_names.values()) == expected_names
+    assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected_names
 
 
 def test_open_parameter_study():
