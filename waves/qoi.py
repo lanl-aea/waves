@@ -787,8 +787,6 @@ def _qoi_history_report(
     :param output: history report output path
     :param plots_per_page: the number of plots on each page of the output
     """
-    qoi_archive = qoi_archive.map_over_datasets(_sort_by_date)
-
     qois = [
         qoi.sortby("date")
         for leaf in qoi_archive.leaves
