@@ -794,8 +794,8 @@ def _qoi_history_report(
         if _can_plot_scalar_qoi_history(qoi)
     ]
     plotting_kwargs = dict(
-        date_min = min(node.ds.date.min() for node in qoi_archive.leaves),
-        date_max = max(node.ds.date.max() for node in qoi_archive.leaves)
+        date_min = min(qoi.date.min() for qoi in qois),
+        date_max = max(qoi.date.max() for qoi in qois)
     )
     page_margins = dict(
         left=0.1,  # leave margin on left edge
@@ -815,8 +815,7 @@ def _pdf_report(qois, output_pdf, page_margins, plots_per_page, plotting_method,
     open_figure = False
     with PdfPages(output_pdf) as pdf:
         for group, qois in itertools.groupby(sorted(qois, key=groupby), key=groupby):
-            plot_num = 0
-            for qoi in qois:
+            for plot_num, qoi in enumerate(qois):
                 ax_num = plot_num % plots_per_page  # ax_num goes from 0 to (plots_per_page - 1)
                 if ax_num == 0:  # Starting new page
                     open_figure = True
@@ -831,7 +830,6 @@ def _pdf_report(qois, output_pdf, page_margins, plots_per_page, plotting_method,
                     pdf.savefig()  # save current figure to a page
                     matplotlib.pyplot.close()
                     open_figure = False
-                plot_num += 1
             if open_figure:  # If a figure is still open (hasn't been saved to a page)
                 for ax in axes[ax_num + 1 :]:  # noqa: E203
                     ax.clear()
