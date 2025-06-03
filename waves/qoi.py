@@ -838,24 +838,6 @@ def _pdf_report(qois, output_pdf, page_margins, plots_per_page, plotting_method,
                 matplotlib.pyplot.close()
 
 
-def _sort_by_date(dataset: xarray.Dataset) -> xarray.Dataset:
-    """Return an Xarray dataset sorted by the ``date`` coordinate
-
-    If the ``date`` coordinate does not exist, return the original dataset.
-
-    Intended for use with ``xarray.map_over_datasets`` method:
-    https://docs.xarray.dev/en/latest/generated/xarray.map_over_datasets.html
-
-    :param dataset: Xarray Dataset containing the ``date`` variable
-
-    :returns: The same Xarray Dataset after sorting
-    """
-    try:
-        return dataset.sortby("date")
-    except KeyError:
-        return dataset
-
-
 def _accept(calculated: pathlib.Path, expected: pathlib.Path) -> None:
     """Update expected QOI values to match the currently calculated values.
 
