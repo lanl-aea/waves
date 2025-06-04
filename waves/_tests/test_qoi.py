@@ -1451,6 +1451,124 @@ def test__get_plotting_name(qoi_array, expected):
     assert output == expected
 
 
+test__can_plot_scalar_qoi_history_cases = {
+    "all_floats": (
+        xarray.DataArray(
+            [[1.0, 2.0, 3.0, 4.0], [1.1, 2.1, 3.1, 4.1]],
+            coords={
+                "version": ["abcdef", "ghijkl"],
+                "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+            },
+            name="qoi1",
+            attrs={},
+        ),
+        True,
+    ),
+    "all_nan": (
+        xarray.DataArray(
+            [[numpy.nan, numpy.nan, numpy.nan, numpy.nan], [numpy.nan, numpy.nan, numpy.nan, numpy.nan]],
+            coords={
+                "version": ["abcdef", "ghijkl"],
+                "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+            },
+            name="qoi1",
+            attrs={},
+        ),
+        False,
+    ),
+    "mostly_nan": (
+        xarray.DataArray(
+            [[1.0, numpy.nan, numpy.nan, numpy.nan], [numpy.nan, numpy.nan, numpy.nan, numpy.nan]],
+            coords={
+                "version": ["abcdef", "ghijkl"],
+                "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+            },
+            name="qoi1",
+            attrs={},
+        ),
+        True,
+    ),
+    "no_version": (
+        xarray.DataArray(
+            [1.0, 2.0, 0.5, 3.0],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={},
+        ),
+        False,
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "qoi_array, expected",
+    test__can_plot_scalar_qoi_history_cases.values(),
+    ids=test__can_plot_scalar_qoi_history_cases.keys(),
+)
+def test__can_plot_scalar_qoi_history(qoi_array, expected):
+    output = qoi._can_plot_scalar_qoi_history(qoi_array)
+    assert output == expected
+
+
+test__can_plot_qoi_tolerance_check_cases = {
+    "all_floats": (
+        xarray.DataArray(
+            [1.0, 2.0, 0.5, 3.0],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={"within_tolerance": 1},
+        ),
+        True,
+    ),
+    "all_nan": (
+        xarray.DataArray(
+            [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={"within_tolerance": 0},
+        ),
+        False,
+    ),
+    "no_within_tolerance_attribute": (
+        xarray.DataArray(
+            [1.0, 2.0, 0.5, 3.0],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={},
+        ),
+        False,
+    ),
+    "some_nan": (
+        xarray.DataArray(
+            [1.0, numpy.nan, numpy.nan, numpy.nan],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={"within_tolerance": 0},
+        ),
+        False,
+    ),
+    "non_scalar": (
+        xarray.DataArray(
+            [[1.0, 1.0], [1.0, 1.0], [1.0, 1.0], [1.0, 1.0]],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"], "extra_dim": [0, 1]},
+            name="qoi1",
+            attrs={"within_tolerance": 0},
+        ),
+        False,
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "qoi_array, expected",
+    test__can_plot_qoi_tolerance_check_cases.values(),
+    ids=test__can_plot_qoi_tolerance_check_cases.keys(),
+)
+def test__can_plot_qoi_tolerance_check(qoi_array, expected):
+    output = qoi._can_plot_qoi_tolerance_check(qoi_array)
+    assert output == expected
+
+
 def test__plot_scalar_qoi_history():
     pass
 
@@ -1459,132 +1577,8 @@ def test__qoi_history_report():
     pass
 
 
-test__sort_by_date_cases = {
-    "minimally correct dataset": (
-        xarray.Dataset(
-            {
-                "data1": xarray.DataArray([1.0], coords={"date": [datetime.datetime(2025, 1, 1)]}),
-            },
-            coords={"date": [datetime.datetime(2025, 1, 1)]},
-        ),
-        xarray.Dataset(
-            {
-                "data1": xarray.DataArray([1.0], coords={"date": [datetime.datetime(2025, 1, 1)]}),
-            },
-            coords={"date": [datetime.datetime(2025, 1, 1)]},
-        ),
-    ),
-    "missing date coordinate should return original dataset": (
-        xarray.Dataset(
-            {
-                "data1": xarray.DataArray([1.0], coords={"coord1": [1]}),
-            },
-            coords={"coord1": [1]},
-        ),
-        xarray.Dataset(
-            {
-                "data1": xarray.DataArray([1.0], coords={"coord1": [1]}),
-            },
-            coords={"coord1": [1]},
-        ),
-    ),
-    "wrong date coordinate name ``time`` should return original dataset": (
-        xarray.Dataset(
-            {
-                "data1": xarray.DataArray([1.0], coords={"time": [datetime.datetime(2025, 1, 1)]}),
-            },
-            coords={"time": [datetime.datetime(2025, 1, 1)]},
-        ),
-        xarray.Dataset(
-            {
-                "data1": xarray.DataArray([1.0], coords={"time": [datetime.datetime(2025, 1, 1)]}),
-            },
-            coords={"time": [datetime.datetime(2025, 1, 1)]},
-        ),
-    ),
-    "single variable dataset out of order": (
-        xarray.Dataset(
-            {
-                "data1": xarray.DataArray(
-                    [1.0, 2.0], coords={"date": [datetime.datetime(2025, 1, 2), datetime.datetime(2025, 1, 1)]}
-                ),
-            },
-            coords={"date": [datetime.datetime(2025, 1, 2), datetime.datetime(2025, 1, 1)]},
-        ),
-        xarray.Dataset(
-            {
-                "data1": xarray.DataArray(
-                    [2.0, 1.0], coords={"date": [datetime.datetime(2025, 1, 1), datetime.datetime(2025, 1, 2)]}
-                ),
-            },
-            coords={"date": [datetime.datetime(2025, 1, 1), datetime.datetime(2025, 1, 2)]},
-        ),
-    ),
-    "multi variable dataset out of order": (
-        xarray.Dataset(
-            {
-                "data1": xarray.DataArray(
-                    [2.0, 1.0], coords={"date": [datetime.datetime(2025, 1, 2), datetime.datetime(2025, 1, 1)]}
-                ),
-                "data2": xarray.DataArray(
-                    [4.0, 3.0], coords={"date": [datetime.datetime(2025, 1, 4), datetime.datetime(2025, 1, 3)]}
-                ),
-            },
-            coords={
-                "date": [
-                    datetime.datetime(2025, 1, 1),
-                    datetime.datetime(2025, 1, 2),
-                    datetime.datetime(2025, 1, 3),
-                    datetime.datetime(2025, 1, 4),
-                ]
-            },
-        ),
-        xarray.Dataset(
-            {
-                "data1": xarray.DataArray(
-                    [1.0, 2.0, numpy.nan, numpy.nan],
-                    coords={
-                        "date": [
-                            datetime.datetime(2025, 1, 1),
-                            datetime.datetime(2025, 1, 2),
-                            datetime.datetime(2025, 1, 3),
-                            datetime.datetime(2025, 1, 4),
-                        ]
-                    },
-                ),
-                "data2": xarray.DataArray(
-                    [numpy.nan, numpy.nan, 3.0, 4.0],
-                    coords={
-                        "date": [
-                            datetime.datetime(2025, 1, 1),
-                            datetime.datetime(2025, 1, 2),
-                            datetime.datetime(2025, 1, 3),
-                            datetime.datetime(2025, 1, 4),
-                        ]
-                    },
-                ),
-            },
-            coords={
-                "date": [
-                    datetime.datetime(2025, 1, 1),
-                    datetime.datetime(2025, 1, 2),
-                    datetime.datetime(2025, 1, 3),
-                    datetime.datetime(2025, 1, 4),
-                ]
-            },
-        ),
-    ),
-}
-
-
-@pytest.mark.parametrize(
-    "qoi_set, expected",
-    test__sort_by_date_cases.values(),
-    ids=test__sort_by_date_cases.keys(),
-)
-def test__sort_by_date(qoi_set, expected):
-    output = qoi._sort_by_date(qoi_set)
-    assert expected.identical(output)
+def test__pdf_report():
+    pass
 
 
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/919
