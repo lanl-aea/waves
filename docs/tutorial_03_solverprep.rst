@@ -31,11 +31,6 @@ Directory Structure
    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
    files.
 
-   .. note::
-
-   If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
-   files.
-
    .. only:: not epub
 
       .. tab-set::
