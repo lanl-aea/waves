@@ -20,7 +20,7 @@
 
          .. code-block:: powershell
 
-            PS > mkdir ~/waves-tutorials
+            PS > New-Item ~/waves-tutorials -ItemType "Directory"
             PS > Set-Location ~/waves-tutorials
             PS > Get-Location
 
