@@ -385,7 +385,7 @@ below.
       .. tab-item:: Linux/MacOS
          :sync: bash
 
-         .. code-block:: bash
+         .. code-block::
 
             $ pwd
             /home/roppenheimer/waves-tutorials
@@ -415,7 +415,7 @@ below.
       .. tab-item:: Windows
          :sync: powershell
 
-         .. code-block:: powershell
+         .. code-block::
 
             PS > Get-Location
 
