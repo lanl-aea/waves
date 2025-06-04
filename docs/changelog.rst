@@ -5,7 +5,40 @@ Changelog
 #########
 
 *******************
-0.13.2 (unreleased)
+0.13.5 (unreleased)
+*******************
+
+New Features
+============
+- Experimental Quantity of Intereset (QOI) module for advanced post-processing and regression testing (:issue:`904`,
+  :merge:`1164`). By `Matthew Fister`_ and `Kyle Brindley`_.
+
+Internal Changes
+================
+- Skip ``twine check`` test on macOS until shell kill error is fixed. By `Kyle Brindley`_.
+- Restructure internal deployment around Gitlab-CI tag pipelines. By `Kyle Brindley`_.
+- Preserve QOI datatree structure when merging (:merge:`1205`). By `Matthew Fister`_.
+- Allow a QOI date attribute to be specified via the ``archive`` subcommand (:merge:`1211`). By `Matthew Fister`_.
+- Only propagate common attributes when merging QOI xarray objects. (:merge:`1206`). By `Matthew Fister`_.
+
+*******************
+0.13.4 (2025-05-29)
+*******************
+
+Internal Changes
+================
+- Fix PyPI deployments (:merge:`1200`). By `Kyle Brindley`_.
+
+*******************
+0.13.3 (2025-05-29)
+*******************
+
+Internal Changes
+================
+- Fix GitHub Actions deployments (:merge:`1199`). By `Kyle Brindley`_.
+
+*******************
+0.13.2 (2025-05-29)
 *******************
 
 Documentation
@@ -19,10 +52,12 @@ Documentation
 - Rewrite the Gmsh+Calculix tutorial as a fully open-source workflow equivalent to the existing quickstart with Abaqus
   (:merge:`1191`). By `Kyle Brindley`_.
 - Build documentation with full runtime dependencies for resolved type hints (:merge:`1195`). By `Kyle Brindley`_.
+- Minor updates to the pure SCons quickstart for better use of executable program path environment variable. By `Kyle
+  Brindley`_.
 
 Internal Changes
 ================
-- Move `_merge_parameter_studies` logic out of class and generalize for arbitrary number of studies
+- Begin generalizing internal parameter study merge operations for a future merge arbitrary number of studies feature
   (:issue:`841`, :merge:`1184`). By `Chris Johnson`_.
 - System test for printing available fetch files. By `Kyle Brindley`_.
 - Gitlab-CI job specific environment for HPC CI job. By `Kyle Brindley`_.

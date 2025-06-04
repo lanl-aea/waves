@@ -16,6 +16,7 @@ from waves import _visualize
 from waves import _build
 from waves import _parameter_study
 from waves import _print_study
+from waves import _qoi
 from waves.exceptions import WAVESError
 
 
@@ -90,6 +91,8 @@ def main() -> None:
             )
         elif args.subcommand == "print_study":
             _print_study.main(args.PARAMETER_STUDY_FILE)
+        elif args.subcommand == "qoi":
+            _qoi.main(args, parser)
         else:
             parser.print_help()
     except (WAVESError, RuntimeError) as err:
@@ -178,6 +181,13 @@ def get_parser() -> argparse.ArgumentParser:
                     "Output formatting subject to change",
         # fmt: on
         parents=[_print_study.get_parser()],
+    )
+
+    subparsers.add_parser(
+        "qoi",
+        help="Quantity of interest (QOI) tools",
+        description="Quantity of interest (QOI) tools",
+        parents=[_qoi.get_parser()],
     )
 
     return main_parser

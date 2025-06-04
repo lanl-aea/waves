@@ -13,6 +13,7 @@ recursive-exclude */*/*/build* *
 recursive-exclude *cache* *
 recursive-exclude */*cache* *
 recursive-exclude */*/*cache* *
+recursive-exclude */*/*/*cache* *
 recursive-exclude docs *
 recursive-exclude recipe* *
 recursive-exclude modulefiles *

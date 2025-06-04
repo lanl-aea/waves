@@ -46,6 +46,25 @@ Parameter Generators
       :inherited-members:
       :show-inheritance:
 
+**************************
+Quantity of Interest (QOI)
+**************************
+
+.. only:: html or epub
+
+   .. automodule:: waves.qoi
+      :members:
+      :inherited-members:
+      :show-inheritance:
+
+.. only:: latex or man
+
+   .. automodule:: waves.qoi
+      :noindex:
+      :members:
+      :inherited-members:
+      :show-inheritance:
+
 **********
 Exceptions
 **********

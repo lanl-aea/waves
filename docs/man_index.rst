@@ -155,6 +155,20 @@ print_study
    :nodefault:
    :path: print_study
 
+.. _qoi_cli:
+
+*********************
+|PROJECT| Subcommands
+*********************
+***
+qoi
+***
+
+.. argparse::
+   :ref: waves._main.get_parser
+   :nodefault:
+   :path: qoi
+
 ******************
 Python Package API
 ******************

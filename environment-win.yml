@@ -36,4 +36,4 @@ dependencies:
   - sphinx-copybutton >=0.5.1
   - sphinx-design
   - sphinxcontrib-bibtex
-  - xarray
+  - xarray >=2024.10.0

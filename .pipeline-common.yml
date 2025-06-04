@@ -144,7 +144,10 @@
     - if [[ -z ${version} ]]; then exit 1; fi
     # Job commands
     # Conda CI environment active
-    - scons install --distribution-name=${distribution_name}
+    - scons build --distribution-name=${distribution_name}
+    # FIXME: Find and fix the source of "zsh: killed" when executing "twine check" on macos
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/932
+    - if [[ $(uname) != "Darwin" ]]; then twine check build/dist/${distribution_filename}-${version}.tar.gz; fi
     - python -m venv pip-build-test
     # Python venv environment active
     - source pip-build-test/bin/activate

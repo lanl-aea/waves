@@ -4,7 +4,7 @@ Import("env")
 abaqus_journal = Builder(
     action=[
         (
-            "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.abspath} ${abaqus_options} "
+            "cd ${TARGET.dir.abspath} && ${ABAQUS_PROGRAM} cae -noGui ${SOURCE.abspath} ${abaqus_options} "
             "-- ${journal_options}"
         )
     ]
@@ -13,7 +13,7 @@ abaqus_journal = Builder(
 abaqus_solver = Builder(
     action=[
         (
-            "cd ${TARGET.dir.abspath} && ${abaqus_program} -job ${job} -input ${SOURCE.filebase} "
+            "cd ${TARGET.dir.abspath} && ${ABAQUS_PROGRAM} -job ${job} -input ${SOURCE.filebase} "
             "${abaqus_options} -interactive -ask_delete no"
         )
     ]
@@ -31,21 +31,18 @@ env.Append(
 env.AbaqusJournal(
     target=["rectangle_geometry.cae"],
     source=["rectangle_geometry.py"],
-    abaqus_program=env["ABAQUS_PROGRAM"],
 )
 
 # Partition
 env.AbaqusJournal(
     target=["rectangle_partition.cae"],
     source=["rectangle_partition.py", "rectangle_geometry.cae"],
-    abaqus_program=env["ABAQUS_PROGRAM"],
 )
 
 # Mesh
 env.AbaqusJournal(
     target=["rectangle_mesh.inp", "rectangle_mesh.cae"],
     source=["rectangle_mesh.py", "rectangle_partition.cae", "abaqus_utilities.py"],
-    abaqus_program=env["ABAQUS_PROGRAM"],
 )
 
 # Abaqus Solve
@@ -66,7 +63,6 @@ solve_targets = [
 target = env.AbaqusSolver(
     target=solve_targets,
     source=solve_sources,
-    abaqus_program=env["ABAQUS_PROGRAM"],
     job="rectangle_compression",
     program_options="-double both",
 )

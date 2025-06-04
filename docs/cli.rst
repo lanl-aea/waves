@@ -118,6 +118,16 @@ print_study
    :nodefault:
    :path: print_study
 
+.. _qoi_cli:
+
+qoi
+---
+
+.. argparse::
+   :ref: waves._main.get_parser
+   :nodefault:
+   :path: qoi
+
 .. _odb_extract_cli:
 
 ***********

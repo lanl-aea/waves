@@ -30,6 +30,17 @@ Parameter Generators
       :private-members:
       :show-inheritance:
 
+**************************
+Quantity of Interest (QOI)
+**************************
+
+.. automodule:: waves.qoi
+   :noindex:
+   :members:
+   :private-members:
+   :inherited-members:
+   :show-inheritance:
+
 **********
 Exceptions
 **********

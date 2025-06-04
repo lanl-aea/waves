@@ -3962,6 +3962,139 @@ def parameter_study_write(
     return targets
 
 
+class QOIPseudoBuilder:
+    """SCons Pseudo-Builder class which allows users to customize the QOI Pseudo-Builder.
+
+    .. warning::
+
+       This pseudo-builder is considered experimental pending early adopter end user trial and feedback.
+
+       The QOI xarray data array and dataset handling for expected/calculated comparisons should be stable, but the
+       output plotting and reporting formatting is subject to change.
+
+    :param collection_dir: Root directory of QOI archive artifacts.
+    :param build_dir: Root directory of SCons project build artifacts.
+    :param updated_expected: Update the expected QOI CSV source files to match the calculated QOI values instead of
+        comparing the calculated and expected values.
+    :param _program: The WAVES command line program call. Intended for internal use by developers to perform
+        in-repository system testing. End users should not change the default value of this argument.
+    """
+
+    def __init__(
+        self,
+        collection_dir: pathlib.Path,
+        build_dir: pathlib.Path,
+        update_expected: bool = False,
+        _program: str = "waves",
+    ) -> None:
+        self.collection_dir = collection_dir
+        self.build_dir = build_dir
+        self.update_expected = update_expected
+        self._program = _program
+
+    def __call__(
+        self,
+        env: SCons.Environment.Environment,
+        calculated: pathlib.Path,
+        expected: typing.Optional[pathlib.Path],
+        archive: bool = False,
+    ) -> SCons.Node.NodeList:
+        """SCons Pseudo-Builder for regression testing and archiving quantities of interest (QOIs).
+
+        This SCons Pseudo-Builder provides a convenient method for archiving and regression testing QOIs (such as
+        critical simulation outputs). When requested, it aggregates the calculated values in a directory for easy
+        archival. If expected values are specified, it compares them to the calculated values and reports any
+        differences to a CSV file. If there are differences which exceed the user-specified tolerances, an error is
+        raised. If ``self.update_expected`` is ``True``, the expected CSV files (in the source tree)
+        will be updated to match the calculated QOI values, and no comparison between the two will be performed.
+
+        :param calculated: Path to CSV file containing calculated QOIs. See :py:func:`qoi.read_qoi_set` for the CSV
+            format.
+
+        :param expected: Path to CSV file containing expected QOI values and tolerances. See :py:func:`qoi.read_qoi_set`
+            for the CSV format. See :py:func:`qoi.create_qoi` for the types of tolerances allowed. See :ref:`qoi_cli`
+            for how tolerances are checked.
+
+            Each of the tolerances are checked independently. If any fail, an error is raised.
+
+            If ``expected`` is not specified, then QOIs are archived but not compared to expected values. Either
+            ``expected`` or ``archive=True`` must be specified. An expected QOI file without tolerances is meaningless;
+            the regression test will always pass.
+
+        :param archive: If True, add the calculated QOIs to ``self.collection_dir`` alongside other archived QOIs. To
+            complete the archive, the QOI files collected in ``self.collection_dir`` should be copied to a read-only
+            central location using ``waves qoi archive``
+
+        :returns: list of SCons Target.
+            The list of targets associated with regression testing and archiving the QOIs. Building these targets will
+            regression test the QOIs and output a CSV file which contains the exact differences between calculated and
+            expected values. If ``archive == True``, these targets will also include moving the calculated QOIs CSV file
+            to the collection directory.
+        """
+        if not expected and not archive:
+            return ValueError("Either expected or archive=True must be specified.")
+        targets = list()
+        collection_dir = pathlib.Path(self.collection_dir)
+        file_to_archive = calculated
+        if expected and self.update_expected:
+            # If requested, update expected values with calculated values
+            # This overwrites the expected values in the source tree. Don't tell SCons we're modifying the source
+            # because that would create a dependency cycle. After this operation, the user needs to manually stage and
+            # commit these changes to the expected values.
+            # The action signature contains an absolute path (which interferes with caching), but this is not something
+            # that should ever be cached.
+            # Get expected CSV file in source directory
+            expected_source = env.File(expected).srcnode().abspath
+            accept_qoi_target = env.Command(
+                target=[f"{expected}.stdout"],
+                source=[calculated, expected],
+                action=(
+                    f"{self._program} qoi accept"
+                    + f" --calculated {calculated}"  # noqa: W503
+                    + f" --expected {expected_source}"  # noqa: W503
+                    + " > ${TARGETS[-1].abspath} 2>&1"  # noqa: W503
+                ),
+            )
+            # Because SCons doesn't know the real target (the expected CSV file in the source tree), it can't know if
+            # the target is out of date, so use AlwaysBuild().
+            env.AlwaysBuild(accept_qoi_target)
+            targets.extend(accept_qoi_target)
+
+        # Only perform the comparison if not updating expected values to match the calculated values
+        elif expected:
+            name = pathlib.Path(calculated).stem
+            diff = pathlib.Path(calculated).parent / f"{name}_diff.csv"
+            file_to_archive = diff
+            # Do the comparison and write results to file
+            comparison_target = env.Command(
+                target=[diff],
+                source=[calculated, expected],
+                action=f"{self._program} qoi diff --expected {expected} --calculated {calculated} --output {diff}",
+            )
+            targets.extend(comparison_target)
+            # Check the comparison results and raise error if not all QOIs are within tolerance
+            check_target = env.Command(
+                target=[f"{name}_check.stdout"],
+                source=[diff],
+                action=(f"{self._program} qoi check --diff {diff}" + " > ${TARGETS[-1].abspath} 2>&1"),
+            )
+            targets.extend(check_target)
+
+        # Add to collection_dir if requested
+        if archive:
+            # Archive the QOI diff results if it's available, otherwise archive the calculated values
+            # Keep directory hierarchy within build/qoi to avoid name conflicts
+            archive_location = collection_dir / pathlib.Path(file_to_archive).resolve().relative_to(self.build_dir)
+            targets.extend(
+                env.Command(
+                    target=archive_location,
+                    source=file_to_archive,
+                    action=SCons.Script.Copy("$TARGET", "$SOURCE"),
+                )
+            )
+        return targets
+
+
 class WAVESEnvironment(SConsEnvironment):
     """Thin overload of SConsEnvironment with WAVES construction environment methods and builders"""
 

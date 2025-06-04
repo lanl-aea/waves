@@ -174,4 +174,3 @@
 .. email addresses
 .. _`w13dev`: w13dev@lanl.gov
 .. _`Christopher Long`: cclong@lanl.gov
-.. _`Chris Johnson`: clj@lanl.gov

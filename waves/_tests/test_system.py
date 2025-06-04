@@ -75,6 +75,14 @@ system_tests = [
     pytest.param([string.Template("${waves_command} sobol_sequence --help")], None, marks=[pytest.mark.cli]),
     pytest.param([string.Template("${waves_command} one_at_a_time --help")], None, marks=[pytest.mark.cli]),
     pytest.param([string.Template("${waves_command} print_study --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} qoi --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} qoi accept --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} qoi diff --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} qoi check --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} qoi aggregate --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} qoi report --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} qoi archive --help")], None, marks=[pytest.mark.cli]),
+    pytest.param([string.Template("${waves_command} qoi plot-archive --help")], None, marks=[pytest.mark.cli]),
     pytest.param([string.Template("${odb_extract_command} --help")], None, marks=[pytest.mark.cli]),
     pytest.param(
         [string.Template("${waves_command} docs --print-local-path")],
@@ -143,6 +151,12 @@ system_tests = [
         [fetch_template, "scons ."],
         "tutorials/tutorial_writing_builders",
         marks=[pytest.mark.scons],
+    ),
+    pytest.param(
+        [fetch_template, string.Template("scons . --waves-command='${waves_command}'")],
+        "tutorials/tutorial_qoi",
+        marks=[pytest.mark.scons],
+        id="tutorial_qoi",
     ),
 ]
 
@@ -777,8 +791,12 @@ def test_system(
         for command in commands:
             if isinstance(command, string.Template):
                 command = command.substitute(template_substitution)
-            command = shlex.split(command, posix=not testing_windows)
-            subprocess.check_output(command, env=env, cwd=temp_path, text=True)
+            # TODO: Find a better way to split ``--waves-command='python -m waves._main'`` correctly for Windows
+            if "--waves-command" in command:
+                command_list = shlex.split(command, posix=True)
+            else:
+                command_list = shlex.split(command, posix=not testing_windows)
+            subprocess.check_output(command_list, env=env, cwd=temp_path, text=True)
     except Exception as err:
         raise err
     else:

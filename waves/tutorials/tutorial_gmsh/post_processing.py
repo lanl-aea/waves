@@ -31,7 +31,8 @@ def combine_data(input_files, group_path, concat_coord):
     """
     paths = [pathlib.Path(input_file).resolve() for input_file in input_files]
     data_generator = (
-        xarray.open_dataset(path, group=group_path).assign_coords({concat_coord: path.parent.name}) for path in paths
+        xarray.open_dataset(path, group=group_path, engine="h5netcdf").assign_coords({concat_coord: path.parent.name})
+        for path in paths
     )
     combined_data = xarray.concat(data_generator, concat_coord)
     combined_data.close()
@@ -49,7 +50,7 @@ def merge_parameter_study(parameter_study_file, combined_data):
     :returns: Combined data
     :rtype: xarray.DataArray
     """
-    parameter_study = xarray.open_dataset(parameter_study_file)
+    parameter_study = xarray.open_dataset(parameter_study_file, engine="h5netcdf")
     combined_data = combined_data.merge(parameter_study)
     parameter_study.close()
     return combined_data
