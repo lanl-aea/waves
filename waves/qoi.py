@@ -558,7 +558,7 @@ def _plot_qoi_tolerance_check(qoi: xarray.DataArray, axes: matplotlib.axes.Axes)
         _plot_scalar_tolerance_check(qoi, axes)
 
 
-def _can_plot_qoi_tolerance_check(qoi: xarray.DataArray):
+def _can_plot_qoi_tolerance_check(qoi: xarray.DataArray) -> bool:
     """Checks if a QOI meets requirements to be plotted by `_plot_qoi_tolerance_check()`.
 
     Requires the following:
@@ -766,7 +766,14 @@ def _qoi_history_report(
     _pdf_report(qois, output, page_margins, plots_per_page, _plot_scalar_qoi_history, plotting_kwargs)
 
 
-def _can_plot_scalar_qoi_history(qoi):
+def _can_plot_scalar_qoi_history(qoi: xarray.DataArray) -> bool:
+    """Checks if a QOI meets requirements to be plotted by `_plot_scalar_qoi_history()`.
+
+    Requires the following:
+        1. The QOI contains at least 1 finite value
+
+    :param qoi: Quantity of interest data array as built by :meth:`create_qoi`
+    """
     return qoi.where(numpy.isfinite(qoi)).dropna(_version_key, how="all").size > 0  # Avoid empty plots
 
 
