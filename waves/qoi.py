@@ -559,6 +559,14 @@ def _plot_qoi_tolerance_check(qoi: xarray.DataArray, axes: matplotlib.axes.Axes)
 
 
 def _can_plot_qoi_tolerance_check(qoi):
+    """Checks if a QOI meets requirements to be plotted by `_plot_qoi_tolerance_check()`.
+    
+    Requires the following:
+        1. "value_type" is a dimension
+        2. "within_tolerance" is an attribute
+        3. The QOI is scalar
+        4. No values (e.g. calculated, expected, lower_limit, upper_limit) are null
+    """
     if "value_type" not in qoi.dims:
         return False
     if "within_tolerance" not in qoi.attrs:
@@ -567,6 +575,8 @@ def _can_plot_qoi_tolerance_check(qoi):
     if qoi_dim == 1:  # Scalar QOI
         if qoi.isnull().any():
             return False
+    else:
+        return False
     return True
 
 
