@@ -663,10 +663,7 @@ def _write_qoi_report(qoi_archive: xarray.DataTree, output: pathlib.Path, plots_
     :param plots_per_page: the number of plots on each page of the output
     """
     qois = [
-        qoi
-        for leaf in qoi_archive.leaves
-        for qoi in leaf.ds.data_vars.values()
-        if _can_plot_qoi_tolerance_check(qoi)
+        qoi for leaf in qoi_archive.leaves for qoi in leaf.ds.data_vars.values() if _can_plot_qoi_tolerance_check(qoi)
     ]
     page_margins = dict(
         left=0.6,  # plot on right half of page because text will go on left side
@@ -746,10 +743,7 @@ def _qoi_history_report(
         for qoi in leaf.ds.data_vars.values()
         if _can_plot_scalar_qoi_history(qoi)
     ]
-    plotting_kwargs = dict(
-        date_min = min(qoi.date.min() for qoi in qois),
-        date_max = max(qoi.date.max() for qoi in qois)
-    )
+    plotting_kwargs = dict(date_min=min(qoi.date.min() for qoi in qois), date_max=max(qoi.date.max() for qoi in qois))
     page_margins = dict(
         left=0.1,  # leave margin on left edge
         right=0.9,  # leave margin on right edge
