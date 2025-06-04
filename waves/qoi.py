@@ -792,7 +792,7 @@ def _pdf_report(
     :param output_pdf: PDF report output path
     :param page_margins: Dictionary of kwargs passed as `gridspec_kw` to `matplotlib.pyplot.subplots()`
     :param plots_per_page: the number of plots on each page of the output
-    :param plotting_method: QOI plotting function which takes a QOI as the first arg and a plotting axis as the second arg
+    :param plotting_method: plotting function which takes a QOI and a plotting axis as the first and second args
     :param plotting_kwargs: additional kwargs to pass to `plotting_method`
     :param groupby: Function which takes a QOI as the only positional argument and returns a string.
         The returned string will be used to group the QOIs and as a PDF page header.

@@ -1450,13 +1450,124 @@ def test__get_plotting_name(qoi_array, expected):
     output = qoi._get_plotting_name(qoi_array)
     assert output == expected
 
+test__can_plot_scalar_qoi_history_cases = {
+    "all_floats": (
+        xarray.DataArray(
+            [[1.0, 2.0, 3.0, 4.0], [1.1, 2.1, 3.1, 4.1]],
+            coords={
+                "version": ["abcdef", "ghijkl"],
+                "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+            },
+            name="qoi1",
+            attrs={},
+        ),
+        True,
+    ),
+    "all_nan": (
+        xarray.DataArray(
+            [[numpy.nan, numpy.nan, numpy.nan, numpy.nan], [numpy.nan, numpy.nan, numpy.nan, numpy.nan]],
+            coords={
+                "version": ["abcdef", "ghijkl"],
+                "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+            },
+            name="qoi1",
+            attrs={},
+        ),
+        False,
+    ),
+    "mostly_nan": (
+        xarray.DataArray(
+            [[1.0, numpy.nan, numpy.nan, numpy.nan], [numpy.nan, numpy.nan, numpy.nan, numpy.nan]],
+            coords={
+                "version": ["abcdef", "ghijkl"],
+                "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+            },
+            name="qoi1",
+            attrs={},
+        ),
+        True,
+    ),
+    "no_version": (
+        xarray.DataArray(
+            [1.0, 2.0, 0.5, 3.0],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={},
+        ),
+        False,
+    ),
+}
 
-def test__can_plot_scalar_qoi_history():
-    pass
+
+@pytest.mark.parametrize(
+    "qoi_array, expected",
+    test__can_plot_scalar_qoi_history_cases.values(),
+    ids=test__can_plot_scalar_qoi_history_cases.keys(),
+)
+def test__can_plot_scalar_qoi_history(qoi_array, expected):
+    output = qoi._can_plot_scalar_qoi_history(qoi_array)
+    assert output == expected
+
+test__can_plot_qoi_tolerance_check_cases = {
+    "all_floats": (
+        xarray.DataArray(
+            [1.0, 2.0, 0.5, 3.0],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={"within_tolerance": 1},
+        ),
+        True,
+    ),
+    "all_nan": (
+        xarray.DataArray(
+            [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={"within_tolerance": 0},
+        ),
+        True,
+    ),
+    "no_within_tolerance_attribute": (
+        xarray.DataArray(
+            [1.0, 2.0, 0.5, 3.0],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={},
+        ),
+        False,
+    ),
+    "some_nan": (
+        xarray.DataArray(
+            [1.0, numpy.nan, numpy.nan, numpy.nan],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+            name="qoi1",
+            attrs={"within_tolerance": 0},
+        ),
+        False,
+    ),
+    "non_scalar": (
+        xarray.DataArray(
+            [[1.0, 1.0], [1.0, 1.0], [1.0, 1.0], [1.0, 1.0]],
+            coords={
+                "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                "extra_dim": [0, 1]
+            },
+            name="qoi1",
+            attrs={"within_tolerance": 0},
+        ),
+        False,
+    ),
+}
 
 
-def test__can_plot_qoi_tolerance_check():
-    pass
+@pytest.mark.parametrize(
+    "qoi_array, expected",
+    test__can_plot_qoi_tolerance_check_cases.values(),
+    ids=test__can_plot_qoi_tolerance_check_cases.keys(),
+)
+def test__can_plot_qoi_tolerance_check(qoi_array, expected):
+    output = qoi._can_plot_qoi_tolerance_check(qoi_array)
+    assert output == expected
 
 
 def test__plot_scalar_qoi_history():
