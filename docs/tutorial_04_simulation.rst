@@ -28,26 +28,73 @@ Directory Structure
 
 .. note::
 
-    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
-    files.
+   If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+   files.
 
-    .. code-block:: bash
+   .. only:: not epub
 
-        $ pwd
-        /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite --tutorial 3 && mv tutorial_03_solverprep_SConstruct SConstruct
-        Destination directory: '/home/roppenheimer/waves-tutorials'
+      .. tab-set::
+         :sync-group: OS
+
+         .. tab-item:: Linux/MacOS
+            :sync: bash
+
+            .. code-block::
+
+               $ pwd
+               /home/roppenheimer/waves-tutorials
+               $ waves fetch --overwrite --tutorial 3 && mv tutorial_03_solverprep_SConstruct SConstruct
+               WAVES fetch
+               Destination directory: '/home/roppenheimer/waves-tutorials'
+
+         .. tab-item:: Windows
+            :sync: powershell
+
+            .. code-block::
+
+               PS > Get-Location
+
+               Path
+               ----
+               C:\Users\roppenheimer\waves-tutorials
+
+               PS > waves fetch --overwrite --tutorial 3 && Move-Item tutorial_03_solverprep_SConstruct SConstruct -Force
+               WAVES fetch
+               Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
 4. Fetch the ``tutorial_03_solverprep`` file and create a new file named ``tutorial_04_simulation``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_03_solverprep && cp tutorial_03_solverprep tutorial_04_simulation
-   WAVES fetch
-   Destination directory: '/home/roppenheimer/waves-tutorials'
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block:: bash
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ waves fetch --overwrite tutorials/tutorial_03_solverprep && cp tutorial_03_solverprep tutorial_04_simulation
+            WAVES fetch
+            Destination directory: '/home/roppenheimer/waves-tutorials'
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > waves fetch --overwrite tutorials\tutorial_03_solverprep && Copy-Item tutorial_03_solverprep tutorial_04_simulation
+            WAVES fetch
+            Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
 .. _tutorials_tutorial_simulation:
 
@@ -183,28 +230,68 @@ Build Targets
 
 10. Build the new targets
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ scons tutorial_04_simulation
-   scons: Reading SConscript files ...
-   Checking whether /apps/abaqus/Commands/abq2024 program exists.../apps/abaqus/Commands/abq2024
-   Checking whether abq2024 program exists.../apps/abaqus/Commands/abq2024
-   scons: done reading SConscript files.
-   scons: Building targets ...
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
-   Copy("build/tutorial_04_simulation/rectangle_compression.inp", "modsim_package/abaqus/rectangle_compression.inp")
-   Copy("build/tutorial_04_simulation/assembly.inp", "modsim_package/abaqus/assembly.inp")
-   Copy("build/tutorial_04_simulation/boundary.inp", "modsim_package/abaqus/boundary.inp")
-   Copy("build/tutorial_04_simulation/field_output.inp", "modsim_package/abaqus/field_output.inp")
-   Copy("build/tutorial_04_simulation/materials.inp", "modsim_package/abaqus/materials.inp")
-   Copy("build/tutorial_04_simulation/parts.inp", "modsim_package/abaqus/parts.inp")
-   Copy("build/tutorial_04_simulation/history_output.inp", "modsim_package/abaqus/history_output.inp")
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2024 -job rectangle_compression -input rectangle_compression -double both -interactive -ask_delete no > rectangle_compression.stdout 2>&1
-   scons: done building targets.
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ scons tutorial_04_simulation
+            scons: Reading SConscript files ...
+            Checking whether /apps/abaqus/Commands/abq2024 program exists.../apps/abaqus/Commands/abq2024
+            Checking whether abq2024 program exists.../apps/abaqus/Commands/abq2024
+            scons: done reading SConscript files.
+            scons: Building targets ...
+            cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
+            cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
+            cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
+            Copy("build/tutorial_04_simulation/rectangle_compression.inp", "modsim_package/abaqus/rectangle_compression.inp")
+            Copy("build/tutorial_04_simulation/assembly.inp", "modsim_package/abaqus/assembly.inp")
+            Copy("build/tutorial_04_simulation/boundary.inp", "modsim_package/abaqus/boundary.inp")
+            Copy("build/tutorial_04_simulation/field_output.inp", "modsim_package/abaqus/field_output.inp")
+            Copy("build/tutorial_04_simulation/materials.inp", "modsim_package/abaqus/materials.inp")
+            Copy("build/tutorial_04_simulation/parts.inp", "modsim_package/abaqus/parts.inp")
+            Copy("build/tutorial_04_simulation/history_output.inp", "modsim_package/abaqus/history_output.inp")
+            cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2024 -job rectangle_compression -input rectangle_compression -double both -interactive -ask_delete no > rectangle_compression.stdout 2>&1
+            scons: done building targets.
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > scons tutorial_04_simulation
+            scons: Reading SConscript files ...
+            Checking whether '/apps/abaqus/Commands/abq2024' program exists...no
+            Checking whether '/usr/projects/ea/abaqus/Commands/abq2024' program exists...no
+            Checking whether 'abq2024' program exists...C:\SIMULIA\Commands\abq2024.BAT
+            Checking whether 'abaqus' program exists...C:\SIMULIA\Commands\abaqus.BAT
+            scons: done reading SConscript files.
+            scons: Building targets ...
+            cd C:\Users\roppenheimer\waves-tutorials\build\tutorial_04_simulation && C:\SIMULIA\Commands\abq2024.BAT cae -noGUI C:\Users\roppenheimer\waves-tutorials\modsim_package\abaqus\rectangle_geometry.py -- > C:\Users\roppenheimer\waves-tutorials\build\tutorial_04_simulation\rectangle_geometry.cae.stdout 2>&1
+            cd C:\Users\roppenheimer\waves-tutorials\build\tutorial_04_simulation && C:\SIMULIA\Commands\abq2024.BAT cae -noGUI C:\Users\roppenheimer\waves-tutorials\modsim_package\abaqus\rectangle_partition.py -- > C:\Users\roppenheimer\waves-tutorials\build\tutorial_04_simulation\rectangle_partition.cae.stdout 2>&1
+            cd C:\Users\roppenheimer\waves-tutorials\build\tutorial_04_simulation && C:\SIMULIA\Commands\abq2024.BAT cae -noGUI C:\Users\roppenheimer\waves-tutorials\modsim_package\abaqus\rectangle_mesh.py -- > C:\Users\roppenheimer\waves-tutorials\build\tutorial_04_simulation\rectangle_mesh.inp.stdout 2>&1
+            Copy("build\tutorial_04_simulation\rectangle_compression.inp", "modsim_package\abaqus\rectangle_compression.inp")
+            Copy("build\tutorial_04_simulation\assembly.inp", "modsim_package\abaqus\assembly.inp")
+            Copy("build\tutorial_04_simulation\boundary.inp", "modsim_package\abaqus\boundary.inp")
+            Copy("build\tutorial_04_simulation\field_output.inp", "modsim_package\abaqus\field_output.inp")
+            Copy("build\tutorial_04_simulation\materials.inp", "modsim_package\abaqus\materials.inp")
+            Copy("build\tutorial_04_simulation\parts.inp", "modsim_package\abaqus\parts.inp")
+            Copy("build\tutorial_04_simulation\history_output.inp", "modsim_package\abaqus\history_output.inp")
+            cd C:\Users\roppenheimer\waves-tutorials\build\tutorial_04_simulation && C:\SIMULIA\Commands\abq2024.BAT -interactive -ask_delete no -job rectangle_compression -input rectangle_compression -double both > C:\Users\roppenheimer\waves-tutorials\build\tutorial_04_simulation\rectangle_compression.odb.stdout 2>&1
+            scons: done building targets.
 
 ************
 Output Files
@@ -213,41 +300,92 @@ Output Files
 Explore the contents of the ``build`` directory using the ``tree`` command against the ``build`` directory, as shown
 below.
 
-.. code-block:: bash
+.. only:: not epub
 
-    $ pwd
-    /home/roppenheimer/waves-tutorials
-    $ tree build/tutorial_04_simulation/
-    build/tutorial_04_simulation/
-    |-- abaqus.rpy
-    |-- abaqus.rpy.1
-    |-- abaqus.rpy.2
-    |-- assembly.inp
-    |-- boundary.inp
-    |-- field_output.inp
-    |-- history_output.inp
-    |-- materials.inp
-    |-- parts.inp
-    |-- rectangle_compression.com
-    |-- rectangle_compression.dat
-    |-- rectangle_compression.inp
-    |-- rectangle_compression.msg
-    |-- rectangle_compression.odb
-    |-- rectangle_compression.prt
-    |-- rectangle_compression.sta
-    |-- rectangle_compression.stdout
-    |-- rectangle_geometry.cae
-    |-- rectangle_geometry.cae.stdout
-    |-- rectangle_geometry.jnl
-    |-- rectangle_mesh.cae
-    |-- rectangle_mesh.inp
-    |-- rectangle_mesh.inp.stdout
-    |-- rectangle_mesh.jnl
-    |-- rectangle_partition.cae
-    |-- rectangle_partition.cae.stdout
-    `-- rectangle_partition.jnl
+   .. tab-set::
+      :sync-group: OS
 
-    0 directories, 27 files
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ tree build/tutorial_04_simulation/
+            build/tutorial_04_simulation/
+            |-- abaqus.rpy
+            |-- abaqus.rpy.1
+            |-- abaqus.rpy.2
+            |-- assembly.inp
+            |-- boundary.inp
+            |-- field_output.inp
+            |-- history_output.inp
+            |-- materials.inp
+            |-- parts.inp
+            |-- rectangle_compression.com
+            |-- rectangle_compression.dat
+            |-- rectangle_compression.inp
+            |-- rectangle_compression.msg
+            |-- rectangle_compression.odb
+            |-- rectangle_compression.prt
+            |-- rectangle_compression.sta
+            |-- rectangle_compression.stdout
+            |-- rectangle_geometry.cae
+            |-- rectangle_geometry.cae.stdout
+            |-- rectangle_geometry.jnl
+            |-- rectangle_mesh.cae
+            |-- rectangle_mesh.inp
+            |-- rectangle_mesh.inp.stdout
+            |-- rectangle_mesh.jnl
+            |-- rectangle_partition.cae
+            |-- rectangle_partition.cae.stdout
+            `-- rectangle_partition.jnl
+
+            0 directories, 27 files
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-Location
+
+               Path
+               ----
+               C:\Users\roppenheimer\waves-tutorials
+
+            PS > tree build\tutorial_04_simulation /F
+            C:\USERS\ROPPENHEIMER\WAVES-TUTORIALS\BUILD\TUTORIAL_04_SIMULATION
+                abaqus.rpy
+                abaqus.rpy.1
+                abaqus.rpy.2
+                assembly.inp
+                boundary.inp
+                field_output.inp
+                history_output.inp
+                materials.inp
+                parts.inp
+                rectangle_compression.com
+                rectangle_compression.dat
+                rectangle_compression.inp
+                rectangle_compression.msg
+                rectangle_compression.odb
+                rectangle_compression.odb.stdout
+                rectangle_compression.prt
+                rectangle_compression.sta
+                rectangle_geometry.cae
+                rectangle_geometry.cae.stdout
+                rectangle_geometry.jnl
+                rectangle_mesh.cae
+                rectangle_mesh.inp
+                rectangle_mesh.inp.stdout
+                rectangle_mesh.jnl
+                rectangle_partition.cae
+                rectangle_partition.cae.stdout
+                rectangle_partition.jnl
+
+            No subfolders exist
 
 The ``build/tutorial_04_simulation`` directory contains several different subsets of related files:
 
@@ -266,11 +404,33 @@ Workflow Visualization
 
 View the workflow directed graph by running the following command and opening the image in your preferred image viewer.
 
-.. code-block::
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_04_simulation --output-file tutorial_04_simulation.png --width=28 --height=5 --exclude-list /usr/bin .stdout .jnl .prt .com
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ waves visualize tutorial_04_simulation --output-file tutorial_04_simulation.png --width=28 --height=5 --exclude-list /usr/bin .stdout .jnl .prt .com
+
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > waves visualize tutorial_04_simulation --output-file tutorial_04_simulation.png --width=28 --height=5 --exclude-list .stdout .jnl .prt .com
 
 The output should look similar to the figure below.
 
