@@ -1450,6 +1450,7 @@ def test__get_plotting_name(qoi_array, expected):
     output = qoi._get_plotting_name(qoi_array)
     assert output == expected
 
+
 test__can_plot_scalar_qoi_history_cases = {
     "all_floats": (
         xarray.DataArray(
@@ -1508,6 +1509,7 @@ def test__can_plot_scalar_qoi_history(qoi_array, expected):
     output = qoi._can_plot_scalar_qoi_history(qoi_array)
     assert output == expected
 
+
 test__can_plot_qoi_tolerance_check_cases = {
     "all_floats": (
         xarray.DataArray(
@@ -1548,10 +1550,7 @@ test__can_plot_qoi_tolerance_check_cases = {
     "non_scalar": (
         xarray.DataArray(
             [[1.0, 1.0], [1.0, 1.0], [1.0, 1.0], [1.0, 1.0]],
-            coords={
-                "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
-                "extra_dim": [0, 1]
-            },
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"], "extra_dim": [0, 1]},
             name="qoi1",
             attrs={"within_tolerance": 0},
         ),
