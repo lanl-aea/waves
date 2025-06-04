@@ -1451,11 +1451,23 @@ def test__get_plotting_name(qoi_array, expected):
     assert output == expected
 
 
+def test__can_plot_scalar_qoi_history():
+    pass
+
+
+def test__can_plot_qoi_tolerance_check():
+    pass
+
+
 def test__plot_scalar_qoi_history():
     pass
 
 
 def test__qoi_history_report():
+    pass
+
+
+def test__pdf_report():
     pass
 
 
