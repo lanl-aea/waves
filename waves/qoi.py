@@ -767,7 +767,7 @@ def _qoi_history_report(
 
 
 def _can_plot_scalar_qoi_history(qoi: xarray.DataArray) -> bool:
-    """Checks if a QOI meets requirements to be plotted by `_plot_scalar_qoi_history()`.
+    """Checks if a QOI meets requirements to be plotted by :meth:`_plot_scalar_qoi_history`.
 
     Requires the following:
         1. The QOI contains at least 1 finite value
