@@ -510,10 +510,28 @@ def test_create_set_names(parameter_study, template, expected_names):
 
 
 test_update_set_names_cases = {
-    "custom template": (
-        parameter_generators.OneAtATime({"parameter_1": [1, 2]}).parameter_study,
+    "custom set name template": (
+        parameter_generators.OneAtATime(
+            {"parameter_1": [1, 2]}, set_name_template=f"out{_settings._template_placeholder}"
+        ).parameter_study,
         _utilities._AtSignTemplate(f"out{_settings._template_placeholder}"),
         ["out0", "out1"],
+    ),
+    "custom file name template": (
+        parameter_generators.OneAtATime(
+            {"parameter_1": [1, 2]}, output_file_template=f"out{_settings._template_placeholder}"
+        ).parameter_study,
+        _utilities._AtSignTemplate(f"out{_settings._template_placeholder}"),
+        ["out0", "out1"],
+    ),
+    "custom file name template override": (
+        parameter_generators.OneAtATime(
+            {"parameter_1": [1, 2]},
+            set_name_template=f"out{_settings._template_placeholder}",
+            output_file_template=f"override{_settings._template_placeholder}",
+        ).parameter_study,
+        _utilities._AtSignTemplate(f"out{_settings._template_placeholder}"),
+        ["override0", "override1"],
     ),
     "default template": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
@@ -523,10 +541,10 @@ test_update_set_names_cases = {
             f"{_settings._default_set_name_template.rstrip(_settings._template_placeholder)}1",
         ],
     ),
-    "nan parameter name": (
+    "nan parameter values": (
         xarray.merge(
             [
-                parameter_generators.OneAtATime({"parameter_1": [1, 2]}).parameter_study.swap_dims(
+                parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study.swap_dims(
                     {_settings._set_coordinate_key: _settings._hash_coordinate_key}
                 ),
                 parameter_generators.OneAtATime({"parameter_2": ["a"]})
