@@ -39,39 +39,117 @@ Directory Structure
 
 .. note::
 
-    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
-    files.
+   If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+   files.
 
-    .. code-block::
+   .. only:: not epub
 
-        $ pwd
-        /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite --tutorial 0 && mv tutorial_00_SConstruct SConstruct
-        WAVES fetch
-        Destination directory: '/home/roppenheimer/waves-tutorials'
+      .. tab-set::
+         :sync-group: OS
 
+         .. tab-item:: Linux/MacOS
+            :sync: bash
+
+            .. code-block::
+
+               $ pwd
+               /home/roppenheimer/waves-tutorials
+               $ waves fetch --overwrite --tutorial 0 && mv tutorial_00_SConstruct SConstruct
+               WAVES fetch
+               Destination directory: '/home/roppenheimer/waves-tutorials'
+
+         .. tab-item:: Windows
+            :sync: powershell
+
+            .. code-block::
+
+               PS > Get-Location
+
+               Path
+               ----
+               C:\Users\roppenheimer\waves-tutorials
+
+               PS > waves fetch --overwrite --tutorial 0 && Move-Item tutorial_00_SConstruct SConstruct -Force
+               WAVES fetch
+               Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
 4. Within the ``waves-tutorials`` directory, create a new directory called
    ``modsim_package/abaqus``. For example, in a bash shell:
 
-.. code-block::
+.. only:: not epub
 
-    $ pwd
-    /home/roppenheimer/waves-tutorials
-    $ mkdir -p modsim_package/abaqus
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ mkdir -p modsim_package/abaqus
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > mkdir modsim_package/abaqus
 
 5. Create Python module initialization files to create a project specific local Python package.
 
 .. admonition:: waves-tutorials/modsim_package/__init__.py and waves-tutorials/modsim_package/abaqus/__init__.py
+   .. only:: not epub
 
-   .. code-block::
+      .. tab-set::
+         :sync-group: OS
 
-      $ pwd
-      /home/roppenheimer/waves-tutorials
-      $ waves fetch tutorials/modsim_package/__init__.py tutorials/modsim_package/abaqus/__init__.py --destination modsim_package
-      $ find . -name "__init__.py"
-      ./modsim_package/__init__.py
-      ./modsim_package/abaqus/__init__.py
+         .. tab-item:: Linux/MacOS
+            :sync: bash
+
+            .. code-block::
+
+               $ pwd
+               /home/roppenheimer/waves-tutorials
+               $ waves fetch tutorials/modsim_package/__init__.py tutorials/modsim_package/abaqus/__init__.py --destination modsim_package
+               $ find . -name "__init__.py"
+               ./modsim_package/__init__.py
+               ./modsim_package/abaqus/__init__.py
+
+         .. tab-item:: Windows
+            :sync: powershell
+
+            .. code-block::
+
+               PS > Get-Location
+
+               Path
+               ----
+               C:\Users\roppenheimer\waves-tutorials
+   
+               PS > waves fetch tutorials/modsim_package/__init__.py tutorials/modsim_package/abaqus/__init__.py --destination modsim_package
+               WAVES fetch
+               Destination directory: 'modsim_package'
+               PS > Get-ChildItem -Path . -Recurse "__init__.py"
+   
+                   Directory: C:\Users\roppenheimer\waves-tutorials\modsim_package
+   
+               Mode                 LastWriteTime         Length Name
+               ----                 -------------         ------ ----
+               -a---             6/9/2023 4:32 PM              0 __init__.py
+   
+                   Directory: C:\Users\roppenheimer\waves-tutorials\modsim_package\abaqus
+   
+               Mode                 LastWriteTime         Length Name
+               ----                 -------------         ------ ----
+               -a---            6/9/2023  4:32 PM              0 __init__.py
 
 ***************
 SConscript File
@@ -361,19 +439,51 @@ Now that you've created the geometry task in ``tutorial_01_geometry``, this sect
 13. To build the targets only for the ``tutorial_01_geometry`` workflow, execute the following
     command:
 
-    .. code-block::
+   .. only:: not epub
 
-        $ pwd
-        /home/roppenheimer/waves-tutorials
-        $ scons tutorial_01_geometry
-        scons: Reading SConscript files ...
-        Checking whether /apps/abaqus/Commands/abq2024 program exists.../apps/abaqus/Commands/abq2024
-        Checking whether abq2024 program exists.../apps/abaqus/Commands/abq2024
-        scons: done reading SConscript files.
-        scons: Building targets ...
-        cd /home/roppenheimer/waves-tutorials/build/tutorial_01_geometry && /apps/abaqus/Commands/abq2024 cae -noGui
-        /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.cae.stdout 2>&1
-        scons: done building targets.
+      .. tab-set::
+         :sync-group: OS
+
+         .. tab-item:: Linux/MacOS
+            :sync: bash
+
+            .. code-block::
+
+               $ pwd
+               /home/roppenheimer/waves-tutorials
+               $ scons tutorial_01_geometry
+               scons: Reading SConscript files ...
+               Checking whether /apps/abaqus/Commands/abq2024 program exists.../apps/abaqus/Commands/abq2024
+               Checking whether abq2024 program exists.../apps/abaqus/Commands/abq2024
+               scons: done reading SConscript files.
+               scons: Building targets ...
+               cd /home/roppenheimer/waves-tutorials/build/tutorial_01_geometry && /apps/abaqus/Commands/abq2024 cae -noGui
+               /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.cae.stdout 2>&1
+               scons: done building targets.
+
+         .. tab-item:: Windows
+            :sync: powershell
+
+            .. code-block::
+
+               PS > Get-Location
+
+               Path
+               ----
+               C:\Users\roppenheimer\waves-tutorials
+
+               PS > scons tutorial_01_geometry
+               scons: Reading SConscript files ...
+               Checking whether '/apps/abaqus/Commands/abq2024' program exists...no
+               Checking whether '/usr/projects/ea/abaqus/Commands/abq2024' program exists...no
+               Checking whether 'abq2024' program exists...C:\SIMULIA\Commands\abq2024.BAT
+               Checking whether 'abaqus' program exists...C:\SIMULIA\Commands\abaqus.BAT
+               scons: done reading SConscript files.
+               scons: Building targets ...
+               cd C:\Users\roppenheimer\waves-tutorials\build\tutorial_01_geometry && C:\SIMULIA\Commands\abq2024.BAT cae -noGUI 
+               C:\Users\316269\waves-tutorials\modsim_package\abaqus\rectangle_geometry.py -- > 
+               C:\Users\roppenheimer\waves-tutorials\build\tutorial_01_geometry\rectangle_geometry.cae.stdout 2>&1
+               scons: done building targets.
 
 The default build directory name is ``build`` and located in the same parent directory as
 the ``SConstruct`` file as described in :ref:`tutorialsconstruct`.
@@ -388,18 +498,46 @@ location where the project-level ``SConstruct`` and ``SConscript`` files exist. 
 multiple simulations in our :term:`modsim repository` with build result separation if more than one simulation is built
 at the same time. :ref:`tutorial_partition_mesh` will demonstrate the importance of this behavior more clearly.
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ tree build/tutorial_01_geometry/
-   build/tutorial_01_geometry/
-   |-- abaqus.rpy
-   |-- rectangle_geometry.cae
-   |-- rectangle_geometry.cae.stdout
-   `-- rectangle_geometry.jnl
+   .. tab-set::
+      :sync-group: OS
 
-   0 directories, 4 files
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block:: bash
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ tree build/tutorial_01_geometry/
+            build/tutorial_01_geometry/
+            |-- abaqus.rpy
+            |-- rectangle_geometry.cae
+            |-- rectangle_geometry.cae.stdout
+            `-- rectangle_geometry.jnl
+
+            0 directories, 4 files
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            PS > Get-Location
+
+               Path
+               ----
+               C:\Users\roppenheimer\waves-tutorials
+
+            PS > tree build/tutorial_01_geometry /F
+            C:\USERS\ROPPENHEIMER\WAVES-TUTORIALS\BUILD\TUTORIAL_01_GEOMETRY
+                abaqus.rpy
+                rectangle_geometry.cae
+                rectangle_geometry.cae.stdout
+                rectangle_geometry.jnl
+
+            No subfolders exist
 
 At this point, the only directory in the ``build`` directory is that pertaining to the
 specific target that was specified to be built. In this case, that is
@@ -421,13 +559,41 @@ Workflow Visualization
 To visualize the workflow, you can use the |project| :ref:`waves_visualize_cli` command. The ``--output-file`` allows
 you to save the visualization file non-interactively. Without this option, you'll enter an interactive matplotlib window.
 
-.. code-block::
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_01_geometry --output-file tutorial_01_geometry.png --width=16 --height=3
-   $ ls tutorial_01_geometry.png
-   tutorial_01_geometry.png
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ waves visualize tutorial_01_geometry --output-file tutorial_01_geometry.png --width=16 --height=3
+            $ ls tutorial_01_geometry.png
+            tutorial_01_geometry.png
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > waves visualize tutorial_01_geometry --output-file tutorial_01_geometry.png --width=16 --height=3
+            PS > Get-ChildItem tutorial_01_geometry.png
+
+                Directory: C:\Users\roppenheimer\waves-tutorials
+
+            Mode                 LastWriteTime         Length Name
+            ----                 -------------         ------ ----
+            -a---             6/9/2023 4:32 PM          44494 tutorial_01_geometry.png
 
 The workflow visualization should look similar to the image below, which is a representation of the directed graph
 constructed by `SCons`_ from the task definitions. The image starts with the final workflow target on the left, in this
