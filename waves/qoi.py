@@ -10,7 +10,7 @@
 
 import pathlib
 import typing
-import subprocess
+import collections.abc
 import itertools
 
 import numpy
@@ -558,14 +558,16 @@ def _plot_qoi_tolerance_check(qoi: xarray.DataArray, axes: matplotlib.axes.Axes)
         _plot_scalar_tolerance_check(qoi, axes)
 
 
-def _can_plot_qoi_tolerance_check(qoi):
+def _can_plot_qoi_tolerance_check(qoi: xarray.DataArray):
     """Checks if a QOI meets requirements to be plotted by `_plot_qoi_tolerance_check()`.
-    
+
     Requires the following:
         1. "value_type" is a dimension
         2. "within_tolerance" is an attribute
         3. The QOI is scalar
         4. No values (e.g. calculated, expected, lower_limit, upper_limit) are null
+
+    :param qoi: Quantity of interest data array as built by :meth:`create_qoi`
     """
     if "value_type" not in qoi.dims:
         return False
@@ -768,7 +770,26 @@ def _can_plot_scalar_qoi_history(qoi):
     return qoi.where(numpy.isfinite(qoi)).dropna(_version_key, how="all").size > 0  # Avoid empty plots
 
 
-def _pdf_report(qois, output_pdf, page_margins, plots_per_page, plotting_method, plotting_kwargs, groupby=_qoi_group):
+def _pdf_report(
+    qois: typing.Iterable[xarray.DataArray],
+    output_pdf: pathlib.Path,
+    page_margins: typing.Dict[str, float],
+    plots_per_page: int,
+    plotting_method: collections.abc.Callable,
+    plotting_kwargs: typing.Dict,
+    groupby: collections.abc.Callable = _qoi_group,
+) -> None:
+    """Generate a multi-page PDF report of QOI plots.
+
+    :param qois: Sequence of QOIs.
+    :param output_pdf: PDF report output path
+    :param page_margins: Dictionary of kwargs passed as `gridspec_kw` to `matplotlib.pyplot.subplots()`
+    :param plots_per_page: the number of plots on each page of the output
+    :param plotting_method: QOI plotting function which takes a QOI as the first arg
+    :param plotting_kwargs: additional kwargs to pass to `plotting_method`
+    :param groupby: Function which takes a QOI as the only positional argument and returns a string.
+        The returned string will be used to group the QOIs and as a PDF page header.
+    """
     open_figure = False
     with PdfPages(output_pdf) as pdf:
         for group, qois in itertools.groupby(sorted(qois, key=groupby), key=groupby):
