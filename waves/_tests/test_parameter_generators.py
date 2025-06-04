@@ -482,12 +482,12 @@ def test_merge_parameter_studies(studies, expected_samples, expected_types, outc
 
 test_create_set_names_cases = {
     "custom template": (
-        parameter_generators.OneAtATime({"parameter_1": [1, 2]}).parameter_study,
+        ['1661dcd0bf4761d25471c1cf5514ceae', '0b588b6a82c1d3d3d19fda304f940342'],
         _utilities._AtSignTemplate(f"out{_settings._template_placeholder}"),
         ["out0", "out1"],
     ),
     "default template": (
-        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
+        ['1661dcd0bf4761d25471c1cf5514ceae', '0b588b6a82c1d3d3d19fda304f940342'],
         None,
         ["parameter_set0", "parameter_set1"],
     ),
@@ -495,13 +495,12 @@ test_create_set_names_cases = {
 
 
 @pytest.mark.parametrize(
-    "parameter_study, template, expected_names",
+    "test_set_hashes, template, expected_names",
     test_create_set_names_cases.values(),
     ids=test_create_set_names_cases.keys(),
 )
-def test_create_set_names(parameter_study, template, expected_names):
+def test_create_set_names(test_set_hashes, template, expected_names):
     """Test the parameter set name generation"""
-    test_set_hashes = list(parameter_study.coords[_settings._hash_coordinate_key].values)
     test_set_names = parameter_generators._create_set_names(test_set_hashes, template)
     assert list(test_set_names.values()) == expected_names
 
