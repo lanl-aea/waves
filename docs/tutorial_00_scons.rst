@@ -108,22 +108,71 @@ tasks are defined.
    and may result in unexpected behavior. Interested readers can read more in the SCons documentation:
    https://scons.org/doc/production/HTML/scons-user.html#app-functions
 
-.. code-block::
+.. only:: not epub
 
-   $ scons
-   $ ls
-   build SConstruct
-   $ scons --build-dir=non_default_build
-   $ ls
-   build non_default_build SConstruct
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ scons
+            $ ls
+            build SConstruct
+            $ scons --build-dir=non_default_build
+            $ ls
+            build non_default_build SConstruct
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > scons
+            PS > Get-ChildItem
+
+               Directory: C:\Users\roppenheimer\waves-tutorials
+
+            Mode                 LastWriteTime         Length Name
+            ----                 -------------         ------ ----
+            -a---            6/9/2023  4:32 PM          23004 build
+            -a---            6/9/2023  4:32 PM          23004 SConstruct
+
+            PS > scons --build-dir=non_default_build
+            PS > Get-ChildItem
+
+               Directory: C:\Users\roppenheimer\waves-tutorials
+
+            Mode                 LastWriteTime         Length Name
+            ----                 -------------         ------ ----
+            -a---            6/9/2023  4:32 PM          23004 build
+            -a---            6/9/2023  4:32 PM          23004 non_default_build
+            -a---            6/9/2023  4:32 PM          23004 SConstruct
 
 The ``--abaqus-command`` option will be useful if the tutorial files struggle to find your Abaqus installation. You can
 also edit the ``default_abaqus_commands`` list to include your Abaqus installation to avoid having to provide it on the
 command line every time you call ``scons``.
 
-.. code-block::
+.. only:: not epub
 
-   $ scons --abaqus-command=/path/to/installed/abaqus
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ scons --abaqus-command=/path/to/installed/abaqus
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > scons --abaqus-command=C:\Path\to\installed\abaqus
 
 The ``--unconditional-build`` option is mostly useful for :ref:`testing` and continuous integration. It is used in the
 tutorial workflows to force a workflow to execute, even if the required programs are not found. This is useful for
@@ -297,26 +346,70 @@ line in your project configuration.
 
 12. Explore the project help message
 
-.. code-block::
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ scons -h
-   scons: Reading SConscript files ...
-   Checking whether /apps/abaqus/Commands/abq2024 program exists.../apps/abaqus/Commands/abq2024
-   Checking whether abq2024 program exists.../apps/abaqus/Commands/abq2024
-   scons: done reading SConscript files.
-   Local Options:
-     --build-dir=DIR         SCons build (variant) root directory. Relative or absolute path. (default: 'build')
-     --unconditional-build   Boolean flag to force building of conditionally ignored targets, e.g. if the target's
-                               action program is missing and it would normally be ignored. (default: 'False')
-     --print-build-failures  Print task *.stdout target file(s) on build failures. (default: 'False')
+   .. tab-set::
+      :sync-group: OS
 
-   Default Targets:
+      .. tab-item:: Linux/MacOS
+         :sync: bash
 
-   Target Aliases:
+         .. code-block::
 
-   Use scons -H for help about SCons built-in command-line options.
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ scons -h
+            scons: Reading SConscript files ...
+            Checking whether /apps/abaqus/Commands/abq2024 program exists.../apps/abaqus/Commands/abq2024
+            Checking whether abq2024 program exists.../apps/abaqus/Commands/abq2024
+            scons: done reading SConscript files.
+            Local Options:
+              --build-dir=DIR           SCons build (variant) root directory. Relative or absolute path. (default: 'build')
+              --unconditional-build     Boolean flag to force building of conditionally ignored targets, e.g. if the target's
+                                           action program is missing and it would normally be ignored. (default: 'False')
+              --print-build-failures    Print task *.stdout target file(s) on build failures. (default: 'False')
+              --abaqus-command=COMMAND  Override for the Abaqus command. Repeat to specify more than one (default:
+                                          ['/apps/abaqus/Commands/abq2024', '/usr/projects/ea/abaqus/Commands/abq2024', 'abq2024', 
+                                          'abaqus'])
+
+            Default Targets:
+
+            Target Aliases:
+
+            Use scons -H for help about SCons built-in command-line options.
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\316269\waves-tutorials
+
+            PS > scons -h
+            scons: Reading SConscript files ...
+            Checking whether '/apps/abaqus/Commands/abq2024' program exists...no
+            Checking whether '/usr/projects/ea/abaqus/Commands/abq2024' program exists...no
+            Checking whether 'abq2024' program exists...no
+            Checking whether 'abaqus' program exists...no
+            scons: done reading SConscript files.
+            Local Options:
+              --build-dir=DIR           SCons build (variant) root directory. Relative or absolute path. (default: 'build')
+              --unconditional-build     Boolean flag to force building of conditionally ignored targets, e.g. if the target's
+                                           action program is missing and it would normally be ignored. (default: 'False')
+              --print-build-failures    Print task *.stdout target file(s) on build failures. (default: 'False')
+              --abaqus-command=COMMAND  Override for the Abaqus command. Repeat to specify more than one (default:
+                                          ['/apps/abaqus/Commands/abq2024', '/usr/projects/ea/abaqus/Commands/abq2024', 'abq2024', 
+                                          'abaqus'])
+
+            Default Targets:
+
+            Target Aliases:
+
+            Use scons -H for help about SCons built-in command-line options.
 
 The text shown in the sample code block above is the project specific help message(s) added in the previous step. The
 ``Default Targets:`` and ``Target Aliases:`` lists will begin to populate in the following tutorial.
