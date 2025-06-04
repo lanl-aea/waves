@@ -500,7 +500,12 @@ test_create_set_names_cases = {
     ids=test_create_set_names_cases.keys(),
 )
 def test_create_set_names(test_set_hashes, template, expected_names):
-    """Test the parameter set name generation"""
+    """Test the parameter set name generation
+
+    :param test_set_hashes: list of arbitrary hash strings for test purposes
+    :param template: ``_AtSignTemplate`` typed string with substitution character
+    :param expected_names: list of expected parameter name strings
+    """
     test_set_names = parameter_generators._create_set_names(test_set_hashes, template)
     assert list(test_set_names.values()) == expected_names
 
@@ -559,8 +564,9 @@ test_update_set_names_cases = {
 def test_update_set_names(parameter_study, template, expected_names):
     """Check the generated and updated parameter set names against template arguments
 
-    :param str set_template: user supplied string to be used as a template for parameter names
-    :param list expected_names: list of expected parameter name strings
+    :param parameter_study: parameter study Xarray dataset
+    :param template: ``_AtSignTemplate`` typed string with substitution character
+    :param expected_names: list of expected parameter name strings
     """
     parameter_study = parameter_generators._update_set_names(parameter_study, template)
     test_set_names = parameter_study[_settings._set_coordinate_key]
