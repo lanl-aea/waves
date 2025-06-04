@@ -173,7 +173,7 @@ latex_documents = [
 man_pages = [(master_doc, project.lower(), _project_name, [author_manpage], 1)]
 
 # Copy button settings
-copybutton_prompt_text = r">>> |> |\.\.\. |\$ |\+(?!\+)"
+copybutton_prompt_text = r">>> |> |\.\.\. |\$ |\+(?!\+)|PS > "
 copybutton_prompt_is_regexp = True
 
 # -- Options for epub page output -----------------------------------------
