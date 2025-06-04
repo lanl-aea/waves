@@ -10,13 +10,12 @@ Changelog
 
 New Features
 ============
-- Allow merging of arbitrary number of parameter studies (:issue:`918`, :merge:`1193`). By `Chris Johnson`_.
 - Experimental Quantity of Intereset (QOI) module for advanced post-processing and regression testing (:issue:`904`,
   :merge:`1164`). By `Matthew Fister`_ and `Kyle Brindley`_.
 
 Internal Changes
 ================
-- Remove class-level ``parameter_generator._update_set_names`` and corresponding ``test_update_set_names``
+- Generalize internal parameter study merge operations for a future merge arbitrary number of studies feature
   (:issue:`918`, :merge:`1193`). By `Chris Johnson`_.
 - Skip ``twine check`` test on macOS until shell kill error is fixed. By `Kyle Brindley`_.
 - Restructure internal deployment around Gitlab-CI tag pipelines. By `Kyle Brindley`_.
