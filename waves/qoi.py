@@ -58,12 +58,6 @@ def create_qoi(
     If you create a QOI with calculated values, and a separate QOI with only expected values, you can combine them with
     ``xarray.merge([calculated, expected])``.
 
-    .. note::
-        When generating a QOI report with ``waves qoi report``, if a QOI has tolerances defined on both sides (e.g.
-        ``lower_rtol`` and ``upper_rtol``) then the QOI will be plotted between the upper and lower limits. If a QOI
-        has tolerances defined on only one side (e.g. ``upper_rtol`` but not ``lower_rtol``) then the QOI will be
-        plotted between the defined limit and 0.
-
     :param name: QOI name
     :param calculated, expected: Calculated and expected QOI values, respectively.
     :param lower_rtol, lower_atol, lower_limit, upper_rtol, upper_atol, upper_limit: Tolerance values which set the
