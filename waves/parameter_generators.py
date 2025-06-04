@@ -388,17 +388,6 @@ class ParameterGenerator(ABC):
         """
         self._set_names = _create_set_names(self._set_hashes, self.set_name_template)
 
-    def _update_set_names(self) -> None:
-        """Update the parameter set names after a parameter study dataset merge operation.
-
-        Resets attributes:
-
-        * ``self.parameter_study``
-        * ``self._set_names``
-        """
-        self.parameter_study = _update_set_names(self.parameter_study, self.set_name_template)
-        self._set_names = self.parameter_study[_set_coordinate_key].to_series().to_dict()
-
     def _create_set_names_array(self) -> xarray.DataArray:
         """Create an Xarray DataArray with the parameter set names using parameter set hashes as the coordinate
 

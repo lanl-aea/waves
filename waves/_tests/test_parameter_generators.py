@@ -726,34 +726,6 @@ class TestParameterGenerator:
         assert list(TemplateGenerator._set_names.values()) == expected
         assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
 
-    @pytest.mark.parametrize(
-        "schema, file_template, set_template, expected",
-        templates.values(),
-        ids=templates.keys(),
-    )
-    def test_update_set_names(self, schema, file_template, set_template, expected):
-        """Check the generated and updated parameter set names against template arguments
-
-        :param str schema: placeholder string standing in for the schema read from an input file
-        :param str file_template: user supplied string to be used as a template for output file names
-        :param str set_template: user supplied string to be used as a template for parameter names
-        :param list expected: list of expected parameter name strings
-        """
-        kwargs = {"sets": 1}
-        if not set_template:
-            TemplateGenerator = DummyGenerator(schema, output_file_template=file_template, **kwargs)
-        else:
-            TemplateGenerator = DummyGenerator(
-                schema, output_file_template=file_template, set_name_template=set_template, **kwargs
-            )
-        assert list(TemplateGenerator._set_names.values()) == expected
-        assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
-
-        # Test that the update function runs with only a single set. Check that the names don't change.
-        TemplateGenerator._update_set_names()
-        assert list(TemplateGenerator._set_names.values()) == expected
-        assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
-
     # fmt: off
     init_write_stdout = {# schema, template, overwrite, dry_run,         is_file,  sets, stdout_calls  # noqa: E261
         "no-template-1": (     {},     None,     False,  False,          [False],    1,            1),  # noqa: E241,E201,E501
