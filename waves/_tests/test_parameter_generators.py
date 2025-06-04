@@ -489,10 +489,7 @@ test_create_set_names_cases = {
     "default template": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
         None,
-        [
-            f"{_settings._default_set_name_template.rstrip(_settings._template_placeholder)}0",
-            f"{_settings._default_set_name_template.rstrip(_settings._template_placeholder)}1",
-        ],
+        ["parameter_set0", "parameter_set1"],
     ),
 }
 
@@ -536,10 +533,7 @@ test_update_set_names_cases = {
     "default template": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
         None,
-        [
-            f"{_settings._default_set_name_template.rstrip(_settings._template_placeholder)}0",
-            f"{_settings._default_set_name_template.rstrip(_settings._template_placeholder)}1",
-        ],
+        ["parameter_set0", "parameter_set1"],
     ),
     "nan parameter values": (
         xarray.merge(
@@ -553,10 +547,7 @@ test_update_set_names_cases = {
             ],
         ),
         None,
-        [
-            f"{_settings._default_set_name_template.rstrip(_settings._template_placeholder)}0",
-            f"{_settings._default_set_name_template.rstrip(_settings._template_placeholder)}1",
-        ],
+        ["parameter_set0", "parameter_set1"],
     ),
 }
 
