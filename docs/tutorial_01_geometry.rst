@@ -101,7 +101,7 @@ Directory Structure
             ----
             C:\Users\roppenheimer\waves-tutorials
 
-            PS > mkdir modsim_package/abaqus
+            PS > New-Item modsim_package/abaqus -Force -ItemType "Directory"
 
 5. Create Python module initialization files to create a project specific local Python package.
 
