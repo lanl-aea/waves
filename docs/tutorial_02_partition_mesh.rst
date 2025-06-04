@@ -31,27 +31,73 @@ Directory Structure
 
 .. note::
 
-    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
-    files.
+   If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+   files.
 
-    .. code-block:: bash
+   .. only:: not epub
 
-        $ pwd
-        /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite --tutorial 1 && mv tutorial_01_geometry_SConstruct SConstruct
-        WAVES fetch
-        Destination directory: '/home/roppenheimer/waves-tutorials'
+      .. tab-set::
+         :sync-group: OS
+
+         .. tab-item:: Linux/MacOS
+            :sync: bash
+
+            .. code-block::
+
+               $ pwd
+               /home/roppenheimer/waves-tutorials
+               $ waves fetch --overwrite --tutorial 1 && mv tutorial_01_geometry_SConstruct SConstruct
+               WAVES fetch
+               Destination directory: '/home/roppenheimer/waves-tutorials'
+
+         .. tab-item:: Windows
+            :sync: powershell
+
+            .. code-block::
+
+               PS > Get-Location
+
+               Path
+               ----
+               C:\Users\roppenheimer\waves-tutorials
+
+               PS > waves fetch --overwrite --tutorial 1 && Move-Item tutorial_01_geometry_SConstruct SConstruct -Force
+               WAVES fetch
+               Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
 4. Fetch the ``tutorial_01_geometry`` file and create a new file named ``tutorial_02_partition_mesh``
    using the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_01_geometry && cp tutorial_01_geometry tutorial_02_partition_mesh
-   WAVES fetch
-   Destination directory: '/home/roppenheimer/waves-tutorials'
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block:: bash
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ waves fetch --overwrite tutorials/tutorial_01_geometry && cp tutorial_01_geometry tutorial_02_partition_mesh
+            WAVES fetch
+            Destination directory: '/home/roppenheimer/waves-tutorials'
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > waves fetch --overwrite tutorials/tutorial_01_geometry && Copy-Item tutorial_01_geometry tutorial_02_partition_mesh
+            WAVES fetch
+            Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
 .. _tutorials_tutorial_partition_mesh:
 
@@ -271,23 +317,58 @@ Build Targets
 
 11. Build the new targets
 
-.. code-block:: bash
+.. only:: not epub
 
-    $ pwd
-    /home/roppenheimer/waves-tutorials
-    $ scons tutorial_02_partition_mesh
-    scons: Reading SConscript files ...
-    Checking whether /apps/abaqus/Commands/abq2024 program exists.../apps/abaqus/Commands/abq2024
-    Checking whether abq2024 program exists.../apps/abaqus/Commands/abq2024
-    scons: done reading SConscript files.
-    scons: Building targets ...
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2024 cae -noGui
-    /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.cae.stdout 2>&1
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2024 -information
-    /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- > rectangle_partition.cae.stdout 2>&1
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2024 cae -noGui
-    /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.cae.stdout 2>&1
-    scons: done building targets.
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ scons tutorial_02_partition_mesh
+            scons: Reading SConscript files ...
+            Checking whether /apps/abaqus/Commands/abq2024 program exists.../apps/abaqus/Commands/abq2024
+            Checking whether abq2024 program exists.../apps/abaqus/Commands/abq2024
+            scons: done reading SConscript files.
+            scons: Building targets ...
+            cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2024 cae -noGui
+            /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.cae.stdout 2>&1
+            cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2024 -information
+            /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- > rectangle_partition.cae.stdout 2>&1
+            cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2024 cae -noGui
+            /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.cae.stdout 2>&1
+            scons: done building targets.
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > scons tutorial_02_partition_mesh
+            scons: Reading SConscript files ...
+            Checking whether '/apps/abaqus/Commands/abq2024' program exists...no
+            Checking whether '/usr/projects/ea/abaqus/Commands/abq2024' program exists...no
+            Checking whether 'abq2024' program exists...C:\SIMULIA\Commands\abq2024.BAT
+            Checking whether 'abaqus' program exists...C:\SIMULIA\Commands\abaqus.BAT
+            scons: done reading SConscript files.
+            scons: Building targets ...
+            cd C:\Users\roppenheimer\waves-tutorials\build\tutorial_02_partition_mesh && C:\SIMULIA\Commands\abq2024.BAT cae -noGUI 
+            C:\Users\316269\waves-tutorials\modsim_package\abaqus\rectangle_geometry.py -- > C:\Users\316269\waves-tutorials\build\tutorial_02_partition_mesh\rectangle_geometry.cae.stdout 2>&1
+            cd C:\Users\roppenheimer\waves-tutorials\build\tutorial_02_partition_mesh && C:\SIMULIA\Commands\abq2024.BAT cae -noGUI 
+            C:\Users\316269\waves-tutorials\modsim_package\abaqus\rectangle_partition.py -- > C:\Users\316269\waves-tutorials\build\tutorial_02_partition_mesh\rectangle_partition.cae.stdout 2>&1
+            cd C:\Users\roppenheimer\waves-tutorials\build\tutorial_02_partition_mesh && C:\SIMULIA\Commands\abq2024.BAT cae -noGUI 
+            C:\Users\316269\waves-tutorials\modsim_package\abaqus\rectangle_mesh.py -- > C:\Users\316269\waves-tutorials\build\tutorial_02_partition_mesh\rectangle_mesh.inp.stdout 2>&1
+            scons: done building targets.
 
 ************
 Output Files
@@ -296,32 +377,74 @@ Output Files
 Explore the contents of the ``build`` directory using the ``tree`` command against the ``build`` directory, as shown
 below.
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ tree build/tutorial_01_geometry/ build/tutorial_02_partition_mesh/
-   build/tutorial_01_geometry/
-   |-- abaqus.rpy
-   |-- rectangle_geometry.cae
-   |-- rectangle_geometry.jnl
-   `-- rectangle_geometry.cae.stdout
-   build/tutorial_02_partition_mesh/
-   |-- abaqus.rpy
-   |-- abaqus.rpy.1
-   |-- abaqus.rpy.2
-   |-- rectangle_geometry.cae
-   |-- rectangle_geometry.jnl
-   |-- rectangle_geometry.cae.stdout
-   |-- rectangle_mesh.cae
-   |-- rectangle_mesh.inp
-   |-- rectangle_mesh.jnl
-   |-- rectangle_mesh.cae.stdout
-   |-- rectangle_partition.cae
-   |-- rectangle_partition.jnl
-   `-- rectangle_partition.cae.stdout
+   .. tab-set::
+      :sync-group: OS
 
-   0 directories, 16 files
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block:: bash
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ tree build/tutorial_01_geometry/ build/tutorial_02_partition_mesh/
+            build/tutorial_01_geometry/
+            |-- abaqus.rpy
+            |-- rectangle_geometry.cae
+            |-- rectangle_geometry.jnl
+            `-- rectangle_geometry.cae.stdout
+            build/tutorial_02_partition_mesh/
+            |-- abaqus.rpy
+            |-- abaqus.rpy.1
+            |-- abaqus.rpy.2
+            |-- rectangle_geometry.cae
+            |-- rectangle_geometry.jnl
+            |-- rectangle_geometry.cae.stdout
+            |-- rectangle_mesh.cae
+            |-- rectangle_mesh.inp
+            |-- rectangle_mesh.jnl
+            |-- rectangle_mesh.cae.stdout
+            |-- rectangle_partition.cae
+            |-- rectangle_partition.jnl
+            `-- rectangle_partition.cae.stdout
+
+            0 directories, 16 files
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            PS > Get-Location
+
+               Path
+               ----
+               C:\Users\roppenheimer\waves-tutorials
+
+            PS > tree build /F
+            C:\USERS\ROPPENHEIMER\WAVES-TUTORIALS\BUILD
+            ├───tutorial_01_geometry
+            │       abaqus.rpy
+            │       rectangle_geometry.cae
+            │       rectangle_geometry.cae.stdout
+            │       rectangle_geometry.jnl
+            │
+            └───tutorial_02_partition_mesh
+                    abaqus.rpy
+                    abaqus.rpy.1
+                    abaqus.rpy.2
+                    rectangle_geometry.cae
+                    rectangle_geometry.cae.stdout
+                    rectangle_geometry.jnl
+                    rectangle_mesh.cae
+                    rectangle_mesh.inp
+                    rectangle_mesh.inp.stdout
+                    rectangle_mesh.jnl
+                    rectangle_partition.cae
+                    rectangle_partition.cae.stdout
+                    rectangle_partition.jnl
 
 Examine the contents of the ``build/tutorial_01_geometry`` and a ``build/tutorial_02_partition_mesh`` directories.
 Recall from the earlier note that we require the geometry target introduced in :ref:`tutorial_geometry` to build the
@@ -342,11 +465,33 @@ Workflow Visualization
 
 View the workflow directed graph by running the following command and opening the image in your preferred image viewer.
 
-.. code-block::
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_02_partition_mesh --output-file tutorial_02_partition_mesh.png --width=28 --height=3 --exclude-list /usr/bin .stdout .jnl
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ waves visualize tutorial_02_partition_mesh --output-file tutorial_02_partition_mesh.png --width=28 --height=3 --exclude-list /usr/bin .stdout .jnl
+
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > waves visualize tutorial_02_partition_mesh --output-file tutorial_02_partition_mesh.png --width=28 --height=3 --exclude-list /usr/bin .stdout .jnl
 
 The output should look similar to the figure below.
 
