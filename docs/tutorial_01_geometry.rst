@@ -101,7 +101,7 @@ Directory Structure
             ----
             C:\Users\roppenheimer\waves-tutorials
 
-            PS > New-Item modsim_package/abaqus -Force -ItemType "Directory"
+            PS > New-Item modsim_package\abaqus -Force -ItemType "Directory"
 
 5. Create Python module initialization files to create a project specific local Python package.
 
@@ -134,7 +134,7 @@ Directory Structure
                ----
                C:\Users\roppenheimer\waves-tutorials
    
-               PS > waves fetch tutorials/modsim_package/__init__.py tutorials/modsim_package/abaqus/__init__.py --destination modsim_package
+               PS > waves fetch tutorials\modsim_package\__init__.py tutorials\modsim_package\abaqus\__init__.py --destination modsim_package
                WAVES fetch
                Destination directory: 'modsim_package'
                PS > Get-ChildItem -Path . -Recurse "__init__.py"
@@ -530,7 +530,7 @@ at the same time. :ref:`tutorial_partition_mesh` will demonstrate the importance
                ----
                C:\Users\roppenheimer\waves-tutorials
 
-            PS > tree build/tutorial_01_geometry /F
+            PS > tree build\tutorial_01_geometry /F
             C:\USERS\ROPPENHEIMER\WAVES-TUTORIALS\BUILD\TUTORIAL_01_GEOMETRY
                 abaqus.rpy
                 rectangle_geometry.cae

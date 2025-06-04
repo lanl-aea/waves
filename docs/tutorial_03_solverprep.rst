@@ -92,7 +92,7 @@ Directory Structure
             ----
             C:\Users\roppenheimer\waves-tutorials
 
-            PS > waves fetch --overwrite tutorials/tutorial_02_partition_mesh && Copy-Item tutorial_02_partition_mesh tutorial_03_solverprep
+            PS > waves fetch --overwrite tutorials\tutorial_02_partition_mesh && Copy-Item tutorial_02_partition_mesh tutorial_03_solverprep
             WAVES fetch
             Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
@@ -130,7 +130,7 @@ Solver Input Files
             ----
             C:\Users\roppenheimer\waves-tutorials
 
-            PS > waves fetch 'tutorials/modsim_package/abaqus/*.inp' --destination modsim_package/abaqus
+            PS > waves fetch 'tutorials\modsim_package\abaqus\*.inp' --destination modsim_package\abaqus
             WAVES fetch
             Destination directory: 'modsim_package\abaqus'
 
@@ -167,7 +167,7 @@ directory. Check the contents of this directory using the ``ls`` command.
             ----
             C:\Users\roppenheimer\waves-tutorials
 
-            PS > Get-ChildItem modsim_package/abaqus
+            PS > Get-ChildItem modsim_package\abaqus
 
                 Directory: C:\Users\roppenheimer\waves-tutorials\modsim_package\abaqus
 
@@ -487,7 +487,7 @@ View the workflow directed graph by running the following command and opening th
             ----
             C:\Users\roppenheimer\waves-tutorials
 
-            PS > waves visualize tutorial_03_solverprep --output-file tutorial_03_solverprep.png --width=28 --height=5 --exclude-list /usr/bin .stdout .jnl
+            PS > waves visualize tutorial_03_solverprep --output-file tutorial_03_solverprep.png --width=28 --height=5 --exclude-list .stdout .jnl
 
 The output should look similar to the figure below.
 

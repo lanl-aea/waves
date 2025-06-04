@@ -95,7 +95,7 @@ Directory Structure
             ----
             C:\Users\roppenheimer\waves-tutorials
 
-            PS > waves fetch --overwrite tutorials/tutorial_01_geometry && Copy-Item tutorial_01_geometry tutorial_02_partition_mesh
+            PS > waves fetch --overwrite tutorials\tutorial_01_geometry && Copy-Item tutorial_01_geometry tutorial_02_partition_mesh
             WAVES fetch
             Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
@@ -491,7 +491,7 @@ View the workflow directed graph by running the following command and opening th
             ----
             C:\Users\roppenheimer\waves-tutorials
 
-            PS > waves visualize tutorial_02_partition_mesh --output-file tutorial_02_partition_mesh.png --width=28 --height=3 --exclude-list /usr/bin .stdout .jnl
+            PS > waves visualize tutorial_02_partition_mesh --output-file tutorial_02_partition_mesh.png --width=28 --height=3 --exclude-list .stdout .jnl
 
 The output should look similar to the figure below.
 

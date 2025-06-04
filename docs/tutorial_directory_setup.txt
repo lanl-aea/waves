@@ -20,8 +20,8 @@
 
          .. code-block:: powershell
 
-            PS > New-Item ~/waves-tutorials -ItemType "Directory"
-            PS > Set-Location ~/waves-tutorials
+            PS > New-Item $HOME\waves-tutorials -ItemType "Directory"
+            PS > Set-Location $HOME\waves-tutorials
             PS > Get-Location
 
             Path
