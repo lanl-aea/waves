@@ -481,7 +481,7 @@ Now that you've created the geometry task in ``tutorial_01_geometry``, this sect
                scons: done reading SConscript files.
                scons: Building targets ...
                cd C:\Users\roppenheimer\waves-tutorials\build\tutorial_01_geometry && C:\SIMULIA\Commands\abq2024.BAT cae -noGUI 
-               C:\Users\316269\waves-tutorials\modsim_package\abaqus\rectangle_geometry.py -- > 
+               C:\Users\roppenheimer\waves-tutorials\modsim_package\abaqus\rectangle_geometry.py -- > 
                C:\Users\roppenheimer\waves-tutorials\build\tutorial_01_geometry\rectangle_geometry.cae.stdout 2>&1
                scons: done building targets.
 

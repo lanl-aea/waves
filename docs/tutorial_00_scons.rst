@@ -387,7 +387,7 @@ line in your project configuration.
 
             Path
             ----
-            C:\Users\316269\waves-tutorials
+            C:\Users\roppenheimer\waves-tutorials
 
             PS > scons -h
             scons: Reading SConscript files ...

@@ -363,11 +363,11 @@ Build Targets
             scons: done reading SConscript files.
             scons: Building targets ...
             cd C:\Users\roppenheimer\waves-tutorials\build\tutorial_02_partition_mesh && C:\SIMULIA\Commands\abq2024.BAT cae -noGUI 
-            C:\Users\316269\waves-tutorials\modsim_package\abaqus\rectangle_geometry.py -- > C:\Users\316269\waves-tutorials\build\tutorial_02_partition_mesh\rectangle_geometry.cae.stdout 2>&1
+            C:\Users\roppenheimer\waves-tutorials\modsim_package\abaqus\rectangle_geometry.py -- > C:\Users\roppenheimer\waves-tutorials\build\tutorial_02_partition_mesh\rectangle_geometry.cae.stdout 2>&1
             cd C:\Users\roppenheimer\waves-tutorials\build\tutorial_02_partition_mesh && C:\SIMULIA\Commands\abq2024.BAT cae -noGUI 
-            C:\Users\316269\waves-tutorials\modsim_package\abaqus\rectangle_partition.py -- > C:\Users\316269\waves-tutorials\build\tutorial_02_partition_mesh\rectangle_partition.cae.stdout 2>&1
+            C:\Users\roppenheimer\waves-tutorials\modsim_package\abaqus\rectangle_partition.py -- > C:\Users\roppenheimer\waves-tutorials\build\tutorial_02_partition_mesh\rectangle_partition.cae.stdout 2>&1
             cd C:\Users\roppenheimer\waves-tutorials\build\tutorial_02_partition_mesh && C:\SIMULIA\Commands\abq2024.BAT cae -noGUI 
-            C:\Users\316269\waves-tutorials\modsim_package\abaqus\rectangle_mesh.py -- > C:\Users\316269\waves-tutorials\build\tutorial_02_partition_mesh\rectangle_mesh.inp.stdout 2>&1
+            C:\Users\roppenheimer\waves-tutorials\modsim_package\abaqus\rectangle_mesh.py -- > C:\Users\roppenheimer\waves-tutorials\build\tutorial_02_partition_mesh\rectangle_mesh.inp.stdout 2>&1
             scons: done building targets.
 
 ************
