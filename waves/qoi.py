@@ -771,10 +771,15 @@ def _can_plot_scalar_qoi_history(qoi: xarray.DataArray) -> bool:
 
     Requires the following:
         1. The QOI contains at least 1 finite value
+        2. The QOI contains a dimension named "version"
 
     :param qoi: Quantity of interest data array as built by :meth:`create_qoi`
     """
-    return qoi.where(numpy.isfinite(qoi)).dropna(_version_key, how="all").size > 0  # Avoid empty plots
+    if _version_key not in qoi.dims:
+        return False
+    if qoi.where(numpy.isfinite(qoi)).dropna(_version_key, how="all").size == 0:  # Avoid empty plots
+        return False
+    return True
 
 
 def _pdf_report(

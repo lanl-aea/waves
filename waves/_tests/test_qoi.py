@@ -1527,7 +1527,7 @@ test__can_plot_qoi_tolerance_check_cases = {
             name="qoi1",
             attrs={"within_tolerance": 0},
         ),
-        True,
+        False,
     ),
     "no_within_tolerance_attribute": (
         xarray.DataArray(
