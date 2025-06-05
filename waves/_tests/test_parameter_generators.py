@@ -507,7 +507,9 @@ def test_create_set_names(test_set_hashes, template, expected_names):
     :param expected_names: list of expected parameter name strings
     """
     test_set_names = parameter_generators._create_set_names(test_set_hashes, template)
-    assert list(test_set_names.values()) == expected_names
+    for index, test_hash in enumerate(test_set_names.keys()):
+        assert test_hash == test_set_hashes[index]
+        assert test_set_names[test_hash] == expected_names[index]
 
 
 test_update_set_names_cases = {
