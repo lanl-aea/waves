@@ -135,8 +135,6 @@ Directory Structure
                C:\Users\roppenheimer\waves-tutorials
    
                PS > waves fetch tutorials\modsim_package\__init__.py tutorials\modsim_package\abaqus\__init__.py --destination modsim_package
-               WAVES fetch
-               Destination directory: 'modsim_package'
                PS > Get-ChildItem -Path . -Recurse "__init__.py"
    
                    Directory: C:\Users\roppenheimer\waves-tutorials\modsim_package

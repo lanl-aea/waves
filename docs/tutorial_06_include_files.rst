@@ -179,8 +179,6 @@ as shown in the :ref:`waves_tutorial_api` for :ref:`python_rectangle_compression
                C:\Users\roppenheimer\waves-tutorials
    
                PS > waves fetch tutorials\modsim_package\python\__init__.py --destination modsim_package\python
-               WAVES fetch
-               Destination directory: 'modsim_package\python'
                PS > Get-ChildItem -Path . -Recurse "__init__.py"
    
                    Directory: C:\Users\roppenheimer\waves-tutorials\modsim_package
