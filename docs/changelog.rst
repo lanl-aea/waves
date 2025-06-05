@@ -5,8 +5,16 @@ Changelog
 #########
 
 *******************
-0.13.6 (unreleased)
+0.13.7 (unreleased)
 *******************
+
+*******************
+0.13.6 (2025-06-05)
+*******************
+
+Internal Changes
+================
+- Fix internal deployment pipeline. By `Kyle Brindley`_.
 
 *******************
 0.13.5 (2025-06-05)
