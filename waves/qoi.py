@@ -10,7 +10,7 @@
 
 import pathlib
 import typing
-import subprocess
+import collections.abc
 import itertools
 
 import numpy
@@ -57,12 +57,6 @@ def create_qoi(
 
     If you create a QOI with calculated values, and a separate QOI with only expected values, you can combine them with
     ``xarray.merge([calculated, expected])``.
-
-    .. note::
-        When generating a QOI report with ``waves qoi report``, if a QOI has tolerances defined on both sides (e.g.
-        ``lower_rtol`` and ``upper_rtol``) then the QOI will be plotted between the upper and lower limits. If a QOI
-        has tolerances defined on only one side (e.g. ``upper_rtol`` but not ``lower_rtol``) then the QOI will be
-        plotted between the defined limit and 0.
 
     :param name: QOI name
     :param calculated, expected: Calculated and expected QOI values, respectively.
@@ -559,115 +553,90 @@ def _plot_qoi_tolerance_check(qoi: xarray.DataArray, axes: matplotlib.axes.Axes)
     :param qoi: Quantity of interest data array as built by :meth:`create_qoi`
     :param axes: Matplotlib axes for plotting
     """
-    if "value_type" not in qoi.dims:
-        axes.clear()
-        axes.annotate(f"Incorrect QOI format for {qoi.name}.", (0.0, 0.0))
-        axes.axis("off")
-        return
     qoi_dim = len(qoi.squeeze().dims)  # Count includes the "value_type" dim
     if qoi_dim == 1:  # Scalar QOI
-        try:
-            calculated = qoi.sel(value_type="calculated").item()
-        except KeyError:
-            calculated = numpy.nan
-        try:
-            within_tolerance = qoi.attrs["within_tolerance"]
-        except KeyError:
-            within_tolerance = 1
-        try:
-            lower_limit = qoi.sel(value_type="lower_limit").item()
-        except KeyError:
-            lower_limit = -numpy.inf
-        try:
-            upper_limit = qoi.sel(value_type="upper_limit").item()
-        except KeyError:
-            upper_limit = numpy.inf
-        try:
-            expected = qoi.sel(value_type="expected").item()
-        except KeyError:
-            expected = numpy.nan
-        name = _get_plotting_name(qoi)
-        _plot_scalar_tolerance_check(name, calculated, expected, lower_limit, upper_limit, within_tolerance, axes)
+        _plot_scalar_tolerance_check(qoi, axes)
+
+
+def _can_plot_qoi_tolerance_check(qoi: xarray.DataArray) -> bool:
+    """Checks if a QOI meets requirements to be plotted by `_plot_qoi_tolerance_check()`.
+
+    Requires the following:
+        1. "value_type" is a dimension
+        2. "within_tolerance" is an attribute
+        3. The QOI is scalar
+        4. No values (e.g. calculated, expected, lower_limit, upper_limit) are null
+
+    :param qoi: Quantity of interest data array as built by :meth:`create_qoi`
+    """
+    if "value_type" not in qoi.dims:
+        return False
+    if "within_tolerance" not in qoi.attrs:
+        return False
+    qoi_dim = len(qoi.squeeze().dims)  # Count includes the "value_type" dim
+    if qoi_dim == 1:  # Scalar QOI
+        if qoi.isnull().any():
+            return False
+    else:
+        return False
+    return True
 
 
 def _plot_scalar_tolerance_check(
-    name: str,
-    calculated: float,
-    expected: float,
-    lower_limit: float,
-    upper_limit: float,
-    within_tolerance: bool,
+    qoi: xarray.DataArray,
     axes: matplotlib.axes.Axes,
 ) -> None:
     """Plots a tolerance check for a scalar QOI DataArray.
 
-    :param name: QOI plotting label
-    :param calculated: QOI calculated value
-    :param expected: QOI expected value
-    :param lower_limit: lower limit to QOI tolerance. If unbounded (e.g. NaN or Inf), then the lower limit is assigned
-        as zero.
-    :param upper_limit: upper limit to QOI tolerance. If unbounded (e.g. NaN or Inf), then the upper limit is assigned
-        as zero.
-    :param within_tolerance: plot QOI in green (good) if True, else plot QOI in red (bad)
+    :param qoi: Quantity of interest data array as built by :meth:`create_qoi`
     :param axes: Matplotlib axes for plotting
     """
+    name = _get_plotting_name(qoi)
+    calculated = qoi.sel(value_type="calculated").item()
+    expected = qoi.sel(value_type="expected").item()
+    lower_limit = qoi.sel(value_type="lower_limit").item()
+    upper_limit = qoi.sel(value_type="upper_limit").item()
+    within_tolerance = qoi.attrs["within_tolerance"]
     # TODO: draw arrow if bar is clipped by xmin, xmax
-    try:
-        # Bar color is always green if within tolerance, red otherwise
-        bar_color = "green" if within_tolerance else "red"
-        # If tolerance on both sides, within_tolerance is good, out of tolerance is bad
-        if numpy.isfinite([lower_limit, upper_limit]).all():
-            lower_line = lower_limit
-            upper_line = upper_limit
-            colors = ["black", "black"]
-        # If unbounded upper, assume convergence to 0 is good
-        elif not numpy.isfinite(upper_limit):
-            lower_line = lower_limit
-            upper_line = 0.0
-            colors = ["black", "blue"]
-        # If unbounded lower, assume convergence to 0 is good
-        elif not numpy.isfinite(lower_limit):
-            lower_line = 0.0
-            upper_line = upper_limit
-            colors = ["blue", "black"]
 
-        # Draw vertical lines at lower and upper tolerance limits
-        container = axes.barh(0.0, width=(calculated - expected), left=expected, color=bar_color)
-        axes.vlines([lower_line, upper_line], *axes.get_ylim(), colors=colors)
-        axes.vlines([expected], *axes.get_ylim(), colors="black", linestyle="dashed")
+    # Bar color is always green if within tolerance, red otherwise
+    bar_color = "green" if within_tolerance else "red"
+    # If tolerance on both sides, within_tolerance is good, out of tolerance is bad
+    lower_line = lower_limit
+    upper_line = upper_limit
+    colors = ["black", "black"]
 
-        # Turn ticks and labels off, except for tolerances and expected value
-        axes.tick_params(axis="x", bottom=False, pad=-1, labelsize=8)
-        axes.tick_params(axis="y", left=False, labelleft=False)
-        axes.set_xticks([lower_line, expected, upper_line])
+    # Draw vertical lines at lower and upper tolerance limits
+    container = axes.barh(0.0, width=(calculated - expected), left=expected, color=bar_color)
+    axes.vlines([lower_line, upper_line], *axes.get_ylim(), colors=colors)
+    axes.vlines([expected], *axes.get_ylim(), colors="black", linestyle="dashed")
 
-        # Turn off plot borders
-        axes.spines["bottom"].set_visible(False)
-        axes.spines["top"].set_visible(False)
-        axes.spines["left"].set_visible(False)
-        axes.spines["right"].set_visible(False)
+    # Turn ticks and labels off, except for tolerances and expected value
+    axes.tick_params(axis="x", bottom=False, pad=-1, labelsize=8)
+    axes.tick_params(axis="y", left=False, labelleft=False)
+    axes.set_xticks([lower_line, expected, upper_line])
 
-        # Extend plot past upper and lower tolerances
-        tolerance_width = upper_line - lower_line
-        xmin = lower_line - 0.25 * tolerance_width
-        xmax = upper_line + 0.25 * tolerance_width
-        axes.set_xlim((xmin, xmax))
+    # Turn off plot borders
+    axes.spines["bottom"].set_visible(False)
+    axes.spines["top"].set_visible(False)
+    axes.spines["left"].set_visible(False)
+    axes.spines["right"].set_visible(False)
 
-        # Add calculated value as annotation above bar
-        axes.annotate(
-            f"{calculated:.3e}",
-            xy=(calculated, 0.555),
-            xytext=(numpy.clip(calculated, xmin, xmax), 0.55),
-            annotation_clip=False,
-            ha="center",
-            fontsize=8,
-        )
+    # Extend plot past upper and lower tolerances
+    tolerance_width = upper_line - lower_line
+    xmin = lower_line - 0.25 * tolerance_width
+    xmax = upper_line + 0.25 * tolerance_width
+    axes.set_xlim((xmin, xmax))
 
-    # ValueError could mean calculated value is inf
-    except ValueError:
-        axes.clear()
-        axes.annotate("Failed to plot.", (0.0, 0.0))
-        axes.axis("off")
+    # Add calculated value as annotation above bar
+    axes.annotate(
+        f"{calculated:.3e}",
+        xy=(calculated, 0.555),
+        xytext=(numpy.clip(calculated, xmin, xmax), 0.55),
+        annotation_clip=False,
+        ha="center",
+        fontsize=8,
+    )
 
     # Add QOI name and values to left of plot
     if not within_tolerance:
@@ -705,36 +674,17 @@ def _write_qoi_report(qoi_archive: xarray.DataTree, output: pathlib.Path, plots_
     :param output: history report output path
     :param plots_per_page: the number of plots on each page of the output
     """
-    with PdfPages(output) as pdf:
-        for qoi_group in qoi_archive.leaves:
-            for plot_num, qoi in enumerate(qoi_group.ds.data_vars.values()):
-                ax_num = plot_num % plots_per_page  # ax_num goes from 0 to (plots_per_page - 1)
-                if ax_num == 0:  # starting new page
-                    open_figure = True
-                    fig, axes = matplotlib.pyplot.subplots(  # create a new figure for a new page
-                        plots_per_page,
-                        figsize=(8.5, 11),
-                        gridspec_kw=dict(
-                            left=0.6,  # plot on right half of page because text will go on left side
-                            right=0.9,  # leave margin on right edge
-                            top=(1.0 - 1.0 / plots_per_page),  # top margin equal to single plot height
-                            bottom=(0.5 / plots_per_page),  # bottom margin equal to half of single plot height
-                            hspace=1.0,
-                        ),
-                    )
-                fig.suptitle(qoi_group.name)
-                _plot_qoi_tolerance_check(qoi, axes[ax_num])
-                if ax_num == plots_per_page - 1:  # ending a page
-                    pdf.savefig()  # save current figure to a page
-                    matplotlib.pyplot.close()
-                    open_figure = False
-            if open_figure:  # If a figure is still open (hasn't been saved to a page)
-                # Clear remaining empty plots on the page
-                for ax in axes[ax_num + 1 :]:  # noqa: E203
-                    ax.clear()
-                    ax.axis("off")
-                pdf.savefig()
-                matplotlib.pyplot.close()
+    qois = [
+        qoi for leaf in qoi_archive.leaves for qoi in leaf.ds.data_vars.values() if _can_plot_qoi_tolerance_check(qoi)
+    ]
+    page_margins = dict(
+        left=0.6,  # plot on right half of page because text will go on left side
+        right=0.9,  # leave margin on right edge
+        top=(1.0 - 1.0 / plots_per_page),  # top margin equal to single plot height
+        bottom=(0.5 / plots_per_page),  # bottom margin equal to half of single plot height
+        hspace=1.0,
+    )
+    _pdf_report(qois, output, page_margins, plots_per_page, _plot_qoi_tolerance_check, {})
 
 
 def _get_plotting_name(qoi: xarray.DataArray) -> str:
@@ -781,7 +731,6 @@ def _plot_scalar_qoi_history(
     :param date_max: maximum date to include on the x-axes
     """
     name = _get_plotting_name(qoi)
-    group = qoi.attrs["group"]
     axes.scatter(qoi.date, qoi.sel(value_type="calculated"))
     axes.plot(qoi.date, qoi.sel(value_type="lower_limit"), "--")
     axes.plot(qoi.date, qoi.sel(value_type="upper_limit"), "--")
@@ -800,61 +749,83 @@ def _qoi_history_report(
     :param output: history report output path
     :param plots_per_page: the number of plots on each page of the output
     """
-    qoi_archive = qoi_archive.map_over_datasets(_sort_by_date)
+    qois = [
+        qoi.sortby("date")
+        for leaf in qoi_archive.leaves
+        for qoi in leaf.ds.data_vars.values()
+        if _can_plot_scalar_qoi_history(qoi)
+    ]
+    plotting_kwargs = dict(date_min=min(qoi.date.min() for qoi in qois), date_max=max(qoi.date.max() for qoi in qois))
+    page_margins = dict(
+        left=0.1,  # leave margin on left edge
+        right=0.9,  # leave margin on right edge
+        top=(1.0 - 0.5 / plots_per_page),  # top margin equal to half of single plot height
+        bottom=(0.5 / plots_per_page),  # bottom margin equal to half of single plot height
+        hspace=1.0,
+    )
+    _pdf_report(qois, output, page_margins, plots_per_page, _plot_scalar_qoi_history, plotting_kwargs)
+
+
+def _can_plot_scalar_qoi_history(qoi: xarray.DataArray) -> bool:
+    """Checks if a QOI meets requirements to be plotted by :meth:`_plot_scalar_qoi_history`.
+
+    Requires the following:
+        1. The QOI contains at least 1 finite value
+        2. The QOI contains a dimension named "version"
+
+    :param qoi: Quantity of interest data array as built by :meth:`create_qoi`
+    """
+    if _version_key not in qoi.dims:
+        return False
+    if qoi.where(numpy.isfinite(qoi)).dropna(_version_key, how="all").size == 0:  # Avoid empty plots
+        return False
+    return True
+
+
+def _pdf_report(
+    qois: typing.Iterable[xarray.DataArray],
+    output_pdf: pathlib.Path,
+    page_margins: typing.Dict[str, float],
+    plots_per_page: int,
+    plotting_method: collections.abc.Callable,
+    plotting_kwargs: typing.Dict,
+    groupby: collections.abc.Callable = _qoi_group,
+) -> None:
+    """Generate a multi-page PDF report of QOI plots.
+
+    :param qois: Sequence of QOIs.
+    :param output_pdf: PDF report output path
+    :param page_margins: Dictionary of kwargs passed as `gridspec_kw` to `matplotlib.pyplot.subplots()`
+    :param plots_per_page: the number of plots on each page of the output
+    :param plotting_method: plotting function which takes a QOI and a plotting axis as the first and second args
+    :param plotting_kwargs: additional kwargs to pass to `plotting_method`
+    :param groupby: Function which takes a QOI as the only positional argument and returns a string.
+        The returned string will be used to group the QOIs and as a PDF page header.
+    """
     open_figure = False
-    date_min = min(node.ds.date.min() for node in qoi_archive.leaves)
-    date_max = max(node.ds.date.max() for node in qoi_archive.leaves)
-    with PdfPages(output) as pdf:
-        for qoi_group in qoi_archive.leaves:
-            plot_num = 0
-            for qoi in qoi_group.ds.data_vars.values():
-                if qoi.where(numpy.isfinite(qoi)).dropna(_version_key, how="all").size == 0:  # Would be an empty plot
-                    continue  # Don't increment plot_num
+    with PdfPages(output_pdf) as pdf:
+        for group, qois in itertools.groupby(sorted(qois, key=groupby), key=groupby):
+            for plot_num, qoi in enumerate(qois):
                 ax_num = plot_num % plots_per_page  # ax_num goes from 0 to (plots_per_page - 1)
                 if ax_num == 0:  # Starting new page
                     open_figure = True
                     fig, axes = matplotlib.pyplot.subplots(  # Create a new figure for a new page
                         plots_per_page,
                         figsize=(8.5, 11),
-                        gridspec_kw=dict(
-                            left=0.1,  # leave margin on left edge
-                            right=0.9,  # leave margin on right edge
-                            top=(1.0 - 0.5 / plots_per_page),  # top margin equal to half of single plot height
-                            bottom=(0.5 / plots_per_page),  # bottom margin equal to half of single plot height
-                            hspace=1.0,
-                        ),
+                        gridspec_kw=page_margins,
                     )
-                    fig.suptitle(qoi_group.name, fontweight="bold")
-                _plot_scalar_qoi_history(qoi, axes[ax_num], date_min, date_max)
+                    fig.suptitle(group, fontweight="bold")
+                plotting_method(qoi, axes[ax_num], **plotting_kwargs)
                 if ax_num == plots_per_page - 1:  # Ending a page
                     pdf.savefig()  # save current figure to a page
                     matplotlib.pyplot.close()
                     open_figure = False
-                plot_num += 1
             if open_figure:  # If a figure is still open (hasn't been saved to a page)
                 for ax in axes[ax_num + 1 :]:  # noqa: E203
                     ax.clear()
                     ax.axis("off")
                 pdf.savefig()
                 matplotlib.pyplot.close()
-
-
-def _sort_by_date(dataset: xarray.Dataset) -> xarray.Dataset:
-    """Return an Xarray dataset sorted by the ``date`` coordinate
-
-    If the ``date`` coordinate does not exist, return the original dataset.
-
-    Intended for use with ``xarray.map_over_datasets`` method:
-    https://docs.xarray.dev/en/latest/generated/xarray.map_over_datasets.html
-
-    :param dataset: Xarray Dataset containing the ``date`` variable
-
-    :returns: The same Xarray Dataset after sorting
-    """
-    try:
-        return dataset.sortby("date")
-    except KeyError:
-        return dataset
 
 
 def _accept(calculated: pathlib.Path, expected: pathlib.Path) -> None:

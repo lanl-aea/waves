@@ -1,71 +1,3 @@
-.linux-cached-environment: &linux-cached-environment
-  variables:
-    GIT_STRATEGY: clone
-    conda_installation: "/apps/anaconda/3.12-anaconda-2024.10"
-    aea_compute_path: "/projects/aea_compute"
-    ci_environment_path: "/projects/aea_compute"
-    scratch_root: "/scratch"
-    abaqus_command_prefix: "/apps/abaqus/Commands"
-    cubit_command_prefix: "/apps"
-    conda_artifacts_directory: "conda-bld"
-  before_script:
-    - function check_directory_variable () { echo "$1"; if [[ -z $1 ]] || [[ ! -d $1 ]]; then exit 1; fi; }
-    - check_directory_variable "${conda_installation}"
-    - check_directory_variable "${aea_compute_path}"
-    - check_directory_variable "${ci_environment_path}"
-    - check_directory_variable "${scratch_root}"
-    - check_directory_variable "${abaqus_command_prefix}"
-    - check_directory_variable "${cubit_command_prefix}"
-    - echo ${conda_artifacts_directory}
-    - if [[ -z ${conda_artifacts_directory} ]]; then exit 1; fi
-    # Remove when AEA RHEL ``all_proxy`` environment variable is removed or set to empty
-    - export all_proxy=''
-    # Handle mixed AEA/HPC jobs
-    - scratch_path="${scratch_root}/${USER}"
-    - check_directory_variable "${scratch_path}"
-    # Prep module command and load system module(s)
-    - module load texlive
-    # Activate CI environment if available. If not, rely on environment job running before other jobs.
-    - module use ${PWD}/modulefiles
-    - project_environment='waves-env'
-    - if [[ -z ${project_environment} ]]; then exit 1; fi
-    - environment_path="${ci_environment_path}/${project_environment}"
-    - echo ${environment_path}
-    - if [[ -z ${environment_path} ]]; then exit 1; fi
-    - if [[ -d ${environment_path} ]]; then module load ${project_environment}; else source ${conda_installation}/etc/profile.d/conda.sh; fi
-    - conda info
-
-# Jobs using this template *must* include the .linux-cached-environment before script.
-.build-cached-environment: &build-cached-environment
-  variables:
-    GIT_STRATEGY: clone
-    environment_file: "environment.yml"
-  script:
-    - echo ${environment_file}
-    - if [[ -z ${environment_file} ]]; then exit 1; fi
-    # Job variables
-    - aea_modulefiles="${aea_compute_path}/modulefiles"
-    - check_directory_variable "${aea_modulefiles}"
-    - echo ${CI_MERGE_REQUEST_ID}
-    - echo ${CI_COMMIT_BEFORE_SHA}
-    - echo ${CI_COMMIT_BRANCH}
-    # Always build from the system anaconda installation
-    - module unload ${project_environment}
-    # Don't rebuild environment for merge request pipelines unless the environment is missing
-    - if [[ -d "${environment_path}" ]]; then exists=true; else exists=false; fi
-    - if [[ $CI_MERGE_REQUEST_ID ]] && ${exists}; then exit 0; fi
-    # Don't rebuild environment for main unless the environment file has changed or the environment doesn't exist
-    - files=$(git diff --name-only ${CI_COMMIT_SHA} ${CI_COMMIT_BEFORE_SHA}) || true
-    - if [[ $CI_COMMIT_BRANCH == "main" ]]; then production=true; else production=false; fi
-    - if [[ "${files}" == *"${environment_file}"* ]]; then modified=true; else modified=false; fi
-    - if ${production} && ${exists} && ! ${modified}; then exit 0; fi
-    # Re-build the Conda environment on changes to environment files
-    - conda env create --prefix ${environment_path} --file ${environment_file} --solver=libmamba --yes
-    # Remove write permissions from group to avoid accidental environment changes
-    - chmod -R 755 ${environment_path}
-    # place the common modulefiles in an accessible location
-    - cp ${PWD}/modulefiles/* ${aea_modulefiles} || true
-
 .nix-job-environment: &nix-job-environment
   variables:
     GIT_STRATEGY: clone
@@ -168,3 +100,8 @@
     - mkdir ${conda_artifacts_directory}
     - scons pyproject.toml
     - VERSION=$(python -m setuptools_scm) conda mambabuild ${recipe_directory} --channel fierromechanics --channel conda-forge --no-anaconda-upload --output-folder ${conda_artifacts_directory}
+    # Help downstream deploy pipeline find this job by ID
+    - tag_job_file_root="/nettmp/aea_service"
+    - tag_job_file_parent="${tag_job_file_root}/${CI_PROJECT_PATH}"
+    - tag_job_file="${tag_job_file_parent}/tag_conda_build.txt"
+    - if [[ ! -z ${CI_COMMIT_TAG} ]] && [[ -d ${tag_job_file_root} ]]; then mkdir -p ${tag_job_file_parent}; echo ${CI_JOB_ID} > ${tag_job_file}; fi

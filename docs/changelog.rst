@@ -5,7 +5,19 @@ Changelog
 #########
 
 *******************
-0.13.5 (unreleased)
+0.13.7 (unreleased)
+*******************
+
+*******************
+0.13.6 (2025-06-05)
+*******************
+
+Internal Changes
+================
+- Fix internal deployment pipeline. By `Kyle Brindley`_.
+
+*******************
+0.13.5 (2025-06-05)
 *******************
 
 New Features
@@ -22,6 +34,9 @@ Internal Changes
 - Preserve QOI datatree structure when merging (:merge:`1205`). By `Matthew Fister`_.
 - Allow a QOI date attribute to be specified via the ``archive`` subcommand (:merge:`1211`). By `Matthew Fister`_.
 - Only propagate common attributes when merging QOI xarray objects. (:merge:`1206`). By `Matthew Fister`_.
+- Create helper function for generating multiple kinds of PDF reports (:merge:`1212`). By `Matthew Fister`_.
+- Fully replace cached CI environments with a CI job-specific environment to reduce collisions in Conda operations that
+  cause false negatives. By `Kyle Brindley`_.
 
 *******************
 0.13.4 (2025-05-29)
