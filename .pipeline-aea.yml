@@ -82,12 +82,11 @@ aea-conda-build-matrix:
 aea-conda-deploy:
   stage: deploy
   rules:
-    - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - if: $PARENT_CI_COMMIT_TAG
+    - if: $CI_COMMIT_TAG
   variables:
-    PARENT_CI_PROJECT_PATH: $CI_PROJECT_PATH
-    PARENT_CI_COMMIT_BRANCH: $PARENT_CI_COMMIT_BRANCH
+    PARENT_CI_JOB_ID_FILE: /nettmp/aea_service/${CI_PROJECT_PATH}/tag_conda_build.txt
+    AEA_CONDA_DEPLOY_JOB: aea-conda-deploy-curl-jobid
+    PARENT_CI_PROJECT_ID: $CI_PROJECT_ID
     AEA_CONDA_PACKAGE_JOB: aea-conda-build-internal
     AEA_CONDA_PACKAGE_ARTIFACTS: conda-bld/noarch/waves-*-*.tar.bz2
   trigger:

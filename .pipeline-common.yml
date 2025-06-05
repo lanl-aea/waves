@@ -100,3 +100,8 @@
     - mkdir ${conda_artifacts_directory}
     - scons pyproject.toml
     - VERSION=$(python -m setuptools_scm) conda mambabuild ${recipe_directory} --channel fierromechanics --channel conda-forge --no-anaconda-upload --output-folder ${conda_artifacts_directory}
+    # Help downstream deploy pipeline find this job by ID
+    - tag_job_file_root="/nettmp/aea_service"
+    - tag_job_file_parent="${tag_job_file_root}/${CI_PROJECT_PATH}"
+    - tag_job_file="${tag_job_file_parent}/tag_conda_build.txt"
+    - if [[ ! -z ${CI_COMMIT_TAG} ]] && [[ -d ${tag_job_file_root} ]]; then mkdir -p ${tag_job_file_parent}; echo ${CI_JOB_ID} > ${tag_job_file}; fi
