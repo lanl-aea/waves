@@ -8,6 +8,11 @@ Changelog
 0.13.7 (unreleased)
 *******************
 
+Internal Changes
+================
+- Generalize internal parameter study merge operations for a future merge arbitrary number of studies feature
+  (:issue:`918`, :merge:`1193`). By `Chris Johnson`_.
+
 *******************
 0.13.6 (2025-06-05)
 *******************
@@ -27,8 +32,6 @@ New Features
 
 Internal Changes
 ================
-- Generalize internal parameter study merge operations for a future merge arbitrary number of studies feature
-  (:issue:`918`, :merge:`1193`). By `Chris Johnson`_.
 - Skip ``twine check`` test on macOS until shell kill error is fixed. By `Kyle Brindley`_.
 - Restructure internal deployment around Gitlab-CI tag pipelines. By `Kyle Brindley`_.
 - Preserve QOI datatree structure when merging (:merge:`1205`). By `Matthew Fister`_.
