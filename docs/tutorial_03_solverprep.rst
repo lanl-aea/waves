@@ -475,7 +475,6 @@ View the workflow directed graph by running the following command and opening th
             /home/roppenheimer/waves-tutorials
             $ waves visualize tutorial_03_solverprep --output-file tutorial_03_solverprep.png --width=28 --height=5 --exclude-list /usr/bin .stdout .jnl
 
-
       .. tab-item:: Windows
          :sync: powershell
 

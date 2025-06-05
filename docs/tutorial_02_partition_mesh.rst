@@ -479,7 +479,6 @@ View the workflow directed graph by running the following command and opening th
             /home/roppenheimer/waves-tutorials
             $ waves visualize tutorial_02_partition_mesh --output-file tutorial_02_partition_mesh.png --width=28 --height=3 --exclude-list /usr/bin .stdout .jnl
 
-
       .. tab-item:: Windows
          :sync: powershell
 

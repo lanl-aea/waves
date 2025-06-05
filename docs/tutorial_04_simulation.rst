@@ -418,7 +418,6 @@ View the workflow directed graph by running the following command and opening th
             /home/roppenheimer/waves-tutorials
             $ waves visualize tutorial_04_simulation --output-file tutorial_04_simulation.png --width=28 --height=5 --exclude-list /usr/bin .stdout .jnl .prt .com
 
-
       .. tab-item:: Windows
          :sync: powershell
 
