@@ -46,27 +46,73 @@ Directory Structure
 
 .. note::
 
-    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
-    files.
+   If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+   files.
 
-    .. code-block:: bash
+   .. only:: not epub
 
-        $ pwd
-        /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite --tutorial 7 && mv tutorial_07_cartesian_product_SConstruct SConstruct
-        WAVES fetch
-        Destination directory: '/home/roppenheimer/waves-tutorials'
+      .. tab-set::
+         :sync-group: OS
+
+         .. tab-item:: Linux/MacOS
+            :sync: bash
+
+            .. code-block::
+
+               $ pwd
+               /home/roppenheimer/waves-tutorials
+               $ waves fetch --overwrite --tutorial 7 && mv tutorial_07_cartesian_product_SConstruct SConstruct
+               WAVES fetch
+               Destination directory: '/home/roppenheimer/waves-tutorials'
+
+         .. tab-item:: Windows
+            :sync: powershell
+
+            .. code-block::
+
+               PS > Get-Location
+
+               Path
+               ----
+               C:\Users\roppenheimer\waves-tutorials
+
+               PS > waves fetch --overwrite --tutorial 7 && Move-Item tutorial_07_cartesian_product_SConstruct SConstruct -Force
+               WAVES fetch
+               Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
 4. Download and copy the ``tutorial_07_cartesian_product`` file to a new file named ``tutorial_08_data_extraction``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_07_cartesian_product && cp tutorial_07_cartesian_product tutorial_08_data_extraction
-   WAVES fetch
-   Destination directory: '/home/roppenheimer/waves-tutorials'
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block:: bash
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ waves fetch --overwrite tutorials/tutorial_07_cartesian_product && cp tutorial_07_cartesian_product tutorial_08_data_extraction
+            WAVES fetch
+            Destination directory: '/home/roppenheimer/waves-tutorials'
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > waves fetch --overwrite tutorials\tutorial_07_cartesian_product && Copy-Item tutorial_07_cartesian_product tutorial_08_data_extraction
+            WAVES fetch
+            Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
 **********
 SConscript
@@ -115,12 +161,34 @@ Build Targets
 
 6. Build the new targets
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ scons tutorial_08_data_extraction --jobs=4
-   <output truncated>
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block:: bash
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ scons tutorial_08_data_extraction --jobs=4
+            <output truncated>
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > scons tutorial_08_data_extraction --jobs=4
+            <output truncated>
 
 ************
 Output Files
@@ -129,19 +197,75 @@ Output Files
 7. View the output files. The output files should match those introduced in :ref:`tutorial_cartesian_product`, with
    the addition of the :ref:`odb_extract_cli` output files.
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ find build/tutorial_08_data_extraction/ -name "*.h5"
-   build/tutorial_08_data_extraction/parameter_set2/rectangle_compression.h5
-   build/tutorial_08_data_extraction/parameter_set2/rectangle_compression_datasets.h5
-   build/tutorial_08_data_extraction/parameter_set1/rectangle_compression.h5
-   build/tutorial_08_data_extraction/parameter_set1/rectangle_compression_datasets.h5
-   build/tutorial_08_data_extraction/parameter_set3/rectangle_compression.h5
-   build/tutorial_08_data_extraction/parameter_set3/rectangle_compression_datasets.h5
-   build/tutorial_08_data_extraction/parameter_set0/rectangle_compression.h5
-   build/tutorial_08_data_extraction/parameter_set0/rectangle_compression_datasets.h5
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ find build/tutorial_08_data_extraction/ -name "*.h5"
+            build/tutorial_08_data_extraction/parameter_study.h5
+            build/tutorial_08_data_extraction/parameter_set2/rectangle_compression.h5
+            build/tutorial_08_data_extraction/parameter_set2/rectangle_compression_datasets.h5
+            build/tutorial_08_data_extraction/parameter_set1/rectangle_compression.h5
+            build/tutorial_08_data_extraction/parameter_set1/rectangle_compression_datasets.h5
+            build/tutorial_08_data_extraction/parameter_set3/rectangle_compression.h5
+            build/tutorial_08_data_extraction/parameter_set3/rectangle_compression_datasets.h5
+            build/tutorial_08_data_extraction/parameter_set0/rectangle_compression.h5
+            build/tutorial_08_data_extraction/parameter_set0/rectangle_compression_datasets.h5
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+   
+            PS > Get-ChildItem -Path build\tutorial_08_data_extraction\ -Recurse "*.h5"
+
+                Directory: C:\Users\roppenheimer\waves-tutorials\build\tutorial_08_data_extraction
+
+            Mode                 LastWriteTime         Length Name
+            ----                 -------------         ------ ----
+            -a---             6/9/2023 4:32 PM           9942 parameter_study.h5
+
+                Directory: C:\Users\roppenheimer\waves-tutorials\build\tutorial_08_data_extraction\parameter_set0
+
+            Mode                 LastWriteTime         Length Name
+            ----                 -------------         ------ ----
+            -a---             6/9/2023 4:32 PM          48648 rectangle_compression_datasets.h5
+            -a---             6/9/2023 4:32 PM         140868 rectangle_compression.h5
+
+                Directory: C:\Users\roppenheimer\waves-tutorials\build\tutorial_08_data_extraction\parameter_set1
+
+            Mode                 LastWriteTime         Length Name
+            ----                 -------------         ------ ----
+            -a---             6/9/2023 4:32 PM          48648 rectangle_compression_datasets.h5
+            -a---             6/9/2023 4:32 PM         140868 rectangle_compression.h5
+
+                Directory: C:\Users\roppenheimer\waves-tutorials\build\tutorial_08_data_extraction\parameter_set2
+
+            Mode                 LastWriteTime         Length Name
+            ----                 -------------         ------ ----
+            -a---             6/9/2023 4:32 PM          48648 rectangle_compression_datasets.h5
+            -a---             6/9/2023 4:32 PM         140868 rectangle_compression.h5
+
+                Directory: C:\Users\roppenheimer\waves-tutorials\build\tutorial_08_data_extraction\parameter_set3
+
+            Mode                 LastWriteTime         Length Name
+            ----                 -------------         ------ ----
+            -a---             6/9/2023 4:32 PM          48648 rectangle_compression_datasets.h5
+            -a---             6/9/2023 4:32 PM         140868 rectangle_compression.h5
 
 See the :ref:`odb_extract_cli` and :meth:`waves.scons_extensions.abaqus_extract` documentation for an overview of the H5
 file structure. You will notice that there are two H5 files per parameter set. The data is organized into a root file,
@@ -153,60 +277,137 @@ dataset objects. :ref:`tutorial_post_processing` will introduce a post-processin
 You can explore the structure of each file with `The HDF5 Group command-line-tools`_ below (the ``grep`` command
 excludes the large, unsorted data in the ``/odb`` group path).
 
-.. code-block::
-   :caption: rectangle_compression.h5
+.. only:: not epub
 
-   $ h5ls -r build/tutorial_08_data_extraction/parameter_set0/rectangle_compression.h5 | grep -v odb
-   /                        Group
-   /RECTANGLE               Group
-   /RECTANGLE/FieldOutputs  Group
-   /RECTANGLE/FieldOutputs/ALL_ELEMENTS External Link {/home/roppenheimer/waves-tutorials/build/tutorial_08_data_extraction/parameter_set0/rectangle_compression_datasets.h5//RECTANGLE/FieldOutputs/ALL_ELEMENTS}
-   /RECTANGLE/FieldOutputs/ALL_NODES External Link {/home/roppenheimer/waves-tutorials/build/tutorial_08_data_extraction/parameter_set0/rectangle_compression_datasets.h5//RECTANGLE/FieldOutputs/ALL_NODES}
-   /RECTANGLE/HistoryOutputs Group
-   /RECTANGLE/HistoryOutputs/NODES External Link {/home/roppenheimer/waves-tutorials/build/tutorial_08_data_extraction/parameter_set0/rectangle_compression_datasets.h5//RECTANGLE/HistoryOutputs/NODES}
-   /RECTANGLE/Mesh          External Link {/home/roppenheimer/waves-tutorials/build/tutorial_08_data_extraction/parameter_set0/rectangle_compression_datasets.h5//RECTANGLE/Mesh}
-   /xarray                  Group
-   /xarray/Dataset          Dataset {4}
+   .. tab-set::
+      :sync-group: OS
 
-.. code-block::
-   :caption: rectangle_compression_datasets.h5
+      .. tab-item:: Linux/MacOS
+         :sync: bash
 
-   $ h5ls -r waves/tutorials/build/tutorial_08_data_extraction/parameter_set0/rectangle_compression_datasets.h5
-   /                        Group
-   /RECTANGLE               Group
-   /RECTANGLE/FieldOutputs  Group
-   /RECTANGLE/FieldOutputs/ALL_ELEMENTS Group
-   /RECTANGLE/FieldOutputs/ALL_ELEMENTS/E Dataset {1, 5, 1, 4, 4}
-   /RECTANGLE/FieldOutputs/ALL_ELEMENTS/E\ values Dataset {4}
-   /RECTANGLE/FieldOutputs/ALL_ELEMENTS/S Dataset {1, 5, 1, 4, 4}
-   /RECTANGLE/FieldOutputs/ALL_ELEMENTS/S\ values Dataset {4}
-   /RECTANGLE/FieldOutputs/ALL_ELEMENTS/elements Dataset {1}
-   /RECTANGLE/FieldOutputs/ALL_ELEMENTS/integration\ point Dataset {4}
-   /RECTANGLE/FieldOutputs/ALL_ELEMENTS/integrationPoint Dataset {1, 4}
-   /RECTANGLE/FieldOutputs/ALL_ELEMENTS/step Dataset {1}
-   /RECTANGLE/FieldOutputs/ALL_ELEMENTS/time Dataset {5}
-   /RECTANGLE/FieldOutputs/ALL_NODES Group
-   /RECTANGLE/FieldOutputs/ALL_NODES/U Dataset {1, 5, 4, 2}
-   /RECTANGLE/FieldOutputs/ALL_NODES/U\ values Dataset {2}
-   /RECTANGLE/FieldOutputs/ALL_NODES/nodes Dataset {4}
-   /RECTANGLE/FieldOutputs/ALL_NODES/step Dataset {1}
-   /RECTANGLE/FieldOutputs/ALL_NODES/time Dataset {5}
-   /RECTANGLE/HistoryOutputs Group
-   /RECTANGLE/HistoryOutputs/NODES Group
-   /RECTANGLE/HistoryOutputs/NODES/U1 Dataset {1, 14}
-   /RECTANGLE/HistoryOutputs/NODES/U2 Dataset {1, 14}
-   /RECTANGLE/HistoryOutputs/NODES/node Dataset {1}
-   /RECTANGLE/HistoryOutputs/NODES/step Dataset {1}
-   /RECTANGLE/HistoryOutputs/NODES/time Dataset {14}
-   /RECTANGLE/HistoryOutputs/NODES/type Dataset {1}
-   /RECTANGLE/Mesh          Group
-   /RECTANGLE/Mesh/CPS4R    Dataset {1}
-   /RECTANGLE/Mesh/CPS4R_mesh Dataset {1, 4}
-   /RECTANGLE/Mesh/CPS4R_node Dataset {4}
-   /RECTANGLE/Mesh/node     Dataset {4}
-   /RECTANGLE/Mesh/node_location Dataset {4, 3}
-   /RECTANGLE/Mesh/section_category Dataset {1}
-   /RECTANGLE/Mesh/vector   Dataset {3}
+         .. code-block::
+            :caption: rectangle_compression.h5
+
+            $ h5ls -r build/tutorial_08_data_extraction/parameter_set0/rectangle_compression.h5 | grep -v odb
+            /                        Group
+            /RECTANGLE               Group
+            /RECTANGLE/FieldOutputs  Group
+            /RECTANGLE/FieldOutputs/ALL_ELEMENTS External Link {/home/roppenheimer/waves-tutorials/build/tutorial_08_data_extraction/parameter_set0/rectangle_compression_datasets.h5//RECTANGLE/FieldOutputs/ALL_ELEMENTS}
+            /RECTANGLE/FieldOutputs/ALL_NODES External Link {/home/roppenheimer/waves-tutorials/build/tutorial_08_data_extraction/parameter_set0/rectangle_compression_datasets.h5//RECTANGLE/FieldOutputs/ALL_NODES}
+            /RECTANGLE/HistoryOutputs Group
+            /RECTANGLE/HistoryOutputs/NODES External Link {/home/roppenheimer/waves-tutorials/build/tutorial_08_data_extraction/parameter_set0/rectangle_compression_datasets.h5//RECTANGLE/HistoryOutputs/NODES}
+            /RECTANGLE/Mesh          External Link {/home/roppenheimer/waves-tutorials/build/tutorial_08_data_extraction/parameter_set0/rectangle_compression_datasets.h5//RECTANGLE/Mesh}
+            /xarray                  Group
+            /xarray/Dataset          Dataset {4}
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+            :caption: rectangle_compression.h5
+
+            PS > h5ls -r build\tutorial_08_data_extraction\parameter_set0\rectangle_compression.h5 | Where-Object { $_ -notmatch "odb" }
+            /                        Group
+            /RECTANGLE               Group
+            /RECTANGLE/FieldOutputs  Group
+            /RECTANGLE/FieldOutputs/ALL_ELEMENTS External Link {C:\Users\316269\waves-tutorials\build\tutorial_08_data_extraction\parameter_set0\rectangle_compression_datasets.h5//RECTANGLE/FieldOutputs/ALL_ELEMENTS}
+            /RECTANGLE/FieldOutputs/ALL_NODES External Link {C:\Users\316269\waves-tutorials\build\tutorial_08_data_extraction\parameter_set0\rectangle_compression_datasets.h5//RECTANGLE/FieldOutputs/ALL_NODES}
+            /RECTANGLE/HistoryOutputs Group
+            /RECTANGLE/HistoryOutputs/NODES External Link {C:\Users\316269\waves-tutorials\build\tutorial_08_data_extraction\parameter_set0\rectangle_compression_datasets.h5//RECTANGLE/HistoryOutputs/NODES}
+            /RECTANGLE/Mesh          External Link {C:\Users\316269\waves-tutorials\build\tutorial_08_data_extraction\parameter_set0\rectangle_compression_datasets.h5//RECTANGLE/Mesh}
+            /xarray                  Group
+            /xarray/Dataset          Dataset {4}
+
+.. only:: not epub
+
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+            :caption: rectangle_compression_datasets.h5
+
+            $ h5ls -r build/tutorial_08_data_extraction/parameter_set0/rectangle_compression_datasets.h5
+            /                        Group
+            /RECTANGLE               Group
+            /RECTANGLE/FieldOutputs  Group
+            /RECTANGLE/FieldOutputs/ALL_ELEMENTS Group
+            /RECTANGLE/FieldOutputs/ALL_ELEMENTS/E Dataset {1, 5, 1, 4, 4}
+            /RECTANGLE/FieldOutputs/ALL_ELEMENTS/E\ values Dataset {4}
+            /RECTANGLE/FieldOutputs/ALL_ELEMENTS/S Dataset {1, 5, 1, 4, 4}
+            /RECTANGLE/FieldOutputs/ALL_ELEMENTS/S\ values Dataset {4}
+            /RECTANGLE/FieldOutputs/ALL_ELEMENTS/elements Dataset {1}
+            /RECTANGLE/FieldOutputs/ALL_ELEMENTS/integration\ point Dataset {4}
+            /RECTANGLE/FieldOutputs/ALL_ELEMENTS/integrationPoint Dataset {1, 4}
+            /RECTANGLE/FieldOutputs/ALL_ELEMENTS/step Dataset {1}
+            /RECTANGLE/FieldOutputs/ALL_ELEMENTS/time Dataset {5}
+            /RECTANGLE/FieldOutputs/ALL_NODES Group
+            /RECTANGLE/FieldOutputs/ALL_NODES/U Dataset {1, 5, 4, 2}
+            /RECTANGLE/FieldOutputs/ALL_NODES/U\ values Dataset {2}
+            /RECTANGLE/FieldOutputs/ALL_NODES/nodes Dataset {4}
+            /RECTANGLE/FieldOutputs/ALL_NODES/step Dataset {1}
+            /RECTANGLE/FieldOutputs/ALL_NODES/time Dataset {5}
+            /RECTANGLE/HistoryOutputs Group
+            /RECTANGLE/HistoryOutputs/NODES Group
+            /RECTANGLE/HistoryOutputs/NODES/U1 Dataset {1, 14}
+            /RECTANGLE/HistoryOutputs/NODES/U2 Dataset {1, 14}
+            /RECTANGLE/HistoryOutputs/NODES/node Dataset {1}
+            /RECTANGLE/HistoryOutputs/NODES/step Dataset {1}
+            /RECTANGLE/HistoryOutputs/NODES/time Dataset {14}
+            /RECTANGLE/HistoryOutputs/NODES/type Dataset {1}
+            /RECTANGLE/Mesh          Group
+            /RECTANGLE/Mesh/CPS4R    Dataset {1}
+            /RECTANGLE/Mesh/CPS4R_mesh Dataset {1, 4}
+            /RECTANGLE/Mesh/CPS4R_node Dataset {4}
+            /RECTANGLE/Mesh/node     Dataset {4}
+            /RECTANGLE/Mesh/node_location Dataset {4, 3}
+            /RECTANGLE/Mesh/section_category Dataset {1}
+            /RECTANGLE/Mesh/vector   Dataset {3}
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+            :caption: rectangle_compression_datasets.h5
+
+            PS > h5ls -r build\tutorial_08_data_extraction\parameter_set0\rectangle_compression_datasets.h5
+            /                        Group
+            /RECTANGLE               Group
+            /RECTANGLE/FieldOutputs  Group
+            /RECTANGLE/FieldOutputs/ALL_ELEMENTS Group
+            /RECTANGLE/FieldOutputs/ALL_ELEMENTS/E Dataset {1, 5, 1, 4, 4}
+            /RECTANGLE/FieldOutputs/ALL_ELEMENTS/E\ values Dataset {4}
+            /RECTANGLE/FieldOutputs/ALL_ELEMENTS/S Dataset {1, 5, 1, 4, 4}
+            /RECTANGLE/FieldOutputs/ALL_ELEMENTS/S\ values Dataset {4}
+            /RECTANGLE/FieldOutputs/ALL_ELEMENTS/elements Dataset {1}
+            /RECTANGLE/FieldOutputs/ALL_ELEMENTS/integration\ point Dataset {4}
+            /RECTANGLE/FieldOutputs/ALL_ELEMENTS/integrationPoint Dataset {1, 4}
+            /RECTANGLE/FieldOutputs/ALL_ELEMENTS/step Dataset {1}
+            /RECTANGLE/FieldOutputs/ALL_ELEMENTS/time Dataset {5}
+            /RECTANGLE/FieldOutputs/ALL_NODES Group
+            /RECTANGLE/FieldOutputs/ALL_NODES/U Dataset {1, 5, 4, 2}
+            /RECTANGLE/FieldOutputs/ALL_NODES/U\ values Dataset {2}
+            /RECTANGLE/FieldOutputs/ALL_NODES/nodes Dataset {4}
+            /RECTANGLE/FieldOutputs/ALL_NODES/step Dataset {1}
+            /RECTANGLE/FieldOutputs/ALL_NODES/time Dataset {5}
+            /RECTANGLE/HistoryOutputs Group
+            /RECTANGLE/HistoryOutputs/NODES Group
+            /RECTANGLE/HistoryOutputs/NODES/U1 Dataset {1, 14}
+            /RECTANGLE/HistoryOutputs/NODES/U2 Dataset {1, 14}
+            /RECTANGLE/HistoryOutputs/NODES/node Dataset {1}
+            /RECTANGLE/HistoryOutputs/NODES/step Dataset {1}
+            /RECTANGLE/HistoryOutputs/NODES/time Dataset {14}
+            /RECTANGLE/HistoryOutputs/NODES/type Dataset {1}
+            /RECTANGLE/Mesh          Group
+            /RECTANGLE/Mesh/CPS4R    Dataset {1}
+            /RECTANGLE/Mesh/CPS4R_mesh Dataset {1, 4}
+            /RECTANGLE/Mesh/CPS4R_node Dataset {4}
+            /RECTANGLE/Mesh/node     Dataset {4}
+            /RECTANGLE/Mesh/node_location Dataset {4, 3}
+            /RECTANGLE/Mesh/section_category Dataset {1}
+            /RECTANGLE/Mesh/vector   Dataset {3}
 
 Each group path directly above a ``Dataset`` path entry can be opened with `Xarray`_, e.g.
 ``/RECTANGLE/FieldOutputs/ALL_ELEMENTS`` as
@@ -240,11 +441,32 @@ Workflow Visualization
 View the workflow directed graph by running the following command and opening the image in your preferred image viewer.
 First, plot the workflow with all parameter sets.
 
-.. code-block::
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_08_data_extraction --output-file tutorial_08_data_extraction.png --width=48 --height=12 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ waves visualize tutorial_08_data_extraction --output-file tutorial_08_data_extraction.png --width=48 --height=12 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > waves visualize tutorial_08_data_extraction --output-file tutorial_08_data_extraction.png --width=48 --height=12 --exclude-list .stdout .jnl .prt .com .msg .dat .sta
 
 The output should look similar to the figure below.
 
@@ -264,11 +486,32 @@ The output should look similar to the figure below.
 
 Now plot the workflow with only the first set, ``set0``.
 
-.. code-block::
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_08_data_extraction --output-file tutorial_08_data_extraction_set0.png --width=46 --height=6 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ waves visualize tutorial_08_data_extraction --output-file tutorial_08_data_extraction_set0.png --width=46 --height=6 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > waves visualize tutorial_08_data_extraction --output-file tutorial_08_data_extraction_set0.png --width=46 --height=6 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
 
 The output should look similar to the figure below.
 
