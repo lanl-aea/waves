@@ -8,6 +8,10 @@ Changelog
 0.13.7 (unreleased)
 *******************
 
+Internal Changes
+================
+- Fix the GitHub Actions conda-build test workflow (:issue:`933`, :merge:`1213`). By `Kyle Brindley`_.
+
 *******************
 0.13.6 (2025-06-05)
 *******************
