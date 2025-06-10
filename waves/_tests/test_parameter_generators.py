@@ -555,6 +555,11 @@ test_update_set_names_cases = {
         None,
         ["parameter_set0", "parameter_set1"],
     ),
+    "single parameter set": (
+        parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
+        None,
+        ["parameter_set0"],
+    ),
 }
 
 
