@@ -11,6 +11,8 @@ Changelog
 Internal Changes
 ================
 - Fix the GitHub Actions conda-build test workflow (:issue:`933`, :merge:`1213`). By `Kyle Brindley`_.
+- Move the AEA RHEL CI jobs out of a child pipeline and into main parent pipeline to allow a coverage badge
+  (:issue:`934`, :merge:`1214`). By `Kyle Brindley`_.
 
 *******************
 0.13.6 (2025-06-05)
