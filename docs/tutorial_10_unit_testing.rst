@@ -207,8 +207,6 @@ directory is specified by name to reduce clutter in the output shown.
                C:\Users\roppenheimer\waves-tutorials
 
             PS > tree build\unit_testing\ /F
-            Folder PATH listing for volume Windows
-            Volume serial number is E681-1CAF
             C:\USERS\ROPPENHEIMER\WAVES-TUTORIALS\BUILD\UNIT_TESTING
                 unit_testing_results.xml
 
