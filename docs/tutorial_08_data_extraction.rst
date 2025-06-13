@@ -310,11 +310,11 @@ excludes the large, unsorted data in the ``/odb`` group path).
             /                        Group
             /RECTANGLE               Group
             /RECTANGLE/FieldOutputs  Group
-            /RECTANGLE/FieldOutputs/ALL_ELEMENTS External Link {C:\Users\316269\waves-tutorials\build\tutorial_08_data_extraction\parameter_set0\rectangle_compression_datasets.h5//RECTANGLE/FieldOutputs/ALL_ELEMENTS}
-            /RECTANGLE/FieldOutputs/ALL_NODES External Link {C:\Users\316269\waves-tutorials\build\tutorial_08_data_extraction\parameter_set0\rectangle_compression_datasets.h5//RECTANGLE/FieldOutputs/ALL_NODES}
+            /RECTANGLE/FieldOutputs/ALL_ELEMENTS External Link {C:\Users\roppenheimer\waves-tutorials\build\tutorial_08_data_extraction\parameter_set0\rectangle_compression_datasets.h5//RECTANGLE/FieldOutputs/ALL_ELEMENTS}
+            /RECTANGLE/FieldOutputs/ALL_NODES External Link {C:\Users\roppenheimer\waves-tutorials\build\tutorial_08_data_extraction\parameter_set0\rectangle_compression_datasets.h5//RECTANGLE/FieldOutputs/ALL_NODES}
             /RECTANGLE/HistoryOutputs Group
-            /RECTANGLE/HistoryOutputs/NODES External Link {C:\Users\316269\waves-tutorials\build\tutorial_08_data_extraction\parameter_set0\rectangle_compression_datasets.h5//RECTANGLE/HistoryOutputs/NODES}
-            /RECTANGLE/Mesh          External Link {C:\Users\316269\waves-tutorials\build\tutorial_08_data_extraction\parameter_set0\rectangle_compression_datasets.h5//RECTANGLE/Mesh}
+            /RECTANGLE/HistoryOutputs/NODES External Link {C:\Users\roppenheimer\waves-tutorials\build\tutorial_08_data_extraction\parameter_set0\rectangle_compression_datasets.h5//RECTANGLE/HistoryOutputs/NODES}
+            /RECTANGLE/Mesh          External Link {C:\Users\roppenheimer\waves-tutorials\build\tutorial_08_data_extraction\parameter_set0\rectangle_compression_datasets.h5//RECTANGLE/Mesh}
             /xarray                  Group
             /xarray/Dataset          Dataset {4}
 
