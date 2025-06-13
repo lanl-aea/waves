@@ -61,27 +61,74 @@ Directory Structure
 
 .. note::
 
-    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
-    files.
+   If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+   files.
 
-    .. code-block:: bash
+   .. only:: not epub
 
-        $ pwd
-        /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite --tutorial 10 && mv tutorial_10_unit_testing_SConstruct SConstruct
-        WAVES fetch
-        Destination directory: '/home/roppenheimer/waves-tutorials'
+      .. tab-set::
+         :sync-group: OS
+
+         .. tab-item:: Linux/MacOS
+            :sync: bash
+
+            .. code-block:: bash
+
+               $ pwd
+               /home/roppenheimer/waves-tutorials
+               $ waves fetch --overwrite --tutorial 10 && mv tutorial_10_unit_testing_SConstruct SConstruct
+               WAVES fetch
+               Destination directory: '/home/roppenheimer/waves-tutorials'
+
+         .. tab-item:: Windows
+            :sync: powershell
+
+            .. code-block:: powershell
+
+               PS > Get-Location
+
+               Path
+               ----
+               C:\Users\roppenheimer\waves-tutorials
+
+               PS > waves fetch --overwrite --tutorial 10 && Move-Item tutorial_10_unit_testing_SConstruct SConstruct -Force
+               WAVES fetch
+               Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
 4. Download and copy the ``tutorial_09_post_processing`` file to a new file named ``tutorial_11_regression_testing``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_09_post_processing && cp tutorial_09_post_processing tutorial_11_regression_testing
-   WAVES fetch
-   Destination directory: '/home/roppenheimer/waves-tutorials'
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block:: bash
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ waves fetch --overwrite tutorials/tutorial_09_post_processing && cp tutorial_09_post_processing tutorial_11_regression_testing
+            WAVES fetch
+            Destination directory: '/home/roppenheimer/waves-tutorials'
+
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > waves fetch --overwrite tutorials\tutorial_09_post_processing && Copy-Item tutorial_09_post_processing tutorial_11_regression_testing
+            WAVES fetch
+            Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
 *****************
 Regression Script
@@ -162,34 +209,108 @@ Build Targets
 
 7. Build the datacheck targets without executing the full simulation workflow
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ time scons datacheck --jobs=4
-   <output truncated>
-   scons: done building targets.
+   .. tab-set::
+      :sync-group: OS
 
-   real 0m9.952s
-   user 0m21.537s
-   sys  0m15.664s
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block:: bash
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ time scons datacheck --jobs=4
+            <output truncated>
+            scons: done building targets.
+
+            real 0m9.952s
+            user 0m21.537s
+            sys  0m15.664s
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > Measure-Command { scons datacheck --jobs=4 | Out-Default }
+            <output truncated>
+            scons: done building targets.
+
+            Days              : 0
+            Hours             : 0
+            Minutes           : 1
+            Seconds           : 1
+            Milliseconds      : 129
+            Ticks             : 611291696
+            TotalDays         : 0.000707513537037037
+            TotalHours        : 0.0169803248888889
+            TotalMinutes      : 1.01881949333333
+            TotalSeconds      : 61.1291696
+            TotalMilliseconds : 61129.1696
 
 8. Run the full workflow and verify that the CSV regression test passes
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ scons datacheck --clean
-   $ time scons tutorial_11_regression_testing --jobs=4
-   <output truncated>
-   scons: done building targets.
+   .. tab-set::
+      :sync-group: OS
 
-   real 0m29.031s
-   user 0m25.712s
-   sys  0m25.622s
-   $ cat build/tutorial_11_regression_testing/regression.yaml
-   CSV comparison: true
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block:: bash
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ scons datacheck --clean
+            $ time scons tutorial_11_regression_testing --jobs=4
+            <output truncated>
+            scons: done building targets.
+
+            real 0m29.031s
+            user 0m25.712s
+            sys  0m25.622s
+            $ cat build/tutorial_11_regression_testing/regression.yaml
+            CSV comparison: true
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > scons datacheck --clean
+            PS > Measure-Command { scons tutorial_11_regression_testing --jobs=4 | Out-Default }
+            <output truncated>
+            scons: done building targets.
+
+            Days              : 0
+            Hours             : 0
+            Minutes           : 1
+            Seconds           : 13
+            Milliseconds      : 493
+            Ticks             : 734936692
+            TotalDays         : 0.000850621171296296
+            TotalHours        : 0.0204149081111111
+            TotalMinutes      : 1.22489448666667
+            TotalSeconds      : 73.4936692
+            TotalMilliseconds : 73493.6692
+
+            PS > Get-Content build\tutorial_11_regression_testing\regression.yaml
+            CSV comparison: true
 
 If you haven't added the project-wide datacheck alias to the previous tutorials, you should expect the ``datacheck``
 alias to run faster than the ``tutorial_11_regression_testing`` alias because the datacheck excludes the solve, extract,
@@ -208,59 +329,134 @@ comparison, you will also need to add a comparable alias to collect the full wor
 Output Files
 ************
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ tree build/tutorial_11_regression_testing/parameter_set0/
-   build/tutorial_11_regression_testing/parameter_set0/
-   |-- abaqus.rpy
-   |-- abaqus.rpy.1
-   |-- abaqus.rpy.2
-   |-- assembly.inp
-   |-- boundary.inp
-   |-- field_output.inp
-   |-- history_output.inp
-   |-- materials.inp
-   |-- parts.inp
-   |-- rectangle_compression.inp
-   |-- rectangle_compression.inp.in
-   |-- rectangle_compression_DATACHECK.023
-   |-- rectangle_compression_DATACHECK.com
-   |-- rectangle_compression_DATACHECK.dat
-   |-- rectangle_compression_DATACHECK.mdl
-   |-- rectangle_compression_DATACHECK.msg
-   |-- rectangle_compression_DATACHECK.odb
-   |-- rectangle_compression_DATACHECK.prt
-   |-- rectangle_compression_DATACHECK.sim
-   |-- rectangle_compression_DATACHECK.stdout
-   |-- rectangle_compression_DATACHECK.stt
-   |-- rectangle_geometry.cae
-   |-- rectangle_geometry.jnl
-   |-- rectangle_geometry.stdout
-   |-- rectangle_mesh.cae
-   |-- rectangle_mesh.inp
-   |-- rectangle_mesh.jnl
-   |-- rectangle_mesh.stdout
-   |-- rectangle_partition.cae
-   |-- rectangle_partition.jnl
-   `-- rectangle_partition.stdout
+   .. tab-set::
+      :sync-group: OS
 
-   0 directories, 31 files
-   $ tree build/tutorial_11_regression_testing/ -L 1
-   build/tutorial_11_regression_testing/
-   |-- parameter_set0
-   |-- parameter_set1
-   |-- parameter_set2
-   |-- parameter_set3
-   |-- parameter_study.h5
-   |-- regression.yaml
-   |-- regression.yaml.stdout
-   |-- stress_strain_comparison.csv
-   |-- stress_strain_comparison.pdf
-   `-- stress_strain_comparison.stdout
+      .. tab-item:: Linux/MacOS
+         :sync: bash
 
-   4 directories, 6 files
+         .. code-block:: bash
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ tree build/tutorial_11_regression_testing/parameter_set0/
+            build/tutorial_11_regression_testing/parameter_set0/
+            |-- abaqus.rpy
+            |-- abaqus.rpy.1
+            |-- abaqus.rpy.2
+            |-- assembly.inp
+            |-- boundary.inp
+            |-- field_output.inp
+            |-- history_output.inp
+            |-- materials.inp
+            |-- parts.inp
+            |-- rectangle_compression.inp
+            |-- rectangle_compression.inp.in
+            |-- rectangle_compression_DATACHECK.023
+            |-- rectangle_compression_DATACHECK.com
+            |-- rectangle_compression_DATACHECK.dat
+            |-- rectangle_compression_DATACHECK.mdl
+            |-- rectangle_compression_DATACHECK.msg
+            |-- rectangle_compression_DATACHECK.odb
+            |-- rectangle_compression_DATACHECK.prt
+            |-- rectangle_compression_DATACHECK.sim
+            |-- rectangle_compression_DATACHECK.stdout
+            |-- rectangle_compression_DATACHECK.stt
+            |-- rectangle_geometry.cae
+            |-- rectangle_geometry.jnl
+            |-- rectangle_geometry.stdout
+            |-- rectangle_mesh.cae
+            |-- rectangle_mesh.inp
+            |-- rectangle_mesh.jnl
+            |-- rectangle_mesh.stdout
+            |-- rectangle_partition.cae
+            |-- rectangle_partition.jnl
+            `-- rectangle_partition.stdout
+
+            0 directories, 31 files
+            $ tree build/tutorial_11_regression_testing/ -L 1
+            build/tutorial_11_regression_testing/
+            |-- parameter_set0
+            |-- parameter_set1
+            |-- parameter_set2
+            |-- parameter_set3
+            |-- parameter_study.h5
+            |-- regression.yaml
+            |-- regression.yaml.stdout
+            |-- stress_strain_comparison.csv
+            |-- stress_strain_comparison.pdf
+            `-- stress_strain_comparison.pdf.stdout
+
+            4 directories, 6 files
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > tree build\tutorial_11_regression_testing\parameter_set0\ /F
+            C:\USERS\ROPPENHEIMER\WAVES-TUTORIALS\BUILD\TUTORIAL_11_REGRESSION_TESTING\PARAMETER_SET0
+                abaqus.rpy
+                abaqus.rpy.2
+                abaqus.rpy.3
+                abaqus.rpy.4
+                abaqus.rpy.5
+                assembly.inp
+                boundary.inp
+                field_output.inp
+                history_output.inp
+                materials.inp
+                parts.inp
+                rectangle_compression.com
+                rectangle_compression.csv
+                rectangle_compression.dat
+                rectangle_compression.h5
+                rectangle_compression.inp
+                rectangle_compression.inp.in
+                rectangle_compression.msg
+                rectangle_compression.odb
+                rectangle_compression.odb.stdout
+                rectangle_compression.prt
+                rectangle_compression.sta
+                rectangle_compression_DATACHECK.cax
+                rectangle_compression_datasets.h5
+                rectangle_geometry.cae
+                rectangle_geometry.cae.stdout
+                rectangle_geometry.jnl
+                rectangle_mesh.cae
+                rectangle_mesh.inp
+                rectangle_mesh.inp.stdout
+                rectangle_mesh.jnl
+                rectangle_partition.cae
+                rectangle_partition.cae.stdout
+                rectangle_partition.jnl
+
+            No subfolders exist
+
+            PS > Get-ChildItem build\tutorial_11_regression_testing\
+
+                Directory: C:\Users\roppenheimer\waves-tutorials\build\tutorial_11_regression_testing
+
+            Mode                 LastWriteTime         Length Name
+            ----                 -------------         ------ ----
+            d----            6/9/2023  4:32 PM                parameter_set0
+            d----            6/9/2023  4:32 PM                parameter_set1
+            d----            6/9/2023  4:32 PM                parameter_set2
+            d----            6/9/2023  4:32 PM                parameter_set3
+            -a---            6/9/2023  4:32 PM           9942 parameter_study.h5
+            -a---            6/9/2023  4:32 PM             22 regression.yaml
+            -a---            6/9/2023  4:32 PM              0 regression.yaml.stdout
+            -a---            6/9/2023  4:32 PM           2609 stress_strain_comparison.csv
+            -a---            6/9/2023  4:32 PM          12061 stress_strain_comparison.pdf
+            -a---            6/9/2023  4:32 PM           1160 stress_strain_comparison.pdf.stdout
 
 **********************
 Workflow Visualization
@@ -269,11 +465,32 @@ Workflow Visualization
 View the workflow directed graph by running the following command and opening the image in your preferred image viewer.
 Plot the workflow with only the first set, ``set0``.
 
-.. code-block::
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ waves visualize datacheck --output-file tutorial_11_datacheck_set0.png --width=42 --height=8 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ waves visualize datacheck --output-file tutorial_11_datacheck_set0.png --width=42 --height=8 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > waves visualize datacheck --output-file tutorial_11_datacheck_set0.png --width=42 --height=8 --exclude-list .stdout .jnl .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
 
 The output should look similar to the figure below.
 
