@@ -173,7 +173,6 @@ directory. Check the contents of this directory using the ``ls`` command.
 
             Mode                 LastWriteTime         Length Name
             ----                 -------------         ------ ----
-            d----            6/9/2023  4:32 PM                __pycache__
             -a---            6/9/2023  4:32 PM              0 __init__.py
             -a---            6/9/2023  4:32 PM           1979 abaqus_utilities.py
             -a---            6/9/2023  4:32 PM             77 assembly.inp
