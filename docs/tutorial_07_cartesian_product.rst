@@ -392,11 +392,11 @@ Explore the contents of the ``build`` directory as shown below.
 
             Mode                 LastWriteTime         Length Name
             ----                 -------------         ------ ----
-            d----             6/9/2023 4:32 pM                parameter_set0
-            d----             6/9/2023 4:32 pM                parameter_set1
-            d----             6/9/2023 4:32 pM                parameter_set2
-            d----             6/9/2023 4:32 pM                parameter_set3
-            -a---             6/9/2023 4:32 pM           9942 parameter_study.h5
+            d----             6/9/2023 4:32 PM                parameter_set0
+            d----             6/9/2023 4:32 PM                parameter_set1
+            d----             6/9/2023 4:32 PM                parameter_set2
+            d----             6/9/2023 4:32 PM                parameter_set3
+            -a---             6/9/2023 4:32 PM           9942 parameter_study.h5
 
 Explore the contents of the ``parameter_set0`` directory using the ``tree`` command. The contents of the remaining
 ``parameter_set{1,2,3}`` directories will be very similar to that shown for ``parameter_set0``.
