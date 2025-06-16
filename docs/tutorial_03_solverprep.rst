@@ -136,7 +136,7 @@ Solver Input Files
 
 This action will fetch the source files we included in the
 ``tutorial_03_solverprep`` file into the ``waves-tutorials/modsim_package/abaqus/``
-directory. Check the contents of this directory using the ``ls`` command.
+directory. Check the contents of this directory with the commands below.
 
 .. only:: not epub
 

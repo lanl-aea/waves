@@ -358,8 +358,7 @@ from parameter set generation. By using the ``--jobs=4`` option, `SCons`_ can ru
 Output Files
 ************
 
-Explore the contents of the ``build`` directory using the ``ls`` and ``tree`` commands against the ``build`` directory,
-as shown below.
+Explore the contents of the ``build`` directory as shown below.
 
 .. only:: not epub
 
