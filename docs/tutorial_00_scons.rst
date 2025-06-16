@@ -360,8 +360,10 @@ line in your project configuration.
             /home/roppenheimer/waves-tutorials
             $ scons -h
             scons: Reading SConscript files ...
-            Checking whether /apps/abaqus/Commands/abq2024 program exists.../apps/abaqus/Commands/abq2024
-            Checking whether abq2024 program exists.../apps/abaqus/Commands/abq2024
+            Checking whether '/apps/abaqus/Commands/abq2024' program exists.../apps/abaqus/Commands/abq2024
+            Checking whether '/usr/projects/ea/abaqus/Commands/abq2024' program exists...no
+            Checking whether 'abq2024' program exists.../apps/abaqus/Commands/abq2024
+            Checking whether 'abaqus' program exists...no
             scons: done reading SConscript files.
             Local Options:
               --build-dir=DIR           SCons build (variant) root directory. Relative or absolute path. (default: 'build')
@@ -393,8 +395,8 @@ line in your project configuration.
             scons: Reading SConscript files ...
             Checking whether '/apps/abaqus/Commands/abq2024' program exists...no
             Checking whether '/usr/projects/ea/abaqus/Commands/abq2024' program exists...no
-            Checking whether 'abq2024' program exists...no
-            Checking whether 'abaqus' program exists...no
+            Checking whether 'abq2024' program exists...C:\SIMULIA\Commands\abq2024.BAT
+            Checking whether 'abaqus' program exists...C:\SIMULIA\Commands\abaqus.BAT
             scons: done reading SConscript files.
             Local Options:
               --build-dir=DIR           SCons build (variant) root directory. Relative or absolute path. (default: 'build')
