@@ -331,8 +331,10 @@ Build Targets
             /home/roppenheimer/waves-tutorials
             $ scons tutorial_02_partition_mesh
             scons: Reading SConscript files ...
-            Checking whether /apps/abaqus/Commands/abq2024 program exists.../apps/abaqus/Commands/abq2024
-            Checking whether abq2024 program exists.../apps/abaqus/Commands/abq2024
+            Checking whether '/apps/abaqus/Commands/abq2024' program exists.../apps/abaqus/Commands/abq2024
+            Checking whether '/usr/projects/ea/abaqus/Commands/abq2024' program exists...no
+            Checking whether 'abq2024' program exists.../apps/abaqus/Commands/abq2024
+            Checking whether 'abaqus' program exists...no
             scons: done reading SConscript files.
             scons: Building targets ...
             cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2024 cae -noGui
