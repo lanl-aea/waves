@@ -18,7 +18,7 @@ test_platform_check_cases = {
     ids=test_platform_check_cases.keys(),
 )
 def test_platform_check(mock_system, expected_testing_windows, expected_root_fs, expected_testing_macos):
-    with patch("platform.system", return_value=mock_system):
+    with patch("platform.system", return_value=mock_system), patch("pathlib.Path.drive", return_value="C:"):
         testing_windows, root_fs, testing_macos = common.platform_check()
     assert testing_windows == expected_testing_windows
     assert root_fs == expected_root_fs

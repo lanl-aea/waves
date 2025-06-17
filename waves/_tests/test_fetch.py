@@ -15,8 +15,9 @@ from waves._tests.common import platform_check
 testing_windows, root_fs, testing_macos = platform_check()
 
 if testing_windows:
-    root_directory = pathlib.Path("C:/path/to/source")
-    destination = pathlib.Path("C:/path/to/destination")
+    drive = pathlib.Path(root_fs).drive
+    root_directory = pathlib.Path(f"{drive}/path/to/source")
+    destination = pathlib.Path(f"{drive}/path/to/destination")
 else:
     root_directory = pathlib.Path("/path/to/source")
     destination = pathlib.Path("/path/to/destination")

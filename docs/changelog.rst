@@ -15,6 +15,7 @@ Internal Changes
   (:issue:`934`, :merge:`1214`). By `Kyle Brindley`_.
 - Drop Python 3.9 support and testing to match minimum Xarray version dependencies. New minimum supported version of
   Python is 3.10 (:issue:`936`, :merge:`1215`). By `Kyle Brindley`_.
+- Update path unit tests to account for differences in Windows drive letter. By `Kyle Brindley`_.
 
 *******************
 0.13.6 (2025-06-05)
