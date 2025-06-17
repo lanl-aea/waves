@@ -22,7 +22,7 @@ def test_platform_check(mock_system, expected_testing_windows, expected_root_fs,
     windows_path_mock.drive = "C:"
     with (
         patch("platform.system", return_value=mock_system),
-        patch("pathlib.Path.resolve", return_value=windows_path_mock)
+        patch("pathlib.Path.resolve", return_value=windows_path_mock),
     ):
         testing_windows, root_fs, testing_macos = common.platform_check()
     assert testing_windows == expected_testing_windows
