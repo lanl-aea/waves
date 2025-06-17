@@ -13,7 +13,7 @@ def platform_check():
     """
     if platform.system().lower() == "windows":
         drive = pathlib.Path("/").resolve().drive
-        root_fs = f"{drive}:\\"
+        root_fs = f"{drive}\\"
         testing_windows = True
     else:
         root_fs = "/"
