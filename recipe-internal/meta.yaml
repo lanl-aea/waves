@@ -1,5 +1,6 @@
 {% set name = "waves" %}
 {% set version = VERSION %}
+{% set python_min = "3.10" %}
 
 package:
   name: {{ name|lower }}
@@ -50,7 +51,7 @@ requirements:
     - sphinxcontrib-bibtex
     - xarray >=2024.10.0
   run:
-    - python >=3.9
+    - python >={{ python_min }}
     - h5netcdf
     - h5py
     - matplotlib-base
