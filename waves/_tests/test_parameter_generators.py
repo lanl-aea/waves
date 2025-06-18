@@ -765,7 +765,6 @@ class TestParameterGenerator:
                 **kwargs,
             )
         with (
-            patch("xarray.open_dataset", mock_open()),
             patch("waves.parameter_generators._open_parameter_study", return_value=mock_previous_study),
         ):
             assert list(TemplateGenerator._set_names.values()) == expected
