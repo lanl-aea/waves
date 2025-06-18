@@ -764,9 +764,7 @@ class TestParameterGenerator:
                 previous_parameter_study=mock_previous_study_name,
                 **kwargs,
             )
-        with (
-            patch("waves.parameter_generators._open_parameter_study", return_value=mock_previous_study),
-        ):
+        with patch("waves.parameter_generators._open_parameter_study", return_value=mock_previous_study):
             assert list(TemplateGenerator._set_names.values()) == expected
             assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
             TemplateGenerator._merge_parameter_studies()
