@@ -733,6 +733,47 @@ class TestParameterGenerator:
         assert list(TemplateGenerator._set_names.values()) == expected
         assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
 
+    @pytest.mark.parametrize(
+        "schema, file_template, set_template, expected",
+        templates.values(),
+        ids=templates.keys(),
+    )
+    def test_merge_parameter_studies(self, schema, file_template, set_template, expected):
+        """Check the generated parameter set names against template arguments
+
+        :param str schema: placeholder string standing in for the schema read from an input file
+        :param str file_template: user supplied string to be used as a template for output file names
+        :param str set_template: user supplied string to be used as a template for parameter names
+        :param list expected: list of expected parameter name strings
+        """
+        kwargs = {"sets": 1}
+        mock_previous_study_name = "dummy_study.h5"
+        if not set_template:
+            mock_previous_study = DummyGenerator(schema, output_file_template=file_template, **kwargs).parameter_study
+            TemplateGenerator = DummyGenerator(
+                schema, output_file_template=file_template, previous_parameter_study=mock_previous_study_name, **kwargs
+            )
+        else:
+            mock_previous_study = DummyGenerator(
+                schema, output_file_template=file_template, set_name_template=set_template, **kwargs
+            ).parameter_study
+            TemplateGenerator = DummyGenerator(
+                schema,
+                output_file_template=file_template,
+                set_name_template=set_template,
+                previous_parameter_study=mock_previous_study_name,
+                **kwargs,
+            )
+        with (
+            patch("xarray.open_dataset", mock_open()),
+            patch("waves.parameter_generators._open_parameter_study", return_value=mock_previous_study),
+        ):
+            assert list(TemplateGenerator._set_names.values()) == expected
+            assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
+            TemplateGenerator._merge_parameter_studies()
+            assert list(TemplateGenerator._set_names.values()) == expected
+            assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
+
     # fmt: off
     init_write_stdout = {# schema, template, overwrite, dry_run,         is_file,  sets, stdout_calls  # noqa: E261
         "no-template-1": (     {},     None,     False,  False,          [False],    1,            1),  # noqa: E241,E201,E501
