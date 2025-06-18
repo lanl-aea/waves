@@ -21,9 +21,9 @@ copy of any tutorial file.
 
 .. warning::
 
-   **Windows users:** To run the tutorial commands and use `WAVES` functionality correctly, you **must** use 
-   **PowerShell 7 (pwsh)**. Earlier versions of PowerShell do not support key features such as command chaining (`&&`) 
-   and output redirection. If you are on an older version, please install `pwsh`.
+   Windows users: To run the tutorial commands and use ``WAVES`` functionality correctly, you must use 
+   PowerShell 7 (pwsh). Earlier versions of PowerShell do not support key features such as command chaining (``&&``) 
+   and output redirection. If you are on an older version, please install ``pwsh``.
 
 .. include:: modsim_templates.txt
 
