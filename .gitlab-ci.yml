@@ -11,26 +11,196 @@ workflow:
 include: ".pipeline-common.yml"
 
 stages:
-  - child-pipelines
+  - test
+  - deploy
 
-aea:
-  stage: child-pipelines
-  trigger:
-    include:
-      - local: .pipeline-aea.yml
-    strategy: depend
+default:
+  tags:
+    - shell
+    - aea
+    - linux
+
+aea-developer-test:
+  extends:
+    - .nix-job-environment
+    - .developer-test
+  stage: test
+  variables:
+    abaqus_command_prefix: "/apps/abaqus/Commands"
+    cubit_command_prefix: "/apps"
+  artifacts:
+    expire_in: '2 hrs'
+    paths:
+      - build/pytest/coverage
+      - build/docs/html-internal
+
+aea-style-guide:
+  extends:
+    - .nix-job-environment
+    - .style-guide
+  stage: test
+  variables:
+    environment_file: "style.yml"
+
+aea-conda-build-internal:
+  extends:
+    - .nix-job-environment
+    - .conda-build
+  stage: test
+  variables:
+    environment_file: "conda-build.yml"
+    recipe_directory: "recipe-internal"
+  artifacts:
+    expire_in: '2 hrs'
+    paths:
+      - conda-bld/noarch/waves-*-*.tar.bz2
+
+aea-conda-build:
+  extends:
+    - .nix-job-environment
+    - .conda-build
+  stage: test
+  variables:
+    environment_file: "conda-build.yml"
+    recipe_directory: "recipe"
+
+aea-conda-build-matrix:
+  extends:
+    - .nix-job-environment
+  stage: test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  variables:
+    environment_file: "conda-build.yml"
+  script:
+    # Override default permissions. Set group to rx with no write permissions.
+    - umask 0022
+    - mkdir ${conda_artifacts_directory}
+    - pytest recipe-matrix/matrix.py -v --no-showlocals --tb=short
+  timeout: 4h
+
+# https://re-git.lanl.gov/aea/developer-operations/aea-conda
+aea-conda-deploy:
+  stage: deploy
   rules:
     - if: $CI_COMMIT_TAG
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   variables:
-    PARENT_CI_COMMIT_TAG: $CI_COMMIT_TAG
-    PARENT_CI_PIPELINE_SOURCE: $CI_PIPELINE_SOURCE
-    PARENT_CI_COMMIT_BRANCH: $CI_COMMIT_BRANCH
+    PARENT_CI_JOB_ID_FILE: /nettmp/aea_service/${CI_PROJECT_PATH}/tag_conda_build.txt
+    AEA_CONDA_DEPLOY_JOB: aea-conda-deploy-curl-jobid
+    PARENT_CI_PROJECT_ID: $CI_PROJECT_ID
+    AEA_CONDA_PACKAGE_JOB: aea-conda-build-internal
+    AEA_CONDA_PACKAGE_ARTIFACTS: conda-bld/noarch/waves-*-*.tar.bz2
+  trigger:
+    project: aea/developer-operations/aea-conda
+    branch: main
+    strategy: depend
+
+aea-pip-build:
+  extends:
+    - .nix-job-environment
+    - .pip-build
+  stage: test
+  variables:
+    environment_file: "pip-build.yml"
+  artifacts:
+    expire_in: '2 hrs'
+    paths:
+      - build/dist/waves-*.tar.gz
+      - build/dist/waves-*.whl
+
+pypi-pip-build:
+  extends:
+    - .nix-job-environment
+    - .pip-build
+  stage: test
+  variables:
+    environment_file: "pip-build.yml"
+    distribution_name: "waves-workflows"
+
+aea-pip-deploy:
+  extends:
+    - .nix-job-environment
+  stage: deploy
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - if: $CI_COMMIT_TAG
+  variables:
+    environment_file: "pip-deploy.yml"
+  dependencies:
+    - "aea-pip-build"
+  script:
+    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi build/dist/*
+
+release:
+  extends:
+    - .nix-job-environment
+  stage: deploy
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - if: $CI_COMMIT_TAG
+  variables:
+    environment_file: "release.yml"
+  script:
+    # Create the release notes. Assumes changelog contains section headers with version number in reverse chronological
+    # order as:
+    #
+    # ```
+    # *******************
+    # 0.12.6 (2025-02-24)
+    # *******************
+    # ... 0.12.6 changelog content to include as release notes...
+    # *******************
+    # 0.12.5 (2025-01-27)
+    # *******************
+    # ```
+    #
+    # sed commands
+    #
+    # 1. print everything between current version and the previous version, excluding the versions
+    # 2. strip the asterisk delimited section header bars
+    # 3. replace the RST issue/merge custom directives with plain text
+    - notes_file="notes.md"
+    - sed -n '/^'"$CI_COMMIT_TAG"'/,/^[0-9]\+\.[0-9]\+\.[0-9]\+/{//!p}' docs/changelog.rst > ${notes_file}
+    - sed -i '/^\*\+$/d' ${notes_file}
+    - sed -i 's/:\([a-z]\+\):`\([0-9]\+\)`/\1 \2/g' ${notes_file}
+    - cat ${notes_file}
+    # Authenticate and create release with glab
+    - glab auth login --job-token ${CI_JOB_TOKEN} --hostname ${CI_SERVER_HOST} --api-protocol ${CI_SERVER_PROTOCOL}
+    - GITLAB_HOST=${CI_SERVER_URL} glab release create ${CI_COMMIT_TAG} -R ${CI_PROJECT_PATH} --ref ${CI_COMMIT_SHA} --notes-file ${notes_file} --no-update --no-close-milestone
+
+# It MUST be called pages
+pages:
+  extends:
+    - .nix-job-environment
+  stage: deploy
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_TAG
+  variables:
+    environment_file: "pip-build.yml"
+  dependencies:
+    - "aea-developer-test"
+  script:
+    - project_root=$PWD
+    - rm -rf public
+    - mkdir -p public/modsim-template
+    - cp -r build/docs/html-internal/* public/
+    - cp -r build/pytest/coverage public/coverage
+    # Build modsim template documentation
+    - cd waves/modsim_template
+    - PYTHONPATH=${project_root} scons html
+    - cp -r build/docs/html/* ${project_root}/public/modsim-template
+  artifacts:
+    paths:
+      # It MUST be called public
+      - public
 
 hpc:
-  stage: child-pipelines
+  stage: test
   trigger:
     include:
       - local: .pipeline-hpc.yml
@@ -42,7 +212,7 @@ hpc:
     PARENT_CI_COMMIT_BRANCH: $CI_COMMIT_BRANCH
 
 win:
-  stage: child-pipelines
+  stage: test
   trigger:
     include:
       - local: .pipeline-win.yml
@@ -54,7 +224,7 @@ win:
     PARENT_CI_COMMIT_BRANCH: $CI_COMMIT_BRANCH
 
 mac:
-  stage: child-pipelines
+  stage: test
   trigger:
     include:
       - local: .pipeline-mac.yml

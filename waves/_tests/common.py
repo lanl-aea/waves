@@ -1,3 +1,4 @@
+import pathlib
 import platform
 from unittest.mock import patch
 
@@ -11,7 +12,8 @@ def platform_check():
     :rtype: (str, bool)
     """
     if platform.system().lower() == "windows":
-        root_fs = "C:\\"
+        drive = pathlib.Path("/").resolve().drive
+        root_fs = f"{drive}\\"
         testing_windows = True
     else:
         root_fs = "/"
