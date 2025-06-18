@@ -739,7 +739,7 @@ class TestParameterGenerator:
         ids=templates.keys(),
     )
     def test_merge_parameter_studies(self, schema, file_template, set_template, expected):
-        """Check the generated parameter set names against template arguments
+        """Check the generated parameter set names against template arguments after a merge operation
 
         :param str schema: placeholder string standing in for the schema read from an input file
         :param str file_template: user supplied string to be used as a template for output file names
