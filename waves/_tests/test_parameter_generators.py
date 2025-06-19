@@ -327,6 +327,7 @@ merge_parameter_studies_cases = {
         ],
         numpy.array([[1]], dtype=object),
         {"parameter_1": numpy.int64},
+        parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
         does_not_raise(),
     ),
     "concatenate along one parameter: int": (
@@ -336,6 +337,7 @@ merge_parameter_studies_cases = {
         ],
         numpy.array([[2], [1]], dtype=object),
         {"parameter_1": numpy.int64},
+        parameter_generators.OneAtATime({"parameter_1": [1, 2]}).parameter_study,
         does_not_raise(),
     ),
     "concatenate along one parameter: float": (
@@ -345,6 +347,7 @@ merge_parameter_studies_cases = {
         ],
         numpy.array([[1.0], [2.0]], dtype=object),
         {"parameter_1": numpy.float64},
+        parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0]}).parameter_study,
         does_not_raise(),
     ),
     "concatenate along one parameter: bool": (
@@ -354,6 +357,7 @@ merge_parameter_studies_cases = {
         ],
         numpy.array([[False], [True]], dtype=object),
         {"parameter_1": numpy.bool_},
+        parameter_generators.OneAtATime({"parameter_1": [True, False]}).parameter_study,
         does_not_raise(),
     ),
     "concatenate along one parameter: int/float": (
@@ -361,6 +365,7 @@ merge_parameter_studies_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_1": [2.0]}).parameter_study,
         ],
+        None,
         None,
         None,
         pytest.raises(RuntimeError),
@@ -372,6 +377,7 @@ merge_parameter_studies_cases = {
         ],
         None,
         None,
+        None,
         pytest.raises(RuntimeError),
     ),
     "concatenate along one parameter: float/bool": (
@@ -379,6 +385,7 @@ merge_parameter_studies_cases = {
             parameter_generators.OneAtATime({"parameter_1": [1.0]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_1": [True]}).parameter_study,
         ],
+        None,
         None,
         None,
         pytest.raises(RuntimeError),
@@ -405,6 +412,9 @@ merge_parameter_studies_cases = {
             dtype=object,
         ),
         {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.dtype("U1")},
+        parameter_generators.OneAtATime(
+            {"parameter_1": [1, 2], "parameter_2": [3.0, 4.0, 5.0], "parameter_3": ["a"]}
+        ).parameter_study,
         does_not_raise(),
     ),
     "concatenate along two parameters across multiple studies: int/bool": (
@@ -428,6 +438,9 @@ merge_parameter_studies_cases = {
             dtype=object,
         ),
         {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.bool_},
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}
+        ).parameter_study,
         does_not_raise(),
     ),
     "concatenate along unchanged parameters across multiple studies": (
@@ -452,26 +465,32 @@ merge_parameter_studies_cases = {
             dtype=object,
         ),
         {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.bool_},
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}
+        ).parameter_study,
         does_not_raise(),
     ),
     "too few parameter studies input": (
         [parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study],
         numpy.array([[1]], dtype=object),
         {"parameter_1": numpy.int64},
+        None,
         pytest.raises(RuntimeError),
     ),
 }
 
 
 @pytest.mark.parametrize(
-    "studies, expected_samples, expected_types, outcome",
+    "studies, expected_samples, expected_types, expected_study, outcome",
     merge_parameter_studies_cases.values(),
     ids=merge_parameter_studies_cases.keys(),
 )
-def test_merge_parameter_studies(studies, expected_samples, expected_types, outcome):
+def test_merge_parameter_studies(studies, expected_samples, expected_types, expected_study, outcome):
     with outcome:
         try:
             merged_study = parameter_generators._merge_parameter_studies(studies)
+            parameter_generators._verify_parameter_study(merged_study)
+            xarray.testing.assert_identical(merged_study, expected_study)
             for key in expected_types.keys():
                 assert merged_study[key].dtype == expected_types[key]
             samples = parameter_generators._parameter_study_to_numpy(merged_study)
