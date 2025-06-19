@@ -8,6 +8,10 @@ Changelog
 0.13.7 (unreleased)
 *******************
 
+Documentation
+=============
+- Add Windows Powershell instructions to core tutorials (:issue:`818`, :merge:`1197`). By `Sergio Cordova`_.
+
 Internal Changes
 ================
 - Fix the GitHub Actions conda-build test workflow (:issue:`933`, :merge:`1213`). By `Kyle Brindley`_.
