@@ -32,16 +32,39 @@ Directory Structure
 
 .. note::
 
-    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
-    files.
+   If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+   files.
 
-    .. code-block:: bash
+   .. only:: not epub
 
-        $ pwd
-        /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite --tutorial 9 && mv tutorial_09_post_processing_SConstruct SConstruct
-        WAVES fetch
-        Destination directory: '/home/roppenheimer/waves-tutorials'
+      .. tab-set::
+         :sync-group: OS
+
+         .. tab-item:: Linux/MacOS
+            :sync: bash
+
+            .. code-block::
+
+               $ pwd
+               /home/roppenheimer/waves-tutorials
+               $ waves fetch --overwrite --tutorial 9 && mv tutorial_09_post_processing_SConstruct SConstruct
+               WAVES fetch
+               Destination directory: '/home/roppenheimer/waves-tutorials'
+
+         .. tab-item:: Windows
+            :sync: powershell
+
+            .. code-block::
+
+               PS > Get-Location
+
+               Path
+               ----
+               C:\Users\roppenheimer\waves-tutorials
+
+               PS > waves fetch --overwrite --tutorial 9 && Move-Item tutorial_09_post_processing_SConstruct SConstruct -Force
+               WAVES fetch
+               Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
 *****************
 Regression Script
@@ -117,12 +140,34 @@ Build Targets
 
 8. Build the test results
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ scons unit_testing
-   <output truncated>
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block:: bash
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ scons unit_testing
+            <output truncated>
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > scons unit_testing
+            <output truncated>
 
 ************
 Output Files
@@ -132,12 +177,37 @@ Explore the contents of the ``build`` directory using the ``tree`` command again
 below. Note that the output files from the previous tutorials may also exist in the ``build`` directory, but the
 directory is specified by name to reduce clutter in the output shown.
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ tree build/unit_testing/
-   build/unit_testing/
-   └── unit_testing_results.xml
+   .. tab-set::
+      :sync-group: OS
 
-   0 directories, 1 file
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block:: bash
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ tree build/unit_testing/
+            build/unit_testing/
+            └── unit_testing_results.xml
+
+            0 directories, 1 file
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            PS > Get-Location
+
+               Path
+               ----
+               C:\Users\roppenheimer\waves-tutorials
+
+            PS > tree build\unit_testing\ /F
+            C:\USERS\ROPPENHEIMER\WAVES-TUTORIALS\BUILD\UNIT_TESTING
+                unit_testing_results.xml
+
+            No subfolders exist

@@ -33,27 +33,73 @@ Directory Structure
 
 .. note::
 
-    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
-    files.
+   If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+   files.
 
-    .. code-block:: bash
+   .. only:: not epub
 
-        $ pwd
-        /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite --tutorial 8 && mv tutorial_08_data_extraction_SConstruct SConstruct
-        WAVES fetch
-        Destination directory: '/home/roppenheimer/waves-tutorials'
+      .. tab-set::
+         :sync-group: OS
+
+         .. tab-item:: Linux/MacOS
+            :sync: bash
+
+            .. code-block::
+
+               $ pwd
+               /home/roppenheimer/waves-tutorials
+               $ waves fetch --overwrite --tutorial 8 && mv tutorial_08_data_extraction_SConstruct SConstruct
+               WAVES fetch
+               Destination directory: '/home/roppenheimer/waves-tutorials'
+
+         .. tab-item:: Windows
+            :sync: powershell
+
+            .. code-block::
+
+               PS > Get-Location
+
+               Path
+               ----
+               C:\Users\roppenheimer\waves-tutorials
+
+               PS > waves fetch --overwrite --tutorial 8 && Move-Item tutorial_08_data_extraction_SConstruct SConstruct -Force
+               WAVES fetch
+               Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
 4. Download and copy the ``tutorial_08_data_extraction`` file to a new file named ``tutorial_09_post_processing``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_08_data_extraction && cp tutorial_08_data_extraction tutorial_09_post_processing
-   WAVES fetch
-   Destination directory: '/home/roppenheimer/waves-tutorials'
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block:: bash
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ waves fetch --overwrite tutorials/tutorial_08_data_extraction && cp tutorial_08_data_extraction tutorial_09_post_processing
+            WAVES fetch
+            Destination directory: '/home/roppenheimer/waves-tutorials'
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > waves fetch --overwrite tutorials\tutorial_08_data_extraction && Copy-Item tutorial_08_data_extraction tutorial_09_post_processing
+            WAVES fetch
+            Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
 **********
 SConscript
@@ -149,12 +195,34 @@ Build Targets
 
 6. Build the new targets
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ scons tutorial_09_post_processing --jobs=4
-   <output truncated>
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block:: bash
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ scons tutorial_09_post_processing --jobs=4
+            <output truncated>
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > scons tutorial_09_post_processing --jobs=4
+            <output truncated>
 
 ************
 Output Files
@@ -162,41 +230,91 @@ Output Files
 
 7. Observe the catenated parameter results and paramter study dataset in the post-processing task's STDOUT file
 
-.. code-block::
+.. only:: not epub
 
-   $ tree build/tutorial_09_post_processing/ -L 1
-   build/tutorial_09_post_processing/
-   |-- parameter_set0
-   |-- parameter_set1
-   |-- parameter_set2
-   |-- parameter_set3
-   |-- parameter_study.h5
-   |-- stress_strain_comparison.csv
-   |-- stress_strain_comparison.pdf
-   `-- stress_strain_comparison.stdout
+   .. tab-set::
+      :sync-group: OS
 
-   4 directories, 4 files
-   $ cat build/tutorial_09_post_processing/stress_strain_comparison.stdout
-   <xarray.Dataset>
-   Dimensions:             (step: 1, time: 5, elements: 1, integration point: 4,
-                            E values: 4, set_name: 4, S values: 4)
-   Coordinates:
-     * step                (step) object 'Step-1'
-     * time                (time) float64 0.0175 0.07094 0.2513 0.86 1.0
-     * elements            (elements) int64 1
-       integrationPoint    (elements, integration point) float64 1.0 nan nan nan
-     * E values            (E values) object 'E11' 'E22' 'E33' 'E12'
-     * S values            (S values) object 'S11' 'S22' 'S33' 'S12'
-     * set_name            (set_name) <U14 'parameter_set0' ... 'parameter...
-       set_hash            (set_name) object ...
-   Dimensions without coordinates: integration point
-   Data variables:
-       E                   (set_name, step, time, elements, integration point, E values) float32 ...
-       S                   (set_name, step, time, elements, integration point, S values) float32 ...
-       displacement        (set_name) float64 ...
-       global_seed         (set_name) float64 ...
-       height              (set_name) float64 ...
-       width               (set_name) float64 ...
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ tree build/tutorial_09_post_processing/ -L 1
+            build/tutorial_09_post_processing/
+            |-- parameter_set0
+            |-- parameter_set1
+            |-- parameter_set2
+            |-- parameter_set3
+            |-- parameter_study.h5
+            |-- stress_strain_comparison.csv
+            |-- stress_strain_comparison.pdf
+            `-- stress_strain_comparison.pdf.stdout
+
+            4 directories, 4 files
+            $ cat build/tutorial_09_post_processing/stress_strain_comparison.pdf.stdout
+            <xarray.Dataset>
+            Dimensions:             (step: 1, time: 5, elements: 1, integration point: 4,
+                                     E values: 4, set_name: 4, S values: 4)
+            Coordinates:
+              * step                (step) object 'Step-1'
+              * time                (time) float64 0.0175 0.07094 0.2513 0.86 1.0
+              * elements            (elements) int64 1
+                integrationPoint    (elements, integration point) float64 1.0 nan nan nan
+              * E values            (E values) object 'E11' 'E22' 'E33' 'E12'
+              * S values            (S values) object 'S11' 'S22' 'S33' 'S12'
+              * set_name            (set_name) <U14 'parameter_set0' ... 'parameter...
+                set_hash            (set_name) object ...
+            Dimensions without coordinates: integration point
+            Data variables:
+                E                   (set_name, step, time, elements, integration point, E values) float32 ...
+                S                   (set_name, step, time, elements, integration point, S values) float32 ...
+                displacement        (set_name) float64 ...
+                global_seed         (set_name) float64 ...
+                height              (set_name) float64 ...
+                width               (set_name) float64 ...
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-ChildItem build\tutorial_09_post_processing\
+
+                Directory: C:\Users\roppenheimer\waves-tutorials\build\tutorial_09_post_processing
+
+            Mode                 LastWriteTime         Length Name
+            ----                 -------------         ------ ----
+            d----            6/9/2023  4:32 PM                parameter_set0
+            d----            6/9/2023  4:32 PM                parameter_set1
+            d----            6/9/2023  4:32 PM                parameter_set2
+            d----            6/9/2023  4:32 PM                parameter_set3
+            -a---            6/9/2023  4:32 PM           9942 parameter_study.h5
+            -a---            6/9/2023  4:32 PM           2609 stress_strain_comparison.csv
+            -a---            6/9/2023  4:32 PM          12061 stress_strain_comparison.pdf
+            -a---            6/9/2023  4:32 PM           1160 stress_strain_comparison.pdf.stdout
+
+            PS > Get-Content build\tutorial_09_post_processing\stress_strain_comparison.pdf.stdout
+            <xarray.Dataset> Size: 4kB
+            Dimensions:           (set_name: 4, step: 1, time: 5, elements: 1,
+                                   integration point: 4, E values: 4, S values: 4)
+            Coordinates:
+              * E values          (E values) <U3 48B 'E11' 'E22' 'E33' 'E12'
+              * S values          (S values) <U3 48B 'S11' 'S22' 'S33' 'S12'
+              * elements          (elements) int64 8B 1
+                integrationPoint  (elements, integration point) float64 32B 1.0 nan nan nan
+              * step              (step) <U6 24B 'Step-1'
+              * time              (time) float64 40B 0.0175 0.07094 0.2513 0.86 1.0
+              * set_name          (set_name) <U14 224B 'parameter_set0' ... 'parameter_set3'
+                set_hash          (set_name) <U32 512B ...
+            Dimensions without coordinates: integration point
+            Data variables:
+                E                 (set_name, step, time, elements, integration point, E values) float32 1kB ...
+                S                 (set_name, step, time, elements, integration point, S values) float32 1kB ...
+                width             (set_name) float64 32B ...
+                height            (set_name) float64 32B ...
+                global_seed       (set_name) float64 32B ...
+                displacement      (set_name) float64 32B ...
 
 The purpose of catenating the parameter set simulations with the parameter study definition is to examine the
 connections between output quantities of interest as a function of the parameter study inputs. Working from a single
@@ -223,11 +341,32 @@ Workflow Visualization
 View the workflow directed graph by running the following command and opening the image in your preferred image viewer.
 Plot the workflow with only the first set, ``set0``.
 
-.. code-block::
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_09_post_processing --output-file tutorial_09_post_processing_set0.png --width=54 --height=8 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ waves visualize tutorial_09_post_processing --output-file tutorial_09_post_processing_set0.png --width=54 --height=8 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > waves visualize tutorial_09_post_processing --output-file tutorial_09_post_processing_set0.png --width=54 --height=8 --exclude-list .stdout .jnl .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
 
 The output should look similar to the figure below.
 

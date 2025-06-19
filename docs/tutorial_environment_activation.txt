@@ -13,15 +13,45 @@ installation`_ and `Conda environment management`_ documentation for more detail
 
 1. Create the tutorials environment if it doesn't exist
 
-   .. code-block::
+   .. only:: not epub
 
-      $ conda create --name waves-tutorial-env --channel conda-forge waves 'scons>=4.6' matplotlib pandas pyyaml xarray seaborn 'numpy>=2' 'salib>=1.5.1' pytest
+      .. tab-set::
+         :sync-group: OS
+
+         .. tab-item:: Linux/MacOS
+            :sync: bash
+
+            .. code-block::
+
+               $ conda create --name waves-tutorial-env --channel conda-forge waves 'scons>=4.6' matplotlib pandas pyyaml xarray seaborn 'numpy>=2' 'salib>=1.5.1' pytest
+
+         .. tab-item:: Windows
+            :sync: powershell
+
+            .. code-block::
+
+               PS > conda create --name waves-tutorial-env --channel conda-forge waves scons matplotlib pandas pyyaml xarray seaborn numpy salib pytest
 
 2. Activate the environment
 
-   .. code-block::
+   .. only:: not epub
 
-      $ conda activate waves-tutorial-env
+      .. tab-set::
+         :sync-group: OS
+
+         .. tab-item:: Linux/MacOS
+            :sync: bash
+
+            .. code-block::
+
+               $ conda activate waves-tutorial-env
+
+         .. tab-item:: Windows
+            :sync: powershell
+
+            .. code-block::
+
+               PS > conda activate waves-tutorial-env
 
 Some tutorials require additional third-party software that is not available for the `Conda`_ package manager. This
 software must be installed separately and either made available to SConstruct by modifying your system's ``PATH`` or by

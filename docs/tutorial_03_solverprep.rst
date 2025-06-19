@@ -28,27 +28,73 @@ Directory Structure
 
 .. note::
 
-    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
-    files.
+   If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+   files.
 
-    .. code-block:: bash
+   .. only:: not epub
 
-        $ pwd
-        /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite --tutorial 2 && mv tutorial_02_partition_mesh_SConstruct SConstruct
-        WAVES fetch
-        Destination directory: '/home/roppenheimer/waves-tutorials'
+      .. tab-set::
+         :sync-group: OS
+
+         .. tab-item:: Linux/MacOS
+            :sync: bash
+
+            .. code-block::
+
+               $ pwd
+               /home/roppenheimer/waves-tutorials
+               $ waves fetch --overwrite --tutorial 2 && mv tutorial_02_partition_mesh_SConstruct SConstruct
+               WAVES fetch
+               Destination directory: '/home/roppenheimer/waves-tutorials'
+
+         .. tab-item:: Windows
+            :sync: powershell
+
+            .. code-block::
+
+               PS > Get-Location
+
+               Path
+               ----
+               C:\Users\roppenheimer\waves-tutorials
+
+               PS > waves fetch --overwrite --tutorial 2 && Move-Item tutorial_02_partition_mesh_SConstruct SConstruct -Force
+               WAVES fetch
+               Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
 4. Fetch the ``tutorial_02_partition_mesh`` file and create a new file named ``tutorial_03_solverprep``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_02_partition_mesh && cp tutorial_02_partition_mesh tutorial_03_solverprep
-   WAVES fetch
-   Destination directory: '/home/roppenheimer/waves-tutorials'
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block:: bash
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ waves fetch --overwrite tutorials/tutorial_02_partition_mesh && cp tutorial_02_partition_mesh tutorial_03_solverprep
+            WAVES fetch
+            Destination directory: '/home/roppenheimer/waves-tutorials'
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > waves fetch --overwrite tutorials\tutorial_02_partition_mesh && Copy-Item tutorial_02_partition_mesh tutorial_03_solverprep
+            WAVES fetch
+            Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
 ******************
 Solver Input Files
@@ -57,27 +103,88 @@ Solver Input Files
 5. Fetch the `WAVES tutorials abaqus source files`_ into your existing ``modsim_package/abaqus`` sub-directory
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ waves fetch 'tutorials/modsim_package/abaqus/*.inp' --destination modsim_package/abaqus
-   WAVES fetch
-   Destination directory: 'modsim_package/abaqus'
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block:: bash
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ waves fetch 'tutorials/modsim_package/abaqus/*.inp' --destination modsim_package/abaqus
+            WAVES fetch
+            Destination directory: 'modsim_package/abaqus'
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > waves fetch 'tutorials\modsim_package\abaqus\*.inp' --destination modsim_package\abaqus
+            WAVES fetch
+            Destination directory: 'modsim_package\abaqus'
 
 This action will fetch the source files we included in the
 ``tutorial_03_solverprep`` file into the ``waves-tutorials/modsim_package/abaqus/``
-directory. Check the contents of this directory using the ``ls`` command.
+directory. Check the contents of this directory with the commands below.
 
-.. code-block::
+.. only:: not epub
 
-    $ pwd
-    /home/roppenheimer/waves-tutorials
-    $ ls modsim_package/abaqus
-    abaqus_utilities.py  history_output.inp  rectangle_compression.inp
-    assembly.inp         __init__.py         rectangle_geometry.py
-    boundary.inp         materials.inp       rectangle_mesh.py
-    field_output.inp     parts.inp           rectangle_partition.py
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ ls modsim_package/abaqus
+            abaqus_utilities.py  history_output.inp  rectangle_compression.inp
+            assembly.inp         __init__.py         rectangle_geometry.py
+            boundary.inp         materials.inp       rectangle_mesh.py
+            field_output.inp     parts.inp           rectangle_partition.py
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > Get-ChildItem modsim_package\abaqus
+
+                Directory: C:\Users\roppenheimer\waves-tutorials\modsim_package\abaqus
+
+            Mode                 LastWriteTime         Length Name
+            ----                 -------------         ------ ----
+            -a---            6/9/2023  4:32 PM              0 __init__.py
+            -a---            6/9/2023  4:32 PM           1979 abaqus_utilities.py
+            -a---            6/9/2023  4:32 PM             77 assembly.inp
+            -a---            6/9/2023  4:32 PM             58 boundary.inp
+            -a---            6/9/2023  4:32 PM            100 field_output.inp
+            -a---            6/9/2023  4:32 PM             36 history_output.inp
+            -a---            6/9/2023  4:32 PM            791 materials.inp
+            -a---            6/9/2023  4:32 PM            119 parts.inp
+            -a---            6/9/2023  4:32 PM            729 rectangle_compression.inp
+            -a---            6/9/2023  4:32 PM           4516 rectangle_geometry.py
+            -a---            6/9/2023  4:32 PM           6060 rectangle_mesh.py
+            -a---            6/9/2023  4:32 PM           6220 rectangle_partition.py
 
 .. _tutorials_tutorial_solverprep:
 
@@ -156,27 +263,68 @@ Build Targets
 
 8. Build the new targets
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ scons tutorial_03_solverprep
-   scons: Reading SConscript files ...
-   Checking whether /apps/abaqus/Commands/abq2024 program exists.../apps/abaqus/Commands/abq2024
-   Checking whether abq2024 program exists.../apps/abaqus/Commands/abq2024
-   scons: done reading SConscript files.
-   scons: Building targets ...
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.cae.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- > rectangle_partition.cae.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.inp.stdout 2>&1
-   Copy("build/tutorial_03_solverprep/rectangle_compression.inp", "modsim_package/abaqus/rectangle_compression.inp")
-   Copy("build/tutorial_03_solverprep/assembly.inp", "modsim_package/abaqus/assembly.inp")
-   Copy("build/tutorial_03_solverprep/boundary.inp", "modsim_package/abaqus/boundary.inp")
-   Copy("build/tutorial_03_solverprep/field_output.inp", "modsim_package/abaqus/field_output.inp")
-   Copy("build/tutorial_03_solverprep/materials.inp", "modsim_package/abaqus/materials.inp")
-   Copy("build/tutorial_03_solverprep/parts.inp", "modsim_package/abaqus/parts.inp")
-   Copy("build/tutorial_03_solverprep/history_output.inp", "modsim_package/abaqus/history_output.inp")
-   scons: done building targets.
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ scons tutorial_03_solverprep
+            scons: Reading SConscript files ...
+            Checking whether '/apps/abaqus/Commands/abq2024' program exists.../apps/abaqus/Commands/abq2024
+            Checking whether '/usr/projects/ea/abaqus/Commands/abq2024' program exists...no
+            Checking whether 'abq2024' program exists.../apps/abaqus/Commands/abq2024
+            Checking whether 'abaqus' program exists...no
+            scons: done reading SConscript files.
+            scons: Building targets ...
+            cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.cae.stdout 2>&1
+            cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- > rectangle_partition.cae.stdout 2>&1
+            cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.inp.stdout 2>&1
+            Copy("build/tutorial_03_solverprep/rectangle_compression.inp", "modsim_package/abaqus/rectangle_compression.inp")
+            Copy("build/tutorial_03_solverprep/assembly.inp", "modsim_package/abaqus/assembly.inp")
+            Copy("build/tutorial_03_solverprep/boundary.inp", "modsim_package/abaqus/boundary.inp")
+            Copy("build/tutorial_03_solverprep/field_output.inp", "modsim_package/abaqus/field_output.inp")
+            Copy("build/tutorial_03_solverprep/materials.inp", "modsim_package/abaqus/materials.inp")
+            Copy("build/tutorial_03_solverprep/parts.inp", "modsim_package/abaqus/parts.inp")
+            Copy("build/tutorial_03_solverprep/history_output.inp", "modsim_package/abaqus/history_output.inp")
+            scons: done building targets.
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > scons tutorial_03_solverprep
+            scons: Reading SConscript files ...
+            Checking whether '/apps/abaqus/Commands/abq2024' program exists...no
+            Checking whether '/usr/projects/ea/abaqus/Commands/abq2024' program exists...no
+            Checking whether 'abq2024' program exists...C:\SIMULIA\Commands\abq2024.BAT
+            Checking whether 'abaqus' program exists...C:\SIMULIA\Commands\abaqus.BAT
+            scons: done reading SConscript files.
+            scons: Building targets ...
+            cd C:\Users\roppenheimer\waves-tutorials\build\tutorial_03_solverprep && C:\SIMULIA\Commands\abq2024.BAT cae -noGUI C:\Users\roppenheimer\waves-tutorials\modsim_package\abaqus\rectangle_geometry.py -- > C:\Users\roppenheimer\waves-tutorials\build\tutorial_03_solverprep\rectangle_geometry.cae.stdout 2>&1
+            cd C:\Users\roppenheimer\waves-tutorials\build\tutorial_03_solverprep && C:\SIMULIA\Commands\abq2024.BAT cae -noGUI C:\Users\roppenheimer\waves-tutorials\modsim_package\abaqus\rectangle_partition.py -- > C:\Users\roppenheimer\waves-tutorials\build\tutorial_03_solverprep\rectangle_partition.cae.stdout 2>&1
+            cd C:\Users\roppenheimer\waves-tutorials\build\tutorial_03_solverprep && C:\SIMULIA\Commands\abq2024.BAT cae -noGUI C:\Users\roppenheimer\waves-tutorials\modsim_package\abaqus\rectangle_mesh.py -- > C:\Users\roppenheimer\waves-tutorials\build\tutorial_03_solverprep\rectangle_mesh.inp.stdout 2>&1
+            Copy("build\tutorial_03_solverprep\rectangle_compression.inp", "modsim_package\abaqus\rectangle_compression.inp")
+            Copy("build\tutorial_03_solverprep\assembly.inp", "modsim_package\abaqus\assembly.inp")
+            Copy("build\tutorial_03_solverprep\boundary.inp", "modsim_package\abaqus\boundary.inp")
+            Copy("build\tutorial_03_solverprep\field_output.inp", "modsim_package\abaqus\field_output.inp")
+            Copy("build\tutorial_03_solverprep\materials.inp", "modsim_package\abaqus\materials.inp")
+            Copy("build\tutorial_03_solverprep\parts.inp", "modsim_package\abaqus\parts.inp")
+            Copy("build\tutorial_03_solverprep\history_output.inp", "modsim_package\abaqus\history_output.inp")
+            scons: done building targets.
 
 ************
 Output Files
@@ -185,53 +333,117 @@ Output Files
 Explore the contents of the ``build`` directory using the ``tree`` command against the
 ``build`` directory, as shown below.
 
-.. code-block:: bash
+.. only:: not epub
 
-    $ pwd
-    /home/roppenheimer/waves-tutorials
-    $ tree build/tutorial_01_geometry/ build/tutorial_02_partition_mesh/ build/tutorial_03_solverprep/
-    build/tutorial_01_geometry/
-    |-- abaqus.rpy
-    |-- rectangle_geometry.cae
-    |-- rectangle_geometry.cae.stdout
-    `-- rectangle_geometry.jnl
-    build/tutorial_02_partition_mesh/
-    |-- abaqus.rpy
-    |-- abaqus.rpy.1
-    |-- abaqus.rpy.2
-    |-- rectangle_geometry.cae
-    |-- rectangle_geometry.cae.stdout
-    |-- rectangle_geometry.jnl
-    |-- rectangle_mesh.cae
-    |-- rectangle_mesh.inp
-    |-- rectangle_mesh.inp.stdout
-    |-- rectangle_mesh.jnl
-    |-- rectangle_partition.cae
-    |-- rectangle_partition.cae.stdout
-    `-- rectangle_partition.jnl
-    build/tutorial_03_solverprep/
-    |-- abaqus.rpy
-    |-- abaqus.rpy.1
-    |-- abaqus.rpy.2
-    |-- assembly.inp
-    |-- boundary.inp
-    |-- field_output.inp
-    |-- history_output.inp
-    |-- materials.inp
-    |-- parts.inp
-    |-- rectangle_compression.inp
-    |-- rectangle_geometry.cae
-    |-- rectangle_geometry.cae.stdout
-    |-- rectangle_geometry.jnl
-    |-- rectangle_mesh.cae
-    |-- rectangle_mesh.inp
-    |-- rectangle_mesh.inp.stdout
-    |-- rectangle_mesh.jnl
-    |-- rectangle_partition.cae
-    |-- rectangle_partition.cae.stdout
-    `-- rectangle_partition.jnl
+   .. tab-set::
+      :sync-group: OS
 
-    0 directories, 36 files
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ tree build/tutorial_01_geometry/ build/tutorial_02_partition_mesh/ build/tutorial_03_solverprep/
+            build/tutorial_01_geometry/
+            |-- abaqus.rpy
+            |-- rectangle_geometry.cae
+            |-- rectangle_geometry.cae.stdout
+            `-- rectangle_geometry.jnl
+            build/tutorial_02_partition_mesh/
+            |-- abaqus.rpy
+            |-- abaqus.rpy.1
+            |-- abaqus.rpy.2
+            |-- rectangle_geometry.cae
+            |-- rectangle_geometry.cae.stdout
+            |-- rectangle_geometry.jnl
+            |-- rectangle_mesh.cae
+            |-- rectangle_mesh.inp
+            |-- rectangle_mesh.inp.stdout
+            |-- rectangle_mesh.jnl
+            |-- rectangle_partition.cae
+            |-- rectangle_partition.cae.stdout
+            `-- rectangle_partition.jnl
+            build/tutorial_03_solverprep/
+            |-- abaqus.rpy
+            |-- abaqus.rpy.1
+            |-- abaqus.rpy.2
+            |-- assembly.inp
+            |-- boundary.inp
+            |-- field_output.inp
+            |-- history_output.inp
+            |-- materials.inp
+            |-- parts.inp
+            |-- rectangle_compression.inp
+            |-- rectangle_geometry.cae
+            |-- rectangle_geometry.cae.stdout
+            |-- rectangle_geometry.jnl
+            |-- rectangle_mesh.cae
+            |-- rectangle_mesh.inp
+            |-- rectangle_mesh.inp.stdout
+            |-- rectangle_mesh.jnl
+            |-- rectangle_partition.cae
+            |-- rectangle_partition.cae.stdout
+            `-- rectangle_partition.jnl
+
+            0 directories, 36 files
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-Location
+
+               Path
+               ----
+               C:\Users\roppenheimer\waves-tutorials
+
+            PS > tree build /F
+            C:\USERS\ROPPENHEIMER\WAVES-TUTORIALS\BUILD
+            ├───tutorial_01_geometry
+            │       abaqus.rpy
+            │       rectangle_geometry.cae
+            │       rectangle_geometry.cae.stdout
+            │       rectangle_geometry.jnl
+            │
+            ├───tutorial_02_partition_mesh
+            │       abaqus.rpy
+            │       abaqus.rpy.1
+            │       abaqus.rpy.2
+            │       rectangle_geometry.cae
+            │       rectangle_geometry.cae.stdout
+            │       rectangle_geometry.jnl
+            │       rectangle_mesh.cae
+            │       rectangle_mesh.inp
+            │       rectangle_mesh.inp.stdout
+            │       rectangle_mesh.jnl
+            │       rectangle_partition.cae
+            │       rectangle_partition.cae.stdout
+            │       rectangle_partition.jnl
+            │
+            └───tutorial_03_solverprep
+                    abaqus.rpy
+                    abaqus.rpy.1
+                    abaqus.rpy.2
+                    assembly.inp
+                    boundary.inp
+                    field_output.inp
+                    history_output.inp
+                    materials.inp
+                    parts.inp
+                    rectangle_compression.inp
+                    rectangle_geometry.cae
+                    rectangle_geometry.cae.stdout
+                    rectangle_geometry.jnl
+                    rectangle_mesh.cae
+                    rectangle_mesh.inp
+                    rectangle_mesh.inp.stdout
+                    rectangle_mesh.jnl
+                    rectangle_partition.cae
+                    rectangle_partition.cae.stdout
+                    rectangle_partition.jnl
 
 Inside the build directory are three sub-directories. ``tutorial_01_geometry`` and
 ``tutorial_02_partition_mesh``  remain from the previous two tutorials. The third
@@ -250,11 +462,32 @@ Workflow Visualization
 
 View the workflow directed graph by running the following command and opening the image in your preferred image viewer.
 
-.. code-block::
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_03_solverprep --output-file tutorial_03_solverprep.png --width=28 --height=5 --exclude-list /usr/bin .stdout .jnl
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ waves visualize tutorial_03_solverprep --output-file tutorial_03_solverprep.png --width=28 --height=5 --exclude-list /usr/bin .stdout .jnl
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > waves visualize tutorial_03_solverprep --output-file tutorial_03_solverprep.png --width=28 --height=5 --exclude-list .stdout .jnl
 
 The output should look similar to the figure below.
 

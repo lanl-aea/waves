@@ -1,9 +1,31 @@
 3. Create and change to a new project root directory to house the tutorial files if you have not already done so. For example
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ mkdir -p ~/waves-tutorials
-   $ cd ~/waves-tutorials
-   $ pwd
-   /home/roppenheimer/waves-tutorials
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block:: bash
+
+            $ mkdir -p ~/waves-tutorials
+            $ cd ~/waves-tutorials
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            PS > New-Item $HOME\waves-tutorials -ItemType "Directory"
+            PS > Set-Location $HOME\waves-tutorials
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
 

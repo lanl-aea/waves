@@ -28,26 +28,73 @@ Directory Structure
 
 .. note::
 
-    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
-    files.
+   If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+   files.
 
-    .. code-block:: bash
+   .. only:: not epub
 
-        $ pwd
-        /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite --tutorial 4 && mv tutorial_04_simulation_SConstruct SConstruct
-        Destination directory: '/home/roppenheimer/waves-tutorials'
+      .. tab-set::
+         :sync-group: OS
+
+         .. tab-item:: Linux/MacOS
+            :sync: bash
+
+            .. code-block::
+
+               $ pwd
+               /home/roppenheimer/waves-tutorials
+               $ waves fetch --overwrite --tutorial 4 && mv tutorial_04_simulation_SConstruct SConstruct
+               WAVES fetch
+               Destination directory: '/home/roppenheimer/waves-tutorials'
+
+         .. tab-item:: Windows
+            :sync: powershell
+
+            .. code-block::
+
+               PS > Get-Location
+
+               Path
+               ----
+               C:\Users\roppenheimer\waves-tutorials
+
+               PS > waves fetch --overwrite --tutorial 4 && Move-Item tutorial_04_simulation_SConstruct SConstruct -Force
+               WAVES fetch
+               Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
 4. Download and copy the ``tutorial_04_simulation`` file to a new file named ``tutorial_05_parameter_substitution``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_04_simulation && cp tutorial_04_simulation tutorial_05_parameter_substitution
-   WAVES fetch
-   Destination directory: '/home/roppenheimer/waves-tutorials'
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block:: bash
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ waves fetch --overwrite tutorials/tutorial_04_simulation && cp tutorial_04_simulation tutorial_05_parameter_substitution
+            WAVES fetch
+            Destination directory: '/home/roppenheimer/waves-tutorials'
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > waves fetch --overwrite tutorials\tutorial_04_simulation && Copy-Item tutorial_04_simulation tutorial_05_parameter_substitution
+            WAVES fetch
+            Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
 ******************
 Solver Input Files
@@ -57,11 +104,32 @@ Solver Input Files
    same directory named ``rectangle_compression.inp.in``. **Note:** the only change in the file name is the
    addition of the ``.in`` suffix.
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ cp modsim_package/abaqus/rectangle_compression.inp modsim_package/abaqus/rectangle_compression.inp.in
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block:: bash
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ cp modsim_package/abaqus/rectangle_compression.inp modsim_package/abaqus/rectangle_compression.inp.in
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > Copy-Item modsim_package\abaqus\rectangle_compression.inp modsim_package\abaqus\rectangle_compression.inp.in
 
 In this tutorial, we will be modifying several files from :ref:`tutorial_simulation`, the first of which is
 ``rectangle_compression.inp``. We copy this file and all of its contents to a new file with the same basename and
@@ -232,29 +300,72 @@ Build Targets
 
 11. Build the new targets
 
-.. code-block:: bash
+.. only:: not epub
 
-    $ pwd
-    /home/roppenheimer/waves-tutorials
-    $ scons tutorial_05_parameter_substitution
-    scons: Reading SConscript files ...
-    Checking whether /apps/abaqus/Commands/abq2024 program exists.../apps/abaqus/Commands/abq2024
-    Checking whether abq2024 program exists.../apps/abaqus/Commands/abq2024
-    scons: done reading SConscript files.
-    scons: Building targets ...
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- --width 1.0 --height 1.0 > rectangle_geometry.stdout 2>&1
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- --width 1.0 --height 1.0 > rectangle_partition.stdout 2>&1
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- --global-seed 1.0 > rectangle_mesh.stdout 2>&1
-    Copy("build/tutorial_05_parameter_substitution/rectangle_compression.inp.in", "modsim_package/abaqus/rectangle_compression.inp.in")
-    Creating 'build/tutorial_05_parameter_substitution/rectangle_compression.inp'
-    Copy("build/tutorial_05_parameter_substitution/assembly.inp", "modsim_package/abaqus/assembly.inp")
-    Copy("build/tutorial_05_parameter_substitution/boundary.inp", "modsim_package/abaqus/boundary.inp")
-    Copy("build/tutorial_05_parameter_substitution/field_output.inp", "modsim_package/abaqus/field_output.inp")
-    Copy("build/tutorial_05_parameter_substitution/materials.inp", "modsim_package/abaqus/materials.inp")
-    Copy("build/tutorial_05_parameter_substitution/parts.inp", "modsim_package/abaqus/parts.inp")
-    Copy("build/tutorial_05_parameter_substitution/history_output.inp", "modsim_package/abaqus/history_output.inp")
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2024 -job rectangle_compression -input rectangle_compression -double both -interactive -ask_delete no > rectangle_compression.stdout 2>&1
-    scons: done building targets.
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ scons tutorial_05_parameter_substitution
+            scons: Reading SConscript files ...
+            Checking whether '/apps/abaqus/Commands/abq2024' program exists.../apps/abaqus/Commands/abq2024
+            Checking whether '/usr/projects/ea/abaqus/Commands/abq2024' program exists...no
+            Checking whether 'abq2024' program exists.../apps/abaqus/Commands/abq2024
+            Checking whether 'abaqus' program exists...no
+            scons: done reading SConscript files.
+            scons: Building targets ...
+            cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- --width 1.0 --height 1.0 > rectangle_geometry.stdout 2>&1
+            cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- --width 1.0 --height 1.0 > rectangle_partition.stdout 2>&1
+            cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- --global-seed 1.0 > rectangle_mesh.stdout 2>&1
+            Copy("build/tutorial_05_parameter_substitution/rectangle_compression.inp.in", "modsim_package/abaqus/rectangle_compression.inp.in")
+            Creating 'build/tutorial_05_parameter_substitution/rectangle_compression.inp'
+            Copy("build/tutorial_05_parameter_substitution/assembly.inp", "modsim_package/abaqus/assembly.inp")
+            Copy("build/tutorial_05_parameter_substitution/boundary.inp", "modsim_package/abaqus/boundary.inp")
+            Copy("build/tutorial_05_parameter_substitution/field_output.inp", "modsim_package/abaqus/field_output.inp")
+            Copy("build/tutorial_05_parameter_substitution/materials.inp", "modsim_package/abaqus/materials.inp")
+            Copy("build/tutorial_05_parameter_substitution/parts.inp", "modsim_package/abaqus/parts.inp")
+            Copy("build/tutorial_05_parameter_substitution/history_output.inp", "modsim_package/abaqus/history_output.inp")
+            cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2024 -job rectangle_compression -input rectangle_compression -double both -interactive -ask_delete no > rectangle_compression.stdout 2>&1
+            scons: done building targets.
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > scons tutorial_05_parameter_substitution
+            scons: Reading SConscript files ...
+            Checking whether '/apps/abaqus/Commands/abq2024' program exists...no
+            Checking whether '/usr/projects/ea/abaqus/Commands/abq2024' program exists...no
+            Checking whether 'abq2024' program exists...C:\SIMULIA\Commands\abq2024.BAT
+            Checking whether 'abaqus' program exists...C:\SIMULIA\Commands\abaqus.BAT
+            scons: done reading SConscript files.
+            scons: Building targets ...
+            cd C:\Users\roppenheimer\waves-tutorials\build\tutorial_05_parameter_substitution && C:\SIMULIA\Commands\abq2024.BAT cae -noGUI C:\Users\roppenheimer\waves-tutorials\modsim_package\abaqus\rectangle_geometry.py -- --width 1.0 --height 1.0 > C:\Users\roppenheimer\waves-tutorials\build\tutorial_05_parameter_substitution\rectangle_geometry.cae.stdout 2>&1
+            cd C:\Users\roppenheimer\waves-tutorials\build\tutorial_05_parameter_substitution && C:\SIMULIA\Commands\abq2024.BAT cae -noGUI C:\Users\roppenheimer\waves-tutorials\modsim_package\abaqus\rectangle_partition.py -- --width 1.0 --height 1.0 > C:\Users\roppenheimer\waves-tutorials\build\tutorial_05_parameter_substitution\rectangle_partition.cae.stdout 2>&1
+            cd C:\Users\roppenheimer\waves-tutorials\build\tutorial_05_parameter_substitution && C:\SIMULIA\Commands\abq2024.BAT cae -noGUI C:\Users\roppenheimer\waves-tutorials\modsim_package\abaqus\rectangle_mesh.py -- --global-seed 1.0 > C:\Users\roppenheimer\waves-tutorials\build\tutorial_05_parameter_substitution\rectangle_mesh.inp.stdout 2>&1
+            Copy("build\tutorial_05_parameter_substitution\rectangle_compression.inp.in", "modsim_package\abaqus\rectangle_compression.inp.in")
+            Creating 'build\tutorial_05_parameter_substitution\rectangle_compression.inp'
+            Copy("build\tutorial_05_parameter_substitution\assembly.inp", "modsim_package\abaqus\assembly.inp")
+            Copy("build\tutorial_05_parameter_substitution\boundary.inp", "modsim_package\abaqus\boundary.inp")
+            Copy("build\tutorial_05_parameter_substitution\field_output.inp", "modsim_package\abaqus\field_output.inp")
+            Copy("build\tutorial_05_parameter_substitution\materials.inp", "modsim_package\abaqus\materials.inp")
+            Copy("build\tutorial_05_parameter_substitution\parts.inp", "modsim_package\abaqus\parts.inp")
+            Copy("build\tutorial_05_parameter_substitution\history_output.inp", "modsim_package\abaqus\history_output.inp")
+            cd C:\Users\roppenheimer\waves-tutorials\build\tutorial_05_parameter_substitution && C:\SIMULIA\Commands\abq2024.BAT -interactive -ask_delete no -job rectangle_compression -input rectangle_compression -double both > C:\Users\roppenheimer\waves-tutorials\build\tutorial_05_parameter_substitution\rectangle_compression.odb.stdout 2>&1
+            scons: done building targets.
 
 .. _tutorial_parameter_substitution_waves_output_files:
 
@@ -265,42 +376,94 @@ Output Files
 Explore the contents of the ``build`` directory using the ``tree`` command against the ``build`` directory, as shown
 below. Note the usage of the ``-I`` option to reduce clutter in the ``tree`` command output.
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ tree build/tutorial_05_parameter_substitution
-   build/tutorial_05_parameter_substitution
-   |-- abaqus.rpy
-   |-- abaqus.rpy.1
-   |-- abaqus.rpy.2
-   |-- assembly.inp
-   |-- boundary.inp
-   |-- field_output.inp
-   |-- history_output.inp
-   |-- materials.inp
-   |-- parts.inp
-   |-- rectangle_compression.com
-   |-- rectangle_compression.dat
-   |-- rectangle_compression.inp
-   |-- rectangle_compression.inp.in
-   |-- rectangle_compression.msg
-   |-- rectangle_compression.odb
-   |-- rectangle_compression.prt
-   |-- rectangle_compression.sta
-   |-- rectangle_compression.stdout
-   |-- rectangle_geometry.cae
-   |-- rectangle_geometry.jnl
-   |-- rectangle_geometry.stdout
-   |-- rectangle_mesh.cae
-   |-- rectangle_mesh.inp
-   |-- rectangle_mesh.jnl
-   |-- rectangle_mesh.stdout
-   |-- rectangle_partition.cae
-   |-- rectangle_partition.jnl
-   `-- rectangle_partition.stdout
+   .. tab-set::
+      :sync-group: OS
 
-   0 directories, 28 files
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ tree build/tutorial_05_parameter_substitution
+            build/tutorial_05_parameter_substitution
+            |-- abaqus.rpy
+            |-- abaqus.rpy.1
+            |-- abaqus.rpy.2
+            |-- assembly.inp
+            |-- boundary.inp
+            |-- field_output.inp
+            |-- history_output.inp
+            |-- materials.inp
+            |-- parts.inp
+            |-- rectangle_compression.com
+            |-- rectangle_compression.dat
+            |-- rectangle_compression.inp
+            |-- rectangle_compression.inp.in
+            |-- rectangle_compression.msg
+            |-- rectangle_compression.odb
+            |-- rectangle_compression.prt
+            |-- rectangle_compression.sta
+            |-- rectangle_compression.stdout
+            |-- rectangle_geometry.cae
+            |-- rectangle_geometry.jnl
+            |-- rectangle_geometry.stdout
+            |-- rectangle_mesh.cae
+            |-- rectangle_mesh.inp
+            |-- rectangle_mesh.jnl
+            |-- rectangle_mesh.stdout
+            |-- rectangle_partition.cae
+            |-- rectangle_partition.jnl
+            `-- rectangle_partition.stdout
+
+            0 directories, 28 files
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-Location
+
+               Path
+               ----
+               C:\Users\roppenheimer\waves-tutorials
+
+            PS > tree build\tutorial_05_parameter_substitution /F
+            C:\USERS\ROPPENHEIMER\WAVES-TUTORIALS\BUILD\TUTORIAL_05_PARAMETER_SUBSTITUTION
+                abaqus.rpy
+                abaqus.rpy.1
+                abaqus.rpy.2
+                assembly.inp
+                boundary.inp
+                field_output.inp
+                history_output.inp
+                materials.inp
+                parts.inp
+                rectangle_compression.com
+                rectangle_compression.dat
+                rectangle_compression.inp
+                rectangle_compression.inp.in
+                rectangle_compression.msg
+                rectangle_compression.odb
+                rectangle_compression.odb.stdout
+                rectangle_compression.prt
+                rectangle_compression.sta
+                rectangle_geometry.cae
+                rectangle_geometry.cae.stdout
+                rectangle_geometry.jnl
+                rectangle_mesh.cae
+                rectangle_mesh.inp
+                rectangle_mesh.inp.stdout
+                rectangle_mesh.jnl
+                rectangle_partition.cae
+                rectangle_partition.cae.stdout
+                rectangle_partition.jnl
+
+            No subfolders exist
 
 The output files for this tutorial are very similar to those from :ref:`tutorial_simulation` with a few key
 differences.
@@ -338,11 +501,32 @@ Workflow Visualization
 
 View the workflow directed graph by running the following command and opening the image in your preferred image viewer.
 
-.. code-block::
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_05_parameter_substitution --output-file tutorial_05_parameter_substitution.png --width=36 --height=6 --exclude-list /usr/bin .stdout .jnl .prt .com
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ waves visualize tutorial_05_parameter_substitution --output-file tutorial_05_parameter_substitution.png --width=36 --height=6 --exclude-list /usr/bin .stdout .jnl .prt .com
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > waves visualize tutorial_05_parameter_substitution --output-file tutorial_05_parameter_substitution.png --width=36 --height=6 --exclude-list .stdout .jnl .prt .com
 
 The output should look similar to the figure below.
 

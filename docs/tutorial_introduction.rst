@@ -19,6 +19,12 @@ An optional ``waves fetch`` command is included in every tutorial to help users 
 completing previous tutorials. The :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand may also be used to create a local
 copy of any tutorial file.
 
+.. warning::
+
+   Windows users: To run the tutorial commands and use ``WAVES`` functionality correctly, you must use 
+   PowerShell 7 (pwsh). Earlier versions of PowerShell do not support key features such as command chaining (``&&``) 
+   and output redirection. If you are on an older version, please install ``pwsh``.
+
 .. include:: modsim_templates.txt
 
 *************

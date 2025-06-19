@@ -41,27 +41,73 @@ Directory Structure
 
 .. note::
 
-    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
-    files.
+   If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+   files.
 
-    .. code-block:: bash
+   .. only:: not epub
 
-        $ pwd
-        /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite --tutorial 11 && mv tutorial_11_regression_testing_SConstruct SConstruct
-        WAVES fetch
-        Destination directory: '/home/roppenheimer/waves-tutorials'
+      .. tab-set::
+         :sync-group: OS
+
+         .. tab-item:: Linux/MacOS
+            :sync: bash
+
+            .. code-block:: bash
+
+               $ pwd
+               /home/roppenheimer/waves-tutorials
+               $ waves fetch --overwrite --tutorial 11 && mv tutorial_11_regression_testing_SConstruct SConstruct
+               WAVES fetch
+               Destination directory: '/home/roppenheimer/waves-tutorials'
+
+         .. tab-item:: Windows
+            :sync: powershell
+
+            .. code-block:: powershell
+
+               PS > Get-Location
+
+               Path
+               ----
+               C:\Users\roppenheimer\waves-tutorials
+
+               PS > waves fetch --overwrite --tutorial 11 && Move-Item tutorial_11_regression_testing_SConstruct SConstruct -Force
+               WAVES fetch
+               Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
 4. Download and copy the ``tutorial_11_regression_testing`` file to a new file named ``tutorial_12_archival``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_11_regression_testing && cp tutorial_11_regression_testing tutorial_12_archival
-   WAVES fetch
-   Destination directory: '/home/roppenheimer/waves-tutorials'
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block:: bash
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ waves fetch --overwrite tutorials/tutorial_11_regression_testing && cp tutorial_11_regression_testing tutorial_12_archival
+            WAVES fetch
+            Destination directory: '/home/roppenheimer/waves-tutorials'
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > waves fetch --overwrite tutorials\tutorial_11_regression_testing && Copy-Item tutorial_11_regression_testing tutorial_12_archival
+            WAVES fetch
+            Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
 **********
 SConscript
@@ -135,11 +181,32 @@ Build Targets
 5. Build the archive target. Note that the usual workflow target does not include the archive task because it is not
    required until the project developer is ready to begin final reporting.
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ scons tutorial_12_archival_archive --jobs=4
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block:: bash
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ scons tutorial_12_archival_archive --jobs=4
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > scons tutorial_12_archival_archive --jobs=4
 
 ************
 Output Files
@@ -148,44 +215,103 @@ Output Files
 The output should look identical to :ref:`tutorial_regression_testing` with the addition of a single ``*.tar.bz2``
 file. You can inspect the contents of the archive as below.
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ find build -name "*.tar.bz2"
-   build/tutorial_12_archival/WAVES-TUTORIAL-0.1.0-tutorial_12_archival.tar.bz2
-   $ tar -tjf $(find build -name "*.tar.bz2") | grep -E "parameter_set0|SConstruct|^tutorial_12_archival"
-   build/tutorial_12_archival/parameter_set0/rectangle_geometry.cae
-   build/tutorial_12_archival/parameter_set0/rectangle_geometry.jnl
-   build/tutorial_12_archival/parameter_set0/rectangle_geometry.stdout
-   build/tutorial_12_archival/parameter_set0/rectangle_partition.cae
-   build/tutorial_12_archival/parameter_set0/rectangle_partition.jnl
-   build/tutorial_12_archival/parameter_set0/rectangle_partition.stdout
-   build/tutorial_12_archival/parameter_set0/rectangle_mesh.inp
-   build/tutorial_12_archival/parameter_set0/rectangle_mesh.cae
-   build/tutorial_12_archival/parameter_set0/rectangle_mesh.jnl
-   build/tutorial_12_archival/parameter_set0/rectangle_mesh.stdout
-   build/tutorial_12_archival/parameter_set0/rectangle_compression.inp.in
-   build/tutorial_12_archival/parameter_set0/rectangle_compression.inp
-   build/tutorial_12_archival/parameter_set0/assembly.inp
-   build/tutorial_12_archival/parameter_set0/boundary.inp
-   build/tutorial_12_archival/parameter_set0/field_output.inp
-   build/tutorial_12_archival/parameter_set0/materials.inp
-   build/tutorial_12_archival/parameter_set0/parts.inp
-   build/tutorial_12_archival/parameter_set0/history_output.inp
-   build/tutorial_12_archival/parameter_set0/rectangle_compression.sta
-   build/tutorial_12_archival/parameter_set0/rectangle_compression.stdout
-   build/tutorial_12_archival/parameter_set0/rectangle_compression.odb
-   build/tutorial_12_archival/parameter_set0/rectangle_compression.dat
-   build/tutorial_12_archival/parameter_set0/rectangle_compression.msg
-   build/tutorial_12_archival/parameter_set0/rectangle_compression.com
-   build/tutorial_12_archival/parameter_set0/rectangle_compression.prt
-   build/tutorial_12_archival/parameter_set0/rectangle_compression.h5
-   build/tutorial_12_archival/parameter_set0/rectangle_compression_datasets.h5
-   build/tutorial_12_archival/parameter_set0/rectangle_compression.csv
-   build/tutorial_12_archival/parameter_set0/rectangle_compression.h5.stdout
-   SConstruct
-   tutorial_12_archival
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block:: bash
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ find build -name "*.tar.bz2"
+            build/tutorial_12_archival/WAVES-TUTORIAL-0.1.0-tutorial_12_archival.tar.bz2
+            $ tar -tjf $(find build -name "*.tar.bz2") | grep -E "parameter_set0|SConstruct|^tutorial_12_archival"
+            build/tutorial_12_archival/parameter_set0/rectangle_geometry.cae
+            build/tutorial_12_archival/parameter_set0/rectangle_geometry.jnl
+            build/tutorial_12_archival/parameter_set0/rectangle_geometry.cae.stdout
+            build/tutorial_12_archival/parameter_set0/rectangle_partition.cae
+            build/tutorial_12_archival/parameter_set0/rectangle_partition.jnl
+            build/tutorial_12_archival/parameter_set0/rectangle_partition.cae.stdout
+            build/tutorial_12_archival/parameter_set0/rectangle_mesh.inp
+            build/tutorial_12_archival/parameter_set0/rectangle_mesh.cae
+            build/tutorial_12_archival/parameter_set0/rectangle_mesh.jnl
+            build/tutorial_12_archival/parameter_set0/rectangle_mesh.inp.stdout
+            build/tutorial_12_archival/parameter_set0/rectangle_compression.inp.in
+            build/tutorial_12_archival/parameter_set0/rectangle_compression.inp
+            build/tutorial_12_archival/parameter_set0/assembly.inp
+            build/tutorial_12_archival/parameter_set0/boundary.inp
+            build/tutorial_12_archival/parameter_set0/field_output.inp
+            build/tutorial_12_archival/parameter_set0/materials.inp
+            build/tutorial_12_archival/parameter_set0/parts.inp
+            build/tutorial_12_archival/parameter_set0/history_output.inp
+            build/tutorial_12_archival/parameter_set0/rectangle_compression.odb
+            build/tutorial_12_archival/parameter_set0/rectangle_compression.dat
+            build/tutorial_12_archival/parameter_set0/rectangle_compression.msg
+            build/tutorial_12_archival/parameter_set0/rectangle_compression.com
+            build/tutorial_12_archival/parameter_set0/rectangle_compression.prt
+            build/tutorial_12_archival/parameter_set0/rectangle_compression.sta
+            build/tutorial_12_archival/parameter_set0/rectangle_compression.odb.stdout
+            build/tutorial_12_archival/parameter_set0/rectangle_compression.h5
+            build/tutorial_12_archival/parameter_set0/rectangle_compression_datasets.h5
+            build/tutorial_12_archival/parameter_set0/rectangle_compression.csv
+            SConstruct
+            tutorial_12_archival
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > Get-ChildItem -Path build -Recurse "*.tar.bz2"
+
+                Directory: C:\Users\roppenheimer\waves-tutorials\build\tutorial_12_archival
+
+            Mode                 LastWriteTime         Length Name
+            ----                 -------------         ------ ----
+            -a---            6/9/2023  4:32 PM         467142 WAVES-TUTORIAL-0.1.0-tutorial_12_archival.tar.bz2
+
+            PS > Get-ChildItem -Path build -Recurse *.tar.bz2 | ForEach-Object { tar -tjf $_.FullName } | Select-String -Pattern 'parameter_set0|SConstruct|^tutorial_12_archival'
+
+            build/tutorial_12_archival/parameter_set0/rectangle_geometry.cae
+            build/tutorial_12_archival/parameter_set0/rectangle_geometry.jnl
+            build/tutorial_12_archival/parameter_set0/rectangle_geometry.cae.stdout
+            build/tutorial_12_archival/parameter_set0/rectangle_partition.cae
+            build/tutorial_12_archival/parameter_set0/rectangle_partition.jnl
+            build/tutorial_12_archival/parameter_set0/rectangle_partition.cae.stdout
+            build/tutorial_12_archival/parameter_set0/rectangle_mesh.inp
+            build/tutorial_12_archival/parameter_set0/rectangle_mesh.cae
+            build/tutorial_12_archival/parameter_set0/rectangle_mesh.jnl
+            build/tutorial_12_archival/parameter_set0/rectangle_mesh.inp.stdout
+            build/tutorial_12_archival/parameter_set0/rectangle_compression.inp.in
+            build/tutorial_12_archival/parameter_set0/rectangle_compression.inp
+            build/tutorial_12_archival/parameter_set0/assembly.inp
+            build/tutorial_12_archival/parameter_set0/boundary.inp
+            build/tutorial_12_archival/parameter_set0/field_output.inp
+            build/tutorial_12_archival/parameter_set0/materials.inp
+            build/tutorial_12_archival/parameter_set0/parts.inp
+            build/tutorial_12_archival/parameter_set0/history_output.inp
+            build/tutorial_12_archival/parameter_set0/rectangle_compression.odb
+            build/tutorial_12_archival/parameter_set0/rectangle_compression.dat
+            build/tutorial_12_archival/parameter_set0/rectangle_compression.msg
+            build/tutorial_12_archival/parameter_set0/rectangle_compression.com
+            build/tutorial_12_archival/parameter_set0/rectangle_compression.prt
+            build/tutorial_12_archival/parameter_set0/rectangle_compression.sta
+            build/tutorial_12_archival/parameter_set0/rectangle_compression.odb.stdout
+            build/tutorial_12_archival/parameter_set0/rectangle_compression.h5
+            build/tutorial_12_archival/parameter_set0/rectangle_compression_datasets.h5
+            build/tutorial_12_archival/parameter_set0/rectangle_compression.csv
+            SConstruct
+            tutorial_12_archival
 
 **********************
 Workflow Visualization
@@ -194,11 +320,32 @@ Workflow Visualization
 View the workflow directed graph by running the following command and opening the image in your preferred image viewer.
 First, plot the workflow with all parameter sets.
 
-.. code-block::
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_12_archival_archive --output-file tutorial_12_archival.png --width=60 --height=12 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ waves visualize tutorial_12_archival_archive --output-file tutorial_12_archival.png --width=60 --height=12 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > waves visualize tutorial_12_archival_archive --output-file tutorial_12_archival.png --width=60 --height=12 --exclude-list .stdout .jnl .prt .com .msg .dat .sta
 
 The output should look similar to the figure below.
 
@@ -225,11 +372,32 @@ supplemental :ref:`tutorial_setuptools_scm`.
 
 Now plot the workflow with only the first set, ``set0``.
 
-.. code-block::
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_12_archival_archive --output-file tutorial_12_archival_set0.png --width=60 --height=8 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ waves visualize tutorial_12_archival_archive --output-file tutorial_12_archival_set0.png --width=60 --height=8 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > waves visualize tutorial_12_archival_archive --output-file tutorial_12_archival_set0.png --width=60 --height=8 --exclude-list .stdout .jnl .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
 
 The output should look similar to the figure below.
 

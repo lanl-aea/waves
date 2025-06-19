@@ -30,27 +30,73 @@ Directory Structure
 
 .. note::
 
-    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
-    files.
+   If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+   files.
 
-    .. code-block:: bash
+   .. only:: not epub
 
-        $ pwd
-        /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite --tutorial 6 && mv tutorial_06_include_files_SConstruct SConstruct
-        WAVES fetch
-        Destination directory: '/home/roppenheimer/waves-tutorials'
+      .. tab-set::
+         :sync-group: OS
+
+         .. tab-item:: Linux/MacOS
+            :sync: bash
+
+            .. code-block::
+
+               $ pwd
+               /home/roppenheimer/waves-tutorials
+               $ waves fetch --overwrite --tutorial 6 && mv tutorial_06_include_files_SConstruct SConstruct
+               WAVES fetch
+               Destination directory: '/home/roppenheimer/waves-tutorials'
+
+         .. tab-item:: Windows
+            :sync: powershell
+
+            .. code-block::
+
+               PS > Get-Location
+
+               Path
+               ----
+               C:\Users\roppenheimer\waves-tutorials
+
+               PS > waves fetch --overwrite --tutorial 6 && Move-Item tutorial_06_include_files_SConstruct SConstruct -Force
+               WAVES fetch
+               Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
 4. Download and copy the ``tutorial_06_include_files`` file to a new file named ``tutorial_07_cartesian_product``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_06_include_files && cp tutorial_06_include_files tutorial_07_cartesian_product
-   WAVES fetch
-   Destination directory: '/home/roppenheimer/waves-tutorials'
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block:: bash
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ waves fetch --overwrite tutorials/tutorial_06_include_files && cp tutorial_06_include_files tutorial_07_cartesian_product
+            WAVES fetch
+            Destination directory: '/home/roppenheimer/waves-tutorials'
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > waves fetch --overwrite tutorials\tutorial_06_include_files && Copy-Item tutorial_06_include_files tutorial_07_cartesian_product
+            WAVES fetch
+            Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
 .. _tutorial_cartesian_product_waves_parameter_study_file:
 
@@ -265,12 +311,34 @@ Build Targets
 
 7. Build the new targets
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ scons tutorial_07_cartesian_product --jobs=4
-   <output truncated>
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block:: bash
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ scons tutorial_07_cartesian_product --jobs=4
+            <output truncated>
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > scons tutorial_07_cartesian_product --jobs=4
+            <output truncated>
 
 In the command above, `SCons`_ is instructed to use four threads to build this tutorial's targets. For this tutorial,
 four ``jobs`` is a sensible number, as we have four simulations to run that are independent of each other downstream
@@ -290,55 +358,137 @@ from parameter set generation. By using the ``--jobs=4`` option, `SCons`_ can ru
 Output Files
 ************
 
-Explore the contents of the ``build`` directory using the ``ls`` and ``tree`` commands against the ``build`` directory,
-as shown below.
+Explore the contents of the ``build`` directory as shown below.
 
-.. code-block:: bash
+.. only:: not epub
 
-    $ pwd
-    /home/roppenheimer/waves-tutorials
-    $ ls build/tutorial_07_cartesian_product/
-    parameter_set0/  parameter_set1/  parameter_set2/  parameter_set3/  parameter_study.h5
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block:: bash
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ ls build/tutorial_07_cartesian_product/
+            parameter_set0/  parameter_set1/  parameter_set2/  parameter_set3/  parameter_study.h5
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block:: powershell
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > Get-ChildItem build\tutorial_07_cartesian_product
+
+                Directory: C:\Users\roppenheimer\waves-tutorials\build\tutorial_07_cartesian_product
+
+            Mode                 LastWriteTime         Length Name
+            ----                 -------------         ------ ----
+            d----             6/9/2023 4:32 PM                parameter_set0
+            d----             6/9/2023 4:32 PM                parameter_set1
+            d----             6/9/2023 4:32 PM                parameter_set2
+            d----             6/9/2023 4:32 PM                parameter_set3
+            -a---             6/9/2023 4:32 PM           9942 parameter_study.h5
 
 Explore the contents of the ``parameter_set0`` directory using the ``tree`` command. The contents of the remaining
 ``parameter_set{1,2,3}`` directories will be very similar to that shown for ``parameter_set0``.
 
-.. code-block:: bash
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ tree build/tutorial_07_cartesian_product/parameter_set0/
-   build/tutorial_07_cartesian_product/parameter_set0/
-   |-- abaqus.rpy
-   |-- abaqus.rpy.1
-   |-- abaqus.rpy.2
-   |-- assembly.inp
-   |-- boundary.inp
-   |-- field_output.inp
-   |-- history_output.inp
-   |-- materials.inp
-   |-- parts.inp
-   |-- rectangle_compression.com
-   |-- rectangle_compression.dat
-   |-- rectangle_compression.inp
-   |-- rectangle_compression.inp.in
-   |-- rectangle_compression.msg
-   |-- rectangle_compression.odb
-   |-- rectangle_compression.prt
-   |-- rectangle_compression.sta
-   |-- rectangle_compression.stdout
-   |-- rectangle_geometry.cae
-   |-- rectangle_geometry.jnl
-   |-- rectangle_geometry.stdout
-   |-- rectangle_mesh.cae
-   |-- rectangle_mesh.inp
-   |-- rectangle_mesh.jnl
-   |-- rectangle_mesh.stdout
-   |-- rectangle_partition.cae
-   |-- rectangle_partition.jnl
-   `-- rectangle_partition.stdout
+   .. tab-set::
+      :sync-group: OS
 
-   0 directories, 28 files
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ tree build/tutorial_07_cartesian_product/parameter_set0/
+            build/tutorial_07_cartesian_product/parameter_set0/
+            |-- abaqus.rpy
+            |-- abaqus.rpy.1
+            |-- abaqus.rpy.2
+            |-- assembly.inp
+            |-- boundary.inp
+            |-- field_output.inp
+            |-- history_output.inp
+            |-- materials.inp
+            |-- parts.inp
+            |-- rectangle_compression.com
+            |-- rectangle_compression.dat
+            |-- rectangle_compression.inp
+            |-- rectangle_compression.inp.in
+            |-- rectangle_compression.msg
+            |-- rectangle_compression.odb
+            |-- rectangle_compression.prt
+            |-- rectangle_compression.sta
+            |-- rectangle_compression.stdout
+            |-- rectangle_geometry.cae
+            |-- rectangle_geometry.jnl
+            |-- rectangle_geometry.stdout
+            |-- rectangle_mesh.cae
+            |-- rectangle_mesh.inp
+            |-- rectangle_mesh.jnl
+            |-- rectangle_mesh.stdout
+            |-- rectangle_partition.cae
+            |-- rectangle_partition.jnl
+            `-- rectangle_partition.stdout
+
+            0 directories, 28 files
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-Location
+
+               Path
+               ----
+               C:\Users\roppenheimer\waves-tutorials
+
+            PS > tree build\tutorial_07_cartesian_product\parameter_set0\ /F
+            C:\USERS\ROPPENHEIMER\WAVES-TUTORIALS\BUILD\TUTORIAL_07_CARTESIAN_PRODUCT\PARAMETER_SET0
+                abaqus.rpy
+                abaqus.rpy.1
+                abaqus.rpy.2
+                assembly.inp
+                boundary.inp
+                field_output.inp
+                history_output.inp
+                materials.inp
+                parts.inp
+                rectangle_compression.com
+                rectangle_compression.dat
+                rectangle_compression.inp
+                rectangle_compression.inp.in
+                rectangle_compression.msg
+                rectangle_compression.odb
+                rectangle_compression.odb.stdout
+                rectangle_compression.prt
+                rectangle_compression.sta
+                rectangle_geometry.cae
+                rectangle_geometry.cae.stdout
+                rectangle_geometry.jnl
+                rectangle_mesh.cae
+                rectangle_mesh.inp
+                rectangle_mesh.inp.stdout
+                rectangle_mesh.jnl
+                rectangle_partition.cae
+                rectangle_partition.cae.stdout
+                rectangle_partition.jnl
+
+            No subfolders exist
 
 The contents of the ``parameter_set0`` directory will appear identical to the contents of the previous tutorials. In
 this case, the contents of the files is different, as we have inserted parameters as part of the parameter study.
@@ -350,11 +500,32 @@ Workflow Visualization
 View the workflow directed graph by running the following command and opening the image in your preferred image viewer.
 First, plot the workflow with all parameter sets.
 
-.. code-block::
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_07_cartesian_product --output-file tutorial_07_cartesian_product.png --width=40 --height=12 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ waves visualize tutorial_07_cartesian_product --output-file tutorial_07_cartesian_product.png --width=40 --height=12 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > waves visualize tutorial_07_cartesian_product --output-file tutorial_07_cartesian_product.png --width=40 --height=12 --exclude-list .stdout .jnl .prt .com .msg .dat .sta
 
 The output should look similar to the figure below.
 
@@ -382,11 +553,32 @@ study has changed.
 
 Now plot the workflow with only the first set, ``set0``.
 
-.. code-block::
+.. only:: not epub
 
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_07_cartesian_product --output-file tutorial_07_cartesian_product_set0.png --width=42 --height=6 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
+   .. tab-set::
+      :sync-group: OS
+
+      .. tab-item:: Linux/MacOS
+         :sync: bash
+
+         .. code-block::
+
+            $ pwd
+            /home/roppenheimer/waves-tutorials
+            $ waves visualize tutorial_07_cartesian_product --output-file tutorial_07_cartesian_product_set0.png --width=42 --height=6 --exclude-list /usr/bin .stdout .jnl .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
+
+      .. tab-item:: Windows
+         :sync: powershell
+
+         .. code-block::
+
+            PS > Get-Location
+
+            Path
+            ----
+            C:\Users\roppenheimer\waves-tutorials
+
+            PS > waves visualize tutorial_07_cartesian_product --output-file tutorial_07_cartesian_product_set0.png --width=42 --height=6 --exclude-list .stdout .jnl .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
 
 The output should look similar to the figure below.
 
