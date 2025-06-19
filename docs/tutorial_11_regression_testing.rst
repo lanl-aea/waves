@@ -245,15 +245,15 @@ Build Targets
 
             Days              : 0
             Hours             : 0
-            Minutes           : 1
-            Seconds           : 1
+            Minutes           : 0
+            Seconds           : 10
             Milliseconds      : 129
-            Ticks             : 611291696
-            TotalDays         : 0.000707513537037037
-            TotalHours        : 0.0169803248888889
-            TotalMinutes      : 1.01881949333333
-            TotalSeconds      : 61.1291696
-            TotalMilliseconds : 61129.1696
+            Ticks             : 101291696
+            TotalDays         : 0.0001172357592593
+            TotalHours        : 0.002813658222222
+            TotalMinutes      : 0.1688194933333
+            TotalSeconds      : 10.1291696
+            TotalMilliseconds : 10129.1696
 
 8. Run the full workflow and verify that the CSV regression test passes
 
@@ -298,15 +298,15 @@ Build Targets
 
             Days              : 0
             Hours             : 0
-            Minutes           : 1
-            Seconds           : 13
+            Minutes           : 0
+            Seconds           : 31
             Milliseconds      : 493
-            Ticks             : 734936692
-            TotalDays         : 0.000850621171296296
-            TotalHours        : 0.0204149081111111
-            TotalMinutes      : 1.22489448666667
-            TotalSeconds      : 73.4936692
-            TotalMilliseconds : 73493.6692
+            Ticks             : 314936692
+            TotalDays         : 0.0003645100601852
+            TotalHours        : 0.008748241444444
+            TotalMinutes      : 0.5248944866667
+            TotalSeconds      : 31.4936692
+            TotalMilliseconds : 31493.6692
 
             PS > Get-Content build\tutorial_11_regression_testing\regression.yaml
             CSV comparison: true
