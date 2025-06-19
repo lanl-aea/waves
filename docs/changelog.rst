@@ -8,6 +8,10 @@ Changelog
 0.13.8 (unreleased)
 *******************
 
+Internal Changes
+================
+- Fix GitHub-Pages deployment action. By `Kyle Brindley`_.
+
 *******************
 0.13.7 (2025-06-19)
 *******************
