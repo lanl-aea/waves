@@ -14,6 +14,8 @@ Documentation
 
 Internal Changes
 ================
+- Generalize internal parameter study merge operations for a future merge arbitrary number of studies feature
+  (:issue:`918`, :merge:`1193`). By `Chris Johnson`_.
 - Fix the GitHub Actions conda-build test workflow (:issue:`933`, :merge:`1213`). By `Kyle Brindley`_.
 - Move the AEA RHEL CI jobs out of a child pipeline and into main parent pipeline to allow a coverage badge
   (:issue:`934`, :merge:`1214`). By `Kyle Brindley`_.

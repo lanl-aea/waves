@@ -11,6 +11,7 @@ import xarray
 from waves import parameter_generators
 from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
 from waves import _settings
+from waves import _utilities
 
 
 set_hashes = {
@@ -479,6 +480,106 @@ def test_merge_parameter_studies(studies, expected_samples, expected_types, outc
             pass
 
 
+test_create_set_names_cases = {
+    "custom template": (
+        ["1661dcd0bf4761d25471c1cf5514ceae", "0b588b6a82c1d3d3d19fda304f940342"],
+        _utilities._AtSignTemplate(f"out{_settings._template_placeholder}"),
+        ["out0", "out1"],
+    ),
+    "default template": (
+        ["1661dcd0bf4761d25471c1cf5514ceae", "0b588b6a82c1d3d3d19fda304f940342"],
+        None,
+        ["parameter_set0", "parameter_set1"],
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "test_set_hashes, template, expected_names",
+    test_create_set_names_cases.values(),
+    ids=test_create_set_names_cases.keys(),
+)
+def test_create_set_names(test_set_hashes, template, expected_names):
+    """Test the parameter set name generation
+
+    :param test_set_hashes: list of arbitrary hash strings for test purposes
+    :param template: ``_AtSignTemplate`` typed string with substitution character
+    :param expected_names: list of expected parameter name strings
+    """
+    test_set_names = parameter_generators._create_set_names(test_set_hashes, template)
+    for index, test_hash in enumerate(test_set_names.keys()):
+        assert test_hash == test_set_hashes[index]
+        assert test_set_names[test_hash] == expected_names[index]
+
+
+test_update_set_names_cases = {
+    "custom set name template": (
+        parameter_generators.OneAtATime(
+            {"parameter_1": [1, 2]}, set_name_template=f"out{_settings._template_placeholder}"
+        ).parameter_study,
+        _utilities._AtSignTemplate(f"out{_settings._template_placeholder}"),
+        ["out0", "out1"],
+    ),
+    "custom file name template": (
+        parameter_generators.OneAtATime(
+            {"parameter_1": [1, 2]}, output_file_template=f"out{_settings._template_placeholder}"
+        ).parameter_study,
+        _utilities._AtSignTemplate(f"out{_settings._template_placeholder}"),
+        ["out0", "out1"],
+    ),
+    "custom file name template override": (
+        parameter_generators.OneAtATime(
+            {"parameter_1": [1, 2]},
+            set_name_template=f"out{_settings._template_placeholder}",
+            output_file_template=f"override{_settings._template_placeholder}",
+        ).parameter_study,
+        _utilities._AtSignTemplate(f"out{_settings._template_placeholder}"),
+        ["override0", "override1"],
+    ),
+    "default template": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
+        None,
+        ["parameter_set0", "parameter_set1"],
+    ),
+    "nan parameter values": (
+        xarray.merge(
+            [
+                parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study.swap_dims(
+                    {_settings._set_coordinate_key: _settings._hash_coordinate_key}
+                ),
+                parameter_generators.OneAtATime({"parameter_2": ["a"]})
+                .parameter_study.swap_dims({_settings._set_coordinate_key: _settings._hash_coordinate_key})
+                .drop_vars(_settings._set_coordinate_key),
+            ],
+        ),
+        None,
+        ["parameter_set0", "parameter_set1"],
+    ),
+    "single parameter set": (
+        parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
+        None,
+        ["parameter_set0"],
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "parameter_study, template, expected_names",
+    test_update_set_names_cases.values(),
+    ids=test_update_set_names_cases.keys(),
+)
+def test_update_set_names(parameter_study, template, expected_names):
+    """Check the generated and updated parameter set names against template arguments
+
+    :param parameter_study: parameter study Xarray dataset
+    :param template: ``_AtSignTemplate`` typed string with substitution character
+    :param expected_names: list of expected parameter name strings
+    """
+    parameter_study = parameter_generators._update_set_names(parameter_study, template)
+    test_set_names = parameter_study[_settings._set_coordinate_key]
+    assert list(test_set_names.values) == expected_names
+
+
 def test_open_parameter_study():
     mock_file = "dummy.h5"
     with (
@@ -637,8 +738,8 @@ class TestParameterGenerator:
         templates.values(),
         ids=templates.keys(),
     )
-    def test_update_set_names(self, schema, file_template, set_template, expected):
-        """Check the generated and updated parameter set names against template arguments
+    def test_merge_parameter_studies(self, schema, file_template, set_template, expected):
+        """Check the generated parameter set names against template arguments after a merge operation
 
         :param str schema: placeholder string standing in for the schema read from an input file
         :param str file_template: user supplied string to be used as a template for output file names
@@ -646,19 +747,29 @@ class TestParameterGenerator:
         :param list expected: list of expected parameter name strings
         """
         kwargs = {"sets": 1}
+        mock_previous_study_name = "dummy_study.h5"
         if not set_template:
-            TemplateGenerator = DummyGenerator(schema, output_file_template=file_template, **kwargs)
-        else:
+            mock_previous_study = DummyGenerator(schema, output_file_template=file_template, **kwargs).parameter_study
             TemplateGenerator = DummyGenerator(
-                schema, output_file_template=file_template, set_name_template=set_template, **kwargs
+                schema, output_file_template=file_template, previous_parameter_study=mock_previous_study_name, **kwargs
             )
-        assert list(TemplateGenerator._set_names.values()) == expected
-        assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
-
-        # Test that the update function runs with only a single set. Check that the names don't change.
-        TemplateGenerator._update_set_names()
-        assert list(TemplateGenerator._set_names.values()) == expected
-        assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
+        else:
+            mock_previous_study = DummyGenerator(
+                schema, output_file_template=file_template, set_name_template=set_template, **kwargs
+            ).parameter_study
+            TemplateGenerator = DummyGenerator(
+                schema,
+                output_file_template=file_template,
+                set_name_template=set_template,
+                previous_parameter_study=mock_previous_study_name,
+                **kwargs,
+            )
+        with patch("waves.parameter_generators._open_parameter_study", return_value=mock_previous_study):
+            assert list(TemplateGenerator._set_names.values()) == expected
+            assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
+            TemplateGenerator._merge_parameter_studies()
+            assert list(TemplateGenerator._set_names.values()) == expected
+            assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
 
     # fmt: off
     init_write_stdout = {# schema, template, overwrite, dry_run,         is_file,  sets, stdout_calls  # noqa: E261
