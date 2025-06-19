@@ -4,6 +4,18 @@
 Tutorial Introduction
 #####################
 
+.. warning::
+
+   Windows users: the WAVES builders require PowerShell 7 (``pwsh``). Earlier versions of PowerShell do not support key
+   features such as command chaining (``&&``) and output redirection (``>``). You can check your version of Powershell with
+
+   .. code-block::
+
+      PS > $PSVersionTable
+
+   and install the latest version with the Microsoft instructions here:
+   https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.5
+
 *************
 Start Options
 *************
@@ -18,12 +30,6 @@ and features, start with :ref:`tutorialsconstruct`. Most of the ``SContruct`` fi
 An optional ``waves fetch`` command is included in every tutorial to help users start in a focus topic without
 completing previous tutorials. The :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand may also be used to create a local
 copy of any tutorial file.
-
-.. warning::
-
-   Windows users: To run the tutorial commands and use ``WAVES`` functionality correctly, you must use 
-   PowerShell 7 (pwsh). Earlier versions of PowerShell do not support key features such as command chaining (``&&``) 
-   and output redirection. If you are on an older version, please install ``pwsh``.
 
 .. include:: modsim_templates.txt
 
