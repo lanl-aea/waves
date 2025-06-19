@@ -86,7 +86,6 @@ Directory Structure
             WAVES fetch
             Destination directory: '/home/roppenheimer/waves-tutorials'
 
-
       .. tab-item:: Windows
          :sync: powershell
 

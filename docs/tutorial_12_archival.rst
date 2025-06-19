@@ -60,7 +60,6 @@ Directory Structure
                WAVES fetch
                Destination directory: '/home/roppenheimer/waves-tutorials'
 
-
          .. tab-item:: Windows
             :sync: powershell
 
@@ -94,7 +93,6 @@ Directory Structure
             $ waves fetch --overwrite tutorials/tutorial_11_regression_testing && cp tutorial_11_regression_testing tutorial_12_archival
             WAVES fetch
             Destination directory: '/home/roppenheimer/waves-tutorials'
-
 
       .. tab-item:: Windows
          :sync: powershell
