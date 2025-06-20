@@ -1494,22 +1494,20 @@ def _merge_parameter_studies(
     # Split the list of studies into one 'base' study and the remainder
     study_base = studies.pop(0)
 
-    # Verify identical parameters prior to merge
-    base_parameters = [parameter for parameter in study_base.data_vars]
-    studies_parameters = []
-    for study in studies:
-        study_parameters = [parameter for parameter in study.data_vars]
-        studies_parameters.extend(study_parameters)
-
-    extra_parameters = set(base_parameters) ^ set(studies_parameters)  # Symmetric Difference
-    if any(extra_parameters):
-        raise RuntimeError(f"Found extra unshared parameter(s) '{extra_parameters}' in attempted merge operation")
-
     # Verify type equality and record types prior to merge.
     types_dictionary = {}
+    studies_parameters = []
     for study in studies:
         coerce_types = _return_dataset_types(study_base, study)
         types_dictionary.update(coerce_types)
+        study_parameters = [parameter for parameter in study.data_vars]
+        studies_parameters.extend(study_parameters)  # Assess parameter space
+
+    # Verify uniform parameter space prior to merge
+    base_parameters = [parameter for parameter in study_base.data_vars]
+    extra_parameters = set(base_parameters) ^ set(studies_parameters)  # Symmetric Difference
+    if any(extra_parameters):
+        raise RuntimeError(f"Found unshared parameter(s) '{extra_parameters}' in attempted merge operation")
 
     # Combine all studies after dropping set names from all but `study_base`
     studies = [study_base] + [study.drop_vars(_set_coordinate_key) for study in studies]
