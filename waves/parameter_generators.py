@@ -1504,8 +1504,8 @@ def _merge_parameter_studies(
         studies_parameters.extend(study_parameters)
 
     # Verify uniform parameter space prior to merge
-    base_parameters = [parameter for parameter in study_base.data_vars]
-    extra_parameters = set(base_parameters) ^ set(studies_parameters)  # Symmetric Difference
+    study_base_parameters = [parameter for parameter in study_base.data_vars]
+    extra_parameters = set(study_base_parameters) ^ set(studies_parameters)  # Symmetric Difference
     if any(extra_parameters):
         raise RuntimeError(f"Found unshared parameter(s) '{extra_parameters}' in attempted merge operation")
 
