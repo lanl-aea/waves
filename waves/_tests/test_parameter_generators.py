@@ -412,7 +412,7 @@ merge_parameter_studies_cases = {
         ),
         {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.dtype("U1")},
         parameter_generators.OneAtATime(
-            {"parameter_1": [1], "parameter_2": [3.0, 4.0, 5.0], "parameter_3": ["a"]}
+            {"parameter_1": [1], "parameter_2": [3.0, 5.0, 4.0], "parameter_3": ["a"]}
         ).parameter_study,
         does_not_raise(),
     ),

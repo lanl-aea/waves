@@ -1493,6 +1493,7 @@ def _merge_parameter_studies(
 
     # Split the list of studies into one 'base' study and the remainder
     study_base = studies.pop(0)
+    studies.sort()
 
     # Verify type equality and record types prior to merge.
     types_dictionary = {}
@@ -1510,8 +1511,10 @@ def _merge_parameter_studies(
         raise RuntimeError(f"Found unshared parameter(s) '{extra_parameters}' in attempted merge operation")
 
     # Combine all studies after dropping set names from all but `study_base`
-    studies = [study_base] + [study.drop_vars(_set_coordinate_key) for study in studies]
-    study_combined = xarray.merge(studies)
+    study_combined = study_base
+    for study in studies:
+        study_combined = xarray.merge([study_combined, study.drop_vars(_set_coordinate_key)])
+        study_combined = _update_set_names(study_combined, template)
 
     # Coerce types back to their original type.
     # Particularly necessary for ints, which are coerced to float by xarray.merge
@@ -1521,7 +1524,6 @@ def _merge_parameter_studies(
             study_combined[key] = study_combined[key].astype(old_dtype)
 
     # Recalculate attributes with lengths matching the number of parameter sets
-    study_combined = _update_set_names(study_combined, template)
     study_combined = study_combined.swap_dims({_hash_coordinate_key: _set_coordinate_key})
     study_combined = study_combined.sortby(_set_coordinate_key)
 
