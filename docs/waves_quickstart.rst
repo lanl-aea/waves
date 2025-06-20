@@ -169,8 +169,6 @@ Building targets
             Checking whether '/usr/projects/ea/abaqus/Commands/abq2024' program exists...no
             Checking whether 'abq2024' program exists...C:\SIMULIA\Commands\abq2024.BAT
             Checking whether 'abaqus' program exists...C:\SIMULIA\Commands\abaqus.BAT
-            C:\Users\roppenheimer\AppData\Local\miniconda3\Lib\site-packages\waves\parameter_generators.py:117: UserWarning: Previous parameter study file 'build\parameter_studies\mesh_convergence.h5' does not exist.
-              warnings.warn(message)
             scons: done reading SConscript files.
             scons: Building targets ...
             Copy("build\nominal\rectangle_compression.inp.in", "rectangle_compression.inp.in")
