@@ -11,8 +11,11 @@ from waves import _settings
 
 import yaml
 import pandas
+<<<<<<< HEAD
 
 from yaml.reader import ReaderError
+=======
+>>>>>>> d2b2ef81 (Force encoding regardless of platform in order to have consistent Error)
 
 
 _exclude_from_namespace = set(globals().keys())
@@ -42,11 +45,11 @@ def main(parameter_study_file: pathlib.Path) -> None:
     if not parameter_study_file.is_file():
         raise RuntimeError(f"'{parameter_study_file}' does not exist or is not a file.")
     try:
-        with open(parameter_study_file) as infile:
+        with open(parameter_study_file, encoding="utf-8") as infile:
             study = yaml.safe_load(infile)
             table = pandas.DataFrame(study).T
             table.index.name = _settings._set_coordinate_key
-    except (UnicodeDecodeError, ReaderError):
+    except UnicodeDecodeError:
         from waves.parameter_generators import _open_parameter_study
 
         study = _open_parameter_study(parameter_study_file)
