@@ -24,7 +24,7 @@ Quickstart
          Explore a minimal working example using Abaqus
 
       .. grid-item-card:: :octicon:`rocket` Gmsh+CalculiX
-         :link: waves_quickstart
+         :link: tutorial_gmsh_calculix
          :link-type: ref
 
          Explore a minimal working example using Gmsh+CalculiX
