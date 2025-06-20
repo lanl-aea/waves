@@ -593,6 +593,23 @@ test_update_set_names_cases = {
         None,
         ["parameter_set0"],
     ),
+    "three study merge": (
+        xarray.merge(
+            [
+                parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study.swap_dims(
+                    {_settings._set_coordinate_key: _settings._hash_coordinate_key}
+                ),
+                parameter_generators.OneAtATime({"parameter_1": [2]})
+                .parameter_study.swap_dims({_settings._set_coordinate_key: _settings._hash_coordinate_key})
+                .drop_vars(_settings._set_coordinate_key),
+                parameter_generators.OneAtATime({"parameter_1": [1, 3]})
+                .parameter_study.swap_dims({_settings._set_coordinate_key: _settings._hash_coordinate_key})
+                .drop_vars(_settings._set_coordinate_key),
+            ],
+        ),
+        None,
+        ["parameter_set1", "parameter_set0", "parameter_set2"],
+    ),
 }
 
 
