@@ -1505,7 +1505,7 @@ def _merge_parameter_studies(
 
     # Verify uniform parameter space prior to merge
     study_base_parameters = [parameter for parameter in study_base.data_vars]
-    extra_parameters = set(study_base_parameters) ^ set(studies_parameters)  # Symmetric Difference
+    extra_parameters = set(study_base_parameters) ^ set(studies_parameters)
     if any(extra_parameters):
         raise RuntimeError(f"Found unshared parameter(s) '{extra_parameters}' in attempted merge operation")
 
@@ -1523,7 +1523,7 @@ def _merge_parameter_studies(
     # Recalculate attributes with lengths matching the number of parameter sets
     study_combined = _update_set_names(study_combined, template)
     study_combined = study_combined.swap_dims({_hash_coordinate_key: _set_coordinate_key})
-    study_combined = study_combined.sortby(_set_coordinate_key)
+    study_combined = study_combined.sortby(_hash_coordinate_key)
 
     return study_combined
 
