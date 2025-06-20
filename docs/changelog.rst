@@ -8,6 +8,11 @@ Changelog
 0.13.9 (unreleased)
 *******************
 
+Bug fixes
+=========
+- Verify correct handling of set hashes and nonuniform parameter space after a merge operation.
+  (:issue:`937`, :merge:`1217`). By `Chris Johnson`_.
+
 *******************
 0.13.8 (2025-06-19)
 *******************
