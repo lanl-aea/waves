@@ -393,27 +393,26 @@ merge_parameter_studies_cases = {
     "concatenate along one parameter across multiple studies: float": (
         [
             parameter_generators.OneAtATime(
-                {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": ["a"]}
+                {"parameter_1": [1], "parameter_2": [3.0], "parameter_3": ["a"]}
             ).parameter_study,
             parameter_generators.OneAtATime(
-                {"parameter_1": [1, 2], "parameter_2": [3.0, 4.0], "parameter_3": ["a"]}
+                {"parameter_1": [1], "parameter_2": [4.0], "parameter_3": ["a"]}
             ).parameter_study,
             parameter_generators.OneAtATime(
-                {"parameter_1": [1, 2], "parameter_2": [3.0, 5.0], "parameter_3": ["a"]}
+                {"parameter_1": [1], "parameter_2": [3.0, 5.0], "parameter_3": ["a"]}
             ).parameter_study,
         ],
         numpy.array(
             [
                 [1, 3.0, "a"],
                 [1, 4.0, "a"],
-                [2, 3.0, "a"],
                 [1, 5.0, "a"],
             ],
             dtype=object,
         ),
         {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.dtype("U1")},
         parameter_generators.OneAtATime(
-            {"parameter_1": [1, 2], "parameter_2": [3.0, 4.0, 5.0], "parameter_3": ["a"]}
+            {"parameter_1": [1], "parameter_2": [3.0, 4.0, 5.0], "parameter_3": ["a"]}
         ).parameter_study,
         does_not_raise(),
     ),
@@ -472,6 +471,21 @@ merge_parameter_studies_cases = {
         None,
         pytest.raises(RuntimeError),
     ),
+    "concatenate with different parameter names": (
+        [
+            parameter_generators.OneAtATime({"parameter_1": [1.0]}).parameter_study,
+            parameter_generators.OneAtATime({"parameter_2": [2.0]}).parameter_study,
+        ],
+        numpy.array([[numpy.nan, 2.0], [1.0, numpy.nan]], dtype=object),
+        {"parameter_1": numpy.float64, "parameter_2": numpy.float64},
+        parameter_generators.CustomStudy(
+            dict(
+                parameter_samples=numpy.array([[1.0, numpy.nan], [numpy.nan, 2.0]], dtype=object),
+                parameter_names=numpy.array(["parameter_1", "parameter_2"]),
+            )
+        ).parameter_study,
+        pytest.raises(RuntimeError),
+    ),
 }
 
 
@@ -484,12 +498,12 @@ def test_merge_parameter_studies(studies, expected_samples, expected_types, expe
     with outcome:
         try:
             merged_study = parameter_generators._merge_parameter_studies(studies)
-            parameter_generators._verify_parameter_study(merged_study)
-            xarray.testing.assert_identical(merged_study, expected_study)
             for key in expected_types.keys():
                 assert merged_study[key].dtype == expected_types[key]
             samples = parameter_generators._parameter_study_to_numpy(merged_study)
             assert numpy.all(samples == expected_samples)
+            xarray.testing.assert_identical(merged_study, expected_study)
+            parameter_generators._verify_parameter_study(merged_study)
         finally:
             pass
 
