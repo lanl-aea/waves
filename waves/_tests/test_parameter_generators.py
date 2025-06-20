@@ -419,27 +419,22 @@ merge_parameter_studies_cases = {
     ),
     "concatenate along two parameters across multiple studies: int/bool": (
         [
-            parameter_generators.CartesianProduct(
-                {"parameter_1": [1], "parameter_2": [3.0], "parameter_3": [True]}
-            ).parameter_study,
-            parameter_generators.CartesianProduct(
-                {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True]}
-            ).parameter_study,
-            parameter_generators.CartesianProduct(
-                {"parameter_1": [2], "parameter_2": [3.0], "parameter_3": [False]}
-            ).parameter_study,
+            parameter_generators.CartesianProduct({"parameter_1": [1], "parameter_2": [True]}).parameter_study,
+            parameter_generators.CartesianProduct({"parameter_1": [2], "parameter_2": [False]}).parameter_study,
         ],
         numpy.array(
             [
-                [2, 3.0, False],
-                [2, 3.0, True],
-                [1, 3.0, True],
+                [1, True],
+                [2, False],
             ],
             dtype=object,
         ),
-        {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.bool_},
-        parameter_generators.CartesianProduct(
-            {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}
+        {"parameter_1": numpy.int64, "parameter_2": numpy.bool_},
+        parameter_generators.CustomStudy(
+            dict(
+                parameter_samples=numpy.array([[1, True], [2, False]], dtype=object),
+                parameter_names=numpy.array(["parameter_1", "parameter_2"]),
+            )
         ).parameter_study,
         does_not_raise(),
     ),

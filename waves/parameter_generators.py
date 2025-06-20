@@ -1514,6 +1514,7 @@ def _merge_parameter_studies(
     # Recalculate attributes with lengths matching the number of parameter sets
     study_combined = _update_set_names(study_combined, template)
     study_combined = study_combined.swap_dims({_hash_coordinate_key: _set_coordinate_key})
+    study_combined = study_combined.sortby(_set_coordinate_key)
 
     return study_combined
 
