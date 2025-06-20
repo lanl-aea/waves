@@ -1501,7 +1501,7 @@ def _merge_parameter_studies(
         coerce_types = _return_dataset_types(study_base, study)
         types_dictionary.update(coerce_types)
         study_parameters = [parameter for parameter in study.data_vars]
-        studies_parameters.extend(study_parameters)  # Assess parameter space
+        studies_parameters.extend(study_parameters)
 
     # Verify uniform parameter space prior to merge
     base_parameters = [parameter for parameter in study_base.data_vars]
