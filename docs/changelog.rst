@@ -8,6 +8,10 @@ Changelog
 0.13.9 (unreleased)
 *******************
 
+Documentation
+=============
+- Add Windows Powershell instructions to quickstart tutorials (:issue:`939`, :merge:`1218`). By `Sergio Cordova`_.
+
 *******************
 0.13.8 (2025-06-19)
 *******************
