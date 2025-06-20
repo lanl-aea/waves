@@ -486,6 +486,21 @@ merge_parameter_studies_cases = {
         ).parameter_study,
         pytest.raises(RuntimeError),
     ),
+    "concatenate with different numbers of parameters": (
+        [
+            parameter_generators.OneAtATime({"parameter_1": [1.0]}).parameter_study,
+            parameter_generators.OneAtATime({"parameter_1": [2.0], "parameter_2": [3]}).parameter_study,
+        ],
+        numpy.array([[1.0, -9223372036854775808], [2.0, 3]], dtype=object),
+        {"parameter_1": numpy.float64, "parameter_2": numpy.int64},
+        parameter_generators.CustomStudy(
+            dict(
+                parameter_samples=numpy.array([[1.0, -9223372036854775808], [2.0, 3]], dtype=object),
+                parameter_names=numpy.array(["parameter_1", "parameter_2"]),
+            )
+        ).parameter_study,
+        pytest.raises(RuntimeError),
+    ),
 }
 
 
