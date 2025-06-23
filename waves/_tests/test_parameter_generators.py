@@ -622,9 +622,7 @@ class TestParameterGenerator:
     def test_output_file_conflict(self):
         with pytest.raises(MutuallyExclusiveError):
             try:
-                DummyGenerator(
-                    {}, output_file_template="out@number", output_file="single_output_file"
-                )
+                DummyGenerator({}, output_file_template="out@number", output_file="single_output_file")
             finally:
                 pass
 
