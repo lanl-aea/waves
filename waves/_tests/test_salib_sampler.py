@@ -29,7 +29,7 @@ class TestSALibSampler:
             {},
             {"calc_second_order": False},
         ),
-        "sobol: two parameter": (
+        "sobol: two parameter: override kwargs": (
             "sobol",
             {
                 "N": 4,
