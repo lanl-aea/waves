@@ -5,7 +5,6 @@ Parse various file types created via Abaqus
 """
 
 from abc import ABC, abstractmethod
-import os
 import re
 import sys
 from pathlib import Path

@@ -37,7 +37,6 @@ path. The '/xarray/Dataset' group path contains a list of group paths that conta
 """
 
 import os
-import re
 import sys
 import json
 import yaml

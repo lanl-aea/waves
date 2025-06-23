@@ -4,7 +4,7 @@ import io
 import os
 import pathlib
 import datetime
-from unittest.mock import patch, Mock
+from unittest.mock import patch
 from contextlib import nullcontext as does_not_raise
 
 import numpy

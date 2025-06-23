@@ -5,7 +5,6 @@ Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAV
 """
 
 import sys
-import pathlib
 import argparse
 
 from waves import _settings

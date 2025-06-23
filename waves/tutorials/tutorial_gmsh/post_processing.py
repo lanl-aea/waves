@@ -6,7 +6,6 @@ import yaml
 import pathlib
 import argparse
 
-import pandas
 import xarray
 import matplotlib.pyplot
 from waves.parameter_generators import SET_COORDINATE_KEY

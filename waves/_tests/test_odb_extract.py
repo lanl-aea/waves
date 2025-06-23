@@ -11,7 +11,6 @@ import pytest
 from unittest.mock import patch, mock_open
 
 from waves._abaqus import odb_extract
-from waves._utilities import _quote_spaces_in_path
 
 
 fake_odb = {

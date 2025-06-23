@@ -5,7 +5,6 @@ import atexit
 import shutil
 import typing
 import pathlib
-import warnings
 import functools
 import collections
 
@@ -3864,8 +3863,6 @@ def parameter_study_sconscript(
     from waves import parameter_generators
 
     if not isinstance(exports, dict):
-        import warnings
-
         message = (
             f"``exports`` keyword argument {exports} *must* be a dictionary of '{{key: value}}' pairs because "
             "this function does not have access to the calling script's namespace."

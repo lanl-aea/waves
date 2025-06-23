@@ -1,7 +1,7 @@
 """Test ParameterGenerator Abstract Base Class"""
 
 import pathlib
-from unittest.mock import patch, mock_open, Mock
+from unittest.mock import patch, mock_open
 from contextlib import nullcontext as does_not_raise
 
 import pytest

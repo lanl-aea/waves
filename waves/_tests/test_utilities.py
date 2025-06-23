@@ -8,7 +8,6 @@ from contextlib import nullcontext as does_not_raise
 
 import pytest
 
-from waves import _settings
 from waves import _utilities
 
 

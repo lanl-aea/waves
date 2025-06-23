@@ -6,7 +6,6 @@ import pathlib
 from contextlib import nullcontext as does_not_raise
 import unittest
 from unittest.mock import patch, call, Mock
-import subprocess
 
 import pytest
 import SCons.Node.FS
