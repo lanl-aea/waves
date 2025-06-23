@@ -515,12 +515,12 @@ def test_merge_parameter_studies(studies, expected_samples, expected_types, expe
 
 test_create_set_names_cases = {
     "custom template": (
-        ["1661dcd0bf4761d25471c1cf5514ceae", "0b588b6a82c1d3d3d19fda304f940342"],
+        ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
         _utilities._AtSignTemplate(f"out{_settings._template_placeholder}"),
         ["out0", "out1"],
     ),
     "default template": (
-        ["1661dcd0bf4761d25471c1cf5514ceae", "0b588b6a82c1d3d3d19fda304f940342"],
+        ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
         None,
         ["parameter_set0", "parameter_set1"],
     ),

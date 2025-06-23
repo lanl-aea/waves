@@ -1523,7 +1523,6 @@ def _merge_parameter_studies(
     # Recalculate attributes with lengths matching the number of parameter sets
     study_combined = _update_set_names(study_combined, template)
     study_combined = study_combined.swap_dims({_hash_coordinate_key: _set_coordinate_key})
-    study_combined = study_combined.sortby(_hash_coordinate_key)
 
     return study_combined
 
@@ -1543,6 +1542,7 @@ def _create_set_names(
         template = _utilities._AtSignTemplate(_settings._default_set_name_template)
 
     set_names = {}
+    set_hashes = sorted(set_hashes)
     for number, set_hash in enumerate(set_hashes):
         set_names[set_hash] = template.substitute({"number": number})
 
@@ -1563,10 +1563,10 @@ def _update_set_names(
     """
     set_hashes = list(parameter_study.coords[_hash_coordinate_key].values)
     set_names = _create_set_names(set_hashes, template)
-    new_set_names = sorted(list(set(set_names.values()) - set(parameter_study.coords[_set_coordinate_key].values)))
+    new_set_names = list(set_names.values())
     null_set_names = parameter_study.coords[_set_coordinate_key].isnull()
     if any(null_set_names):
-        parameter_study.coords[_set_coordinate_key][null_set_names] = new_set_names
+        parameter_study.coords[_set_coordinate_key][:] = new_set_names
 
     return parameter_study
 
