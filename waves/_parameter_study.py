@@ -50,7 +50,7 @@ def get_parser() -> argparse.ArgumentParser:
             "appended to the template string. Output files are overwritten if the "
             "content of the file has changed or if ``overwrite`` is True "
             "(default: %(default)s)"
-        )
+        ),
     )
     output_file_group.add_argument(
         "-f",
@@ -78,8 +78,7 @@ def get_parser() -> argparse.ArgumentParser:
         default=_settings._default_set_name_template,
         dest="SET_NAME_TEMPLATE",
         help=(
-            "Parameter set name template. Overridden by ``output_file_template``, "
-            "if provided (default: %(default)s)"
+            "Parameter set name template. Overridden by ``output_file_template``, if provided (default: %(default)s)"
         ),
     )
     parser.add_argument(
