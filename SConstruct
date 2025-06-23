@@ -3,7 +3,6 @@
 import os
 import shutil
 import pathlib
-import platform
 import warnings
 
 import setuptools_scm

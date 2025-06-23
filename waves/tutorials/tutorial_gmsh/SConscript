@@ -1,6 +1,4 @@
 #! /usr/bin/env python
-import waves
-
 import vtu2xarray
 
 Import("env", "alias", "parameters")

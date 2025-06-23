@@ -1,6 +1,4 @@
 #! /usr/bin/env python
-
-import os
 import pathlib
 
 # Inherit the parent construction environment
@@ -376,12 +374,12 @@ env.Alias("documentation", html + latexpdf + man)
 env.Alias("regression", html + latexpdf + man + internal)
 
 if not env["unconditional_build"] and not env["sphinx_build"]:
-    print(f"Program 'sphinx-build' was not found in construction environment. Ignoring Sphinx target(s)")
+    print("Program 'sphinx-build' was not found in construction environment. Ignoring Sphinx target(s)")
     Ignore([".", html_directory, "html", "documentation", "regression"], html)
     Ignore([".", internal_directory, "html-internal", "regression"], internal)
     Ignore([".", latex_directory, "latexpdf", "documentation", "regression"], latexpdf)
     Ignore([".", man_directory, "man", "documentation", "regression"], man)
     Ignore([".", epub_directory, "epub"], epub)
 if not env["unconditional_build"] and not env["latexmk"]:
-    print(f"Program 'latexmk' was not found in construction environment. Ignoring Sphinx LaTeXPDF target(s)")
+    print("Program 'latexmk' was not found in construction environment. Ignoring Sphinx LaTeXPDF target(s)")
     Ignore([".", latex_directory, "latexpdf", "documentation", "regression"], latexpdf)

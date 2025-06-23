@@ -22,7 +22,7 @@ workflow = []
 build_file = pathlib.Path("stress_strain_comparison.csv")
 workflow.extend(
     env.PythonScript(
-        target=[f"regression.yaml"],
+        target=["regression.yaml"],
         source=[
             env["modsim_package_abspath"] / "regression.py",
             env["modsim_package_abspath"] / f"{alias}-{build_file.stem}.csv",
