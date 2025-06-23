@@ -217,16 +217,16 @@ def odb_extract(
             )
         # Index error is reached if a line is split and the line is empty (i.e. file is empty), ValueError is reached if
         # a string is found where an integer is expected
-        except (IndexError, ValueError) as e:
-            sys.exit(f"{job_name} could not be parsed. Please check if file is in expected format. {e}")
+        except (IndexError, ValueError) as err:
+            sys.exit(f"{job_name} could not be parsed. Please check if file is in expected format. {err}")
     else:
         parsed_odb = None
         # Parse output of odbreport
         try:
             parsed_odb = abaqus_file_parser.OdbReportFileParser(job_name, "odb").parsed
         # Index error is reached if a line is split and the line is empty (i.e. file is empty0)
-        except (IndexError, ValueError) as e:
-            sys.exit(f"{job_name} could not be parsed. Please check if file is in expected format. {e}")
+        except (IndexError, ValueError) as err:
+            sys.exit(f"{job_name} could not be parsed. Please check if file is in expected format. {err}")
 
         # Write parsed output
         if output_type == "json":

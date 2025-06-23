@@ -270,7 +270,7 @@ def ancestor_subgraph(
     for node in nodes:
         try:
             sources = sources.union(networkx.ancestors(graph, node))
-        except networkx.NetworkXError as err:
+        except networkx.NetworkXError:
             missing.append(node)
 
     if missing:

@@ -238,10 +238,10 @@ for alias in default_ans:
 try:
     # SCons >=4.9.0
     Help(alias_help, append=True, local_only=True)
-except TypeError as err:
+except TypeError:
     try:
         # SCons >=4.6,<4.9.0
         Help(alias_help, append=True, keep_local=True)
-    except TypeError as err:
+    except TypeError:
         # SCons <4.6
         Help(alias_help, append=True)

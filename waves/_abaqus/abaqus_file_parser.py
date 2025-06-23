@@ -877,7 +877,6 @@ class OdbReportFileParser(AbaqusFileParser):
         while "history" not in line.lower() and line != "":
             if line.strip().startswith("Frame number"):
                 frame = dict()
-                frame_number = int(line.replace("Frame number", "").strip())
                 current_frame_number += 1
                 while (
                     not line.strip().startswith("Number of field outputs")

@@ -421,11 +421,11 @@ def project_help_default_targets(
     try:
         # SCons >=4.9.0
         SConsEnvironment.Help(env, default_targets_help, append=append, local_only=local_only)
-    except TypeError as err:
+    except TypeError:
         try:
             # SCons >=4.6,<4.9.0
             SConsEnvironment.Help(env, default_targets_help, append=append, keep_local=local_only)
-        except TypeError as err:
+        except TypeError:
             # SCons <4.6
             SConsEnvironment.Help(env, default_targets_help, append=append)
 
@@ -840,7 +840,7 @@ def _build_subdirectory(target: list) -> pathlib.Path:
     """
     try:
         build_subdirectory = pathlib.Path(str(target[0])).parent
-    except IndexError as err:
+    except IndexError:
         build_subdirectory = pathlib.Path(".")
     return build_subdirectory
 

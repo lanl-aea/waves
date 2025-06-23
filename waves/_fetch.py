@@ -337,12 +337,11 @@ def recursive_copy(
 
     # Down select to requested file list
     if len(requested_paths) > 0:
-        requested_paths_resolved, missing_requested_paths = build_source_files(
+        requested_paths_resolved, _ = build_source_files(
             longest_common_source_path, requested_paths
         )
     else:
         requested_paths_resolved = source_files
-        missing_requested_paths = []
     if not requested_paths_resolved:
         raise RuntimeError(f"Did not find any requested files in '{longest_common_source_path}'")
 

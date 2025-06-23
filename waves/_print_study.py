@@ -44,7 +44,7 @@ def main(parameter_study_file: pathlib.Path) -> None:
             study = yaml.safe_load(infile)
             table = pandas.DataFrame(study).T
             table.index.name = _settings._set_coordinate_key
-    except UnicodeDecodeError as err:
+    except UnicodeDecodeError:
         from waves.parameter_generators import _open_parameter_study
 
         study = _open_parameter_study(parameter_study_file)
