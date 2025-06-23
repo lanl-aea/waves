@@ -608,7 +608,7 @@ test_update_set_names_cases = {
             ],
         ),
         None,
-        ["parameter_set1", "parameter_set0", "parameter_set2"],
+        ["parameter_set0", "parameter_set1", "parameter_set2"],
     ),
 }
 
