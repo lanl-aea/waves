@@ -32,7 +32,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "TARGET",
         nargs="+",
-        help=f"SCons target(s)",
+        help="SCons target(s)",
     )
 
     parser.add_argument(

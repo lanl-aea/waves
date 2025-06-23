@@ -42,26 +42,26 @@ def get_parser() -> argparse.ArgumentParser:
         "--output-file-template",
         default=_settings._default_output_file_template,
         dest="OUTPUT_FILE_TEMPLATE",
-        # fmt: off
-        help="Output file template. May contain pathseps for an absolute or relative "
-             f"path template. May contain the ``{_settings._template_placeholder}`` "
-             "set number placeholder in the file basename but not in the path. "
-             "If the placeholder is not found, it will be "
-             "appended to the template string. Output files are overwritten if the "
-             "content of the file has changed or if ``overwrite`` is True "
-             "(default: %(default)s)",
-        # fmt: on
+        help=(
+            "Output file template. May contain pathseps for an absolute or relative "
+            f"path template. May contain the ``{_settings._template_placeholder}`` "
+            "set number placeholder in the file basename but not in the path. "
+            "If the placeholder is not found, it will be "
+            "appended to the template string. Output files are overwritten if the "
+            "content of the file has changed or if ``overwrite`` is True "
+            "(default: %(default)s)"
+        )
     )
     output_file_group.add_argument(
         "-f",
         "--output-file",
         default=_settings._default_output_file,
         dest="OUTPUT_FILE",
-        # fmt: off
-        help=f"Output file name. May contain pathseps for an absolute or relative path. "
-              "Output file is overwritten if the content of the file has changed or if "
-              "``overwrite`` is True (default: %(default)s)",
-        # fmt: on
+        help=(
+            "Output file name. May contain pathseps for an absolute or relative path. "
+            "Output file is overwritten if the content of the file has changed or if "
+            "``overwrite`` is True (default: %(default)s)"
+        ),
     )
 
     # Optional keyword options
@@ -77,20 +77,20 @@ def get_parser() -> argparse.ArgumentParser:
         "--set-name-template",
         default=_settings._default_set_name_template,
         dest="SET_NAME_TEMPLATE",
-        # fmt: off
-        help="Parameter set name template. Overridden by ``output_file_template``, "
-             "if provided (default: %(default)s)",
-        # fmt: on
+        help=(
+            "Parameter set name template. Overridden by ``output_file_template``, "
+            "if provided (default: %(default)s)"
+        ),
     )
     parser.add_argument(
         "-p",
         "--previous-parameter-study",
         default=_settings._default_previous_parameter_study,
         dest="PREVIOUS_PARAMETER_STUDY",
-        # fmt: off
-        help="A relative or absolute file path to a previously created parameter study Xarray "
-             "Dataset (default: %(default)s)",
-        # fmt: on
+        help=(
+            "A relative or absolute file path to a previously created parameter study Xarray "
+            "Dataset (default: %(default)s)"
+        ),
     )
     parser.add_argument(
         "--require-previous-parameter-study",
@@ -110,10 +110,10 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--write-meta",
         action="store_true",
-        # fmt: off
-        help="Write a meta file named 'parameter_study_meta.txt' containing the parameter set file names "
-             "(default: %(default)s)",
-        # fmt: on
+        help=(
+            "Write a meta file named 'parameter_study_meta.txt' containing the parameter set file names "
+            "(default: %(default)s)"
+        ),
     )
 
     return parser

@@ -151,7 +151,7 @@ class OdbReportFileParser(AbaqusFileParser):
         while not line.startswith("General ODB information") and line != "":
             if line.startswith("ODB Report"):
                 if not re.search("csv", line, re.IGNORECASE):
-                    sys.exit(f"ODB report file must be in CSV format")
+                    sys.exit("ODB report file must be in CSV format")
             line = f.readline()
 
         while not line.startswith("Job Data") and line != "" and not line.startswith("---"):

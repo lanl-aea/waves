@@ -29,7 +29,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "FILE",
         nargs="*",
-        help=f"modsim template file or directory",
+        help="modsim template file or directory",
         type=pathlib.Path,
     )
     parser.add_argument(

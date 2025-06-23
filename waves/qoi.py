@@ -127,7 +127,7 @@ def create_qoi(
         default=numpy.nan,
     )
     if lower > upper:
-        raise ValueError(f"Upper limit is lower than the lower limit.")
+        raise ValueError("Upper limit is lower than the lower limit.")
     return xarray.DataArray(
         data=[calculated, expected, lower, upper],
         coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},

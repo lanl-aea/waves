@@ -111,7 +111,7 @@ def test_parse_output(
 
     tree_lines = tree_output.split("\n")
     break_paths = True if break_path_separator is not None else False
-    with patch(f"os.path.sep", new=break_path_separator):
+    with patch("os.path.sep", new=break_path_separator):
         graph = _visualize.parse_output(tree_lines, break_paths=break_paths, no_labels=no_labels)
 
     assert len(graph.nodes) == len(expected_nodes)

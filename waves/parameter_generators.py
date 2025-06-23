@@ -1250,7 +1250,7 @@ class SALibSampler(ParameterGenerator, ABC):
         if "names" not in self.parameter_schema["problem"].keys():
             raise SchemaValidationError("Parameter schema 'problem' dict is missing the required 'names' key")
         if not isinstance(self.parameter_schema["problem"]["names"], (list, set, tuple)):
-            raise SchemaValidationError(f"Parameter 'names' is not one of list, set, or tuple")
+            raise SchemaValidationError("Parameter 'names' is not one of list, set, or tuple")
         self._create_parameter_names()
         # Sampler specific validation
         self._sampler_validation()

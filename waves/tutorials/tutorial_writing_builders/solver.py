@@ -248,7 +248,7 @@ def get_parser() -> argparse.ArgumentParser:
         type=positive_nonzero_int,
         default=_default_solve_cpus,
         required=False,
-        help=f"The number of threads to use (default: %(default)s)",
+        help="The number of threads to use (default: %(default)s)",
     )
     subcommand_parser_parent.add_argument(
         "--overwrite",
