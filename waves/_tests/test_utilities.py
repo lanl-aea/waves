@@ -213,7 +213,7 @@ def test_find_cubit_python():
     with (
         patch("waves._utilities.find_command"),
         patch("os.path.realpath", return_value=str(mock_abspath)),
-        patch("pathlib.Path.rglob", return_value=[mock_python]) as mock_rglob,
+        patch("pathlib.Path.rglob", return_value=[mock_python]),
         patch("pathlib.Path.is_file", return_value=True),
         patch("os.access", return_value=True),
     ):

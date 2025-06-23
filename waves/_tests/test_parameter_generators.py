@@ -622,7 +622,7 @@ class TestParameterGenerator:
     def test_output_file_conflict(self):
         with pytest.raises(MutuallyExclusiveError):
             try:
-                OutputFileConflict = DummyGenerator(
+                DummyGenerator(
                     {}, output_file_template="out@number", output_file="single_output_file"
                 )
             finally:
@@ -631,7 +631,7 @@ class TestParameterGenerator:
     def test_output_file_type(self):
         with pytest.raises(ChoicesError):
             try:
-                OutputTypeError = DummyGenerator({}, output_file_type="notsupported")
+                DummyGenerator({}, output_file_type="notsupported")
             finally:
                 pass
 
@@ -658,6 +658,7 @@ class TestParameterGenerator:
                 MissingPreviousStudy = DummyGenerator(
                     {}, previous_parameter_study="doesnotexist.h5", require_previous_parameter_study=False
                 )
+                assert isinstance(MissingPreviousStudy, parameter_generators.ParameterGenerator)
                 mock_merge.assert_not_called()
                 mock_warn.assert_called_once()
             finally:
@@ -1075,6 +1076,7 @@ class TestParameterGenerator:
         ):
             WriteParameterGenerator.write()
             mock_write_meta.assert_called_once()
+            mock_private_write.assert_called_once()
 
     def test_write_meta(self):
         WriteMetaParameterGenerator = DummyGenerator({})
@@ -1185,6 +1187,7 @@ class TestParameterDistributions:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
                 TestValidate = ParameterDistributions(parameter_schema)
+                assert isinstance(TestValidate, parameter_generators.ParameterGenerator)
                 mock_distros.assert_called_once()
             finally:
                 pass

@@ -62,7 +62,7 @@ def test_odb_extract():
         patch("shutil.which", return_value="abaqus"),
         patch("select.select", return_value=[None, None, None]),
         patch("waves._abaqus.abaqus_file_parser.OdbReportFileParser"),
-        patch("builtins.print") as mock_print,
+        patch("builtins.print"),
         patch("pathlib.Path.exists", return_value=True),
     ):  # Test warning after second critical error
         odb_extract.odb_extract(["sample"], None)
