@@ -12,7 +12,6 @@ import SCons.Node.FS
 
 from waves import parameter_generators
 from waves import scons_extensions
-from waves import parameter_generators
 from waves._settings import _cd_action_prefix
 from waves._settings import _redirect_action_suffix
 from waves._settings import _redirect_environment_suffix
