@@ -681,11 +681,11 @@ class TestParameterGenerator:
         mock_write.assert_called_once_with(**expected_kwargs)
 
     # fmt: off
-    templates = {       # schema, file_template, set_template,          expected
-        "no template":   (    {},        None,         None, ["parameter_set0"]),  # noqa: E241,E201
-        "file template": (    {},       "out",         None,           ["out0"]),  # noqa: E241,E201
-        "file template": (    {},        None,        "out",           ["out0"]),  # noqa: E241,E201
-        "file template": (    {},       "out", "overridden",           ["out0"]),  # noqa: E241,E201
+    templates = {       # schema, file_template, set_template,           expected
+        "no template":   (    {},          None,         None, ["parameter_set0"]),  # noqa: E241,E201
+        "file template": (    {},         "out",         None,           ["out0"]),  # noqa: E241,E201
+        "set template":  (    {},          None, "out@number",           ["out0"]),  # noqa: E241,E201
+        "set template, overridden": ({}, "out", "overridden",            ["out0"]),  # noqa: E241,E201
     }
     # fmt: on
 
