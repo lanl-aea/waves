@@ -39,10 +39,10 @@ def get_parser() -> argparse.ArgumentParser:
         "-o",
         "--output-file",
         type=pathlib.Path,
-        # fmt: off
-        help="Path to output image file with an extension supported by matplotlib, e.g. 'visualization.svg' "
-             "(default: %(default)s)",
-        # fmt: on
+        help=(
+            "Path to output image file with an extension supported by matplotlib, e.g. 'visualization.svg' "
+            "(default: %(default)s)"
+        ),
     )
     parser.add_argument(
         "--sconstruct",

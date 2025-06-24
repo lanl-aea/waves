@@ -34,10 +34,10 @@ def get_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--destination",
-        # fmt: off
-        help="Destination directory. Unless ``--overwrite`` is specified, conflicting file names in the "
-             "destination will not be copied. (default: PWD)",
-        # fmt: on
+        help=(
+            "Destination directory. Unless ``--overwrite`` is specified, conflicting file names in the "
+            "destination will not be copied. (default: PWD)"
+        ),
         type=pathlib.Path,
         default=pathlib.Path().cwd(),
     )
