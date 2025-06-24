@@ -748,7 +748,14 @@ class TestParameterGenerator:
 
     @pytest.mark.parametrize("length", range(1, 20, 5))
     def test_parameter_study_to_dict(self, length):
-        expected = {f"parameter_set{index}": {"parameter_1": float(index)} for index in range(length)}
+        expected_by_hash = {
+            parameter_generators._calculate_set_hash(["parameter_1"], [float(index)]): {"parameter_1": float(index)}
+            for index in range(length)
+        }
+        expected = {
+            f"parameter_set{index}": expected_by_hash[item]
+            for index, item in enumerate(sorted(expected_by_hash.keys()))
+        }
         kwargs = {"sets": length}
         sconsIterator = DummyGenerator({}, **kwargs)
         set_samples = sconsIterator.parameter_study_to_dict()
