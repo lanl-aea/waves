@@ -129,23 +129,23 @@ def get_parser() -> argparse.ArgumentParser:
     subparsers.add_parser(
         "docs",
         help=f"Open the {_settings._project_name_short.upper()} HTML documentation",
-        # fmt: off
-        description=f"Open the packaged {_settings._project_name_short.upper()} HTML documentation in the "
-                    "system default web browser",
-        # fmt: on
+        description=(
+            f"Open the packaged {_settings._project_name_short.upper()} HTML documentation in the "
+            "system default web browser"
+        ),
         parents=[_docs.get_parser()],
     )
 
     subparsers.add_parser(
         "fetch",
         help="Fetch and copy WAVES modsim template files and directories",
-        # fmt: off
-        description="Fetch and copy WAVES modsim template files and directories. If no ``FILE`` is specified, "
+        description=(
+            "Fetch and copy WAVES modsim template files and directories. If no ``FILE`` is specified, "
             "all available files will be created. Directories are recursively copied. ``pathlib.Path`` recursive "
             "pattern matching is possible. The source path is truncated to use the shortest common file prefix, "
             "e.g. requesting two files ``common/source/file.1`` and ``common/source/file.2`` will create "
-            "``/destination/file.1`` and ``/destination/file.2``, respectively.",
-        # fmt: on
+            "``/destination/file.1`` and ``/destination/file.2``, respectively."
+        ),
         parents=[_fetch.get_parser()],
     )
 
@@ -174,11 +174,11 @@ def get_parser() -> argparse.ArgumentParser:
     subparsers.add_parser(
         "print_study",
         help="Print a parameter study file as a table",
-        # fmt: off
-        description="Open and print a WAVES parameter study file as a table. Does not work with multi-file parameter "
-                    "study output, e.g. ``--output-file-template`` option. Not intended for piped shell commands. "
-                    "Output formatting subject to change",
-        # fmt: on
+        description=(
+            "Open and print a WAVES parameter study file as a table. Does not work with multi-file parameter "
+            "study output, e.g. ``--output-file-template`` option. Not intended for piped shell commands. "
+            "Output formatting subject to change"
+        ),
         parents=[_print_study.get_parser()],
     )
 

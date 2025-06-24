@@ -1,16 +1,15 @@
 #! /usr/bin/env python
+import re
 import pathlib
+
+import SCons.Scanner
 
 # Inherit the parent construction environment
 Import(["env", "project_substitution_dictionary"])
 
+
 # VVV Sphinx prototypes
-# TODO: boostrap from waves.scons_extensions.sphinx_scanner *after* the function is deployed on conda-forge
 # DO NOT 'bootstrap' by importing the current/repository version of WAVES. That's not bootstrapping, it's a bug factory
-import re
-import SCons.Scanner
-
-
 def sphinx_scanner():
     suffixes = [".rst", ".txt"]
     flags = re.MULTILINE

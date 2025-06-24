@@ -230,7 +230,7 @@ for workflow in workflow_configurations:
 # ============================================================================================= PROJECT HELP MESSAGE ===
 # Add aliases to help message so users know what build target options are available
 # This must come *after* all expected Alias definitions and SConscript files.
-from SCons.Node.Alias import default_ans
+from SCons.Node.Alias import default_ans  # noqa: E402
 
 alias_help = "\nTarget Aliases:\n"
 for alias in default_ans:
