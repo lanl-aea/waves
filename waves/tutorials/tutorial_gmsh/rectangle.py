@@ -41,7 +41,7 @@ def main(
 
     # Partition
     # TODO: Move to separate function/script
-    rectangle_group_tag = gmsh.model.addPhysicalGroup(2, [rectangle_tag], name="rectangle")
+    gmsh.model.addPhysicalGroup(2, [rectangle_tag], name="rectangle")
 
     tolerance = 0.01 * min(width, height)
     bottom_left = get_entities_at_coordinates((0.0, 0.0, 0.0), 0)

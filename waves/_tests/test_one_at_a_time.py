@@ -56,6 +56,7 @@ class TestOneAtATime:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
                 TestValidate = OneAtATime(parameter_schema)
+                assert isinstance(TestValidate, OneAtATime)
             finally:
                 pass
 

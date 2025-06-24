@@ -4,7 +4,7 @@ import io
 import os
 import pathlib
 import datetime
-from unittest.mock import patch, Mock
+from unittest.mock import patch
 from contextlib import nullcontext as does_not_raise
 
 import numpy
@@ -1063,7 +1063,7 @@ def test__read_qoi_set_h5():
         patch("pandas.read_csv") as mock_read_csv,
         patch("xarray.open_dataset") as mock_open_dataset,
     ):
-        qoi_set = qoi._read_qoi_set(from_file)
+        qoi._read_qoi_set(from_file)
         mock_read_csv.assert_not_called()
         mock_open_dataset.assert_called_once_with(from_file, engine="h5netcdf")
 
@@ -1076,7 +1076,7 @@ def test__read_qoi_set_unknown():
         pytest.raises(RuntimeError),
     ):
         try:
-            qoi_set = qoi._read_qoi_set(from_file)
+            qoi._read_qoi_set(from_file)
         finally:
             mock_read_csv.assert_not_called()
             mock_open_dataset.assert_not_called()

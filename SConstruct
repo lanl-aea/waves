@@ -3,7 +3,6 @@
 import os
 import shutil
 import pathlib
-import platform
 import warnings
 
 import setuptools_scm
@@ -231,7 +230,7 @@ for workflow in workflow_configurations:
 # ============================================================================================= PROJECT HELP MESSAGE ===
 # Add aliases to help message so users know what build target options are available
 # This must come *after* all expected Alias definitions and SConscript files.
-from SCons.Node.Alias import default_ans
+from SCons.Node.Alias import default_ans  # noqa: E402
 
 alias_help = "\nTarget Aliases:\n"
 for alias in default_ans:
@@ -239,10 +238,10 @@ for alias in default_ans:
 try:
     # SCons >=4.9.0
     Help(alias_help, append=True, local_only=True)
-except TypeError as err:
+except TypeError:
     try:
         # SCons >=4.6,<4.9.0
         Help(alias_help, append=True, keep_local=True)
-    except TypeError as err:
+    except TypeError:
         # SCons <4.6
         Help(alias_help, append=True)

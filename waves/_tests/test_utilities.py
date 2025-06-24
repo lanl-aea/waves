@@ -8,7 +8,6 @@ from contextlib import nullcontext as does_not_raise
 
 import pytest
 
-from waves import _settings
 from waves import _utilities
 
 
@@ -149,11 +148,11 @@ def test_quote_spaces_in_path(path, expected):
 
 def test_search_commands():
     """Test :meth:`waves._utilities.search_command`"""
-    with patch("shutil.which", return_value=None) as shutil_which:
+    with patch("shutil.which", return_value=None):
         command_abspath = _utilities.search_commands(["notfound"])
         assert command_abspath is None
 
-    with patch("shutil.which", return_value="found") as shutil_which:
+    with patch("shutil.which", return_value="found"):
         command_abspath = _utilities.search_commands(["found"])
         assert command_abspath == "found"
 
@@ -214,7 +213,7 @@ def test_find_cubit_python():
     with (
         patch("waves._utilities.find_command"),
         patch("os.path.realpath", return_value=str(mock_abspath)),
-        patch("pathlib.Path.rglob", return_value=[mock_python]) as mock_rglob,
+        patch("pathlib.Path.rglob", return_value=[mock_python]),
         patch("pathlib.Path.is_file", return_value=True),
         patch("os.access", return_value=True),
     ):
@@ -224,7 +223,7 @@ def test_find_cubit_python():
     with (
         patch("waves._utilities.find_command"),
         patch("os.path.realpath", return_value=str(mock_abspath)),
-        patch("pathlib.Path.rglob", return_value=[mock_python]) as mock_rglob,
+        patch("pathlib.Path.rglob", return_value=[mock_python]),
         patch("pathlib.Path.is_file", return_value=False),
         patch("os.access", return_value=True),
         pytest.raises(FileNotFoundError),

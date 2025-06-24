@@ -119,7 +119,7 @@ study.write()
 simulation_variables = {}
 env.ParameterStudySConscript(
     "SConscript",
-    variant_dir=f"build_with_subdirs",
+    variant_dir="build_with_subdirs",
     exports={"env": env},
     duplicate=True,
     study=study,

@@ -1,5 +1,4 @@
 import argparse
-import pathlib
 
 from waves import qoi
 

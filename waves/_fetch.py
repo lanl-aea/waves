@@ -29,15 +29,15 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "FILE",
         nargs="*",
-        help=f"modsim template file or directory",
+        help="modsim template file or directory",
         type=pathlib.Path,
     )
     parser.add_argument(
         "--destination",
-        # fmt: off
-        help="Destination directory. Unless ``--overwrite`` is specified, conflicting file names in the "
-             "destination will not be copied. (default: PWD)",
-        # fmt: on
+        help=(
+            "Destination directory. Unless ``--overwrite`` is specified, conflicting file names in the "
+            "destination will not be copied. (default: PWD)"
+        ),
         type=pathlib.Path,
         default=pathlib.Path().cwd(),
     )
@@ -337,12 +337,9 @@ def recursive_copy(
 
     # Down select to requested file list
     if len(requested_paths) > 0:
-        requested_paths_resolved, missing_requested_paths = build_source_files(
-            longest_common_source_path, requested_paths
-        )
+        requested_paths_resolved, _ = build_source_files(longest_common_source_path, requested_paths)
     else:
         requested_paths_resolved = source_files
-        missing_requested_paths = []
     if not requested_paths_resolved:
         raise RuntimeError(f"Did not find any requested files in '{longest_common_source_path}'")
 

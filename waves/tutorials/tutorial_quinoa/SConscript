@@ -1,9 +1,4 @@
 #! /usr/bin/env python
-import pathlib
-
-import waves
-
-
 Import("env", "envQuinoa")
 
 # TODO: move parameters to a dedicated dictionary file read
@@ -49,5 +44,5 @@ local_target = envQuinoa.QuinoaSolver(
 envQuinoa.Alias("quinoa-local", local_target)
 
 if not env["unconditional_build"] and not envQuinoa["inciter"]:
-    print(f"Program 'inciter' was not found in construction environment. Ignoring 'quinoa-local' target(s)")
+    print("Program 'inciter' was not found in construction environment. Ignoring 'quinoa-local' target(s)")
     Ignore([".", "quinoa-local"], local_target)

@@ -36,9 +36,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import warnings
 from importlib.metadata import version, PackageNotFoundError
 
-from waves import scons_extensions
-from waves import parameter_generators
-from waves import qoi
+from waves import scons_extensions  # noqa: F401
+from waves import parameter_generators  # noqa: F401
+from waves import qoi  # noqa: F401
 
 
 warnings.filterwarnings(

@@ -32,17 +32,17 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "TARGET",
         nargs="+",
-        help=f"SCons target(s)",
+        help="SCons target(s)",
     )
 
     parser.add_argument(
         "-o",
         "--output-file",
         type=pathlib.Path,
-        # fmt: off
-        help="Path to output image file with an extension supported by matplotlib, e.g. 'visualization.svg' "
-             "(default: %(default)s)",
-        # fmt: on
+        help=(
+            "Path to output image file with an extension supported by matplotlib, e.g. 'visualization.svg' "
+            "(default: %(default)s)"
+        ),
     )
     parser.add_argument(
         "--sconstruct",
@@ -270,7 +270,7 @@ def ancestor_subgraph(
     for node in nodes:
         try:
             sources = sources.union(networkx.ancestors(graph, node))
-        except networkx.NetworkXError as err:
+        except networkx.NetworkXError:
             missing.append(node)
 
     if missing:

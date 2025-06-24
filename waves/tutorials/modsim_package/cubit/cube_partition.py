@@ -79,8 +79,6 @@ def get_parser():
     # Set default parameter values
     default_input_file = script_name.with_suffix(".cub").name.replace("_partition", "_geometry")
     default_output_file = script_name.with_suffix(".cub").name
-    default_width = 1.0
-    default_height = 1.0
 
     prog = f"python {script_name.name} "
     cli_description = (

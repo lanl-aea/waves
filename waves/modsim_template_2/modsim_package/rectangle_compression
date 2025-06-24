@@ -96,7 +96,7 @@ artifacts.extend(
 plot_name = "stress_strain_comparison"
 post_processing_source = ["rectangle_compression_datasets.h5"]
 script_options = "--input-file ${post_processing_source}"
-script_options += f" --output-file ${{TARGET.file}} --x-units 'mm/mm' --y-units 'MPa'"
+script_options += " --output-file ${TARGET.file} --x-units 'mm/mm' --y-units 'MPa'"
 workflow.extend(
     env.PythonScript(
         target=[f"{plot_name}.pdf", f"{plot_name}.csv"],

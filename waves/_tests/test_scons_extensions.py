@@ -6,14 +6,12 @@ import pathlib
 from contextlib import nullcontext as does_not_raise
 import unittest
 from unittest.mock import patch, call, Mock
-import subprocess
 
 import pytest
 import SCons.Node.FS
 
 from waves import parameter_generators
 from waves import scons_extensions
-from waves import parameter_generators
 from waves._settings import _cd_action_prefix
 from waves._settings import _redirect_action_suffix
 from waves._settings import _redirect_environment_suffix
@@ -1571,17 +1569,17 @@ first_target_emitter_input = {
     "subdirectory only stdout": (
         ["set1/subdir1.stdout"],
         [source_file],
-        [f"set1/subdir1.stdout"],
+        ["set1/subdir1.stdout"],
     ),
     "subdirectory first stdout": (
         ["set1/subdir2.stdout", "set1/subdir2.cub"],
         [source_file],
-        [f"set1/subdir2.cub", f"set1/subdir2.stdout"],
+        ["set1/subdir2.cub", "set1/subdir2.stdout"],
     ),
     "subdirectory second stdout": (
         ["set1/subdir3.cub", "set1/subdir3.stdout"],
         [source_file],
-        [f"set1/subdir3.cub", f"set1/subdir3.stdout"],
+        ["set1/subdir3.cub", "set1/subdir3.stdout"],
     ),
 }
 
@@ -2232,14 +2230,14 @@ scanner_input = {                                   # content,       expected_de
     'no_suffix':              ('**\n*INCLUDE, INPUT=dummy.out',               ['dummy.out']),  # noqa: E241
     'pattern_not_found':       ('**\n*DUMMY, STRING=dummy.out',                          []),  # noqa: E241
     'multiple_files':     ('**\n*INCLUDE, INPUT=dummy.out\n**'                                 # noqa: E241
-                              '**\n*INCLUDE, INPUT=dummy2.inp', ['dummy.out', 'dummy2.inp']),  # noqa: E241
+                              '**\n*INCLUDE, INPUT=dummy2.inp', ['dummy.out', 'dummy2.inp']),  # noqa: E241,E127
     'lower_case':             ('**\n*include, input=dummy.out',               ['dummy.out']),  # noqa: E241
     'mixed_case':             ('**\n*inClUdE, iNpuT=dummy.out',               ['dummy.out']),  # noqa: E241
     'no_leading':                 ('*INCLUDE, INPUT=dummy.out',               ['dummy.out']),  # noqa: E241
     'comment':                   ('**INCLUDE, INPUT=dummy.out'                                 # noqa: E241
-                              '\n***INCLUDE, INPUT=dummy2.inp',                          []),  # noqa: E241
+                              '\n***INCLUDE, INPUT=dummy2.inp',                          []),  # noqa: E241,E128
     'mixed_keywords':     ('**\n*INCLUDE, INPUT=dummy.out\n**'                                 # noqa: E241
-                            '\n*TEMPERATURE, INPUT=dummy2.inp', ['dummy.out', 'dummy2.inp']),  # noqa: E241
+                            '\n*TEMPERATURE, INPUT=dummy2.inp', ['dummy.out', 'dummy2.inp']),  # noqa: E241,E127
     'trailing_whitespace': ('**\n*INCLUDE, INPUT=dummy.out   ',               ['dummy.out']),  # noqa: E241
     'partial match':     ('**\n*DUMMY, MATRIX INPUT=dummy.out',                          []),  # noqa: E241
     'extra_space':         ('**\n*INCLUDE,    INPUT=dummy.out',               ['dummy.out']),  # noqa: E241

@@ -20,7 +20,7 @@ envCubit.PythonScript(
 
 # Mesh
 envCubit.PythonScript(
-    target=[f"cube_mesh.g", "cube_mesh.cub"],
+    target=["cube_mesh.g", "cube_mesh.cub"],
     source=["cube_mesh.py", "cube_partition.cub"],
     subcommand_options="--global-seed ${global_seed} --element-type ${element_type} --solver ${solver}",
     **parameters,
@@ -46,6 +46,6 @@ env.Alias(alias, solve_targets)
 
 if not env["TRUCHAS_PROGRAM"] or not envCubit["python"]:
     print(
-        f"Program 'truchas' or Cubit 'python' was not found in construction environment. Ignoring simulation target(s)"
+        "Program 'truchas' or Cubit 'python' was not found in construction environment. Ignoring simulation target(s)"
     )
     Ignore([".", alias, "cube_compression.inp"], solve_targets)

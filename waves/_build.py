@@ -26,7 +26,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "TARGET",
         nargs="+",
-        help=f"SCons target(s)",
+        help="SCons target(s)",
     )
     parser.add_argument(
         "-m",
@@ -48,10 +48,10 @@ def get_parser() -> argparse.ArgumentParser:
         "--git-clone-directory",
         type=str,
         default=None,
-        # fmt: off
-        help="Perform a full local git clone operation to the specified directory before executing the scons "
-             "command, ``git clone --no-hardlinks ${PWD} ${GIT_CLONE_DIRECTORY}`` (default: %(default)s)",
-        # fmt: on
+        help=(
+            "Perform a full local git clone operation to the specified directory before executing the scons "
+            "command, ``git clone --no-hardlinks ${PWD} ${GIT_CLONE_DIRECTORY}`` (default: %(default)s)"
+        ),
     )
 
     return parser

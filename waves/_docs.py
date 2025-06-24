@@ -8,8 +8,6 @@ import sys
 import pathlib
 import argparse
 
-from waves import _settings
-
 
 _exclude_from_namespace = set(globals().keys())
 
@@ -25,11 +23,11 @@ def get_parser() -> argparse.ArgumentParser:
         "-p",
         "--print-local-path",
         action="store_true",
-        # fmt: off
-        help="Print the path to the locally installed documentation index file. "
-             "As an alternative to the docs sub-command, open index.html in a web browser "
-             "(default: %(default)s)",
-        # fmt: on
+        help=(
+            "Print the path to the locally installed documentation index file. "
+            "As an alternative to the docs sub-command, open index.html in a web browser "
+            "(default: %(default)s)"
+        ),
     )
 
     return parser

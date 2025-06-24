@@ -8,6 +8,10 @@ Changelog
 0.13.9 (unreleased)
 *******************
 
+Internal Changes
+================
+- Cleanup unused imports and enforce in project style CI jobs. By `Kyle Brindley`_.
+
 *******************
 0.13.8 (2025-06-19)
 *******************

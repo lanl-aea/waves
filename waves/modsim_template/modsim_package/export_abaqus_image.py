@@ -1,9 +1,7 @@
 import os
 import sys
-import shutil
 import inspect
 import argparse
-import tempfile
 
 import abaqus
 import abaqusConstants

@@ -52,7 +52,7 @@ def test_main():
         pytest.raises(SystemExit) as err,
     ):
         solver.main()
-        assert str(err) == message
+        assert str(err) == "message"
 
 
 name_output_file = {
