@@ -4,7 +4,6 @@ Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAV
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
 
-import sys
 import pathlib
 import argparse
 
@@ -12,7 +11,6 @@ from waves import _settings
 
 import yaml
 import pandas
-import xarray
 
 
 _exclude_from_namespace = set(globals().keys())
@@ -46,7 +44,7 @@ def main(parameter_study_file: pathlib.Path) -> None:
             study = yaml.safe_load(infile)
             table = pandas.DataFrame(study).T
             table.index.name = _settings._set_coordinate_key
-    except UnicodeDecodeError as err:
+    except UnicodeDecodeError:
         from waves.parameter_generators import _open_parameter_study
 
         study = _open_parameter_study(parameter_study_file)

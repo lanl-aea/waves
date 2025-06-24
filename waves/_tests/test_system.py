@@ -13,7 +13,6 @@ available substitutions.
 """
 
 import os
-import re
 import sys
 import shlex
 import shutil

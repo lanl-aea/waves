@@ -74,7 +74,7 @@ def find_shebang(path: pathlib.Path, shebang: str = default_shebang) -> None:
             first_line = infile.readline()
             if re.match(shebang, first_line):
                 print(path)
-        except UnicodeDecodeError as err:
+        except UnicodeDecodeError:
             pass
 
 

@@ -56,6 +56,7 @@ class TestCustomStudy:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
                 TestValidate = CustomStudy(parameter_schema)
+                assert isinstance(TestValidate, CustomStudy)
             finally:
                 pass
 

@@ -66,7 +66,7 @@ def get_parser():
     parser.add_argument(
         "--depth",
         type=float,
-        default=default_height,
+        default=default_depth,
         help="The cube depth (Z-axis)",
     )
     return parser

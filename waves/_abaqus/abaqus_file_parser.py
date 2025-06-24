@@ -5,7 +5,6 @@ Parse various file types created via Abaqus
 """
 
 from abc import ABC, abstractmethod
-import os
 import re
 import sys
 from pathlib import Path
@@ -152,7 +151,7 @@ class OdbReportFileParser(AbaqusFileParser):
         while not line.startswith("General ODB information") and line != "":
             if line.startswith("ODB Report"):
                 if not re.search("csv", line, re.IGNORECASE):
-                    sys.exit(f"ODB report file must be in CSV format")
+                    sys.exit("ODB report file must be in CSV format")
             line = f.readline()
 
         while not line.startswith("Job Data") and line != "" and not line.startswith("---"):
@@ -878,7 +877,6 @@ class OdbReportFileParser(AbaqusFileParser):
         while "history" not in line.lower() and line != "":
             if line.strip().startswith("Frame number"):
                 frame = dict()
-                frame_number = int(line.replace("Frame number", "").strip())
                 current_frame_number += 1
                 while (
                     not line.strip().startswith("Number of field outputs")

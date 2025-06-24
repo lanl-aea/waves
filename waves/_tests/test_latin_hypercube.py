@@ -78,6 +78,9 @@ class TestLatinHypercube:
             expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
             set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
             assert numpy.all(set_names == expected_set_names)
+            # Check that the parameter names are correct
+            assert parameter_names == TestGenerate._parameter_names
+            assert parameter_names == list(TestGenerate.parameter_study.keys())
 
     merge_test = {
         "increase simulations": (

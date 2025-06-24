@@ -88,7 +88,7 @@ env.Alias("documentation", html + latexpdf)
 env.Alias(env["regression_alias"], html + latexpdf)
 
 if not env["SPHINX_BUILD"]:
-    print(f"Program 'sphinx-build' was not found in construction environment. Ignoring Sphinx target(s)")
+    print("Program 'sphinx-build' was not found in construction environment. Ignoring Sphinx target(s)")
     Ignore([".", "html", "html"], html)
     Ignore([".", "latex", "latexpdf"], latexpdf)
 else:

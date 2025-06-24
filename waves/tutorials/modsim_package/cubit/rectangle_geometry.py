@@ -23,11 +23,11 @@ def main(output_file, width, height):
     cubit.cmd("new")
     cubit.cmd("reset")
 
-    cubit.cmd(f"create vertex 0 0 0")
+    cubit.cmd("create vertex 0 0 0")
     cubit.cmd(f"create vertex {width} 0 0")
     cubit.cmd(f"create vertex {width} {height} 0")
     cubit.cmd(f"create vertex 0 {height} 0")
-    cubit.cmd(f"create surface vertex 1,2,3,4")
+    cubit.cmd("create surface vertex 1,2,3,4")
 
     cubit.cmd(f"save as '{output_file}' overwrite")
 

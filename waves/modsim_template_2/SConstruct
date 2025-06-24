@@ -118,8 +118,8 @@ for key, value in project_variables.items():
 # Make the modsim package importable for: (1) SConscript files and (2) Python and Abaqus Python environments
 sys.path.insert(0, str(project_dir))
 env.PrependENVPath("PYTHONPATH", project_dir)
-import modsim_package.rectangle_compression
-import modsim_package.utilities
+import modsim_package.rectangle_compression  # noqa: E402
+import modsim_package.utilities  # noqa: E402
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env["SPHINX_BUILD"] = env.AddProgram(["sphinx-build"])

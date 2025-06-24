@@ -49,6 +49,7 @@ class TestCartesianProduct:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
                 TestValidate = CartesianProduct(parameter_schema)
+                assert isinstance(TestValidate, CartesianProduct)
             finally:
                 pass
 

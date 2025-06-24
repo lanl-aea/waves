@@ -1,7 +1,7 @@
 """Test ParameterGenerator Abstract Base Class"""
 
 import pathlib
-from unittest.mock import patch, mock_open, Mock
+from unittest.mock import patch, mock_open
 from contextlib import nullcontext as does_not_raise
 
 import pytest
@@ -672,16 +672,14 @@ class TestParameterGenerator:
     def test_output_file_conflict(self):
         with pytest.raises(MutuallyExclusiveError):
             try:
-                OutputFileConflict = DummyGenerator(
-                    {}, output_file_template="out@number", output_file="single_output_file"
-                )
+                DummyGenerator({}, output_file_template="out@number", output_file="single_output_file")
             finally:
                 pass
 
     def test_output_file_type(self):
         with pytest.raises(ChoicesError):
             try:
-                OutputTypeError = DummyGenerator({}, output_file_type="notsupported")
+                DummyGenerator({}, output_file_type="notsupported")
             finally:
                 pass
 
@@ -708,6 +706,7 @@ class TestParameterGenerator:
                 MissingPreviousStudy = DummyGenerator(
                     {}, previous_parameter_study="doesnotexist.h5", require_previous_parameter_study=False
                 )
+                assert isinstance(MissingPreviousStudy, parameter_generators.ParameterGenerator)
                 mock_merge.assert_not_called()
                 mock_warn.assert_called_once()
             finally:
@@ -732,11 +731,11 @@ class TestParameterGenerator:
         mock_write.assert_called_once_with(**expected_kwargs)
 
     # fmt: off
-    templates = {       # schema, file_template, set_template,          expected
-        "no template":   (    {},        None,         None, ["parameter_set0"]),  # noqa: E241,E201
-        "file template": (    {},       "out",         None,           ["out0"]),  # noqa: E241,E201
-        "file template": (    {},        None,        "out",           ["out0"]),  # noqa: E241,E201
-        "file template": (    {},       "out", "overridden",           ["out0"]),  # noqa: E241,E201
+    templates = {       # schema, file_template, set_template,           expected
+        "no template":   (    {},          None,         None, ["parameter_set0"]),  # noqa: E241,E201
+        "file template": (    {},         "out",         None,           ["out0"]),  # noqa: E241,E201
+        "set template":  (    {},          None, "out@number",           ["out0"]),  # noqa: E241,E201
+        "set template, overridden": ({}, "out", "overridden",            ["out0"]),  # noqa: E241,E201
     }
     # fmt: on
 
@@ -1125,6 +1124,7 @@ class TestParameterGenerator:
         ):
             WriteParameterGenerator.write()
             mock_write_meta.assert_called_once()
+            mock_private_write.assert_called_once()
 
     def test_write_meta(self):
         WriteMetaParameterGenerator = DummyGenerator({})
@@ -1235,6 +1235,7 @@ class TestParameterDistributions:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
                 TestValidate = ParameterDistributions(parameter_schema)
+                assert isinstance(TestValidate, parameter_generators.ParameterGenerator)
                 mock_distros.assert_called_once()
             finally:
                 pass

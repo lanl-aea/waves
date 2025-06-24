@@ -29,7 +29,7 @@ class TestSALibSampler:
             {},
             {"calc_second_order": False},
         ),
-        "sobol: two parameter": (
+        "sobol: two parameter: override kwargs": (
             "sobol",
             {
                 "N": 4,
@@ -148,6 +148,7 @@ class TestSALibSampler:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
                 TestValidate = SALibSampler(sampler_class, parameter_schema)
+                assert isinstance(TestValidate, SALibSampler)
             finally:
                 pass
 

@@ -127,7 +127,7 @@ def create_qoi(
         default=numpy.nan,
     )
     if lower > upper:
-        raise ValueError(f"Upper limit is lower than the lower limit.")
+        raise ValueError("Upper limit is lower than the lower limit.")
     return xarray.DataArray(
         data=[calculated, expected, lower, upper],
         coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
@@ -607,7 +607,7 @@ def _plot_scalar_tolerance_check(
     colors = ["black", "black"]
 
     # Draw vertical lines at lower and upper tolerance limits
-    container = axes.barh(0.0, width=(calculated - expected), left=expected, color=bar_color)
+    axes.barh(0.0, width=(calculated - expected), left=expected, color=bar_color)
     axes.vlines([lower_line, upper_line], *axes.get_ylim(), colors=colors)
     axes.vlines([expected], *axes.get_ylim(), colors="black", linestyle="dashed")
 
