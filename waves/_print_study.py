@@ -11,11 +11,6 @@ from waves import _settings
 
 import yaml
 import pandas
-<<<<<<< HEAD
-
-from yaml.reader import ReaderError
-=======
->>>>>>> d2b2ef81 (Force encoding regardless of platform in order to have consistent Error)
 
 
 _exclude_from_namespace = set(globals().keys())
