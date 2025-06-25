@@ -24,5 +24,7 @@ dependencies:
   - sphinx-copybutton >=0.5.1
   - sphinx-design
   - sphinxcontrib-bibtex
-  - twine >=5
   - xarray >=2024.10.0
+  # Twine from conda-forge is killed with an invalid signature on macOS
+  - pip:
+    - twine >=5
