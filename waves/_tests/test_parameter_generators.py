@@ -645,6 +645,7 @@ test_update_set_names_cases = {
         ).parameter_study,
         _utilities._AtSignTemplate(f"out{_settings._template_placeholder}"),
         ["out0", "out1"],
+        does_not_raise(),
     ),
     "custom file name template": (
         parameter_generators.OneAtATime(
@@ -652,6 +653,7 @@ test_update_set_names_cases = {
         ).parameter_study,
         _utilities._AtSignTemplate(f"out{_settings._template_placeholder}"),
         ["out0", "out1"],
+        does_not_raise(),
     ),
     "custom file name template override": (
         parameter_generators.OneAtATime(
@@ -661,11 +663,13 @@ test_update_set_names_cases = {
         ).parameter_study,
         _utilities._AtSignTemplate(f"out{_settings._template_placeholder}"),
         ["override0", "override1"],
+        does_not_raise(),
     ),
     "default template": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
         None,
         ["parameter_set0", "parameter_set1"],
+        does_not_raise(),
     ),
     "nan parameter values": (
         xarray.merge(
@@ -680,11 +684,13 @@ test_update_set_names_cases = {
         ),
         None,
         ["parameter_set0", "parameter_set1"],
+        does_not_raise(),
     ),
     "single parameter set": (
         parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
         None,
         ["parameter_set0"],
+        does_not_raise(),
     ),
     "three study merge": (
         xarray.merge(
@@ -702,25 +708,31 @@ test_update_set_names_cases = {
         ),
         None,
         ["parameter_set1", "parameter_set0", "parameter_set2"],
+        does_not_raise(),
     ),
 }
 
 
 @pytest.mark.parametrize(
-    "parameter_study, template, expected_names",
+    "parameter_study, template, expected_names, outcome",
     test_update_set_names_cases.values(),
     ids=test_update_set_names_cases.keys(),
 )
-def test_update_set_names(parameter_study, template, expected_names):
+def test_update_set_names(parameter_study, template, expected_names, outcome):
     """Check the generated and updated parameter set names against template arguments
 
     :param parameter_study: parameter study Xarray dataset
     :param template: ``_AtSignTemplate`` typed string with substitution character
     :param expected_names: list of expected parameter name strings
+    :param outcome: pytest expected error for the test case
     """
-    parameter_study = parameter_generators._update_set_names(parameter_study, template)
-    test_set_names = parameter_study[_set_coordinate_key]
-    assert list(test_set_names.values) == expected_names
+    with outcome:
+        try:
+            parameter_study = parameter_generators._update_set_names(parameter_study, template)
+            test_set_names = parameter_study[_set_coordinate_key]
+            assert list(test_set_names.values) == expected_names
+        finally:
+            pass
 
 
 def test_open_parameter_study():
