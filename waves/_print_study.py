@@ -40,7 +40,7 @@ def main(parameter_study_file: pathlib.Path) -> None:
     if not parameter_study_file.is_file():
         raise RuntimeError(f"'{parameter_study_file}' does not exist or is not a file.")
     try:
-        with open(parameter_study_file) as infile:
+        with open(parameter_study_file, encoding="utf-8") as infile:
             study = yaml.safe_load(infile)
             table = pandas.DataFrame(study).T
             table.index.name = _settings._set_coordinate_key

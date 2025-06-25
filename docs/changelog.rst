@@ -8,6 +8,10 @@ Changelog
 0.13.9 (unreleased)
 *******************
 
+Bug fixes
+=========
+- Fix ``print_study`` error affecting Windows users. By `Sergio Cordova`_.
+
 Internal Changes
 ================
 - Cleanup unused imports and enforce in project style CI jobs. By `Kyle Brindley`_.
