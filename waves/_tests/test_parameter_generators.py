@@ -456,15 +456,15 @@ merge_parameter_studies_cases = {
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
-                    [1, 1, 1], coords={_set_coordinate_key: ["parameter_set0", "parameter_set2", "parameter_set1"]}
+                    [1, 1, 1], coords={_set_coordinate_key: ["parameter_set0", "parameter_set1", "parameter_set2"]}
                 ),
                 "parameter_2": xarray.DataArray(
                     [3.0, 4.0, 5.0],
-                    coords={_set_coordinate_key: ["parameter_set0", "parameter_set2", "parameter_set1"]},
+                    coords={_set_coordinate_key: ["parameter_set0", "parameter_set1", "parameter_set2"]},
                 ),
                 "parameter_3": xarray.DataArray(
                     ["a", "a", "a"],
-                    coords={_set_coordinate_key: ["parameter_set0", "parameter_set2", "parameter_set1"]},
+                    coords={_set_coordinate_key: ["parameter_set0", "parameter_set1", "parameter_set2"]},
                 ),
                 _hash_coordinate_key: xarray.DataArray(
                     [
@@ -478,7 +478,7 @@ merge_parameter_studies_cases = {
                             ["parameter_1", "parameter_2", "parameter_3"], [1, 5.0, "a"]
                         ),
                     ],
-                    coords={_set_coordinate_key: ["parameter_set0", "parameter_set2", "parameter_set1"]},
+                    coords={_set_coordinate_key: ["parameter_set0", "parameter_set1", "parameter_set2"]},
                 ),
             }
         )
@@ -691,7 +691,7 @@ test_update_set_names_cases = {
             ],
         ),
         None,
-        ["parameter_set2", "parameter_set0", "parameter_set1"],
+        ["parameter_set1", "parameter_set0", "parameter_set2"],
     ),
 }
 
