@@ -83,8 +83,8 @@ win-pip-build:
     - if ([string]::IsNullOrEmpty($version)) { exit 1 }
     # Job commands
     # Conda CI environment active
-    - scons build --distribution-name=${distribution_name}
-    - twine check build/dist/${distribution_filename}-${version}.tar.gz
+    - scons build --distribution-name=$distribution_name
+    - twine check build/dist/$distribution_name-$version.tar.gz
     - python -m venv pip-build-test
     # Python venv environment active
     - pip-build-test\Scripts\Activate.ps1
