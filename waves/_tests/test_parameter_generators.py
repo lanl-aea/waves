@@ -578,13 +578,23 @@ merge_parameter_studies_cases = {
 
 
 @pytest.mark.parametrize(
-    "studies, expected_samples, expected_types, expected_study, outcome",
+    "base_study, other_studies, expected_samples, expected_types, expected_study, outcome",
     merge_parameter_studies_cases.values(),
     ids=merge_parameter_studies_cases.keys(),
 )
-def test_merge_parameter_studies(studies, expected_samples, expected_types, expected_study, outcome):
+def test_merge_parameter_studies(base_study, other_studies, expected_samples, expected_types, expected_study, outcome):
+    """Check the merged parameter study contents and verify unchanged base study set_name-to-set_hash relationships
+
+    :param base_study: list containing one single parameter study Xarray dataset
+    :param other_studies: list of N number of parameter study Xarray datasets to merge with base_study
+    :param expected_samples: numpy.array containing the expected parameter sets, in order, after merging
+    :param expected_types: dictionary with parameter names as the keys and numpy types as values
+    :param expected_study: Xarray dataset
+    :param outcome: pytest expected error for the test case
+    """
     with outcome:
         try:
+            studies = base_study + other_studies
             merged_study = parameter_generators._merge_parameter_studies(studies)
             for key in expected_types.keys():
                 assert merged_study[key].dtype == expected_types[key]
