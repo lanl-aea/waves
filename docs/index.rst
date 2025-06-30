@@ -83,30 +83,24 @@
 
    \part{Indices and Tables}
 
+.. only:: html and aea
+
+   .. |aea-release| image:: https://re-git.lanl.gov/aea/python-projects/waves/-/badges/release.svg?key_text=re-git%20release
+      :target: https://re-git.lanl.gov/aea/python-projects/waves/-/releases
+
+   .. |aea-main| image:: https://re-git.lanl.gov/aea/python-projects/waves/badges/main/pipeline.svg?key_text=re-git%20latest&key_width=80
+      :target: https://re-git.lanl.gov/aea/python-projects/waves/-/pipelines
+
+   .. |aea-coverage| image:: https://re-git.lanl.gov/aea/python-projects/waves/badges/main/coverage.svg?job=aea-developer-test&key_text=re-git%20latest&key_width=80
+      :target: https://re-git.lanl.gov/aea/python-projects/waves/-/pipelines
+
+   |aea-release| |aea-main| |aea-coverage|
+
 .. only:: html
 
-   .. |github-pages| image:: https://img.shields.io/github/actions/workflow/status/lanl-aea/waves/pages.yml?branch=main&label=GitHub-Pages
-      :target: https://lanl-aea.github.io/waves/
-
-   .. |github-release| image:: https://img.shields.io/github/v/release/lanl-aea/waves?label=GitHub-Release
-      :target: https://github.com/lanl-aea/waves/releases
-
-   .. |conda-forge version| image:: https://img.shields.io/conda/vn/conda-forge/waves
-      :target: https://anaconda.org/conda-forge/waves
-
-   .. |conda-forge downloads| image:: https://img.shields.io/conda/dn/conda-forge/waves.svg?label=Conda%20downloads
-      :target: https://anaconda.org/conda-forge/waves
-
-   .. |pypi version| image:: https://img.shields.io/pypi/v/waves-workflows?label=PyPI%20package
-      :target: https://pypi.org/project/waves-workflows/
-
-   .. |pypi downloads| image:: https://img.shields.io/pypi/dm/waves-workflows?label=PyPI%20downloads
-      :target: https://pypi.org/project/waves-workflows/
-
-   .. |zenodo| image:: https://zenodo.org/badge/591388602.svg
-      :target: https://zenodo.org/badge/latestdoi/591388602
-
-   |github-pages| |github-release| |conda-forge version| |conda-forge downloads| |pypi version| |pypi downloads| |zenodo|
+   .. include:: README.txt
+      :start-after: badges-start-do-not-remove
+      :end-before: badges-end-do-not-remove
 
    |
 

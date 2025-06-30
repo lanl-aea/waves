@@ -16,6 +16,7 @@ Internal Changes
 ================
 - Cleanup unused imports and enforce in project style CI jobs. By `Kyle Brindley`_.
 - Use PyPI twine installation until conda-forge ``twine check`` is fixed on macOS. By `Kyle Brindley`_.
+- Single definition of the shield/badges URLs. By `Kyle Brindley`_.
 
 *******************
 0.13.8 (2025-06-19)

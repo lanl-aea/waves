@@ -29,26 +29,32 @@
 WAVES
 #####
 
-.. image:: https://img.shields.io/github/actions/workflow/status/lanl-aea/waves/pages.yml?branch=main&label=GitHub-Pages
+.. badges-start-do-not-remove
+
+.. |github-pages| image:: https://img.shields.io/github/actions/workflow/status/lanl-aea/waves/pages.yml?branch=main&label=GitHub-Pages
    :target: https://lanl-aea.github.io/waves/
 
-.. image:: https://img.shields.io/github/v/release/lanl-aea/waves?label=GitHub-Release
+.. |github-release| image:: https://img.shields.io/github/v/release/lanl-aea/waves?label=GitHub-Release
    :target: https://github.com/lanl-aea/waves/releases
 
-.. image:: https://img.shields.io/conda/vn/conda-forge/waves
+.. |conda-forge version| image:: https://img.shields.io/conda/vn/conda-forge/waves
    :target: https://anaconda.org/conda-forge/waves
 
-.. image:: https://img.shields.io/conda/dn/conda-forge/waves.svg?label=Conda%20downloads
+.. |conda-forge downloads| image:: https://img.shields.io/conda/dn/conda-forge/waves.svg?label=Conda%20downloads
    :target: https://anaconda.org/conda-forge/waves
 
-.. image:: https://img.shields.io/pypi/v/waves-workflows?label=PyPI%20package
+.. |pypi version| image:: https://img.shields.io/pypi/v/waves-workflows?label=PyPI%20package
    :target: https://pypi.org/project/waves-workflows/
 
-.. image:: https://img.shields.io/pypi/dm/waves-workflows?label=PyPI%20downloads
+.. |pypi downloads| image:: https://img.shields.io/pypi/dm/waves-workflows?label=PyPI%20downloads
    :target: https://pypi.org/project/waves-workflows/
 
-.. image:: https://zenodo.org/badge/591388602.svg
+.. |zenodo| image:: https://zenodo.org/badge/591388602.svg
    :target: https://zenodo.org/badge/latestdoi/591388602
+
+|github-pages| |github-release| |conda-forge version| |conda-forge downloads| |pypi version| |pypi downloads| |zenodo|
+
+.. badges-end-do-not-remove
 
 .. inclusion-marker-do-not-remove
 
