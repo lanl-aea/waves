@@ -594,7 +594,6 @@ def test_merge_parameter_studies(studies, expected_samples, expected_types, expe
     """
     with outcome:
         try:
-            base_study = studies[0]
             merged_study = parameter_generators._merge_parameter_studies(studies)
             for key in expected_types.keys():
                 assert merged_study[key].dtype == expected_types[key]
@@ -602,6 +601,12 @@ def test_merge_parameter_studies(studies, expected_samples, expected_types, expe
             assert numpy.all(samples == expected_samples)
             xarray.testing.assert_identical(merged_study, expected_study)
             parameter_generators._verify_parameter_study(merged_study)
+            # Compare base study hash and set names to merged ones
+            base_study = studies[0]
+            base_study_from_merged = merged_study.where(
+                merged_study[_hash_coordinate_key] == base_study[_hash_coordinate_key]
+            )
+            xarray.testing.assert_identical(base_study_from_merged, base_study)
         finally:
             pass
 
