@@ -12,10 +12,13 @@ Bug fixes
 =========
 - Verify correct handling of set hashes and nonuniform parameter space after a merge operation.
   (:issue:`937`, :merge:`1217`). By `Chris Johnson`_.
+- Fix ``print_study`` error affecting Windows users. By `Sergio Cordova`_.
 
 Internal Changes
 ================
 - Cleanup unused imports and enforce in project style CI jobs. By `Kyle Brindley`_.
+- Use PyPI twine installation until conda-forge ``twine check`` is fixed on macOS. By `Kyle Brindley`_.
+- Single definition of the shield/badges URLs. By `Kyle Brindley`_.
 
 *******************
 0.13.8 (2025-06-19)
