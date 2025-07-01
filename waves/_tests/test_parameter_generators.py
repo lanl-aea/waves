@@ -438,19 +438,20 @@ merge_parameter_studies_cases = {
     "concatenate along one parameter across multiple studies: float": (
         [
             parameter_generators.OneAtATime(
-                {"parameter_1": [1], "parameter_2": [3.0], "parameter_3": ["a"]}
+                {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": ["a"]}
             ).parameter_study,
             parameter_generators.OneAtATime(
-                {"parameter_1": [1], "parameter_2": [4.0], "parameter_3": ["a"]}
+                {"parameter_1": [1, 2], "parameter_2": [3.0, 4.0], "parameter_3": ["a"]}
             ).parameter_study,
             parameter_generators.OneAtATime(
-                {"parameter_1": [1], "parameter_2": [3.0, 5.0], "parameter_3": ["a"]}
+                {"parameter_1": [1, 2], "parameter_2": [3.0, 5.0], "parameter_3": ["a"]}
             ).parameter_study,
         ],
         numpy.array(
             [
                 [1, 3.0, "a"],
                 [1, 4.0, "a"],
+                [2, 3.0, "a"],
                 [1, 5.0, "a"],
             ],
             dtype=object,
@@ -459,16 +460,37 @@ merge_parameter_studies_cases = {
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
-                    [1, 1, 1],
-                    coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1", "parameter_set2"]},
+                    [1, 1, 2, 1],
+                    coords={
+                        _settings._set_coordinate_key: [
+                            "parameter_set0",
+                            "parameter_set2",
+                            "parameter_set1",
+                            "parameter_set3",
+                        ]
+                    },
                 ),
                 "parameter_2": xarray.DataArray(
-                    [3.0, 4.0, 5.0],
-                    coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1", "parameter_set2"]},
+                    [3.0, 4.0, 3.0, 5.0],
+                    coords={
+                        _settings._set_coordinate_key: [
+                            "parameter_set0",
+                            "parameter_set2",
+                            "parameter_set1",
+                            "parameter_set3",
+                        ]
+                    },
                 ),
                 "parameter_3": xarray.DataArray(
-                    ["a", "a", "a"],
-                    coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1", "parameter_set2"]},
+                    ["a", "a", "a", "a"],
+                    coords={
+                        _settings._set_coordinate_key: [
+                            "parameter_set0",
+                            "parameter_set2",
+                            "parameter_set1",
+                            "parameter_set3",
+                        ]
+                    },
                 ),
                 _settings._hash_coordinate_key: xarray.DataArray(
                     [
@@ -479,10 +501,20 @@ merge_parameter_studies_cases = {
                             ["parameter_1", "parameter_2", "parameter_3"], [1, 4.0, "a"]
                         ),
                         parameter_generators._calculate_set_hash(
+                            ["parameter_1", "parameter_2", "parameter_3"], [2, 3.0, "a"]
+                        ),
+                        parameter_generators._calculate_set_hash(
                             ["parameter_1", "parameter_2", "parameter_3"], [1, 5.0, "a"]
                         ),
                     ],
-                    coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1", "parameter_set2"]},
+                    coords={
+                        _settings._set_coordinate_key: [
+                            "parameter_set0",
+                            "parameter_set2",
+                            "parameter_set1",
+                            "parameter_set3",
+                        ]
+                    },
                 ),
             }
         )
