@@ -1562,7 +1562,11 @@ def _update_set_names(
     """
     set_hashes = list(parameter_study.coords[_hash_coordinate_key].values)
     set_names = _create_set_names(set_hashes, template)
-    new_set_names = sorted(list(set(set_names.values()) - set(parameter_study.coords[_set_coordinate_key].values)))
+    new_set_names = [
+        set_name
+        for set_name in set_names.values()
+        if set_name not in parameter_study.coords[_set_coordinate_key].values
+    ]
     null_set_names = parameter_study.coords[_set_coordinate_key].isnull()
     if any(null_set_names):
         parameter_study.coords[_set_coordinate_key][null_set_names] = new_set_names
