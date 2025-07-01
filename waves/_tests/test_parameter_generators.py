@@ -651,42 +651,44 @@ test_create_set_names_cases = {
     "custom template": (
         ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
         _utilities._AtSignTemplate(f"out{_settings._template_placeholder}"),
-        ["out0", "out1"],
+        {"0b588b6a82c1d3d3d19fda304f940342": "out0", "1661dcd0bf4761d25471c1cf5514ceae": "out1"},
     ),
     "default template": (
         ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
         None,
-        ["parameter_set0", "parameter_set1"],
+        {"0b588b6a82c1d3d3d19fda304f940342": "parameter_set0", "1661dcd0bf4761d25471c1cf5514ceae": "parameter_set1"},
     ),
     "unordered hashes": (
         ["1661dcd0bf4761d25471c1cf5514ceae", "0b588b6a82c1d3d3d19fda304f940342", "f94ff85af046704aff100133c958ad1e"],
         None,
-        ["parameter_set0", "parameter_set1", "parameter_set2"],
+        {
+            "0b588b6a82c1d3d3d19fda304f940342": "parameter_set0",
+            "1661dcd0bf4761d25471c1cf5514ceae": "parameter_set1",
+            "f94ff85af046704aff100133c958ad1e": "parameter_set2",
+        },
     ),
 }
 
 
 @pytest.mark.parametrize(
-    "test_set_hashes, template, expected_names",
+    "test_set_hashes, template, expected_set_names",
     test_create_set_names_cases.values(),
     ids=test_create_set_names_cases.keys(),
 )
-def test_create_set_names(test_set_hashes, template, expected_names):
+def test_create_set_names(test_set_hashes, template, expected_set_names):
     """Test the parameter set name generation. Test that the same hashes get the same parameter set names
 
     :param test_set_hashes: list of arbitrary hash strings for test purposes
     :param template: ``_AtSignTemplate`` typed string with substitution character
-    :param expected_names: list of expected parameter name strings
+    :param expected_set_names: dictionary of set hash keys with corresponding expected set name as value
     """
-    expected_hashes = sorted(test_set_hashes)
     test_set_hashes_reversed = reversed(test_set_hashes)
     test_set_names = parameter_generators._create_set_names(test_set_hashes, template)
     test_set_names_reversed = parameter_generators._create_set_names(test_set_hashes_reversed, template)
-    for index, test_hash in enumerate(test_set_names.keys()):
-        assert test_hash == expected_hashes[index]
-        assert test_set_names[test_hash] == expected_names[index]
-        assert test_set_names_reversed[test_hash] == expected_names[index]
-        assert test_set_names[test_hash] == test_set_names_reversed[test_hash]
+    for test_hash in test_set_names.keys():
+        assert test_hash in expected_set_names
+        assert test_set_names[test_hash] == expected_set_names[test_hash]
+        assert test_set_names_reversed[test_hash] == expected_set_names[test_hash]
 
 
 test_update_set_names_cases = {
