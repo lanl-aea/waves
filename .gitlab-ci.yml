@@ -76,6 +76,7 @@ aea-conda-build-matrix:
     # Override default permissions. Set group to rx with no write permissions.
     - umask 0022
     - mkdir ${conda_artifacts_directory}
+    - scons pyproject.toml
     - pytest recipe-matrix/matrix.py -v --no-showlocals --tb=short
   timeout: 4h
 

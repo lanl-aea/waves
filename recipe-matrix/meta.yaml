@@ -27,7 +27,7 @@ requirements:
     - h5py
     - matplotlib-base
     - networkx
-    - numpy
+    - numpy >=1.26
     - pip
     - python-build
     - pyyaml
@@ -49,7 +49,7 @@ requirements:
     - h5py
     - matplotlib-base
     - networkx
-    - numpy
+    - numpy >=1.26
     - pyyaml
     - salib >=1.4.6
     - scipy >=1.7
