@@ -344,8 +344,8 @@ merge_parameter_studies_cases = {
                 ),
                 _settings._hash_coordinate_key: xarray.DataArray(
                     [
-                        parameter_generators._calculate_set_hash(["parameter_1"], [1]),
-                        parameter_generators._calculate_set_hash(["parameter_1"], [2]),
+                        "1661dcd0bf4761d25471c1cf5514ceae",
+                        "0b588b6a82c1d3d3d19fda304f940342",
                     ],
                     coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]},
                 ),
@@ -369,8 +369,8 @@ merge_parameter_studies_cases = {
                 ),
                 _settings._hash_coordinate_key: xarray.DataArray(
                     [
-                        parameter_generators._calculate_set_hash(["parameter_1"], [1.0]),
-                        parameter_generators._calculate_set_hash(["parameter_1"], [2.0]),
+                        "7f9805b5c9946582ec1fb14b91dd144d",
+                        "8f7d7ec854ffe07c4c976e2bccea0665",
                     ],
                     coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]},
                 ),
@@ -394,8 +394,8 @@ merge_parameter_studies_cases = {
                 ),
                 _settings._hash_coordinate_key: xarray.DataArray(
                     [
-                        parameter_generators._calculate_set_hash(["parameter_1"], [True]),
-                        parameter_generators._calculate_set_hash(["parameter_1"], [False]),
+                        "6c2fb5097da66f7bb3795420b802986e",
+                        "3ded86c691cf9621651acb15d909139e",
                     ],
                     coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]},
                 ),
@@ -494,18 +494,10 @@ merge_parameter_studies_cases = {
                 ),
                 _settings._hash_coordinate_key: xarray.DataArray(
                     [
-                        parameter_generators._calculate_set_hash(
-                            ["parameter_1", "parameter_2", "parameter_3"], [1, 3.0, "a"]
-                        ),
-                        parameter_generators._calculate_set_hash(
-                            ["parameter_1", "parameter_2", "parameter_3"], [1, 4.0, "a"]
-                        ),
-                        parameter_generators._calculate_set_hash(
-                            ["parameter_1", "parameter_2", "parameter_3"], [2, 3.0, "a"]
-                        ),
-                        parameter_generators._calculate_set_hash(
-                            ["parameter_1", "parameter_2", "parameter_3"], [1, 5.0, "a"]
-                        ),
+                        "4d9644f3ff9205869b5c5aef11cb5235",
+                        "8e213a62356cd1d4ce2b3b795fab6ef9",
+                        "8eb85255b4d3888cbf413afc55cbbac3",
+                        "d7dd3ecf2cebf5e89d3e211faf2f0526",
                     ],
                     coords={
                         _settings._set_coordinate_key: [
@@ -545,8 +537,8 @@ merge_parameter_studies_cases = {
                 ),
                 _settings._hash_coordinate_key: xarray.DataArray(
                     [
-                        parameter_generators._calculate_set_hash(["parameter_1", "parameter_2"], [1, True]),
-                        parameter_generators._calculate_set_hash(["parameter_1", "parameter_2"], [2, False]),
+                        "d65bccd02f05b0419dc634e643418e62",
+                        "df1ac82da14f4f1fd9d73159bb64a717",
                     ],
                     coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]},
                 ),
