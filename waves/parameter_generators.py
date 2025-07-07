@@ -1511,6 +1511,7 @@ def _merge_parameter_studies(
     # Combine all studies after dropping set names from all but `study_base`
     studies = [study_base] + [study.drop_vars(_set_coordinate_key) for study in studies]
     study_combined = xarray.merge(studies)
+    study_combined = study_combined.sortby(_hash_coordinate_key)
 
     # Coerce types back to their original type.
     # Particularly necessary for ints, which are coerced to float by xarray.merge
