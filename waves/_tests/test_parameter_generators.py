@@ -677,10 +677,8 @@ def test_create_set_names(test_set_hashes, template, expected_set_names):
     test_set_hashes_reversed = reversed(test_set_hashes)
     test_set_names = parameter_generators._create_set_names(test_set_hashes, template)
     test_set_names_reversed = parameter_generators._create_set_names(test_set_hashes_reversed, template)
-    for test_hash in test_set_names.keys():
-        assert test_hash in expected_set_names
-        assert test_set_names[test_hash] == expected_set_names[test_hash]
-        assert test_set_names_reversed[test_hash] == expected_set_names[test_hash]
+    assert test_set_names == expected_set_names
+    assert test_set_names_reversed == expected_set_names
 
 
 test_update_set_names_cases = {
