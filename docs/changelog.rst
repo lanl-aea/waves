@@ -19,6 +19,10 @@ Internal Changes
 - Single definition of the shield/badges URLs. By `Kyle Brindley`_.
 - Make QOI update target unique. By `Matthew Fister`_.
 
+Documentation
+=============
+- Add Windows Powershell instructions to quickstart tutorials (:issue:`939`, :merge:`1218`). By `Sergio Cordova`_.
+
 *******************
 0.13.8 (2025-06-19)
 *******************
