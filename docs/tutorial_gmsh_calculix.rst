@@ -344,7 +344,6 @@ Explore the contents of the ``build`` directory, as shown below.
             /home/roppenheimer/waves-tutorials/tutorial_gmsh
             $ find build/nominal -type f
             build/nominal/SConscript
-            build/nominal/__pycache__/vtu2xarray.cpython-312.pyc
             build/nominal/post_processing.py
             build/nominal/rectangle.py
             build/nominal/rectangle_compression.01.vtu
@@ -436,12 +435,6 @@ Explore the contents of the ``build`` directory, as shown below.
             -a---            6/9/2023  4:32 PM           1206 strip_heading.py
             -a---            6/9/2023  4:32 PM             44 time_points.inp
             -a---            6/9/2023  4:32 PM           6079 vtu2xarray.py
-
-                Directory: C:\Users\roppenheimer\waves-tutorials\tutorial_gmsh\build\nominal\__pycache__
-
-            Mode                 LastWriteTime         Length Name
-            ----                 -------------         ------ ----
-            -a---            6/9/2023  4:32 PM           7247 vtu2xarray.cpython-313.pyc
 
 **********************
 Workflow Visualization

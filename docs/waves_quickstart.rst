@@ -302,7 +302,6 @@ set because the workflow definitions are identical for each parameter set.
             |-- abaqus.rpy.1
             |-- abaqus.rpy.2
             |-- abaqus_utilities.py
-            |-- abaqus_utilities.pyc
             |-- post_processing.py
             |-- rectangle_compression.com
             |-- rectangle_compression.csv
