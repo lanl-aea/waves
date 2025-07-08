@@ -4043,7 +4043,7 @@ class QOIPseudoBuilder:
             # Get expected CSV file in source directory
             expected_source = env.File(expected).srcnode().abspath
             accept_qoi_target = env.Command(
-                target=[f"{expected}.stdout"],
+                target=[f"{calculated}_{expected}.stdout"],
                 source=[calculated, expected],
                 action=(
                     f"{self._program} qoi accept"
