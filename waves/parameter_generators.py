@@ -1530,7 +1530,8 @@ def _merge_parameter_studies(
 def _create_set_names(
     set_hashes: typing.List[str], template: typing.Optional[_utilities._AtSignTemplate] = None
 ) -> dict:
-    """Construct parameter set names from the set name template and number of parameter set hashes.
+    """Construct parameter set names from the set name template and number of parameter set hashes. Set names are
+    assigned to set hashes in hash ascending alphabetical order.
 
     :param set_hashes: parameter set content hashes identifying rows of parameter study
     :param template: parameter set naming template utilizing the '@' sign to mark substitution. If none is provided upon
@@ -1552,7 +1553,8 @@ def _create_set_names(
 def _update_set_names(
     parameter_study: xarray.Dataset, template: typing.Optional[_utilities._AtSignTemplate] = None
 ) -> xarray.Dataset:
-    """Update the parameter set names after a parameter study dataset merge operation.
+    """Update the parameter set names after a parameter study dataset merge operation. Hashes that are missing set
+    names are assigned a new set name in hash ascending alphabetical order.
 
     :param parameter_study: A :class:`ParameterGenerator` parameter study Xarray Dataset with swapped set hash and set
         name dimensions
@@ -1561,6 +1563,7 @@ def _update_set_names(
 
     :return: parameter study xarray Dataset
     """
+    parameter_study = parameter_study.sortby(_hash_coordinate_key)
     set_hashes = list(parameter_study.coords[_hash_coordinate_key].values)
     set_names = _create_set_names(set_hashes, template)
     new_set_names = [
