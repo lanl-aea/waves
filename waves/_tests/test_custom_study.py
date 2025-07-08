@@ -174,7 +174,7 @@ class TestCustomStudy:
             None,
             "yaml",
             2,
-            [call("a: 1\n"), call("a: 2\n")],
+            [call("a: 2\n"), call("a: 1\n")],
         ),
         "two parameter yaml": (
             {"parameter_names": ["a", "b"], "parameter_samples": numpy.array([[1, 2.0], [3, 4.5]], dtype=object)},
@@ -190,7 +190,7 @@ class TestCustomStudy:
             "parameter_study.yaml",
             "yaml",
             1,
-            [call("parameter_set0:\n  a: 1\nparameter_set1:\n  a: 2\n")],
+            [call("parameter_set0:\n  a: 2\nparameter_set1:\n  a: 1\n")],
         ),
         "two parameter one file yaml": (
             {"parameter_names": ["a", "b"], "parameter_samples": numpy.array([[1, 2.0], [3, 4.5]], dtype=object)},

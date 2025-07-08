@@ -10,6 +10,8 @@ Changelog
 
 Bug fixes
 =========
+- Verify correct handling of set hashes and nonuniform parameter space after a merge operation.
+  (:issue:`937`, :merge:`1217`). By `Chris Johnson`_.
 - Fix ``print_study`` error affecting Windows users. By `Sergio Cordova`_.
 
 Internal Changes

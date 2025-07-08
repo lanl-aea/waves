@@ -204,8 +204,8 @@ class TestCartesianProduct:
             # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
             numpy.array(
                 [
-                    [1, True, "a"],
                     [2, True, "a"],
+                    [1, True, "a"],
                 ],
                 dtype=object,
             ),
@@ -235,7 +235,7 @@ class TestCartesianProduct:
             None,
             "yaml",
             2,
-            [call("parameter_1: 1\n"), call("parameter_1: 2\n")],
+            [call("parameter_1: 2\n"), call("parameter_1: 1\n")],
         ),
         "two parameter yaml": (
             {"parameter_1": [1, 2], "parameter_2": ["a", "b"]},
@@ -246,8 +246,8 @@ class TestCartesianProduct:
             [
                 call("parameter_1: 1\nparameter_2: a\n"),
                 call("parameter_1: 1\nparameter_2: b\n"),
-                call("parameter_1: 2\nparameter_2: a\n"),
                 call("parameter_1: 2\nparameter_2: b\n"),
+                call("parameter_1: 2\nparameter_2: a\n"),
             ],
         ),
         "two parameter yaml: floats and ints": (
@@ -257,10 +257,10 @@ class TestCartesianProduct:
             "yaml",
             4,
             [
-                call("parameter_1: 1\nparameter_2: 3.0\n"),
                 call("parameter_1: 1\nparameter_2: 4.0\n"),
-                call("parameter_1: 2\nparameter_2: 3.0\n"),
+                call("parameter_1: 1\nparameter_2: 3.0\n"),
                 call("parameter_1: 2\nparameter_2: 4.0\n"),
+                call("parameter_1: 2\nparameter_2: 3.0\n"),
             ],
         ),
         "two parameter yaml: bools and ints": (
@@ -270,10 +270,10 @@ class TestCartesianProduct:
             "yaml",
             4,
             [
-                call("parameter_1: 1\nparameter_2: true\n"),
-                call("parameter_1: 1\nparameter_2: false\n"),
                 call("parameter_1: 2\nparameter_2: true\n"),
+                call("parameter_1: 1\nparameter_2: true\n"),
                 call("parameter_1: 2\nparameter_2: false\n"),
+                call("parameter_1: 1\nparameter_2: false\n"),
             ],
         ),
         "one parameter one file yaml": (
@@ -282,7 +282,7 @@ class TestCartesianProduct:
             "parameter_study.yaml",
             "yaml",
             1,
-            [call("parameter_set0:\n  parameter_1: 1\nparameter_set1:\n  parameter_1: 2\n")],
+            [call("parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n")],
         ),
         "two parameter one file yaml": (
             {"parameter_1": [1, 2], "parameter_2": ["a", "b"]},
@@ -294,8 +294,8 @@ class TestCartesianProduct:
                 call(
                     "parameter_set0:\n  parameter_1: 1\n  parameter_2: a\n"
                     "parameter_set1:\n  parameter_1: 1\n  parameter_2: b\n"
-                    "parameter_set2:\n  parameter_1: 2\n  parameter_2: a\n"
-                    "parameter_set3:\n  parameter_1: 2\n  parameter_2: b\n"
+                    "parameter_set2:\n  parameter_1: 2\n  parameter_2: b\n"
+                    "parameter_set3:\n  parameter_1: 2\n  parameter_2: a\n"
                 )
             ],
         ),
@@ -307,10 +307,10 @@ class TestCartesianProduct:
             1,
             [
                 call(
-                    "parameter_set0:\n  parameter_1: 1\n  parameter_2: true\n"
-                    "parameter_set1:\n  parameter_1: 1\n  parameter_2: false\n"
-                    "parameter_set2:\n  parameter_1: 2\n  parameter_2: true\n"
-                    "parameter_set3:\n  parameter_1: 2\n  parameter_2: false\n"
+                    "parameter_set0:\n  parameter_1: 2\n  parameter_2: true\n"
+                    "parameter_set1:\n  parameter_1: 1\n  parameter_2: true\n"
+                    "parameter_set2:\n  parameter_1: 2\n  parameter_2: false\n"
+                    "parameter_set3:\n  parameter_1: 1\n  parameter_2: false\n"
                 )
             ],
         ),
@@ -350,11 +350,11 @@ class TestCartesianProduct:
         ),
         "floats": (
             {"floats": [10.0, 20.0]},
-            {"parameter_set0": {"floats": 10.0}, "parameter_set1": {"floats": 20.0}},
+            {"parameter_set0": {"floats": 20.0}, "parameter_set1": {"floats": 10.0}},
         ),
         "strings": (
             {"strings": ["a", "b"]},
-            {"parameter_set0": {"strings": "a"}, "parameter_set1": {"strings": "b"}},
+            {"parameter_set0": {"strings": "b"}, "parameter_set1": {"strings": "a"}},
         ),
         "bools": (
             {"bools": [False, True]},

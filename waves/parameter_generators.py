@@ -1495,13 +1495,23 @@ def _merge_parameter_studies(
 
     # Verify type equality and record types prior to merge.
     types_dictionary = {}
+    studies_parameters = []
     for study in studies:
         coerce_types = _return_dataset_types(study_base, study)
         types_dictionary.update(coerce_types)
+        study_parameters = [parameter for parameter in study.data_vars]
+        studies_parameters.extend(study_parameters)
+
+    # Verify uniform parameter space prior to merge
+    study_base_parameters = [parameter for parameter in study_base.data_vars]
+    extra_parameters = set(study_base_parameters) ^ set(studies_parameters)
+    if any(extra_parameters):
+        raise RuntimeError(f"Found unshared parameter(s) '{extra_parameters}' in attempted merge operation")
 
     # Combine all studies after dropping set names from all but `study_base`
     studies = [study_base] + [study.drop_vars(_set_coordinate_key) for study in studies]
     study_combined = xarray.merge(studies)
+    study_combined = study_combined.sortby(_hash_coordinate_key)
 
     # Coerce types back to their original type.
     # Particularly necessary for ints, which are coerced to float by xarray.merge
@@ -1520,7 +1530,8 @@ def _merge_parameter_studies(
 def _create_set_names(
     set_hashes: typing.List[str], template: typing.Optional[_utilities._AtSignTemplate] = None
 ) -> dict:
-    """Construct parameter set names from the set name template and number of parameter set hashes.
+    """Construct parameter set names from the set name template and number of parameter set hashes. Set names are
+    assigned to set hashes in hash ascending alphabetical order.
 
     :param set_hashes: parameter set content hashes identifying rows of parameter study
     :param template: parameter set naming template utilizing the '@' sign to mark substitution. If none is provided upon
@@ -1532,6 +1543,7 @@ def _create_set_names(
         template = _utilities._AtSignTemplate(_settings._default_set_name_template)
 
     set_names = {}
+    set_hashes = sorted(set_hashes)
     for number, set_hash in enumerate(set_hashes):
         set_names[set_hash] = template.substitute({"number": number})
 
@@ -1541,7 +1553,8 @@ def _create_set_names(
 def _update_set_names(
     parameter_study: xarray.Dataset, template: typing.Optional[_utilities._AtSignTemplate] = None
 ) -> xarray.Dataset:
-    """Update the parameter set names after a parameter study dataset merge operation.
+    """Update the parameter set names after a parameter study dataset merge operation. Hashes that are missing set
+    names are assigned a new set name in hash ascending alphabetical order.
 
     :param parameter_study: A :class:`ParameterGenerator` parameter study Xarray Dataset with swapped set hash and set
         name dimensions
@@ -1550,12 +1563,17 @@ def _update_set_names(
 
     :return: parameter study xarray Dataset
     """
+    parameter_study = parameter_study.sortby(_hash_coordinate_key)
     set_hashes = list(parameter_study.coords[_hash_coordinate_key].values)
     set_names = _create_set_names(set_hashes, template)
-    new_set_names = set(set_names.values()) - set(parameter_study.coords[_set_coordinate_key].values)
+    new_set_names = [
+        set_name
+        for set_name in set_names.values()
+        if set_name not in parameter_study.coords[_set_coordinate_key].values
+    ]
     null_set_names = parameter_study.coords[_set_coordinate_key].isnull()
     if any(null_set_names):
-        parameter_study.coords[_set_coordinate_key][null_set_names] = list(new_set_names)
+        parameter_study.coords[_set_coordinate_key][null_set_names] = new_set_names
 
     return parameter_study
 
