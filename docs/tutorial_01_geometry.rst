@@ -450,13 +450,13 @@ Now that you've created the geometry task in ``tutorial_01_geometry.scons``, thi
                /home/roppenheimer/waves-tutorials
                $ scons tutorial_01_geometry
                scons: Reading SConscript files ...
-               Checking whether '/apps/abaqus/Commands/abq2024' program exists.../apps/abaqus/Commands/abq2024
-               Checking whether '/usr/projects/ea/abaqus/Commands/abq2024' program exists...no
-               Checking whether 'abq2024' program exists.../apps/abaqus/Commands/abq2024
+               Checking whether '/apps/abaqus/Commands/abq2025' program exists.../apps/abaqus/Commands/abq2025
+               Checking whether '/usr/projects/ea/abaqus/Commands/abq2025' program exists...no
+               Checking whether 'abq2025' program exists.../apps/abaqus/Commands/abq2025
                Checking whether 'abaqus' program exists...no
                scons: done reading SConscript files.
                scons: Building targets ...
-               cd /home/roppenheimer/waves-tutorials/build/tutorial_01_geometry && /apps/abaqus/Commands/abq2024 cae -noGui
+               cd /home/roppenheimer/waves-tutorials/build/tutorial_01_geometry && /apps/abaqus/Commands/abq2025 cae -noGui
                /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.cae.stdout 2>&1
                scons: done building targets.
 
@@ -473,14 +473,14 @@ Now that you've created the geometry task in ``tutorial_01_geometry.scons``, thi
 
                PS > scons tutorial_01_geometry
                scons: Reading SConscript files ...
-               Checking whether '/apps/abaqus/Commands/abq2024' program exists...no
-               Checking whether '/usr/projects/ea/abaqus/Commands/abq2024' program exists...no
-               Checking whether 'abq2024' program exists...C:\SIMULIA\Commands\abq2024.BAT
+               Checking whether '/apps/abaqus/Commands/abq2025' program exists...no
+               Checking whether '/usr/projects/ea/abaqus/Commands/abq2025' program exists...no
+               Checking whether 'abq2025' program exists...C:\SIMULIA\Commands\abq2025.BAT
                Checking whether 'abaqus' program exists...C:\SIMULIA\Commands\abaqus.BAT
                scons: done reading SConscript files.
                scons: Building targets ...
-               cd C:\Users\roppenheimer\waves-tutorials\build\tutorial_01_geometry && C:\SIMULIA\Commands\abq2024.BAT cae -noGUI
-               C:\Users\roppenheimer\waves-tutorials\modsim_package\abaqus\rectangle_geometry.py -- >
+               cd C:\Users\roppenheimer\waves-tutorials\build\tutorial_01_geometry && C:\SIMULIA\Commands\abq2025.BAT cae -noGUI 
+               C:\Users\roppenheimer\waves-tutorials\modsim_package\abaqus\rectangle_geometry.py -- > 
                C:\Users\roppenheimer\waves-tutorials\build\tutorial_01_geometry\rectangle_geometry.cae.stdout 2>&1
                scons: done building targets.
 

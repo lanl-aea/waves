@@ -114,8 +114,8 @@ Build Targets
    /home/roppenheimer/waves-tutorials/tutorial_cubit
    $ scons abaqus
    scons: Reading SConscript files ...
-   Checking whether /apps/abaqus/Commands/abq2024 program exists.../apps/abaqus/Commands/abq2024
-   Checking whether abq2024 program exists...no
+   Checking whether /apps/abaqus/Commands/abq2025 program exists.../apps/abaqus/Commands/abq2025
+   Checking whether abq2025 program exists...no
    Checking whether /apps/Cubit-16.12/cubit program exists.../apps/Cubit-16.12/cubit
    Checking whether cubit program exists...no
    Checking whether sierra program exists...no
@@ -131,7 +131,7 @@ Build Targets
    cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/abaqus && python /home/roppenheimer/waves-tutorials/tutorial_cubit/modsim_package/cubit/rectangle_geometry.py > rectangle_geometry.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/abaqus && python /home/roppenheimer/waves-tutorials/tutorial_cubit/modsim_package/cubit/rectangle_partition.py > rectangle_partition.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/abaqus && python /home/roppenheimer/waves-tutorials/tutorial_cubit/modsim_package/cubit/rectangle_mesh.py > rectangle_mesh.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/abaqus && /apps/abaqus/Commands/abq2024 -job rectangle_compression -input rectangle_compression -double both -interactive -ask_delete no > rectangle_compression.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/abaqus && /apps/abaqus/Commands/abq2025 -job rectangle_compression -input rectangle_compression -double both -interactive -ask_delete no > rectangle_compression.stdout 2>&1
    scons: done building targets.
 
 ************

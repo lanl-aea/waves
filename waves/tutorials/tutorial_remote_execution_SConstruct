@@ -36,9 +36,9 @@ AddOption(
 )
 # Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
 default_abaqus_commands = [
-    "/apps/abaqus/Commands/abq2024",
-    "/usr/projects/ea/abaqus/Commands/abq2024",
-    "abq2024",
+    "/apps/abaqus/Commands/abq2025",
+    "/usr/projects/ea/abaqus/Commands/abq2025",
+    "abq2025",
     "abaqus",
 ]
 AddOption(
@@ -96,7 +96,7 @@ user = getpass.getuser()
 env.Append(
     BUILDERS={
         "SSHAbaqusSolver": waves.scons_extensions.ssh_builder_actions(
-            waves.scons_extensions.abaqus_solver_builder_factory(program="/apps/abaqus/Commands/abq2024"),
+            waves.scons_extensions.abaqus_solver_builder_factory(program="/apps/abaqus/Commands/abq2025"),
             remote_server="sstbigbird.lanl.gov",
             remote_directory=f"/scratch/{user}/WAVES-TUTORIAL/tutorial_remote_execution",
         ),

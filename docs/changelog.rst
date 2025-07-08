@@ -201,6 +201,7 @@ Internal Changes
 - Use PyPI twine installation until conda-forge ``twine check`` is fixed on macOS. By `Kyle Brindley`_.
 - Single definition of the shield/badges URLs. By `Kyle Brindley`_.
 - Make QOI update target unique. By `Matthew Fister`_.
+- Use and test Abaqus 2025. Preserves scheduled testing against Abaqus 2024 and 2023. By `Kyle Brindley`_.
 
 Documentation
 =============
