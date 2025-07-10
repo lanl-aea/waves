@@ -52,7 +52,7 @@ AEA developers may then create a local development environment with the followin
 
 .. code-block::
 
-   $ source /apps/anaconda/3.12-anaconda-2024.10/etc/profile.d/conda.sh
+   $ source /apps/miniconda3/3.13-miniconda-25.5.1/etc/profile.d/conda.sh
    $ conda env create --name waves-env --file environment.yml
    $ conda activate waves-env
 
