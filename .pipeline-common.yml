@@ -24,7 +24,7 @@
     - export CONDA_PKGS_DIRS="${conda_pkgs_dirs}"
     - source ${conda_installation}/etc/profile.d/conda.sh
     - conda info
-    - conda env create --prefix ${prefix} --file ${environment_file} --yes
+    - conda env create --prefix ${prefix} --file ${environment_file} --yes --solver=libmamba
     - conda activate ${prefix}
     - conda info
   after_script:
