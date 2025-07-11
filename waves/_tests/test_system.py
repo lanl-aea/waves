@@ -188,7 +188,9 @@ require_third_party_system_tests = [
     pytest.param(
         [
             fetch_template,
-            string.Template("scons nominal mesh_convergence ${unconditional_build}"),
+            # TODO: Return to testing aliases ``nominal mesh_convergence`` when ccx2paraview/VTK stop throwing
+            # segfaults. Looking for a VTK >9.4.2 patch.
+            string.Template("scons build/nominal/rectangle_compression.frd ${unconditional_build}"),
             string.Template("${waves_command} print_study build/parameter_studies/mesh_convergence.h5"),
         ],
         "tutorials/tutorial_gmsh",
