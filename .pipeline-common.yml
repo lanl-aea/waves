@@ -27,6 +27,7 @@
     - conda env create --prefix ${prefix} --file ${environment_file} --yes --solver=libmamba
     - conda activate ${prefix}
     - conda info
+    - conda env export
   after_script:
     - rm -r $PWD/conda-environment $PWD/conda-pkgs || true
 
