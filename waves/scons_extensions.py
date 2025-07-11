@@ -3993,7 +3993,7 @@ class QOIPseudoBuilder:
         self,
         env: SCons.Environment.Environment,
         calculated: pathlib.Path,
-        expected: typing.Optional[pathlib.Path],
+        expected: typing.Optional[pathlib.Path] = None,
         archive: bool = False,
     ) -> SCons.Node.NodeList:
         """SCons Pseudo-Builder for regression testing and archiving quantities of interest (QOIs).
