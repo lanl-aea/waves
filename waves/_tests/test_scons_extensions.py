@@ -2580,7 +2580,8 @@ def test_qoi_pseudo_builder(class_kwargs, call_kwargs, expected, outcome, messag
                 pathlib.Path("build_dir"),
                 **class_kwargs
             )
-            QOIPseudoBuilder(env, pathlib.Path("calculated"), **call_kwargs)
+            targets = QOIPseudoBuilder(env, pathlib.Path("calculated"), **call_kwargs)
+            assert targets == expected
         except ValueError as err:
             assert message in str(err)
             raise err
@@ -2597,7 +2598,8 @@ def test_qoi_pseudo_builder(class_kwargs, call_kwargs, expected, outcome, messag
                 ),
                 "QOI",
             )
-            env.QOI(pathlib.Path("calculated"), **call_kwargs)
+            targets = env.QOI(pathlib.Path("calculated"), **call_kwargs)
+            assert targets == expected
         except ValueError as err:
             assert message in str(err)
             raise err
