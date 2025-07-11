@@ -8,6 +8,11 @@ Changelog
 0.13.10 (unreleased)
 ********************
 
+Bug fixes
+=========
+- Fix default QOI pseudo-builder arguments to make expected QOI path optional (:issue:`943`, :merge:`1226`). By `Matthew
+  Fister`_.
+
 *******************
 0.13.9 (2025-07-08)
 *******************
