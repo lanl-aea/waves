@@ -4029,7 +4029,7 @@ class QOIPseudoBuilder:
             to the collection directory.
         """
         if not expected and not archive:
-            return ValueError("Either expected or archive=True must be specified.")
+            raise ValueError("Either expected or archive=True must be specified.")
         targets = list()
         collection_dir = pathlib.Path(self.collection_dir)
         file_to_archive = calculated
