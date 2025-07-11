@@ -1,6 +1,7 @@
 channels:
   - fierromechanics
   - conda-forge
+  - nodefaults
 
 dependencies:
   - black
