@@ -3993,7 +3993,7 @@ class QOIPseudoBuilder:
         self,
         env: SCons.Environment.Environment,
         calculated: pathlib.Path,
-        expected: typing.Optional[pathlib.Path],
+        expected: typing.Optional[pathlib.Path] = None,
         archive: bool = False,
     ) -> SCons.Node.NodeList:
         """SCons Pseudo-Builder for regression testing and archiving quantities of interest (QOIs).
@@ -4029,7 +4029,7 @@ class QOIPseudoBuilder:
             to the collection directory.
         """
         if not expected and not archive:
-            return ValueError("Either expected or archive=True must be specified.")
+            raise ValueError("Either expected or archive=True must be specified.")
         targets = list()
         collection_dir = pathlib.Path(self.collection_dir)
         file_to_archive = calculated

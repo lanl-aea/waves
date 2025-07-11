@@ -2553,6 +2553,54 @@ def test_parameter_study_write(parameter_generator, kwargs, expected, outcome):
         assert [str(target) for target in targets] == expected
 
 
+test_qoi_pseudo_builder_cases = {
+    "default call": (
+        {},
+        {},
+        None,
+        pytest.raises(ValueError),
+        "Either expected or archive=True must be specified",
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "class_kwargs, call_kwargs, expected, outcome, message",
+    test_qoi_pseudo_builder_cases.values(),
+    ids=test_qoi_pseudo_builder_cases.keys(),
+)
+def test_qoi_pseudo_builder(class_kwargs, call_kwargs, expected, outcome, message) -> None:
+
+    # Direct call
+    with outcome:
+        env = SCons.Environment.Environment()
+        try:
+            QOIPseudoBuilder = scons_extensions.QOIPseudoBuilder(
+                pathlib.Path("collection_directory"), pathlib.Path("build_dir"), **class_kwargs
+            )
+            targets = QOIPseudoBuilder(env, pathlib.Path("calculated"), **call_kwargs)
+            assert targets == expected
+        except ValueError as err:
+            assert message in str(err)
+            raise err
+
+    # Environment method
+    with outcome:
+        env = SCons.Environment.Environment()
+        try:
+            env.AddMethod(
+                scons_extensions.QOIPseudoBuilder(
+                    pathlib.Path("collection_directory"), pathlib.Path("build_dir"), **class_kwargs
+                ),
+                "QOI",
+            )
+            targets = env.QOI(pathlib.Path("calculated"), **call_kwargs)
+            assert targets == expected
+        except ValueError as err:
+            assert message in str(err)
+            raise err
+
+
 waves_environment_attributes = {
     "default": ({}),
     "no defaults": (
