@@ -26,11 +26,11 @@ title: "waves"
 doi: 10.5281/zenodo.7574167
 url: "https://github.com/lanl-aea/waves"
 license: BSD-3-Clause
-date-released: 2025-06-05
+date-released: 2025-07-08
 identifiers:
   - description: "All versions"
     type: doi
     value: 10.5281/zenodo.7574167
-  - description: "0.13.7"
+  - description: "0.13.9"
     type: doi
-    value: 10.5281/zenodo.15700430
+    value: 10.5281/zenodo.15843814
