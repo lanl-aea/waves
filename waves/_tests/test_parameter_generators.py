@@ -681,6 +681,8 @@ def test_create_set_names(test_set_hashes, template, expected_set_names):
     assert test_set_names_reversed == expected_set_names
 
 
+# TODO: Build a hardcoded dataset as the test expectation and test with ``xarray.testing.assert_identical``
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/948
 test_update_set_names_cases = {
     "custom set name template": (
         parameter_generators.CartesianProduct(
