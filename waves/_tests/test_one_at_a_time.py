@@ -353,7 +353,7 @@ class TestOneAtATime:
             None,
             "yaml",
             2,
-            [call("parameter_1: 2\n"), call("parameter_1: 1\n")],
+            [call("parameter_1: 1\n"), call("parameter_1: 2\n")],
         ),
         "two parameter yaml": (
             {"parameter_1": [1, 2], "parameter_2": ["a", "b"]},
@@ -374,8 +374,8 @@ class TestOneAtATime:
             "yaml",
             3,
             [
-                call("parameter_1: 1\nparameter_2: 4.0\n"),
                 call("parameter_1: 1\nparameter_2: 3.0\n"),
+                call("parameter_1: 1\nparameter_2: 4.0\n"),
                 call("parameter_1: 2\nparameter_2: 3.0\n"),
             ],
         ),
@@ -386,8 +386,8 @@ class TestOneAtATime:
             "yaml",
             3,
             [
-                call("parameter_1: 2\nparameter_2: true\n"),
                 call("parameter_1: 1\nparameter_2: true\n"),
+                call("parameter_1: 2\nparameter_2: true\n"),
                 call("parameter_1: 1\nparameter_2: false\n"),
             ],
         ),
@@ -397,7 +397,7 @@ class TestOneAtATime:
             "parameter_study.yaml",
             "yaml",
             1,
-            [call("parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n")],
+            [call("parameter_set0:\n  parameter_1: 1\nparameter_set1:\n  parameter_1: 2\n")],
         ),
         "two parameter one file yaml": (
             {"parameter_1": [1, 2], "parameter_2": ["a", "b"]},
@@ -421,8 +421,8 @@ class TestOneAtATime:
             1,
             [
                 call(
-                    "parameter_set0:\n  parameter_1: 2\n  parameter_2: true\n"
-                    "parameter_set1:\n  parameter_1: 1\n  parameter_2: true\n"
+                    "parameter_set0:\n  parameter_1: 1\n  parameter_2: true\n"
+                    "parameter_set1:\n  parameter_1: 2\n  parameter_2: true\n"
                     "parameter_set2:\n  parameter_1: 1\n  parameter_2: false\n"
                 )
             ],
@@ -463,11 +463,11 @@ class TestOneAtATime:
         ),
         "floats": (
             {"floats": [10.0, 20.0]},
-            {"parameter_set0": {"floats": 20.0}, "parameter_set1": {"floats": 10.0}},
+            {"parameter_set0": {"floats": 10.0}, "parameter_set1": {"floats": 20.0}},
         ),
         "strings": (
             {"strings": ["a", "b"]},
-            {"parameter_set0": {"strings": "b"}, "parameter_set1": {"strings": "a"}},
+            {"parameter_set0": {"strings": "a"}, "parameter_set1": {"strings": "b"}},
         ),
         "bools": (
             {"bools": [False, True]},
