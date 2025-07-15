@@ -863,10 +863,12 @@ class OneAtATime(ParameterGenerator):
         # Combine the studies, preserving the nominal set as first set, e.g. "parameter_set0" by default.
         # This is not possible with super()._generate()
         nominal_study = CustomStudy(
-            {"parameter_samples": nominal_set, "parameter_names": self._parameter_names}
+            {"parameter_samples": nominal_set, "parameter_names": self._parameter_names},
+            set_name_template=self.set_name_template.template,
         ).parameter_study
         off_nominal_study = CustomStudy(
-            {"parameter_samples": all_sets, "parameter_names": self._parameter_names}
+            {"parameter_samples": all_sets, "parameter_names": self._parameter_names},
+            set_name_template=self.set_name_template.template,
         ).parameter_study
         self.parameter_study = _merge_parameter_studies([nominal_study, off_nominal_study], self.set_name_template)
         self.parameter_study = self.parameter_study.sortby(_set_coordinate_key)
@@ -876,6 +878,8 @@ class OneAtATime(ParameterGenerator):
         self._set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
         self._set_names = self.parameter_study[_set_coordinate_key].to_series().to_dict()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
+        if self.previous_parameter_study is not None and self.previous_parameter_study.is_file():
+            self._merge_parameter_studies()
 
 
 class CustomStudy(ParameterGenerator):
