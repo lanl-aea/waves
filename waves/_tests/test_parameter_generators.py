@@ -681,23 +681,25 @@ def test_create_set_names(test_set_hashes, template, expected_set_names):
     assert test_set_names_reversed == expected_set_names
 
 
+# TODO: Build a hardcoded dataset as the test expectation and test with ``xarray.testing.assert_identical``
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/948
 test_update_set_names_cases = {
     "custom set name template": (
-        parameter_generators.OneAtATime(
+        parameter_generators.CartesianProduct(
             {"parameter_1": [1, 2]}, set_name_template=f"out{_settings._template_placeholder}"
         ).parameter_study,
         _utilities._AtSignTemplate(f"out{_settings._template_placeholder}"),
         ["out0", "out1"],
     ),
     "custom file name template": (
-        parameter_generators.OneAtATime(
+        parameter_generators.CartesianProduct(
             {"parameter_1": [1, 2]}, output_file_template=f"out{_settings._template_placeholder}"
         ).parameter_study,
         _utilities._AtSignTemplate(f"out{_settings._template_placeholder}"),
         ["out0", "out1"],
     ),
     "custom file name template override": (
-        parameter_generators.OneAtATime(
+        parameter_generators.CartesianProduct(
             {"parameter_1": [1, 2]},
             set_name_template=f"out{_settings._template_placeholder}",
             output_file_template=f"override{_settings._template_placeholder}",

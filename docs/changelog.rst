@@ -8,6 +8,11 @@ Changelog
 0.13.11 (unreleased)
 ********************
 
+Bug fixes
+=========
+- Ensure OneAtATime parameter study's nominal parameter set is always the first set, e.g. "parameter_set0"
+  (:issue:`947`, :merge:`1228`). By `Kyle Brindley`_.
+
 ********************
 0.13.10 (2025-07-14)
 ********************
