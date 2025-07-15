@@ -869,10 +869,13 @@ class OneAtATime(ParameterGenerator):
             {"parameter_samples": all_sets, "parameter_names": self._parameter_names}
         ).parameter_study
         self.parameter_study = _merge_parameter_studies([nominal_study, off_nominal_study], self.set_name_template)
+        self.parameter_study = self.parameter_study.sortby(_set_coordinate_key)
         # Do work normally performed by super()._generate(). Must re-calculate semi-private variables
+        self.parameter_study = self.parameter_study.swap_dims({_set_coordinate_key: _hash_coordinate_key})
         self._samples = self._parameter_study_to_numpy()
         self._set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
         self._set_names = self.parameter_study[_set_coordinate_key].to_series().to_dict()
+        self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
 
 class CustomStudy(ParameterGenerator):
