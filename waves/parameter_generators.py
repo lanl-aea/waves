@@ -851,17 +851,28 @@ class OneAtATime(ParameterGenerator):
         # Count how many total sets will be generated (= nominal set + number of off-nominal values)
         set_count = 1 + numpy.sum([len(self.parameter_schema[name]) - 1 for name in self._parameter_names])
         # Generate the nominal set, assuming that the first entry of each parameter is the nominal parameter
-        nominal_set = numpy.array([self.parameter_schema[name][0] for name in self._parameter_names], dtype=object)
-        # Initialize array at final size
-        self._samples = numpy.repeat([nominal_set], set_count, axis=0)
-        # Substitute the off-nominal values into the array
+        nominal_set = numpy.array([[self.parameter_schema[name][0] for name in self._parameter_names]], dtype=object)
+        # Generate the off-nominal sets, assuming that the first entry of each parameter is the nominal parameter
+        all_sets = numpy.repeat([nominal_set[0]], set_count, axis=0)
         parameter_set_index = 1  # Start at 1 since we don't change the nominal set
         for parameter_name_index, name in enumerate(self._parameter_names):
             if len(self.parameter_schema[name]) > 1:
                 for value in self.parameter_schema[name][1:]:  # Skip nominal value
-                    self._samples[parameter_set_index][parameter_name_index] = value
+                    all_sets[parameter_set_index][parameter_name_index] = value
                     parameter_set_index += 1
-        super()._generate()
+        # Combine the studies, preserving the nominal set as first set, e.g. "parameter_set0" by default.
+        # This is not possible with super()._generate()
+        nominal_study = CustomStudy(
+            {"parameter_samples": nominal_set, "parameter_names": self._parameter_names}
+        ).parameter_study
+        off_nominal_study = CustomStudy(
+            {"parameter_samples": all_sets, "parameter_names": self._parameter_names}
+        ).parameter_study
+        self.parameter_study = _merge_parameter_studies([nominal_study, off_nominal_study], self.set_name_template)
+        # Do work normally performed by super()._generate(). Must re-calculate semi-private variables
+        self._samples = self._parameter_study_to_numpy()
+        self._set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
+        self._set_names = self.parameter_study[_set_coordinate_key].to_series().to_dict()
 
 
 class CustomStudy(ParameterGenerator):
