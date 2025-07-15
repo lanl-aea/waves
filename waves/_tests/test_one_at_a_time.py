@@ -64,6 +64,7 @@ class TestOneAtATime:
     generate_io = {
         "one_parameter: 1, 2": (
             {"parameter_1": [1, 2]},
+            {},
             xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
@@ -78,8 +79,26 @@ class TestOneAtATime:
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64},
         ),
+        "one_parameter: 1, 2, custom template": (
+            {"parameter_1": [1, 2]},
+            {"set_name_template": "set@number"},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1, 2],
+                        coords={"set_name": xarray.DataArray(["set0", "set1"], dims="set_name")},
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["1661dcd0bf4761d25471c1cf5514ceae", "0b588b6a82c1d3d3d19fda304f940342"],
+                        dims="set_name",
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {"parameter_1": numpy.int64},
+        ),
         "one_parameter: 2, 1": (
             {"parameter_1": [2, 1]},
+            {},
             xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
@@ -96,6 +115,7 @@ class TestOneAtATime:
         ),
         "two_parameter": (
             {"parameter_1": [1, 2], "parameter_2": ["a", "b"]},
+            {},
             xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
@@ -128,6 +148,7 @@ class TestOneAtATime:
         ),
         "ints and floats": (
             {"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]},
+            {},
             xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
@@ -160,6 +181,7 @@ class TestOneAtATime:
         ),
         "various parameter types, sizes, and orders": (
             {"parameter_1": [1, 2], "parameter_2": [3.0, -1.0, 4.0], "parameter_3": ("a", "b")},
+            {},
             xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
@@ -224,12 +246,12 @@ class TestOneAtATime:
     }
 
     @pytest.mark.parametrize(
-        "parameter_schema, expected_dataset, expected_types",
+        "parameter_schema, kwargs, expected_dataset, expected_types",
         generate_io.values(),
         ids=generate_io.keys(),
     )
-    def test_generate(self, parameter_schema, expected_dataset, expected_types):
-        TestGenerate = OneAtATime(parameter_schema)
+    def test_generate(self, parameter_schema, kwargs, expected_dataset, expected_types):
+        TestGenerate = OneAtATime(parameter_schema, **kwargs)
         xarray.testing.assert_identical(TestGenerate.parameter_study, expected_dataset)
         for key in TestGenerate.parameter_study.keys():
             assert TestGenerate.parameter_study[key].dtype == expected_types[key]
