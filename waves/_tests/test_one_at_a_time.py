@@ -138,7 +138,7 @@ class TestOneAtATime:
                         [
                             "3b86be0b68c8a5a2a7dca07213846681",
                             "dd8d813de1f1b82671b694817bf10c3f",
-                            "f4f5a25089f52a0d069c83f34ce6b68b"
+                            "f4f5a25089f52a0d069c83f34ce6b68b",
                         ],
                         dims="set_name",
                     ),
@@ -171,7 +171,7 @@ class TestOneAtATime:
                         [
                             "ad4d9f0b45ec964db8f313a2b64636de",
                             "6a184a4ff7991572e4c8f2d096656b6b",
-                            "e12bff8429a0bc549e4f029ffcb14e6b"
+                            "e12bff8429a0bc549e4f029ffcb14e6b",
                         ],
                         dims="set_name",
                     ),
@@ -193,7 +193,7 @@ class TestOneAtATime:
                                     "parameter_set1",
                                     "parameter_set2",
                                     "parameter_set3",
-                                    "parameter_set4"
+                                    "parameter_set4",
                                 ],
                                 dims="set_name",
                             )
@@ -208,7 +208,7 @@ class TestOneAtATime:
                                     "parameter_set1",
                                     "parameter_set2",
                                     "parameter_set3",
-                                    "parameter_set4"
+                                    "parameter_set4",
                                 ],
                                 dims="set_name",
                             )
@@ -223,7 +223,7 @@ class TestOneAtATime:
                                     "parameter_set1",
                                     "parameter_set2",
                                     "parameter_set3",
-                                    "parameter_set4"
+                                    "parameter_set4",
                                 ],
                                 dims="set_name",
                             )
@@ -235,7 +235,7 @@ class TestOneAtATime:
                             "52c0adc106690f2ab51d40f4e810a005",
                             "8e213a62356cd1d4ce2b3b795fab6ef9",
                             "8eb85255b4d3888cbf413afc55cbbac3",
-                            "e12e11343c63ebc9b329cf90c9a2b07e"
+                            "e12e11343c63ebc9b329cf90c9a2b07e",
                         ],
                         dims="set_name",
                     ),
