@@ -774,6 +774,9 @@ class OneAtATime(ParameterGenerator):
 
     Parameters must be scalar valued integers, floats, strings, or booleans
 
+    The nominal parameter set will always be the first parameter set, e.g. ``parameter_set0`` for the default
+    ``set_name_template``.
+
     :param parameter_schema: The YAML loaded parameter study schema dictionary - ``{parameter_name: schema value}``
         OneAtATime expects "schema value" to be an ordered iterable. For example, when read from a YAML file "schema
         value" will be a Python list. Each parameter's values must have a consistent data type, but data type may vary
