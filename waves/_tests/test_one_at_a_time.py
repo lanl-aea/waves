@@ -69,11 +69,15 @@ class TestOneAtATime:
                 {
                     "parameter_1": xarray.DataArray(
                         [1, 2],
-                        coords={"set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims="set_name")},
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"], dims=_set_coordinate_key
+                            )
+                        },
                     ),
                     "set_hash": xarray.DataArray(
                         ["1661dcd0bf4761d25471c1cf5514ceae", "0b588b6a82c1d3d3d19fda304f940342"],
-                        dims="set_name",
+                        dims=_set_coordinate_key,
                     ),
                 }
             ).set_coords("set_hash"),
@@ -86,11 +90,11 @@ class TestOneAtATime:
                 {
                     "parameter_1": xarray.DataArray(
                         [1, 2],
-                        coords={"set_name": xarray.DataArray(["set0", "set1"], dims="set_name")},
+                        coords={_set_coordinate_key: xarray.DataArray(["set0", "set1"], dims=_set_coordinate_key)},
                     ),
                     "set_hash": xarray.DataArray(
                         ["1661dcd0bf4761d25471c1cf5514ceae", "0b588b6a82c1d3d3d19fda304f940342"],
-                        dims="set_name",
+                        dims=_set_coordinate_key,
                     ),
                 }
             ).set_coords("set_hash"),
@@ -103,11 +107,15 @@ class TestOneAtATime:
                 {
                     "parameter_1": xarray.DataArray(
                         [2, 1],
-                        coords={"set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims="set_name")},
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"], dims=_set_coordinate_key
+                            )
+                        },
                     ),
                     "set_hash": xarray.DataArray(
                         ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
-                        dims="set_name",
+                        dims=_set_coordinate_key,
                     ),
                 }
             ).set_coords("set_hash"),
@@ -121,16 +129,16 @@ class TestOneAtATime:
                     "parameter_1": xarray.DataArray(
                         [1, 1, 2],
                         coords={
-                            "set_name": xarray.DataArray(
-                                ["parameter_set0", "parameter_set1", "parameter_set2"], dims="set_name"
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2"], dims=_set_coordinate_key
                             )
                         },
                     ),
                     "parameter_2": xarray.DataArray(
                         ["a", "b", "a"],
                         coords={
-                            "set_name": xarray.DataArray(
-                                ["parameter_set0", "parameter_set1", "parameter_set2"], dims="set_name"
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2"], dims=_set_coordinate_key
                             )
                         },
                     ),
@@ -140,7 +148,7 @@ class TestOneAtATime:
                             "dd8d813de1f1b82671b694817bf10c3f",
                             "f4f5a25089f52a0d069c83f34ce6b68b",
                         ],
-                        dims="set_name",
+                        dims=_set_coordinate_key,
                     ),
                 }
             ).set_coords("set_hash"),
@@ -154,16 +162,16 @@ class TestOneAtATime:
                     "parameter_1": xarray.DataArray(
                         [1, 1, 2],
                         coords={
-                            "set_name": xarray.DataArray(
-                                ["parameter_set0", "parameter_set1", "parameter_set2"], dims="set_name"
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2"], dims=_set_coordinate_key
                             )
                         },
                     ),
                     "parameter_2": xarray.DataArray(
                         [3.0, 4.0, 3.0],
                         coords={
-                            "set_name": xarray.DataArray(
-                                ["parameter_set0", "parameter_set1", "parameter_set2"], dims="set_name"
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2"], dims=_set_coordinate_key
                             )
                         },
                     ),
@@ -173,7 +181,7 @@ class TestOneAtATime:
                             "6a184a4ff7991572e4c8f2d096656b6b",
                             "e12bff8429a0bc549e4f029ffcb14e6b",
                         ],
-                        dims="set_name",
+                        dims=_set_coordinate_key,
                     ),
                 }
             ).set_coords("set_hash"),
@@ -187,7 +195,7 @@ class TestOneAtATime:
                     "parameter_1": xarray.DataArray(
                         [1, 1, 1, 2, 1],
                         coords={
-                            "set_name": xarray.DataArray(
+                            _set_coordinate_key: xarray.DataArray(
                                 [
                                     "parameter_set0",
                                     "parameter_set1",
@@ -195,14 +203,14 @@ class TestOneAtATime:
                                     "parameter_set3",
                                     "parameter_set4",
                                 ],
-                                dims="set_name",
+                                dims=_set_coordinate_key,
                             )
                         },
                     ),
                     "parameter_2": xarray.DataArray(
                         [3.0, -1.0, 4.0, 3.0, 3.0],
                         coords={
-                            "set_name": xarray.DataArray(
+                            _set_coordinate_key: xarray.DataArray(
                                 [
                                     "parameter_set0",
                                     "parameter_set1",
@@ -210,14 +218,14 @@ class TestOneAtATime:
                                     "parameter_set3",
                                     "parameter_set4",
                                 ],
-                                dims="set_name",
+                                dims=_set_coordinate_key,
                             )
                         },
                     ),
                     "parameter_3": xarray.DataArray(
                         ["a", "a", "a", "a", "b"],
                         coords={
-                            "set_name": xarray.DataArray(
+                            _set_coordinate_key: xarray.DataArray(
                                 [
                                     "parameter_set0",
                                     "parameter_set1",
@@ -225,7 +233,7 @@ class TestOneAtATime:
                                     "parameter_set3",
                                     "parameter_set4",
                                 ],
-                                dims="set_name",
+                                dims=_set_coordinate_key,
                             )
                         },
                     ),
@@ -237,7 +245,7 @@ class TestOneAtATime:
                             "8eb85255b4d3888cbf413afc55cbbac3",
                             "e12e11343c63ebc9b329cf90c9a2b07e",
                         ],
-                        dims="set_name",
+                        dims=_set_coordinate_key,
                     ),
                 }
             ).set_coords("set_hash"),
@@ -258,7 +266,7 @@ class TestOneAtATime:
         # Verify that the parameter set name creation method was called
         # TODO: _set_names is an ordered object (dictionary). Fix test to compare dictionary-to-dictionary instead of
         # implied consistency according to value order.
-        assert list(TestGenerate._set_names.values()) == list(expected_dataset["set_name"].to_numpy())
+        assert list(TestGenerate._set_names.values()) == list(expected_dataset[_set_coordinate_key].to_numpy())
 
     merge_test = {
         "single set unchanged": (
