@@ -14,6 +14,7 @@ available substitutions.
 
 import os
 import sys
+import copy
 import shlex
 import shutil
 import string
@@ -21,14 +22,18 @@ import typing
 import inspect
 import pathlib
 import tempfile
+import importlib
 import subprocess
-from importlib.metadata import version, PackageNotFoundError
+from unittest.mock import patch
 
 import pytest
 
 from waves import _settings
 from waves import _utilities
 from waves._tests.common import platform_check
+
+MODULE_NAME = pathlib.Path(__file__).stem
+PACKAGE_PARENT_PATH = _settings._project_root_abspath.parent
 
 
 testing_windows, root_fs, testing_macos = platform_check()
@@ -37,27 +42,87 @@ testing_windows, root_fs, testing_macos = platform_check()
 testing_hpc = shutil.which("sbatch") is not None
 python_313_or_above = sys.version_info >= (3, 13)
 
-tutorial_directory = _settings._tutorials_directory
-env = os.environ.copy()
-waves_command = "waves"
-odb_extract_command = "odb_extract"
 
-# If executing in repository, add package to PYTHONPATH
-try:
-    version("waves")
-    installed = True
-except PackageNotFoundError:
-    installed = False
+def check_installed(package_name: str = "waves") -> bool:
+    try:
+        importlib.metadata.version(package_name)
+        return True
+    except importlib.metadata.PackageNotFoundError:
+        return False
 
-if not installed:
-    waves_command = "python -m waves._main"
-    odb_extract_command = "python -m waves._abaqus.odb_extract"
-    package_parent_path = _settings._project_root_abspath.parent
-    key = "PYTHONPATH"
-    if key in env:
-        env[key] = f"{package_parent_path}:{env[key]}"
-    else:
-        env[key] = f"{package_parent_path}"
+
+def test_check_installed() -> None:
+    with patch("importlib.metadata.version", return_value="0.0.0"):
+        assert check_installed()
+    with patch("importlib.metadata.version", side_effect=importlib.metadata.PackageNotFoundError):
+        assert not check_installed()
+
+
+def prepend_path(environment: dict, key: str, prepend_item: str) -> dict:
+    """Return a copy of the environment dictionary with updated key using operating system pathsep"""
+    new_environment = copy.deepcopy(environment)
+    new_path = os.pathsep.join(filter(None, (prepend_item, environment.get(key))))
+    new_environment.update({key: new_path})
+    return new_environment
+
+
+test_prepend_path_cases = {
+    "non-existent": (({}, "key", "new_item"), {"key": "new_item"}),
+    "empty": (({"key": ""}, "key", "new_item"), {"key": "new_item"}),
+    "filled": (({"key": "old_item"}, "key", "new_item"), {"key": f"new_item{os.pathsep}old_item"}),
+}
+
+
+@pytest.mark.parametrize(
+    "args, expected",
+    test_prepend_path_cases.values(),
+    ids=test_prepend_path_cases.keys(),
+)
+def test_prepend_path(args, expected) -> None:
+    original_environment = copy.deepcopy(args[0])
+    assert prepend_path(*args) == expected
+    assert args[0] == original_environment
+
+
+def augment_system_test_environment(
+    environment: dict,
+    installed: bool,
+    package_parent_path: str = str(PACKAGE_PARENT_PATH),
+) -> dict:
+    new_environment = copy.deepcopy(environment)
+    if not installed:
+        new_environment = prepend_path(new_environment, "PYTHONPATH", package_parent_path)
+    return new_environment
+
+
+test_augment_system_test_environment_cases = {
+    "empty, installed": (({}, True), {}),
+    "empty, not installed": (({}, False), {"PYTHONPATH": str(PACKAGE_PARENT_PATH)}),
+    "existing PYTHONPATH, installed": (
+        ({"PYTHONPATH": "olditem"}, True), {"PYTHONPATH": "olditem"}
+    ),
+    "existing PYTHONPATH, not installed": (
+        ({"PYTHONPATH": "olditem"}, False),
+        {"PYTHONPATH": str(PACKAGE_PARENT_PATH) + f"{os.pathsep}olditem"},
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "args, expected",
+    test_augment_system_test_environment_cases.values(),
+    ids=test_augment_system_test_environment_cases.keys(),
+)
+def test_augment_system_test_environment(args, expected) -> None:
+    original_environment = copy.deepcopy(args[0])
+    assert augment_system_test_environment(*args) == expected
+    assert args[0] == original_environment
+
+
+installed = check_installed()
+system_test_environment = augment_system_test_environment(os.environ.copy(), installed)
+waves_command = "waves" if installed else "python -m waves._main"
+odb_extract_command = "odb_extract" if installed else "python -m waves._abaqus.odb_extract"
 
 fetch_template = string.Template("${waves_command} fetch ${fetch_options} --destination ${temp_directory}")
 system_tests = [
@@ -750,10 +815,9 @@ def test_system(
     :param commands: list of command strings for the system test
     :param fetch_options: the fetch arguments for replacement in string templates
     """
-    module_name = pathlib.Path(__file__).stem
     test_id = request.node.callspec.id
     test_prefix = _utilities.create_valid_identifier(test_id)
-    test_prefix = f"{module_name}.{test_prefix}."
+    test_prefix = f"{MODULE_NAME}.{test_prefix}."
 
     if system_test_directory is not None:
         system_test_directory.mkdir(parents=True, exist_ok=True)
@@ -797,7 +861,7 @@ def test_system(
                 command_list = shlex.split(command, posix=True)
             else:
                 command_list = shlex.split(command, posix=not testing_windows)
-            subprocess.check_output(command_list, env=env, cwd=temp_path, text=True)
+            subprocess.check_output(command_list, env=system_test_environment, cwd=temp_path, text=True)
     except Exception as err:
         raise err
     else:
