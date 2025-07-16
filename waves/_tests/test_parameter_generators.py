@@ -1,8 +1,9 @@
 """Test ParameterGenerator Abstract Base Class"""
 
+import typing
 import pathlib
+import contextlib
 from unittest.mock import patch, mock_open
-from contextlib import nullcontext as does_not_raise
 
 import pytest
 import numpy
@@ -12,6 +13,8 @@ from waves import parameter_generators
 from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
 from waves import _settings
 from waves import _utilities
+
+does_not_raise = contextlib.nullcontext()
 
 
 set_hashes = {
@@ -112,7 +115,7 @@ def test_verify_parameter_study(parameter_names, samples, expected_hashes):
     assert HashesParameterGenerator._set_hashes == expected_hashes
     parameter_study = HashesParameterGenerator.parameter_study
 
-    with does_not_raise():
+    with does_not_raise:
         parameter_generators._verify_parameter_study(parameter_study)
 
     # Delete necessary coordinates
@@ -149,31 +152,31 @@ return_dataset_types_cases = {
         parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
         parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
         {"parameter_1": numpy.int64},
-        does_not_raise(),
+        does_not_raise,
     ),
     "CartesianProduct: different parameters": (
         parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
         parameter_generators.CartesianProduct({"parameter_2": [10.0]}).parameter_study,
         {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
-        does_not_raise(),
+        does_not_raise,
     ),
     "CartesianProduct: extra parameters in second dataset": (
         parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
         parameter_generators.CartesianProduct({"parameter_1": [1], "parameter_2": [10.0]}).parameter_study,
         {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
-        does_not_raise(),
+        does_not_raise,
     ),
     "CartesianProduct: extra parameters in both datasets": (
         parameter_generators.CartesianProduct({"parameter_1": [1], "parameter_3": ["a"]}).parameter_study,
         parameter_generators.CartesianProduct({"parameter_1": [1], "parameter_2": [10.0]}).parameter_study,
         {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.dtype("U1")},
-        does_not_raise(),
+        does_not_raise,
     ),
     "CartesianProduct: extra parameters bools": (
         parameter_generators.CartesianProduct({"parameter_1": [1], "parameter_3": ["a"]}).parameter_study,
         parameter_generators.CartesianProduct({"parameter_1": [1], "parameter_2": [True]}).parameter_study,
         {"parameter_1": numpy.int64, "parameter_2": bool, "parameter_3": numpy.dtype("U1")},
-        does_not_raise(),
+        does_not_raise,
     ),
     "CartesianProduct: inconsistent types: int/float": (
         parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
@@ -197,31 +200,31 @@ return_dataset_types_cases = {
         parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
         parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
         {"parameter_1": numpy.int64},
-        does_not_raise(),
+        does_not_raise,
     ),
     "OneAtATime: different parameters": (
         parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
         parameter_generators.OneAtATime({"parameter_2": [10.0]}).parameter_study,
         {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
-        does_not_raise(),
+        does_not_raise,
     ),
     "OneAtATime: extra parameters in second dataset": (
         parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
         parameter_generators.OneAtATime({"parameter_1": [1], "parameter_2": [10.0]}).parameter_study,
         {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
-        does_not_raise(),
+        does_not_raise,
     ),
     "OneAtATime: extra parameters in both datasets": (
         parameter_generators.OneAtATime({"parameter_1": [1], "parameter_3": ["a"]}).parameter_study,
         parameter_generators.OneAtATime({"parameter_1": [1], "parameter_2": [10.0]}).parameter_study,
         {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.dtype("U1")},
-        does_not_raise(),
+        does_not_raise,
     ),
     "OneAtATime: extra parameters bools": (
         parameter_generators.OneAtATime({"parameter_1": [1], "parameter_3": ["a"]}).parameter_study,
         parameter_generators.OneAtATime({"parameter_1": [1], "parameter_2": [True]}).parameter_study,
         {"parameter_1": numpy.int64, "parameter_2": bool, "parameter_3": numpy.dtype("U1")},
-        does_not_raise(),
+        does_not_raise,
     ),
     "OneAtATime: inconsistent types: int/float": (
         parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
@@ -328,7 +331,7 @@ merge_parameter_studies_cases = {
         numpy.array([[1]], dtype=object),
         {"parameter_1": numpy.int64},
         parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
-        does_not_raise(),
+        does_not_raise,
     ),
     "concatenate along one parameter: int": (
         [
@@ -353,7 +356,7 @@ merge_parameter_studies_cases = {
         )
         .set_coords(_settings._hash_coordinate_key)
         .sortby(_settings._hash_coordinate_key),
-        does_not_raise(),
+        does_not_raise,
     ),
     "concatenate along one parameter: float": (
         [
@@ -378,7 +381,7 @@ merge_parameter_studies_cases = {
         )
         .set_coords(_settings._hash_coordinate_key)
         .sortby(_settings._hash_coordinate_key),
-        does_not_raise(),
+        does_not_raise,
     ),
     "concatenate along one parameter: bool": (
         [
@@ -403,7 +406,7 @@ merge_parameter_studies_cases = {
         )
         .set_coords(_settings._hash_coordinate_key)
         .sortby(_settings._hash_coordinate_key),
-        does_not_raise(),
+        does_not_raise,
     ),
     "concatenate along one parameter: int/float": (
         [
@@ -512,7 +515,7 @@ merge_parameter_studies_cases = {
         )
         .set_coords(_settings._hash_coordinate_key)
         .sortby(_settings._hash_coordinate_key),
-        does_not_raise(),
+        does_not_raise,
     ),
     "concatenate along two parameters across multiple studies: int/bool": (
         [
@@ -546,7 +549,7 @@ merge_parameter_studies_cases = {
         )
         .set_coords(_settings._hash_coordinate_key)
         .sortby(_settings._hash_coordinate_key),
-        does_not_raise(),
+        does_not_raise,
     ),
     "concatenate along unchanged parameters across multiple studies": (
         [
@@ -573,7 +576,7 @@ merge_parameter_studies_cases = {
         parameter_generators.CartesianProduct(
             {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}
         ).parameter_study,
-        does_not_raise(),
+        does_not_raise,
     ),
     "too few parameter studies input": (
         [parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study],
@@ -729,7 +732,7 @@ test_update_set_names_cases = {
                 ),
             }
         ).set_coords(_settings._set_coordinate_key),
-        does_not_raise(),
+        does_not_raise,
     ),
     "filled dataset, non-default template, should return as original": (
         xarray.Dataset(
@@ -777,7 +780,7 @@ test_update_set_names_cases = {
                 ),
             }
         ).set_coords(_settings._set_coordinate_key),
-        does_not_raise(),
+        does_not_raise,
     ),
     "empty dataset, default template": (
         xarray.Dataset(
@@ -825,7 +828,7 @@ test_update_set_names_cases = {
                 ),
             }
         ).set_coords(_settings._set_coordinate_key),
-        does_not_raise(),
+        does_not_raise,
     ),
     "empty dataset, non-default template": (
         xarray.Dataset(
@@ -873,7 +876,7 @@ test_update_set_names_cases = {
                 ),
             }
         ).set_coords(_settings._set_coordinate_key),
-        does_not_raise(),
+        does_not_raise,
     ),
     "first set name filled dataset, default template": (
         xarray.Dataset(
@@ -921,7 +924,7 @@ test_update_set_names_cases = {
                 ),
             }
         ).set_coords(_settings._set_coordinate_key),
-        does_not_raise(),
+        does_not_raise,
     ),
     "second set name filled dataset, default template": (
         xarray.Dataset(
@@ -969,7 +972,7 @@ test_update_set_names_cases = {
                 ),
             }
         ).set_coords(_settings._set_coordinate_key),
-        does_not_raise(),
+        does_not_raise,
     ),
     "first set name filled dataset, non-default template": (
         xarray.Dataset(
@@ -1017,7 +1020,7 @@ test_update_set_names_cases = {
                 ),
             }
         ).set_coords(_settings._set_coordinate_key),
-        does_not_raise(),
+        does_not_raise,
     ),
     "second set name filled dataset, non-default template": (
         xarray.Dataset(
@@ -1065,7 +1068,7 @@ test_update_set_names_cases = {
                 ),
             }
         ).set_coords(_settings._set_coordinate_key),
-        does_not_raise(),
+        does_not_raise,
     ),
     "first set name filled dataset, non-default template, mismatching naming convention": (
         xarray.Dataset(
@@ -1120,7 +1123,7 @@ test_update_set_names_cases = {
                 ),
             }
         ).set_coords(_settings._set_coordinate_key),
-        does_not_raise(),
+        does_not_raise,
     ),
     "empty dataset, no kwargs, should return as original, single parameter set": (
         xarray.Dataset(
@@ -1148,7 +1151,7 @@ test_update_set_names_cases = {
                 ),
             }
         ).set_coords(_settings._set_coordinate_key),
-        does_not_raise(),
+        does_not_raise,
     ),
     # Integration test by parameter study dataset initialization by API
     "filled dataset, custom set name template": (
@@ -1172,7 +1175,7 @@ test_update_set_names_cases = {
         )
         .set_coords(_settings._hash_coordinate_key)
         .swap_dims({_settings._set_coordinate_key: _settings._hash_coordinate_key}),
-        does_not_raise(),
+        does_not_raise,
     ),
     "filled dataset, custom file name template": (
         parameter_generators.CartesianProduct(
@@ -1193,7 +1196,7 @@ test_update_set_names_cases = {
         )
         .set_coords(_settings._hash_coordinate_key)
         .swap_dims({_settings._set_coordinate_key: _settings._hash_coordinate_key}),
-        does_not_raise(),
+        does_not_raise,
     ),
     "filled dataset, custom file name template override": (
         parameter_generators.CartesianProduct(
@@ -1218,7 +1221,7 @@ test_update_set_names_cases = {
         )
         .set_coords(_settings._hash_coordinate_key)
         .swap_dims({_settings._set_coordinate_key: _settings._hash_coordinate_key}),
-        does_not_raise(),
+        does_not_raise,
     ),
     "filled dataset, single parameter set": (
         parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study.swap_dims(
@@ -1238,7 +1241,7 @@ test_update_set_names_cases = {
         )
         .set_coords(_settings._hash_coordinate_key)
         .swap_dims({_settings._set_coordinate_key: _settings._hash_coordinate_key}),
-        does_not_raise(),
+        does_not_raise,
     ),
 }
 
@@ -1248,7 +1251,12 @@ test_update_set_names_cases = {
     test_update_set_names_cases.values(),
     ids=test_update_set_names_cases.keys(),
 )
-def test_update_set_names(parameter_study, kwargs, expected, outcome):
+def test_update_set_names(
+    parameter_study: xarray.Dataset,
+    kwargs: dict,
+    expected: xarray.Dataset,
+    outcome: typing.Union[contextlib.nullcontext, pytest.RaisesExc],
+) -> None:
     """Check the generated and updated parameter set names against template arguments
 
     :param parameter_study: parameter study Xarray dataset
@@ -1269,7 +1277,7 @@ def test_open_parameter_study():
         patch("pathlib.Path.is_file", return_value=True),
         patch("xarray.open_dataset") as mock_open_dataset,
         patch("waves.parameter_generators._verify_parameter_study"),
-        does_not_raise(),
+        does_not_raise,
     ):
         parameter_generators._open_parameter_study(mock_file)
         mock_open_dataset.assert_called_once_with(mock_file, engine="h5netcdf")
@@ -1333,7 +1341,7 @@ class TestParameterGenerator:
             patch("pathlib.Path.is_file", return_value=False),
             patch("waves.parameter_generators.ParameterGenerator._merge_parameter_studies") as mock_merge,
             patch("warnings.warn") as mock_warn,
-            does_not_raise(),
+            does_not_raise,
         ):
             try:
                 MissingPreviousStudy = DummyGenerator(
@@ -1830,7 +1838,7 @@ class TestParameterDistributions:
     validate_input = {
         "good schema": (
             {"num_simulations": 1, "parameter_1": {"distribution": "norm", "kwarg1": 1}},
-            does_not_raise(),
+            does_not_raise,
         ),
         "not a dict": (
             "not a dict",
