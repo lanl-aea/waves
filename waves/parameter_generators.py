@@ -1549,9 +1549,7 @@ def _merge_parameter_studies(
     return study_combined
 
 
-def _create_set_names(
-    set_hashes: typing.List[str], template: typing.Optional[string.Template] = None
-) -> dict:
+def _create_set_names(set_hashes: typing.List[str], template: typing.Optional[string.Template] = None) -> dict:
     """Construct parameter set names from the set name template and number of parameter set hashes. Set names are
     assigned to set hashes in hash ascending alphabetical order.
 
