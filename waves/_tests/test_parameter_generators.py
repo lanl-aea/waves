@@ -686,141 +686,181 @@ test_update_set_names_cases = {
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
-                    [2, 1], coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]}
+                    [2, 1],
+                    coords={
+                        _settings._hash_coordinate_key: [
+                            "0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"
+                        ],
+                    },
                 ),
-                _settings._hash_coordinate_key: xarray.DataArray(
-                    [
-                        "0b588b6a82c1d3d3d19fda304f940342",
-                        "1661dcd0bf4761d25471c1cf5514ceae",
-                    ],
-                    coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]},
+                _settings._set_coordinate_key: xarray.DataArray(
+                    ["parameter_set0", "parameter_set1"],
+                    coords={
+                        _settings._hash_coordinate_key: [
+                            "0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"
+                        ],
+                    },
                 ),
             }
         )
-        .set_coords(_settings._hash_coordinate_key)
-        .swap_dims({_settings._set_coordinate_key: _settings._hash_coordinate_key}),
+        .set_coords(_settings._set_coordinate_key),
         {},
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
-                    [2, 1], coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]}
+                    [2, 1],
+                    coords={
+                        _settings._hash_coordinate_key: [
+                            "0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"
+                        ],
+                    },
                 ),
-                _settings._hash_coordinate_key: xarray.DataArray(
-                    [
-                        "0b588b6a82c1d3d3d19fda304f940342",
-                        "1661dcd0bf4761d25471c1cf5514ceae",
-                    ],
-                    coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]},
+                _settings._set_coordinate_key: xarray.DataArray(
+                    ["parameter_set0", "parameter_set1"],
+                    coords={
+                        _settings._hash_coordinate_key: [
+                            "0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"
+                        ],
+                    },
                 ),
             }
         )
-        .set_coords(_settings._hash_coordinate_key)
-        .swap_dims({_settings._set_coordinate_key: _settings._hash_coordinate_key}),
+        .set_coords(_settings._set_coordinate_key),
     ),
     "filled dataset, non-default template, should return as original": (
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
-                    [2, 1], coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]}
+                    [2, 1],
+                    coords={
+                        _settings._hash_coordinate_key: [
+                            "0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"
+                        ],
+                    },
                 ),
-                _settings._hash_coordinate_key: xarray.DataArray(
-                    [
-                        "0b588b6a82c1d3d3d19fda304f940342",
-                        "1661dcd0bf4761d25471c1cf5514ceae",
-                    ],
-                    coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]},
+                _settings._set_coordinate_key: xarray.DataArray(
+                    ["parameter_set0", "parameter_set1"],
+                    coords={
+                        _settings._hash_coordinate_key: [
+                            "0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"
+                        ],
+                    },
                 ),
             }
         )
-        .set_coords(_settings._hash_coordinate_key)
-        .swap_dims({_settings._set_coordinate_key: _settings._hash_coordinate_key}),
+        .set_coords(_settings._set_coordinate_key),
         {"template": _utilities._AtSignTemplate("out@{number}")},
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
-                    [2, 1], coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]}
+                    [2, 1],
+                    coords={
+                        _settings._hash_coordinate_key: [
+                            "0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"
+                        ],
+                    },
                 ),
-                _settings._hash_coordinate_key: xarray.DataArray(
-                    [
-                        "0b588b6a82c1d3d3d19fda304f940342",
-                        "1661dcd0bf4761d25471c1cf5514ceae",
-                    ],
-                    coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]},
+                _settings._set_coordinate_key: xarray.DataArray(
+                    ["parameter_set0", "parameter_set1"],
+                    coords={
+                        _settings._hash_coordinate_key: [
+                            "0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"
+                        ],
+                    },
                 ),
             }
         )
-        .set_coords(_settings._hash_coordinate_key)
-        .swap_dims({_settings._set_coordinate_key: _settings._hash_coordinate_key}),
+        .set_coords(_settings._set_coordinate_key),
     ),
     "empty dataset, default template": (
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
-                    [2, 1], coords={_settings._set_coordinate_key: ["0", "1"]}
+                    [2, 1],
+                    coords={
+                        _settings._hash_coordinate_key: [
+                            "0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"
+                        ],
+                    },
                 ),
-                _settings._hash_coordinate_key: xarray.DataArray(
-                    [
-                        "0b588b6a82c1d3d3d19fda304f940342",
-                        "1661dcd0bf4761d25471c1cf5514ceae",
-                    ],
-                    coords={_settings._set_coordinate_key: ["0", "1"]},
+                _settings._set_coordinate_key: xarray.DataArray(
+                    numpy.array([numpy.nan, numpy.nan], dtype=object),
+                    coords={
+                        _settings._hash_coordinate_key: [
+                            "0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"
+                        ],
+                    },
                 ),
             }
         )
-        .set_coords(_settings._hash_coordinate_key)
-        .swap_dims({_settings._set_coordinate_key: _settings._hash_coordinate_key}),
+        .set_coords(_settings._set_coordinate_key),
         {},
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
-                    [2, 1], coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]}
+                    [2, 1],
+                    coords={
+                        _settings._hash_coordinate_key: [
+                            "0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"
+                        ],
+                    },
                 ),
-                _settings._hash_coordinate_key: xarray.DataArray(
-                    [
-                        "0b588b6a82c1d3d3d19fda304f940342",
-                        "1661dcd0bf4761d25471c1cf5514ceae",
-                    ],
-                    coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]},
+                _settings._set_coordinate_key: xarray.DataArray(
+                    ["parameter_set0", "parameter_set1"],
+                    coords={
+                        _settings._hash_coordinate_key: [
+                            "0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"
+                        ],
+                    },
                 ),
             }
         )
-        .set_coords(_settings._hash_coordinate_key)
-        .swap_dims({_settings._set_coordinate_key: _settings._hash_coordinate_key}),
+        .set_coords(_settings._set_coordinate_key),
     ),
     "empty dataset, non-default template": (
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
-                    [2, 1], coords={_settings._set_coordinate_key: ["0", "1"]}
+                    [2, 1],
+                    coords={
+                        _settings._hash_coordinate_key: [
+                            "0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"
+                        ],
+                    },
                 ),
-                _settings._hash_coordinate_key: xarray.DataArray(
-                    [
-                        "0b588b6a82c1d3d3d19fda304f940342",
-                        "1661dcd0bf4761d25471c1cf5514ceae",
-                    ],
-                    coords={_settings._set_coordinate_key: ["0", "1"]},
+                _settings._set_coordinate_key: xarray.DataArray(
+                    numpy.array([numpy.nan, numpy.nan], dtype=object),
+                    coords={
+                        _settings._hash_coordinate_key: [
+                            "0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"
+                        ],
+                    },
                 ),
             }
         )
-        .set_coords(_settings._hash_coordinate_key)
-        .swap_dims({_settings._set_coordinate_key: _settings._hash_coordinate_key}),
+        .set_coords(_settings._set_coordinate_key),
         {"template": _utilities._AtSignTemplate("out@{number}")},
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
-                    [2, 1], coords={_settings._set_coordinate_key: ["out0", "out1"]}
+                    [2, 1],
+                    coords={
+                        _settings._hash_coordinate_key: [
+                            "0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"
+                        ],
+                    },
                 ),
-                _settings._hash_coordinate_key: xarray.DataArray(
-                    [
-                        "0b588b6a82c1d3d3d19fda304f940342",
-                        "1661dcd0bf4761d25471c1cf5514ceae",
-                    ],
-                    coords={_settings._set_coordinate_key: ["out0", "out1"]},
+                _settings._set_coordinate_key: xarray.DataArray(
+                    ["out0", "out1"],
+                    coords={
+                        _settings._hash_coordinate_key: [
+                            "0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"
+                        ],
+                    },
                 ),
             }
         )
-        .set_coords(_settings._hash_coordinate_key)
-        .swap_dims({_settings._set_coordinate_key: _settings._hash_coordinate_key}),
+        .set_coords(_settings._set_coordinate_key),
     ),
     "custom set name template": (
         parameter_generators.CartesianProduct(
