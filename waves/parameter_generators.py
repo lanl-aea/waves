@@ -1584,6 +1584,9 @@ def _update_set_names(
         template using the ``@`` delimiter from the WAVES settings.
 
     :return: parameter study xarray Dataset
+
+    :raises RuntimeError: if the new set name assignment has a shape mismatch, e.g. when the set name template doesn't
+        match the existing set names in the parameter study.
     """
     parameter_study = parameter_study.sortby(_hash_coordinate_key)
     set_hashes = list(parameter_study.coords[_hash_coordinate_key].values)
@@ -1595,7 +1598,12 @@ def _update_set_names(
     ]
     null_set_names = parameter_study.coords[_set_coordinate_key].isnull()
     if any(null_set_names):
-        parameter_study.coords[_set_coordinate_key][null_set_names] = new_set_names
+        try:
+            parameter_study.coords[_set_coordinate_key][null_set_names] = new_set_names
+        except ValueError:
+            raise RuntimeError(
+                "Could not fill merged parameter set names. Does the parameter set naming convention match?"
+            )
 
     return parameter_study
 
