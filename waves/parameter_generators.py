@@ -1490,7 +1490,7 @@ def _coerce_values(values: typing.Iterable, name: typing.Optional[str] = None) -
 
 
 def _merge_parameter_studies(
-    studies: typing.List[xarray.Dataset], template: typing.Optional[_utilities._AtSignTemplate] = None
+    studies: typing.List[xarray.Dataset], template: typing.Optional[string.Template] = None
 ) -> xarray.Dataset:
     """Merge a list of parameter studies into one study.
 
@@ -1554,8 +1554,8 @@ def _create_set_names(set_hashes: typing.List[str], template: typing.Optional[st
     assigned to set hashes in hash ascending alphabetical order.
 
     :param set_hashes: parameter set content hashes identifying rows of parameter study
-    :param template: parameter set naming template utilizing the '@' sign to mark substitution. If none is provided,
-        fetch it from the WAVES settings.
+    :param template: parameter set naming :class:`string.Template`. If none is provided, fetch the default template
+        using the ``@`` delimiter from the WAVES settings.
 
     :return: Dictionary mapping parameter set hash to parameter set name
     """
