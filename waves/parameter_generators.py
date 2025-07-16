@@ -7,6 +7,7 @@ to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 from abc import ABC, abstractmethod
 import sys
 import copy
+import string
 import typing
 import hashlib
 import pathlib
@@ -1489,7 +1490,7 @@ def _coerce_values(values: typing.Iterable, name: typing.Optional[str] = None) -
 
 
 def _merge_parameter_studies(
-    studies: typing.List[xarray.Dataset], template: typing.Optional[_utilities._AtSignTemplate] = None
+    studies: typing.List[xarray.Dataset], template: typing.Optional[string.Template] = None
 ) -> xarray.Dataset:
     """Merge a list of parameter studies into one study.
 
@@ -1497,8 +1498,8 @@ def _merge_parameter_studies(
     names during merge.
 
     :param studies: list of parameter study xarray Datasets where the first study is considered the 'base' study
-    :param template: parameter set naming template utilizing the '@' sign to mark substitution. If none is provided upon
-        call, fetch it from the WAVES settings.
+    :param template: parameter set naming :class:`string.Template`. If none is provided, fetch the default template
+        using the ``@`` delimiter from the WAVES settings.
 
     :return: parameter study xarray Dataset
 
@@ -1548,15 +1549,13 @@ def _merge_parameter_studies(
     return study_combined
 
 
-def _create_set_names(
-    set_hashes: typing.List[str], template: typing.Optional[_utilities._AtSignTemplate] = None
-) -> dict:
+def _create_set_names(set_hashes: typing.List[str], template: typing.Optional[string.Template] = None) -> dict:
     """Construct parameter set names from the set name template and number of parameter set hashes. Set names are
     assigned to set hashes in hash ascending alphabetical order.
 
     :param set_hashes: parameter set content hashes identifying rows of parameter study
-    :param template: parameter set naming template utilizing the '@' sign to mark substitution. If none is provided upon
-        call, fetch it from the WAVES settings.
+    :param template: parameter set naming :class:`string.Template`. If none is provided, fetch the default template
+        using the ``@`` delimiter from the WAVES settings.
 
     :return: Dictionary mapping parameter set hash to parameter set name
     """
@@ -1572,17 +1571,20 @@ def _create_set_names(
 
 
 def _update_set_names(
-    parameter_study: xarray.Dataset, template: typing.Optional[_utilities._AtSignTemplate] = None
+    parameter_study: xarray.Dataset, template: typing.Optional[string.Template] = None
 ) -> xarray.Dataset:
     """Update the parameter set names after a parameter study dataset merge operation. Hashes that are missing set
     names are assigned a new set name in hash ascending alphabetical order.
 
     :param parameter_study: A :class:`ParameterGenerator` parameter study Xarray Dataset with swapped set hash and set
         name dimensions
-    :param template: parameter set naming template utilizing the '@' sign to mark substitution. If none is provided upon
-        call, fetch it from the WAVES settings.
+    :param template: parameter set naming :class:`string.Template`. If none is provided upon call, fetch the default
+        template using the ``@`` delimiter from the WAVES settings.
 
     :return: parameter study xarray Dataset
+
+    :raises RuntimeError: if the new set name assignment has a shape mismatch, e.g. when the set name template doesn't
+        match the existing set names in the parameter study.
     """
     parameter_study = parameter_study.sortby(_hash_coordinate_key)
     set_hashes = list(parameter_study.coords[_hash_coordinate_key].values)
@@ -1594,7 +1596,12 @@ def _update_set_names(
     ]
     null_set_names = parameter_study.coords[_set_coordinate_key].isnull()
     if any(null_set_names):
-        parameter_study.coords[_set_coordinate_key][null_set_names] = new_set_names
+        try:
+            parameter_study.coords[_set_coordinate_key][null_set_names] = new_set_names
+        except ValueError:
+            raise RuntimeError(
+                "Could not fill merged parameter set names. Does the parameter set naming convention match?"
+            )
 
     return parameter_study
 

@@ -8,6 +8,11 @@ Changelog
 0.13.12 (unreleased)
 ********************
 
+Internal Changes
+================
+- Improve test suite for set name handling during parameter study merge operations (:issue:`948`, :merge:`1229`). By
+  `Kyle Brindley`_.
+
 ********************
 0.13.11 (2025-07-15)
 ********************
