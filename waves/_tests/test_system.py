@@ -24,7 +24,7 @@ import pathlib
 import tempfile
 import importlib
 import subprocess
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 
 import pytest
 
@@ -825,21 +825,11 @@ def test_system(
     # TODO: Move to common test utility VVV
     # Naive move to waves/_tests/common.py resulted in every test failing with FileNotFoundError.
     # Probably tempfile is handling some scope existence that works when inside the function but not when it's outside.
-    kwargs = {}
-    temporary_directory_inspection = inspect.getfullargspec(tempfile.TemporaryDirectory)
-    temporary_directory_arguments = temporary_directory_inspection.args + temporary_directory_inspection.kwonlyargs
-    if "ignore_cleanup_errors" in temporary_directory_arguments and system_test_directory is not None:
-        kwargs.update({"ignore_cleanup_errors": True})
-    if keep_system_tests:
-        if "delete" in temporary_directory_arguments:
-            kwargs.update({"delete": False})
-        else:
-            print(
-                "``--keep-system-tests`` requested, but Python version does not support ``delete=False`` in"
-                " tempfile.TemporaryDirectory. System test directories will be deleted on cleanup.",
-                file=sys.stderr,
-            )
-    temp_directory = tempfile.TemporaryDirectory(dir=system_test_directory, prefix=test_prefix, **kwargs)
+    temp_directory = tempfile.TemporaryDirectory(
+        dir=system_test_directory,
+        prefix=test_prefix,
+        **return_temporary_directory_kwargs(system_test_directory, keep_system_tests),
+    )
     temp_path = pathlib.Path(temp_directory.name)
     temp_path.mkdir(parents=True, exist_ok=True)
     # Move to common test utility ^^^
@@ -867,3 +857,55 @@ def test_system(
     else:
         if not keep_system_tests:
             temp_directory.cleanup()
+
+
+def return_temporary_directory_kwargs(
+    system_test_directory: typing.Optional[pathlib.Path],
+    keep_system_tests: bool,
+) -> dict:
+    kwargs = {}
+    temporary_directory_inspection = inspect.getfullargspec(tempfile.TemporaryDirectory)
+    temporary_directory_arguments = temporary_directory_inspection.args + temporary_directory_inspection.kwonlyargs
+    if "ignore_cleanup_errors" in temporary_directory_arguments and system_test_directory is not None:
+        kwargs.update({"ignore_cleanup_errors": True})
+    if keep_system_tests and "delete" in temporary_directory_arguments:
+        kwargs.update({"delete": False})
+    return kwargs
+
+
+test_return_temporary_directory_kwargs_cases = {
+    "no arguments": (None, False, [], [], {}),
+    "directory": (pathlib.Path("dummy/path"), False, [], [], {}),
+    "directory and keep": (pathlib.Path("dummy/path"), True, [], [], {}),
+    "directory: matching directory kwarg": (
+        pathlib.Path("dummy/path"),
+        False,
+        ["ignore_cleanup_errors"],
+        [],
+        {"ignore_cleanup_errors": True},
+    ),
+    "directory and keep: matching keep kwarg": (pathlib.Path("dummy/path"), True, [], ["delete"], {"delete": False}),
+    "directory and keep: matching both kwargs": (
+        pathlib.Path("dummy/path"),
+        True,
+        ["ignore_cleanup_errors"],
+        ["delete"],
+        {"ignore_cleanup_errors": True, "delete": False},
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "system_test_directory, keep_system_tests, available_args, available_kwargs, expected",
+    test_return_temporary_directory_kwargs_cases.values(),
+    ids=test_return_temporary_directory_kwargs_cases.keys(),
+)
+def test_return_temporary_directory_kwargs(
+    system_test_directory, keep_system_tests, available_args, available_kwargs, expected
+) -> None:
+    mock_inspection = Mock()
+    mock_inspection.args = available_args
+    mock_inspection.kwonlyargs = available_kwargs
+    with patch("inspect.getfullargspec", return_value=mock_inspection):
+        kwargs = return_temporary_directory_kwargs(system_test_directory, keep_system_tests)
+        assert kwargs == expected
