@@ -124,7 +124,7 @@ system_test_environment = augment_system_test_environment(os.environ.copy(), ins
 waves_command = "waves" if installed else "python -m waves._main"
 odb_extract_command = "odb_extract" if installed else "python -m waves._abaqus.odb_extract"
 
-fetch_template = string.Template("${waves_command} fetch ${fetch_options} --destination ${temp_directory}")
+fetch_template = string.Template("${waves_command} fetch ${fetch_options} --destination ${temporary_directory}")
 system_tests = [
     # CLI sign-of-life and help/usage
     pytest.param([string.Template("${waves_command} --help")], None, marks=[pytest.mark.cli]),
@@ -790,7 +790,7 @@ def test_system(
     * ``waves_command``: module namespace variable selected to match installation status
     * ``odb_extract_command``: module namespace variable selected to match installation status
     * ``fetch_options``: test API variable
-    * ``temp_directory``: temporary directory created one per test with ``tempfile``
+    * ``temporary_directory``: temporary directory created one per test with ``tempfile``
     * ``unconditional_build``: pass through CLI argument string for the tutorial/system test SConstruct option of the
         same name
     * ``abaqus_command``: pass through CLI argument string for tutorial/system test SConstruct option of the same name
@@ -815,29 +815,25 @@ def test_system(
     :param commands: list of command strings for the system test
     :param fetch_options: the fetch arguments for replacement in string templates
     """
-    test_id = request.node.callspec.id
-    test_prefix = _utilities.create_valid_identifier(test_id)
-    test_prefix = f"{MODULE_NAME}.{test_prefix}."
-
     if system_test_directory is not None:
         system_test_directory.mkdir(parents=True, exist_ok=True)
 
     # TODO: Move to common test utility VVV
     # Naive move to waves/_tests/common.py resulted in every test failing with FileNotFoundError.
     # Probably tempfile is handling some scope existence that works when inside the function but not when it's outside.
-    temp_directory = tempfile.TemporaryDirectory(
+    temporary_directory = tempfile.TemporaryDirectory(
         dir=system_test_directory,
-        prefix=test_prefix,
+        prefix=create_test_prefix(request),
         **return_temporary_directory_kwargs(system_test_directory, keep_system_tests),
     )
-    temp_path = pathlib.Path(temp_directory.name)
-    temp_path.mkdir(parents=True, exist_ok=True)
+    temporary_path = pathlib.Path(temporary_directory.name)
+    temporary_path.mkdir(parents=True, exist_ok=True)
     # Move to common test utility ^^^
     template_substitution = {
         "waves_command": waves_command,
         "odb_extract_command": odb_extract_command,
         "fetch_options": fetch_options,
-        "temp_directory": temp_path,
+        "temporary_directory": temporary_path,
         "unconditional_build": "--unconditional-build" if unconditional_build else "",
         "abaqus_command": f"--abaqus-command={abaqus_command}" if abaqus_command is not None else "",
         "cubit_command": f"--cubit-command={cubit_command}" if cubit_command is not None else "",
@@ -851,12 +847,35 @@ def test_system(
                 command_list = shlex.split(command, posix=True)
             else:
                 command_list = shlex.split(command, posix=not testing_windows)
-            subprocess.check_output(command_list, env=system_test_environment, cwd=temp_path, text=True)
+            subprocess.check_output(command_list, env=system_test_environment, cwd=temporary_path, text=True)
     except Exception as err:
         raise err
     else:
         if not keep_system_tests:
-            temp_directory.cleanup()
+            temporary_directory.cleanup()
+
+
+def create_test_prefix(request: pytest.FixtureRequest, module_name: str = MODULE_NAME) -> str:
+    test_id = request.node.callspec.id
+    test_identifier = _utilities.create_valid_identifier(test_id)
+    return f"{module_name}.{test_identifier}."
+
+
+test_create_test_prefix_cases = {
+    "test_identifier": ({}, "test_system.test_identifier."),
+    "test identifier": ({}, "test_system.test_identifier."),
+    "another_test_identifier": ({}, "test_system.another_test_identifier."),
+    "override_module_name": ({"module_name": "another_module_name"}, "another_module_name.override_module_name."),
+}
+
+
+@pytest.mark.parametrize(
+    "kwargs, expected",
+    test_create_test_prefix_cases.values(),
+    ids=test_create_test_prefix_cases.keys(),
+)
+def test_create_test_prefix(kwargs, expected, request: pytest.FixtureRequest) -> None:
+    assert create_test_prefix(request, **kwargs) == expected
 
 
 def return_temporary_directory_kwargs(
