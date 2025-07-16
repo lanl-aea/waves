@@ -1252,8 +1252,8 @@ def test_update_set_names(parameter_study, kwargs, expected, outcome):
     """Check the generated and updated parameter set names against template arguments
 
     :param parameter_study: parameter study Xarray dataset
-    :param template: ``_AtSignTemplate`` typed string with substitution character
-    :param expected_names: list of expected parameter name strings
+    :param kwargs: optional keyword arguments dictionary to pass through to the function under test
+    :param expected: expected output parameter study Xarray dataset
     """
     with outcome:
         try:
