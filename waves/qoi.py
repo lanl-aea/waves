@@ -731,9 +731,9 @@ def _plot_scalar_qoi_history(
     :param date_max: maximum date to include on the x-axes
     """
     name = _get_plotting_name(qoi)
-    axes.scatter(pandas.to_datetime(qoi.date), qoi.sel(value_type="calculated"))
-    axes.plot(pandas.to_datetime(qoi.date), qoi.sel(value_type="lower_limit"), "--")
-    axes.plot(pandas.to_datetime(qoi.date), qoi.sel(value_type="upper_limit"), "--")
+    axes.scatter(qoi.date, qoi.sel(value_type="calculated"))
+    axes.plot(qoi.date, qoi.sel(value_type="lower_limit"), "--")
+    axes.plot(qoi.date, qoi.sel(value_type="upper_limit"), "--")
     axes.set_xlim((date_min, date_max))
     axes.set_title(name)
 
@@ -755,10 +755,7 @@ def _qoi_history_report(
         for qoi in leaf.ds.data_vars.values()
         if _can_plot_scalar_qoi_history(qoi)
     ]
-    plotting_kwargs = dict(
-        date_min=pandas.to_datetime(min(qoi.date.min().item() for qoi in qois)),
-        date_max=pandas.to_datetime(max(qoi.date.max().item() for qoi in qois)),
-    )
+    plotting_kwargs = dict(date_min=min(qoi.date.min() for qoi in qois), date_max=max(qoi.date.max() for qoi in qois))
     page_margins = dict(
         left=0.1,  # leave margin on left edge
         right=0.9,  # leave margin on right edge
@@ -925,7 +922,7 @@ def _archive(output: pathlib.Path, version: str, date: str, qoi_set_files: typin
     if version:
         qois = (qoi.assign_attrs(version=version) for qoi in qois)
     if date:
-        qois = (qoi.assign_attrs(date=date) for qoi in qois)
+        qois = (qoi.assign_attrs(date=numpy.datetime(date)) for qoi in qois)
     _create_qoi_archive(qois).to_netcdf(output, engine="h5netcdf")
 
 
