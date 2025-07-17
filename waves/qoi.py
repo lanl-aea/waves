@@ -401,7 +401,7 @@ def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataT
         │       Coordinates:
         │         * version     (version) object 8B 'ghijkl'
         │         * value_type  (value_type) <U11 176B 'calculated' 'expected' ... 'upper_limit'
-        │           date        (version) <U10 40B '2025-02-01'
+        │           date        (version) datetime64[s] 8B 2025-02-01
         │       Data variables:
         │           load        (version, value_type) float64 32B 5.3 4.5 3.5 5.5
         │           gap         (version, value_type) float64 32B 1.0 0.95 0.85 1.05
@@ -410,7 +410,7 @@ def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataT
                 Coordinates:
                   * version     (version) object 8B 'ghijkl'
                   * value_type  (value_type) <U11 176B 'calculated' 'expected' ... 'upper_limit'
-                    date        (version) <U10 40B '2025-02-01'
+                    date        (version) datetime64[s] 8B 2025-02-01
                 Data variables:
                     load        (version, value_type) float64 32B 35.0 nan nan nan
                     stress      (version, value_type) float64 32B 110.0 nan nan nan
@@ -422,7 +422,7 @@ def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataT
         qois = [qoi.expand_dims(version=[qoi.attrs[_version_key]]) for qoi in qois]
         # Try to add date as a coordinate if available
         try:
-            qois = [qoi.assign_coords(date=(_version_key, [qoi.attrs["date"]])) for qoi in qois]
+            qois = [qoi.assign_coords(date=(_version_key, [numpy.datetime64(qoi.attrs["date"])])) for qoi in qois]
         except KeyError:
             pass  # date coordinate is not needed
         qoi_set = create_qoi_set(qois)
@@ -922,7 +922,7 @@ def _archive(output: pathlib.Path, version: str, date: str, qoi_set_files: typin
     if version:
         qois = (qoi.assign_attrs(version=version) for qoi in qois)
     if date:
-        qois = (qoi.assign_attrs(date=numpy.datetime(date)) for qoi in qois)
+        qois = (qoi.assign_attrs(date=date) for qoi in qois)
     _create_qoi_archive(qois).to_netcdf(output, engine="h5netcdf")
 
 
