@@ -17,7 +17,6 @@ import numpy
 import xarray
 import pandas
 import matplotlib.pyplot
-from matplotlib.dates import datestr2num
 from matplotlib.backends.backend_pdf import PdfPages
 
 from waves import _settings
