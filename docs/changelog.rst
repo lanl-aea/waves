@@ -12,6 +12,7 @@ Internal Changes
 ================
 - Improve test suite for set name handling during parameter study merge operations (:issue:`948`, :merge:`1229`). By
   `Kyle Brindley`_.
+- Store QOI "date" coordinate as datetime64 object (:issue:`950`, :merge:`1230`). By `Matthew Fister`_.
 
 ********************
 0.13.11 (2025-07-15)
