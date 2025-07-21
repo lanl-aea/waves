@@ -98,9 +98,7 @@ def augment_system_test_environment(
 test_augment_system_test_environment_cases = {
     "empty, installed": (({}, True), {}),
     "empty, not installed": (({}, False), {"PYTHONPATH": str(PACKAGE_PARENT_PATH)}),
-    "existing PYTHONPATH, installed": (
-        ({"PYTHONPATH": "olditem"}, True), {"PYTHONPATH": "olditem"}
-    ),
+    "existing PYTHONPATH, installed": (({"PYTHONPATH": "olditem"}, True), {"PYTHONPATH": "olditem"}),
     "existing PYTHONPATH, not installed": (
         ({"PYTHONPATH": "olditem"}, False),
         {"PYTHONPATH": str(PACKAGE_PARENT_PATH) + f"{os.pathsep}olditem"},
