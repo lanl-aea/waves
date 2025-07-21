@@ -739,6 +739,7 @@ def test__create_qoi_archive():
                 upper_limit=5.5,
                 group="Assembly ABC Preload",
                 version="ghijkl",
+                date="2025-07-21T14:44:47+0000",
             ),
             qoi.create_qoi(
                 name="gap",
@@ -748,71 +749,67 @@ def test__create_qoi_archive():
                 upper_limit=1.05,
                 group="Assembly ABC Preload",
                 version="ghijkl",
+                date="2025-07-21T14:44:47+0000",
             ),
             qoi.create_qoi(
                 name="load",
                 calculated=35.0,
                 group="Assembly DEF Preload",
                 version="ghijkl",
+                date="2025-07-21T14:44:47+0000",
             ),
             qoi.create_qoi(
                 name="stress",
                 calculated=110.0,
                 group="Assembly DEF Preload",
                 version="ghijkl",
+                date="2025-07-21T14:44:47+0000",
             ),
         )
     )
     expected = xarray.DataTree()
+    common_coords = xarray.Coordinates(
+        coords={
+            "version": ("version", numpy.array(["ghijkl"], dtype=object)),
+            "value_type": ("value_type", ["calculated", "expected", "lower_limit", "upper_limit"]),
+            "date": ("version", [numpy.datetime64("2025-07-21T14:44:47")]),
+        }
+    )
     expected["Assembly ABC Preload"] = xarray.Dataset(
         {
             "load": xarray.DataArray(
                 [[5.3, 4.5, 3.5, 5.5]],
-                coords={
-                    "version": ["ghijkl"],
-                    "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
-                },
-                attrs={"group": "Assembly ABC Preload", "version": "ghijkl"},
+                coords=common_coords,
+                dims=["version", "value_type"],
+                attrs={"group": "Assembly ABC Preload", "version": "ghijkl", "date": "2025-07-21T14:44:47+0000"},
             ),
             "gap": xarray.DataArray(
                 [[1.0, 0.95, 0.85, 1.05]],
-                coords={
-                    "version": ["ghijkl"],
-                    "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
-                },
-                attrs={"group": "Assembly ABC Preload", "version": "ghijkl"},
+                coords=common_coords,
+                dims=["version", "value_type"],
+                attrs={"group": "Assembly ABC Preload", "version": "ghijkl", "date": "2025-07-21T14:44:47+0000"},
             ),
         },
-        coords={
-            "version": ["ghijkl"],
-            "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
-        },
+        coords=common_coords,
     )
     expected["Assembly DEF Preload"] = xarray.Dataset(
         {
             "load": xarray.DataArray(
                 [[35.0, numpy.nan, numpy.nan, numpy.nan]],
-                coords={
-                    "version": ["ghijkl"],
-                    "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
-                },
-                attrs={"group": "Assembly DEF Preload", "version": "ghijkl"},
+                coords=common_coords,
+                dims=["version", "value_type"],
+                attrs={"group": "Assembly DEF Preload", "version": "ghijkl", "date": "2025-07-21T14:44:47+0000"},
             ),
             "stress": xarray.DataArray(
                 [[110.0, numpy.nan, numpy.nan, numpy.nan]],
-                coords={
-                    "version": ["ghijkl"],
-                    "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
-                },
-                attrs={"group": "Assembly DEF Preload", "version": "ghijkl"},
+                coords=common_coords,
+                dims=["version", "value_type"],
+                attrs={"group": "Assembly DEF Preload", "version": "ghijkl", "date": "2025-07-21T14:44:47+0000"},
             ),
         },
-        coords={
-            "version": ["ghijkl"],
-            "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
-        },
+        coords=common_coords,
     )
-    assert expected.identical(archive)
+    xarray.testing.assert_identical(archive, expected)
 
 
 def test__merge_qoi_archives():
