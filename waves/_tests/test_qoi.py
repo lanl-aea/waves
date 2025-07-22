@@ -1535,6 +1535,15 @@ test__can_plot_qoi_tolerance_check_cases = {
         ),
         False,
     ),
+    "no_value_type_dimension": (
+        xarray.DataArray(
+            [1.0],
+            coords={"count": [1]},
+            name="qoi1",
+            attrs={},
+        ),
+        False,
+    ),
     "some_nan": (
         xarray.DataArray(
             [1.0, numpy.nan, numpy.nan, numpy.nan],
