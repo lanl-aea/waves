@@ -1568,8 +1568,8 @@ def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.D
     active dimension.
 
      :param study_base: A :class:`ParameterGenerator` parameter study Xarray Dataset
-     :param study_other: A :class:`ParameterGenerator` parameter study Xarray Dataset with unique parameters from
-        `study_base`
+     :param study_other: A :class:`ParameterGenerator` parameter study Xarray Dataset with unique parameters compared
+        to `study_base`
 
      :return: parameter study xarray Dataset
     """
