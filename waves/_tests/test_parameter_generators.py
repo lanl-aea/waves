@@ -647,6 +647,87 @@ def test_merge_parameter_studies(studies, expected_samples, expected_types, expe
             pass
 
 
+propagate_parameter_space_cases = {
+    "propagate one parameter: int": (
+        parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
+        parameter_generators.OneAtATime({"parameter_2": [2]}).parameter_study,
+        parameter_generators.OneAtATime({"parameter_1": [1], "parameter_2": [2]}).parameter_study,
+        does_not_raise,
+    ),
+    "propagate one parameter: bool": (
+        parameter_generators.CartesianProduct({"parameter_1": [True]}).parameter_study,
+        parameter_generators.CartesianProduct({"parameter_2": [False]}).parameter_study,
+        parameter_generators.CartesianProduct({"parameter_1": [True], "parameter_2": [False]}).parameter_study,
+        does_not_raise,
+    ),
+    "propagate one parameter: string": (
+        parameter_generators.OneAtATime({"parameter_1": ["a"]}).parameter_study,
+        parameter_generators.OneAtATime({"parameter_2": ["a"]}).parameter_study,
+        parameter_generators.OneAtATime({"parameter_1": ["a"], "parameter_2": ["a"]}).parameter_study,
+        does_not_raise,
+    ),
+    "propagate one parameter: float": (
+        parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0]}).parameter_study,
+        parameter_generators.CartesianProduct({"parameter_2": [2.0, 3.0]}).parameter_study,
+        parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0], "parameter_2": [2.0, 3.0]}).parameter_study,
+        does_not_raise,
+    ),
+    "propagate one parameter of mixed typing: int and bool": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
+        parameter_generators.CartesianProduct({"parameter_2": [False]}).parameter_study,
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2], "parameter_2": [False]}).parameter_study,
+        does_not_raise,
+    ),
+    "propagate one parameter of mixed typing: float and str": (
+        parameter_generators.CartesianProduct({"parameter_1": [1.0]}).parameter_study,
+        parameter_generators.CartesianProduct({"parameter_2": ["a", "b"]}).parameter_study,
+        parameter_generators.CartesianProduct({"parameter_1": [1.0], "parameter_2": ["a", "b"]}).parameter_study,
+        does_not_raise,
+    ),
+    "propagate one parameter with many values": (
+        parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0, 3.0]}).parameter_study,
+        parameter_generators.CartesianProduct({"parameter_2": ["a", "b", "c"]}).parameter_study,
+        parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0, 3.0], "parameter_2": ["a", "b", "c"]}).parameter_study,
+        does_not_raise,
+    ),
+    "propagate one parameter with many values: reversed": (
+        parameter_generators.CartesianProduct({"parameter_1": [3.0, 2.0, 1.0]}).parameter_study,
+        parameter_generators.CartesianProduct({"parameter_2": ["c", "b", "a"]}).parameter_study,
+        parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0, 3.0], "parameter_2": ["a", "b", "c"]}).parameter_study,
+        does_not_raise,
+    ),
+    "propagate two parameters: cartesian product": (
+        parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0]}).parameter_study,
+        parameter_generators.CartesianProduct({"parameter_2": ["a", "b"], "parameter_3": [5, 10]}).parameter_study,
+        parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0], "parameter_2": ["a", "b"], "parameter_3": [5, 10]}).parameter_study,
+        does_not_raise,
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "study_base, study_other, expected_study, outcome",
+    propagate_parameter_space_cases.values(),
+    ids=propagate_parameter_space_cases.keys(),
+)
+def test_propagate_parameter_space(study_base, study_other, expected_study, outcome):
+    """Check the propagation of parameter space between two studies.
+
+    :param study_base: A :class:`ParameterGenerator` parameter study Xarray Dataset
+    :param study_other: A :class:`ParameterGenerator` parameter study Xarray Dataset with unique parameters compared
+        to `study_base`
+    :param expected_study: parameter study Xarray Dataset
+    :param outcome: pytest expected error for the test case
+    """
+    with outcome:
+        try:
+            propagated_study = parameter_generators._propagate_parameter_space(study_base, study_other)
+            xarray.testing.assert_identical(propagated_study, expected_study)
+            parameter_generators._verify_parameter_study(propagated_study)
+        finally:
+            pass
+
+
 test_create_set_names_cases = {
     "custom template": (
         ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
