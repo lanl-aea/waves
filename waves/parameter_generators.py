@@ -1534,7 +1534,7 @@ def _merge_parameter_studies(
                 f"Shared parameters :'{shared_parameters}'"
             )
         if any(extra_parameters):
-            # Parameter space propagation will fail if the spaces are not entirely unique between all studies
+            # Parameter space propagation will fail if the individual spaces are not unique across all studies
             # TODO: Sort the parameter space prior to merge/propagate operations
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/952
             study_base = _propagate_parameter_space(
@@ -1561,8 +1561,9 @@ def _merge_parameter_studies(
 
 
 def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.Dataset) -> xarray.Dataset:
-    """Propagate unique parameters from a new study into the base study. Assumes that the parameter studies do not
-    share any parameters. The incoming studies should have set name as the active dimension.
+    """Propagate unique parameters from a new study into the base study, creating a new study using CustomStudy.
+    Assumes that the parameter studies do not share any parameters. The incoming studies should have set name as the
+    active dimension.
 
      :param study_base: A :class:`ParameterGenerator` parameter study Xarray Dataset
      :param study_other: A :class:`ParameterGenerator` parameter study Xarray Dataset with unique parameters from
