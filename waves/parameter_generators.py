@@ -1510,6 +1510,7 @@ def _merge_parameter_studies(
 
     # Swap dimensions from the set name to the set hash to merge identical sets
     swap_to_hash_index = {_set_coordinate_key: _hash_coordinate_key}
+    swap_to_set_index = {_hash_coordinate_key: _set_coordinate_key}
     studies = [study.swap_dims(swap_to_hash_index) for study in studies]
 
     # Split the list of studies into one 'base' study and the remainder
@@ -1534,7 +1535,9 @@ def _merge_parameter_studies(
             )
         if any(extra_parameters):
             # The base study may change as the loop progresses, to accommodate expansions to the parameter space
-            study_base = _propagate_parameter_space(study_base, study_other)
+            study_base = _propagate_parameter_space(
+                study_base.swap_dims(swap_to_set_index), study_other.swap_dims(swap_to_set_index)
+            )
 
     # Combine all studies after dropping set names from all but `study_base`
     studies = [study_base] + [study.drop_vars(_set_coordinate_key) for study in studies]
@@ -1550,14 +1553,13 @@ def _merge_parameter_studies(
 
     # Recalculate attributes with lengths matching the number of parameter sets
     study_combined = _update_set_names(study_combined, template)
-    study_combined = study_combined.swap_dims({_hash_coordinate_key: _set_coordinate_key})
+    study_combined = study_combined.swap_dims(swap_to_set_index)
 
     return study_combined
 
 
 def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.Dataset) -> xarray.Dataset:
-    """Propagate unique parameters from a new study into the base study
-    """
+    """Propagate unique parameters from a new study into the base study"""
 
 
 def _create_set_names(set_hashes: typing.List[str], template: typing.Optional[string.Template] = None) -> dict:
