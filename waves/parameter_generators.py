@@ -1599,29 +1599,20 @@ def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.D
     for set_index in range(num_parameter_sets_base):
         for repeat_index in range(repeats_base):
             row = set_index * repeats_base + repeat_index
-            propagated_study_samples[row, 0:num_parameters_base] = list(
-                study_base.isel(set_name=set_index).to_array().to_series().to_dict().values()
-            )  # Populate each line of the samples matrix one-by-one using the values of each parameter set
+            for column, parameter in enumerate(study_base.data_vars):
+                # Populate each entry of the samples matrix using the values of each parameter set at each parameter
+                propagated_study_samples[row, column] = study_base.isel(set_name=set_index)[parameter].to_numpy().item()
     for repeat_index in range(repeats_other):
         for set_index in range(num_parameter_sets_other):
             row = repeat_index * num_parameter_sets_other + set_index
-            propagated_study_samples[row, num_parameters_base:] = list(
-                study_other.isel(set_name=set_index).to_array().to_series().to_dict().values()
-            )
+            for column_index, parameter in enumerate(study_other.data_vars):
+                column = column_index + num_parameters_base
+                propagated_study_samples[row, column] = study_other.isel(set_name=set_index)[parameter].to_numpy().item()
 
     parameter_schema = dict(
         parameter_samples=propagated_study_samples, parameter_names=propagated_study_parameters.flatten()
     )
     propagated_study = CustomStudy(parameter_schema).parameter_study
-
-    # Coerce types back to their original type.
-    # Necessary for booleans, which can be coerced to ints in the process
-    coerce_types = _return_dataset_types(study_base, study_other)
-    for key, old_dtype in coerce_types.items():
-        new_dtype = propagated_study[key].dtype
-        if new_dtype != old_dtype:
-            propagated_study[key] = propagated_study[key].astype(old_dtype)
-
     return propagated_study
 
 
