@@ -590,10 +590,15 @@ merge_parameter_studies_cases = {
             parameter_generators.OneAtATime({"parameter_1": [1.0]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_2": [2.0]}).parameter_study,
         ],
-        None,
-        None,
-        None,
-        pytest.raises(RuntimeError),
+        numpy.array(
+            [
+                [1.0, 2.0],
+            ],
+            dtype=object,
+        ),
+        {"parameter_1": numpy.float64, "parameter_2": numpy.float64},
+        parameter_generators.OneAtATime({"parameter_1": [1.0], "parameter_2": [2.0]}).parameter_study,
+        does_not_raise,
     ),
     "concatenate with different numbers of parameters": (
         [

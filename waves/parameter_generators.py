@@ -1516,13 +1516,14 @@ def _merge_parameter_studies(
     # Split the list of studies into one 'base' study and the remainder
     study_base = studies.pop(0)
 
-    # Verify type equality and record types prior to merge. Also handle any nonuniform parameter spaces
     types_dictionary = {}
-    for study_other in studies:
+    studies_iterator = studies  # Copy list to avoid index shifting from item removal
+    for study_other in studies_iterator:
+        # Verify type equality and record types prior to merge
         coerce_types = _return_dataset_types(study_base, study_other)
         types_dictionary.update(coerce_types)
 
-        # Find nonuniform parameter spaces
+        # Find and propagate any nonuniform parameter spaces
         study_base_parameters = [parameter for parameter in study_base.data_vars]
         study_other_parameters = [parameter for parameter in study_other.data_vars]
         extra_parameters = set(study_base_parameters) ^ set(study_other_parameters)
@@ -1540,6 +1541,7 @@ def _merge_parameter_studies(
             study_base = _propagate_parameter_space(
                 study_base.swap_dims(swap_to_set_index), study_other.swap_dims(swap_to_set_index)
             ).swap_dims(swap_to_hash_index)
+            studies.remove(study_other)
 
     # Combine all studies after dropping set names from all but `study_base`
     studies = [study_base] + [study.drop_vars(_set_coordinate_key) for study in studies]
