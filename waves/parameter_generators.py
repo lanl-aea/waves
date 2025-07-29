@@ -1612,7 +1612,17 @@ def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.D
     parameter_schema = dict(
         parameter_samples=propagated_study_samples, parameter_names=propagated_study_parameters.flatten()
     )
-    return CustomStudy(parameter_schema).parameter_study
+    propagated_study = CustomStudy(parameter_schema).parameter_study
+
+    # Coerce types back to their original type.
+    # Necessary for booleans, which can be coerced to ints in the process
+    coerce_types = _return_dataset_types(study_base, study_other)
+    for key, old_dtype in coerce_types.items():
+        new_dtype = propagated_study[key].dtype
+        if new_dtype != old_dtype:
+            propagated_study[key] = propagated_study[key].astype(old_dtype)
+
+    return propagated_study
 
 
 def _create_set_names(set_hashes: typing.List[str], template: typing.Optional[string.Template] = None) -> dict:
