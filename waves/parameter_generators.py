@@ -1534,10 +1534,12 @@ def _merge_parameter_studies(
                 f"Shared parameters :'{shared_parameters}'"
             )
         if any(extra_parameters):
-            # The base study may change as the loop progresses, to accommodate expansions to the parameter space
+            # Parameter space propagation will fail if the spaces are not entirely unique between all studies
+            # TODO: Sort the parameter space prior to merge/propagate operations
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/952
             study_base = _propagate_parameter_space(
                 study_base.swap_dims(swap_to_set_index), study_other.swap_dims(swap_to_set_index)
-            )
+            ).swap_dims(swap_to_hash_index)
 
     # Combine all studies after dropping set names from all but `study_base`
     studies = [study_base] + [study.drop_vars(_set_coordinate_key) for study in studies]
@@ -1559,7 +1561,55 @@ def _merge_parameter_studies(
 
 
 def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.Dataset) -> xarray.Dataset:
-    """Propagate unique parameters from a new study into the base study"""
+    """Propagate unique parameters from a new study into the base study. Assumes that the parameter studies do not
+    share any parameters. The incoming studies should have set name as the active dimension.
+
+     :param study_base: A :class:`ParameterGenerator` parameter study Xarray Dataset
+     :param study_other: A :class:`ParameterGenerator` parameter study Xarray Dataset with unique parameters from
+        `study_base`
+
+     :return: parameter study xarray Dataset
+    """
+    # Calculate parameter sets (ROWS) in the samples matrix
+    num_parameter_sets_base = len(study_base[_set_coordinate_key])
+    num_parameter_sets_other = len(study_other[_set_coordinate_key])
+    total_parameter_sets = num_parameter_sets_base * num_parameter_sets_other
+
+    # Calculate parameters (COLUMNS) in the samples/parameters matrix
+    num_parameters_base = len(study_base.data_vars)
+    num_parameters_other = len(study_other.data_vars)
+    total_parameters = num_parameters_base + num_parameters_other
+
+    # Populate matrices for the propagated CustomStudy
+    propagated_study_samples = numpy.full((total_parameter_sets, total_parameters), numpy.nan, dtype=object)
+    propagated_study_parameters = numpy.full((1, total_parameters), numpy.nan, dtype=object)
+
+    # Parameter values will need to be repeated by some factor to fill out the sample space
+    repeats_base = int(numpy.ceil(total_parameter_sets / num_parameter_sets_base))
+    repeats_other = int(numpy.ceil(total_parameter_sets / num_parameter_sets_other))
+
+    # Construct the parameter names vector
+    propagated_study_parameters[0, 0:num_parameters_base] = study_base.data_vars
+    propagated_study_parameters[0, num_parameters_base:] = numpy.array(study_other.data_vars).flatten()
+
+    # Construct the samples matrix
+    for set_index in range(num_parameter_sets_base):
+        for repeat_index in range(repeats_base):
+            row = set_index * repeats_base + repeat_index
+            propagated_study_samples[row, 0:num_parameters_base] = list(
+                study_base.isel(set_name=set_index).to_array().to_series().to_dict().values()
+            )  # Populate each line of the samples matrix one-by-one using the values of each parameter set
+    for repeat_index in range(repeats_other):
+        for set_index in range(num_parameter_sets_other):
+            row = repeat_index * num_parameter_sets_other + set_index
+            propagated_study_samples[row, num_parameters_base:] = list(
+                study_other.isel(set_name=set_index).to_array().to_series().to_dict().values()
+            )
+
+    parameter_schema = dict(
+        parameter_samples=propagated_study_samples, parameter_names=propagated_study_parameters.flatten()
+    )
+    return CustomStudy(parameter_schema).parameter_study
 
 
 def _create_set_names(set_hashes: typing.List[str], template: typing.Optional[string.Template] = None) -> dict:
