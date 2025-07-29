@@ -1517,15 +1517,15 @@ def _merge_parameter_studies(
 
     # Verify type equality and record types prior to merge. Also handle any nonuniform parameter spaces
     types_dictionary = {}
-    for study in studies:
+    for study_other in studies:
         coerce_types = _return_dataset_types(study_base, study)
         types_dictionary.update(coerce_types)
 
         # Find nonuniform parameter spaces
         study_base_parameters = [parameter for parameter in study_base.data_vars]
-        study_parameters = [parameter for parameter in study.data_vars]
-        extra_parameters = set(study_base_parameters) ^ set(study_parameters)
-        shared_parameters = set(study_base_parameters) & set(study_parameters)
+        study_other_parameters = [parameter for parameter in study_other.data_vars]
+        extra_parameters = set(study_base_parameters) ^ set(study_other_parameters)
+        shared_parameters = set(study_base_parameters) & set(study_other_parameters)
         if any(shared_parameters) and any(extra_parameters):
             raise RuntimeError(
                 f"Found study containing partially overlapping parameter space during attempted merge operation.\n"
@@ -1534,7 +1534,7 @@ def _merge_parameter_studies(
             )
         if any(extra_parameters):
             # The base study may change as the loop progresses, to accommodate expansions to the parameter space
-            study_base = _propagate_parameter_space(study_base, study)
+            study_base = _propagate_parameter_space(study_base, study_other)
 
     # Combine all studies after dropping set names from all but `study_base`
     studies = [study_base] + [study.drop_vars(_set_coordinate_key) for study in studies]
@@ -1555,8 +1555,9 @@ def _merge_parameter_studies(
     return study_combined
 
 
-def _propagate_parameter_space(study_base: xarray.Dataset, study_new: xarray.Dataset) -> xarray.Dataset:
-    """Propagate unique parameters from a new study into the base study"""
+def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.Dataset) -> xarray.Dataset:
+    """Propagate unique parameters from a new study into the base study
+    """
 
 
 def _create_set_names(set_hashes: typing.List[str], template: typing.Optional[string.Template] = None) -> dict:
