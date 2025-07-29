@@ -1518,7 +1518,7 @@ def _merge_parameter_studies(
     # Verify type equality and record types prior to merge. Also handle any nonuniform parameter spaces
     types_dictionary = {}
     for study_other in studies:
-        coerce_types = _return_dataset_types(study_base, study)
+        coerce_types = _return_dataset_types(study_base, study_other)
         types_dictionary.update(coerce_types)
 
         # Find nonuniform parameter spaces
