@@ -1489,6 +1489,62 @@ def _coerce_values(values: typing.Iterable, name: typing.Optional[str] = None) -
     return values_coerced
 
 
+def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.Dataset) -> xarray.Dataset:
+    """Propagate unique parameters from a new study into the base study, creating a new study using CustomStudy.
+    Assumes that the parameter studies do not share any parameters. The incoming studies should have set name as the
+    active dimension.
+
+     :param study_base: A :class:`ParameterGenerator` parameter study Xarray Dataset
+     :param study_other: A :class:`ParameterGenerator` parameter study Xarray Dataset with unique parameters compared
+        to `study_base`
+
+     :return: parameter study xarray Dataset
+    """
+    # Calculate parameter sets (ROWS) in the samples matrix
+    num_parameter_sets_base = len(study_base[_set_coordinate_key])
+    num_parameter_sets_other = len(study_other[_set_coordinate_key])
+    total_parameter_sets = num_parameter_sets_base * num_parameter_sets_other
+
+    # Calculate parameters (COLUMNS) in the samples/parameters matrix
+    num_parameters_base = len(study_base.data_vars)
+    num_parameters_other = len(study_other.data_vars)
+    total_parameters = num_parameters_base + num_parameters_other
+
+    # Populate matrices for the propagated CustomStudy
+    propagated_study_samples = numpy.full((total_parameter_sets, total_parameters), numpy.nan, dtype=object)
+    propagated_study_parameters = numpy.full((1, total_parameters), numpy.nan, dtype=object)
+
+    # Parameter values will need to be repeated by some factor to fill out the sample space
+    repeats_base = int(numpy.ceil(total_parameter_sets / num_parameter_sets_base))
+    repeats_other = int(numpy.ceil(total_parameter_sets / num_parameter_sets_other))
+
+    # Construct the parameter names vector
+    propagated_study_parameters[0, 0:num_parameters_base] = study_base.data_vars
+    propagated_study_parameters[0, num_parameters_base:] = numpy.array(study_other.data_vars).flatten()
+
+    # Construct the samples matrix
+    for set_index in range(num_parameter_sets_base):
+        for repeat_index in range(repeats_base):
+            row = set_index * repeats_base + repeat_index
+            for column, parameter in enumerate(study_base.data_vars):
+                # Populate each entry of the samples matrix using the values of each parameter set at each parameter
+                propagated_study_samples[row, column] = study_base.isel(set_name=set_index)[parameter].to_numpy().item()
+    for repeat_index in range(repeats_other):
+        for set_index in range(num_parameter_sets_other):
+            row = repeat_index * num_parameter_sets_other + set_index
+            for column_index, parameter in enumerate(study_other.data_vars):
+                column = column_index + num_parameters_base
+                propagated_study_samples[row, column] = (
+                    study_other.isel(set_name=set_index)[parameter].to_numpy().item()
+                )
+
+    parameter_schema = dict(
+        parameter_samples=propagated_study_samples, parameter_names=propagated_study_parameters.flatten()
+    )
+    propagated_study = CustomStudy(parameter_schema).parameter_study
+    return propagated_study
+
+
 def _merge_parameter_studies(
     studies: typing.List[xarray.Dataset], template: typing.Optional[string.Template] = None
 ) -> xarray.Dataset:
@@ -1560,60 +1616,6 @@ def _merge_parameter_studies(
     study_combined = study_combined.swap_dims(swap_to_set_index)
 
     return study_combined
-
-
-def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.Dataset) -> xarray.Dataset:
-    """Propagate unique parameters from a new study into the base study, creating a new study using CustomStudy.
-    Assumes that the parameter studies do not share any parameters. The incoming studies should have set name as the
-    active dimension.
-
-     :param study_base: A :class:`ParameterGenerator` parameter study Xarray Dataset
-     :param study_other: A :class:`ParameterGenerator` parameter study Xarray Dataset with unique parameters compared
-        to `study_base`
-
-     :return: parameter study xarray Dataset
-    """
-    # Calculate parameter sets (ROWS) in the samples matrix
-    num_parameter_sets_base = len(study_base[_set_coordinate_key])
-    num_parameter_sets_other = len(study_other[_set_coordinate_key])
-    total_parameter_sets = num_parameter_sets_base * num_parameter_sets_other
-
-    # Calculate parameters (COLUMNS) in the samples/parameters matrix
-    num_parameters_base = len(study_base.data_vars)
-    num_parameters_other = len(study_other.data_vars)
-    total_parameters = num_parameters_base + num_parameters_other
-
-    # Populate matrices for the propagated CustomStudy
-    propagated_study_samples = numpy.full((total_parameter_sets, total_parameters), numpy.nan, dtype=object)
-    propagated_study_parameters = numpy.full((1, total_parameters), numpy.nan, dtype=object)
-
-    # Parameter values will need to be repeated by some factor to fill out the sample space
-    repeats_base = int(numpy.ceil(total_parameter_sets / num_parameter_sets_base))
-    repeats_other = int(numpy.ceil(total_parameter_sets / num_parameter_sets_other))
-
-    # Construct the parameter names vector
-    propagated_study_parameters[0, 0:num_parameters_base] = study_base.data_vars
-    propagated_study_parameters[0, num_parameters_base:] = numpy.array(study_other.data_vars).flatten()
-
-    # Construct the samples matrix
-    for set_index in range(num_parameter_sets_base):
-        for repeat_index in range(repeats_base):
-            row = set_index * repeats_base + repeat_index
-            for column, parameter in enumerate(study_base.data_vars):
-                # Populate each entry of the samples matrix using the values of each parameter set at each parameter
-                propagated_study_samples[row, column] = study_base.isel(set_name=set_index)[parameter].to_numpy().item()
-    for repeat_index in range(repeats_other):
-        for set_index in range(num_parameter_sets_other):
-            row = repeat_index * num_parameter_sets_other + set_index
-            for column_index, parameter in enumerate(study_other.data_vars):
-                column = column_index + num_parameters_base
-                propagated_study_samples[row, column] = study_other.isel(set_name=set_index)[parameter].to_numpy().item()
-
-    parameter_schema = dict(
-        parameter_samples=propagated_study_samples, parameter_names=propagated_study_parameters.flatten()
-    )
-    propagated_study = CustomStudy(parameter_schema).parameter_study
-    return propagated_study
 
 
 def _create_set_names(set_hashes: typing.List[str], template: typing.Optional[string.Template] = None) -> dict:
