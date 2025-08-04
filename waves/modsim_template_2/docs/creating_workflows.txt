@@ -1,0 +1,79 @@
+******************
+Creating Workflows
+******************
+
+This project uses three layers of SCons configuration files:
+
+1. SConstruct: the project configuration
+2. Workflow SConscript: named after the assembly or simulation, e.g. ``rectangle_compression``
+3. Part/Assembly SConscript: named after the part or assembly drawing title, e.g. ``rectangle``
+
+SConstruct
+==========
+
+The project configuration SConstruct file is responsible for configuring project wide variables, command line options,
+and parameter sets. The SConstruct file calls workflow SConscript files with project construction environment variable 
+name ``env`` export. For example,
+
+.. code-block::
+
+   SConscript(..., exports=["env", ...)
+
+The SConscript calls are constructed in the ``workflow_configurations`` variable as a list of  workflow SConscript
+file names. To maintain a flat build directory, parameter generator set names must match the workflow-study name.
+
+Workflow SConscript
+===================
+
+The workflow configuration SConscript files are named after the workflow, assembly, or simulation that they configure.
+These files are limited to pass-through operations calling the correct part and assembly configuration files required by
+the workflow and workflow specific tasks. They pass the ``env``, and ``parameters`` through to the part or assembly 
+SConscript files.
+
+.. code-block::
+
+   Import("env")
+
+   SConscript(..., exports=["env", "parameters", ...)
+
+Part/Assembly SConscript
+========================
+
+The final layer of SConscript files is the part (or assembly) configuration files. These configuration files should
+accept the construction environment ``env``. The project ``parameters`` are imported and unpacked into the part task 
+definitions.
+
+.. code-block::
+
+   Import("env", "parameters")
+
+   env.Command(
+       target=[...],
+       source=[...],
+       action=[...],
+       **parameters,
+   )
+
+The part and assembly configuration files should collect all task targets under a root alias passed through the 
+SConscript ``exports={}`` and ``Import()`` interface. Assembly configuration files are not allowed to call part 
+SConscript files. Instead, assembly SConscript files must operate on the assembly journal files, which should accept 
+part files as input, e.g. ``rectangle_mesh.cae``. Part and assembly workflows should include an optional task to 
+create an image of the meshed ``*.cae`` file(s). These tasks should not be included in the default workflow, but may 
+optionally create a similarly named alias appended with construction similar to ``f"{alias}-images"``.
+
+The SConscript files *must* be located in the ``modsim_package`` directory. All project files are located in a single 
+``modsim_package``, the workflow and parts SConscript files are re-combined many ways and must be co-located to end up 
+with a single build directory per workflow, Abaqus input files are scanned for implicit ``*INCLUDE`` statements so the 
+calling workflow SConscript 1files must be co-located with the Abaqus input files. These restrictions make for large 
+and growing ``modsim_package`` directory, so users and developers are encouraged to become comfortable sorting and 
+finding files with ``grep`` and ``find`` in a bash command line terminal or seeking out the advanced behaviors for 
+file sorting in their preferred GUI file browser.
+
+An example of a workflow configuration may be found in the following files, listed in the SCons configuration order
+
+1. ``SConstruct``
+2. ``modsim_package/rectangle_compression-nominal-regression``
+3. ``modsim_package/rectangle``
+
+When updating or adding a new workflow, be sure to update the workflow description contained in the SConscript file 
+so that the project command line help stays up to date.
