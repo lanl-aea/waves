@@ -19,7 +19,7 @@ name ``env`` export. For example,
 
    SConscript(..., exports=["env", ...)
 
-The SConscript calls are constructed in the ``workflow_configurations`` variable as a list of  workflow SConscript
+The SConscript calls are constructed in the ``workflow_configurations`` variable as a list of workflow SConscript
 file names. To maintain a flat build directory, parameter generator set names must match the workflow-study name.
 
 Workflow SConscript
