@@ -12,8 +12,8 @@ SConstruct
 ==========
 
 The project configuration SConstruct file is responsible for configuring project wide variables, command line options,
-and parameter sets. The SConstruct file calls workflow SConscript files with project construction environment variable 
-name ``env`` export. For example,
+and parameter sets. The SConstruct file calls workflow SConscript files with the construction environment export 
+named ``env``. For example,
 
 .. code-block::
 
