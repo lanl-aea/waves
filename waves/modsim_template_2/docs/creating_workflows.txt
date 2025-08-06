@@ -57,9 +57,7 @@ definitions.
    )
 
 The part and assembly configuration files should collect all task targets under a root alias passed through the 
-SConscript ``exports={}`` and ``Import()`` interface. Assembly configuration files are not allowed to call part 
-SConscript files. Instead, assembly SConscript files must operate on the assembly journal files, which should accept 
-part files as input, e.g. ``rectangle_mesh.cae``.
+SConscript ``exports={}`` and ``Import()`` interface.
 
 The SConscript files *must* be located in the ``modsim_package`` directory. All project files are located in a single 
 ``modsim_package``, the workflow and parts SConscript files are re-combined many ways and must be co-located to end up 
