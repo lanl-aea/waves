@@ -17,7 +17,7 @@ name ``env`` export. For example,
 
 .. code-block::
 
-   SConscript(..., exports=["env", ...)
+   SConscript(..., exports={"env": env, ...}, ...)
 
 The SConscript calls are constructed in the ``workflow_configurations`` variable as a list of workflow SConscript
 file names. To maintain a flat build directory, parameter generator set names must match the workflow-study name.
@@ -34,7 +34,7 @@ SConscript files.
 
    Import("env")
 
-   SConscript(..., exports=["env", "parameters", ...)
+   SConscript(..., exports={"env": env, "parameters": parameters, ...}, ...)
 
 Part/Assembly SConscript
 ========================
