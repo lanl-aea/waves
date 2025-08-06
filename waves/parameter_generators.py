@@ -1494,11 +1494,14 @@ def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.D
     Assumes that the parameter studies do not share any parameters. The incoming studies should have set name as the
     active dimension.
 
-     :param study_base: A :class:`ParameterGenerator` parameter study Xarray Dataset
-     :param study_other: A :class:`ParameterGenerator` parameter study Xarray Dataset with unique parameters compared
+    This function breaks set_name-to-content associations of the input studies, including the base study. This is due
+    to new set hashes calculated for each expanded parameter set.
+
+    :param study_base: A :class:`ParameterGenerator` parameter study Xarray Dataset
+    :param study_other: A :class:`ParameterGenerator` parameter study Xarray Dataset with unique parameters compared
         to `study_base`
 
-     :return: parameter study xarray Dataset
+    :return: :class:`CustomStudy` parameter study xarray Dataset
     """
     # Calculate parameter sets (ROWS) in the samples matrix
     num_parameter_sets_base = len(study_base[_set_coordinate_key])
