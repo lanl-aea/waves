@@ -54,8 +54,8 @@ definitions.
        **parameters,
    )
 
-The part and assembly configuration files should collect all task targets under a root alias passed through the 
-SConscript ``exports={}`` and ``Import()`` interface.
+The part and assembly configuration files do not define their own alias; instead, the alias is automatically 
+constructed from the name of the build directory.
 
 The SConscript files *must* be located in the project root directory. All other project files are located in a single 
 ``modsim_package``, the workflow and parts SConscript files are re-combined many ways and must be co-located to end up 
