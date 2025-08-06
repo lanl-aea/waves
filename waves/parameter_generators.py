@@ -55,7 +55,10 @@ class ParameterGenerator(ABC):
     :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
-        study Xarray Dataset
+        study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
+        Set name to content associations of the previous study are preserved when the parameter spaces between the
+        previous and current study are identical. If the parameter spaces are unique, the current study will propagate
+        the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param require_previous_parameter_study: Raise a ``RuntimeError`` if the previous parameter study file is missing.
     :param overwrite: Overwrite existing output files
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
@@ -467,8 +470,12 @@ class ParameterGenerator(ABC):
     def _merge_parameter_studies(self) -> None:
         """Merge the current parameter study into a previous parameter study.
 
-        Preserve the previous parameter study set name to set contents associations by dropping the current study's set
-        names during merge. Resets attributes:
+        When merging across identical parameter spaces, preserves the previous parameter study set name to set
+        contents associations by dropping the new studies' set names during merge. If the parameter spaces are unique
+        across studies, this method will use ``_propagate_parameter_space()`` to resolve the parameter spaces and break
+        the set name to set contents associations of the previous study.
+
+        Resets attributes:
 
         * ``self.parameter_study``
         * ``self._samples``
