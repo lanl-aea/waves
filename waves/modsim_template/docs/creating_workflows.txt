@@ -57,9 +57,7 @@ definitions.
 The part and assembly configuration files should collect all task targets under a root alias passed through the 
 SConscript ``exports={}`` and ``Import()`` interface. Assembly configuration files are not allowed to call part 
 SConscript files. Instead, assembly SConscript files must operate on the assembly journal files, which should accept 
-part files as input, e.g. ``rectangle_mesh.cae``. Part and assembly workflows should include an optional task to 
-create an image of the meshed ``*.cae`` file(s). These tasks should not be included in the default workflow, but may 
-optionally create a similarly named alias appended with construction similar to ``f"{alias}-images"``.
+part files as input, e.g. ``rectangle_mesh.cae``.
 
 The SConscript files *must* be located in the project root directory. All other project files are located in a single 
 ``modsim_package``, the workflow and parts SConscript files are re-combined many ways and must be co-located to end up 
