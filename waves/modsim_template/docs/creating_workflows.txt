@@ -5,7 +5,7 @@ Creating Workflows
 This project uses three layers of SCons configuration files:
 
 1. SConstruct: the project configuration
-2. Workflow SConscript: named after the assembly or simulation, e.g. ``rectangle_compression``
+2. Workflow SConscript: named after the workflow or simulation, e.g. ``rectangle_compression``
 3. Part/Assembly SConscript: named after the part or assembly drawing title, e.g. ``rectangle``
 
 SConstruct
