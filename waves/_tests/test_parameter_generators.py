@@ -322,136 +322,6 @@ def test_coerce_values(values, name, expected_output_type, should_warn):
             mock_warn.assert_not_called()
 
 
-propagate_parameter_space_cases = {
-    "propagate one parameter: int": (
-        parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
-        parameter_generators.OneAtATime({"parameter_2": [2]}).parameter_study,
-        parameter_generators.OneAtATime({"parameter_1": [1], "parameter_2": [2]}).parameter_study,
-        {"parameter_1": numpy.int64, "parameter_2": numpy.int64},
-        does_not_raise,
-    ),
-    "propagate one parameter: bool": (
-        parameter_generators.CartesianProduct({"parameter_1": [True]}).parameter_study,
-        parameter_generators.CartesianProduct({"parameter_2": [False]}).parameter_study,
-        parameter_generators.CartesianProduct({"parameter_1": [True], "parameter_2": [False]}).parameter_study,
-        {"parameter_1": numpy.bool_, "parameter_2": numpy.bool_},
-        does_not_raise,
-    ),
-    "propagate one parameter: string": (
-        parameter_generators.OneAtATime({"parameter_1": ["a"]}).parameter_study,
-        parameter_generators.OneAtATime({"parameter_2": ["a"]}).parameter_study,
-        parameter_generators.OneAtATime({"parameter_1": ["a"], "parameter_2": ["a"]}).parameter_study,
-        {"parameter_1": numpy.dtype("U1"), "parameter_2": numpy.dtype("U1")},
-        does_not_raise,
-    ),
-    "propagate one parameter: float": (
-        parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0]}).parameter_study,
-        parameter_generators.CartesianProduct({"parameter_2": [2.0, 3.0]}).parameter_study,
-        parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0], "parameter_2": [2.0, 3.0]}).parameter_study,
-        {"parameter_1": numpy.float64, "parameter_2": numpy.float64},
-        does_not_raise,
-    ),
-    "propagate one parameter of mixed typing: int and bool": (
-        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
-        parameter_generators.CartesianProduct({"parameter_2": [False]}).parameter_study,
-        parameter_generators.CartesianProduct({"parameter_1": [1, 2], "parameter_2": [False]}).parameter_study,
-        {"parameter_1": numpy.int64, "parameter_2": numpy.bool_},
-        does_not_raise,
-    ),
-    "propagate one parameter of mixed typing: float and str": (
-        parameter_generators.CartesianProduct({"parameter_1": [1.0]}).parameter_study,
-        parameter_generators.CartesianProduct({"parameter_2": ["a", "b"]}).parameter_study,
-        parameter_generators.CartesianProduct({"parameter_1": [1.0], "parameter_2": ["a", "b"]}).parameter_study,
-        {"parameter_1": numpy.float64, "parameter_2": numpy.dtype("U1")},
-        does_not_raise,
-    ),
-    "propagate one parameter with many values": (
-        parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0, 3.0]}).parameter_study,
-        parameter_generators.CartesianProduct({"parameter_2": ["a", "b", "c"]}).parameter_study,
-        parameter_generators.CartesianProduct(
-            {"parameter_1": [1.0, 2.0, 3.0], "parameter_2": ["a", "b", "c"]}
-        ).parameter_study,
-        {"parameter_1": numpy.float64, "parameter_2": numpy.dtype("U1")},
-        does_not_raise,
-    ),
-    "propagate one parameter with many values: reversed values": (
-        parameter_generators.CartesianProduct({"parameter_1": [3.0, 2.0, 1.0]}).parameter_study,
-        parameter_generators.CartesianProduct({"parameter_2": ["c", "b", "a"]}).parameter_study,
-        parameter_generators.CartesianProduct(
-            {"parameter_1": [1.0, 2.0, 3.0], "parameter_2": ["a", "b", "c"]}
-        ).parameter_study,
-        {"parameter_1": numpy.float64, "parameter_2": numpy.dtype("U1")},
-        does_not_raise,
-    ),
-    "propagate two parameters: cartesian product": (
-        parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0]}).parameter_study,
-        parameter_generators.CartesianProduct({"parameter_2": ["a", "b"], "parameter_3": [5, 10]}).parameter_study,
-        parameter_generators.CartesianProduct(
-            {"parameter_1": [1.0, 2.0], "parameter_2": ["a", "b"], "parameter_3": [5, 10]}
-        ).parameter_study,
-        {"parameter_1": numpy.float64, "parameter_2": numpy.dtype("U1"), "parameter_3": numpy.int64},
-        does_not_raise,
-    ),
-    "propagate two parameters: cartesian product shuffled values": (
-        parameter_generators.CartesianProduct({"parameter_1": [2.0, 1.0]}).parameter_study,
-        parameter_generators.CartesianProduct({"parameter_2": ["b", "a"], "parameter_3": [5, 10]}).parameter_study,
-        parameter_generators.CartesianProduct(
-            {"parameter_1": [1.0, 2.0], "parameter_2": ["a", "b"], "parameter_3": [5, 10]}
-        ).parameter_study,
-        {"parameter_1": numpy.float64, "parameter_2": numpy.dtype("U1"), "parameter_3": numpy.int64},
-        does_not_raise,
-    ),
-    "propagate two parameters: one-at-a-time": (
-        parameter_generators.OneAtATime({"parameter_1": [1.0, 2.0]}).parameter_study,
-        parameter_generators.OneAtATime({"parameter_2": ["a"], "parameter_3": [5]}).parameter_study,
-        parameter_generators.OneAtATime(
-            {"parameter_1": [1.0, 2.0], "parameter_2": ["a"], "parameter_3": [5]}
-        ).parameter_study,
-        {"parameter_1": numpy.float64, "parameter_2": numpy.dtype("U1"), "parameter_3": numpy.int64},
-        does_not_raise,
-    ),
-    "propagate one parameter into two: cartesian product": (
-        parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0], "parameter_3": [True]}).parameter_study,
-        parameter_generators.CartesianProduct({"parameter_2": ["a", "b"]}).parameter_study,
-        parameter_generators.CartesianProduct(
-            {
-                "parameter_1": [1.0, 2.0],
-                "parameter_2": ["a", "b"],
-                "parameter_3": [True],
-            }
-        ).parameter_study,
-        {"parameter_1": numpy.float64, "parameter_2": numpy.dtype("U1"), "parameter_3": numpy.bool_},
-        does_not_raise,
-    ),
-}
-
-
-@pytest.mark.parametrize(
-    "study_base, study_other, expected_study, expected_types, outcome",
-    propagate_parameter_space_cases.values(),
-    ids=propagate_parameter_space_cases.keys(),
-)
-def test_propagate_parameter_space(study_base, study_other, expected_study, expected_types, outcome):
-    """Check the propagation of parameter space between two studies.
-
-    :param study_base: A :class:`ParameterGenerator` parameter study Xarray Dataset
-    :param study_other: A :class:`ParameterGenerator` parameter study Xarray Dataset with unique parameters compared
-        to `study_base`
-    :param expected_study: parameter study Xarray Dataset
-    :param expected_types: dictionary with parameter names as the keys and numpy types as values
-    :param outcome: pytest expected error for the test case
-    """
-    with outcome:
-        try:
-            propagated_study = parameter_generators._propagate_parameter_space(study_base, study_other)
-            for key in expected_types.keys():
-                assert propagated_study[key].dtype == expected_types[key]
-            xarray.testing.assert_identical(propagated_study, expected_study)
-            parameter_generators._verify_parameter_study(propagated_study)
-        finally:
-            pass
-
-
 merge_parameter_studies_cases = {
     "concatenate along one parameter: unchanged": (
         [
@@ -693,16 +563,6 @@ merge_parameter_studies_cases = {
         None,
         pytest.raises(RuntimeError),
     ),
-    "concatenate with different parameter names": (
-        [
-            parameter_generators.OneAtATime({"parameter_1": [1.0]}).parameter_study,
-            parameter_generators.OneAtATime({"parameter_2": [2.0]}).parameter_study,
-        ],
-        parameter_generators.OneAtATime({"parameter_1": [1.0], "parameter_2": [2.0]}).parameter_study,
-        {"parameter_1": numpy.float64, "parameter_2": numpy.float64},
-        True,
-        does_not_raise,
-    ),
     "concatenate with different numbers of parameters": (
         [
             parameter_generators.OneAtATime({"parameter_1": [1.0]}).parameter_study,
@@ -713,7 +573,171 @@ merge_parameter_studies_cases = {
         None,
         pytest.raises(RuntimeError),
     ),
+    "propagate one parameter: int": (
+        [
+            parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
+            parameter_generators.OneAtATime({"parameter_2": [2]}).parameter_study,
+        ],
+        parameter_generators.OneAtATime({"parameter_1": [1], "parameter_2": [2]}).parameter_study,
+        {"parameter_1": numpy.int64, "parameter_2": numpy.int64},
+        True,
+        does_not_raise,
+    ),
+    "propagate one parameter: bool": (
+        [
+            parameter_generators.CartesianProduct({"parameter_1": [True]}).parameter_study,
+            parameter_generators.CartesianProduct({"parameter_2": [False]}).parameter_study,
+        ],
+        parameter_generators.CartesianProduct({"parameter_1": [True], "parameter_2": [False]}).parameter_study,
+        {"parameter_1": numpy.bool_, "parameter_2": numpy.bool_},
+        True,
+        does_not_raise,
+    ),
+    "propagate one parameter: string": (
+        [
+            parameter_generators.OneAtATime({"parameter_1": ["a"]}).parameter_study,
+            parameter_generators.OneAtATime({"parameter_2": ["a"]}).parameter_study,
+        ],
+        parameter_generators.OneAtATime({"parameter_1": ["a"], "parameter_2": ["a"]}).parameter_study,
+        {"parameter_1": numpy.dtype("U1"), "parameter_2": numpy.dtype("U1")},
+        True,
+        does_not_raise,
+    ),
+    "propagate one parameter: float": (
+        [
+            parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0]}).parameter_study,
+            parameter_generators.CartesianProduct({"parameter_2": [2.0, 3.0]}).parameter_study,
+        ],
+        parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0], "parameter_2": [2.0, 3.0]}).parameter_study,
+        {"parameter_1": numpy.float64, "parameter_2": numpy.float64},
+        True,
+        does_not_raise,
+    ),
+    "propagate one parameter of mixed typing: int and bool": (
+        [
+            parameter_generators.CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
+            parameter_generators.CartesianProduct({"parameter_2": [False]}).parameter_study,
+        ],
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2], "parameter_2": [False]}).parameter_study,
+        {"parameter_1": numpy.int64, "parameter_2": numpy.bool_},
+        True,
+        does_not_raise,
+    ),
+    "propagate one parameter of mixed typing: float and str": (
+        [
+            parameter_generators.CartesianProduct({"parameter_1": [1.0]}).parameter_study,
+            parameter_generators.CartesianProduct({"parameter_2": ["a", "b"]}).parameter_study,
+        ],
+        parameter_generators.CartesianProduct({"parameter_1": [1.0], "parameter_2": ["a", "b"]}).parameter_study,
+        {"parameter_1": numpy.float64, "parameter_2": numpy.dtype("U1")},
+        True,
+        does_not_raise,
+    ),
+    "propagate one parameter with many values": (
+        [
+            parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0, 3.0]}).parameter_study,
+            parameter_generators.CartesianProduct({"parameter_2": ["a", "b", "c"]}).parameter_study,
+        ],
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1.0, 2.0, 3.0], "parameter_2": ["a", "b", "c"]}
+        ).parameter_study,
+        {"parameter_1": numpy.float64, "parameter_2": numpy.dtype("U1")},
+        True,
+        does_not_raise,
+    ),
+    "propagate one parameter with many values: reversed values": (
+        [
+            parameter_generators.CartesianProduct({"parameter_1": [3.0, 2.0, 1.0]}).parameter_study,
+            parameter_generators.CartesianProduct({"parameter_2": ["c", "b", "a"]}).parameter_study,
+        ],
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1.0, 2.0, 3.0], "parameter_2": ["a", "b", "c"]}
+        ).parameter_study,
+        {"parameter_1": numpy.float64, "parameter_2": numpy.dtype("U1")},
+        True,
+        does_not_raise,
+    ),
+    "propagate two parameters: cartesian product": (
+        [
+            parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0]}).parameter_study,
+            parameter_generators.CartesianProduct({"parameter_2": ["a", "b"], "parameter_3": [5, 10]}).parameter_study,
+        ],
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1.0, 2.0], "parameter_2": ["a", "b"], "parameter_3": [5, 10]}
+        ).parameter_study,
+        {"parameter_1": numpy.float64, "parameter_2": numpy.dtype("U1"), "parameter_3": numpy.int64},
+        True,
+        does_not_raise,
+    ),
+    "propagate two parameters: cartesian product shuffled values": (
+        [
+            parameter_generators.CartesianProduct({"parameter_1": [2.0, 1.0]}).parameter_study,
+            parameter_generators.CartesianProduct({"parameter_2": ["b", "a"], "parameter_3": [5, 10]}).parameter_study,
+        ],
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1.0, 2.0], "parameter_2": ["a", "b"], "parameter_3": [5, 10]}
+        ).parameter_study,
+        {"parameter_1": numpy.float64, "parameter_2": numpy.dtype("U1"), "parameter_3": numpy.int64},
+        True,
+        does_not_raise,
+    ),
+    "propagate two parameters: one-at-a-time": (
+        [
+            parameter_generators.OneAtATime({"parameter_1": [1.0, 2.0]}).parameter_study,
+            parameter_generators.OneAtATime({"parameter_2": ["a"], "parameter_3": [5]}).parameter_study,
+        ],
+        parameter_generators.OneAtATime(
+            {"parameter_1": [1.0, 2.0], "parameter_2": ["a"], "parameter_3": [5]}
+        ).parameter_study,
+        {"parameter_1": numpy.float64, "parameter_2": numpy.dtype("U1"), "parameter_3": numpy.int64},
+        True,
+        does_not_raise,
+    ),
+    "propagate one parameter into two: cartesian product": (
+        [
+            parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0], "parameter_3": [True]}).parameter_study,
+            parameter_generators.CartesianProduct({"parameter_2": ["a", "b"]}).parameter_study,
+        ],
+        parameter_generators.CartesianProduct(
+            {
+                "parameter_1": [1.0, 2.0],
+                "parameter_2": ["a", "b"],
+                "parameter_3": [True],
+            }
+        ).parameter_study,
+        {"parameter_1": numpy.float64, "parameter_2": numpy.dtype("U1"), "parameter_3": numpy.bool_},
+        True,
+        does_not_raise,
+    ),
 }
+
+
+@pytest.mark.parametrize(
+    "studies, expected_study, expected_types, propagate_space, outcome",
+    merge_parameter_studies_cases.values(),
+    ids=merge_parameter_studies_cases.keys(),
+)
+def test_propagate_parameter_space(studies, expected_study, expected_types, propagate_space, outcome):
+    """Check the propagation of parameter space between two studies.
+
+    :param studies: list of N number of parameter study Xarray datasets to merge, where the first study in the list is
+        the base study
+    :param expected_study: Xarray dataset
+    :param expected_types: dictionary with parameter names as the keys and numpy types as values
+    :param propagate_space: boolean indicating if parameter space propagation is used to construct the output study
+    :param outcome: pytest expected error for the test case
+    """
+    if propagate_space:
+        study_base, study_other = studies
+        with outcome:
+            try:
+                propagated_study = parameter_generators._propagate_parameter_space(study_base, study_other)
+                for key in expected_types.keys():
+                    assert propagated_study[key].dtype == expected_types[key]
+                xarray.testing.assert_identical(propagated_study, expected_study)
+                parameter_generators._verify_parameter_study(propagated_study)
+            finally:
+                pass
 
 
 @pytest.mark.parametrize(
