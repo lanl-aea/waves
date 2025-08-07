@@ -21,8 +21,7 @@ named ``env``. For example,
 
 The SConscript calls are constructed in the ``workflow_configurations`` variable as a list of tuples that consist of: (1) 
 workflow study name, (2) workflow SConscript file, and (3) study definition dictionary of simulation variables or 
-parameter generator object. To maintain a flat build directory, parameter generator set names must match the 
-workflow-study name.
+parameter generator object.
 
 Workflow SConscript
 ===================
