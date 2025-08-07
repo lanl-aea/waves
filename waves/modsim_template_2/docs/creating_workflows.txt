@@ -69,7 +69,7 @@ file sorting in their preferred GUI file browser.
 An example of a workflow configuration may be found in the following files, listed in the SCons configuration order
 
 1. ``SConstruct``
-2. ``modsim_package/rectangle_compression-nominal-regression``
+2. ``modsim_package/rectangle_compression``
 3. ``modsim_package/rectangle``
 
 When updating or adding a new workflow, be sure to update the workflow description contained in the SConscript file 
