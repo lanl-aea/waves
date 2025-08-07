@@ -446,6 +446,7 @@ merge_parameter_studies_cases = {
         numpy.array([[1]], dtype=object),
         {"parameter_1": numpy.int64},
         parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
+        False,
         does_not_raise,
     ),
     "concatenate along one parameter: int": (
@@ -471,6 +472,7 @@ merge_parameter_studies_cases = {
         )
         .set_coords(_settings._hash_coordinate_key)
         .sortby(_settings._hash_coordinate_key),
+        False,
         does_not_raise,
     ),
     "concatenate along one parameter: float": (
@@ -496,6 +498,7 @@ merge_parameter_studies_cases = {
         )
         .set_coords(_settings._hash_coordinate_key)
         .sortby(_settings._hash_coordinate_key),
+        False,
         does_not_raise,
     ),
     "concatenate along one parameter: bool": (
@@ -521,6 +524,7 @@ merge_parameter_studies_cases = {
         )
         .set_coords(_settings._hash_coordinate_key)
         .sortby(_settings._hash_coordinate_key),
+        False,
         does_not_raise,
     ),
     "concatenate along one parameter: int/float": (
@@ -528,6 +532,7 @@ merge_parameter_studies_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_1": [2.0]}).parameter_study,
         ],
+        None,
         None,
         None,
         None,
@@ -541,6 +546,7 @@ merge_parameter_studies_cases = {
         None,
         None,
         None,
+        None,
         pytest.raises(RuntimeError),
     ),
     "concatenate along one parameter: float/bool": (
@@ -548,6 +554,7 @@ merge_parameter_studies_cases = {
             parameter_generators.OneAtATime({"parameter_1": [1.0]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_1": [True]}).parameter_study,
         ],
+        None,
         None,
         None,
         None,
@@ -630,6 +637,7 @@ merge_parameter_studies_cases = {
         )
         .set_coords(_settings._hash_coordinate_key)
         .sortby(_settings._hash_coordinate_key),
+        False,
         does_not_raise,
     ),
     "concatenate along two parameters across multiple studies: int/bool": (
@@ -664,6 +672,7 @@ merge_parameter_studies_cases = {
         )
         .set_coords(_settings._hash_coordinate_key)
         .sortby(_settings._hash_coordinate_key),
+        False,
         does_not_raise,
     ),
     "concatenate along unchanged parameters across multiple studies": (
@@ -691,10 +700,12 @@ merge_parameter_studies_cases = {
         parameter_generators.CartesianProduct(
             {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}
         ).parameter_study,
+        False,
         does_not_raise,
     ),
     "too few parameter studies input": (
         [parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study],
+        None,
         None,
         None,
         None,
@@ -713,6 +724,7 @@ merge_parameter_studies_cases = {
         ),
         {"parameter_1": numpy.float64, "parameter_2": numpy.float64},
         parameter_generators.OneAtATime({"parameter_1": [1.0], "parameter_2": [2.0]}).parameter_study,
+        True,
         does_not_raise,
     ),
     "concatenate with different numbers of parameters": (
@@ -723,17 +735,18 @@ merge_parameter_studies_cases = {
         None,
         None,
         None,
+        None,
         pytest.raises(RuntimeError),
     ),
 }
 
 
 @pytest.mark.parametrize(
-    "studies, expected_samples, expected_types, expected_study, outcome",
+    "studies, expected_samples, expected_types, expected_study, propagate_space, outcome",
     merge_parameter_studies_cases.values(),
     ids=merge_parameter_studies_cases.keys(),
 )
-def test_merge_parameter_studies(studies, expected_samples, expected_types, expected_study, outcome):
+def test_merge_parameter_studies(studies, expected_samples, expected_types, expected_study, propagate_space, outcome):
     """Check the merged parameter study contents and verify unchanged base study set_name-to-set_hash relationships
 
     :param studies: list of N number of parameter study Xarray datasets to merge, where the first study in the list is
@@ -741,6 +754,7 @@ def test_merge_parameter_studies(studies, expected_samples, expected_types, expe
     :param expected_samples: numpy.array containing the expected parameter sets, in order, after merging
     :param expected_types: dictionary with parameter names as the keys and numpy types as values
     :param expected_study: Xarray dataset
+    :param propagate_space: boolean indicating if parameter space propagation is used to construct the output study
     :param outcome: pytest expected error for the test case
     """
     with outcome:
@@ -752,12 +766,13 @@ def test_merge_parameter_studies(studies, expected_samples, expected_types, expe
             assert numpy.all(samples == expected_samples)
             xarray.testing.assert_identical(merged_study, expected_study)
             parameter_generators._verify_parameter_study(merged_study)
-            # Compare base study hash and set names to merged ones
-            base_study = studies[0]
-            base_study_from_merged = merged_study.where(
-                merged_study[_settings._hash_coordinate_key] == base_study[_settings._hash_coordinate_key]
-            )
-            xarray.testing.assert_identical(base_study_from_merged, base_study)
+            if not propagate_space:
+                # Compare base study hash and set names to merged ones for uniform parameter space
+                base_study = studies[0]
+                base_study_from_merged = merged_study.where(
+                    merged_study[_settings._hash_coordinate_key] == base_study[_settings._hash_coordinate_key]
+                )
+                xarray.testing.assert_identical(base_study_from_merged, base_study)
         finally:
             pass
 
