@@ -458,8 +458,8 @@ merge_parameter_studies_cases = {
             parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
         ],
-        {"parameter_1": numpy.int64},
         parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
+        {"parameter_1": numpy.int64},
         False,
         does_not_raise,
     ),
@@ -468,7 +468,6 @@ merge_parameter_studies_cases = {
             parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_1": [2]}).parameter_study,
         ],
-        {"parameter_1": numpy.int64},
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
@@ -485,6 +484,7 @@ merge_parameter_studies_cases = {
         )
         .set_coords(_settings._hash_coordinate_key)
         .sortby(_settings._hash_coordinate_key),
+        {"parameter_1": numpy.int64},
         False,
         does_not_raise,
     ),
@@ -493,7 +493,6 @@ merge_parameter_studies_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1.0]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_1": [2.0]}).parameter_study,
         ],
-        {"parameter_1": numpy.float64},
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
@@ -510,6 +509,7 @@ merge_parameter_studies_cases = {
         )
         .set_coords(_settings._hash_coordinate_key)
         .sortby(_settings._hash_coordinate_key),
+        {"parameter_1": numpy.float64},
         False,
         does_not_raise,
     ),
@@ -518,7 +518,6 @@ merge_parameter_studies_cases = {
             parameter_generators.OneAtATime({"parameter_1": [True]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_1": [False]}).parameter_study,
         ],
-        {"parameter_1": numpy.bool_},
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
@@ -535,6 +534,7 @@ merge_parameter_studies_cases = {
         )
         .set_coords(_settings._hash_coordinate_key)
         .sortby(_settings._hash_coordinate_key),
+        {"parameter_1": numpy.bool_},
         False,
         does_not_raise,
     ),
@@ -580,7 +580,6 @@ merge_parameter_studies_cases = {
                 {"parameter_1": [1, 2], "parameter_2": [3.0, 5.0], "parameter_3": ["a"]}
             ).parameter_study,
         ],
-        {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.dtype("U1")},
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
@@ -636,6 +635,7 @@ merge_parameter_studies_cases = {
         )
         .set_coords(_settings._hash_coordinate_key)
         .sortby(_settings._hash_coordinate_key),
+        {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.dtype("U1")},
         False,
         does_not_raise,
     ),
@@ -644,7 +644,6 @@ merge_parameter_studies_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1], "parameter_2": [True]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_1": [2], "parameter_2": [False]}).parameter_study,
         ],
-        {"parameter_1": numpy.int64, "parameter_2": numpy.bool_},
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
@@ -664,6 +663,7 @@ merge_parameter_studies_cases = {
         )
         .set_coords(_settings._hash_coordinate_key)
         .sortby(_settings._hash_coordinate_key),
+        {"parameter_1": numpy.int64, "parameter_2": numpy.bool_},
         False,
         does_not_raise,
     ),
@@ -679,10 +679,10 @@ merge_parameter_studies_cases = {
                 {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}
             ).parameter_study,
         ],
-        {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.bool_},
         parameter_generators.CartesianProduct(
             {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}
         ).parameter_study,
+        {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.bool_},
         False,
         does_not_raise,
     ),
@@ -698,8 +698,8 @@ merge_parameter_studies_cases = {
             parameter_generators.OneAtATime({"parameter_1": [1.0]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_2": [2.0]}).parameter_study,
         ],
-        {"parameter_1": numpy.float64, "parameter_2": numpy.float64},
         parameter_generators.OneAtATime({"parameter_1": [1.0], "parameter_2": [2.0]}).parameter_study,
+        {"parameter_1": numpy.float64, "parameter_2": numpy.float64},
         True,
         does_not_raise,
     ),
@@ -717,17 +717,17 @@ merge_parameter_studies_cases = {
 
 
 @pytest.mark.parametrize(
-    "studies, expected_types, expected_study, propagate_space, outcome",
+    "studies, expected_study, expected_types, propagate_space, outcome",
     merge_parameter_studies_cases.values(),
     ids=merge_parameter_studies_cases.keys(),
 )
-def test_merge_parameter_studies(studies, expected_types, expected_study, propagate_space, outcome):
+def test_merge_parameter_studies(studies, expected_study, expected_types, propagate_space, outcome):
     """Check the merged parameter study contents and verify unchanged base study set_name-to-set_hash relationships
 
     :param studies: list of N number of parameter study Xarray datasets to merge, where the first study in the list is
         the base study
-    :param expected_types: dictionary with parameter names as the keys and numpy types as values
     :param expected_study: Xarray dataset
+    :param expected_types: dictionary with parameter names as the keys and numpy types as values
     :param propagate_space: boolean indicating if parameter space propagation is used to construct the output study
     :param outcome: pytest expected error for the test case
     """
