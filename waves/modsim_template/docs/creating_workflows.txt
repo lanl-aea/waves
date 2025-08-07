@@ -57,13 +57,13 @@ definitions.
 The part and assembly configuration files do not define their own alias; instead, the alias is automatically 
 constructed from the name of the build directory.
 
-The SConscript files *must* be located in the project root directory. All other project files are located in a single 
-``modsim_package``, the workflow and parts SConscript files are re-combined many ways and must be co-located to end up 
-with a single build directory per workflow, Abaqus input files are scanned for implicit ``*INCLUDE`` statements so the 
-calling workflow SConscript 1files must be co-located with the Abaqus input files. These restrictions make for large 
-and growing ``modsim_package`` directory, so users and developers are encouraged to become comfortable sorting and 
-finding files with ``grep`` and ``find`` in a bash command line terminal or seeking out the advanced behaviors for 
-file sorting in their preferred GUI file browser.
+The Sconscript files can be spread throughout the source tree. allowing users to structure both source and 
+build directories according to their project needs. Simulation workflows are defined in separate SConscript files, 
+which keeps each simulation self-contained and easier to manage. This layout supports deeply nested directory trees 
+and allows users to maintain a clear separation between parts, workflows, and utility scripts. While this flexibility 
+can lead to more verbose SConstruct and SConscript implementations, it enables greater clarity and transparency in 
+the build process. Users are encouraged to adopt consistent naming conventions and directory structures to help 
+navigate the project efficiently, especially when using command line tools or GUI file browsers.
 
 An example of a workflow configuration may be found in the following files, listed in the SCons configuration order
 
