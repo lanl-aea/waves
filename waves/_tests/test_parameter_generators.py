@@ -443,7 +443,6 @@ merge_parameter_studies_cases = {
             parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
         ],
-        numpy.array([[1]], dtype=object),
         {"parameter_1": numpy.int64},
         parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
         False,
@@ -454,7 +453,6 @@ merge_parameter_studies_cases = {
             parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_1": [2]}).parameter_study,
         ],
-        numpy.array([[2], [1]], dtype=object),
         {"parameter_1": numpy.int64},
         xarray.Dataset(
             {
@@ -480,7 +478,6 @@ merge_parameter_studies_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1.0]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_1": [2.0]}).parameter_study,
         ],
-        numpy.array([[1.0], [2.0]], dtype=object),
         {"parameter_1": numpy.float64},
         xarray.Dataset(
             {
@@ -506,7 +503,6 @@ merge_parameter_studies_cases = {
             parameter_generators.OneAtATime({"parameter_1": [True]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_1": [False]}).parameter_study,
         ],
-        numpy.array([[False], [True]], dtype=object),
         {"parameter_1": numpy.bool_},
         xarray.Dataset(
             {
@@ -535,7 +531,6 @@ merge_parameter_studies_cases = {
         None,
         None,
         None,
-        None,
         pytest.raises(RuntimeError),
     ),
     "concatenate along one parameter: int/bool": (
@@ -546,7 +541,6 @@ merge_parameter_studies_cases = {
         None,
         None,
         None,
-        None,
         pytest.raises(RuntimeError),
     ),
     "concatenate along one parameter: float/bool": (
@@ -554,7 +548,6 @@ merge_parameter_studies_cases = {
             parameter_generators.OneAtATime({"parameter_1": [1.0]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_1": [True]}).parameter_study,
         ],
-        None,
         None,
         None,
         None,
@@ -572,15 +565,6 @@ merge_parameter_studies_cases = {
                 {"parameter_1": [1, 2], "parameter_2": [3.0, 5.0], "parameter_3": ["a"]}
             ).parameter_study,
         ],
-        numpy.array(
-            [
-                [1, 3.0, "a"],
-                [1, 4.0, "a"],
-                [2, 3.0, "a"],
-                [1, 5.0, "a"],
-            ],
-            dtype=object,
-        ),
         {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.dtype("U1")},
         xarray.Dataset(
             {
@@ -645,13 +629,6 @@ merge_parameter_studies_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1], "parameter_2": [True]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_1": [2], "parameter_2": [False]}).parameter_study,
         ],
-        numpy.array(
-            [
-                [1, True],
-                [2, False],
-            ],
-            dtype=object,
-        ),
         {"parameter_1": numpy.int64, "parameter_2": numpy.bool_},
         xarray.Dataset(
             {
@@ -687,15 +664,6 @@ merge_parameter_studies_cases = {
                 {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}
             ).parameter_study,
         ],
-        numpy.array(
-            [
-                [2, 3.0, False],
-                [1, 3.0, False],
-                [2, 3.0, True],
-                [1, 3.0, True],
-            ],
-            dtype=object,
-        ),
         {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.bool_},
         parameter_generators.CartesianProduct(
             {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}
@@ -708,7 +676,6 @@ merge_parameter_studies_cases = {
         None,
         None,
         None,
-        None,
         pytest.raises(RuntimeError),
     ),
     "concatenate with different parameter names": (
@@ -716,12 +683,6 @@ merge_parameter_studies_cases = {
             parameter_generators.OneAtATime({"parameter_1": [1.0]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_2": [2.0]}).parameter_study,
         ],
-        numpy.array(
-            [
-                [1.0, 2.0],
-            ],
-            dtype=object,
-        ),
         {"parameter_1": numpy.float64, "parameter_2": numpy.float64},
         parameter_generators.OneAtATime({"parameter_1": [1.0], "parameter_2": [2.0]}).parameter_study,
         True,
@@ -735,23 +696,21 @@ merge_parameter_studies_cases = {
         None,
         None,
         None,
-        None,
         pytest.raises(RuntimeError),
     ),
 }
 
 
 @pytest.mark.parametrize(
-    "studies, expected_samples, expected_types, expected_study, propagate_space, outcome",
+    "studies, expected_types, expected_study, propagate_space, outcome",
     merge_parameter_studies_cases.values(),
     ids=merge_parameter_studies_cases.keys(),
 )
-def test_merge_parameter_studies(studies, expected_samples, expected_types, expected_study, propagate_space, outcome):
+def test_merge_parameter_studies(studies, expected_types, expected_study, propagate_space, outcome):
     """Check the merged parameter study contents and verify unchanged base study set_name-to-set_hash relationships
 
     :param studies: list of N number of parameter study Xarray datasets to merge, where the first study in the list is
         the base study
-    :param expected_samples: numpy.array containing the expected parameter sets, in order, after merging
     :param expected_types: dictionary with parameter names as the keys and numpy types as values
     :param expected_study: Xarray dataset
     :param propagate_space: boolean indicating if parameter space propagation is used to construct the output study
@@ -762,8 +721,6 @@ def test_merge_parameter_studies(studies, expected_samples, expected_types, expe
             merged_study = parameter_generators._merge_parameter_studies(studies)
             for key in expected_types.keys():
                 assert merged_study[key].dtype == expected_types[key]
-            samples = parameter_generators._parameter_study_to_numpy(merged_study)
-            assert numpy.all(samples == expected_samples)
             xarray.testing.assert_identical(merged_study, expected_study)
             parameter_generators._verify_parameter_study(merged_study)
             if not propagate_space:
