@@ -155,6 +155,7 @@ Internal Changes
 - Add parameter space propagation when merging studies with unique parameter spaces (:issue:`951`, :merge:`1232`). By
   `Chris Johnson`_.
 - Address Xarray future warnings related to default merge behavior (:issue:`954`, :merge:`1237`). By `Kyle Brindley`_.
+- Use and test Abaqus 2025. Preserves scheduled testing against Abaqus 2024 and 2023. By `Kyle Brindley`_.
 
 ********************
 0.13.12 (2025-07-21)
@@ -201,7 +202,6 @@ Internal Changes
 - Use PyPI twine installation until conda-forge ``twine check`` is fixed on macOS. By `Kyle Brindley`_.
 - Single definition of the shield/badges URLs. By `Kyle Brindley`_.
 - Make QOI update target unique. By `Matthew Fister`_.
-- Use and test Abaqus 2025. Preserves scheduled testing against Abaqus 2024 and 2023. By `Kyle Brindley`_.
 
 Documentation
 =============
