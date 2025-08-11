@@ -1,5 +1,6 @@
 """Test ParameterGenerator Abstract Base Class"""
 
+import copy
 import typing
 import pathlib
 import contextlib
@@ -322,257 +323,7 @@ def test_coerce_values(values, name, expected_output_type, should_warn):
             mock_warn.assert_not_called()
 
 
-merge_parameter_studies_cases = {
-    "concatenate along one parameter: unchanged": (
-        [
-            parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
-            parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
-        ],
-        parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
-        {"parameter_1": numpy.int64},
-        False,
-        does_not_raise,
-    ),
-    "concatenate along one parameter: int": (
-        [
-            parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
-            parameter_generators.OneAtATime({"parameter_1": [2]}).parameter_study,
-        ],
-        xarray.Dataset(
-            {
-                "parameter_1": xarray.DataArray(
-                    [1, 2], coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]}
-                ),
-                _settings._hash_coordinate_key: xarray.DataArray(
-                    [
-                        "1661dcd0bf4761d25471c1cf5514ceae",
-                        "0b588b6a82c1d3d3d19fda304f940342",
-                    ],
-                    coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]},
-                ),
-            }
-        )
-        .set_coords(_settings._hash_coordinate_key)
-        .sortby(_settings._hash_coordinate_key),
-        {"parameter_1": numpy.int64},
-        False,
-        does_not_raise,
-    ),
-    "concatenate along one parameter: float": (
-        [
-            parameter_generators.CartesianProduct({"parameter_1": [1.0]}).parameter_study,
-            parameter_generators.CartesianProduct({"parameter_1": [2.0]}).parameter_study,
-        ],
-        xarray.Dataset(
-            {
-                "parameter_1": xarray.DataArray(
-                    [1.0, 2.0], coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]}
-                ),
-                _settings._hash_coordinate_key: xarray.DataArray(
-                    [
-                        "7f9805b5c9946582ec1fb14b91dd144d",
-                        "8f7d7ec854ffe07c4c976e2bccea0665",
-                    ],
-                    coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]},
-                ),
-            }
-        )
-        .set_coords(_settings._hash_coordinate_key)
-        .sortby(_settings._hash_coordinate_key),
-        {"parameter_1": numpy.float64},
-        False,
-        does_not_raise,
-    ),
-    "concatenate along one parameter: bool": (
-        [
-            parameter_generators.OneAtATime({"parameter_1": [True]}).parameter_study,
-            parameter_generators.OneAtATime({"parameter_1": [False]}).parameter_study,
-        ],
-        xarray.Dataset(
-            {
-                "parameter_1": xarray.DataArray(
-                    [True, False], coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]}
-                ),
-                _settings._hash_coordinate_key: xarray.DataArray(
-                    [
-                        "6c2fb5097da66f7bb3795420b802986e",
-                        "3ded86c691cf9621651acb15d909139e",
-                    ],
-                    coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]},
-                ),
-            }
-        )
-        .set_coords(_settings._hash_coordinate_key)
-        .sortby(_settings._hash_coordinate_key),
-        {"parameter_1": numpy.bool_},
-        False,
-        does_not_raise,
-    ),
-    "concatenate along one parameter: int/float": (
-        [
-            parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
-            parameter_generators.CartesianProduct({"parameter_1": [2.0]}).parameter_study,
-        ],
-        None,
-        None,
-        None,
-        pytest.raises(RuntimeError),
-    ),
-    "concatenate along one parameter: int/bool": (
-        [
-            parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
-            parameter_generators.CartesianProduct({"parameter_1": [True]}).parameter_study,
-        ],
-        None,
-        None,
-        None,
-        pytest.raises(RuntimeError),
-    ),
-    "concatenate along one parameter: float/bool": (
-        [
-            parameter_generators.OneAtATime({"parameter_1": [1.0]}).parameter_study,
-            parameter_generators.OneAtATime({"parameter_1": [True]}).parameter_study,
-        ],
-        None,
-        None,
-        None,
-        pytest.raises(RuntimeError),
-    ),
-    "concatenate along one parameter across multiple studies: float": (
-        [
-            parameter_generators.OneAtATime(
-                {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": ["a"]}
-            ).parameter_study,
-            parameter_generators.OneAtATime(
-                {"parameter_1": [1, 2], "parameter_2": [3.0, 4.0], "parameter_3": ["a"]}
-            ).parameter_study,
-            parameter_generators.OneAtATime(
-                {"parameter_1": [1, 2], "parameter_2": [3.0, 5.0], "parameter_3": ["a"]}
-            ).parameter_study,
-        ],
-        xarray.Dataset(
-            {
-                "parameter_1": xarray.DataArray(
-                    [1, 1, 2, 1],
-                    coords={
-                        _settings._set_coordinate_key: [
-                            "parameter_set0",
-                            "parameter_set2",
-                            "parameter_set1",
-                            "parameter_set3",
-                        ]
-                    },
-                ),
-                "parameter_2": xarray.DataArray(
-                    [3.0, 4.0, 3.0, 5.0],
-                    coords={
-                        _settings._set_coordinate_key: [
-                            "parameter_set0",
-                            "parameter_set2",
-                            "parameter_set1",
-                            "parameter_set3",
-                        ]
-                    },
-                ),
-                "parameter_3": xarray.DataArray(
-                    ["a", "a", "a", "a"],
-                    coords={
-                        _settings._set_coordinate_key: [
-                            "parameter_set0",
-                            "parameter_set2",
-                            "parameter_set1",
-                            "parameter_set3",
-                        ]
-                    },
-                ),
-                _settings._hash_coordinate_key: xarray.DataArray(
-                    [
-                        "4d9644f3ff9205869b5c5aef11cb5235",
-                        "8e213a62356cd1d4ce2b3b795fab6ef9",
-                        "8eb85255b4d3888cbf413afc55cbbac3",
-                        "d7dd3ecf2cebf5e89d3e211faf2f0526",
-                    ],
-                    coords={
-                        _settings._set_coordinate_key: [
-                            "parameter_set0",
-                            "parameter_set2",
-                            "parameter_set1",
-                            "parameter_set3",
-                        ]
-                    },
-                ),
-            }
-        )
-        .set_coords(_settings._hash_coordinate_key)
-        .sortby(_settings._hash_coordinate_key),
-        {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.dtype("U1")},
-        False,
-        does_not_raise,
-    ),
-    "concatenate along two parameters across multiple studies: int/bool": (
-        [
-            parameter_generators.CartesianProduct({"parameter_1": [1], "parameter_2": [True]}).parameter_study,
-            parameter_generators.CartesianProduct({"parameter_1": [2], "parameter_2": [False]}).parameter_study,
-        ],
-        xarray.Dataset(
-            {
-                "parameter_1": xarray.DataArray(
-                    [1, 2], coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]}
-                ),
-                "parameter_2": xarray.DataArray(
-                    [True, False], coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]}
-                ),
-                _settings._hash_coordinate_key: xarray.DataArray(
-                    [
-                        "d65bccd02f05b0419dc634e643418e62",
-                        "df1ac82da14f4f1fd9d73159bb64a717",
-                    ],
-                    coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]},
-                ),
-            }
-        )
-        .set_coords(_settings._hash_coordinate_key)
-        .sortby(_settings._hash_coordinate_key),
-        {"parameter_1": numpy.int64, "parameter_2": numpy.bool_},
-        False,
-        does_not_raise,
-    ),
-    "concatenate along unchanged parameters across multiple studies": (
-        [
-            parameter_generators.CartesianProduct(
-                {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}
-            ).parameter_study,
-            parameter_generators.CartesianProduct(
-                {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}
-            ).parameter_study,
-            parameter_generators.CartesianProduct(
-                {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}
-            ).parameter_study,
-        ],
-        parameter_generators.CartesianProduct(
-            {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}
-        ).parameter_study,
-        {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.bool_},
-        False,
-        does_not_raise,
-    ),
-    "too few parameter studies input": (
-        [parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study],
-        None,
-        None,
-        None,
-        pytest.raises(RuntimeError),
-    ),
-    "concatenate with different numbers of parameters": (
-        [
-            parameter_generators.OneAtATime({"parameter_1": [1.0]}).parameter_study,
-            parameter_generators.OneAtATime({"parameter_1": [2.0], "parameter_2": [3]}).parameter_study,
-        ],
-        None,
-        None,
-        None,
-        pytest.raises(RuntimeError),
-    ),
+propagate_parameter_space_cases = {
     "propagate one parameter: int": (
         [
             parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
@@ -746,8 +497,8 @@ merge_parameter_studies_cases = {
 
 @pytest.mark.parametrize(
     "studies, expected_study, expected_types, propagate_space, outcome",
-    merge_parameter_studies_cases.values(),
-    ids=merge_parameter_studies_cases.keys(),
+    propagate_parameter_space_cases.values(),
+    ids=propagate_parameter_space_cases.keys(),
 )
 def test_propagate_parameter_space(studies, expected_study, expected_types, propagate_space, outcome):
     """Check the propagation of parameter space between two studies.
@@ -759,17 +510,273 @@ def test_propagate_parameter_space(studies, expected_study, expected_types, prop
     :param propagate_space: boolean indicating if parameter space propagation is used to construct the output study
     :param outcome: pytest expected error for the test case
     """
-    if propagate_space:
-        study_base, study_other = studies
-        with outcome:
-            try:
-                propagated_study = parameter_generators._propagate_parameter_space(study_base, study_other)
-                for key in expected_types.keys():
-                    assert propagated_study[key].dtype == expected_types[key]
-                xarray.testing.assert_identical(propagated_study, expected_study)
-                parameter_generators._verify_parameter_study(propagated_study)
-            finally:
-                pass
+    study_base, study_other = studies
+    with outcome:
+        try:
+            propagated_study = parameter_generators._propagate_parameter_space(study_base, study_other)
+            for key in expected_types.keys():
+                assert propagated_study[key].dtype == expected_types[key]
+            xarray.testing.assert_identical(propagated_study, expected_study)
+            parameter_generators._verify_parameter_study(propagated_study)
+        finally:
+            pass
+
+
+merge_parameter_studies_cases = copy.deepcopy(propagate_parameter_space_cases)
+merge_parameter_studies_cases.update(
+    {
+        "concatenate along one parameter: unchanged": (
+            [
+                parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
+                parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
+            ],
+            parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
+            {"parameter_1": numpy.int64},
+            False,
+            does_not_raise,
+        ),
+        "concatenate along one parameter: int": (
+            [
+                parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
+                parameter_generators.OneAtATime({"parameter_1": [2]}).parameter_study,
+            ],
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1, 2], coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]}
+                    ),
+                    _settings._hash_coordinate_key: xarray.DataArray(
+                        [
+                            "1661dcd0bf4761d25471c1cf5514ceae",
+                            "0b588b6a82c1d3d3d19fda304f940342",
+                        ],
+                        coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]},
+                    ),
+                }
+            )
+            .set_coords(_settings._hash_coordinate_key)
+            .sortby(_settings._hash_coordinate_key),
+            {"parameter_1": numpy.int64},
+            False,
+            does_not_raise,
+        ),
+        "concatenate along one parameter: float": (
+            [
+                parameter_generators.CartesianProduct({"parameter_1": [1.0]}).parameter_study,
+                parameter_generators.CartesianProduct({"parameter_1": [2.0]}).parameter_study,
+            ],
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1.0, 2.0], coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]}
+                    ),
+                    _settings._hash_coordinate_key: xarray.DataArray(
+                        [
+                            "7f9805b5c9946582ec1fb14b91dd144d",
+                            "8f7d7ec854ffe07c4c976e2bccea0665",
+                        ],
+                        coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]},
+                    ),
+                }
+            )
+            .set_coords(_settings._hash_coordinate_key)
+            .sortby(_settings._hash_coordinate_key),
+            {"parameter_1": numpy.float64},
+            False,
+            does_not_raise,
+        ),
+        "concatenate along one parameter: bool": (
+            [
+                parameter_generators.OneAtATime({"parameter_1": [True]}).parameter_study,
+                parameter_generators.OneAtATime({"parameter_1": [False]}).parameter_study,
+            ],
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [True, False], coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]}
+                    ),
+                    _settings._hash_coordinate_key: xarray.DataArray(
+                        [
+                            "6c2fb5097da66f7bb3795420b802986e",
+                            "3ded86c691cf9621651acb15d909139e",
+                        ],
+                        coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]},
+                    ),
+                }
+            )
+            .set_coords(_settings._hash_coordinate_key)
+            .sortby(_settings._hash_coordinate_key),
+            {"parameter_1": numpy.bool_},
+            False,
+            does_not_raise,
+        ),
+        "concatenate along one parameter: int/float": (
+            [
+                parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
+                parameter_generators.CartesianProduct({"parameter_1": [2.0]}).parameter_study,
+            ],
+            None,
+            None,
+            None,
+            pytest.raises(RuntimeError),
+        ),
+        "concatenate along one parameter: int/bool": (
+            [
+                parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
+                parameter_generators.CartesianProduct({"parameter_1": [True]}).parameter_study,
+            ],
+            None,
+            None,
+            None,
+            pytest.raises(RuntimeError),
+        ),
+        "concatenate along one parameter: float/bool": (
+            [
+                parameter_generators.OneAtATime({"parameter_1": [1.0]}).parameter_study,
+                parameter_generators.OneAtATime({"parameter_1": [True]}).parameter_study,
+            ],
+            None,
+            None,
+            None,
+            pytest.raises(RuntimeError),
+        ),
+        "concatenate along one parameter across multiple studies: float": (
+            [
+                parameter_generators.OneAtATime(
+                    {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": ["a"]}
+                ).parameter_study,
+                parameter_generators.OneAtATime(
+                    {"parameter_1": [1, 2], "parameter_2": [3.0, 4.0], "parameter_3": ["a"]}
+                ).parameter_study,
+                parameter_generators.OneAtATime(
+                    {"parameter_1": [1, 2], "parameter_2": [3.0, 5.0], "parameter_3": ["a"]}
+                ).parameter_study,
+            ],
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1, 1, 2, 1],
+                        coords={
+                            _settings._set_coordinate_key: [
+                                "parameter_set0",
+                                "parameter_set2",
+                                "parameter_set1",
+                                "parameter_set3",
+                            ]
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [3.0, 4.0, 3.0, 5.0],
+                        coords={
+                            _settings._set_coordinate_key: [
+                                "parameter_set0",
+                                "parameter_set2",
+                                "parameter_set1",
+                                "parameter_set3",
+                            ]
+                        },
+                    ),
+                    "parameter_3": xarray.DataArray(
+                        ["a", "a", "a", "a"],
+                        coords={
+                            _settings._set_coordinate_key: [
+                                "parameter_set0",
+                                "parameter_set2",
+                                "parameter_set1",
+                                "parameter_set3",
+                            ]
+                        },
+                    ),
+                    _settings._hash_coordinate_key: xarray.DataArray(
+                        [
+                            "4d9644f3ff9205869b5c5aef11cb5235",
+                            "8e213a62356cd1d4ce2b3b795fab6ef9",
+                            "8eb85255b4d3888cbf413afc55cbbac3",
+                            "d7dd3ecf2cebf5e89d3e211faf2f0526",
+                        ],
+                        coords={
+                            _settings._set_coordinate_key: [
+                                "parameter_set0",
+                                "parameter_set2",
+                                "parameter_set1",
+                                "parameter_set3",
+                            ]
+                        },
+                    ),
+                }
+            )
+            .set_coords(_settings._hash_coordinate_key)
+            .sortby(_settings._hash_coordinate_key),
+            {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.dtype("U1")},
+            False,
+            does_not_raise,
+        ),
+        "concatenate along two parameters across multiple studies: int/bool": (
+            [
+                parameter_generators.CartesianProduct({"parameter_1": [1], "parameter_2": [True]}).parameter_study,
+                parameter_generators.CartesianProduct({"parameter_1": [2], "parameter_2": [False]}).parameter_study,
+            ],
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1, 2], coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]}
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [True, False], coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]}
+                    ),
+                    _settings._hash_coordinate_key: xarray.DataArray(
+                        [
+                            "d65bccd02f05b0419dc634e643418e62",
+                            "df1ac82da14f4f1fd9d73159bb64a717",
+                        ],
+                        coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]},
+                    ),
+                }
+            )
+            .set_coords(_settings._hash_coordinate_key)
+            .sortby(_settings._hash_coordinate_key),
+            {"parameter_1": numpy.int64, "parameter_2": numpy.bool_},
+            False,
+            does_not_raise,
+        ),
+        "concatenate along unchanged parameters across multiple studies": (
+            [
+                parameter_generators.CartesianProduct(
+                    {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}
+                ).parameter_study,
+                parameter_generators.CartesianProduct(
+                    {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}
+                ).parameter_study,
+                parameter_generators.CartesianProduct(
+                    {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}
+                ).parameter_study,
+            ],
+            parameter_generators.CartesianProduct(
+                {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}
+            ).parameter_study,
+            {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.bool_},
+            False,
+            does_not_raise,
+        ),
+        "too few parameter studies input": (
+            [parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study],
+            None,
+            None,
+            None,
+            pytest.raises(RuntimeError),
+        ),
+        "concatenate with different numbers of parameters": (
+            [
+                parameter_generators.OneAtATime({"parameter_1": [1.0]}).parameter_study,
+                parameter_generators.OneAtATime({"parameter_1": [2.0], "parameter_2": [3]}).parameter_study,
+            ],
+            None,
+            None,
+            None,
+            pytest.raises(RuntimeError),
+        ),
+    }
+)
 
 
 @pytest.mark.parametrize(
