@@ -1543,15 +1543,15 @@ def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.D
 
     # Populate matrices for the propagated CustomStudy
     propagated_study_samples = numpy.full((total_parameter_sets, total_parameters), numpy.nan, dtype=object)
-    propagated_study_parameters = numpy.full((1, total_parameters), numpy.nan, dtype=object)
+    propagated_study_parameters = numpy.full(total_parameters, numpy.nan, dtype=object)
 
     # Parameter values will need to be repeated by some factor to fill out the sample space
     repeats_base = int(numpy.ceil(total_parameter_sets / num_parameter_sets_base))
     repeats_other = int(numpy.ceil(total_parameter_sets / num_parameter_sets_other))
 
     # Construct the parameter names vector
-    propagated_study_parameters[0, 0:num_parameters_base] = study_base.data_vars
-    propagated_study_parameters[0, num_parameters_base:] = numpy.array(study_other.data_vars).flatten()
+    propagated_study_parameters[0:num_parameters_base] = study_base.data_vars
+    propagated_study_parameters[num_parameters_base:] = numpy.array(study_other.data_vars).flatten()
 
     # Construct the samples matrix
     for set_index in range(num_parameter_sets_base):
