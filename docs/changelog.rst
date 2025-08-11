@@ -8,6 +8,11 @@ Changelog
 0.13.13 (unreleased)
 ********************
 
+Internal Changes
+================
+- Add parameter space propagation when merging studies with unique parameter spaces. (:issue:`951`, :merge:`1235`). By
+  `Chris Johnson`_.
+
 ********************
 0.13.12 (2025-07-21)
 ********************
