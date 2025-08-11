@@ -55,7 +55,10 @@ class ParameterGenerator(ABC):
     :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
-        study Xarray Dataset
+        study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
+        Set name to content associations of the previous study are preserved when the parameter spaces between the
+        previous and current study are identical. If the parameter spaces are unique, the current study will propagate
+        the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param require_previous_parameter_study: Raise a ``RuntimeError`` if the previous parameter study file is missing.
     :param overwrite: Overwrite existing output files
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
@@ -467,8 +470,12 @@ class ParameterGenerator(ABC):
     def _merge_parameter_studies(self) -> None:
         """Merge the current parameter study into a previous parameter study.
 
-        Preserve the previous parameter study set name to set contents associations by dropping the current study's set
-        names during merge. Resets attributes:
+        When merging across identical parameter spaces, preserves the previous parameter study set name to set
+        contents associations by dropping the new studies' set names during merge. If the parameter spaces are unique
+        across studies, this method will use ``_propagate_parameter_space()`` to resolve the parameter spaces and break
+        the set name to set contents associations of the previous study.
+
+        Resets attributes:
 
         * ``self.parameter_study``
         * ``self._samples``
@@ -627,7 +634,10 @@ class CartesianProduct(ParameterGenerator):
     :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
-        study Xarray Dataset
+        study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
+        Set name to content associations of the previous study are preserved when the parameter spaces between the
+        previous and current study are identical. If the parameter spaces are unique, the current study will propagate
+        the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param require_previous_parameter_study: Raise a ``RuntimeError`` if the previous parameter study file is missing.
     :param overwrite: Overwrite existing output files
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
@@ -708,7 +718,10 @@ class LatinHypercube(_ScipyGenerator):
     :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
-        study Xarray Dataset
+        study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
+        Set name to content associations of the previous study are preserved when the parameter spaces between the
+        previous and current study are identical. If the parameter spaces are unique, the current study will propagate
+        the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param require_previous_parameter_study: Raise a ``RuntimeError`` if the previous parameter study file is missing.
     :param overwrite: Overwrite existing output files
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
@@ -795,7 +808,10 @@ class OneAtATime(ParameterGenerator):
     :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
-        study Xarray Dataset
+        study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
+        Set name to content associations of the previous study are preserved when the parameter spaces between the
+        previous and current study are identical. If the parameter spaces are unique, the current study will propagate
+        the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param require_previous_parameter_study: Raise a ``RuntimeError`` if the previous parameter study file is missing.
     :param overwrite: Overwrite existing output files
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
@@ -910,7 +926,10 @@ class CustomStudy(ParameterGenerator):
     :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
-        study Xarray Dataset
+        study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
+        Set name to content associations of the previous study are preserved when the parameter spaces between the
+        previous and current study are identical. If the parameter spaces are unique, the current study will propagate
+        the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param require_previous_parameter_study: Raise a ``RuntimeError`` if the previous parameter study file is missing.
     :param overwrite: Overwrite existing output files
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
@@ -1008,7 +1027,10 @@ class SobolSequence(_ScipyGenerator):
     :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
-        study Xarray Dataset
+        study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
+        Set name to content associations of the previous study are preserved when the parameter spaces between the
+        previous and current study are identical. If the parameter spaces are unique, the current study will propagate
+        the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param overwrite: Overwrite existing output files
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
@@ -1101,7 +1123,10 @@ class ScipySampler(_ScipyGenerator):
     :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
-        study Xarray Dataset
+        study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
+        Set name to content associations of the previous study are preserved when the parameter spaces between the
+        previous and current study are identical. If the parameter spaces are unique, the current study will propagate
+        the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param overwrite: Overwrite existing output files
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
@@ -1200,7 +1225,10 @@ class SALibSampler(ParameterGenerator, ABC):
     :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
-        study Xarray Dataset
+        study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
+        Set name to content associations of the previous study are preserved when the parameter spaces between the
+        previous and current study are identical. If the parameter spaces are unique, the current study will propagate
+        the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param overwrite: Overwrite existing output files
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
@@ -1489,13 +1517,74 @@ def _coerce_values(values: typing.Iterable, name: typing.Optional[str] = None) -
     return values_coerced
 
 
+def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.Dataset) -> xarray.Dataset:
+    """Propagate unique parameters from a new study into the base study, creating a new study using CustomStudy.
+    Assumes that the parameter studies do not share any parameters. The incoming studies should have set name as the
+    active dimension.
+
+    This function breaks set_name-to-content associations of the input studies, including the base study. This is due
+    to new set hashes calculated for each expanded parameter set.
+
+    :param study_base: A :class:`ParameterGenerator` parameter study Xarray Dataset
+    :param study_other: A :class:`ParameterGenerator` parameter study Xarray Dataset with unique parameters compared
+        to `study_base`
+
+    :return: :class:`CustomStudy` parameter study xarray Dataset
+    """
+    # Calculate parameter sets (ROWS) in the samples matrix
+    num_parameter_sets_base = len(study_base[_set_coordinate_key])
+    num_parameter_sets_other = len(study_other[_set_coordinate_key])
+    total_parameter_sets = num_parameter_sets_base * num_parameter_sets_other
+
+    # Calculate parameters (COLUMNS) in the samples/parameters matrix
+    num_parameters_base = len(study_base.data_vars)
+    num_parameters_other = len(study_other.data_vars)
+    total_parameters = num_parameters_base + num_parameters_other
+
+    # Populate matrices for the propagated CustomStudy
+    propagated_study_samples = numpy.full((total_parameter_sets, total_parameters), numpy.nan, dtype=object)
+    propagated_study_parameters = numpy.full(total_parameters, numpy.nan, dtype=object)
+
+    # Parameter values will need to be repeated by some factor to fill out the sample space
+    repeats_base = int(numpy.ceil(total_parameter_sets / num_parameter_sets_base))
+    repeats_other = int(numpy.ceil(total_parameter_sets / num_parameter_sets_other))
+
+    # Construct the parameter names vector
+    propagated_study_parameters[0:num_parameters_base] = study_base.data_vars
+    propagated_study_parameters[num_parameters_base:] = study_other.data_vars
+
+    # Construct the samples matrix
+    for set_index in range(num_parameter_sets_base):
+        for repeat_index in range(repeats_base):
+            row = set_index * repeats_base + repeat_index
+            for column, parameter in enumerate(study_base.data_vars):
+                # Populate each entry of the samples matrix using the values of each parameter set at each parameter
+                propagated_study_samples[row, column] = study_base.isel(set_name=set_index)[parameter].to_numpy().item()
+    for repeat_index in range(repeats_other):
+        for set_index in range(num_parameter_sets_other):
+            row = repeat_index * num_parameter_sets_other + set_index
+            for column_index, parameter in enumerate(study_other.data_vars):
+                column = column_index + num_parameters_base
+                propagated_study_samples[row, column] = (
+                    study_other.isel(set_name=set_index)[parameter].to_numpy().item()
+                )
+
+    parameter_schema = dict(
+        parameter_samples=propagated_study_samples, parameter_names=propagated_study_parameters.flatten()
+    )
+    propagated_study = CustomStudy(parameter_schema).parameter_study
+    return propagated_study
+
+
 def _merge_parameter_studies(
     studies: typing.List[xarray.Dataset], template: typing.Optional[string.Template] = None
 ) -> xarray.Dataset:
     """Merge a list of parameter studies into one study.
 
-    Preserve the first given parameter study set name to set contents associations by dropping subsequent studies' set
-    names during merge.
+    When merging across identical parameter spaces, preserves the first given parameter study set name to set contents
+    associations by dropping subsequent studies' set names during merge. If the parameter spaces are unique across
+    studies, this function will use ``_propagate_parameter_space()`` to resolve the spaces and break the set name to
+    set contents associations of the base study.
 
     :param studies: list of parameter study xarray Datasets where the first study is considered the 'base' study
     :param template: parameter set naming :class:`string.Template`. If none is provided, fetch the default template
@@ -1510,25 +1599,38 @@ def _merge_parameter_studies(
 
     # Swap dimensions from the set name to the set hash to merge identical sets
     swap_to_hash_index = {_set_coordinate_key: _hash_coordinate_key}
+    swap_to_set_index = {_hash_coordinate_key: _set_coordinate_key}
     studies = [study.swap_dims(swap_to_hash_index) for study in studies]
 
     # Split the list of studies into one 'base' study and the remainder
     study_base = studies.pop(0)
 
-    # Verify type equality and record types prior to merge.
     types_dictionary = {}
-    studies_parameters = []
-    for study in studies:
-        coerce_types = _return_dataset_types(study_base, study)
+    studies_iterator = studies  # Copy list to avoid index shifting from item removal
+    for study_other in studies_iterator:
+        # Verify type equality and record types prior to merge
+        coerce_types = _return_dataset_types(study_base, study_other)
         types_dictionary.update(coerce_types)
-        study_parameters = [parameter for parameter in study.data_vars]
-        studies_parameters.extend(study_parameters)
 
-    # Verify uniform parameter space prior to merge
-    study_base_parameters = [parameter for parameter in study_base.data_vars]
-    extra_parameters = set(study_base_parameters) ^ set(studies_parameters)
-    if any(extra_parameters):
-        raise RuntimeError(f"Found unshared parameter(s) '{extra_parameters}' in attempted merge operation")
+        # Find and propagate any nonuniform parameter spaces
+        study_base_parameters = [parameter for parameter in study_base.data_vars]
+        study_other_parameters = [parameter for parameter in study_other.data_vars]
+        extra_parameters = set(study_base_parameters) ^ set(study_other_parameters)
+        shared_parameters = set(study_base_parameters) & set(study_other_parameters)
+        if any(shared_parameters) and any(extra_parameters):
+            raise RuntimeError(
+                f"Found study containing partially overlapping parameter space during attempted merge operation.\n"
+                f"Unshared parameter(s): '{extra_parameters}'\n"
+                f"Shared parameters :'{shared_parameters}'"
+            )
+        if any(extra_parameters):
+            # Parameter space propagation will fail if the individual spaces are not unique across all studies
+            # TODO: Sort the parameter space prior to merge/propagate operations
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/952
+            study_base = _propagate_parameter_space(
+                study_base.swap_dims(swap_to_set_index), study_other.swap_dims(swap_to_set_index)
+            ).swap_dims(swap_to_hash_index)
+            studies.remove(study_other)
 
     # Combine all studies after dropping set names from all but `study_base`
     studies = [study_base] + [study.drop_vars(_set_coordinate_key) for study in studies]
@@ -1544,7 +1646,7 @@ def _merge_parameter_studies(
 
     # Recalculate attributes with lengths matching the number of parameter sets
     study_combined = _update_set_names(study_combined, template)
-    study_combined = study_combined.swap_dims({_hash_coordinate_key: _set_coordinate_key})
+    study_combined = study_combined.swap_dims(swap_to_set_index)
 
     return study_combined
 
