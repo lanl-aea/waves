@@ -10,7 +10,7 @@ Changelog
 
 Internal Changes
 ================
-- Add parameter space propagation when merging studies with unique parameter spaces. (:issue:`951`, :merge:`1235`). By
+- Add parameter space propagation when merging studies with unique parameter spaces. (:issue:`951`, :merge:`1232`). By
   `Chris Johnson`_.
 
 ********************
