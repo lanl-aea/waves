@@ -732,7 +732,12 @@ merge_parameter_studies_cases = {
                 "parameter_4": [True],
             }
         ).parameter_study,
-        {"parameter_1": numpy.float64, "parameter_2": numpy.dtype("U1"), "parameter_3": numpy.int64, "parameter_4": numpy.bool_},
+        {
+            "parameter_1": numpy.float64,
+            "parameter_2": numpy.dtype("U1"),
+            "parameter_3": numpy.int64,
+            "parameter_4": numpy.bool_,
+        },
         True,
         does_not_raise,
     ),
