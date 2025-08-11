@@ -29,9 +29,9 @@ Workflow SConscript
 ===================
 
 The workflow configuration SConscript files are named after the workflow, assembly, or simulation that they configure.
-These files are limited to pass-through operations calling the correct part and assembly configuration files required by
-the workflow and workflow specific tasks. They pass the ``env``, and ``parameters`` through to the part or assembly 
-SConscript files.
+These files should call SConscript files defining the re-usable portions of the workflow, such as parts and assembly 
+configuration, and may optionally define workflow specific tasks. They pass the ``env``, and ``parameters`` through to 
+the part or assembly SConscript files.
 
 .. code-block::
 
