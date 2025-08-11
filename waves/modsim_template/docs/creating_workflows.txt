@@ -57,14 +57,6 @@ definitions.
 The part and assembly configuration files do not define their own alias; instead, the alias is automatically 
 constructed from the name of the build directory.
 
-The Sconscript files can be spread throughout the source tree. allowing users to structure both source and 
-build directories according to their project needs. Simulation workflows are defined in separate SConscript files, 
-which keeps each simulation self-contained and easier to manage. This layout supports deeply nested directory trees 
-and allows users to maintain a clear separation between parts, workflows, and utility scripts. While this flexibility 
-can lead to more verbose SConstruct and SConscript implementations, it enables greater clarity and transparency in 
-the build process. Users are encouraged to adopt consistent naming conventions and directory structures to help 
-navigate the project efficiently, especially when using command line tools or GUI file browsers.
-
 An example of a workflow configuration may be found in the following files, listed in the SCons configuration order
 
 1. ``SConstruct``
