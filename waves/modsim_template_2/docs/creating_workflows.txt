@@ -67,9 +67,3 @@ calling workflow SConscript files must be co-located with the Abaqus input files
 and growing ``modsim_package`` directory, so users and developers are encouraged to become comfortable sorting and 
 finding files with ``grep`` and ``find`` in a bash command line terminal or seeking out the advanced behaviors for 
 file sorting in their preferred GUI file browser.
-
-An example of a workflow configuration may be found in the following files, listed in the SCons configuration order
-
-1. ``SConstruct``
-2. ``modsim_package/rectangle_compression``
-3. ``modsim_package/rectangle``

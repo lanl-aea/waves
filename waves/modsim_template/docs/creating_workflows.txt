@@ -58,9 +58,3 @@ definitions.
 
 The part and assembly configuration files do not define their own alias; instead, the alias is automatically 
 constructed from the name of the build directory.
-
-An example of a workflow configuration may be found in the following files, listed in the SCons configuration order
-
-1. ``SConstruct``
-2. ``modsim_package/rectangle_compression``
-3. ``modsim_package/rectangle``
