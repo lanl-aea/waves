@@ -719,6 +719,23 @@ merge_parameter_studies_cases = {
         True,
         does_not_raise,
     ),
+    "propagate two parameters into two: cartesian product": (
+        [
+            parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0], "parameter_4": [True]}).parameter_study,
+            parameter_generators.CartesianProduct({"parameter_2": ["a", "b"], "parameter_3": [3, 4]}).parameter_study,
+        ],
+        parameter_generators.CartesianProduct(
+            {
+                "parameter_1": [1.0, 2.0],
+                "parameter_2": ["a", "b"],
+                "parameter_3": [3, 4],
+                "parameter_4": [True],
+            }
+        ).parameter_study,
+        {"parameter_1": numpy.float64, "parameter_2": numpy.dtype("U1"), "parameter_3": numpy.int64, "parameter_4": numpy.bool_},
+        True,
+        does_not_raise,
+    ),
 }
 
 
