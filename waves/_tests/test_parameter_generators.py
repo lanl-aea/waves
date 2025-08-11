@@ -658,7 +658,7 @@ merge_parameter_studies_cases.update(
             None,
             None,
             None,
-            pytest.raises(RuntimeError),
+            pytest.raises(RuntimeError, match="Different types for"),
         ),
         "concatenate along one parameter: int/bool": (
             [
@@ -668,7 +668,7 @@ merge_parameter_studies_cases.update(
             None,
             None,
             None,
-            pytest.raises(RuntimeError),
+            pytest.raises(RuntimeError, match="Different types for"),
         ),
         "concatenate along one parameter: float/bool": (
             [
@@ -678,7 +678,7 @@ merge_parameter_studies_cases.update(
             None,
             None,
             None,
-            pytest.raises(RuntimeError),
+            pytest.raises(RuntimeError, match="Different types for"),
         ),
         "concatenate along one parameter across multiple studies: float": (
             [
@@ -803,7 +803,7 @@ merge_parameter_studies_cases.update(
             None,
             None,
             None,
-            pytest.raises(RuntimeError),
+            pytest.raises(RuntimeError, match="Not enough parameter studies provided for merge operation"),
         ),
         "concatenate with different numbers of parameters": (
             [
@@ -813,7 +813,7 @@ merge_parameter_studies_cases.update(
             None,
             None,
             None,
-            pytest.raises(RuntimeError),
+            pytest.raises(RuntimeError, match="Found study containing partially overlapping parameter space"),
         ),
     }
 )
@@ -1305,7 +1305,10 @@ test_update_set_names_cases = {
         ).set_coords(_settings._set_coordinate_key),
         {"template": _utilities._AtSignTemplate("out@{number}")},
         None,
-        pytest.raises(RuntimeError),
+        pytest.raises(
+            RuntimeError,
+            match="Could not fill merged parameter set names. Does the parameter set naming convention match?",
+        ),
     ),
     "filled dataset, no kwargs, should return as original, single parameter set": (
         xarray.Dataset(
