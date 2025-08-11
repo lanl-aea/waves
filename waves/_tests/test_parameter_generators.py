@@ -623,6 +623,16 @@ merge_parameter_studies_cases = {
         True,
         does_not_raise,
     ),
+    "propagate one parameter of mixed typing: int and float": (
+        [
+            parameter_generators.CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
+            parameter_generators.CartesianProduct({"parameter_2": [3.0, 4.0]}).parameter_study,
+        ],
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}).parameter_study,
+        {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
+        True,
+        does_not_raise,
+    ),
     "propagate one parameter of mixed typing: float and str": (
         [
             parameter_generators.CartesianProduct({"parameter_1": [1.0]}).parameter_study,
