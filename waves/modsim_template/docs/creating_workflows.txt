@@ -8,6 +8,8 @@ This project uses three layers of SCons configuration files:
 2. Workflow SConscript: named after the workflow or simulation, e.g. ``rectangle_compression``
 3. Part/Assembly SConscript: named after the part, e.g. ``rectangle``
 
+When updating or adding a new workflow, be sure to update the SConscript docstring to match any requirement changes.
+
 SConstruct
 ==========
 
@@ -62,6 +64,3 @@ An example of a workflow configuration may be found in the following files, list
 1. ``SConstruct``
 2. ``modsim_package/rectangle_compression``
 3. ``modsim_package/rectangle``
-
-When updating or adding a new workflow, be sure to update the workflow description contained in the SConscript file 
-so that the project command line help stays up to date.
