@@ -14,12 +14,12 @@ SConstruct
 ==========
 
 The project configuration SConstruct file is responsible for configuring project wide variables, command line options,
-and parameter sets. The SConstruct file calls workflow SConscript files with the construction environment export 
-named ``env``. For example,
+and parameter sets. The SConstruct file calls workflow SConscript files with the construction environment and parameters 
+exports, ``env`` and ``parameters``, respectively.
 
 .. code-block::
 
-   SConscript(..., exports={"env": env, ...}, ...)
+   SConscript(..., exports={"env": env, "parameters": parameters, ...}, ...)
 
 The SConscript calls are constructed in the ``workflow_configurations`` variable as a list of tuples that consist of: (1) 
 workflow study name, (2) workflow SConscript file, and (3) study definition dictionary of simulation variables or 
