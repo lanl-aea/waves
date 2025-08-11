@@ -61,8 +61,8 @@ The part and assembly configuration files rely on an explicit alias defined in t
 through the ``exports={}`` and ``Import()`` interface.
 
 The SConscript files *must* be located in the ``modsim_package`` directory. All project files are located in a single 
-``modsim_package``, the workflow and parts SConscript files are re-combined many ways and must be co-located to end up 
-with a single build directory per workflow, Abaqus input files are scanned for implicit ``*INCLUDE`` statements so the 
+``modsim_package``. The workflow and parts SConscript files are re-combined many ways and must be co-located to end up 
+with a single build directory per workflow. Abaqus input files are scanned for implicit ``*INCLUDE`` statements, so the 
 calling workflow SConscript files must be co-located with the Abaqus input files. These restrictions make for large 
 and growing ``modsim_package`` directory, so users and developers are encouraged to become comfortable sorting and 
 finding files with ``grep`` and ``find`` in a bash command line terminal or seeking out the advanced behaviors for 
