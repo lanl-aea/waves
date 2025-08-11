@@ -1551,7 +1551,7 @@ def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.D
 
     # Construct the parameter names vector
     propagated_study_parameters[0:num_parameters_base] = study_base.data_vars
-    propagated_study_parameters[num_parameters_base:] = numpy.array(study_other.data_vars).flatten()
+    propagated_study_parameters[num_parameters_base:] = study_other.data_vars
 
     # Construct the samples matrix
     for set_index in range(num_parameter_sets_base):
