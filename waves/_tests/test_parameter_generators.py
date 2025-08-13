@@ -815,6 +815,17 @@ merge_parameter_studies_cases.update(
             None,
             pytest.raises(RuntimeError, match="Found study containing partially overlapping parameter space"),
         ),
+        "merge and propagate: three studies, two parameter spaces": (
+            [
+                parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
+                parameter_generators.CartesianProduct({"parameter_1": [2]}).parameter_study,
+                parameter_generators.CartesianProduct({"parameter_2": [3.0, 4.0]}).parameter_study,
+            ],
+            parameter_generators.CartesianProduct({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}).parameter_study,
+            {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
+            True,
+            does_not_raise,
+        )
     }
 )
 
