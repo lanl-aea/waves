@@ -815,7 +815,7 @@ merge_parameter_studies_cases.update(
             None,
             pytest.raises(RuntimeError, match="Found study containing partially overlapping parameter space"),
         ),
-        "merge and propagate: three studies, two parameter spaces": (
+        "merge and propagate: three studies, two parameter spaces - int/float": (
             [
                 parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
                 parameter_generators.CartesianProduct({"parameter_1": [2]}).parameter_study,
@@ -825,7 +825,45 @@ merge_parameter_studies_cases.update(
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
             True,
             does_not_raise,
-        )
+        ),
+        "merge and propagate: four studies, two parameter spaces - string/bool": (
+            [
+                parameter_generators.CartesianProduct({"parameter_1": ["a"]}).parameter_study,
+                parameter_generators.CartesianProduct({"parameter_2": [True]}).parameter_study,
+                parameter_generators.CartesianProduct({"parameter_1": ["b"]}).parameter_study,
+                parameter_generators.CartesianProduct({"parameter_2": [False]}).parameter_study,
+            ],
+            parameter_generators.CartesianProduct(
+                {"parameter_1": ["a", "b"], "parameter_2": [True, False]}
+            ).parameter_study,
+            {"parameter_1": numpy.dtype("U1"), "parameter_2": numpy.bool_},
+            True,
+            does_not_raise,
+        ),
+        "merge and propagate: three studies, three parameter spaces": (
+            [
+                parameter_generators.CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
+                parameter_generators.CartesianProduct({"parameter_2": [True, False]}).parameter_study,
+                parameter_generators.CartesianProduct({"parameter_3": [1.0, 2.0]}).parameter_study,
+            ],
+            parameter_generators.CartesianProduct(
+                {"parameter_1": [1, 2], "parameter_2": [True, False], "parameter_3": [1.0, 2.0]}
+            ).parameter_study,
+            {"parameter_1": numpy.int64, "parameter_2": numpy.bool_, "parameter_3": numpy.float64},
+            True,
+            does_not_raise,
+        ),
+        "merge and propagate: One at a Time": (
+            [
+                parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
+                parameter_generators.OneAtATime({"parameter_2": [2.0]}).parameter_study,
+                parameter_generators.OneAtATime({"parameter_1": [2, 3]}).parameter_study,
+            ],
+            parameter_generators.CartesianProduct({"parameter_1": [1, 2, 3], "parameter_2": [2.0]}).parameter_study,
+            {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
+            True,
+            does_not_raise,
+        ),
     }
 )
 
