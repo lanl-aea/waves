@@ -1643,6 +1643,13 @@ def _merge_parameter_studies(
         first_study = parameter_spaces[space]["studies"].pop(0)
         other_studies = [study.drop_vars(_set_coordinate_key) for study in parameter_spaces[space]["studies"]]
         merged_study = xarray.merge([first_study] + other_studies).sortby(_hash_coordinate_key)
+        # Coerce types back to their original type.
+        # Particularly necessary for ints, which are coerced to float by xarray.merge
+        for parameter in parameter_spaces[space]["parameters"]:
+            new_dtype = merged_study[parameter].dtype
+            old_dtype = types_dictionary[parameter]
+            if new_dtype != old_dtype:
+                merged_study[parameter] = merged_study[parameter].astype(old_dtype)
         # Recalculate attributes with lengths matching the number of parameter sets
         parameter_spaces[space]["studies"] = _update_set_names(merged_study, template)
 
@@ -1652,13 +1659,6 @@ def _merge_parameter_studies(
     if any(studies):
         for study_other in studies:
             study_combined = _propagate_parameter_space(study_combined, study_other)
-
-    # Coerce types back to their original type.
-    # Particularly necessary for ints, which are coerced to float by xarray.merge
-    for key, old_dtype in types_dictionary.items():
-        new_dtype = study_combined[key].dtype
-        if new_dtype != old_dtype:
-            study_combined[key] = study_combined[key].astype(old_dtype)
 
     return study_combined
 
