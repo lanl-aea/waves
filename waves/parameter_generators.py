@@ -1606,36 +1606,54 @@ def _merge_parameter_studies(
     study_base = studies.pop(0)
 
     types_dictionary = {}
-    studies_iterator = studies  # Copy list to avoid index shifting from item removal
-    for study_other in studies_iterator:
+    parameter_spaces = {"parameter_space0": {"studies": [study_base], "parameters": list(study_base.data_vars)}}
+    parameter_space_index = 1
+    for study_other in studies:
         # Verify type equality and record types prior to merge
         coerce_types = _return_dataset_types(study_base, study_other)
         types_dictionary.update(coerce_types)
 
-        # Find and propagate any nonuniform parameter spaces
-        study_base_parameters = [parameter for parameter in study_base.data_vars]
-        study_other_parameters = [parameter for parameter in study_other.data_vars]
-        extra_parameters = set(study_base_parameters) ^ set(study_other_parameters)
-        shared_parameters = set(study_base_parameters) & set(study_other_parameters)
-        if any(shared_parameters) and any(extra_parameters):
-            raise RuntimeError(
-                f"Found study containing partially overlapping parameter space during attempted merge operation.\n"
-                f"Unshared parameter(s): '{extra_parameters}'\n"
-                f"Shared parameters :'{shared_parameters}'"
-            )
-        if any(extra_parameters):
-            # Parameter space propagation will fail if the individual spaces are not unique across all studies
-            # TODO: Sort the parameter space prior to merge/propagate operations
-            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/952
-            study_base = _propagate_parameter_space(
-                study_base.swap_dims(swap_to_set_index), study_other.swap_dims(swap_to_set_index)
-            ).swap_dims(swap_to_hash_index)
-            studies.remove(study_other)
+        # Compare parameters of current study with existing known parameter spaces
+        parameters = list(study_other.data_vars)
+        generate_new_space = False
+        for space in parameter_spaces.keys():
+            shared_parameters = set(parameters) & set(parameter_spaces[space]["parameters"])
+            unshared_parameters = set(parameters) ^ set(parameter_spaces[space]["parameters"])
+            if any(shared_parameters) and any(unshared_parameters):
+                raise RuntimeError(
+                    f"Found study containing partially overlapping parameter space during attempted merge operation.\n"
+                    f"Unshared parameter(s): '{unshared_parameters}'\n"
+                    f"Shared parameters :'{shared_parameters}'"
+                )
+            if any(shared_parameters):
+                generate_new_space = False
+                parameter_spaces[space]["studies"].append(study_other)
+                break
+            if any(unshared_parameters):
+                generate_new_space = True
+        if generate_new_space:
+            parameter_spaces[f"parameter_space{parameter_space_index}"] = {
+                "studies": [study_other],
+                "parameters": parameters,
+            }
+            parameter_space_index += 1
 
-    # Combine all studies after dropping set names from all but `study_base`
-    studies = [study_base] + [study.drop_vars(_set_coordinate_key) for study in studies]
-    study_combined = xarray.merge(studies)
-    study_combined = study_combined.sortby(_hash_coordinate_key)
+    # Merge studies in each parameter space
+    for space in parameter_spaces.keys():
+        first_study = parameter_spaces[space]["studies"].pop(0)
+        other_studies = [study.drop_vars(_set_coordinate_key) for study in parameter_spaces[space]["studies"]]
+        merged_study = xarray.merge([first_study] + other_studies).sortby(_hash_coordinate_key)
+        # Recalculate attributes with lengths matching the number of parameter sets
+        parameter_spaces[space]["studies"] = _update_set_names(merged_study, template)
+
+    # If multiple parameter spaces, propagate into one combined study
+    studies = [parameter_spaces[space]["studies"] for space in parameter_spaces.keys()]
+    study_combined = studies.pop(0)
+    if any(studies):
+        for study_other in studies:
+            study_combined = _propagate_parameter_space(
+                study_combined.swap_dims(swap_to_set_index), study_other.swap_dims(swap_to_set_index)
+            ).swap_dims(swap_to_hash_index)
 
     # Coerce types back to their original type.
     # Particularly necessary for ints, which are coerced to float by xarray.merge
@@ -1644,8 +1662,6 @@ def _merge_parameter_studies(
         if new_dtype != old_dtype:
             study_combined[key] = study_combined[key].astype(old_dtype)
 
-    # Recalculate attributes with lengths matching the number of parameter sets
-    study_combined = _update_set_names(study_combined, template)
     study_combined = study_combined.swap_dims(swap_to_set_index)
 
     return study_combined
