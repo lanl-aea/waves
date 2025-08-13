@@ -1638,13 +1638,12 @@ def _merge_parameter_studies(
             }
             parameter_space_index += 1
 
-    # Merge studies in each parameter space
+    # Merge studies in each parameter space. Preserves the set names of the first study in each space
     for space in parameter_spaces.keys():
         first_study = parameter_spaces[space]["studies"].pop(0)
         other_studies = [study.drop_vars(_set_coordinate_key) for study in parameter_spaces[space]["studies"]]
         merged_study = xarray.merge([first_study] + other_studies)
-        # Coerce types back to their original type.
-        # Particularly necessary for ints, which are coerced to float by xarray.merge
+        # Coerce types back to their original type. Especially necessary for ints, which xarray.merge converts to float
         for parameter in parameter_spaces[space]["parameters"]:
             new_dtype = merged_study[parameter].dtype
             old_dtype = types_dictionary[parameter]
@@ -1654,7 +1653,7 @@ def _merge_parameter_studies(
         # Recalculate attributes with lengths matching the number of parameter sets
         parameter_spaces[space]["studies"] = _update_set_names(merged_study, template)
 
-    # If multiple parameter spaces, propagate into one combined study
+    # If multiple parameter spaces, propagate into one combined study. Breaks all set name associations
     studies = [parameter_spaces[space]["studies"].swap_dims(swap_to_set_index) for space in parameter_spaces.keys()]
     study_combined = studies.pop(0)
     if any(studies):
