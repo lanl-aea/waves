@@ -12,6 +12,8 @@ Internal Changes
 ================
 - Add parameter space propagation when merging studies with unique parameter spaces. (:issue:`951`, :merge:`1232`). By
   `Chris Johnson`_.
+- Sort the parameter spaces of incoming studies when merging studies. (:issue:`952`, :merge:`1236`). By
+  `Chris Johnson`_.
 
 ********************
 0.13.12 (2025-07-21)
