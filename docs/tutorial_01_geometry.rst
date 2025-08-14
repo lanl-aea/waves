@@ -166,10 +166,10 @@ rectangle part using the :meth:`waves.scons_extensions.abaqus_journal_builder_fa
 .. admonition:: waves-tutorials/tutorial_01_geometry
 
     .. literalinclude:: tutorials_tutorial_01_geometry
-        :language: Python
-        :lineno-match:
-        :end-before: marker-1
-        :emphasize-lines: 15
+       :language: Python
+       :lineno-match:
+       :end-before: marker-1
+       :emphasize-lines: 15
 
 The ``SConscript`` file begins with imports of standard Python libraries. The first
 highlighted line imports the ``env`` variable (``Import('env')``), which is a variable set

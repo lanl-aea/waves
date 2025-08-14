@@ -14,23 +14,37 @@ SConstruct
 ==========
 
 The project configuration SConstruct file is responsible for configuring project wide variables, command line options,
-and parameter sets. The SConstruct file is also responsible for defining the alias and passing it through to the workflow 
-SConscript file. The SConstruct file calls workflow SConscript files with the construction environment and alias 
-exports, ``env`` and ``alias``, respectively.
+and parameter sets. The SConstruct file is also responsible for defining the alias and passing it through to the
+workflow SConscript file. The SConstruct file is reponsible for calling workflow SConscript files with the construction
+environment, alias, and workflow parameters under the variable names ``env``, ``alias``, and ``parameters``,
+respectively.
+
+The workflow SConscript calls are constructed in the ``workflow_configurations`` variable as a list of tuples defining
+the: (1) workflow SConscript file ``workflow``, (2) study name ``study_name``, and (3) study definition
+``study_definition``.
+
+.. admonition:: SConstruct
+
+    .. literalinclude:: SConstruct.txt
+       :language: Python
+       :lineno-match:
+       :start-after: workflow-configurations-start-do-not-remove
+       :end-before: workflow-configurations-start-do-not-remove
+
+The alias is constructed from the workflow Sconscrtip file name and the study name as ``f"{workflow}_{study_name}"``. To
+accommodate parameters defined by both `WAVES`_ parameter studies, which require iterative unpacking, and dictionaries
+the `WAVES`_ ``ParameterStudySConscript`` construction environment method is used as
 
 .. code-block::
 
-   SConscript(..., exports={"env": env, "alias": alias, ...}, ...)
-
-The SConscript calls are constructed in the ``workflow_configurations`` variable as a list of tuples that consist of: (1) 
-workflow SConscript file, (2) study name, and (3) parameters.
+   ParameterStudySConscript(..., exports={"env": env, "alias": alias, ...}, study=study_definition, ...)
 
 Workflow SConscript
 ===================
 
 The workflow configuration SConscript files are named after the workflow, assembly, or simulation that they configure.
-These files should call SConscript files defining the re-usable portions of the workflow, such as parts and assembly 
-configuration, and may optionally define workflow specific tasks. They pass the ``env``, and ``parameters`` through to 
+These files should call SConscript files defining the re-usable portions of the workflow, such as parts and assembly
+configuration, and may optionally define workflow specific tasks. They pass the ``env``, and ``parameters`` through to
 the part or assembly SConscript files.
 
 .. code-block::
@@ -43,7 +57,7 @@ Part/Assembly SConscript
 ========================
 
 The final layer of SConscript files is the part (or assembly) configuration files. These configuration files should
-accept the construction environment ``env``. The project ``parameters`` are imported and unpacked into the part task 
+accept the construction environment ``env``. The project ``parameters`` are imported and unpacked into the part task
 definitions.
 
 .. code-block::
@@ -57,13 +71,13 @@ definitions.
        **parameters,
    )
 
-The part and assembly configuration files rely on an explicit alias defined in the SConstruct file and passed down 
+The part and assembly configuration files rely on an explicit alias defined in the SConstruct file and passed down
 through the ``exports={}`` and ``Import()`` interface.
 
-The SConscript files *must* be located in the ``modsim_package`` directory. All project files are located in a single 
-``modsim_package``. The workflow and parts SConscript files are re-combined many ways and must be co-located to end up 
-with a single build directory per workflow. Abaqus input files are scanned for implicit ``*INCLUDE`` statements, so the 
-calling workflow SConscript files must be co-located with the Abaqus input files. These restrictions make for large 
-and growing ``modsim_package`` directory, so users and developers are encouraged to become comfortable sorting and 
-finding files with ``grep`` and ``find`` in a bash command line terminal or seeking out the advanced behaviors for 
+The SConscript files *must* be located in the ``modsim_package`` directory. All project files are located in a single
+``modsim_package``. The workflow and parts SConscript files are re-combined many ways and must be co-located to end up
+with a single build directory per workflow. Abaqus input files are scanned for implicit ``*INCLUDE`` statements, so the
+calling workflow SConscript files must be co-located with the Abaqus input files. These restrictions make for large
+and growing ``modsim_package`` directory, so users and developers are encouraged to become comfortable sorting and
+finding files with ``grep`` and ``find`` in a bash command line terminal or seeking out the advanced behaviors for
 file sorting in their preferred GUI file browser.

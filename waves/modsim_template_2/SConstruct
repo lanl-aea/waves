@@ -175,10 +175,12 @@ mesh_convergence_parameter_generator = waves.parameter_generators.CartesianProdu
 )
 
 # Add simulation targets
+# workflow-configurations-start-do-not-remove
 workflow_configurations = [
     ("rectangle_compression", "nominal", modsim_package.rectangle_compression.nominal()),
     ("rectangle_compression", "mesh_convergence", mesh_convergence_parameter_generator),
 ]
+# workflow-configurations-end-do-not-remove
 workflow_artifacts = {}
 for workflow, study_name, study_definition in workflow_configurations:
     # Project naming conventions
