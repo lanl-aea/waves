@@ -29,6 +29,7 @@ env.Substfile(
 root_files = [
     ("README.txt", "#/README.rst"),
     ("environment.yml", "#/environment.yml"),
+    ("SConstruct.txt", "#/SConstruct"),
 ]
 for target, source in root_files:
     env.Command(

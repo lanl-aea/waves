@@ -9,3 +9,5 @@ Developer Manual
 .. include:: contribution.txt
 
 .. include:: documentation.txt
+
+.. include:: creating_workflows.txt
