@@ -34,7 +34,7 @@ the part or assembly SConscript files.
 
 .. code-block::
 
-   Import("env")
+   Import("env", "alias", "parameters")
 
    SConscript(..., exports={"env": env, "parameters": parameters, ...}, ...)
 
