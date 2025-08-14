@@ -9,9 +9,11 @@ This project uses three layers of SCons configuration files:
 3. Part/Assembly/Simulation SConscript: named after the re-usable task(s) purpose,
    e.g. when creating a part use the part name ``rectangle``
 
-There is one, and only one, SConstruct file, which is located in the project root directory. Every SConscript file must
-contain a module level docstring that describes the import/return requirements of that SConscript file. When updating or
-adding a new workflow, be sure to update the SConscript docstring to match any requirement changes.
+There is one, and only one, SConstruct file, which is located in the project root directory. The project convention is
+to place SConscript files in the project root directory. If SConscript files are relocated, the workflow configuration
+unpacking for loop in the SConstruct file must be updated to accommodate the file structure change. Every SConscript
+file must contain a module level docstring that describes the import/return requirements of that SConscript file. When
+updating or adding a new workflow, be sure to update the SConscript docstring to match any requirement changes.
 
 SConstruct
 ==========
@@ -35,6 +37,10 @@ SConscript file is used as the build directory name. The SConscript calls are co
        :lineno-match:
        :start-after: workflow-configurations-start-do-not-remove
        :end-before: workflow-configurations-start-do-not-remove
+
+Because the project assumes that SConscript files are located in the project root, the logic contained in this workflow
+configuration loop must be updated if the SConscript files are relocated. The only contraints placed by the project
+design is the construction of a unique build directory for every iteration of the for loop.
 
 Workflow SConscript
 ===================
