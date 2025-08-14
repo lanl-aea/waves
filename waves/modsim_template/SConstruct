@@ -162,11 +162,13 @@ SConscript(
 )
 
 # Add simulation targets
+# Marker: workflow-configurations-start-do-not-remove
 workflow_configurations = [
     "rectangle_compression-nominal",
     "rectangle_compression-mesh_convergence",
 ]
 for workflow in workflow_configurations:
+# Marker: workflow-configurations-start-do-not-remove
     build_dir = env["variant_dir_base"] / workflow
     SConscript(workflow, variant_dir=build_dir, exports={"env": env}, duplicate=False)
 

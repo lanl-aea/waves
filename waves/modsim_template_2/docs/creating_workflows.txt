@@ -6,7 +6,8 @@ This project uses three layers of SCons configuration files:
 
 1. SConstruct: the project configuration
 2. Workflow SConscript: named after the workflow or simulation, e.g. ``rectangle_compression``
-3. Part/Assembly/Simulation SConscript: named after the part, e.g. ``rectangle``
+3. Part/Assembly/Simulation SConscript: named after the re-usable task(s) purpose,
+   e.g. when creating a part use the part name ``rectangle``
 
 There is one, and only one, SConstruct file, which is located in the project root directory. Every SConscript file must
 contain a module level docstring that describes the import/return requirements of that SConscript file. When updating or

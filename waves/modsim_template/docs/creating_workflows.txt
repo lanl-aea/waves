@@ -6,44 +6,76 @@ This project uses three layers of SCons configuration files:
 
 1. SConstruct: the project configuration
 2. Workflow SConscript: named after the workflow or simulation, e.g. ``rectangle_compression``
-3. Part/Assembly SConscript: named after the part, e.g. ``rectangle``
+3. Part/Assembly/Simulation SConscript: named after the re-usable task(s) purpose,
+   e.g. when creating a part use the part name ``rectangle``
 
-When updating or adding a new workflow, be sure to update the SConscript docstring to match any requirement changes.
+There is one, and only one, SConstruct file, which is located in the project root directory. Every SConscript file must
+contain a module level docstring that describes the import/return requirements of that SConscript file. When updating or
+adding a new workflow, be sure to update the SConscript docstring to match any requirement changes.
 
 SConstruct
 ==========
 
 The project configuration SConstruct file is responsible for configuring project wide variables, command line options,
-and parameter sets. The SConstruct file calls workflow SConscript files with the construction environment export 
-named ``env``. For example,
+construction environment(s), and workflows. The SConstruct file is reponsible for calling workflow SConscript files with
+the workflow's construction environment
 
 .. code-block::
 
    SConscript(..., exports={"env": env, ...}, ...)
 
-The SConscript calls are constructed in the ``workflow_configurations`` variable as a list of workflow SConscript
-file names.
+and a unique build directory. By project convention, there is one workflow SConscript file per workflow, so the workflow
+SConscript file is used as the build directory name. The SConscript calls are constructed in the
+``workflow_configurations`` variable as a list of workflow SConscript file names.
+
+.. admonition:: SConstruct
+
+    .. literalinclude:: SConstruct.txt
+       :language: Python
+       :lineno-match:
+       :start-after: workflow-configurations-start-do-not-remove
+       :end-before: workflow-configurations-start-do-not-remove
 
 Workflow SConscript
 ===================
 
-The workflow configuration SConscript files are named after the workflow, assembly, or simulation that they configure.
-These files should call SConscript files defining the re-usable portions of the workflow, such as parts and assembly 
-configuration, and may optionally define workflow specific tasks. They pass the ``env``, and ``parameters`` through to 
-the part or assembly SConscript files.
+The workflow configuration SConscript files are named after the workflow, simulation, or assembly that they configure.
+They are responsible for defining the workflow parameters and for adding targets to the workflow alias(es). The project
+convention is to construct the workflow alias from the build directory supplied by the SConstruct file. The workflow
+files should call SConscript files defining the re-usable portions of the workflow, such as parts and assembly
+configuration, and may optionally define workflow specific tasks. The workflow configuration files pass the ``env``, and
+``parameters`` through to the part or assembly SConscript files. Any task definitions must unpack the workflow
+``parameters`` variable.
 
 .. code-block::
 
    Import("env")
 
+   build_directory = pathlib.Path(Dir(".").abspath)
+   workflow_name = build_directory.name
+
+   parameters = {parameter: value, ...}
+
    SConscript(..., exports={"env": env, "parameters": parameters, ...}, ...)
 
-Part/Assembly SConscript
-========================
+   env.Command(
+       target=[...],
+       source=[...],
+       action=[...],
+       **parameters,
+   )
 
-The final layer of SConscript files is the part (or assembly) configuration files. These configuration files should
-accept the construction environment ``env``. The project ``parameters`` are imported and unpacked into the part task 
-definitions.
+   env.Alias(workflow_name, targets)
+
+Part/Assembly/Simulation SConscript
+===================================
+
+The final layer of SConscript files consists of re-usable task definitions. Most commonly, these contain part (or
+assembly) configuration files. This layer may also include any re-usable tasks if there are common simulation or
+post-processing task definitions that can be shared between workflows. These configuration files should accept the
+construction environment ``env`` and workflow ``parameters``. The parameters should be unpacked into the part task
+definitions. These files may optionally return a list of target artifacts for the parent workflow SConscript file to use
+in alias definitions.
 
 .. code-block::
 
@@ -56,5 +88,4 @@ definitions.
        **parameters,
    )
 
-The part and assembly configuration files do not define their own alias; instead, the alias is automatically 
-constructed from the name of the build directory.
+   Return(artifacts)
