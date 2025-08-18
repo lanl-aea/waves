@@ -1640,8 +1640,8 @@ def _merge_parameter_studies(
 
     # Merge studies in each parameter space. Preserves the set names of the first study in each space
     for space in parameter_spaces.keys():
-        first_study = parameter_spaces[space]["studies"].pop(0)
-        other_studies = [study.drop_vars(_set_coordinate_key) for study in parameter_spaces[space]["studies"]]
+        first_study = parameter_spaces[space]["studies"][0]
+        other_studies = [study.drop_vars(_set_coordinate_key) for study in parameter_spaces[space]["studies"][1:]]
         merged_study = xarray.merge([first_study] + other_studies, join="outer", compat="no_conflicts")
         # Coerce types back to their original type. Especially necessary for ints, which xarray.merge converts to float
         for parameter in parameter_spaces[space]["parameters"]:
