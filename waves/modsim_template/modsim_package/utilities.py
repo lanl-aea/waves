@@ -27,7 +27,7 @@ def combine_data(input_files, group_path, concat_coord):
         xarray.open_dataset(path, group=group_path, engine="h5netcdf").assign_coords({concat_coord: path.parent.name})
         for path in paths
     )
-    combined_data = xarray.concat(data_generator, concat_coord)
+    combined_data = xarray.concat(data_generator, concat_coord, join="outer", compat="no_conflicts")
     combined_data.close()
 
     return combined_data
