@@ -8,10 +8,16 @@ Changelog
 0.13.13 (unreleased)
 ********************
 
+Documentation
+=============
+- Document the modsim template SCons configuration structure (:issue:`689`, :merge:`1233`). By `Sergio Cordova`_ and
+  `Kyle Brindley`_.
+
 Internal Changes
 ================
-- Add parameter space propagation when merging studies with unique parameter spaces. (:issue:`951`, :merge:`1232`). By
+- Add parameter space propagation when merging studies with unique parameter spaces (:issue:`951`, :merge:`1232`). By
   `Chris Johnson`_.
+- Address Xarray future warnings related to default merge behavior (:issue:`954`, :merge:`1237`). By `Kyle Brindley`_.
 - Sort the parameter spaces of incoming studies when merging studies. (:issue:`952`, :merge:`1236`). By
   `Chris Johnson`_.
 

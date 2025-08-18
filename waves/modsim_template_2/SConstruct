@@ -175,16 +175,20 @@ mesh_convergence_parameter_generator = waves.parameter_generators.CartesianProdu
 )
 
 # Add simulation targets
+workflow_artifacts = {}
+# Marker: workflow-configurations-start-do-not-remove
 workflow_configurations = [
     ("rectangle_compression", "nominal", modsim_package.rectangle_compression.nominal()),
     ("rectangle_compression", "mesh_convergence", mesh_convergence_parameter_generator),
 ]
-workflow_artifacts = {}
 for workflow, study_name, study_definition in workflow_configurations:
+    # Marker: workflow-configurations-end-do-not-remove
+    # Marker: workflow-naming-conventions-start-do-not-remove
     # Project naming conventions
     alias = f"{workflow}-{study_name}"
     build_dir = env["variant_dir_base"] / alias
     workflow_file = modsim_package_dir / workflow
+    # Marker: workflow-naming-conventions-end-do-not-remove
 
     # Write workflow parameter file
     modsim_package.utilities.write_study_definition(study_definition, env["parameter_study_build_abspath"], alias)

@@ -407,9 +407,9 @@ class ParameterGenerator(ABC):
     def _merge_set_names_array(self) -> None:
         """Merge the parameter set names array into the parameter study dataset as a non-index coordinate"""
         set_names_array = self._create_set_names_array()
-        self.parameter_study = xarray.merge([self.parameter_study.reset_coords(), set_names_array]).set_coords(
-            _set_coordinate_key
-        )
+        self.parameter_study = xarray.merge(
+            [self.parameter_study.reset_coords(), set_names_array], join="outer", compat="no_conflicts"
+        ).set_coords(_set_coordinate_key)
 
     def _create_parameter_study(self) -> None:
         """Create the standard structure for the parameter study dataset
@@ -433,7 +433,7 @@ class ParameterGenerator(ABC):
             )
             for name, values in zip(self._parameter_names, self._samples.T)
         ]
-        self.parameter_study = xarray.merge(sample_arrays)
+        self.parameter_study = xarray.merge(sample_arrays, join="outer", compat="no_conflicts")
         self._merge_set_names_array()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
@@ -1625,11 +1625,11 @@ def _merge_parameter_studies(
                     f"Unshared parameter(s): '{unshared_parameters}'\n"
                     f"Shared parameters :'{shared_parameters}'"
                 )
-            if any(shared_parameters):
+            elif any(shared_parameters):
                 generate_new_space = False
                 parameter_spaces[space]["studies"].append(study_other)
                 break
-            if any(unshared_parameters):
+            elif any(unshared_parameters):
                 generate_new_space = True
         if generate_new_space:
             parameter_spaces[f"parameter_space{parameter_space_index}"] = {
@@ -1642,7 +1642,7 @@ def _merge_parameter_studies(
     for space in parameter_spaces.keys():
         first_study = parameter_spaces[space]["studies"].pop(0)
         other_studies = [study.drop_vars(_set_coordinate_key) for study in parameter_spaces[space]["studies"]]
-        merged_study = xarray.merge([first_study] + other_studies)
+        merged_study = xarray.merge([first_study] + other_studies, join="outer", compat="no_conflicts")
         # Coerce types back to their original type. Especially necessary for ints, which xarray.merge converts to float
         for parameter in parameter_spaces[space]["parameters"]:
             new_dtype = merged_study[parameter].dtype

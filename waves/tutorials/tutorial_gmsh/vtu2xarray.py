@@ -96,7 +96,7 @@ def main(
                 )
             )
 
-    data = xarray.merge(data_arrays)
+    data = xarray.merge(data_arrays, join="outer", compat="no_conflicts")
     data.to_netcdf(output_file, engine="h5netcdf")
 
 
