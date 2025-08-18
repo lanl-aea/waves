@@ -408,9 +408,7 @@ class ParameterGenerator(ABC):
         """Merge the parameter set names array into the parameter study dataset as a non-index coordinate"""
         set_names_array = self._create_set_names_array()
         self.parameter_study = xarray.merge(
-            [self.parameter_study.reset_coords(), set_names_array],
-            join="outer",
-            compat="no_conflicts"
+            [self.parameter_study.reset_coords(), set_names_array], join="outer", compat="no_conflicts"
         ).set_coords(_set_coordinate_key)
 
     def _create_parameter_study(self) -> None:
