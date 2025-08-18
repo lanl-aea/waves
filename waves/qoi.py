@@ -38,7 +38,7 @@ def _propagate_identical_attrs(all_attrs, context):
     return identical_pairs
 
 
-_merge_constants = {"combine_attrs": _propagate_identical_attrs}
+_merge_constants = {"join": "outer", "compat": "no_conflicts", "combine_attrs": _propagate_identical_attrs}
 
 
 def create_qoi(
@@ -209,7 +209,7 @@ def create_qoi_set(qois: typing.Iterable[xarray.DataArray]) -> xarray.Dataset:
 
 def _create_qoi_study(
     qois: typing.Iterable[xarray.DataArray],
-    parameter_study: xarray.Dataset = None,
+    parameter_study: typing.Optional[xarray.Dataset] = None,
 ) -> xarray.Dataset:
     """Create a QOI Dataset spanning multiple simulations.
 
@@ -866,7 +866,7 @@ def _diff(calculated: pathlib.Path, expected: pathlib.Path, output: pathlib.Path
     :param expected: path to source file containing expected QOI values
     :param output: output path for differences between calculated and expected QOI values
     """
-    qoi_set = xarray.merge((_read_qoi_set(calculated), _read_qoi_set(expected)))
+    qoi_set = xarray.merge((_read_qoi_set(calculated), _read_qoi_set(expected)), join="outer", compat="no_conflicts")
     _add_tolerance_attribute(qoi_set)
     write_qoi_set_to_csv(qoi_set, output)
 

@@ -407,9 +407,11 @@ class ParameterGenerator(ABC):
     def _merge_set_names_array(self) -> None:
         """Merge the parameter set names array into the parameter study dataset as a non-index coordinate"""
         set_names_array = self._create_set_names_array()
-        self.parameter_study = xarray.merge([self.parameter_study.reset_coords(), set_names_array]).set_coords(
-            _set_coordinate_key
-        )
+        self.parameter_study = xarray.merge(
+            [self.parameter_study.reset_coords(), set_names_array],
+            join="outer",
+            compat="no_conflicts"
+        ).set_coords(_set_coordinate_key)
 
     def _create_parameter_study(self) -> None:
         """Create the standard structure for the parameter study dataset
@@ -433,7 +435,7 @@ class ParameterGenerator(ABC):
             )
             for name, values in zip(self._parameter_names, self._samples.T)
         ]
-        self.parameter_study = xarray.merge(sample_arrays)
+        self.parameter_study = xarray.merge(sample_arrays, join="outer", compat="no_conflicts")
         self._merge_set_names_array()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
@@ -1634,7 +1636,7 @@ def _merge_parameter_studies(
 
     # Combine all studies after dropping set names from all but `study_base`
     studies = [study_base] + [study.drop_vars(_set_coordinate_key) for study in studies]
-    study_combined = xarray.merge(studies)
+    study_combined = xarray.merge(studies, join="outer", compat="no_conflicts")
     study_combined = study_combined.sortby(_hash_coordinate_key)
 
     # Coerce types back to their original type.
