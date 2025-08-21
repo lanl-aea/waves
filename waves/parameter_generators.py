@@ -1615,7 +1615,7 @@ def _merge_parameter_studies(
 
         # Compare parameters of current study with existing known parameter spaces
         parameters = list(study_other.data_vars)
-        generate_new_space = False
+        parameter_space_matches = []
         for space in parameter_spaces.keys():
             shared_parameters = set(parameters) & set(parameter_spaces[space]["parameters"])
             unshared_parameters = set(parameters) ^ set(parameter_spaces[space]["parameters"])
@@ -1626,12 +1626,12 @@ def _merge_parameter_studies(
                     f"Shared parameters :'{shared_parameters}'"
                 )
             elif any(shared_parameters):
-                generate_new_space = False
+                parameter_space_matches.append(True)
                 parameter_spaces[space]["studies"].append(study_other)
                 break
             elif any(unshared_parameters):
-                generate_new_space = True
-        if generate_new_space:
+                parameter_space_matches.append(False)
+        if not any(parameter_space_matches):
             parameter_spaces[f"parameter_space{parameter_space_index}"] = {
                 "studies": [study_other],
                 "parameters": parameters,
