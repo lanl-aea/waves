@@ -1599,20 +1599,14 @@ def _merge_parameter_studies(
 
     # Swap dimensions from the set name to the set hash to merge identical sets
     swap_to_hash_index = {_set_coordinate_key: _hash_coordinate_key}
-    swap_to_set_index = {_hash_coordinate_key: _set_coordinate_key}
     studies = [study.swap_dims(swap_to_hash_index) for study in studies]
 
     # Split the list of studies into one 'base' study and the remainder
     study_base = studies.pop(0)
 
-    types_dictionary = {}
     parameter_spaces = {"parameter_space0": {"studies": [study_base], "parameters": list(study_base.data_vars)}}
     parameter_space_index = 1
     for study_other in studies:
-        # Verify type equality and record types prior to merge
-        coerce_types = _return_dataset_types(study_base, study_other)
-        types_dictionary.update(coerce_types)
-
         # Compare parameters of current study with existing known parameter spaces
         parameters = list(study_other.data_vars)
         parameter_space_matches = []
@@ -1631,6 +1625,7 @@ def _merge_parameter_studies(
                 break
             elif any(unshared_parameters):
                 parameter_space_matches.append(False)
+
         if not any(parameter_space_matches):
             parameter_spaces[f"parameter_space{parameter_space_index}"] = {
                 "studies": [study_other],
@@ -1640,13 +1635,23 @@ def _merge_parameter_studies(
 
     # Merge studies in each parameter space. Preserves the set names of the first study in each space
     for space in parameter_spaces.keys():
-        first_study = parameter_spaces[space]["studies"][0]
-        other_studies = [study.drop_vars(_set_coordinate_key) for study in parameter_spaces[space]["studies"][1:]]
-        merged_study = xarray.merge([first_study] + other_studies, join="outer", compat="no_conflicts")
+        studies = parameter_spaces[space]["studies"]
+        first_study = studies.pop(0)
+        types_dictionary = {}
+        other_studies = []
+        for study in studies:
+            other_study = study
+            other_study = other_study.drop_vars(_set_coordinate_key)
+            # Verify type equality and record types prior to merge
+            coerce_types = _return_dataset_types(first_study, other_study)
+            types_dictionary.update(coerce_types)
+            other_studies.append(other_study)
+
+        studies = [first_study] + other_studies
+        merged_study = xarray.merge(studies, join="outer", compat="no_conflicts")
         # Coerce types back to their original type. Especially necessary for ints, which xarray.merge converts to float
-        for parameter in parameter_spaces[space]["parameters"]:
+        for parameter, old_dtype in types_dictionary.items():
             new_dtype = merged_study[parameter].dtype
-            old_dtype = types_dictionary[parameter]
             if new_dtype != old_dtype:
                 merged_study[parameter] = merged_study[parameter].astype(old_dtype)
         merged_study = merged_study.sortby(_hash_coordinate_key)
@@ -1654,6 +1659,7 @@ def _merge_parameter_studies(
         parameter_spaces[space]["studies"] = _update_set_names(merged_study, template)
 
     # If multiple parameter spaces, propagate into one combined study. Breaks all set name associations
+    swap_to_set_index = {_hash_coordinate_key: _set_coordinate_key}
     studies = [parameter_spaces[space]["studies"].swap_dims(swap_to_set_index) for space in parameter_spaces.keys()]
     study_combined = studies.pop(0)
     if any(studies):
