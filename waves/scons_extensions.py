@@ -2003,7 +2003,7 @@ class AbaqusPseudoBuilder:
             trigger a rebuild.
         :param oldjob: Name of job(s) to restart/import. If ``oldjob`` is a string, "-oldjob" will be added to the
             Abaqus command. If ``oldjob`` is a list of strings, "-oldjob" will not be added to the Abaqus command
-            (users should use the "library=" syntax in the Abaqus input file).
+            (users should use the ``*IMPORT, LIBRARY=`` syntax in the Abaqus input file).
         :param write_restart: If True, add restart files to target list. This is required if you want to use these
             restart files for a restart job.
         :param double: Passthrough option for Abaqus' ``-double ${double}``.
