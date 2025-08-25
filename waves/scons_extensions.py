@@ -2001,8 +2001,8 @@ class AbaqusPseudoBuilder:
         :param cpus: CPUs to use for simulation. Is superceded by ``override_cpus`` if provided during object
             instantiation.  The CPUs option is escaped in the action string, i.e. changing the number of CPUs will not
             trigger a rebuild.
-        :param oldjob: Name of job(s) to restart/import. If ``oldjob`` is a string, "-oldjob" will be added to the
-            Abaqus command. If ``oldjob`` is a list of strings, "-oldjob" will not be added to the Abaqus command
+        :param oldjob: Name of job(s) to restart/import. If a single old job is specified, "-oldjob" will be added to the
+            Abaqus command. If multiple old jobs are specified, "-oldjob" will not be added to the Abaqus command
             (users should use the ``*IMPORT, LIBRARY=`` syntax in the Abaqus input file).
         :param write_restart: If True, add restart files to target list. This is required if you want to use these
             restart files for a restart job.
@@ -2111,11 +2111,12 @@ class AbaqusPseudoBuilder:
 
         # If restarting/importing a job, add old job restart files to sources
         if oldjob:
-            # If a single str is passed as oldjob, add "oldjob=" to the Abaqus command
+            # Ensure oldjob is a list of str
             if isinstance(oldjob, str):
-                options += f" -oldjob {oldjob}"
                 oldjob = [oldjob]
-            # Now oldjob is a list with 1 or more strings
+            # If a single old job is specified, add "-oldjob" to the Abaqus command
+            if len(oldjob) == 1:
+                options += f" -oldjob {oldjob[0]}"
             # Add old job targets to source list
             sources.extend(
                 [

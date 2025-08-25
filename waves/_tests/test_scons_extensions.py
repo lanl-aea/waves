@@ -1419,7 +1419,7 @@ abaqus_pseudobuilder_input = {
         {"job": "job", "oldjob": ["oldjob"]},
         ["job.inp"] + [f"oldjob{ext}" for ext in _abaqus_standard_restart_extensions],
         [f"job{ext}" for ext in _abaqus_standard_extensions],
-        " -double both $(-cpus 1$)",
+        " -double both $(-cpus 1$) -oldjob oldjob",
         {"job": "job"},
     ),
     "oldjob_list": (
