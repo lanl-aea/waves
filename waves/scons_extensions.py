@@ -1970,8 +1970,6 @@ class AbaqusPseudoBuilder:
 
     # TODO: address Explicit-specific restart files: ['abq', 'pac', 'sel']
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/821
-    # TODO: allow for import jobs that don't execute Abaqus with ``-oldjob {}``
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/822
     def __call__(
         self,
         env: SCons.Environment.Environment,
@@ -1979,7 +1977,7 @@ class AbaqusPseudoBuilder:
         inp: typing.Optional[str] = None,
         user: typing.Optional[str] = None,
         cpus: int = 1,
-        oldjob: typing.Optional[str] = None,
+        oldjob: typing.Union[typing.List[str], str, None] = None,
         write_restart: bool = False,
         double: str = "both",
         extra_sources: typing.Optional[typing.List[str]] = None,
@@ -2003,7 +2001,9 @@ class AbaqusPseudoBuilder:
         :param cpus: CPUs to use for simulation. Is superceded by ``override_cpus`` if provided during object
             instantiation.  The CPUs option is escaped in the action string, i.e. changing the number of CPUs will not
             trigger a rebuild.
-        :param oldjob: Name of job to restart/import.
+        :param oldjob: Name of job(s) to restart/import. If a single old job is specified, "-oldjob" will be added to
+            the Abaqus command. If multiple old jobs are specified, "-oldjob" will not be added to the Abaqus command
+            (users should use the ``*IMPORT, LIBRARY=`` syntax in the Abaqus input file).
         :param write_restart: If True, add restart files to target list. This is required if you want to use these
             restart files for a restart job.
         :param double: Passthrough option for Abaqus' ``-double ${double}``.
@@ -2067,6 +2067,12 @@ class AbaqusPseudoBuilder:
 
             env.Abaqus(job='simulation_2', oldjob='simulation_1')
 
+        Multiple previous jobs can be specified if the Abaqus simulation imports from multiple ODBs:
+
+        .. code-block:: python
+
+            env.Abaqus(job='simulation_2', oldjob=['simulation_1', 'simulation_1a'])
+
         If your Abaqus job depends on files which aren't detected by an implicit dependency scanner, you can add them to
         the source list directly:
 
@@ -2103,10 +2109,22 @@ class AbaqusPseudoBuilder:
         # Always allow user to override CPUs with CLI option and exclude CPUs from build signature
         options += f" $(-cpus {self.override_cpus or cpus}$)"
 
-        # If restarting a job, add old job restart files to sources
+        # If restarting/importing a job, add old job restart files to sources
         if oldjob:
-            sources.extend([f"{oldjob}{extension}" for extension in _settings._abaqus_standard_restart_extensions])
-            options += f" -oldjob {oldjob}"
+            # Ensure oldjob is a list of str
+            if isinstance(oldjob, str):
+                oldjob = [oldjob]
+            # If a single old job is specified, add "-oldjob" to the Abaqus command
+            if len(oldjob) == 1:
+                options += f" -oldjob {oldjob[0]}"
+            # Add old job targets to source list
+            sources.extend(
+                [
+                    f"{job_name}{extension}"
+                    for job_name in oldjob
+                    for extension in _settings._abaqus_standard_restart_extensions
+                ]
+            )
 
         # If writing restart files, add restart files to targets
         if write_restart:
