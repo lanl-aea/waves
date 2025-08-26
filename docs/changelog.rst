@@ -8,6 +8,10 @@ Changelog
 0.13.15 (unreleased)
 ********************
 
+Bug fixes
+=========
+- Place the node count label on visualize output when requested (:issue:`956`, :merge:`1242`). By `Kyle Brindley`_.
+
 ********************
 0.13.14 (2025-08-25)
 ********************

@@ -463,6 +463,11 @@ def visualize(
             arrowprops=arrowprops,
         )
 
+    for key, position in node_positions.items():
+        if isinstance(key, str) and key.lower().startswith("node count"):
+            axes.annotate(key, xy=position, **patch_kwargs)
+            break
+
     figure.set_size_inches((width, height))
 
     return figure
