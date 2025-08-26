@@ -1517,6 +1517,88 @@ def _coerce_values(values: typing.Iterable, name: typing.Optional[str] = None) -
     return values_coerced
 
 
+def _assess_parameter_spaces(studies: typing.List[xarray.Dataset]) -> dict:
+    """From a list of parameter studies, generates a dictionary of the studies separated into parameter spaces.
+
+    The dictionary contents are split by parameter space, determined by the parameter study parameters. Each parameter
+    space has keys "studies" and "parameters". The key "studies" contains a list of the parameter studies in that space,
+    with the first study in the list corresponding to the "base" study for that parameter space. The key "parameters" is
+    a list of strings with all the parameters present in the parameter space.
+
+    :param studies: list of parameter study xarray Datasets where the first study is considered the 'base' study
+
+    :return: dictionary
+
+    :raises RuntimeError: if input studies contain partially overlapping parameter spaces
+    """
+    study_base = studies.pop(0)
+
+    parameter_spaces = {"parameter_space0": {"studies": [study_base], "parameters": list(study_base.data_vars)}}
+    parameter_space_index = 1
+    for study_other in studies:
+        # Compare parameters of current study with existing known parameter spaces
+        parameters = list(study_other.data_vars)
+        parameter_space_matches = []
+        for space in parameter_spaces.keys():
+            shared_parameters = set(parameters) & set(parameter_spaces[space]["parameters"])
+            unshared_parameters = set(parameters) ^ set(parameter_spaces[space]["parameters"])
+            if any(shared_parameters) and any(unshared_parameters):
+                raise RuntimeError(
+                    f"Found study containing partially overlapping parameter space during attempted merge operation.\n"
+                    f"Unshared parameter(s): '{unshared_parameters}'\n"
+                    f"Shared parameters :'{shared_parameters}'"
+                )
+            elif any(shared_parameters):
+                parameter_space_matches.append(True)
+                parameter_spaces[space]["studies"].append(study_other)
+                break
+            elif any(unshared_parameters):
+                parameter_space_matches.append(False)
+
+        if not any(parameter_space_matches):
+            parameter_spaces[f"parameter_space{parameter_space_index}"] = {
+                "studies": [study_other],
+                "parameters": parameters,
+            }
+            parameter_space_index += 1
+    return parameter_spaces
+
+
+def _merge_parameter_space(studies: typing.List[xarray.Dataset], template: typing.Optional[string.Template] = None
+) -> xarray.Dataset:
+    """Merges a list of studies with identical parameter space into one single output study.
+
+    The input list of studies should have set hash as the active dimension.
+
+    :param studies: list of parameter study xarray Datasets where the first study is considered the 'base' study
+    :param template: parameter set naming :class:`string.Template`. If none is provided, fetch the default template
+        using the ``@`` delimiter from the WAVES settings.
+
+    :return: parameter study xarray Dataset
+    """
+    first_study = studies.pop(0)
+    types_dictionary = {}
+    other_studies = []
+    for study in studies:
+        other_study = study
+        other_study = other_study.drop_vars(_set_coordinate_key)
+        # Verify type equality and record types prior to merge
+        coerce_types = _return_dataset_types(first_study, other_study)
+        types_dictionary.update(coerce_types)
+        other_studies.append(other_study)
+
+    studies = [first_study] + other_studies
+    merged_study = xarray.merge(studies, join="outer", compat="no_conflicts")
+    # Coerce types back to their original type. Especially necessary for ints, which xarray.merge converts to float
+    for parameter, old_dtype in types_dictionary.items():
+        new_dtype = merged_study[parameter].dtype
+        if new_dtype != old_dtype:
+            merged_study[parameter] = merged_study[parameter].astype(old_dtype)
+    merged_study = _update_set_names(merged_study.sortby(_hash_coordinate_key), template)
+    # Recalculate attributes with lengths matching the number of parameter sets
+    return merged_study
+
+
 def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.Dataset) -> xarray.Dataset:
     """Propagate unique parameters from a new study into the base study, creating a new study using CustomStudy.
     Assumes that the parameter studies do not share any parameters. The incoming studies should have set name as the
@@ -1601,62 +1683,12 @@ def _merge_parameter_studies(
     swap_to_hash_index = {_set_coordinate_key: _hash_coordinate_key}
     studies = [study.swap_dims(swap_to_hash_index) for study in studies]
 
-    # Split the list of studies into one 'base' study and the remainder
-    study_base = studies.pop(0)
-
-    parameter_spaces = {"parameter_space0": {"studies": [study_base], "parameters": list(study_base.data_vars)}}
-    parameter_space_index = 1
-    for study_other in studies:
-        # Compare parameters of current study with existing known parameter spaces
-        parameters = list(study_other.data_vars)
-        parameter_space_matches = []
-        for space in parameter_spaces.keys():
-            shared_parameters = set(parameters) & set(parameter_spaces[space]["parameters"])
-            unshared_parameters = set(parameters) ^ set(parameter_spaces[space]["parameters"])
-            if any(shared_parameters) and any(unshared_parameters):
-                raise RuntimeError(
-                    f"Found study containing partially overlapping parameter space during attempted merge operation.\n"
-                    f"Unshared parameter(s): '{unshared_parameters}'\n"
-                    f"Shared parameters :'{shared_parameters}'"
-                )
-            elif any(shared_parameters):
-                parameter_space_matches.append(True)
-                parameter_spaces[space]["studies"].append(study_other)
-                break
-            elif any(unshared_parameters):
-                parameter_space_matches.append(False)
-
-        if not any(parameter_space_matches):
-            parameter_spaces[f"parameter_space{parameter_space_index}"] = {
-                "studies": [study_other],
-                "parameters": parameters,
-            }
-            parameter_space_index += 1
+    parameter_spaces = _assess_parameter_spaces(studies)
 
     # Merge studies in each parameter space. Preserves the set names of the first study in each space
     for space in parameter_spaces.keys():
         studies = parameter_spaces[space]["studies"]
-        first_study = studies.pop(0)
-        types_dictionary = {}
-        other_studies = []
-        for study in studies:
-            other_study = study
-            other_study = other_study.drop_vars(_set_coordinate_key)
-            # Verify type equality and record types prior to merge
-            coerce_types = _return_dataset_types(first_study, other_study)
-            types_dictionary.update(coerce_types)
-            other_studies.append(other_study)
-
-        studies = [first_study] + other_studies
-        merged_study = xarray.merge(studies, join="outer", compat="no_conflicts")
-        # Coerce types back to their original type. Especially necessary for ints, which xarray.merge converts to float
-        for parameter, old_dtype in types_dictionary.items():
-            new_dtype = merged_study[parameter].dtype
-            if new_dtype != old_dtype:
-                merged_study[parameter] = merged_study[parameter].astype(old_dtype)
-        merged_study = merged_study.sortby(_hash_coordinate_key)
-        # Recalculate attributes with lengths matching the number of parameter sets
-        parameter_spaces[space]["studies"] = _update_set_names(merged_study, template)
+        parameter_spaces[space]["studies"] = _merge_parameter_space(studies, template)
 
     # If multiple parameter spaces, propagate into one combined study. Breaks all set name associations
     swap_to_set_index = {_hash_coordinate_key: _set_coordinate_key}
