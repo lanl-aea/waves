@@ -799,31 +799,41 @@ merge_parameter_space_cases = {
 }
 
 
-# @pytest.mark.parametrize(
-#     "studies, expected_study, expected_types, propagate_space, outcome",
-#     merge_parameter_space_cases.values(),
-#     ids=merge_parameter_space_cases.keys(),
-# )
-# def test_merge_parameter_space(studies, expected_study, expected_types, propagate_space, outcome):
-#     """Check the propagation of parameter space between two studies.
-#
-#     :param studies: list of N number of parameter study Xarray datasets to merge, where the first study in the list is
-#         the base study
-#     :param expected_study: Xarray dataset
-#     :param expected_types: dictionary with parameter names as the keys and numpy types as values
-#     :param propagate_space: boolean indicating if parameter space propagation is used to construct the output study.
-#     :param outcome: pytest expected error for the test case
-#     """
-#     study_base = studies.pop(0)
-#     with outcome:
-#         try:
-#             merged_study = parameter_generators._merge_parameter_space(study_base, studies)
-#             for key in expected_types.keys():
-#                 assert merged_study[key].dtype == expected_types[key]
-#             xarray.testing.assert_identical(merged_study, expected_study)
-#             parameter_generators._verify_parameter_study(merged_study)
-#         finally:
-#             pass
+@pytest.mark.parametrize(
+    "studies, expected_study, expected_types, propagate_space, outcome",
+    merge_parameter_space_cases.values(),
+    ids=merge_parameter_space_cases.keys(),
+)
+def test_merge_parameter_space(studies, expected_study, expected_types, propagate_space, outcome):
+    """Check the propagation of parameter space between two studies.
+
+    :param studies: list of N number of parameter study Xarray datasets to merge, where the first study in the list is
+        the base study
+    :param expected_study: Xarray dataset
+    :param expected_types: dictionary with parameter names as the keys and numpy types as values
+    :param propagate_space: boolean indicating if parameter space propagation is used to construct the output study.
+    :param outcome: pytest expected error for the test case
+    """
+    with outcome:
+        try:
+            swap_to_hash_index = {_settings._set_coordinate_key: _settings._hash_coordinate_key}
+            swap_to_set_index = {_settings._hash_coordinate_key: _settings._set_coordinate_key}
+            studies = [study.swap_dims(swap_to_hash_index) for study in studies]
+            merged_study = parameter_generators._merge_parameter_space(studies)
+            merged_study = merged_study.swap_dims(swap_to_set_index)
+            for key in expected_types.keys():
+                assert merged_study[key].dtype == expected_types[key]
+            xarray.testing.assert_identical(merged_study, expected_study)
+            parameter_generators._verify_parameter_study(merged_study)
+            if not propagate_space:
+                # Compare base study hash and set names to merged ones for uniform parameter space
+                base_study = studies[0].swap_dims(swap_to_set_index)
+                base_study_from_merged = merged_study.where(
+                    merged_study[_settings._hash_coordinate_key] == base_study[_settings._hash_coordinate_key]
+                )
+                xarray.testing.assert_identical(base_study_from_merged, base_study)
+        finally:
+            pass
 
 
 merge_parameter_studies_cases = copy.deepcopy(propagate_parameter_space_cases | merge_parameter_space_cases)
