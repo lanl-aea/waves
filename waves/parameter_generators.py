@@ -1576,10 +1576,12 @@ def _merge_parameter_space(studies: typing.List[xarray.Dataset], template: typin
 
     :return: parameter study xarray Dataset
     """
-    first_study = studies.pop(0)
+    first_study = studies[0]
     types_dictionary = {}
     other_studies = []
     for study in studies:
+        if study == first_study:
+            pass
         other_study = study
         other_study = other_study.drop_vars(_set_coordinate_key)
         # Verify type equality and record types prior to merge
