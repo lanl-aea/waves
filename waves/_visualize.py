@@ -464,7 +464,7 @@ def visualize(
         )
 
     for key, position in node_positions.items():
-        if key.startswith("Node count"):
+        if isinstance(key, str) and key.lower().startswith("node count"):
             axes.annotate(key, xy=position, **patch_kwargs)
             break
 
