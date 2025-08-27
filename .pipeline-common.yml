@@ -5,6 +5,8 @@
     environment_file: "environment.yml"
     conda_artifacts_directory: "conda-bld"
   before_script:
+    - function check_variable () { echo "$1"; if [[ -z $1 ]]; then exit 1; fi; }
+    - check_variable "${LANG}"
     - function check_directory_variable () { echo "$1"; if [[ -z $1 ]] || [[ ! -d $1 ]]; then exit 1; fi; }
     - check_directory_variable "${conda_installation}"
     - echo ${environment_file}
