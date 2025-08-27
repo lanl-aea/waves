@@ -1597,9 +1597,7 @@ def _merge_parameter_space(
     study_base = studies[0]
     types_dictionary = {}
     studies_other = []
-    for study_other in studies:
-        if study_other == study_base:
-            pass
+    for study_other in studies[1:]:
         coerce_types = _return_dataset_types(study_base, study_other)
         types_dictionary.update(coerce_types)
         studies_other.append(study_other.drop_vars(_set_coordinate_key))
