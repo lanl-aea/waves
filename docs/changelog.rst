@@ -15,6 +15,8 @@ Documentation
 
 Internal Changes
 ================
+- Implement separate function to merge all studies in a given parameter space (:issue:`955`, :merge:`1238`). By
+  `Chris Johnson`_.
 - Add parameter space propagation when merging studies with unique parameter spaces (:issue:`951`, :merge:`1232`). By
   `Chris Johnson`_.
 - Address Xarray future warnings related to default merge behavior (:issue:`954`, :merge:`1237`). By `Kyle Brindley`_.
