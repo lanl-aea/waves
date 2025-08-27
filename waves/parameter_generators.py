@@ -1624,10 +1624,10 @@ def _merge_parameter_studies(
 ) -> xarray.Dataset:
     """Merge a list of parameter studies into one study.
 
-    When merging across identical parameter spaces, uses ``_merge_parameter_space()`` to preserve the first given
+    When merging across identical parameter spaces, uses :meth:`_merge_parameter_space()` to preserve the first given
     parameter study set name to set contents associations by dropping subsequent studies' set names during merge. If
-    the parameter spaces are unique across studies, this function will use ``_propagate_parameter_space()`` to resolve
-    the spaces and break the set name to set contents associations of the base study.
+    the parameter spaces are unique across studies, this function will use :meth:`_propagate_parameter_space()` to
+    resolve the spaces and break the set name to set contents associations of the base study.
 
     :param studies: list of parameter study xarray Datasets where the first study is considered the 'base' study
     :param template: parameter set naming :class:`string.Template`. If none is provided, fetch the default template
