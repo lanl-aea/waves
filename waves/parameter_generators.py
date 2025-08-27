@@ -1564,43 +1564,6 @@ def _assess_parameter_spaces(studies: typing.List[xarray.Dataset]) -> dict:
     return parameter_spaces
 
 
-def _merge_parameter_space(studies: typing.List[xarray.Dataset], template: typing.Optional[string.Template] = None
-) -> xarray.Dataset:
-    """Merges a list of studies with identical parameter space into one single output study.
-
-    The input list of studies should have set hash as the active dimension.
-
-    :param studies: list of parameter study xarray Datasets where the first study is considered the 'base' study
-    :param template: parameter set naming :class:`string.Template`. If none is provided, fetch the default template
-        using the ``@`` delimiter from the WAVES settings.
-
-    :return: parameter study xarray Dataset
-    """
-    first_study = studies[0]
-    types_dictionary = {}
-    other_studies = []
-    for study in studies:
-        if study == first_study:
-            pass
-        other_study = study
-        other_study = other_study.drop_vars(_set_coordinate_key)
-        # Verify type equality and record types prior to merge
-        coerce_types = _return_dataset_types(first_study, other_study)
-        types_dictionary.update(coerce_types)
-        other_studies.append(other_study)
-
-    studies = [first_study] + other_studies
-    merged_study = xarray.merge(studies, join="outer", compat="no_conflicts")
-    # Coerce types back to their original type. Especially necessary for ints, which xarray.merge converts to float
-    for parameter, old_dtype in types_dictionary.items():
-        new_dtype = merged_study[parameter].dtype
-        if new_dtype != old_dtype:
-            merged_study[parameter] = merged_study[parameter].astype(old_dtype)
-    merged_study = _update_set_names(merged_study.sortby(_hash_coordinate_key), template)
-    # Recalculate attributes with lengths matching the number of parameter sets
-    return merged_study
-
-
 def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.Dataset) -> xarray.Dataset:
     """Propagate unique parameters from a new study into the base study, creating a new study using CustomStudy.
     Assumes that the parameter studies do not share any parameters. The incoming studies should have set name as the
@@ -1660,15 +1623,56 @@ def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.D
     return propagated_study
 
 
+def _merge_parameter_space(
+    studies: typing.List[xarray.Dataset],
+    template: typing.Optional[string.Template] = None,
+) -> xarray.Dataset:
+    """Merge a list of parameter studies with the same parameter space into one study. Studies should have set hash as
+    the active dimension.
+
+    Preserves the first given parameter study set name to set contents associations by dropping subsequent studies'
+    set names during merge.
+
+    :param studies: list of parameter study xarray Datasets with identical parameter spaces where the first
+        study is considered the 'base' study.
+    :param template: parameter set naming :class:`string.Template`. If none is provided, fetch the default template
+        using the ``@`` delimiter from the WAVES settings.
+
+    :return: parameter study xarray Dataset
+    """
+    # Verify type equality and record types prior to merge
+    study_base = studies[0]
+    types_dictionary = {}
+    studies_other = []
+    for study_other in studies[1:]:
+        coerce_types = _return_dataset_types(study_base, study_other)
+        types_dictionary.update(coerce_types)
+        studies_other.append(study_other.drop_vars(_set_coordinate_key))
+
+    # Combine all studies after dropping set names from all but `study_base`
+    merged_study = xarray.merge([study_base] + studies_other, join="outer", compat="no_conflicts")
+
+    # Coerce types back to their original type. Especially necessary for ints, which xarray.merge converts to float
+    for parameter, old_dtype in types_dictionary.items():
+        new_dtype = merged_study[parameter].dtype
+        if new_dtype != old_dtype:
+            merged_study[parameter] = merged_study[parameter].astype(old_dtype)
+
+    merged_study = merged_study.sortby(_hash_coordinate_key)
+    # Recalculate attributes with lengths matching the number of parameter sets
+    merged_study = _update_set_names(merged_study, template)
+    return merged_study
+
+
 def _merge_parameter_studies(
     studies: typing.List[xarray.Dataset], template: typing.Optional[string.Template] = None
 ) -> xarray.Dataset:
     """Merge a list of parameter studies into one study.
 
-    When merging across identical parameter spaces, preserves the first given parameter study set name to set contents
-    associations by dropping subsequent studies' set names during merge. If the parameter spaces are unique across
-    studies, this function will use ``_propagate_parameter_space()`` to resolve the spaces and break the set name to
-    set contents associations of the base study.
+    When merging across identical parameter spaces, uses :func:`_merge_parameter_space()` to preserve the first given
+    parameter study set name to set contents associations by dropping subsequent studies' set names during merge. If
+    the parameter spaces are unique across studies, this function will use :func:`_propagate_parameter_space()` to
+    resolve the spaces and break the set name to set contents associations of the base study.
 
     :param studies: list of parameter study xarray Datasets where the first study is considered the 'base' study
     :param template: parameter set naming :class:`string.Template`. If none is provided, fetch the default template
