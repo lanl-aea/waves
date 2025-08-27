@@ -7,10 +7,8 @@
   before_script:
     # FIXME: trace the Gitlab-CI behavior that unsets LANG VVV
     - if [[ -z "${LANG}" ]]; then export LANG='en_US.UTF-8'; fi
-    - if [[ -z "${LC_ALL}" ]]; then export LC_ALL='POSIX'; fi
     - function check_variable () { echo "$1"; if [[ -z $1 ]]; then exit 1; fi; }
     - check_variable "${LANG}"
-    - check_variable "${LC_ALL}"
     # FIXME: trace the Gitlab-CI behavior that unsets LANG ^^^
     - function check_directory_variable () { echo "$1"; if [[ -z $1 ]] || [[ ! -d $1 ]]; then exit 1; fi; }
     - check_directory_variable "${conda_installation}"
