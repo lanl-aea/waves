@@ -1,6 +1,5 @@
 """Test ParameterGenerator Abstract Base Class"""
 
-import copy
 import typing
 import pathlib
 import contextlib
@@ -836,7 +835,7 @@ def test_merge_parameter_space(studies, expected_study, expected_types, propagat
             pass
 
 
-merge_parameter_studies_cases = copy.deepcopy(propagate_parameter_space_cases | merge_parameter_space_cases)
+merge_parameter_studies_cases = propagate_parameter_space_cases | merge_parameter_space_cases
 merge_parameter_studies_cases.update(
     {
         "too few parameter studies input": (
