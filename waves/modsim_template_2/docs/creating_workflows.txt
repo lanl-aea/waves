@@ -43,7 +43,7 @@ the: (1) workflow SConscript file ``workflow``, (2) study name ``study_name``, a
        :language: Python
        :lineno-match:
        :start-after: workflow-configurations-start-do-not-remove
-       :end-before: workflow-configurations-start-do-not-remove
+       :end-before: workflow-configurations-end-do-not-remove
 
 The alias is constructed from the workflow Sconscript file name and the study name as ``f"{workflow}_{study_name}"`` and
 used to construct a unique build directory name.  The workflow file name is assumed to be a base name for a file found
@@ -55,7 +55,7 @@ in the ``modsim_package`` directory.
        :language: Python
        :lineno-match:
        :start-after: workflow-naming-conventions-start-do-not-remove
-       :end-before: workflow-naming-conventions-start-do-not-remove
+       :end-before: workflow-naming-conventions-end-do-not-remove
 
 To accommodate parameters defined by both `WAVES`_ parameter studies, which require iterative unpacking, and
 dictionaries the `WAVES`_ ``ParameterStudySConscript`` construction environment method is used as

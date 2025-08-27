@@ -1406,12 +1406,30 @@ abaqus_pseudobuilder_input = {
         " -double both $(-cpus 1$) -user user.f",
         {"job": "job"},
     ),
-    "oldjob": (
+    "oldjob_str": (
         {},
         {"job": "job", "oldjob": "oldjob"},
         ["job.inp"] + [f"oldjob{ext}" for ext in _abaqus_standard_restart_extensions],
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " -double both $(-cpus 1$) -oldjob oldjob",
+        {"job": "job"},
+    ),
+    "oldjob_list_of_1": (
+        {},
+        {"job": "job", "oldjob": ["oldjob"]},
+        ["job.inp"] + [f"oldjob{ext}" for ext in _abaqus_standard_restart_extensions],
+        [f"job{ext}" for ext in _abaqus_standard_extensions],
+        " -double both $(-cpus 1$) -oldjob oldjob",
+        {"job": "job"},
+    ),
+    "oldjob_list": (
+        {},
+        {"job": "job", "oldjob": ["oldjob_1", "oldjob_2"]},
+        ["job.inp"]
+        + [f"oldjob_1{ext}" for ext in _abaqus_standard_restart_extensions]
+        + [f"oldjob_2{ext}" for ext in _abaqus_standard_restart_extensions],
+        [f"job{ext}" for ext in _abaqus_standard_extensions],
+        " -double both $(-cpus 1$)",
         {"job": "job"},
     ),
     "write restart": (

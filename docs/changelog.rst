@@ -5,7 +5,28 @@ Changelog
 #########
 
 ********************
-0.13.13 (unreleased)
+0.13.16 (unreleased)
+********************
+
+********************
+0.13.15 (2025-08-27)
+********************
+
+Bug fixes
+=========
+- Place the node count label on visualize output when requested (:issue:`956`, :merge:`1242`). By `Kyle Brindley`_.
+
+********************
+0.13.14 (2025-08-25)
+********************
+
+Enhancements
+============
+- Support importing from multiple previous Abaqus jobs using the Abaqus Pseudo-Builder (:issue:`822`, :merge:`1241`). By
+  `Matthew Fister`_.
+
+********************
+0.13.13 (2025-08-20)
 ********************
 
 Documentation
