@@ -8,6 +8,11 @@ Changelog
 0.13.16 (unreleased)
 ********************
 
+Internal Changes
+================
+- Sort the parameter spaces of incoming studies when merging studies. (:issue:`952`, :merge:`1236`). By
+  `Chris Johnson`_.
+
 ********************
 0.13.15 (2025-08-27)
 ********************
@@ -41,8 +46,6 @@ Internal Changes
 - Add parameter space propagation when merging studies with unique parameter spaces (:issue:`951`, :merge:`1232`). By
   `Chris Johnson`_.
 - Address Xarray future warnings related to default merge behavior (:issue:`954`, :merge:`1237`). By `Kyle Brindley`_.
-- Sort the parameter spaces of incoming studies when merging studies. (:issue:`952`, :merge:`1236`). By
-  `Chris Johnson`_.
 
 ********************
 0.13.12 (2025-07-21)
