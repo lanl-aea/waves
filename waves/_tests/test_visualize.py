@@ -110,7 +110,7 @@ def test_parse_output(
         graph = _visualize.parse_output([])
 
     tree_lines = tree_output.split("\n")
-    break_paths = True if break_path_separator is not None else False
+    break_paths = True if break_path_separator is not None else False  # noqa: SIM210
     with patch("os.path.sep", new=break_path_separator):
         graph = _visualize.parse_output(tree_lines, break_paths=break_paths, no_labels=no_labels)
 
