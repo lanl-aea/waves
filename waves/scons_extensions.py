@@ -73,7 +73,7 @@ def _print_failed_nodes_stdout() -> None:
         stdout_path_options = [path.resolve() for path in stdout_path_options]
         try:
             stdout_path = next((path for path in stdout_path_options if path.exists()))
-            with open(stdout_path, "r") as stdout_file:
+            with stdout_path.open(mode="r") as stdout_file:
                 print(
                     f"\n{failure.node} failed with STDOUT file '{stdout_path}'\n{stdout_file.read()}", file=sys.stderr
                 )
