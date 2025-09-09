@@ -136,7 +136,10 @@ class TestCartesianProduct:
         generate_io.values(),
         ids=generate_io.keys(),
     )
-    def test_verify_parameter_study(self, parameter_schema, expected_array, expected_types):
+    # FIXME: trace original use of ``expected_array`` and ``expected_types``. Either use in test or remove from test
+    # function arguments. Remove ``noqa: ARG002`` after fixing.
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/961
+    def test_verify_parameter_study(self, parameter_schema, expected_array, expected_types):  # noqa: ARG002
         TestGenerate = CartesianProduct(parameter_schema)
         parameter_generators._verify_parameter_study(TestGenerate.parameter_study)
 
