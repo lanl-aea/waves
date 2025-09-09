@@ -60,7 +60,7 @@ class TestCustomStudy:
             finally:
                 pass
 
-    generate_io = {
+    test_generate_cases = {
         "one_parameter": (
             {"parameter_names": ["a"], "parameter_samples": numpy.array([[1], [2]], dtype=object)},
             numpy.array([[1], [2]], dtype=object),
@@ -75,8 +75,8 @@ class TestCustomStudy:
 
     @pytest.mark.parametrize(
         "parameter_schema, expected_array, expected_types",
-        generate_io.values(),
-        ids=generate_io.keys(),
+        test_generate_cases.values(),
+        ids=test_generate_cases.keys(),
     )
     def test_generate(self, parameter_schema, expected_array, expected_types):
         TestGenerate = CustomStudy(parameter_schema)
@@ -166,7 +166,7 @@ class TestCustomStudy:
             )
             assert TestMerge2._set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
 
-    generate_io = {
+    test_write_yaml_cases = {
         "one parameter yaml": (
             {"parameter_names": ["a"], "parameter_samples": numpy.array([[1], [2]], dtype=object)},
             "out",
@@ -203,8 +203,8 @@ class TestCustomStudy:
 
     @pytest.mark.parametrize(
         "parameter_schema, output_file_template, output_file, output_type, file_count, expected_calls",
-        generate_io.values(),
-        ids=generate_io.keys(),
+        test_write_yaml_cases.values(),
+        ids=test_write_yaml_cases.keys(),
     )
     def test_write_yaml(
         self, parameter_schema, output_file_template, output_file, output_type, file_count, expected_calls
