@@ -1155,13 +1155,13 @@ class OdbReportFileParser(AbaqusFileParser):
                     if element_size:
                         if just_added:
                             values[value_instance]["integrationPoint"].append([None for _ in range(element_size)])
-                            values[value_instance]["integrationPoint"][index_key][element_index] = (
-                                current_integration_point
-                            )
+                            values[value_instance]["integrationPoint"][index_key][
+                                element_index
+                            ] = current_integration_point
                         else:
-                            values[value_instance]["integrationPoint"][index_key][element_index] = (
-                                current_integration_point
-                            )
+                            values[value_instance]["integrationPoint"][index_key][
+                                element_index
+                            ] = current_integration_point
                     else:
                         if just_added:
                             values[value_instance]["integrationPoint"].append(current_integration_point)
@@ -1322,17 +1322,17 @@ class OdbReportFileParser(AbaqusFileParser):
                             if index_key == len(values[value_instance]["values"][self.current_step_count][time_index]):
                                 values[value_instance]["values"][self.current_step_count][time_index].append(data_value)
                             else:
-                                values[value_instance]["values"][self.current_step_count][time_index][index_key] = (
-                                    data_value
-                                )
+                                values[value_instance]["values"][self.current_step_count][time_index][
+                                    index_key
+                                ] = data_value
                     else:
                         if index_key == len(values[value_instance]["values"][self.current_step_count][time_index]):
                             # If the index_key is the length of the list, then it's one more index than currently exists
                             values[value_instance]["values"][self.current_step_count][time_index].append(data_value)
                         else:
-                            values[value_instance]["values"][self.current_step_count][time_index][index_key] = (
-                                data_value
-                            )
+                            values[value_instance]["values"][self.current_step_count][time_index][
+                                index_key
+                            ] = data_value
         return line
 
     def get_position_index(self, position, position_type, values):
