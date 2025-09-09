@@ -417,15 +417,17 @@ def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataT
     """
     archive = xarray.DataTree()
     # Creates a group for each "group" attribute
-    for group, qois in itertools.groupby(sorted(qois, key=_qoi_group), key=_qoi_group):
+    for group, group_qois in itertools.groupby(sorted(qois, key=_qoi_group), key=_qoi_group):
         # Move "version" from attribute to dimension for each DataArray and merge to Dataset
-        qois = [qoi.expand_dims(version=[qoi.attrs[_version_key]]) for qoi in qois]
+        set_qois = [qoi.expand_dims(version=[qoi.attrs[_version_key]]) for qoi in group_qois]
         # Try to add date as a coordinate if available
         try:
-            qois = [qoi.assign_coords(date=(_version_key, [numpy.datetime64(qoi.attrs["date"])])) for qoi in qois]
+            set_qois = [
+                qoi.assign_coords(date=(_version_key, [numpy.datetime64(qoi.attrs["date"])])) for qoi in set_qois
+            ]
         except KeyError:
             pass  # date coordinate is not needed
-        qoi_set = create_qoi_set(qois)
+        qoi_set = create_qoi_set(set_qois)
         # Add dataset as a node in the DataTree
         archive[group] = qoi_set
     return archive
@@ -798,8 +800,8 @@ def _pdf_report(
     """
     open_figure = False
     with PdfPages(output_pdf) as pdf:
-        for group, qois in itertools.groupby(sorted(qois, key=groupby), key=groupby):
-            for plot_num, qoi in enumerate(qois):
+        for group, group_qois in itertools.groupby(sorted(qois, key=groupby), key=groupby):
+            for plot_num, qoi in enumerate(group_qois):
                 ax_num = plot_num % plots_per_page  # ax_num goes from 0 to (plots_per_page - 1)
                 if ax_num == 0:  # Starting new page
                     open_figure = True
