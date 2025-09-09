@@ -210,7 +210,7 @@ def get_parser():
     parser.add_argument(
         "-s",
         "--selection-dict",
-        type=str,
+        type=pathlib.Path,
         default=None,
         help=(
             "The YAML formatted dictionary file to define the down selection of data to be plotted. "
@@ -236,7 +236,7 @@ if __name__ == "__main__":
     if not args.selection_dict:
         selection_dict = default_selection_dict
     else:
-        with open(args.selection_dict, "r") as input_yaml:
+        with args.selection_dict.open(mode="r") as input_yaml:
             selection_dict = yaml.safe_load(input_yaml)
     sys.exit(
         main(
