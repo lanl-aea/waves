@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 from datetime import datetime
 from itertools import compress
+import contextlib
 
 import yaml
 import xarray
@@ -1906,10 +1907,9 @@ class OdbReportFileParser(AbaqusFileParser):
                 h5file[f"{path}{key}"] = item
             # Check everything else
             elif isinstance(item, (str, bytes)):
-                try:
+                # If group is already created, just ignore the error
+                with contextlib.suppress(ValueError):
                     h5file.create_group(path)
-                except ValueError:  # pragma: no cover
-                    pass  # If group is already created, just ignore the error
                 h5file[path].attrs[key] = item
             elif isinstance(item, list):
                 if all(isinstance(x, (str, bytes)) for x in item):
@@ -1929,16 +1929,14 @@ class OdbReportFileParser(AbaqusFileParser):
                         elif isinstance(list_item, dict):
                             self.save_dict_to_group(h5file, f"{path}{key}/{index}/", list_item, output_file)
             elif isinstance(item, int):
-                try:
+                # If group is already created, just ignore the error
+                with contextlib.suppress(ValueError):
                     h5file.create_group(path)
-                except ValueError:  # pragma: no cover
-                    pass  # If group is already created, just ignore the error
                 h5file[path].attrs[key] = numpy.int64(item)
             elif isinstance(item, float):
-                try:
+                # If group is already created, just ignore the error
+                with contextlib.suppress(ValueError):
                     h5file.create_group(path)
-                except ValueError:  # pragma: no cover
-                    pass  # If group is already created, just ignore the error
                 h5file[path].attrs[key] = numpy.float64(item)
             elif isinstance(item, tuple):
                 if item:
