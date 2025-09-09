@@ -1379,7 +1379,10 @@ class OdbReportFileParser(AbaqusFileParser):
                 values[step_number][frame_number] = [[None for _ in range(data_length)] for _ in range(position_length)]
         return
 
-    def parse_history_regions(self, f, line, regions, number_of_history_regions):
+    # FIXME: trace the purpose and use of ``number_of_history_regions`` and either use or remove from function
+    # arguments. Remove ``noqa: ARG002`` after fixing.
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/962
+    def parse_history_regions(self, f, line, regions, number_of_history_regions):  # noqa: ARG002
         """Parse the section that contains history regions
 
         :param file object f: open file
