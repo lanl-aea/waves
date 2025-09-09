@@ -1540,8 +1540,8 @@ def test_copy_substfile(source_list, expected_list):
 
 
 build_subdirectory_input = {
-    "no target": ([], pathlib.Path(".")),
-    "no parent": (["target.ext"], pathlib.Path(".")),
+    "no target": ([], pathlib.Path()),
+    "no parent": (["target.ext"], pathlib.Path()),
     "one parent": (["set1/target.ext"], pathlib.Path("set1")),
 }
 
