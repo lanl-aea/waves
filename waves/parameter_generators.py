@@ -1569,7 +1569,8 @@ def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.D
                 )
 
     parameter_schema = {
-        "parameter_samples": propagated_study_samples, "parameter_names": propagated_study_parameters.flatten()
+        "parameter_samples": propagated_study_samples,
+        "parameter_names": propagated_study_parameters.flatten(),
     }
     propagated_study = CustomStudy(parameter_schema).parameter_study
     return propagated_study
