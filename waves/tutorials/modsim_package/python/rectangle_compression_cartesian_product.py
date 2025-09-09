@@ -2,10 +2,10 @@
 
 
 def parameter_schema(
-    width=[1.0, 1.1],
-    height=[1.0, 1.1],
-    global_seed=[1.0],
-    displacement=[-0.01],
+    width=(1.0, 1.1),
+    height=(1.0, 1.1),
+    global_seed=(1.0,),
+    displacement=(-0.01,),
 ):
     """Return WAVES CartesianProduct parameter schema
 
@@ -18,9 +18,9 @@ def parameter_schema(
     :rtype: dict
     """
     schema = {
-        "width": width,
-        "height": height,
-        "global_seed": global_seed,
-        "displacement": displacement,
+        "width": list(width),
+        "height": list(height),
+        "global_seed": list(global_seed),
+        "displacement": list(displacement),
     }
     return schema
