@@ -539,7 +539,7 @@ propagate_parameter_space_cases = {
     propagate_parameter_space_cases.values(),
     ids=propagate_parameter_space_cases.keys(),
 )
-def test_propagate_parameter_space(studies, expected_study, expected_types, propagate_space, outcome):
+def test_propagate_parameter_space(studies, expected_study, expected_types, propagate_space, outcome):  # noqa: ARG001
     """Check the propagation of parameter space between two studies.
 
     :param studies: list of N number of parameter study Xarray datasets to merge, where the first study in the list is

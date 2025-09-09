@@ -28,7 +28,7 @@ _exclude_from_namespace = set(globals().keys())
 _version_key = "version"
 
 
-def _propagate_identical_attrs(all_attrs, context):
+def _propagate_identical_attrs(all_attrs, context):  # noqa: ARG001
     first_attrs = all_attrs[0]
     identical_pairs = {}
 

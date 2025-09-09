@@ -306,7 +306,7 @@ def test_add_cubit_python():
     assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[0] == str(cubit_bin)
 
 
-def dummy_emitter_for_testing(target, source, env):
+def dummy_emitter_for_testing(target, source, env):  # noqa: ARG001
     return target, source
 
 
