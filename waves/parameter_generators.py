@@ -249,7 +249,7 @@ class ParameterGenerator(ABC):
             dry_run=dry_run,
         )
 
-    def _scons_write(self, target: list, source: list, env) -> None:
+    def _scons_write(self, target: list, source: list, env) -> None:  # noqa: ARG002
         """`SCons Python build function`_ wrapper for the parameter generator's write() function.
 
         Reference: https://scons.org/doc/production/HTML/scons-user/ch17s04.html
