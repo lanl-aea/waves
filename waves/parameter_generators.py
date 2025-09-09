@@ -686,7 +686,7 @@ class CartesianProduct(ParameterGenerator):
             if not isinstance(self.parameter_schema[name], (list, set, tuple)):
                 raise SchemaValidationError(f"Parameter '{name}' is not one of list, set, or tuple")
 
-    def _generate(self, **kwargs) -> None:
+    def _generate(self, **kwargs) -> None:  # noqa: ARG002
         """Generate the Cartesian Product parameter sets."""
         self._samples = numpy.array(list(itertools.product(*self.parameter_schema.values())), dtype=object)
         super()._generate()
@@ -865,7 +865,7 @@ class OneAtATime(ParameterGenerator):
             if len(self.parameter_schema[name]) < 1:
                 raise SchemaValidationError(f"Parameter '{name}' must have at least one value")
 
-    def _generate(self, **kwargs) -> None:
+    def _generate(self, **kwargs) -> None:  # noqa: ARG002
         """Generate the parameter sets from the user provided parameter values."""
         # Count how many total sets will be generated (= nominal set + number of off-nominal values)
         set_count = 1 + numpy.sum([len(self.parameter_schema[name]) - 1 for name in self._parameter_names])
@@ -994,7 +994,7 @@ class CustomStudy(ParameterGenerator):
             )
         return
 
-    def _generate(self, **kwargs) -> None:
+    def _generate(self, **kwargs) -> None:  # noqa: ARG002
         """Generate the parameter study dataset from the user provided parameter array."""
         # Converted to numpy array by _validate. Simply assign to correct attribute
         self._samples = self.parameter_schema["parameter_samples"]
