@@ -150,9 +150,8 @@ class OdbReportFileParser(AbaqusFileParser):
         self.parsed["odb"]["info"] = {}
         line = f.readline()
         while not line.startswith("General ODB information") and line != "":
-            if line.startswith("ODB Report"):
-                if not re.search("csv", line, re.IGNORECASE):
-                    sys.exit("ODB report file must be in CSV format")
+            if line.startswith("ODB Report") and not re.search("csv", line, re.IGNORECASE):
+                sys.exit("ODB report file must be in CSV format")
             line = f.readline()
 
         while not line.startswith("Job Data") and line != "" and not line.startswith("---"):
@@ -738,10 +737,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 if line_values[0] == "START":
                     segment["name"] = line_values[0]
                     segment["origin"] = [float(_.strip()) for _ in line_values[1:]]
-                elif line_values[0] == "LINE":
-                    segment["name"] = line_values[0]
-                    segment["endPoint"] = [float(_.strip()) for _ in line_values[1:]]
-                elif line_values[0] == "CIRCLE":
+                elif line_values[0] == "LINE" or line_values[0] == "CIRCLE":
                     segment["name"] = line_values[0]
                     segment["endPoint"] = [float(_.strip()) for _ in line_values[1:]]
                 # TODO: get odb with parabola segments and parse that data here
@@ -1946,7 +1942,7 @@ class OdbReportFileParser(AbaqusFileParser):
                         h5file[f"{path}{key}"] = numpy.array(item)
             elif isinstance(item, dict):
                 self.save_dict_to_group(h5file, f"{path}{key}/", item, output_file)
-            elif isinstance(item, xarray.core.dataset.Dataset) or isinstance(item, xarray.core.dataarray.DataArray):
+            elif isinstance(item, (xarray.core.dataset.Dataset, xarray.core.dataarray.DataArray)):
                 item.to_netcdf(
                     path=output_file,
                     mode="a",
