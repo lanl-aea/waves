@@ -134,7 +134,7 @@ class ParameterGenerator(ABC):
         if self.output_file_template:
             self.output_directory = pathlib.Path(self.output_file_template.safe_substitute()).parent
         else:
-            self.output_directory = pathlib.Path(".").resolve()
+            self.output_directory = pathlib.Path().resolve()
         self.parameter_study_meta_file = self.output_directory / _settings._parameter_study_meta_file
 
         self._validate()
@@ -336,12 +336,14 @@ class ParameterGenerator(ABC):
         """
         write = True
         if not self.overwrite and pathlib.Path(output_file).is_file():
-            with open(output_file, "r") as existing_file:
+            # FIXME: simplify class API/attributes type handling and remove the ``noqa: PTH123`` style guide exception.
+            with open(output_file, "r") as existing_file:  # noqa: PTH123
                 existing_yaml_object = yaml.safe_load(existing_file)
                 if existing_yaml_object == parameter_dictionary:
                     write = False
         if write:
-            with open(output_file, "w") as outfile:
+            # FIXME: simplify class API/attributes type handling and remove the ``noqa: PTH123`` style guide exception.
+            with open(output_file, "w") as outfile:  # noqa: PTH123
                 outfile.write(yaml.dump(parameter_dictionary))
 
     def _write_meta(self) -> None:
