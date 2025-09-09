@@ -77,10 +77,10 @@ def main():
         mesh_out.write("\n")
         mesh_out.write(f"CELL_TYPES {ncells}\n")
         if ndim == 2:
-            for n in range(ncells):
+            for _n in range(ncells):
                 mesh_out.write("9\n")
         else:
-            for n in range(ncells):
+            for _n in range(ncells):
                 mesh_out.write("12\n")
 
 
