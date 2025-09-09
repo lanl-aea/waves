@@ -459,7 +459,6 @@ class OdbReportFileParser(AbaqusFileParser):
                 line_values = line.split(",")
                 element["label"] = int(line_values[0].strip())
                 element["type"] = line_values[1].strip()
-                # element['connectivity'] = tuple(int(_.strip()) for _ in line_values[2:])
                 connectivity_list = list()
                 for i, line_value in enumerate(line_values[2:]):
                     try:
@@ -652,7 +651,6 @@ class OdbReportFileParser(AbaqusFileParser):
                                 else:
                                     node = dict()
                                     node["label"] = int(value)
-                                    # except ValueError:
                                     surface["nodes"].append(node)
                 elif line.strip().startswith("element label:face pairs from instance "):
                     instance_name = (

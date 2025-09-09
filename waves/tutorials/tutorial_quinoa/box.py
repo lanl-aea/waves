@@ -28,7 +28,7 @@ def main(output_file, xlength, ylength, zlength):
     cubit.cmd(f"webcut volume 1 with plane xplane offset {xlength * 0.5} noimprint nomerge")
     cubit.cmd("merge volume 1 2")
 
-    # Sets (partition)
+    # Create sets (partition)
     cubit.cmd("sideset 1 add surface 8 15")
     cubit.cmd("sideset 2 add surface 9 16")
     cubit.cmd("sideset 3 add surface 10 14")
