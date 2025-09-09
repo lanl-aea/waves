@@ -467,9 +467,7 @@ require_third_party_system_tests = [
     pytest.param(
         [
             fetch_template,
-            string.Template(
-                "scons quinoa-local ${unconditional_build} --print-build-failures ${cubit_command}"
-            ),
+            string.Template("scons quinoa-local ${unconditional_build} --print-build-failures ${cubit_command}"),
         ],
         "tutorials/tutorial_quinoa",
         marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.cubit, pytest.mark.quinoa],

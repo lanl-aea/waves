@@ -240,9 +240,7 @@ class OdbReportFileParser(AbaqusFileParser):
         line = f.readline()
         while (
             (len(categories) < number_of_categories)
-            and not line.startswith(
-                "-------------------------------------------------------------------------------"
-            )
+            and not line.startswith("-------------------------------------------------------------------------------")
             and line != ""
         ):
             # TODO: Find odb with sectionPoint array and likely parse sectionPoint data within this array
