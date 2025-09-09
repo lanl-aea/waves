@@ -91,7 +91,7 @@ extend-exclude = ["build", "install", "conda-environment", "conda-pkgs", "pip-bu
 extend-include = ["SConstruct", "SConscript", "*.scons"]
 
 [tool.ruff.lint]
-extend-select = ["A", "B", "E", "F", "Q", "W", "C4", "ERA", "ISC", "PIE", "PYI", "RSE", "SIM", "T10", "RUF"]
+extend-select = ["A", "B", "E", "F", "Q", "W", "ARG", "C4", "ERA", "ISC", "PIE", "PYI", "RSE", "SIM", "T10", "RUF"]
 extend-ignore = ["B028", "PIE808", "PIE790", "SIM108"]
 
 [tool.ruff.lint.extend-per-file-ignores]
@@ -103,6 +103,7 @@ extend-ignore = ["B028", "PIE808", "PIE790", "SIM108"]
 "**/abaqus_utilities.py" = ["SIM115"]
 "waves/parameter_generators.py" = ["RUF005"]
 "waves/_tests/test_*.py" = ["RUF012"]
+"**/cubit/rectangle_partition.py" = ["ARG001"]
 # TODO: re-enable B006 VVV
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/959
 "**/rectangle_compression_sobol_sequence.py" = ["B006"]

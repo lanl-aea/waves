@@ -5,7 +5,7 @@ import SCons.Environment
 import scons_extensions
 
 
-def dummy_emitter_for_testing(target, source, env):
+def dummy_emitter_for_testing(target, source, env):  # noqa: ARG001
     return target, source
 
 

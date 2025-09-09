@@ -23,7 +23,7 @@ from waves import _utilities
 _exclude_from_namespace = set(globals().keys())
 
 
-def print_action_signature_string(s, target, source, env) -> None:
+def print_action_signature_string(s, target, source, env) -> None:  # noqa: ARG001
     """Print the action string used to calculate the action signature
 
     Designed to behave similarly to SCons ``--debug=presub`` option using ``PRINT_CMD_LINE_FUNC`` feature:
@@ -534,7 +534,7 @@ def _project_help_descriptions(
 
 
 def substitution_syntax(
-    env: SCons.Environment.Environment,
+    env: SCons.Environment.Environment,  # noqa: ARG001
     substitution_dictionary: dict,
     prefix: str = "@",
     suffix: str = "@",
@@ -940,7 +940,7 @@ def builder_factory(
 def first_target_emitter(
     target: list,
     source: list,
-    env: SCons.Environment.Environment,
+    env: SCons.Environment.Environment,  # noqa: ARG001
     suffixes: typing.Optional[typing.Iterable[str]] = None,
     appending_suffixes: typing.Optional[typing.Iterable[str]] = None,
     stdout_extension: str = _settings._stdout_extension,
@@ -1981,7 +1981,7 @@ class AbaqusPseudoBuilder:
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/821
     def __call__(
         self,
-        env: SCons.Environment.Environment,
+        env: SCons.Environment.Environment,  # noqa: ARG002
         job: str,
         inp: typing.Optional[str] = None,
         user: typing.Optional[str] = None,
@@ -2912,7 +2912,7 @@ def _custom_scanner(
         """
         return [node for node in node_list if node.path.endswith(tuple(suffixes))]
 
-    def regex_scan(node: SCons.Node.FS, env: SCons.Environment.Environment, path: str) -> list:
+    def regex_scan(node: SCons.Node.FS, env: SCons.Environment.Environment, path: str) -> list:  # noqa: ARG001
         """Scan function for extracting dependencies from the content of a file based on the given regular expression.
 
         The interface of the scan function is fixed by SCons. It must include ``node``, ``env`` and ``path``. It may
@@ -3670,7 +3670,7 @@ def truchas_builder_factory(
 
 
 def parameter_study_task(
-    env: SCons.Environment.Environment,
+    env: SCons.Environment.Environment,  # noqa: ARG001
     builder: SCons.Builder.Builder,
     *args,
     study=None,
