@@ -59,6 +59,9 @@ test_results.xml
 systemtest_results.xml
 coverage*.xml
 
+# MyPy
+.mypy_cache
+
 # NFS Files
 *.nfs*
 
