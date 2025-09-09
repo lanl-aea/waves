@@ -343,7 +343,7 @@ class ParameterGenerator(ABC):
                     write = False
         if write:
             # FIXME: simplify class API/attributes type handling to avoid the explict type cast
-            with pathlib.Path(output_file).open(mode="w") as outfile:  # noqa: PTH123
+            with pathlib.Path(output_file).open(mode="w") as outfile:
                 outfile.write(yaml.dump(parameter_dictionary))
 
     def _write_meta(self) -> None:
