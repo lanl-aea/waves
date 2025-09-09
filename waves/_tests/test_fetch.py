@@ -305,14 +305,14 @@ build_copy_tuples_input = {
         two_file_source_tree,
         True,
         (two_file_destination_tree, [two_file_destination_tree[1]]),
-        list(zip(two_file_source_tree, two_file_destination_tree)),
+        list(zip(two_file_source_tree, two_file_destination_tree, strict=True)),
     ),
     "two files, one exists, no overwrite": (
         "/path/to/destination",
         two_file_source_tree,
         False,
         (two_file_destination_tree, [two_file_destination_tree[1]]),
-        list(zip([two_file_source_tree[0]], [two_file_destination_tree[0]])),
+        list(zip([two_file_source_tree[0]], [two_file_destination_tree[0]], strict=True)),
     ),
 }
 
@@ -363,7 +363,7 @@ def test_print_list():
 )
 def test_recursive_copy(root_directory, source_files, source_tree, destination_tree, tutorial):
     # Dummy modsim_template tree
-    copy_tuples = list(zip(source_tree, destination_tree))
+    copy_tuples = list(zip(source_tree, destination_tree, strict=True))
     not_found = []
     available_files_output = (source_tree, not_found)
     single_file_requested = ([source_tree[0]], not_found)

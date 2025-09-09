@@ -92,6 +92,7 @@ extend-include = ["SConstruct", "SConscript", "*.scons"]
 
 [tool.ruff.lint]
 extend-select = ["A", "B", "E", "F", "W", "RUF", "ERA"]
+extend-ignore = ["B028"]
 
 [tool.ruff.lint.extend-per-file-ignores]
 "SConstruct" = ["F821"]

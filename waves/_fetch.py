@@ -233,7 +233,7 @@ def build_copy_tuples(
     destination_files, existing_files = build_destination_files(destination, requested_paths_resolved)
     copy_tuples = [
         (requested_path, destination_file)
-        for requested_path, destination_file in zip(requested_paths_resolved, destination_files)
+        for requested_path, destination_file in zip(requested_paths_resolved, destination_files, strict=True)
     ]
     if not overwrite and existing_files:
         copy_tuples = [

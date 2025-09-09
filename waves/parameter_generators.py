@@ -431,7 +431,7 @@ class ParameterGenerator(ABC):
                 dims=[_hash_coordinate_key],
                 coords={_hash_coordinate_key: self._set_hashes},
             )
-            for name, values in zip(self._parameter_names, self._samples.T)
+            for name, values in zip(self._parameter_names, self._samples.T, strict=True)
         ]
         self.parameter_study = xarray.merge(sample_arrays, join="outer", compat="no_conflicts")
         self._merge_set_names_array()
@@ -1372,7 +1372,7 @@ def _calculate_set_hash(parameter_names: typing.List[str], set_samples: numpy.nd
     if len(parameter_names) != len(set_samples):
         raise RuntimeError("Expected length of parameter names to match number of sample values")
     set_samples = numpy.array(set_samples, dtype=object)
-    sorted_contents = sorted(zip(parameter_names, set_samples))
+    sorted_contents = sorted(zip(parameter_names, set_samples, strict=True))
     set_catenation = "\n".join(f"{name}:{sample!r}" for name, sample in sorted_contents)
     set_hash = hashlib.md5(set_catenation.encode("utf-8"), usedforsecurity=False).hexdigest()
     return set_hash

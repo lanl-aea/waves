@@ -77,7 +77,7 @@ set_hashes = {
     ids=set_hashes.keys(),
 )
 def test_calculate_set_hash(parameter_names, samples, expected_hashes):
-    for row, expected_hash in zip(samples, expected_hashes):
+    for row, expected_hash in zip(samples, expected_hashes, strict=True):
         set_hash = parameter_generators._calculate_set_hash(parameter_names, row)
         assert set_hash == expected_hash
 
@@ -2167,7 +2167,7 @@ class TestParameterDistributions:
     def test_generate_parameter_distributions(self, parameter_schema, expected_scipy_kwds):
         TestDistributions = ParameterDistributions(parameter_schema)
         assert TestDistributions._parameter_names == list(TestDistributions.parameter_distributions.keys())
-        for parameter_name, expected_kwds in zip(TestDistributions._parameter_names, expected_scipy_kwds):
+        for parameter_name, expected_kwds in zip(TestDistributions._parameter_names, expected_scipy_kwds, strict=True):
             assert TestDistributions.parameter_distributions[parameter_name].kwds == expected_kwds
 
 
