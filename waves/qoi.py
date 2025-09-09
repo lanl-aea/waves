@@ -203,7 +203,7 @@ def create_qoi_set(qois: typing.Iterable[xarray.DataArray]) -> xarray.Dataset:
     """
     qoi_set = xarray.merge(qois, **_merge_constants)
     # Keep all attributes at the data variable level
-    qoi_set.attrs = dict()
+    qoi_set.attrs = {}
     return qoi_set
 
 
@@ -313,7 +313,7 @@ def _create_qoi_study(
             f"Each DataArray in ``qois`` must have an attribute named '{_settings._set_coordinate_key}'."
         ) from err
     # Keep all attributes at the data variable level
-    qoi_study.attrs = dict()
+    qoi_study.attrs = {}
     # Merge in parameter study definition
     if parameter_study:
         # Convert parameter study variables to coordinates
@@ -673,13 +673,13 @@ def _write_qoi_report(qoi_archive: xarray.DataTree, output: pathlib.Path, plots_
     qois = [
         qoi for leaf in qoi_archive.leaves for qoi in leaf.ds.data_vars.values() if _can_plot_qoi_tolerance_check(qoi)
     ]
-    page_margins = dict(
-        left=0.6,  # plot on right half of page because text will go on left side
-        right=0.9,  # leave margin on right edge
-        top=(1.0 - 1.0 / plots_per_page),  # top margin equal to single plot height
-        bottom=(0.5 / plots_per_page),  # bottom margin equal to half of single plot height
-        hspace=1.0,
-    )
+    page_margins = {
+        "left": 0.6,  # plot on right half of page because text will go on left side
+        "right": 0.9,  # leave margin on right edge
+        "top": (1.0 - 1.0 / plots_per_page),  # top margin equal to single plot height
+        "bottom": (0.5 / plots_per_page),  # bottom margin equal to half of single plot height
+        "hspace": 1.0,
+    }
     _pdf_report(qois, output, page_margins, plots_per_page, _plot_qoi_tolerance_check, {})
 
 
@@ -751,14 +751,14 @@ def _qoi_history_report(
         for qoi in leaf.ds.data_vars.values()
         if _can_plot_scalar_qoi_history(qoi)
     ]
-    plotting_kwargs = dict(date_min=min(qoi.date.min() for qoi in qois), date_max=max(qoi.date.max() for qoi in qois))
-    page_margins = dict(
-        left=0.1,  # leave margin on left edge
-        right=0.9,  # leave margin on right edge
-        top=(1.0 - 0.5 / plots_per_page),  # top margin equal to half of single plot height
-        bottom=(0.5 / plots_per_page),  # bottom margin equal to half of single plot height
-        hspace=1.0,
-    )
+    plotting_kwargs = {"date_min": min(qoi.date.min() for qoi in qois), "date_max": max(qoi.date.max() for qoi in qois)}
+    page_margins = {
+        "left": 0.1,  # leave margin on left edge
+        "right": 0.9,  # leave margin on right edge
+        "top": (1.0 - 0.5 / plots_per_page),  # top margin equal to half of single plot height
+        "bottom": (0.5 / plots_per_page),  # bottom margin equal to half of single plot height
+        "hspace": 1.0,
+    }
     _pdf_report(qois, output, page_margins, plots_per_page, _plot_scalar_qoi_history, plotting_kwargs)
 
 

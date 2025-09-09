@@ -2459,29 +2459,29 @@ cartesian_product = parameter_generators.CartesianProduct(
     set_name_template="set@number",
 )
 parameter_study_sconscript = {
-    "exports not a dictionary": ([], {"exports": list()}, {}, pytest.raises(TypeError)),
+    "exports not a dictionary": ([], {"exports": []}, {}, pytest.raises(TypeError)),
     "default kwargs": (
         ["SConscript"],
         {},
-        {"variant_dir": None, "exports": {"set_name": "", "parameters": dict()}},
+        {"variant_dir": None, "exports": {"set_name": "", "parameters": {}}},
         does_not_raise(),
     ),
     "added kwarg": (
         ["SConscript"],
         {"extra kwarg": "value"},
-        {"extra kwarg": "value", "variant_dir": None, "exports": {"set_name": "", "parameters": dict()}},
+        {"extra kwarg": "value", "variant_dir": None, "exports": {"set_name": "", "parameters": {}}},
         does_not_raise(),
     ),
     "variant_dir": (
         ["SConscript"],
         {"variant_dir": "build"},
-        {"variant_dir": pathlib.Path("build"), "exports": {"set_name": "", "parameters": dict()}},
+        {"variant_dir": pathlib.Path("build"), "exports": {"set_name": "", "parameters": {}}},
         does_not_raise(),
     ),
     "variant_dir subdirectories": (
         ["SConscript"],
         {"variant_dir": "build", "subdirectories": True},
-        {"variant_dir": pathlib.Path("build"), "exports": {"set_name": "", "parameters": dict()}},
+        {"variant_dir": pathlib.Path("build"), "exports": {"set_name": "", "parameters": {}}},
         does_not_raise(),
     ),
     "dictionary study": (

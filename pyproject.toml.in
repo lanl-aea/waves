@@ -91,7 +91,7 @@ extend-exclude = ["build", "install", "conda-environment", "conda-pkgs", "pip-bu
 extend-include = ["SConstruct", "SConscript", "*.scons"]
 
 [tool.ruff.lint]
-extend-select = ["A", "B", "E", "F", "W", "RUF", "ERA"]
+extend-select = ["A", "B", "E", "F", "W", "C4", "ERA", "RUF"]
 extend-ignore = ["B028"]
 
 [tool.ruff.lint.extend-per-file-ignores]

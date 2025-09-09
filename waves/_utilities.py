@@ -55,7 +55,7 @@ def set_name_substitution(
     elif isinstance(original, pathlib.Path):
         return pathlib.Path(_AtSignTemplate(str(original)).safe_substitute(mapping))
     elif isinstance(original, (list, set, tuple)) and all(isinstance(item, (str, pathlib.Path)) for item in original):
-        modified = list()
+        modified = []
         for node in original:
             try:
                 modified.append(_AtSignTemplate(node).safe_substitute(mapping))
@@ -261,7 +261,7 @@ def return_environment(
         first_key = first_key.rsplit("\n")[-1]
     variables[0] = f"{first_key}={first_value}"
 
-    environment = dict()
+    environment = {}
     for line in variables:
         if line != "":
             key, value = line.split("=", 1)

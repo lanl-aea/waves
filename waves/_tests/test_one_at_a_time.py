@@ -42,7 +42,7 @@ class TestOneAtATime:
             pytest.raises(SchemaValidationError),
         ),
         "bad schema set": (
-            {"parameter_1": set([1, 2])},
+            {"parameter_1": {1, 2}},
             pytest.raises(SchemaValidationError),
         ),
     }

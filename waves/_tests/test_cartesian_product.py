@@ -18,7 +18,7 @@ class TestCartesianProduct:
 
     validate_input = {
         "good schema": (
-            {"parameter_1": [1], "parameter_2": (2,), "parameter_3": set([3, 4])},
+            {"parameter_1": [1], "parameter_2": (2,), "parameter_3": {3, 4}},
             does_not_raise(),
         ),
         "not a dict": (

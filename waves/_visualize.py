@@ -266,7 +266,7 @@ def ancestor_subgraph(
     :raises RuntimeError: If one or more nodes are missing from the graph
     """
     sources = set(nodes)
-    missing = list()
+    missing = []
     for node in nodes:
         try:
             sources = sources.union(networkx.ancestors(graph, node))
@@ -326,7 +326,7 @@ def parse_output(
     :raises RuntimeError: If the parsed input doesn't contain recognizable SCons nodes
     """
     graph = networkx.DiGraph()
-    higher_nodes = dict()
+    higher_nodes = {}
     exclude_node = False
     exclude_indent = 0
     for line in tree_lines:
@@ -421,7 +421,7 @@ def visualize(
     :param font_size: Font size of file names in points
     :param vertical: Specifies a vertical layout of graph instead of the default horizontal layout
     """
-    multipartite_kwargs = dict(align="vertical")
+    multipartite_kwargs = {"align": "vertical"}
     if vertical:
         multipartite_kwargs.update({"align": "horizontal"})
     node_positions = networkx.multipartite_layout(graph, subset_key="layer", **multipartite_kwargs)
@@ -437,22 +437,26 @@ def visualize(
         graph.edges(), key=lambda edge: min(graph.nodes[edge[0]]["layer"], graph.nodes[edge[1]]["layer"])
     )
 
-    patch_kwargs = dict(
-        xycoords="data",
-        ha="center",
-        va="center",
-        size=font_size,
-        bbox=dict(facecolor=node_color, boxstyle="round"),
-    )
+    patch_kwargs = {
+        "xycoords": "data",
+        "ha": "center",
+        "va": "center",
+        "size": font_size,
+        "bbox": {"facecolor": node_color, "boxstyle": "round"},
+    }
 
     # Labels are written on top of existing nodes, which are laid out by networkx
     for source, target in sorted_edges:
         patch_a = axes.annotate(graph.nodes[target]["label"], xy=node_positions[target], **patch_kwargs)
         patch_b = axes.annotate(graph.nodes[source]["label"], xy=node_positions[source], **patch_kwargs)
 
-        arrowprops = dict(
-            arrowstyle="<-", color=edge_color, connectionstyle="arc3,rad=0.1", patchA=patch_a, patchB=patch_b
-        )
+        arrowprops = {
+            "arrowstyle": "<-",
+            "color": edge_color,
+            "connectionstyle": "arc3,rad=0.1",
+            "patchA": patch_a,
+            "patchB": patch_b,
+        }
 
         axes.annotate(
             "",

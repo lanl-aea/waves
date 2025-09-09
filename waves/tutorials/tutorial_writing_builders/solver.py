@@ -161,7 +161,7 @@ def solve(configuration: dict) -> None:
     overwrite = configuration["overwrite"]
 
     output_files = solve_output_files(output_file, solve_cpus)
-    if any([output.exists() for output in output_files]) and not overwrite:
+    if any(output.exists() for output in output_files) and not overwrite:
         message = "Output file(s) already exist. Exiting."
         raise RuntimeError(message)
 

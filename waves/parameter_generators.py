@@ -1506,7 +1506,7 @@ def _coerce_values(values: typing.Iterable, name: typing.Optional[str] = None) -
 
     :return: 1D numpy array of a consistent datatype
     """
-    datatypes = set(type(value) for value in values)
+    datatypes = {type(value) for value in values}
     values_coerced = numpy.array(values)
     if len(datatypes) > 1:
         warnings.warn(
@@ -1568,9 +1568,9 @@ def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.D
                     study_other.isel(set_name=set_index)[parameter].to_numpy().item()
                 )
 
-    parameter_schema = dict(
-        parameter_samples=propagated_study_samples, parameter_names=propagated_study_parameters.flatten()
-    )
+    parameter_schema = {
+        "parameter_samples": propagated_study_samples, "parameter_names": propagated_study_parameters.flatten()
+    }
     propagated_study = CustomStudy(parameter_schema).parameter_study
     return propagated_study
 
@@ -1648,8 +1648,8 @@ def _merge_parameter_studies(
     studies_iterator = studies  # Copy list to avoid index shifting from item removal
     for study_other in studies_iterator:
         # Find and propagate any nonuniform parameter spaces
-        study_base_parameters = [parameter for parameter in study_base.data_vars]
-        study_other_parameters = [parameter for parameter in study_other.data_vars]
+        study_base_parameters = list(study_base.data_vars)
+        study_other_parameters = list(study_other.data_vars)
         extra_parameters = set(study_base_parameters) ^ set(study_other_parameters)
         shared_parameters = set(study_base_parameters) & set(study_other_parameters)
         if any(shared_parameters) and any(extra_parameters):

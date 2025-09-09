@@ -146,7 +146,7 @@ env["cubit"] = next(
 )
 
 # Build variable substitution dictionary
-project_substitution_dictionary = dict()
+project_substitution_dictionary = {}
 for key, value in project_variables.items():
     env[key] = value
     project_substitution_dictionary[f"@{key}@"] = value

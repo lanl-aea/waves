@@ -482,7 +482,7 @@ def project_alias(
     *args,
     description: str = "",
     # Normally you should not use mutables for argument defaults, but this method relies on the mutable behavior.
-    target_descriptions: dict = dict(),  # noqa: B006
+    target_descriptions: dict = {},  # noqa: B006
     **kwargs,
 ) -> dict:
     """Wrapper around the `SCons Alias`_ method. Appends and returns target descriptions dictionary.
@@ -2096,8 +2096,8 @@ class AbaqusPseudoBuilder:
             env.Abaqus(job='simulation_1', cpus=4)
         """
         # Initialize with empty arguments for AbaqusSolver builder
-        sources = list()
-        targets = list()
+        sources = []
+        targets = []
         options = ""
 
         # Specify job name
@@ -3773,7 +3773,7 @@ def parameter_study_task(
     else:
         suffix = "_"
 
-    return_targets = list()
+    return_targets = []
     if isinstance(study, parameter_generators.ParameterGenerator):
         for set_name, parameters in study.parameter_study_to_dict().items():
             modified_args = (
@@ -3884,7 +3884,7 @@ def parameter_study_sconscript(
     :raises TypeError: if ``exports`` is not a dictionary
     """
     if exports is None:
-        exports = dict()
+        exports = {}
 
     # Avoid importing parameter generator module (heavy) unless necessary
     from waves import parameter_generators
@@ -3895,9 +3895,9 @@ def parameter_study_sconscript(
             "this function does not have access to the calling script's namespace."
         )
         raise TypeError(message)
-    exports.update({"set_name": set_name, "parameters": dict()})
+    exports.update({"set_name": set_name, "parameters": {}})
 
-    sconscript_output = list()
+    sconscript_output = []
 
     if variant_dir is not None:
         variant_dir = pathlib.Path(variant_dir)
@@ -4057,7 +4057,7 @@ class QOIPseudoBuilder:
         """
         if not expected and not archive:
             raise ValueError("Either expected or archive=True must be specified.")
-        targets = list()
+        targets = []
         collection_dir = pathlib.Path(self.collection_dir)
         file_to_archive = calculated
         if expected and self.update_expected:
