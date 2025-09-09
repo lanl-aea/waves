@@ -32,6 +32,7 @@ dependencies:
   - python-build
   - python-gmsh
   - pyyaml
+  - ruff
   # Required to satisfy undocumented SALib dependencies on numpy version
   - salib >=1.5.1
   - scipy >=1
