@@ -58,7 +58,10 @@ class TestLatinHypercube:
         generate_input.values(),
         ids=generate_input.keys(),
     )
-    def test_generate(self, parameter_schema, seed, expected_samples, expected_scipy_kwds):
+    # FIXME: trace the original use of the ``expected_scipy_kwds`` variable and either use in tests or remove. Remove
+    # ``noqa: ARG002`` after fixing.
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/960
+    def test_generate(self, parameter_schema, seed, expected_samples, expected_scipy_kwds):  # noqa: ARG002
         parameter_names = [key for key in parameter_schema if key != "num_simulations"]
         kwargs = {"seed": seed}
         generator_classes = (
