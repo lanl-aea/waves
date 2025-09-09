@@ -119,11 +119,11 @@ class OdbReportFileParser(AbaqusFileParser):
             Dataset  # HDF5 Dataset that lists the location within the hdf5 file of all xarray datasets
     """
 
-    def parse(self, format="extract", h5_file=f"extract{_settings._default_h5_extension}", time_stamp=None):
+    def parse(self, data_format="extract", h5_file=f"extract{_settings._default_h5_extension}", time_stamp=None):
         """Parse the file and store the results in the self.parsed dictionary.
          Can parse csv formatted output with the blocked option from the odbreport command
 
-        :param str format: Format in which to store data can be 'odb' or 'extract'
+        :param str data_format: Format in which to store data can be 'odb' or 'extract'
         :param str h5_file: Name of hdf5 file to store data into when using the extract format
         :param str time_stamp: Time stamp for possibly appending to hdf5 file names
         :return: None
@@ -133,7 +133,7 @@ class OdbReportFileParser(AbaqusFileParser):
         # In the Abaqus documentation under Scripting Reference -> Python commands -> Odb commands -> Odb object
         # At the bottom of this page will list all the members of the odb and each member with a link will have links
         # to their members
-        self.format = format
+        self.format = data_format
         self.history_extract_format = dict()
         self.field_extract_format = dict()
         input_file = self.input_file
