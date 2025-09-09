@@ -9,12 +9,12 @@ def main(input_file: pathlib.Path, output_file: pathlib.Path) -> None:
     :param input_file: The Abaqus input file to read
     :param output_file: The Abaqus input file to write
     """
-    with open(input_file, "r") as read_file:
+    with input_file.open(mode="r") as read_file:
         read_text = read_file.read()
     write_text = re.sub(
         r"(\*heading.*?)(\*)", r"\2", read_text, count=0, flags=re.MULTILINE | re.IGNORECASE | re.DOTALL
     )
-    with open(output_file, "w") as write_file:
+    with output_file.open(mode="w") as write_file:
         write_file.write(write_text)
 
 
