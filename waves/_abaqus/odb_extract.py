@@ -230,10 +230,10 @@ def odb_extract(
 
         # Write parsed output
         if output_type == "json":
-            with open(output_file, "w") as f:
+            with pathlib.Path(output_file).open(mode="w") as f:
                 json.dump(parsed_odb, f, indent=4)
         elif output_type == "yaml":
-            with open(output_file, "w") as f:
+            with pathlib.Path(output_file).open(mode="w") as f:
                 yaml.safe_dump(parsed_odb, f)  # With safe_dump, tuples are converted to lists
     # Remove odbreport file, don't raise exception if it doesn't exist
     if delete_report_file:

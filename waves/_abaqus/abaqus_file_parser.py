@@ -66,7 +66,7 @@ class AbaqusFileParser(ABC):
             self.output_file = str(Path(self.output_file).with_suffix(_settings._default_yaml_extension))
             self.print_warning(f"Changing suffix of output file to {_settings._default_yaml_extension}")
         try:
-            with open(self.output_file, "w") as f:
+            with Path(self.output_file).open(mode="w") as f:
                 yaml.safe_dump(self.parsed, f)
         except EnvironmentError as e:
             sys.exit(f"Couldn't write file {self.output_file}: {e}")
@@ -139,7 +139,7 @@ class OdbReportFileParser(AbaqusFileParser):
         input_file = self.input_file
         # TODO: Refactor to use a context manager
         try:
-            f = open(input_file, "r")  # noqa: SIM115
+            f = Path(input_file).open(mode="r")  # noqa: SIM115
         except EnvironmentError as e:
             sys.exit(f"Couldn't read file {input_file}: {e}")
 
