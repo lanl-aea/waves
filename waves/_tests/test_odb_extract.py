@@ -49,7 +49,7 @@ def test_odb_extract():
         patch("shutil.which", return_value="abaqus"),
         patch("select.select", return_value=[None, None, None]),
         patch("waves._abaqus.abaqus_file_parser.OdbReportFileParser"),
-        patch("builtins.open", mock_open(read_data="data")),
+        patch("pathlib.Path.open", mock_open(read_data="data")),
         pytest.raises(SystemExit) as err,
     ):  # Test first critical error
         odb_extract.odb_extract(["sample.odb"], None)
@@ -58,7 +58,7 @@ def test_odb_extract():
 
     with (
         patch("yaml.safe_dump"),
-        patch("builtins.open", mock_open(read_data="data")),
+        patch("pathlib.Path.open", mock_open(read_data="data")),
         patch("shutil.which", return_value="abaqus"),
         patch("select.select", return_value=[None, None, None]),
         patch("waves._abaqus.abaqus_file_parser.OdbReportFileParser"),
@@ -71,7 +71,7 @@ def test_odb_extract():
 
     with (
         patch("yaml.safe_dump"),
-        patch("builtins.open", mock_open(read_data="data")),
+        patch("pathlib.Path.open", mock_open(read_data="data")),
         patch("shutil.which", return_value="abaqus"),
         patch("select.select", return_value=[None, None, None]),
         patch("waves._abaqus.abaqus_file_parser.OdbReportFileParser", side_effect=IndexError("Test")),
@@ -86,7 +86,7 @@ def test_odb_extract():
 
     with (
         patch("pathlib.Path.exists", return_value=True),
-        patch("builtins.open", mock_open(read_data="data")),
+        patch("pathlib.Path.open", mock_open(read_data="data")),
         patch("yaml.safe_dump"),
         patch("shutil.which", return_value="abaqus"),
         patch("select.select", return_value=["y", None, None]),
@@ -100,7 +100,7 @@ def test_odb_extract():
 
     with (
         patch("pathlib.Path.exists", side_effect=[True, True, True, False]),
-        patch("builtins.open", mock_open(read_data="data")),
+        patch("pathlib.Path.open", mock_open(read_data="data")),
         patch("yaml.safe_dump"),
         patch("shutil.which", return_value="abaqus"),
         patch("select.select", return_value=["y", None, None]),
@@ -115,7 +115,7 @@ def test_odb_extract():
 
     with (
         patch("pathlib.Path.exists", return_value=True),
-        patch("builtins.open", mock_open(read_data="data")),
+        patch("pathlib.Path.open", mock_open(read_data="data")),
         patch("yaml.safe_dump"),
         patch("shutil.which", return_value="abaqus"),
         patch("select.select", return_value=["y", None, None]),
@@ -132,7 +132,7 @@ def test_odb_extract():
 
     with (
         patch("pathlib.Path.exists", return_value=True),
-        patch("builtins.open", mock_open(read_data="data")),
+        patch("pathlib.Path.open", mock_open(read_data="data")),
         patch("yaml.safe_dump") as mock_safe_dump,
         patch("shutil.which", return_value="abaqus"),
         patch("select.select", return_value=["y", None, None]),
@@ -146,7 +146,7 @@ def test_odb_extract():
 
     with (
         patch("pathlib.Path.exists", return_value=True),
-        patch("builtins.open", mock_open(read_data="data")),
+        patch("pathlib.Path.open", mock_open(read_data="data")),
         patch("yaml.safe_dump") as mock_safe_dump,
         patch("shutil.which", return_value="abaqus"),
         patch("select.select", return_value=["y", None, None]),
@@ -175,7 +175,7 @@ def test_odb_extract():
 
     with (
         patch("pathlib.Path.exists", return_value=True),
-        patch("builtins.open", mock_open(read_data="data")),
+        patch("pathlib.Path.open", mock_open(read_data="data")),
         patch("select.select", return_value=[None, None, None]),
         patch("shutil.which", return_value=""),
         patch("json.dump") as mock_safe_dump,
@@ -190,7 +190,7 @@ def test_odb_extract():
 
     with (
         patch("pathlib.Path.exists", return_value=True),
-        patch("builtins.open", mock_open(read_data="data")),
+        patch("pathlib.Path.open", mock_open(read_data="data")),
         patch("shutil.which", return_value="abaqus"),
         patch("select.select", return_value=[None, None, None]),
         patch("waves._abaqus.abaqus_file_parser.OdbReportFileParser") as h5_parser,
@@ -202,7 +202,7 @@ def test_odb_extract():
 
     with (
         patch("yaml.safe_dump"),
-        patch("builtins.open", mock_open(read_data="data")),
+        patch("pathlib.Path.open", mock_open(read_data="data")),
         patch("shutil.which", return_value="abaqus"),
         patch("select.select", return_value=[None, None, None]),
         patch("waves._abaqus.abaqus_file_parser.OdbReportFileParser", side_effect=IndexError("Test")),
