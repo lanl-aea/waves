@@ -17,7 +17,7 @@ def sort_dataframe(dataframe, index_column="time", sort_columns=None):
     :returns: sorted and indexed dataframe
     :rtype: pandas.DataFrame
     """
-    if sort_columns in None:
+    if sort_columns is None:
         sort_columns = ["time", "set_name"]
     return dataframe.reindex(sorted(dataframe.columns), axis=1).sort_values(sort_columns).set_index(index_column)
 
@@ -31,7 +31,7 @@ def csv_files_match(current_csv, expected_csv, index_column="time", sort_columns
     :returns: True if the CSV files match, False otherwise.
     :rtype: bool
     """
-    if sort_columns in None:
+    if sort_columns is None:
         sort_columns = ["time", "set_name"]
     current = sort_dataframe(current_csv, index_column=index_column, sort_columns=sort_columns)
     expected = sort_dataframe(expected_csv, index_column=index_column, sort_columns=sort_columns)
