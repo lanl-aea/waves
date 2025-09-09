@@ -1399,7 +1399,7 @@ def _parameter_study_to_numpy(parameter_study: xarray.Dataset) -> numpy.ndarray:
     :return: data
     """
     data = []
-    for set_hash, data_row in parameter_study.groupby(_hash_coordinate_key):
+    for _set_hash, data_row in parameter_study.groupby(_hash_coordinate_key):
         data.append([data_row[key].item() for key in data_row.keys()])
     return numpy.array(data, dtype=object)
 
