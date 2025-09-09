@@ -1,30 +1,30 @@
 """Test WAVES SCons builders and support functions"""
 
-import os
 import copy
+import os
 import pathlib
-from contextlib import nullcontext as does_not_raise
 import unittest
-from unittest.mock import patch, call, Mock
+from contextlib import nullcontext as does_not_raise
+from unittest.mock import Mock, call, patch
 
 import pytest
 import SCons.Node.FS
 
-from waves import parameter_generators
-from waves import scons_extensions
-from waves._settings import _cd_action_prefix
-from waves._settings import _redirect_action_suffix
-from waves._settings import _redirect_environment_suffix
-from waves._settings import _abaqus_environment_extension
-from waves._settings import _abaqus_datacheck_extensions
-from waves._settings import _abaqus_explicit_extensions
-from waves._settings import _abaqus_standard_extensions
-from waves._settings import _abaqus_standard_restart_extensions
-from waves._settings import _abaqus_common_extensions
-from waves._settings import _sbatch_wrapper_options
-from waves._settings import _stdout_extension
+from waves import parameter_generators, scons_extensions
+from waves._settings import (
+    _abaqus_common_extensions,
+    _abaqus_datacheck_extensions,
+    _abaqus_environment_extension,
+    _abaqus_explicit_extensions,
+    _abaqus_standard_extensions,
+    _abaqus_standard_restart_extensions,
+    _cd_action_prefix,
+    _redirect_action_suffix,
+    _redirect_environment_suffix,
+    _sbatch_wrapper_options,
+    _stdout_extension,
+)
 from waves._tests.common import platform_check
-
 
 # Test setup and helper functions
 fs = SCons.Node.FS.FS()

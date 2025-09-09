@@ -6,12 +6,11 @@ Test odb_extract.py
 
 import os
 import pathlib
+from unittest.mock import mock_open, patch
 
 import pytest
-from unittest.mock import patch, mock_open
 
 from waves._abaqus import odb_extract
-
 
 fake_odb = {
     "rootAssembly": {

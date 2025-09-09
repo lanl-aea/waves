@@ -2,12 +2,12 @@
 
 from unittest.mock import patch
 
-import pytest
 import numpy
+import pytest
 
-from waves.parameter_generators import LatinHypercube, ScipySampler
 from waves._settings import _hash_coordinate_key, _set_coordinate_key
 from waves._tests.common import merge_samplers
+from waves.parameter_generators import LatinHypercube, ScipySampler
 
 
 class TestLatinHypercube:

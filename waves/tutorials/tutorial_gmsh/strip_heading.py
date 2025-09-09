@@ -1,6 +1,6 @@
-import re
-import pathlib
 import argparse
+import pathlib
+import re
 
 
 def main(input_file: pathlib.Path, output_file: pathlib.Path) -> None:

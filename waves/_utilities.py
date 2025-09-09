@@ -8,20 +8,19 @@ message and non-zero exit codes.
 """
 
 import os
-import re
-import sys
-import shutil
-import string
-import typing
 import pathlib
 import platform
-import warnings
+import re
+import shutil
+import string
 import subprocess
+import sys
+import typing
+import warnings
 
 import yaml
 
 from waves import _settings
-
 
 _exclude_from_namespace = set(globals().keys())
 
@@ -205,8 +204,8 @@ def tee_subprocess(command: typing.List[str], **kwargs) -> typing.Tuple[int, str
 
     :returns: integer return code, string STDOUT
     """
-    from io import StringIO
     import subprocess
+    from io import StringIO
 
     with (
         subprocess.Popen(command, stdout=subprocess.PIPE, bufsize=1, text=True, **kwargs) as process,

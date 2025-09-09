@@ -1,9 +1,8 @@
-from unittest.mock import patch, Mock
+from unittest.mock import Mock, patch
 
 import pytest
 
 from waves._tests import common
-
 
 test_platform_check_cases = {
     "linux": ("Linux", False, "/", False),

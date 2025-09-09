@@ -1,6 +1,6 @@
 """Test WAVES SCons builders and support functions"""
 
-from unittest.mock import patch, call, ANY
+from unittest.mock import ANY, call, patch
 
 import pytest
 import SCons.Environment

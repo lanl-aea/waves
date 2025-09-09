@@ -1,18 +1,16 @@
 """Test ParameterGenerator Abstract Base Class"""
 
-import typing
-import pathlib
 import contextlib
-from unittest.mock import patch, mock_open
+import pathlib
+import typing
+from unittest.mock import mock_open, patch
 
-import pytest
 import numpy
+import pytest
 import xarray
 
-from waves import parameter_generators
+from waves import _settings, _utilities, parameter_generators
 from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
-from waves import _settings
-from waves import _utilities
 
 does_not_raise = contextlib.nullcontext()
 

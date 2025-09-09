@@ -1,14 +1,15 @@
 """Python 3 utilities not compatible with Abaqus Python 2"""
 
+import pathlib
 import sys
 import typing
-import pathlib
 
-import yaml
-import waves
+import matplotlib.pyplot
 import pandas
 import xarray
-import matplotlib.pyplot
+import yaml
+
+import waves
 
 
 def combine_data(input_files, group_path, concat_coord):

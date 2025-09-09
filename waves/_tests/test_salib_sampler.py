@@ -1,15 +1,15 @@
 """Test SALibSampler Class"""
 
-from unittest.mock import patch
 from contextlib import nullcontext as does_not_raise
+from unittest.mock import patch
 
-import pytest
 import numpy
+import pytest
 
-from waves.parameter_generators import SALibSampler
 from waves._settings import _set_coordinate_key, _supported_salib_samplers
+from waves._tests.common import consistent_hash_parameter_check, merge_samplers, self_consistency_checks
 from waves.exceptions import SchemaValidationError
-from waves._tests.common import consistent_hash_parameter_check, self_consistency_checks, merge_samplers
+from waves.parameter_generators import SALibSampler
 
 
 class TestSALibSampler:

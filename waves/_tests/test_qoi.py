@@ -1,20 +1,18 @@
 """Test QOI module"""
 
+import datetime
 import io
 import os
 import pathlib
-import datetime
-from unittest.mock import patch
 from contextlib import nullcontext as does_not_raise
+from unittest.mock import patch
 
 import numpy
 import pandas
 import pytest
 import xarray
 
-from waves import qoi
-from waves import parameter_generators
-
+from waves import parameter_generators, qoi
 
 test_create_qoi_cases = {
     "minimum input": (

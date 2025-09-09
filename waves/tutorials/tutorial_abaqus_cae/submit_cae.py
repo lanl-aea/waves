@@ -1,15 +1,14 @@
-import os
-import sys
-import json
-import shutil
-import inspect
-import tempfile
 import argparse
+import inspect
+import json
+import os
+import shutil
+import sys
+import tempfile
 
 import abaqus
 import abaqusConstants
 import job
-
 
 default_model_name = "Model-1"
 default_cpus = None

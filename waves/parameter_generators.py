@@ -4,26 +4,24 @@ Will raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAVES
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
 
-from abc import ABC, abstractmethod
-import sys
 import copy
-import string
-import typing
 import hashlib
-import pathlib
-import warnings
 import itertools
+import pathlib
+import string
+import sys
+import typing
+import warnings
+from abc import ABC, abstractmethod
 
-import yaml
 import numpy
-import xarray
-import scipy.stats
 import SALib
+import scipy.stats
+import xarray
+import yaml
 
-from waves import _settings
-from waves import _utilities
-from waves._settings import _hash_coordinate_key
-from waves._settings import _set_coordinate_key
+from waves import _settings, _utilities
+from waves._settings import _hash_coordinate_key, _set_coordinate_key
 from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
 
 _exclude_from_namespace = set(globals().keys())

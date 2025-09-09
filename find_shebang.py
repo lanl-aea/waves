@@ -3,11 +3,10 @@
 # TODO: Remove custom python script if/when black supports magic file type searches
 # https://github.com/psf/black/issues/491
 
+import argparse
+import pathlib
 import re
 import typing
-import pathlib
-import argparse
-
 
 default_shebang = "#!.*python"
 

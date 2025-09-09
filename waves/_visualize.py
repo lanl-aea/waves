@@ -4,20 +4,19 @@ Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAV
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
 
+import argparse
 import io
 import os
+import pathlib
 import re
+import subprocess
 import sys
 import typing
-import pathlib
-import argparse
-import subprocess
 
-import networkx
 import matplotlib.pyplot
+import networkx
 
 from waves import _settings
-
 
 _exclude_from_namespace = set(globals().keys())
 

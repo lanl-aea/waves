@@ -1,15 +1,15 @@
 """Test CustomStudy Class"""
 
-from unittest.mock import patch, call, mock_open
 from contextlib import nullcontext as does_not_raise
+from unittest.mock import call, mock_open, patch
 
-import pytest
 import numpy
+import pytest
 
-from waves.parameter_generators import CustomStudy
 from waves._settings import _hash_coordinate_key, _set_coordinate_key
-from waves.exceptions import SchemaValidationError
 from waves._tests.common import merge_samplers
+from waves.exceptions import SchemaValidationError
+from waves.parameter_generators import CustomStudy
 
 
 class TestCustomStudy:

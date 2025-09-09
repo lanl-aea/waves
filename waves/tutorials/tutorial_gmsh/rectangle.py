@@ -1,10 +1,9 @@
-import typing
-import pathlib
 import argparse
+import pathlib
+import typing
 
-import numpy
 import gmsh
-
+import numpy
 
 script_name = pathlib.Path(__file__)
 # Set default parameter values

@@ -1,16 +1,13 @@
-import sys
 import pathlib
-from unittest.mock import Mock
-from unittest.mock import patch, call
+import sys
 from contextlib import nullcontext as does_not_raise
+from unittest.mock import Mock, call, patch
 
 import pytest
 
-from waves import _fetch
-from waves import _settings
-from waves.exceptions import ChoicesError
+from waves import _fetch, _settings
 from waves._tests.common import platform_check
-
+from waves.exceptions import ChoicesError
 
 testing_windows, root_fs, testing_macos = platform_check()
 

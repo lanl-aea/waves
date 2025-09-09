@@ -1,6 +1,6 @@
-import sys
-import pathlib
 import argparse
+import pathlib
+import sys
 
 import cubit
 

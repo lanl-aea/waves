@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-import sys
-import pathlib
 import argparse
+import pathlib
+import sys
 
 import pandas
 import yaml

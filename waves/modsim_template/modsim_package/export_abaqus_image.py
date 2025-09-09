@@ -1,13 +1,12 @@
+import argparse
+import inspect
 import os
 import sys
-import inspect
-import argparse
 
 import abaqus
 import abaqusConstants
 
 import modsim_package.abaqus_utilities
-
 
 default_x_angle = 0.0
 default_y_angle = 0.0

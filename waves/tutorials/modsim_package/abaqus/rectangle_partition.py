@@ -1,8 +1,8 @@
-import os
-import sys
-import shutil
-import inspect
 import argparse
+import inspect
+import os
+import shutil
+import sys
 
 import abaqus
 

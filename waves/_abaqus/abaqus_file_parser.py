@@ -4,21 +4,20 @@ Parse various file types created via Abaqus
 .. moduleauthor:: Prabhu S. Khalsa <pkhalsa@lanl.gov>
 """
 
-from abc import ABC, abstractmethod
+import contextlib
 import re
 import sys
-from pathlib import Path
+from abc import ABC, abstractmethod
 from datetime import datetime
 from itertools import compress
-import contextlib
+from pathlib import Path
 
-import yaml
-import xarray
-import numpy
 import h5py
+import numpy
+import xarray
+import yaml
 
 from waves._abaqus import _settings
-
 
 _exclude_from_namespace = set(globals().keys())
 

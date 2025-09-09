@@ -1,21 +1,20 @@
 #!/usr/bin/env python
 """Example of catenating WAVES parameter study results and definition"""
 
-import sys
-import yaml
-import pathlib
 import argparse
+import pathlib
+import sys
 
-import pandas
-import xarray
 import matplotlib.pyplot
 import numpy
-import seaborn
+import pandas
 import SALib.analyze.delta
-from waves.parameter_generators import SET_COORDINATE_KEY
+import seaborn
+import xarray
+import yaml
 
 from modsim_package.python.rectangle_compression_sensitivity_study import parameter_schema
-
+from waves.parameter_generators import SET_COORDINATE_KEY
 
 default_selection_dict = {
     "E values": "E22",

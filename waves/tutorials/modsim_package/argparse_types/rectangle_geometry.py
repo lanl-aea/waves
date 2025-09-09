@@ -1,11 +1,10 @@
+import argparse
+import inspect
 import os
 import sys
-import inspect
-import argparse
 
 import abaqus
 import abaqusConstants
-
 from modsim_package.argparse_types import positive_float
 
 

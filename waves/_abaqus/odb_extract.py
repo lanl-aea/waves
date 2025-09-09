@@ -36,23 +36,22 @@ path. The '/xarray/Dataset' group path contains a list of group paths that conta
    /xarray/          # Group with a dataset that lists the location of all data written from xarray datasets
 """
 
-import os
-import sys
-import json
-import yaml
-import shlex
-import select
-import shutil
-import typing
-import pathlib
 import datetime
+import json
+import os
+import pathlib
+import select
+import shlex
+import shutil
 import subprocess
+import sys
+import typing
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 
-from waves._abaqus import _settings
-from waves._abaqus import abaqus_file_parser
-from waves._utilities import _quote_spaces_in_path
+import yaml
 
+from waves._abaqus import _settings, abaqus_file_parser
+from waves._utilities import _quote_spaces_in_path
 
 _exclude_from_namespace = set(globals().keys())
 

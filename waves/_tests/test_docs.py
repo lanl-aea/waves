@@ -1,10 +1,9 @@
-from unittest.mock import patch
 from contextlib import nullcontext as does_not_raise
+from unittest.mock import patch
 
 import pytest
 
-from waves import _settings
-from waves import _docs
+from waves import _docs, _settings
 
 
 def test_docs():

@@ -2,12 +2,12 @@
 
 from unittest.mock import patch
 
-import pytest
 import numpy
+import pytest
 
-from waves.parameter_generators import SobolSequence, ScipySampler
 from waves._settings import _set_coordinate_key
-from waves._tests.common import consistent_hash_parameter_check, self_consistency_checks, merge_samplers
+from waves._tests.common import consistent_hash_parameter_check, merge_samplers, self_consistency_checks
+from waves.parameter_generators import ScipySampler, SobolSequence
 
 
 class TestSobolSequence:

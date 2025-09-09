@@ -1,15 +1,14 @@
-import sys
 import copy
 import pathlib
-import warnings
 import subprocess
-from unittest.mock import patch
+import sys
+import warnings
 from contextlib import nullcontext as does_not_raise
+from unittest.mock import patch
 
 import pytest
 
 from waves import _utilities
-
 
 set_name_substitution = {
     "default behavior": (

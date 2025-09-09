@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 """Example of catenating WAVES parameter study results and definition"""
 
-import sys
-import yaml
-import pathlib
 import argparse
+import pathlib
+import sys
 
-import xarray
 import matplotlib.pyplot
+import xarray
+import yaml
+
 from waves.parameter_generators import SET_COORDINATE_KEY
 
 default_selection_dict = {

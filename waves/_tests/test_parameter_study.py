@@ -1,7 +1,7 @@
 import io
 import pathlib
-from unittest.mock import Mock, patch, mock_open
 from contextlib import nullcontext as does_not_raise
+from unittest.mock import Mock, mock_open, patch
 
 import pytest
 import yaml

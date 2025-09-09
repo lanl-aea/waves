@@ -51,7 +51,6 @@ Example usage:
 
 import pathlib
 
-
 # Inherit the parent construction environment
 Import(["env", "simulation_variables", "workflow", "datacheck"])
 

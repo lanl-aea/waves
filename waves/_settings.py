@@ -1,5 +1,5 @@
-import typing
 import pathlib
+import typing
 
 # Set some semi-private project meta variables for package internal use to avoid hardcode duplication
 _project_root_abspath = pathlib.Path(__file__).parent.resolve()

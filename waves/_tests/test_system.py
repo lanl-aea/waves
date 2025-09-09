@@ -12,24 +12,23 @@ All tests should use string template substitution instead of f-strings, if possi
 available substitutions.
 """
 
-import os
-import sys
 import copy
+import importlib
+import inspect
+import os
+import pathlib
 import shlex
 import shutil
 import string
-import typing
-import inspect
-import pathlib
-import tempfile
-import importlib
 import subprocess
-from unittest.mock import patch, Mock
+import sys
+import tempfile
+import typing
+from unittest.mock import Mock, patch
 
 import pytest
 
-from waves import _settings
-from waves import _utilities
+from waves import _settings, _utilities
 from waves._tests.common import platform_check
 
 MODULE_NAME = pathlib.Path(__file__).stem

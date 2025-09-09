@@ -1,9 +1,9 @@
 import pathlib
 from unittest.mock import patch
 
-import pytest
-import networkx
 import matplotlib.pyplot
+import networkx
+import pytest
 
 from waves import _visualize
 

@@ -1,24 +1,22 @@
-import re
-import sys
-import copy
 import atexit
-import shutil
-import typing
-import pathlib
-import functools
 import collections
+import copy
+import functools
+import pathlib
+import re
+import shutil
+import sys
+import typing
 
-import SCons.Node
-import SCons.Script
 import SCons.Builder
-import SCons.Scanner
 import SCons.Defaults
 import SCons.Environment
+import SCons.Node
+import SCons.Scanner
+import SCons.Script
 from SCons.Script.SConscript import SConsEnvironment
 
-from waves import _settings
-from waves import _utilities
-
+from waves import _settings, _utilities
 
 _exclude_from_namespace = set(globals().keys())
 

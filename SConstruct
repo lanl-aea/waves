@@ -1,12 +1,11 @@
 #! /usr/bin/env python
 
 import os
-import shutil
 import pathlib
+import shutil
 import warnings
 
 import setuptools_scm
-
 
 warnings.filterwarnings(action="ignore", message="tag", category=UserWarning, module="setuptools_scm")
 

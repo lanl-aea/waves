@@ -1,13 +1,12 @@
-import os
-import sys
-import shutil
-import inspect
 import argparse
+import inspect
+import os
+import shutil
+import sys
 
 import abaqus
 import abaqusConstants
 import mesh
-
 import modsim_package.abaqus.abaqus_utilities
 from modsim_package.argparse_types import positive_float
 

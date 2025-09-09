@@ -1,10 +1,10 @@
-import typing
-import pathlib
 import argparse
+import pathlib
+import typing
 import warnings
 
-import numpy
 import meshio
+import numpy
 import xarray
 
 

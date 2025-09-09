@@ -1,10 +1,9 @@
-import pathlib
 import argparse
-from unittest.mock import patch, mock_open
+import pathlib
 from contextlib import nullcontext as does_not_raise
+from unittest.mock import mock_open, patch
 
 import pytest
-
 import solver
 
 

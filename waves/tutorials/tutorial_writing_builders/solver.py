@@ -28,13 +28,12 @@ Exit codes:
 4. reached max log file integer before finding a free file name
 """
 
+import argparse
+import pathlib
 import sys
 import typing
-import pathlib
-import argparse
 
 import yaml
-
 
 _version = "1.0.0"
 _project_name = pathlib.Path(__file__).stem

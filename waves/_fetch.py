@@ -4,17 +4,16 @@ Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAV
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
 
-import os
-import sys
-import shutil
-import typing
-import filecmp
-import pathlib
 import argparse
+import filecmp
+import os
+import pathlib
+import shutil
+import sys
+import typing
 
 from waves import _settings
 from waves.exceptions import ChoicesError
-
 
 _exclude_from_namespace = set(globals().keys())
 

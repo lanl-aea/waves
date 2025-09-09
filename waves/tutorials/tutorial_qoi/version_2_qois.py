@@ -1,6 +1,5 @@
 from waves import qoi
 
-
 version_2_qois = qoi._create_qoi_archive(
     (
         qoi.create_qoi(

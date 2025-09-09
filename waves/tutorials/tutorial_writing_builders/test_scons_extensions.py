@@ -1,8 +1,8 @@
-import waves
 import pytest
 import SCons.Environment
-
 import scons_extensions
+
+import waves
 
 
 def dummy_emitter_for_testing(target, source, env):  # noqa: ARG001

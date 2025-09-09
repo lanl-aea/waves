@@ -8,20 +8,19 @@
    the output plotting and reporting formatting is subject to change.
 """
 
+import collections.abc
+import contextlib
+import itertools
 import pathlib
 import typing
-import collections.abc
-import itertools
-import contextlib
 
-import numpy
-import xarray
-import pandas
 import matplotlib.pyplot
+import numpy
+import pandas
+import xarray
 from matplotlib.backends.backend_pdf import PdfPages
 
 from waves import _settings
-
 
 _exclude_from_namespace = set(globals().keys())
 

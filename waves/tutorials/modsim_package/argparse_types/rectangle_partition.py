@@ -1,11 +1,10 @@
-import os
-import sys
-import shutil
-import inspect
 import argparse
+import inspect
+import os
+import shutil
+import sys
 
 import abaqus
-
 from modsim_package.argparse_types import positive_float
 
 

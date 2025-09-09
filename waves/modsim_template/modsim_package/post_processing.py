@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 """Post-process with data catenation and plotting"""
 
-import sys
-import yaml
-import pathlib
 import argparse
+import pathlib
+import sys
 
 import pandas
-from waves.parameter_generators import SET_COORDINATE_KEY
+import yaml
 
 import modsim_package.utilities
+from waves.parameter_generators import SET_COORDINATE_KEY
 
 default_selection_dict = {
     "E values": "E22",

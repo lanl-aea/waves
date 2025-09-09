@@ -1,13 +1,12 @@
 import pathlib
-from unittest.mock import patch, mock_open
 from contextlib import nullcontext as does_not_raise
+from unittest.mock import mock_open, patch
 
-import pytest
 import pandas
+import pytest
 import xarray
 
-from waves import _settings
-from waves import _print_study
+from waves import _print_study, _settings
 
 
 def test_print_study():

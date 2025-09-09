@@ -4,20 +4,11 @@ Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAV
 :meth:`waves._main.main` to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
 
-import sys
 import argparse
+import sys
 
-from waves import _settings
-from waves import __version__
-from waves import _docs
-from waves import _fetch
-from waves import _visualize
-from waves import _build
-from waves import _parameter_study
-from waves import _print_study
-from waves import _qoi
+from waves import __version__, _build, _docs, _fetch, _parameter_study, _print_study, _qoi, _settings, _visualize
 from waves.exceptions import WAVESError
-
 
 _exclude_from_namespace = set(globals().keys())
 

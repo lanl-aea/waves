@@ -4,14 +4,13 @@ Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAV
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
 
-import pathlib
 import argparse
+import pathlib
+
+import pandas
+import yaml
 
 from waves import _settings
-
-import yaml
-import pandas
-
 
 _exclude_from_namespace = set(globals().keys())
 

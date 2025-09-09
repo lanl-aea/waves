@@ -1,14 +1,12 @@
 """Test command line utility and associated functions"""
 
 import pathlib
-from unittest.mock import Mock, patch, mock_open
 from contextlib import nullcontext as does_not_raise
+from unittest.mock import Mock, mock_open, patch
 
 import pytest
 
-from waves import _main
-from waves import _settings
-from waves import exceptions
+from waves import _main, _settings, exceptions
 
 
 def test_main():
