@@ -120,12 +120,12 @@ def configure(args: argparse.Namespace) -> dict:
         raise RuntimeError(message)
     configuration["routine"] = args.subcommand.lower()
     configuration["version"] = _project_name_version
-    configuration["log_file"] = pathlib.Path(name_log_file(_log_file))
+    configuration["log_file"] = str(name_log_file(_log_file))
     configuration["output_file"] = str(name_output_file(args.input_file, args.output_file))
     configuration["solve_cpus"] = args.solve_cpus
     configuration["overwrite"] = args.overwrite
 
-    with configuration["log_file"].open(mode="w+") as log_writer:
+    with pathlib.Path(configuration["log_file"]).open(mode="w+") as log_writer:
         log_writer.write(f"{configuration['version']}\n{configuration['routine']}\n")
         log_writer.write(f"{configuration['log_file']}\n{configuration['output_file']}\n")
 
