@@ -1624,14 +1624,12 @@ class TestParameterGenerator:
             sconsWrite._scons_write([], [], env)
         mock_write.assert_called_once_with(**expected_kwargs)
 
-    # fmt: off
-    templates = {       # schema, file_template, set_template,           expected
-        "no template":   (    {},          None,         None, ["parameter_set0"]),
-        "file template": (    {},         "out",         None,           ["out0"]),
-        "set template":  (    {},          None, "out@number",           ["out0"]),
-        "set template, overridden": ({}, "out", "overridden",            ["out0"]),
+    templates = {
+        "no template": ({}, None, None, ["parameter_set0"]),
+        "file template": ({}, "out", None, ["out0"]),
+        "set template": ({}, None, "out@number", ["out0"]),
+        "set template, overridden": ({}, "out", "overridden", ["out0"]),
     }
-    # fmt: on
 
     def test_merge_parameter_studies_with_missing_previous_parameter_study(self):
         # Test exception on missing previous parameter study attribute
@@ -1721,18 +1719,16 @@ class TestParameterGenerator:
             assert list(TemplateGenerator._set_names.values()) == expected
             assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
 
-    # fmt: off
-    init_write_stdout = {# schema, template, overwrite, dry_run,         is_file,  sets, stdout_calls
-        "no-template-1": (     {},     None,     False,  False,          [False],    1,            1),
-        "no-template-2": (     {},     None,      True,  False,          [False],    1,            1),
-        "no-template-3": (     {},     None,     False,   True,   [False, False],    2,            1),
-        "no-template-4": (     {},     None,     False,  False,   [ True,  True],    2,            1),
-        "dry_run-1":     (     {},    "out",     False,   True,          [False],    1,            1),
-        "dry_run-2":     (     {},    "out",      True,   True,          [False],    1,            1),
-        "dry_run-3":     (     {},    "out",      True,   True,   [ True, False],    2,            2),
-        "dry_run-4":     (     {},    "out",     False,   True,   [False,  True],    1,            1),
+    init_write_stdout = {
+        "no-template-1": ({}, None, False, False, [False], 1, 1),
+        "no-template-2": ({}, None, True, False, [False], 1, 1),
+        "no-template-3": ({}, None, False, True, [False, False], 2, 1),
+        "no-template-4": ({}, None, False, False, [True, True], 2, 1),
+        "dry_run-1": ({}, "out", False, True, [False], 1, 1),
+        "dry_run-2": ({}, "out", True, True, [False], 1, 1),
+        "dry_run-3": ({}, "out", True, True, [True, False], 2, 2),
+        "dry_run-4": ({}, "out", False, True, [False, True], 1, 1),
     }
-    # fmt: on
 
     @pytest.mark.parametrize(
         "schema, template, overwrite, dry_run, is_file, sets, stdout_calls",
@@ -1773,17 +1769,15 @@ class TestParameterGenerator:
                 xarray_to_netcdf.assert_not_called()
                 assert stdout_write.call_count == stdout_calls
 
-    # fmt: off
-    init_write_files = {# schema, template, overwrite,        is_file, sets, files
-        "template-1":  (      {},    "out",     False,        [False],    1,     1),
-        "template-2":  (      {},    "out",     False, [False, False],    2,     2),
-        "template-3":  (      {},    "out",     False, [ True,  True],    2,     0),
-        "template-4":  (      {},    "out",     False, [ True, False],    2,     1),
-        "overwrite-2": (      {},    "out",      True, [False, False],    2,     2),
-        "overwrite-3": (      {},    "out",      True, [ True,  True],    2,     2),
-        "overwrite-4": (      {},    "out",      True, [ True, False],    2,     2),
+    init_write_files = {
+        "template-1": ({}, "out", False, [False], 1, 1),
+        "template-2": ({}, "out", False, [False, False], 2, 2),
+        "template-3": ({}, "out", False, [True, True], 2, 0),
+        "template-4": ({}, "out", False, [True, False], 2, 1),
+        "overwrite-2": ({}, "out", True, [False, False], 2, 2),
+        "overwrite-3": ({}, "out", True, [True, True], 2, 2),
+        "overwrite-4": ({}, "out", True, [True, False], 2, 2),
     }
-    # fmt: on
 
     @pytest.mark.parametrize(
         "schema, template, overwrite, is_file, sets, files",
@@ -1896,15 +1890,13 @@ class TestParameterGenerator:
             mock_write_yaml.assert_not_called()
             assert mock_write_dataset.call_count == files
 
-    # fmt: off
-    init_write_dataset_files = {# equals, is_file, overwrite, expected_call_count
-        "equal-datasets":      (    True,  [True],     False,                   0),
-        "equal-overwrite":     (    True,  [True],      True,                   1),
-        "different-datasets":  (   False,  [True],     False,                   1),
-        "not-file-1":          (    True, [False],     False,                   1),
-        "not-file-2":          (   False, [False],     False,                   1),
+    init_write_dataset_files = {
+        "equal-datasets": (True, [True], False, 0),
+        "equal-overwrite": (True, [True], True, 1),
+        "different-datasets": (False, [True], False, 1),
+        "not-file-1": (True, [False], False, 1),
+        "not-file-2": (False, [False], False, 1),
     }
-    # fmt: on
 
     @pytest.mark.parametrize(
         "equals, is_file, overwrite, expected_call_count",
