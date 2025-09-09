@@ -1758,7 +1758,7 @@ class TestParameterGenerator:
             )
             with (
                 patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-                patch("builtins.open", mock_open()) as mock_file,
+                patch("pathlib.Path.open", mock_open()) as mock_file,
                 patch("sys.stdout.write") as stdout_write,
                 patch("xarray.Dataset.to_netcdf") as xarray_to_netcdf,
                 patch("pathlib.Path.is_file", side_effect=is_file),
@@ -1939,7 +1939,7 @@ class TestParameterGenerator:
         existing_dict = {"dummy": "dict"} if equals else {"smart": "dict"}
 
         with (
-            patch("builtins.open", mock_open()) as write_yaml_file,
+            patch("pathlib.Path.open", mock_open()) as write_yaml_file,
             patch("yaml.safe_load", return_value=existing_dict),
             patch("pathlib.Path.is_file", side_effect=is_file),
         ):
@@ -2022,7 +2022,7 @@ class TestParameterGenerator:
     def test_write_meta(self):
         WriteMetaParameterGenerator = DummyGenerator({})
         with (
-            patch("pathlib.Path.open", mock_open()) as mock_file,
+            patch("pathlib.Path.open"", mock_open()) as mock_file,
             patch("pathlib.Path.resolve", return_value=pathlib.Path("parameter_set1.h5")),
         ):
             WriteMetaParameterGenerator._write_meta()
@@ -2031,7 +2031,7 @@ class TestParameterGenerator:
 
         WriteMetaParameterGenerator.output_file = pathlib.Path("dummy.h5")
         with (
-            patch("pathlib.Path.open", mock_open()) as mock_file,
+            patch("pathlib.Path.open"", mock_open()) as mock_file,
             patch("pathlib.Path.resolve", return_value=pathlib.Path("dummy.h5")),
         ):
             WriteMetaParameterGenerator._write_meta()

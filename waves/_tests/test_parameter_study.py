@@ -26,7 +26,7 @@ def test_read_parameter_schema():
         patch("yaml.safe_load", return_value=expected),
     ):
         parameter_schema = _parameter_study.read_parameter_schema(input_file)
-    mock_file.assert_called_once_with(input_file, "r")
+    mock_file.assert_called_once_with(mode="r")
     assert parameter_schema == expected
 
     # Test RuntimeError on missing file

@@ -152,7 +152,7 @@ def test_parameter_study(subcommand, class_name, argument, option, argument_valu
     mock_instantiation = Mock()
     with (
         patch("sys.argv", arg_list),
-        patch("builtins.open", mock_open()),
+        patch("pathlib.Path.open", mock_open()),
         patch("yaml.safe_load"),
         patch(f"waves.parameter_generators.{class_name}", return_value=mock_instantiation) as mock_generator,
         patch("pathlib.Path.is_file", return_value=True),

@@ -211,7 +211,7 @@ class TestCustomStudy:
     ):
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-            patch("builtins.open", mock_open()) as mock_file,
+            patch("pathlib.Path.open", mock_open()) as mock_file,
             patch("xarray.Dataset.to_netcdf") as xarray_to_netcdf,
             patch("sys.stdout.write") as stdout_write,
             patch("pathlib.Path.is_file", return_value=False),
