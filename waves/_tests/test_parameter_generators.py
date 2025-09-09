@@ -1651,10 +1651,10 @@ class TestParameterGenerator:
         set_samples = sconsIterator.parameter_study_to_dict()
         assert set_samples == expected
         assert all(isinstance(key, str) for key in set_samples)
-        for set_name in expected:
-            assert expected[set_name] == set_samples[set_name]
-            for parameter in expected[set_name]:
-                assert type(set_samples[set_name][parameter]) is type(expected[set_name][parameter])
+        for set_name, set_value in expected.items():
+            assert set_value == set_samples[set_name]
+            for parameter in set_value:
+                assert type(set_samples[set_name][parameter]) is type(set_value[parameter])
 
     @pytest.mark.parametrize(
         "schema, file_template, set_template, expected",
