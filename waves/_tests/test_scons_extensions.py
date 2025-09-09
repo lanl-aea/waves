@@ -485,7 +485,7 @@ def test_print_failed_nodes_stdout():
     with (
         patch("SCons.Script.GetBuildFailures", return_value=[mock_failure_file]),
         patch("pathlib.Path.exists", return_value=True) as mock_exists,
-        patch("builtins.open") as mock_open,
+        patch("pathlib.Path.open") as mock_open,
         patch("builtins.print") as mock_print,
     ):
         scons_extensions._print_failed_nodes_stdout()
@@ -495,7 +495,7 @@ def test_print_failed_nodes_stdout():
     with (
         patch("SCons.Script.GetBuildFailures", return_value=[mock_failure_file]),
         patch("pathlib.Path.exists", return_value=False) as mock_exists,
-        patch("builtins.open") as mock_open,
+        patch("pathlib.Path.open") as mock_open,
         patch("builtins.print") as mock_print,
     ):
         scons_extensions._print_failed_nodes_stdout()

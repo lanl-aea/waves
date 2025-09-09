@@ -352,7 +352,7 @@ class ParameterGenerator(ABC):
         """
         set_files = [pathlib.Path(set_name) for set_name in self.parameter_study.coords[_set_coordinate_key].values]
         # Always overwrite the meta data file to ensure that *all* parameter file names are included.
-        with open(self.parameter_study_meta_file, "w") as meta_file:
+        with self.parameter_study_meta_file.open(mode="w") as meta_file:
             if self.output_file:
                 meta_file.write(f"{self.output_file.resolve()}\n")
             else:
