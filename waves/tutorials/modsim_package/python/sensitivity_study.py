@@ -168,7 +168,7 @@ def get_parser():
     parser.add_argument(
         "-s",
         "--selection-dict",
-        type=str,
+        type=pathlib.Path,
         default=None,
         help=(
             "The YAML formatted dictionary file to define the down selection of data to be plotted. "
