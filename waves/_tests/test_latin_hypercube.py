@@ -59,7 +59,7 @@ class TestLatinHypercube:
         ids=generate_input.keys(),
     )
     def test_generate(self, parameter_schema, seed, expected_samples, expected_scipy_kwds):
-        parameter_names = [key for key in parameter_schema.keys() if key != "num_simulations"]
+        parameter_names = [key for key in parameter_schema if key != "num_simulations"]
         kwargs = {"seed": seed}
         generator_classes = (
             LatinHypercube(parameter_schema, **kwargs),
@@ -69,7 +69,7 @@ class TestLatinHypercube:
             samples_array = TestGenerate._samples
             assert numpy.allclose(samples_array, expected_samples)
             # Check for type preservation
-            for key in TestGenerate.parameter_study.keys():
+            for key in TestGenerate.parameter_study:
                 assert TestGenerate.parameter_study[key].dtype == numpy.float64
             # Verify that the parameter set name creation method was called
             expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
@@ -121,7 +121,7 @@ class TestLatinHypercube:
             # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
             assert numpy.allclose(numpy.sort(samples, axis=0), numpy.sort(expected_samples, axis=0))
             # Check for type preservation
-            for key in TestMerge2.parameter_study.keys():
+            for key in TestMerge2.parameter_study:
                 assert TestMerge2.parameter_study[key].dtype == numpy.float64
             # Check for consistent hash-parameter set relationships
             for set_name, parameters in TestMerge1.parameter_study.groupby(_set_coordinate_key):

@@ -553,7 +553,7 @@ def test_propagate_parameter_space(studies, expected_study, expected_types, prop
     with outcome:
         try:
             propagated_study = parameter_generators._propagate_parameter_space(study_base, study_other)
-            for key in expected_types.keys():
+            for key in expected_types:
                 assert propagated_study[key].dtype == expected_types[key]
             xarray.testing.assert_identical(propagated_study, expected_study)
             parameter_generators._verify_parameter_study(propagated_study)
@@ -820,7 +820,7 @@ def test_merge_parameter_space(studies, expected_study, expected_types, propagat
             studies = [study.swap_dims(swap_to_hash_index) for study in studies]
             merged_study = parameter_generators._merge_parameter_space(studies)
             merged_study = merged_study.swap_dims(swap_to_set_index)
-            for key in expected_types.keys():
+            for key in expected_types:
                 assert merged_study[key].dtype == expected_types[key]
             xarray.testing.assert_identical(merged_study, expected_study)
             parameter_generators._verify_parameter_study(merged_study)
@@ -877,7 +877,7 @@ def test_merge_parameter_studies(studies, expected_study, expected_types, propag
     with outcome:
         try:
             merged_study = parameter_generators._merge_parameter_studies(studies)
-            for key in expected_types.keys():
+            for key in expected_types:
                 assert merged_study[key].dtype == expected_types[key]
             xarray.testing.assert_identical(merged_study, expected_study)
             parameter_generators._verify_parameter_study(merged_study)
@@ -1652,10 +1652,10 @@ class TestParameterGenerator:
         sconsIterator = DummyGenerator({}, **kwargs)
         set_samples = sconsIterator.parameter_study_to_dict()
         assert set_samples == expected
-        assert all(isinstance(key, str) for key in set_samples.keys())
-        for set_name in expected.keys():
+        assert all(isinstance(key, str) for key in set_samples)
+        for set_name in expected:
             assert expected[set_name] == set_samples[set_name]
-            for parameter in expected[set_name].keys():
+            for parameter in expected[set_name]:
                 assert type(set_samples[set_name][parameter]) is type(expected[set_name][parameter])
 
     @pytest.mark.parametrize(

@@ -82,7 +82,7 @@ class TestCustomStudy:
         TestGenerate = CustomStudy(parameter_schema)
         generate_array = TestGenerate._samples
         assert numpy.all(generate_array == expected_array)
-        for key in TestGenerate.parameter_study.keys():
+        for key in TestGenerate.parameter_study:
             assert TestGenerate.parameter_study[key].dtype == expected_types[key]
         # Verify that the parameter set name creation method was called
         assert list(TestGenerate._set_names.values()) == [f"parameter_set{num}" for num in range(len(expected_array))]
@@ -155,7 +155,7 @@ class TestCustomStudy:
             generate_array = TestMerge2._samples
             assert numpy.all(generate_array == expected_array)
             # Check for type preservation
-            for key in TestMerge2.parameter_study.keys():
+            for key in TestMerge2.parameter_study:
                 assert TestMerge2.parameter_study[key].dtype == expected_types[key]
             # Check for consistent hash-parameter set relationships
             for set_name, parameters in TestMerge1.parameter_study.groupby(_set_coordinate_key):

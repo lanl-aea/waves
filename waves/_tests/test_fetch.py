@@ -519,7 +519,7 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
 
 def test_extend_requested_paths():
     # Testing accepted tutorial keys
-    for tutorial_num in _settings._tutorial_paths.keys():
+    for tutorial_num in _settings._tutorial_paths:
         mock_list = Mock()
         _fetch.extend_requested_paths(mock_list, tutorial_num)
         assert mock_list.extend.call_count == tutorial_num + 1

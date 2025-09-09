@@ -122,7 +122,7 @@ class TestCartesianProduct:
         TestGenerate = CartesianProduct(parameter_schema)
         generate_array = TestGenerate._samples
         assert numpy.all(generate_array == expected_array)
-        for key in TestGenerate.parameter_study.keys():
+        for key in TestGenerate.parameter_study:
             assert TestGenerate.parameter_study[key].dtype == expected_types[key]
         # Verify that the parameter set name creation method was called
         assert list(TestGenerate._set_names.values()) == [f"parameter_set{num}" for num in range(len(expected_array))]
@@ -223,7 +223,7 @@ class TestCartesianProduct:
             original_study, merged_study = merge_samplers(CartesianProduct, first_schema, second_schema, {})
             generate_array = merged_study._samples
             assert numpy.all(generate_array == expected_array)
-            for key in merged_study.parameter_study.keys():
+            for key in merged_study.parameter_study:
                 assert merged_study.parameter_study[key].dtype == expected_types[key]
             consistent_hash_parameter_check(original_study, merged_study)
             self_consistency_checks(merged_study)
@@ -374,8 +374,8 @@ class TestCartesianProduct:
         TestParameterStudyDict = CartesianProduct(parameter_schema)
         returned_dictionary = TestParameterStudyDict.parameter_study_to_dict()
         assert expected_dictionary.keys() == returned_dictionary.keys()
-        assert all(isinstance(key, str) for key in returned_dictionary.keys())
-        for set_name in expected_dictionary.keys():
+        assert all(isinstance(key, str) for key in returned_dictionary)
+        for set_name in expected_dictionary:
             assert expected_dictionary[set_name] == returned_dictionary[set_name]
             for parameter in expected_dictionary[set_name]:
                 assert type(expected_dictionary[set_name][parameter]) is type(returned_dictionary[set_name][parameter])

@@ -12,6 +12,7 @@ import pathlib
 import typing
 import collections.abc
 import itertools
+import contextlib
 
 import numpy
 import xarray
@@ -420,13 +421,11 @@ def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataT
     for group, group_qois in itertools.groupby(sorted(qois, key=_qoi_group), key=_qoi_group):
         # Move "version" from attribute to dimension for each DataArray and merge to Dataset
         set_qois = [qoi.expand_dims(version=[qoi.attrs[_version_key]]) for qoi in group_qois]
-        # Try to add date as a coordinate if available
-        try:
+        # Try to add date as a coordinate if available, but allow failure because date coordinate is not needed
+        with contextlib.suppress(KeyError):
             set_qois = [
                 qoi.assign_coords(date=(_version_key, [numpy.datetime64(qoi.attrs["date"])])) for qoi in set_qois
             ]
-        except KeyError:
-            pass  # date coordinate is not needed
         qoi_set = create_qoi_set(set_qois)
         # Add dataset as a node in the DataTree
         archive[group] = qoi_set
@@ -773,7 +772,8 @@ def _can_plot_scalar_qoi_history(qoi: xarray.DataArray) -> bool:
     """
     if _version_key not in qoi.dims:
         return False
-    if qoi.where(numpy.isfinite(qoi)).dropna(_version_key, how="all").size == 0:  # Avoid empty plots
+    # Avoid empty plots
+    if qoi.where(numpy.isfinite(qoi)).dropna(_version_key, how="all").size == 0:  # noqa: SIM103
         return False
     return True
 

@@ -526,7 +526,7 @@ def _project_help_descriptions(
     descriptions = {**alias_descriptions, **target_descriptions}
     keys = [str(node) for node in nodes]
     for key in keys:
-        if key in descriptions.keys():
+        if key in descriptions:
             message += f"    {key}: {descriptions[key]}\n"
         else:
             message += f"    {key}\n"

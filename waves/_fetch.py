@@ -284,7 +284,7 @@ def extend_requested_paths(
 
     :raises ChoicesError: If the requested tutorial number doesn't exist
     """
-    if tutorial not in _settings._tutorial_paths.keys():
+    if tutorial not in _settings._tutorial_paths:
         raise ChoicesError(
             f"Requested tutorial number '{tutorial}' does not exist. "
             f"Must be one of {_settings._allowable_tutorial_numbers}."

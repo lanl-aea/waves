@@ -536,7 +536,7 @@ class _ScipyGenerator(ParameterGenerator, ABC):
         if not isinstance(self.parameter_schema, dict):
             raise SchemaValidationError("parameter_schema must be a dictionary")
         # TODO: Settle on an input file schema and validation library
-        if "num_simulations" not in self.parameter_schema.keys():
+        if "num_simulations" not in self.parameter_schema:
             raise SchemaValidationError("Parameter schema is missing the required 'num_simulations' key")
         elif not isinstance(self.parameter_schema["num_simulations"], int):
             raise SchemaValidationError("Parameter schema 'num_simulations' must be an integer.")
@@ -608,7 +608,7 @@ class _ScipyGenerator(ParameterGenerator, ABC):
 
     def _create_parameter_names(self) -> None:
         """Construct the parameter names from a distribution parameter schema"""
-        self._parameter_names = [key for key in self.parameter_schema.keys() if key != "num_simulations"]
+        self._parameter_names = [key for key in self.parameter_schema if key != "num_simulations"]
 
 
 class CartesianProduct(ParameterGenerator):
@@ -1287,16 +1287,16 @@ class SALibSampler(ParameterGenerator, ABC):
         if not isinstance(self.parameter_schema, dict):
             raise SchemaValidationError("parameter_schema must be a dictionary")
         # TODO: Settle on an input file schema and validation library
-        if "N" not in self.parameter_schema.keys():
+        if "N" not in self.parameter_schema:
             raise SchemaValidationError("Parameter schema is missing the required 'N' key")
         elif not isinstance(self.parameter_schema["N"], int):
             raise SchemaValidationError("Parameter schema 'N' must be an integer.")
         # Check the SALib owned "problem" dictionary for necessary WAVES elements
-        if "problem" not in self.parameter_schema.keys():
+        if "problem" not in self.parameter_schema:
             raise SchemaValidationError("Parameter schema is missing the required 'problem' key")
         elif not isinstance(self.parameter_schema["problem"], dict):
             raise SchemaValidationError("'problem' must be a dictionary")
-        if "names" not in self.parameter_schema["problem"].keys():
+        if "names" not in self.parameter_schema["problem"]:
             raise SchemaValidationError("Parameter schema 'problem' dict is missing the required 'names' key")
         if not isinstance(self.parameter_schema["problem"]["names"], (list, set, tuple)):
             raise SchemaValidationError("Parameter 'names' is not one of list, set, or tuple")
@@ -1400,7 +1400,7 @@ def _parameter_study_to_numpy(parameter_study: xarray.Dataset) -> numpy.ndarray:
     """
     data = []
     for _set_hash, data_row in parameter_study.groupby(_hash_coordinate_key):
-        data.append([data_row[key].item() for key in data_row.keys()])
+        data.append([data_row[key].item() for key in data_row])
     return numpy.array(data, dtype=object)
 
 
@@ -1459,8 +1459,8 @@ def _return_dataset_types(original_dataset: xarray.Dataset, update_dataset: xarr
     :raises RuntimeError: if data variables with matching names have different types
     """
     # TODO: Accept an arbitrarily long list of positional arguments
-    original_types = {key: original_dataset[key].dtype for key in original_dataset.keys()}
-    update_types = {key: update_dataset[key].dtype for key in update_dataset.keys()}
+    original_types = {key: original_dataset[key].dtype for key in original_dataset}
+    update_types = {key: update_dataset[key].dtype for key in update_dataset}
     matching_keys = set(original_types.keys()) & set(update_types.keys())
     for key in matching_keys:
         original_type = original_types[key]

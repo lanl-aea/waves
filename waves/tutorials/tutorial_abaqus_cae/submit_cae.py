@@ -38,12 +38,12 @@ def main(input_file, job_name, model_name=default_model_name, cpus=default_cpus,
         kwargs.update({"numCpus": cpus})
 
     with AbaqusNamedTemporaryFile(input_file=input_file, suffix=".cae", dir="."):
-        if job in abaqus.mdb.jobs.keys():
+        if job in abaqus.mdb.jobs:
             script_job = abaqus.mdb.jobs[job]
             script_job.setValues(**kwargs)
             model_name = script_job.model
 
-        if model_name in abaqus.mdb.models.keys():
+        if model_name in abaqus.mdb.models:
             script_job = abaqus.mdb.Job(name=job_name, model=model_name, **kwargs)
         else:
             raise RuntimeError("Could not find model name '{}' in file '{}'\n".format(model_name, input_file))

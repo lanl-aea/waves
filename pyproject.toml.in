@@ -91,14 +91,15 @@ extend-exclude = ["build", "install", "conda-environment", "conda-pkgs", "pip-bu
 extend-include = ["SConstruct", "SConscript", "*.scons"]
 
 [tool.ruff.lint]
-extend-select = ["A", "B", "E", "F", "Q", "W", "C4", "ERA", "ISC", "PIE", "PYI", "RSE", "T10", "RUF"]
-extend-ignore = ["B028", "PIE808", "PIE790"]
+extend-select = ["A", "B", "E", "F", "Q", "W", "C4", "ERA", "ISC", "PIE", "PYI", "RSE", "SIM", "T10", "RUF"]
+extend-ignore = ["B028", "PIE808", "PIE790", "SIM108"]
 
 [tool.ruff.lint.extend-per-file-ignores]
 "SConstruct" = ["F821"]
 "SConscript" = ["F821"]
 "*.scons" = ["F821"]
-"**/submit_cae.py" = ["F821"]
+"**/submit_cae.py" = ["F821", "SIM115"]
+"**/export_abaqus_image.py" = ["SIM115"]
 "waves/parameter_generators.py" = ["RUF005"]
 "waves/_tests/test_*.py" = ["RUF012"]
 # TODO: re-enable B006 VVV
