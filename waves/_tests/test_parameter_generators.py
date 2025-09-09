@@ -1626,10 +1626,10 @@ class TestParameterGenerator:
 
     # fmt: off
     templates = {       # schema, file_template, set_template,           expected
-        "no template":   (    {},          None,         None, ["parameter_set0"]),  # noqa: E241,E201
-        "file template": (    {},         "out",         None,           ["out0"]),  # noqa: E241,E201
-        "set template":  (    {},          None, "out@number",           ["out0"]),  # noqa: E241,E201
-        "set template, overridden": ({}, "out", "overridden",            ["out0"]),  # noqa: E241,E201
+        "no template":   (    {},          None,         None, ["parameter_set0"]),
+        "file template": (    {},         "out",         None,           ["out0"]),
+        "set template":  (    {},          None, "out@number",           ["out0"]),
+        "set template, overridden": ({}, "out", "overridden",            ["out0"]),
     }
     # fmt: on
 
@@ -1722,15 +1722,15 @@ class TestParameterGenerator:
             assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
 
     # fmt: off
-    init_write_stdout = {# schema, template, overwrite, dry_run,         is_file,  sets, stdout_calls  # noqa: E261
-        "no-template-1": (     {},     None,     False,  False,          [False],    1,            1),  # noqa: E241,E201,E501
-        "no-template-2": (     {},     None,      True,  False,          [False],    1,            1),  # noqa: E241,E201,E501
-        "no-template-3": (     {},     None,     False,   True,   [False, False],    2,            1),  # noqa: E241,E201,E501
-        "no-template-4": (     {},     None,     False,  False,   [ True,  True],    2,            1),  # noqa: E241,E201,E501
-        "dry_run-1":     (     {},    "out",     False,   True,          [False],    1,            1),  # noqa: E241,E201,E501
-        "dry_run-2":     (     {},    "out",      True,   True,          [False],    1,            1),  # noqa: E241,E201,E501
-        "dry_run-3":     (     {},    "out",      True,   True,   [ True, False],    2,            2),  # noqa: E241,E201,E501
-        "dry_run-4":     (     {},    "out",     False,   True,   [False,  True],    1,            1),  # noqa: E241,E201,E501
+    init_write_stdout = {# schema, template, overwrite, dry_run,         is_file,  sets, stdout_calls
+        "no-template-1": (     {},     None,     False,  False,          [False],    1,            1),
+        "no-template-2": (     {},     None,      True,  False,          [False],    1,            1),
+        "no-template-3": (     {},     None,     False,   True,   [False, False],    2,            1),
+        "no-template-4": (     {},     None,     False,  False,   [ True,  True],    2,            1),
+        "dry_run-1":     (     {},    "out",     False,   True,          [False],    1,            1),
+        "dry_run-2":     (     {},    "out",      True,   True,          [False],    1,            1),
+        "dry_run-3":     (     {},    "out",      True,   True,   [ True, False],    2,            2),
+        "dry_run-4":     (     {},    "out",     False,   True,   [False,  True],    1,            1),
     }
     # fmt: on
 
@@ -1774,14 +1774,14 @@ class TestParameterGenerator:
                 assert stdout_write.call_count == stdout_calls
 
     # fmt: off
-    init_write_files = {# schema, template, overwrite,        is_file, sets, files  # noqa: E261,E721
-        "template-1":  (      {},    "out",     False,        [False],    1,     1),  # noqa: E241,E201
-        "template-2":  (      {},    "out",     False, [False, False],    2,     2),  # noqa: E241,E201
-        "template-3":  (      {},    "out",     False, [ True,  True],    2,     0),  # noqa: E241,E201
-        "template-4":  (      {},    "out",     False, [ True, False],    2,     1),  # noqa: E241,E201
-        "overwrite-2": (      {},    "out",      True, [False, False],    2,     2),  # noqa: E241,E201
-        "overwrite-3": (      {},    "out",      True, [ True,  True],    2,     2),  # noqa: E241,E201
-        "overwrite-4": (      {},    "out",      True, [ True, False],    2,     2),  # noqa: E241,E201
+    init_write_files = {# schema, template, overwrite,        is_file, sets, files
+        "template-1":  (      {},    "out",     False,        [False],    1,     1),
+        "template-2":  (      {},    "out",     False, [False, False],    2,     2),
+        "template-3":  (      {},    "out",     False, [ True,  True],    2,     0),
+        "template-4":  (      {},    "out",     False, [ True, False],    2,     1),
+        "overwrite-2": (      {},    "out",      True, [False, False],    2,     2),
+        "overwrite-3": (      {},    "out",      True, [ True,  True],    2,     2),
+        "overwrite-4": (      {},    "out",      True, [ True, False],    2,     2),
     }
     # fmt: on
 
@@ -1897,12 +1897,12 @@ class TestParameterGenerator:
             assert mock_write_dataset.call_count == files
 
     # fmt: off
-    init_write_dataset_files = {# equals, is_file, overwrite, expected_call_count  # noqa: E261
-        "equal-datasets":      (    True,  [True],     False,                   0),  # noqa: E241,E201
-        "equal-overwrite":     (    True,  [True],      True,                   1),  # noqa: E241,E201
-        "different-datasets":  (   False,  [True],     False,                   1),  # noqa: E241,E201
-        "not-file-1":          (    True, [False],     False,                   1),  # noqa: E241,E201
-        "not-file-2":          (   False, [False],     False,                   1),  # noqa: E241,E201
+    init_write_dataset_files = {# equals, is_file, overwrite, expected_call_count
+        "equal-datasets":      (    True,  [True],     False,                   0),
+        "equal-overwrite":     (    True,  [True],      True,                   1),
+        "different-datasets":  (   False,  [True],     False,                   1),
+        "not-file-1":          (    True, [False],     False,                   1),
+        "not-file-2":          (   False, [False],     False,                   1),
     }
     # fmt: on
 

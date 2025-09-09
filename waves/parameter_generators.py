@@ -548,7 +548,7 @@ class _ScipyGenerator(ParameterGenerator, ABC):
                 raise SchemaValidationError(f"Parameter '{name}' does not contain the required 'distribution' key")
             elif (
                 not isinstance(parameter_definition["distribution"], str)
-                or not parameter_definition["distribution"].isidentifier()  # noqa: W503
+                or not parameter_definition["distribution"].isidentifier()
             ):
                 raise SchemaValidationError(
                     f"Parameter '{name}' distribution '{parameter_definition['distribution']}' "
@@ -987,7 +987,7 @@ class CustomStudy(ParameterGenerator):
             )
         if (
             self.parameter_schema["parameter_samples"].ndim != 2
-            or len(self._parameter_names) != self.parameter_schema["parameter_samples"].shape[1]  # noqa: W503
+            or len(self._parameter_names) != self.parameter_schema["parameter_samples"].shape[1]
         ):
             raise SchemaValidationError(
                 "The parameter samples must be an array of shape MxN, where N is the number of parameters."
@@ -1373,7 +1373,7 @@ def _calculate_set_hash(parameter_names: typing.List[str], set_samples: numpy.nd
         raise RuntimeError("Expected length of parameter names to match number of sample values")
     set_samples = numpy.array(set_samples, dtype=object)
     sorted_contents = sorted(zip(parameter_names, set_samples))
-    set_catenation = "\n".join(f"{name}:{repr(sample)}" for name, sample in sorted_contents)
+    set_catenation = "\n".join(f"{name}:{sample!r}" for name, sample in sorted_contents)
     set_hash = hashlib.md5(set_catenation.encode("utf-8"), usedforsecurity=False).hexdigest()
     return set_hash
 

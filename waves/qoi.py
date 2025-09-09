@@ -815,7 +815,7 @@ def _pdf_report(
                     matplotlib.pyplot.close()
                     open_figure = False
             if open_figure:  # If a figure is still open (hasn't been saved to a page)
-                for ax in axes[ax_num + 1 :]:  # noqa: E203
+                for ax in axes[ax_num + 1 :]:
                     ax.clear()
                     ax.axis("off")
                 pdf.savefig()

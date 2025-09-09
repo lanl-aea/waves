@@ -240,10 +240,10 @@ class OdbReportFileParser(AbaqusFileParser):
         line = f.readline()
         while (
             (len(categories) < number_of_categories)
-            and not line.startswith(  # noqa: W503
+            and not line.startswith(
                 "-------------------------------------------------------------------------------"
             )
-            and line != ""  # noqa: W503
+            and line != ""
         ):
             # TODO: Find odb with sectionPoint array and likely parse sectionPoint data within this array
             if line.strip().startswith("Section category name"):
@@ -436,7 +436,7 @@ class OdbReportFileParser(AbaqusFileParser):
                         connectivity_list.append(int(line_value.strip()))
                     except ValueError:
                         # sometimes the section category name is a string at the end of the line
-                        section_category_name = " ".join(line_values[i - 1 :])  # noqa: E203
+                        section_category_name = " ".join(line_values[i - 1 :])
                 try:
                     instance["elements"][element_type]["labels"].append(element_number)
                     instance["elements"][element_type]["connectivity"].append(connectivity_list)
@@ -469,7 +469,7 @@ class OdbReportFileParser(AbaqusFileParser):
                     except ValueError:
                         # sometimes the section category name is a string at the end of the line
                         element["sectionCategory"] = dict()
-                        element["sectionCategory"]["name"] = " ".join(line_values[i - 1 :])  # noqa: E203
+                        element["sectionCategory"]["name"] = " ".join(line_values[i - 1 :])
                 element["connectivity"] = tuple(connectivity_list)
                 instance["elements"].append(element)
                 if line == "":
@@ -789,8 +789,8 @@ class OdbReportFileParser(AbaqusFileParser):
                         surface_name = line.replace("analytical surface ", "").strip()
                         if (
                             "analyticSurface" in instance
-                            and "name" in instance["analyticSurface"]  # noqa: W503
-                            and instance["analyticSurface"]["name"] == surface_name  # noqa: W503
+                            and "name" in instance["analyticSurface"]
+                            and instance["analyticSurface"]["name"] == surface_name
                         ):
                             rigid_body["analyticSurface"] = instance["analyticSurface"]
                         else:
@@ -827,9 +827,9 @@ class OdbReportFileParser(AbaqusFileParser):
                     self.current_step_name = step["name"]
                 while (
                     not line.strip().startswith("Total number of frames")
-                    and not line.strip().startswith("Number of history regions")  # noqa: W503
-                    and not line.strip().startswith("History Region")  # noqa: W503
-                    and line != ""  # noqa: W503
+                    and not line.strip().startswith("Number of history regions")
+                    and not line.strip().startswith("History Region")
+                    and line != ""
                 ):
                     line = f.readline()
                     if "," in line:
@@ -880,8 +880,8 @@ class OdbReportFileParser(AbaqusFileParser):
                 current_frame_number += 1
                 while (
                     not line.strip().startswith("Number of field outputs")
-                    and not line.strip().startswith("Field name")  # noqa: W503
-                    and line != ""  # noqa: W503
+                    and not line.strip().startswith("Field name")
+                    and line != ""
                 ):
                     line = f.readline()
                     if "," in line:
@@ -912,9 +912,9 @@ class OdbReportFileParser(AbaqusFileParser):
         field = dict()
         while (
             "history" not in line.lower()
-            and not line.startswith("-----------------------------------------------------------")  # noqa: W503
-            and not line.startswith("  -------------------------------------")  # noqa: W503
-            and line != ""  # noqa: W503
+            and not line.startswith("-----------------------------------------------------------")
+            and not line.startswith("  -------------------------------------")
+            and line != ""
         ):
             if line.strip().startswith("Field name"):
                 self.current_field_number += 1
@@ -926,8 +926,8 @@ class OdbReportFileParser(AbaqusFileParser):
                 field["locations"] = list()
                 while (
                     not line.strip().startswith("Components of field ")
-                    and not line.strip().startswith("Invariants of field")  # noqa: W503
-                    and line != ""  # noqa: W503
+                    and not line.strip().startswith("Invariants of field")
+                    and line != ""
                 ):
                     line = f.readline()
                     if ":" in line:
@@ -1269,7 +1269,7 @@ class OdbReportFileParser(AbaqusFileParser):
                                     len(
                                         values[value_instance]["values"][self.current_step_count][time_index][index_key]
                                     )
-                                    > element_index  # noqa: W503
+                                    > element_index
                                 ):
                                     values[value_instance]["values"][self.current_step_count][time_index][index_key][
                                         element_index
@@ -1297,7 +1297,7 @@ class OdbReportFileParser(AbaqusFileParser):
                         else:
                             if (
                                 len(values[value_instance]["values"][self.current_step_count][time_index][index_key])
-                                > element_index  # noqa: W503
+                                > element_index
                             ):
                                 values[value_instance]["values"][self.current_step_count][time_index][index_key][
                                     element_index
@@ -1430,8 +1430,8 @@ class OdbReportFileParser(AbaqusFileParser):
                 region["point"] = dict()
                 while (
                     not line.strip().startswith("Number of history outputs")
-                    and not line.strip().startswith("History Output")  # noqa: W503
-                    and line != ""  # noqa: W503
+                    and not line.strip().startswith("History Output")
+                    and line != ""
                 ):
                     line = f.readline()
                     if ":" in line:
@@ -1544,8 +1544,8 @@ class OdbReportFileParser(AbaqusFileParser):
             line = f.readline()
         while (
             not line.strip().startswith("History Region")
-            and line != ""  # noqa: W503
-            and not line.startswith("-----------------------------------------------------------")  # noqa: W503
+            and line != ""
+            and not line.startswith("-----------------------------------------------------------")
         ):
             if line.strip().startswith("History Output"):
                 output = dict()
@@ -1654,7 +1654,7 @@ class OdbReportFileParser(AbaqusFileParser):
         for step_name in self.parsed["odb"]["steps"]:
             if (
                 "frames" in self.parsed["odb"]["steps"][step_name]
-                and len(self.parsed["odb"]["steps"][step_name]["frames"]) != 0  # noqa: W503
+                and len(self.parsed["odb"]["steps"][step_name]["frames"]) != 0
             ):
                 step_field_names.append(step_name)
                 step_field_mask.append(True)
@@ -1662,7 +1662,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 step_field_mask.append(False)
             if (
                 "historyRegions" in self.parsed["odb"]["steps"][step_name]
-                and len(self.parsed["odb"]["steps"][step_name]["historyRegions"]) != 0  # noqa: W503
+                and len(self.parsed["odb"]["steps"][step_name]["historyRegions"]) != 0
             ):
                 step_history_names.append(step_name)
                 step_history_mask.append(True)

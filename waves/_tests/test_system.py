@@ -341,7 +341,7 @@ require_third_party_system_tests = [
         [
             fetch_template,
             string.Template(
-                "scons abaqus ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
+                "scons abaqus ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"
             ),
         ],
         "tutorials/tutorial_cubit",
@@ -359,7 +359,7 @@ require_third_party_system_tests = [
         [
             fetch_template,
             string.Template(
-                "scons fierro ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
+                "scons fierro ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"
             ),
         ],
         "tutorials/tutorial_cubit",
@@ -377,7 +377,7 @@ require_third_party_system_tests = [
         [
             fetch_template,
             string.Template(
-                "scons sierra ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
+                "scons sierra ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"
             ),
         ],
         "tutorials/tutorial_cubit",
@@ -400,7 +400,7 @@ require_third_party_system_tests = [
         [
             fetch_template,
             string.Template(
-                "scons abaqus ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
+                "scons abaqus ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"
             ),
         ],
         "tutorials/tutorial_cubit_alternate",
@@ -421,7 +421,7 @@ require_third_party_system_tests = [
         [
             fetch_template,
             string.Template(
-                "scons fierro ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
+                "scons fierro ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"
             ),
         ],
         "tutorials/tutorial_cubit_alternate",
@@ -442,7 +442,7 @@ require_third_party_system_tests = [
         [
             fetch_template,
             string.Template(
-                "scons sierra ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
+                "scons sierra ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"
             ),
         ],
         "tutorials/tutorial_cubit_alternate",
@@ -468,7 +468,7 @@ require_third_party_system_tests = [
         [
             fetch_template,
             string.Template(
-                "scons quinoa-local ${unconditional_build} --print-build-failures ${cubit_command}"  # noqa: E501
+                "scons quinoa-local ${unconditional_build} --print-build-failures ${cubit_command}"
             ),
         ],
         "tutorials/tutorial_quinoa",
@@ -701,7 +701,7 @@ require_third_party_system_tests = [
                 " unit_testing"
             ),
             string.Template(
-                "${waves_command} visualize rectangle_compression-nominal --output-file nominal.png ${abaqus_command}"  # noqa: E501
+                "${waves_command} visualize rectangle_compression-nominal --output-file nominal.png ${abaqus_command}"
             ),
             string.Template(
                 "${waves_command} print_study build/rectangle_compression-mesh_convergence/mesh_convergence.h5"
@@ -741,7 +741,7 @@ require_third_party_system_tests = [
                 " unit_testing"
             ),
             string.Template(
-                "${waves_command} visualize rectangle_compression-nominal --output-file nominal.png ${abaqus_command}"  # noqa: E501
+                "${waves_command} visualize rectangle_compression-nominal --output-file nominal.png ${abaqus_command}"
             ),
             string.Template(
                 "${waves_command} print_study build/parameter_studies/rectangle_compression-mesh_convergence.h5"

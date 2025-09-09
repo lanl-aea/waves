@@ -3755,7 +3755,7 @@ def parameter_study_task(
         substitutions
 
     :return: SCons NodeList of target nodes
-    """  # noqa: E501
+    """
     # Avoid importing parameter generator module (heavy) unless necessary
     from waves import parameter_generators
 

@@ -54,8 +54,8 @@ def recurse_files(paths: typing.Iterable[pathlib.Path], exclude_dir: typing.Iter
                     path
                     for path in path.rglob("*")
                     if path.is_file()
-                    and not path.is_symlink()  # noqa: W503
-                    and not any(exclude in str(path) for exclude in exclude_dir)  # noqa: W503
+                    and not path.is_symlink()
+                    and not any(exclude in str(path) for exclude in exclude_dir)
                 ]
             )
         else:

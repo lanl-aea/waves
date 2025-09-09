@@ -106,7 +106,7 @@ def test_main():
 
 
 # fmt: off
-parameter_study_args = {  #               subcommand,         class_name,                   argument,         option, argument_value  # noqa: E262,E501
+parameter_study_args = {  #               subcommand,         class_name,                   argument,         option, argument_value  # noqa: E501
     'cartesian product':        ('cartesian_product', 'CartesianProduct',                       None,           None,             None),  # noqa E241,E501
     'custom study':             (     'custom_study',      'CustomStudy',                       None,           None,             None),  # noqa E241,E501
     'latin hypercube':          (  'latin_hypercube',   'LatinHypercube',                       None,           None,             None),  # noqa E241,E501

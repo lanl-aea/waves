@@ -48,30 +48,30 @@ def main(
     top_right = get_entities_at_coordinates((width, height, 0.0), 0)
     # fmt: off
     top = gmsh.model.getEntitiesInBoundingBox(
-        0.0    - tolerance,  # noqa: E221 X-min
-        height - tolerance,  # noqa: E221 Y-min
-        0.0    - tolerance,  # noqa: E221 Z-min
-        width  + tolerance,  # noqa: E221 X-max
-        height + tolerance,  # noqa: E221 Y-max
-        0.0    + tolerance,  # noqa: E221 Z-max
+        0.0    - tolerance,
+        height - tolerance,
+        0.0    - tolerance,
+        width  + tolerance,
+        height + tolerance,
+        0.0    + tolerance,
         0  # Entity dimension: points
     )
     bottom = gmsh.model.getEntitiesInBoundingBox(
-        0.0    - tolerance,  # noqa: E221 X-min
-        0.0    - tolerance,  # noqa: E221 Y-min
-        0.0    - tolerance,  # noqa: E221 Z-min
-        width  + tolerance,  # noqa: E221 X-max
-        0.0    + tolerance,  # noqa: E221 Y-max
-        0.0    + tolerance,  # noqa: E221 Z-max
+        0.0    - tolerance,
+        0.0    - tolerance,
+        0.0    - tolerance,
+        width  + tolerance,
+        0.0    + tolerance,
+        0.0    + tolerance,
         0  # Entity dimension: points
     )
     left = gmsh.model.getEntitiesInBoundingBox(
-        0.0    - tolerance,  # noqa: E221 X-min
-        0.0    - tolerance,  # noqa: E221 Y-min
-        0.0    - tolerance,  # noqa: E221 Z-min
-        0.0    + tolerance,  # noqa: E221 X-max
-        height + tolerance,  # noqa: E221 Y-max
-        0.0    + tolerance,  # noqa: E221 Z-max
+        0.0    - tolerance,
+        0.0    - tolerance,
+        0.0    - tolerance,
+        0.0    + tolerance,
+        height + tolerance,
+        0.0    + tolerance,
         0  # Entity dimension: points
     )
     # fmt: on

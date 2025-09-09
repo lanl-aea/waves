@@ -174,7 +174,7 @@ def odb_extract(
     time_stamp = datetime.datetime.now().strftime(_settings._default_timestamp_format)
     job_name = path_output_file.with_suffix(".csv")
     if path_output_file.exists():
-        new_output_file = f"{str(path_output_file.with_suffix(''))}_{time_stamp}.{file_suffix}"
+        new_output_file = f"{path_output_file.with_suffix('')!s}_{time_stamp}.{file_suffix}"
         print(f"{output_file} already exists. Will use {new_output_file} instead.", file=sys.stderr)
         output_file = new_output_file
 

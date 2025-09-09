@@ -186,6 +186,6 @@ if __name__ == "__main__":
             model_name=args.model_name,
             cpus=args.cpus,
             write_inp=args.write_inp,
-            **kwargs,  # fmt: skip
+            **kwargs,
         )
     )
