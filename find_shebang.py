@@ -69,7 +69,7 @@ def find_shebang(path: pathlib.Path, shebang: str = default_shebang) -> None:
     :param path: file to check for shebang
     :param shebang: shebang regular expression to look for
     """
-    with open(path) as infile:
+    with path.open() as infile:
         try:
             first_line = infile.readline()
             if re.match(shebang, first_line):
