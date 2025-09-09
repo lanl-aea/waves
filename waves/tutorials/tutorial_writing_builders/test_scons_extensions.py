@@ -105,7 +105,7 @@ def test_solver_builder_factory(
         emitter_handling.update({"emitter": emitter})
 
     # Test builder object attributes
-    factory = getattr(scons_extensions, "solver_builder_factory")
+    factory = scons_extensions.solver_builder_factory
     builder = factory(**builder_kwargs, **emitter_handling)
     assert builder.action.cmd_list == expected_action
     assert builder.emitter == expected_emitter
