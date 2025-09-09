@@ -315,7 +315,7 @@ def cache_environment(
     if cache and cache.exists() and not overwrite_cache:
         if verbose:
             print(f"Sourcing the shell environment from cached file '{cache}' ...")
-        with open(cache, "r") as cache_file:
+        with pathlib.Path(cache).open(mode="r") as cache_file:
             environment = yaml.safe_load(cache_file)
     else:
         if verbose:
