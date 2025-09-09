@@ -66,11 +66,11 @@ AddOption(
     dest="unconditional_build",
     default=False,
     action="store_true",
-    # fmt: off
-    help="Pass through argument used by system test configuration. "
-         "Boolean to force building of conditionally ignored targets, e.g. if the target's action program is missing "
-         "and it would normally be ignored. (default: '%default')"
-    # fmt: on
+    help=(
+        "Pass through argument used by system test configuration. "
+        "Boolean to force building of conditionally ignored targets, e.g. if the target's action program is missing "
+        "and it would normally be ignored. (default: '%default')"
+    ),
 )
 # Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
 default_abaqus_commands = [
