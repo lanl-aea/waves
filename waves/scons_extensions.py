@@ -3916,12 +3916,12 @@ def parameter_study_sconscript(
         :returns: variant directory
         """
         if subdirectories:
-            if variant_dir is not None:
-                build_directory = variant_dir / subdirectory
+            if variant_directory is not None:
+                build_directory = variant_directory / subdirectory
             else:
                 build_directory = pathlib.Path(subdirectory)
         else:
-            build_directory = variant_dir
+            build_directory = variant_directory
         return build_directory
 
     if isinstance(study, parameter_generators.ParameterGenerator):
