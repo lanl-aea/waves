@@ -82,7 +82,7 @@ def _print_failed_nodes_stdout() -> None:
 
 
 def print_build_failures(
-    env: SCons.Environment.Environment = SCons.Environment.Environment(),
+    env: typing.Optional[SCons.Environment.Environment] = None,
     print_stdout: bool = True,
 ) -> None:
     """On exit, query the SCons reported build failures and print the associated node's STDOUT file, if it exists
@@ -106,6 +106,8 @@ def print_build_failures(
     :param env: SCons construction environment
     :param print_stdout: Boolean to set the exit behavior. If False, don't modify the exit behavior.
     """
+    if env is None:
+        env = SCons.Environment.Environment()
     if print_stdout:
         atexit.register(_print_failed_nodes_stdout)
 
@@ -369,7 +371,7 @@ def ssh_builder_actions(
 
 
 def project_help(
-    env: SCons.Environment.Environment = SCons.Environment.Environment(),
+    env: typing.Optional[SCons.Environment.Environment] = None,
     append: bool = True,
     local_only: bool = True,
     target_descriptions: typing.Optional[dict] = None,
@@ -387,12 +389,14 @@ def project_help(
     :param local_only: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     :param target_descriptions: dictionary containing target metadata.
     """
+    if env is None:
+        env = SCons.Environment.Environment()
     project_help_default_targets(env=env, append=append, local_only=local_only, target_descriptions=target_descriptions)
     project_help_aliases(env=env, append=append, local_only=local_only, target_descriptions=target_descriptions)
 
 
 def project_help_default_targets(
-    env: SCons.Environment.Environment = SCons.Environment.Environment(),
+    env: typing.Optional[SCons.Environment.Environment] = None,
     append: bool = True,
     local_only: bool = True,
     target_descriptions: typing.Optional[dict] = None,
@@ -415,6 +419,8 @@ def project_help_default_targets(
     :param local_only: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     :param target_descriptions: dictionary containing target metadata.
     """
+    if env is None:
+        env = SCons.Environment.Environment()
     default_targets_help = _project_help_descriptions(
         SCons.Script.DEFAULT_TARGETS, message="\nDefault Targets:\n", target_descriptions=target_descriptions
     )
@@ -431,7 +437,7 @@ def project_help_default_targets(
 
 
 def project_help_aliases(
-    env: SCons.Environment.Environment = SCons.Environment.Environment(),
+    env: typing.Optional[SCons.Environment.Environment] = None,
     append: bool = True,
     local_only: bool = True,
     target_descriptions: typing.Optional[dict] = None,
@@ -454,6 +460,8 @@ def project_help_aliases(
     :param local_only: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     :param target_descriptions: dictionary containing target metadata.
     """
+    if env is None:
+        env = SCons.Environment.Environment()
     alias_help = _project_help_descriptions(
         SCons.Node.Alias.default_ans, message="\nTarget Aliases:\n", target_descriptions=target_descriptions
     )
