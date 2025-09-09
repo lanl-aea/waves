@@ -150,7 +150,7 @@ read_input = {
 def test_read_input(input_file, is_file_result, mock_data, expected, outcome):
     with (
         patch("pathlib.Path.is_file", side_effect=[is_file_result]),
-        patch("builtins.open", mock_open(read_data=mock_data)),
+        patch("pathlib.Path.open", mock_open(read_data=mock_data)),
         outcome,
     ):
         try:
@@ -217,7 +217,7 @@ def test_configure(args, read_input, expected, outcome):
         patch("solver.read_input", return_value=read_input),
         patch("solver.name_log_file", return_value=log_file),
         patch("solver.name_output_file", return_value=output_file),
-        patch("builtins.open", mock_open()),
+        patch("pathlib.Path.open", mock_open()),
         outcome,
     ):
         try:
@@ -270,7 +270,7 @@ solve = {
 def test_solve(configuration, exists, outcome):
     with (
         patch("pathlib.Path.exists", return_value=exists),
-        patch("builtins.open", mock_open()),
+        patch("pathlib.Path.open", mock_open()),
         outcome,
     ):
         try:
