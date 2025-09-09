@@ -142,5 +142,5 @@ def write_study_definition(
     elif isinstance(study_definition, dict):
         study_path = path / f"{alias}.yaml"
         study_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(study_path, "w") as study_file:
+        with study_path.open(mode="w") as study_file:
             study_file.write(yaml.safe_dump(study_definition))
