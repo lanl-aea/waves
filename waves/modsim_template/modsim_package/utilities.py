@@ -77,28 +77,38 @@ def save_table(combined_data, selection_dict, output_file):
     combined_data.sel(selection_dict).to_dataframe().to_csv(output_file)
 
 
-def sort_dataframe(dataframe, index_column="time", sort_columns=["time", "set_name"]):
+def sort_dataframe(dataframe, index_column="time", sort_columns=None):
     """Return a sorted dataframe and set an index
 
     1. sort columns by column name
     2. sort rows by column values ``sort_columns``
     3. set an index
 
+    :param dataframe: dataframe to sort
+    :param index_column: name of the column to use an index
+    :param sort_columns: name of the column(s) to sort by. Defaults to ``["time", "set_name"]``
+
     :returns: sorted and indexed dataframe
     :rtype: pandas.DataFrame
     """
+    if sort_columns is None:
+        sort_columns = ["time", "set_name"]
     return dataframe.reindex(sorted(dataframe.columns), axis=1).sort_values(sort_columns).set_index(index_column)
 
 
-def csv_files_match(current_csv, expected_csv, index_column="time", sort_columns=["time", "set_name"]):
+def csv_files_match(current_csv, expected_csv, index_column="time", sort_columns=None):
     """Compare two pandas DataFrame objects and determine if they match.
 
     :param pandas.DataFrame current_csv: Current CSV data of generated plot.
     :param pandas.DataFrame expected_csv: Expected CSV data.
+    :param index_column: name of the column to use an index
+    :param sort_columns: name of the column(s) to sort by. Defaults to ``["time", "set_name"]``
 
     :returns: True if the CSV files match, False otherwise.
     :rtype: bool
     """
+    if sort_columns is None:
+        sort_columns = ["time", "set_name"]
     current = sort_dataframe(current_csv, index_column=index_column, sort_columns=sort_columns)
     expected = sort_dataframe(expected_csv, index_column=index_column, sort_columns=sort_columns)
     try:

@@ -27,10 +27,10 @@ def nominal(
 
 
 def mesh_convergence(
-    width=[1.0],
-    height=[1.0],
-    global_seed=[1.0, 0.5, 0.25, 0.125],
-    displacement=[-0.01],
+    width=(1.0),
+    height=(1.0),
+    global_seed=(1.0, 0.5, 0.25, 0.125),
+    displacement=(-0.01),
 ):
     """Return mesh convergence WAVES CartesianProduct schema dictionary
 
@@ -40,9 +40,9 @@ def mesh_convergence(
     :rtype: dict
     """
     schema = {
-        "width": width,
-        "height": height,
-        "global_seed": global_seed,
-        "displacement": displacement,
+        "width": list(width),
+        "height": list(height),
+        "global_seed": list(global_seed),
+        "displacement": list(displacement),
     }
     return schema
