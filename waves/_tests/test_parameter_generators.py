@@ -2022,7 +2022,7 @@ class TestParameterGenerator:
     def test_write_meta(self):
         WriteMetaParameterGenerator = DummyGenerator({})
         with (
-            patch("pathlib.Path.open"", mock_open()) as mock_file,
+            patch("pathlib.Path.open", mock_open()) as mock_file,
             patch("pathlib.Path.resolve", return_value=pathlib.Path("parameter_set1.h5")),
         ):
             WriteMetaParameterGenerator._write_meta()
@@ -2031,7 +2031,7 @@ class TestParameterGenerator:
 
         WriteMetaParameterGenerator.output_file = pathlib.Path("dummy.h5")
         with (
-            patch("pathlib.Path.open"", mock_open()) as mock_file,
+            patch("pathlib.Path.open", mock_open()) as mock_file,
             patch("pathlib.Path.resolve", return_value=pathlib.Path("dummy.h5")),
         ):
             WriteMetaParameterGenerator._write_meta()
