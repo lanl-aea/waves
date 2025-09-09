@@ -850,7 +850,7 @@ def _build_subdirectory(target: list) -> pathlib.Path:
     try:
         build_subdirectory = pathlib.Path(str(target[0])).parent
     except IndexError:
-        build_subdirectory = pathlib.Path(".")
+        build_subdirectory = pathlib.Path()
     return build_subdirectory
 
 
