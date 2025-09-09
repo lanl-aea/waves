@@ -211,7 +211,7 @@ def main(
         else:
             tree_output = input_file.read_text()
     else:
-        scons_command = [_settings._scons_command] + targets + [f"--sconstruct={sconstruct.name}"]
+        scons_command = [_settings._scons_command, *targets, f"--sconstruct={sconstruct.name}"]
         scons_command.extend(scons_args)
         scons_command.extend(_settings._scons_visualize_arguments)
         scons_stdout = subprocess.check_output(scons_command, cwd=sconstruct.parent)

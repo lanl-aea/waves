@@ -1399,7 +1399,7 @@ abaqus_pseudobuilder_input = {
     "user": (
         {},
         {"job": "job", "user": "user.f"},
-        ["job.inp"] + ["user.f"],
+        ["job.inp", "user.f"],
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " -double both $(-cpus 1$) -user user.f",
         {"job": "job"},
@@ -1449,7 +1449,7 @@ abaqus_pseudobuilder_input = {
     "extras": (
         {},
         {"job": "job", "extra_sources": ["extra.inp"], "extra_targets": ["extra.odb"], "extra_options": "--extra-opt"},
-        ["job.inp"] + ["extra.inp"],
+        ["job.inp", "extra.inp"],
         [f"job{ext}" for ext in _abaqus_standard_extensions] + ["extra.odb"],
         " -double both $(-cpus 1$) --extra-opt",
         {"job": "job"},

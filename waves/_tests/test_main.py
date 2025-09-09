@@ -44,7 +44,7 @@ def test_main():
     requested_paths = ["dummy.file1", "dummy.file2"]
     requested_paths_args = [pathlib.Path(path) for path in requested_paths]
     with (
-        patch("sys.argv", ["waves.py", "fetch"] + requested_paths),
+        patch("sys.argv", ["waves.py", "fetch", *requested_paths]),
         patch("waves._fetch.recursive_copy") as mock_recursive_copy,
     ):
         _main.main()
