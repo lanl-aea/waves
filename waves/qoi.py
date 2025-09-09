@@ -486,10 +486,10 @@ def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
     """
     suffix = from_file.suffix.lower()
     if suffix == ".csv":
-        df = pandas.read_csv(from_file)
+        raw_dataframe = pandas.read_csv(from_file)
         # Empty entries in the CSV end up as NaN in the DataFrame.
         # Drop NaNs so they aren't passed as kwargs to `create_qoi()`
-        qoi_kwargs = [row.dropna().to_dict() for idx, row in df.iterrows()]
+        qoi_kwargs = [row.dropna().to_dict() for idx, row in raw_dataframe.iterrows()]
         return create_qoi_set([create_qoi(**kwargs) for kwargs in qoi_kwargs])
     elif suffix == ".h5":
         return xarray.open_dataset(from_file, engine="h5netcdf")
@@ -537,11 +537,11 @@ def write_qoi_set_to_csv(qoi_set: xarray.Dataset, output: pathlib.Path) -> None:
         load,5.0,4.5,3.5,5.5,N,Axial Load,Axial load through component XYZ,Assembly ABC Preload,abcdef,2025-01-01
         gap,1.0,0.8,0.7000000000000001,0.9,mm,Radial gap,Radial gap between components A and B,Assembly ABC Preload,abcdef,2025-01-01
     """  # noqa: E501
-    df = qoi_set.to_dataarray("name").to_pandas()
+    csv_dataframes = qoi_set.to_dataarray("name").to_pandas()
     # Convert attributes to data variables so they end up as columns in the CSV
     attrs = pandas.DataFrame.from_dict({qoi: qoi_set[qoi].attrs for qoi in qoi_set}, orient="index")
     attrs.index.name = "name"
-    pandas.concat((df, attrs), axis="columns").to_csv(output)
+    pandas.concat((csv_dataframes, attrs), axis="columns").to_csv(output)
 
 
 def _plot_qoi_tolerance_check(qoi: xarray.DataArray, axes: matplotlib.axes.Axes) -> None:
@@ -575,7 +575,7 @@ def _can_plot_qoi_tolerance_check(qoi: xarray.DataArray) -> bool:
         return False
     qoi_dim = len(qoi.squeeze().dims)  # Count includes the "value_type" dim
     if qoi_dim == 1:  # Scalar QOI
-        if qoi.isnull().any():
+        if qoi.isna().any():
             return False
     else:
         return False
