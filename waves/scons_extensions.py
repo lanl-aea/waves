@@ -473,7 +473,8 @@ def project_alias(
     env: SCons.Environment.Environment = None,
     *args,
     description: str = "",
-    target_descriptions: dict = dict(),
+    # Normally you should not use mutables for argument defaults, but this method relies on the mutable behavior.
+    target_descriptions: dict = dict(),  # noqa: B006
     **kwargs,
 ) -> dict:
     """Wrapper around the `SCons Alias`_ method. Appends and returns target descriptions dictionary.
