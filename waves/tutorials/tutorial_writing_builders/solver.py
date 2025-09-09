@@ -99,7 +99,7 @@ def read_input(input_file: pathlib.Path) -> dict:
     input_file.resolve()
     if not input_file.is_file():
         raise RuntimeError(f"input file '{input_file}' does not exist")
-    with open(input_file, "r") as input_handle:
+    with input_file.open(mode="r") as input_handle:
         try:
             configuration = yaml.safe_load(input_handle)
         except (yaml.parser.ParserError, yaml.scanner.ScannerError) as err:
@@ -121,12 +121,12 @@ def configure(args: argparse.Namespace) -> dict:
         raise RuntimeError(message)
     configuration["routine"] = args.subcommand.lower()
     configuration["version"] = _project_name_version
-    configuration["log_file"] = str(name_log_file(_log_file))
+    configuration["log_file"] = pathlib.Path(name_log_file(_log_file))
     configuration["output_file"] = str(name_output_file(args.input_file, args.output_file))
     configuration["solve_cpus"] = args.solve_cpus
     configuration["overwrite"] = args.overwrite
 
-    with open(configuration["log_file"], "w+") as log_writer:
+    with configuration["log_file"].open(mode="w+") as log_writer:
         log_writer.write(f"{configuration['version']}\n{configuration['routine']}\n")
         log_writer.write(f"{configuration['log_file']}\n{configuration['output_file']}\n")
 
@@ -165,9 +165,9 @@ def solve(configuration: dict) -> None:
         message = "Output file(s) already exist. Exiting."
         raise RuntimeError(message)
 
-    with open(log_file, "a+") as log_writer:
+    with log_file.open(mode="a+") as log_writer:
         for output in output_files:
-            with open(output, "w") as output_writer:
+            with output.open(mode="w") as output_writer:
                 log_writer.write(f"writing: {output}\n")
                 output_writer.write(yaml.safe_dump(configuration))
 
