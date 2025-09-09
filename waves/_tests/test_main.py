@@ -105,23 +105,27 @@ def test_main():
         mock_print_help.assert_called_once()
 
 
-# fmt: off
-parameter_study_args = {  #               subcommand,         class_name,                   argument,         option, argument_value  # noqa: E501
-    'cartesian product':        ('cartesian_product', 'CartesianProduct',                       None,           None,             None),  # noqa E241,E501
-    'custom study':             (     'custom_study',      'CustomStudy',                       None,           None,             None),  # noqa E241,E501
-    'latin hypercube':          (  'latin_hypercube',   'LatinHypercube',                       None,           None,             None),  # noqa E241,E501
-    'sobol sequence':           (   'sobol_sequence',    'SobolSequence',                       None,           None,             None),  # noqa E241,E501
-    'one at a time':            (    'one_at_a_time',       'OneAtATime',                       None,           None,             None),  # noqa E241,E501
-    'output file template':     ('cartesian_product', 'CartesianProduct',     'output_file_template',           '-o', 'dummy_template'),  # noqa E241,E501
-    'output file':              (     'custom_study',      'CustomStudy',              'output_file',           '-f', 'dummy_file.txt'),  # noqa E241,E501
-    'output file type':         (  'latin_hypercube',   'LatinHypercube',         'output_file_type',           '-t',             'h5'),  # noqa E241,E501
-    'set name template':        (   'sobol_sequence',    'SobolSequence',        'set_name_template',           '-s',        '@number'),  # noqa E241,E501
-    'previous parameter study': ('cartesian_product', 'CartesianProduct', 'previous_parameter_study',           '-p', 'dummy_file.txt'),  # noqa E241,E501
-    'overwrite':                (     'custom_study',      'CustomStudy',                'overwrite',  '--overwrite',             True),  # noqa E241,E501
-    'dry run':                  (  'latin_hypercube',   'LatinHypercube',                  'dry_run',    '--dry-run',             True),  # noqa E241,E501
-    'write meta':               (   'sobol_sequence',    'SobolSequence',               'write_meta', '--write-meta',             True),  # noqa E241,E501
+parameter_study_args = {
+    "cartesian product": ("cartesian_product", "CartesianProduct", None, None, None),
+    "custom study": ("custom_study", "CustomStudy", None, None, None),
+    "latin hypercube": ("latin_hypercube", "LatinHypercube", None, None, None),
+    "sobol sequence": ("sobol_sequence", "SobolSequence", None, None, None),
+    "one at a time": ("one_at_a_time", "OneAtATime", None, None, None),
+    "output file template": ("cartesian_product", "CartesianProduct", "output_file_template", "-o", "dummy_template"),
+    "output file": ("custom_study", "CustomStudy", "output_file", "-f", "dummy_file.txt"),
+    "output file type": ("latin_hypercube", "LatinHypercube", "output_file_type", "-t", "h5"),
+    "set name template": ("sobol_sequence", "SobolSequence", "set_name_template", "-s", "@number"),
+    "previous parameter study": (
+        "cartesian_product",
+        "CartesianProduct",
+        "previous_parameter_study",
+        "-p",
+        "dummy_file.txt",
+    ),
+    "overwrite": ("custom_study", "CustomStudy", "overwrite", "--overwrite", True),
+    "dry run": ("latin_hypercube", "LatinHypercube", "dry_run", "--dry-run", True),
+    "write meta": ("sobol_sequence", "SobolSequence", "write_meta", "--write-meta", True),
 }
-# fmt: on
 
 
 @pytest.mark.parametrize(
