@@ -327,7 +327,7 @@ def cache_environment(
             raise err
 
     if cache:
-        with open(cache, "w") as cache_file:
+        with pathlib.Path(cache).open(mode="w") as cache_file:
             yaml.safe_dump(environment, cache_file)
 
     return environment

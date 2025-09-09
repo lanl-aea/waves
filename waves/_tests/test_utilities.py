@@ -335,7 +335,7 @@ def test_cache_environment(kwargs, cache, overwrite_cache, verbose, expected, fi
         patch("yaml.safe_load", return_value=expected) as yaml_load,
         patch("pathlib.Path.exists", return_value=file_exists),
         patch("yaml.safe_dump") as yaml_dump,
-        patch("builtins.open"),
+        patch("pathlib.Path.open"),
         patch("builtins.print") as mock_print,
     ):
         environment_dictionary = _utilities.cache_environment(
