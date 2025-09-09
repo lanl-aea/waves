@@ -237,10 +237,10 @@ def get_parser() -> argparse.ArgumentParser:
         type=pathlib.Path,
         default=None,
         required=False,
-        # fmt: off
-        help=f"The {_project_name} results file. Extension is always replaced with ``{_output_file_extension}``. "
-             f"If none is provided, uses the pattern ``input_file{_output_file_extension}``",
-        # fmt: on
+        help=(
+            f"The {_project_name} results file. Extension is always replaced with ``{_output_file_extension}``. "
+            f"If none is provided, uses the pattern ``input_file{_output_file_extension}``"
+        ),
     )
     subcommand_parser_parent.add_argument(
         "-n",
