@@ -50,7 +50,7 @@ def main(parameter_study_file: pathlib.Path) -> None:
         study = _open_parameter_study(parameter_study_file)
         table = study.to_pandas()
     except Exception as err:
-        raise RuntimeError(f"'{parameter_study_file}' failed to open with: '{err}'")
+        raise RuntimeError(f"'{parameter_study_file}' failed to open with: '{err}'") from err
     print(f"{table.sort_values(_settings._set_coordinate_key)}")
 
 

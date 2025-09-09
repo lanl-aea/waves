@@ -104,7 +104,7 @@ def read_input(input_file: pathlib.Path) -> dict:
             configuration = yaml.safe_load(input_handle)
         except (yaml.parser.ParserError, yaml.scanner.ScannerError) as err:
             message = f"Error loading '{input_file}'. Check the YAML syntax.\nyaml.parser.ParserError: {err}"
-            raise RuntimeError(message)
+            raise RuntimeError(message) from err
     return configuration
 
 
@@ -206,8 +206,8 @@ def positive_nonzero_int(argument):
     MINIMUM_VALUE = 1
     try:
         argument = int(argument)
-    except ValueError:
-        raise argparse.ArgumentTypeError("invalid integer value: '{}'".format(argument))
+    except ValueError as err:
+        raise argparse.ArgumentTypeError("invalid integer value: '{}'".format(argument)) from err
     if not argument >= MINIMUM_VALUE:
         raise argparse.ArgumentTypeError("invalid positive integer: '{}'".format(argument))
     return argument

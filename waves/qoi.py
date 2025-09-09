@@ -308,10 +308,10 @@ def _create_qoi_study(
             [qoi.expand_dims(set_name=[qoi.attrs[_settings._set_coordinate_key]]) for qoi in qois],
             **_merge_constants,
         )
-    except KeyError:
+    except KeyError as err:
         raise RuntimeError(
             f"Each DataArray in ``qois`` must have an attribute named '{_settings._set_coordinate_key}'."
-        )
+        ) from err
     # Keep all attributes at the data variable level
     qoi_study.attrs = dict()
     # Merge in parameter study definition

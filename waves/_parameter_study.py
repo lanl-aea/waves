@@ -169,7 +169,9 @@ def main(
     try:
         parameter_schema = read_parameter_schema(input_file)
     except yaml.parser.ParserError as err:
-        raise RuntimeError(f"Error loading '{input_file}'. Check the YAML syntax.\nyaml.parser.ParserError: {err}")
+        raise RuntimeError(
+            f"Error loading '{input_file}'. Check the YAML syntax.\nyaml.parser.ParserError: {err}"
+        ) from err
 
     # Retrieve and instantiate the subcommand class
     available_parameter_generators = {

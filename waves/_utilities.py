@@ -164,8 +164,8 @@ def find_cubit_bin(options: typing.Iterable[str], bin_directory: typing.Optional
         search = cubit_bin.rglob(bin_directory)
         try:
             cubit_bin = next((path for path in search if path.name == bin_directory))
-        except StopIteration:
-            raise FileNotFoundError(message)
+        except StopIteration as err:
+            raise FileNotFoundError(message) from err
     return cubit_bin
 
 
@@ -192,8 +192,8 @@ def find_cubit_python(options: typing.Iterable[str], python_command: str = "pyth
     search = cubit_parent.rglob(python_command)
     try:
         cubit_python = next((path for path in search if path.is_file() and os.access(path, os.X_OK)))
-    except StopIteration:
-        raise FileNotFoundError(message)
+    except StopIteration as err:
+        raise FileNotFoundError(message) from err
     return cubit_python
 
 
