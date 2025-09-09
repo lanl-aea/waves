@@ -575,7 +575,8 @@ def _can_plot_qoi_tolerance_check(qoi: xarray.DataArray) -> bool:
         return False
     qoi_dim = len(qoi.squeeze().dims)  # Count includes the "value_type" dim
     if qoi_dim == 1:  # Scalar QOI
-        if qoi.isna().any():
+        # Not a pandas object in the unit tests, so the linter suggestion is wrong.
+        if qoi.isnull().any():  # noqa: PD003
             return False
     else:
         return False
