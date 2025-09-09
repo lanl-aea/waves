@@ -110,7 +110,7 @@ def get_parser():
         "--element-type",
         type=str,
         default=default_element_type,
-        help="The model element type. Must be a supported Cubit 4 node element type. " "(default: %(default)s)",
+        help="The model element type. Must be a supported Cubit 4 node element type. (default: %(default)s)",
     )
     parser.add_argument(
         "--solver",

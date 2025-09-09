@@ -38,7 +38,6 @@ def main(input_file, job_name, model_name=default_model_name, cpus=default_cpus,
         kwargs.update({"numCpus": cpus})
 
     with AbaqusNamedTemporaryFile(input_file=input_file, suffix=".cae", dir="."):
-
         if job in abaqus.mdb.jobs.keys():
             script_job = abaqus.mdb.jobs[job]
             script_job.setValues(**kwargs)
@@ -108,13 +107,13 @@ def get_parser():
         "--json-file",
         type=str,
         default=default_json_file,
-        help="A JSON file containing a dictionary of keyword arguments for ``abaqus.mdb.Job`` " "(default %(default)s)",
+        help="A JSON file containing a dictionary of keyword arguments for ``abaqus.mdb.Job`` (default %(default)s)",
     )
     parser.add_argument(
         "--write-inp",
         "--write-input",
         action="store_true",
-        help="Write an Abaqus ``job.inp`` file and exit without submitting the job " "(default %(default)s)",
+        help="Write an Abaqus ``job.inp`` file and exit without submitting the job (default %(default)s)",
     )
     return parser
 
@@ -187,6 +186,6 @@ if __name__ == "__main__":
             model_name=args.model_name,
             cpus=args.cpus,
             write_inp=args.write_inp,
-            **kwargs  # fmt: skip
+            **kwargs,  # fmt: skip
         )
     )
