@@ -21,10 +21,10 @@ cli_description = "Save an assembly view image of an Abaqus model from an input 
 # Sphinx documentation
 # fmt: off
 color_map_choices = [
-    'Material', 'Section', 'Composite layup', 'Composite ply', 'Part', 'Part instance', 'Element set',
-    'Averaging region', 'Element type', 'Default', 'Assembly', 'Part geometry', 'Load', 'Boundary condition',
-    'Interaction', 'Constraint', 'Property', 'Meshability', 'Instance type', 'Set', 'Surface', 'Internal set',
-    'Internal surface', 'Display group', 'Selection group', 'Skin', 'Stringer', 'Cell', 'Face'
+    "Material", "Section", "Composite layup", "Composite ply", "Part", "Part instance", "Element set",
+    "Averaging region", "Element type", "Default", "Assembly", "Part geometry", "Load", "Boundary condition",
+    "Interaction", "Constraint", "Property", "Meshability", "Instance type", "Set", "Surface", "Internal set",
+    "Internal surface", "Display group", "Selection group", "Skin", "Stringer", "Cell", "Face"
 ]
 # fmt: on
 
