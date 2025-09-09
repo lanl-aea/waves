@@ -378,6 +378,4 @@ class TestCartesianProduct:
         for set_name in expected_dictionary.keys():
             assert expected_dictionary[set_name] == returned_dictionary[set_name]
             for parameter in expected_dictionary[set_name]:
-                assert type(expected_dictionary[set_name][parameter]) == type(  # noqa: 721
-                    returned_dictionary[set_name][parameter]
-                )
+                assert type(expected_dictionary[set_name][parameter]) is type(returned_dictionary[set_name][parameter])

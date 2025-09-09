@@ -1658,7 +1658,7 @@ class TestParameterGenerator:
         for set_name in expected.keys():
             assert expected[set_name] == set_samples[set_name]
             for parameter in expected[set_name].keys():
-                assert type(set_samples[set_name][parameter]) == type(expected[set_name][parameter])  # fmt:skip # noqa: 721,E501
+                assert type(set_samples[set_name][parameter]) is type(expected[set_name][parameter])
 
     @pytest.mark.parametrize(
         "schema, file_template, set_template, expected",

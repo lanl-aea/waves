@@ -812,7 +812,7 @@ def test_system(
     :param request: pytest decorator with test case meta data
     :param commands: list of command strings for the system test
     :param fetch_options: the fetch arguments for replacement in string templates
-    """
+    """  # noqa: E501
     if system_test_directory is not None:
         system_test_directory.mkdir(parents=True, exist_ok=True)
 
