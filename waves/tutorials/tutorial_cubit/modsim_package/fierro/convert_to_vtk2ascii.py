@@ -54,7 +54,7 @@ def main():
     pts_per_cell = cells.shape[1]
 
     outfile = pathlib.Path(args.outfile).resolve()
-    with open(outfile, "w") as mesh_out:
+    with outfile.open(mode="w") as mesh_out:
         mesh_out.write("# vtk DataFile Version 2.0\n")
         mesh_out.write("meshio converted to Fierro VTK\n")
         mesh_out.write("ASCII\n")
