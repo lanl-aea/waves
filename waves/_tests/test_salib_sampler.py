@@ -227,9 +227,9 @@ class TestSALibSampler:
 
     def _big_enough(self, sampler, N, num_vars):
         if (  # noqa: SIM103
-            (sampler == "sobol" and num_vars < 2) or
-            (sampler == "fast_sampler" and N < 64) or
-            (sampler == "morris" and num_vars < 2)
+            (sampler == "sobol" and num_vars < 2)
+            or (sampler == "fast_sampler" and N < 64)
+            or (sampler == "morris" and num_vars < 2)
         ):
             return False
         return True
