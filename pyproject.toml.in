@@ -103,6 +103,7 @@ extend-ignore = ["B028", "PIE808", "PIE790", "SIM108"]
 "**/abaqus_utilities.py" = ["SIM115"]
 "waves/parameter_generators.py" = ["RUF005"]
 "waves/_tests/test_*.py" = ["RUF012"]
+"waves/tutorials/waves_quickstart/rectangle_*.py" = ["PTH"]
 "**/cubit/rectangle_partition.py" = ["ARG001"]
 # TODO: re-enable B006 VVV
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/959
