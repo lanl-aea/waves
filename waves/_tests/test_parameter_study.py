@@ -13,7 +13,7 @@ def test_read_parameter_schema():
     # Test STDIN/TexIOWrapper read
     input_file = io.TextIOWrapper(io.BytesIO(b"{a: [1], b: [2]}"))
     expected = {"a": [1], "b": [2]}
-    with patch("builtins.open", mock_open()) as mock_file:
+    with patch("pathlib.Path.open", mock_open()) as mock_file:
         parameter_schema = _parameter_study.read_parameter_schema(input_file)
     mock_file.assert_not_called()
     assert parameter_schema == expected
@@ -22,7 +22,7 @@ def test_read_parameter_schema():
     input_file = pathlib.Path("dummy.yaml")
     with (
         patch("pathlib.Path.is_file", return_value=True),
-        patch("builtins.open", mock_open()) as mock_file,
+        patch("pathlib.Path.open", mock_open()) as mock_file,
         patch("yaml.safe_load", return_value=expected),
     ):
         parameter_schema = _parameter_study.read_parameter_schema(input_file)
@@ -32,7 +32,7 @@ def test_read_parameter_schema():
     # Test RuntimeError on missing file
     with (
         patch("pathlib.Path.is_file", return_value=False),
-        patch("builtins.open", mock_open()) as mock_file,
+        patch("pathlib.Path.open", mock_open()) as mock_file,
         pytest.raises(RuntimeError),
     ):
         parameter_schema = _parameter_study.read_parameter_schema(input_file)
@@ -41,7 +41,7 @@ def test_read_parameter_schema():
     # Test RuntimeError on missing STDIN and missing file
     with (
         patch("pathlib.Path.is_file", return_value=False),
-        patch("builtins.open", mock_open()) as mock_file,
+        patch("pathlib.Path.open", mock_open()) as mock_file,
         pytest.raises(RuntimeError),
     ):
         parameter_schema = _parameter_study.read_parameter_schema(None)

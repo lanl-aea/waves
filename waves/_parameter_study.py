@@ -135,7 +135,7 @@ def read_parameter_schema(input_file: typing.Union[str, pathlib.Path, io.TextIOW
         input_file = pathlib.Path(input_file)
         if not input_file.is_file():
             raise RuntimeError(f"File '{input_file}' does not exist.")
-        with open(input_file, "r") as input_handle:
+        with pathlib.Path(input_file).open(mode="r") as input_handle:
             parameter_schema = yaml.safe_load(input_handle)
     return parameter_schema
 
