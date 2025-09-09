@@ -373,7 +373,7 @@ class OdbReportFileParser(AbaqusFileParser):
         """
         instance["element_classes"] = dict()
         line = f.readline()
-        for element_class_number in range(number_of_element_classes):
+        for _element_class_number in range(number_of_element_classes):
             if line.strip().startswith("Class "):
                 class_name = line.replace("Class ", "").strip()
                 if class_name == "Number of elements":

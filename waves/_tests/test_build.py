@@ -51,7 +51,7 @@ def test_build():
             _build.main(["dummy.target"], git_clone_directory="dummy/clone", max_iterations=max_iterations)
         finally:
             # tee subprocess called once for Git clone and up to max iterations
-            mock_tee_subprocess.call_count == max_iterations + 1
+            assert mock_tee_subprocess.call_count == max_iterations + 1
             mock_mkdir.assert_called_once()
 
     # SCons non-zero exit codes should raise a RuntimeError. Don't use git clone feature, so no mkdir and only one
