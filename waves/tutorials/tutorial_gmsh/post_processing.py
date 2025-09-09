@@ -170,11 +170,11 @@ def get_parser():
         "--output-file",
         type=str,
         default=default_output_file,
-        # fmt: off
-        help="The output file for the stress-strain comparison plot with extension, "
-             "e.g. ``output_file.pdf``. Extension must be supported by matplotlib. File stem is also "
-             "used for the CSV table output, e.g. ``output_file.csv``. (default: %(default)s)",
-        # fmt: on
+        help=(
+            "The output file for the stress-strain comparison plot with extension, "
+            "e.g. ``output_file.pdf``. Extension must be supported by matplotlib. File stem is also "
+            "used for the CSV table output, e.g. ``output_file.csv``. (default: %(default)s)"
+        ),
     )
     parser.add_argument(
         "-g",
@@ -202,12 +202,12 @@ def get_parser():
         "--selection-dict",
         type=str,
         default=None,
-        # fmt: off
-        help="The YAML formatted dictionary file to define the down selection of data to be plotted. "
-             "Dictionary key: value pairs must match the data variables and coordinates of the "
-             "expected Xarray Dataset object. If no file is provided, the a default selection dict "
-             f"will be used (default: {default_selection_dict})",
-        # fmt: on
+        help=(
+            "The YAML formatted dictionary file to define the down selection of data to be plotted. "
+            "Dictionary key: value pairs must match the data variables and coordinates of the "
+            "expected Xarray Dataset object. If no file is provided, the a default selection dict "
+            f"will be used (default: {default_selection_dict})"
+        ),
     )
     parser.add_argument(
         "-p",

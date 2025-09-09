@@ -134,10 +134,10 @@ def get_parser():
         "--output-file",
         type=pathlib.Path,
         default=default_output_file,
-        # fmt: off
-        help="The output file for the Gmsh model. Extension must match a supported Gmsh file type, e.g. "
-             "``output_file``.msh (default: %(default)s",
-        # fmt: on
+        help=(
+            "The output file for the Gmsh model. Extension must match a supported Gmsh file type, e.g. "
+            "``output_file``.msh (default: %(default)s"
+        ),
     )
     parser.add_argument(
         "--width",

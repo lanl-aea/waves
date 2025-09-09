@@ -73,10 +73,10 @@ def get_parser():
         "--output-file",
         type=str,
         required=True,
-        # fmt: off
-        help="The output file for the Cubit model. Will be stripped of the extension and ``.cub`` and ``.exo`` will "
-             "be used for the model and mesh files, respectively.",
-        # fmt: on
+        help=(
+            "The output file for the Cubit model. Will be stripped of the extension and ``.cub`` and ``.exo`` will "
+            "be used for the model and mesh files, respectively."
+        ),
     )
     parser.add_argument("--xlength", type=float, required=True, help="box edge length on global x axis")
     parser.add_argument("--ylength", type=float, required=True, help="box edge length on global y axis")
