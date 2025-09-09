@@ -6,3 +6,4 @@ per-file-ignores =
     test_system.py:E501
     rectangle.py:E221
     qoi.py:E203
+    abaqus_file_parser.py:E203

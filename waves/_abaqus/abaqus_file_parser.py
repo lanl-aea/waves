@@ -435,7 +435,7 @@ class OdbReportFileParser(AbaqusFileParser):
                     try:
                         connectivity_list.append(int(line_value.strip()))
                     except ValueError:
-                        # sometimes the section category name is a string at the end of the line
+                        # Sometimes the section category name is a string at the end of the line
                         section_category_name = " ".join(line_values[i - 1 :])
                 try:
                     instance["elements"][element_type]["labels"].append(element_number)
@@ -467,7 +467,7 @@ class OdbReportFileParser(AbaqusFileParser):
                     try:
                         connectivity_list.append(int(line_value.strip()))
                     except ValueError:
-                        # sometimes the section category name is a string at the end of the line
+                        # Sometimes the section category name is a string at the end of the line
                         element["sectionCategory"] = dict()
                         element["sectionCategory"]["name"] = " ".join(line_values[i - 1 :])
                 element["connectivity"] = tuple(connectivity_list)
