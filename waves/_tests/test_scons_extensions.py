@@ -205,7 +205,6 @@ def test_add_program(names, checkprog_side_effect, first_found_path):
     ids=find_program_input.keys(),
 )
 def test_add_cubit(names, checkprog_side_effect, first_found_path):
-
     # Test function style interface
     env = SCons.Environment.Environment()
     original_path = env["ENV"]["PATH"]
@@ -257,7 +256,6 @@ def test_add_cubit(names, checkprog_side_effect, first_found_path):
 
 
 def test_add_cubit_python():
-
     # Test function style interface
     env = SCons.Environment.Environment()
     cubit_bin = "/path/to/cubit/bin/"
@@ -2588,7 +2586,6 @@ test_qoi_pseudo_builder_cases = {
     ids=test_qoi_pseudo_builder_cases.keys(),
 )
 def test_qoi_pseudo_builder(class_kwargs, call_kwargs, expected, outcome, message) -> None:
-
     # Direct call
     with outcome:
         env = SCons.Environment.Environment()

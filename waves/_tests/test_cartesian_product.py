@@ -317,7 +317,7 @@ class TestCartesianProduct:
     }
 
     @pytest.mark.parametrize(
-        "parameter_schema, output_file_template, output_file, output_type, file_count, " "expected_calls",
+        "parameter_schema, output_file_template, output_file, output_type, file_count, expected_calls",
         write_yaml.values(),
         ids=write_yaml.keys(),
     )

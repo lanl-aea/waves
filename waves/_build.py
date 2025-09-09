@@ -101,7 +101,7 @@ def main(
         count += 1
         if count > max_iterations:
             raise RuntimeError(
-                f"Exceeded maximum iterations '{max_iterations}' before finding '{stop_trigger}' " "for every target"
+                f"Exceeded maximum iterations '{max_iterations}' before finding '{stop_trigger}' for every target"
             )
         print(
             f"\n{_settings._project_name_short.lower()} build iteration {count}: '{' '.join(command)}'\n",

@@ -2180,7 +2180,6 @@ class TestParameterDistributions:
 
 
 class DummyGenerator(parameter_generators.ParameterGenerator):
-
     def _validate(self):
         self._parameter_names = ["parameter_1"]
 
@@ -2194,6 +2193,5 @@ class DummyGenerator(parameter_generators.ParameterGenerator):
 
 
 class ParameterDistributions(parameter_generators._ScipyGenerator):
-
     def _generate(self):
         pass

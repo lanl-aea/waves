@@ -1155,13 +1155,13 @@ class OdbReportFileParser(AbaqusFileParser):
                     if element_size:
                         if just_added:
                             values[value_instance]["integrationPoint"].append([None for _ in range(element_size)])
-                            values[value_instance]["integrationPoint"][index_key][
-                                element_index
-                            ] = current_integration_point
+                            values[value_instance]["integrationPoint"][index_key][element_index] = (
+                                current_integration_point
+                            )
                         else:
-                            values[value_instance]["integrationPoint"][index_key][
-                                element_index
-                            ] = current_integration_point
+                            values[value_instance]["integrationPoint"][index_key][element_index] = (
+                                current_integration_point
+                            )
                     else:
                         if just_added:
                             values[value_instance]["integrationPoint"].append(current_integration_point)
@@ -1322,17 +1322,17 @@ class OdbReportFileParser(AbaqusFileParser):
                             if index_key == len(values[value_instance]["values"][self.current_step_count][time_index]):
                                 values[value_instance]["values"][self.current_step_count][time_index].append(data_value)
                             else:
-                                values[value_instance]["values"][self.current_step_count][time_index][
-                                    index_key
-                                ] = data_value
+                                values[value_instance]["values"][self.current_step_count][time_index][index_key] = (
+                                    data_value
+                                )
                     else:
                         if index_key == len(values[value_instance]["values"][self.current_step_count][time_index]):
                             # If the index_key is the length of the list, then it's one more index than currently exists
                             values[value_instance]["values"][self.current_step_count][time_index].append(data_value)
                         else:
-                            values[value_instance]["values"][self.current_step_count][time_index][
-                                index_key
-                            ] = data_value
+                            values[value_instance]["values"][self.current_step_count][time_index][index_key] = (
+                                data_value
+                            )
         return line
 
     def get_position_index(self, position, position_type, values):
@@ -1604,11 +1604,11 @@ class OdbReportFileParser(AbaqusFileParser):
             except KeyError:
                 try:
                     extract[instance["name"]]["Mesh"] = xarray.Dataset()
-                    datasets.append(f'{instance["name"]}/Mesh')
+                    datasets.append(f"{instance['name']}/Mesh")
                 except KeyError:
                     extract[instance["name"]] = dict()
                     extract[instance["name"]]["Mesh"] = xarray.Dataset()
-                    datasets.append(f'{instance["name"]}/Mesh')
+                    datasets.append(f"{instance['name']}/Mesh")
                 mesh = extract[instance["name"]]["Mesh"]
             try:
                 node_labels = instance["nodes"]["labels"]
@@ -1859,8 +1859,7 @@ class OdbReportFileParser(AbaqusFileParser):
         datasets_file = datasets_file.parent / f"{datasets_file.stem}_datasets{_settings._default_h5_extension}"
         if datasets_file.exists():
             datasets_file = (
-                datasets_file.parent / f"{datasets_file.stem}_datasets_{time_stamp}"
-                f"{_settings._default_h5_extension}"
+                datasets_file.parent / f"{datasets_file.stem}_datasets_{time_stamp}{_settings._default_h5_extension}"
             )
 
         # Always create a datasets file, even if it's empty. Required for predictable behavior in a build system task,

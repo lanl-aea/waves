@@ -504,7 +504,6 @@ class ParameterGenerator(ABC):
 
 
 class _ScipyGenerator(ParameterGenerator, ABC):
-
     def _validate(self) -> None:
         """Validate the parameter distribution schema. Executed by class initiation.
 

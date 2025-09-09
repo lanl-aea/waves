@@ -362,7 +362,6 @@ def test_print_list():
     ],
 )
 def test_recursive_copy(root_directory, source_files, source_tree, destination_tree, tutorial):
-
     # Dummy modsim_template tree
     copy_tuples = list(zip(source_tree, destination_tree))
     not_found = []

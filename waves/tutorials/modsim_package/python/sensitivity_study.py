@@ -143,7 +143,7 @@ def get_parser():
         "--parameter-study-file",
         type=str,
         default=default_parameter_study_file,
-        help="An optional h5 file with a WAVES parameter study Xarray Dataset " "(default: %(default)s)",
+        help="An optional h5 file with a WAVES parameter study Xarray Dataset (default: %(default)s)",
     )
 
     parser.add_argument(

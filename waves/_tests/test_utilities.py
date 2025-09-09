@@ -295,7 +295,7 @@ def test_return_environment(command, kwargs, stdout, expected):
     expected_kwargs.update(kwargs)
     expected_command = (
         f"{expected_kwargs['shell']} {expected_kwargs['string_option']} "
-        f"\"{command} {expected_kwargs['separator']} {expected_kwargs['environment']}\""
+        f'"{command} {expected_kwargs["separator"]} {expected_kwargs["environment"]}"'
     )
 
     mock_run_return = subprocess.CompletedProcess(args=command, returncode=0, stdout=stdout)
@@ -396,7 +396,6 @@ def test_create_valid_identifier(identifier, expected) -> None:
 
 
 def test_warn_only_once():
-
     def test_warning():
         warnings.warn("test warning")
 

@@ -991,11 +991,7 @@ test__read_qoi_set_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        (
-            f"name,calculated,expected,lower_limit,upper_limit{os.linesep}"
-            f"qoi1,,,,{os.linesep}"
-            f"qoi2,,,,{os.linesep}"
-        ),
+        f"name,calculated,expected,lower_limit,upper_limit{os.linesep}qoi1,,,,{os.linesep}qoi2,,,,{os.linesep}",
     ),
     "two qoi: recommended attributes": (
         xarray.Dataset(

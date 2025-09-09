@@ -646,13 +646,7 @@ def _plot_scalar_tolerance_check(
         color = "black"
         fontweight = "normal"
     axes.annotate(
-        text=(
-            f"{name}\n"
-            f" min: {lower_limit:.2e},"
-            f" max: {upper_limit:.2e},"
-            f" exp: {expected:.2e},"
-            f" calc: {calculated:.2e}"
-        ),
+        text=f"{name}\n min: {lower_limit:.2e}, max: {upper_limit:.2e}, exp: {expected:.2e}, calc: {calculated:.2e}",
         xy=(-0.05, 0.5),
         textcoords="axes fraction",
         annotation_clip=False,

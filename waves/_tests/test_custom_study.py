@@ -162,8 +162,7 @@ class TestCustomStudy:
                 assert parameters == TestMerge2.parameter_study.sel({_set_coordinate_key: set_name})
             # Self-consistency checks
             assert (
-                list(TestMerge2._set_names.values())
-                == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()  # noqa: W503
+                list(TestMerge2._set_names.values()) == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()
             )
             assert TestMerge2._set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
 

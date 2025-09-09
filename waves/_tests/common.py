@@ -39,10 +39,7 @@ def self_consistency_checks(merged_study):
 
     :param Union[CartesianProduct, SobolSequence, ScipySampler, SALibSampler] merged_study: Sampler object
     """
-    assert (
-        list(merged_study._set_names.values())
-        == merged_study.parameter_study[_set_coordinate_key].values.tolist()  # noqa: W503
-    )
+    assert list(merged_study._set_names.values()) == merged_study.parameter_study[_set_coordinate_key].values.tolist()
     assert merged_study._set_hashes == merged_study.parameter_study[_hash_coordinate_key].values.tolist()
 
 
