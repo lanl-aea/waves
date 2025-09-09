@@ -21,7 +21,7 @@ def test_print_study():
     with (
         patch("pathlib.Path.is_file", return_value=False),
         patch("builtins.print") as mock_print,
-        patch("builtins.open", mock_open(read_data="")),
+        patch("pathlib.Path.open", mock_open(read_data="")),
         patch("yaml.safe_load", return_value={}),
         pytest.raises(RuntimeError),
     ):
@@ -34,7 +34,7 @@ def test_print_study():
     with (
         patch("pathlib.Path.is_file", return_value=True),
         patch("builtins.print") as mock_print,
-        patch("builtins.open", mock_open(read_data="")),
+        patch("pathlib.Path.open", mock_open(read_data="")),
         patch("yaml.safe_load", side_effect=Exception()),
         pytest.raises(RuntimeError),
     ):
