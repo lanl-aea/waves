@@ -280,21 +280,22 @@ software, so the CI tests on this server require the full build as
 
    $ scons regression --unconditional-build
 
-The continuous integration server also performs a separate style guide check using ``flake8`` and ``black`` with
-associated aliases or the collector alias ``style``.
+The continuous integration server also performs a separate style guide check using ``flake8``, ``black``, and `Ruff`_
+with associated aliases or the collector alias ``style``. The project is transitioning to ``ruff`` as a replacement for
+``flake8`` and ``black``, so the ``style`` alias is the preferred style check.
 
 .. code-block::
 
    $ scons style
 
-If ``black`` reports files that should be formatted, the following alias will format files using the same command line
-options as the check alias. ``black`` can also be run directly, but this may miss files without the ``.py`` extension,
+If ``ruff`` reports files that should be formatted, the following alias will format files using the same command line
+options as the check alias. ``ruff`` can also be run directly, but this may miss files without the ``.py`` extension,
 such as SConstruct and SConscript files. After formatting, the developer must review the changes and commit them to
 their branch.
 
 .. code-block::
 
-   $ scons black-format
+   $ scons ruff-format
 
 |PROJECT| has dedicated target aliases for the unit and system tests. To run the unit tests, activate a conda
 environment and run

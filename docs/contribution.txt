@@ -35,5 +35,29 @@ guide`_.
 Style Guide
 ===========
 
-This project does not yet have a full style guide. Generally, wherever a style can't be inferred from surrounding code
-this project falls back to `PEP-8`_-like styles. There are two notable exceptions to the notional PEP-8 fall back:
+This project uses the `Ruff`_ autoformatting and style guide. The Ruff default options are found in
+``pyproject.toml.in``. See the :ref:`build` section for a discussion about the need for templating the configuration
+file.
+
+The style guide checks are run with the following alias
+
+.. code-block::
+
+   $ scons style
+
+You can autoformat Python and SConscript files with the following command.
+
+.. code-block::
+
+   $ scons ruff-format
+
+You can also run the style checks and format files with ``ruff`` directly, but bear in mind that the project uses a
+template ``pyproject.toml.in`` file, so any changes to the ``ruff`` configuration must be followed by a re-build of the
+``pyproject.toml`` file prior to running checks and formatting commands. This dependence is explicitly captured in the
+``style`` and ``ruff-format`` aliases, so it is not necessary to explicitly re-build the ``pyproject.toml``
+configuration file when using the aliases.
+
+.. code-block::
+
+   $ scons pyproject.toml && ruff check . && ruff format . --check
+   $ scons pyproject.toml && ruff check . --fix; ruff format .
