@@ -1617,9 +1617,7 @@ def _merge_parameter_space(
     return merged_study
 
 
-def _merge_parameter_studies(
-    studies: list[xarray.Dataset], template: string.Template | None = None
-) -> xarray.Dataset:
+def _merge_parameter_studies(studies: list[xarray.Dataset], template: string.Template | None = None) -> xarray.Dataset:
     """Merge a list of parameter studies into one study.
 
     When merging across identical parameter spaces, uses :func:`_merge_parameter_space()` to preserve the first given
@@ -1695,9 +1693,7 @@ def _create_set_names(set_hashes: list[str], template: string.Template | None = 
     return set_names
 
 
-def _update_set_names(
-    parameter_study: xarray.Dataset, template: string.Template | None = None
-) -> xarray.Dataset:
+def _update_set_names(parameter_study: xarray.Dataset, template: string.Template | None = None) -> xarray.Dataset:
     """Update the parameter set names after a parameter study dataset merge operation. Hashes that are missing set
     names are assigned a new set name in hash ascending alphabetical order.
 

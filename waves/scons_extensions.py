@@ -503,9 +503,7 @@ def project_alias(
     return target_descriptions
 
 
-def _project_help_descriptions(
-    nodes: SCons.Node.NodeList, target_descriptions: dict | None = None, message=""
-) -> str:
+def _project_help_descriptions(nodes: SCons.Node.NodeList, target_descriptions: dict | None = None, message="") -> str:
     """Return a help message for all nodes found in the alias and target descriptions
 
     Alias descriptions are returned from the :meth:`project_alias`. When both the alias and target descriptions
