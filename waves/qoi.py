@@ -30,7 +30,8 @@ _version_key = "version"
 def _propagate_identical_attrs(all_attrs, context):  # noqa: ARG001
     first_attrs = all_attrs[0]
     identical_pairs = {
-        key: value for key, value in first_attrs.items()
+        key: value
+        for key, value in first_attrs.items()
         if all(key in attrs and attrs[key] == value and type(attrs[key]) is type(value) for attrs in all_attrs[1:])
     }
     return identical_pairs
