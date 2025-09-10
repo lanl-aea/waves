@@ -1,3 +1,4 @@
+from contextlib import nullcontext as does_not_raise
 import pathlib
 from unittest.mock import patch
 
@@ -8,21 +9,38 @@ import pytest
 from waves import _visualize
 
 
-def test_ancestor_subgraph():
-    graph = networkx.DiGraph()
-    graph.add_edge("parent", "child")
+test_ancestor_subgraph_cases = {
+    "node not found": (
+        networkx.DiGraph([("parent", "child")]),
+        ["notanode"],
+        pytest.raises(RuntimeError, match="Nodes 'notanode' not found in the graph"),
+        None,
+    ),
+    "single parent-child: request child": (
+        networkx.DiGraph([("parent", "child")]),
+        ["child"],
+        does_not_raise(),
+        networkx.DiGraph([("parent", "child")]),
+    ),
+    "single parent-child: request parent": (
+        networkx.DiGraph([("parent", "child")]),
+        ["parent"],
+        does_not_raise(),
+        networkx.DiGraph([("parent", "child")]).subgraph("parent"),
+    ),
+}
 
+
+@pytest.mark.parametrize(
+    "graph, nodes, outcome, expected",
+    test_ancestor_subgraph_cases.values(),
+    ids=test_ancestor_subgraph_cases.keys(),
+)
+def test_ancestor_subgraph(graph, nodes, outcome, expected):
     # Check for a runtime error on empty subgraph/missing node
-    with pytest.raises(RuntimeError):
-        subgraph = _visualize.ancestor_subgraph(graph, ["notanode"])
-
-    # Check subgraph(s)
-    subgraph = _visualize.ancestor_subgraph(graph, ["child"])
-    assert subgraph.nodes == graph.nodes
-
-    # Check subgraph(s)
-    subgraph = _visualize.ancestor_subgraph(graph, ["parent"])
-    assert list(subgraph.nodes) == ["parent"]
+    with outcome:
+        subgraph = _visualize.ancestor_subgraph(graph, nodes)
+        assert subgraph.nodes == expected.nodes
 
 
 def test_add_node_count():
