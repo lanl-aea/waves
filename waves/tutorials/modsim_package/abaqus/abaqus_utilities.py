@@ -23,7 +23,9 @@ def export_mesh(model_object, part_name, orphan_mesh_file):
     block = model_object.keywordBlock.sieBlocks
     block_string = "\n".join(block)
     orphan_mesh = re.findall(
-        r".*?\*Part, name=({})$\n(.*?)\*End Part".format(part_name), block_string, re.DOTALL | re.I | re.M
+        r".*?\*Part, name=({})$\n(.*?)\*End Part".format(part_name),
+        block_string,
+        re.DOTALL | re.IGNORECASE | re.MULTILINE,
     )
     part_definition = orphan_mesh[0]
     with open(orphan_mesh_file, "w") as output:

@@ -132,7 +132,7 @@ class ParameterGenerator(ABC):
         if self.output_file_template:
             self.output_directory = pathlib.Path(self.output_file_template.safe_substitute()).parent
         else:
-            self.output_directory = pathlib.Path().resolve()
+            self.output_directory = pathlib.Path.cwd()
         self.parameter_study_meta_file = self.output_directory / _settings._parameter_study_meta_file
 
         self._validate()
