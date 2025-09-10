@@ -271,14 +271,13 @@ def get_odb_report_args(odb_report_args: str, input_file: pathlib.Path, job_name
 
 
 def run_external(cmd):
-    """
-    Execute an external command and get its exitcode, stdout and stderr.
+    """Execute an external command and get its exitcode, stdout and stderr.
 
     :param str cmd: command line command to run
     :returns: output, return_code, error_code
     """
     args = shlex.split(cmd, posix=(os.name == "posix"))
-    process = subprocess.run(args, capture_output=True)
+    process = subprocess.run(args, capture_output=True, check=False)
     return process.returncode, process.stdout.decode(), process.stderr.decode()
 
 
