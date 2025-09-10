@@ -70,7 +70,7 @@ def _print_failed_nodes_stdout() -> None:
         ]
         stdout_path_options = [path.resolve() for path in stdout_path_options]
         try:
-            stdout_path = next((path for path in stdout_path_options if path.exists()))
+            stdout_path = next(path for path in stdout_path_options if path.exists())
             with stdout_path.open(mode="r") as stdout_file:
                 print(
                     f"\n{failure.node} failed with STDOUT file '{stdout_path}'\n{stdout_file.read()}", file=sys.stderr
@@ -80,7 +80,7 @@ def _print_failed_nodes_stdout() -> None:
 
 
 def print_build_failures(
-    env: typing.Optional[SCons.Environment.Environment] = None,
+    env: SCons.Environment.Environment | None = None,
     print_stdout: bool = True,
 ) -> None:
     """On exit, query the SCons reported build failures and print the associated node's STDOUT file, if it exists
@@ -121,7 +121,7 @@ def action_list_scons(actions: typing.Iterable[str]) -> SCons.Action.ListAction:
     return SCons.Action.ListAction(command_actions)
 
 
-def action_list_strings(builder: SCons.Builder.Builder) -> typing.List[str]:
+def action_list_strings(builder: SCons.Builder.Builder) -> list[str]:
     """Return a builder's action list as a list of str
 
     :param builder: The builder to extract the action list from
@@ -369,10 +369,10 @@ def ssh_builder_actions(
 
 
 def project_help(
-    env: typing.Optional[SCons.Environment.Environment] = None,
+    env: SCons.Environment.Environment | None = None,
     append: bool = True,
     local_only: bool = True,
-    target_descriptions: typing.Optional[dict] = None,
+    target_descriptions: dict | None = None,
 ) -> None:
     """Add default targets and alias lists to project help message
 
@@ -394,10 +394,10 @@ def project_help(
 
 
 def project_help_default_targets(
-    env: typing.Optional[SCons.Environment.Environment] = None,
+    env: SCons.Environment.Environment | None = None,
     append: bool = True,
     local_only: bool = True,
-    target_descriptions: typing.Optional[dict] = None,
+    target_descriptions: dict | None = None,
 ) -> None:
     """Add a default targets list to the project's help message
 
@@ -435,10 +435,10 @@ def project_help_default_targets(
 
 
 def project_help_aliases(
-    env: typing.Optional[SCons.Environment.Environment] = None,
+    env: SCons.Environment.Environment | None = None,
     append: bool = True,
     local_only: bool = True,
-    target_descriptions: typing.Optional[dict] = None,
+    target_descriptions: dict | None = None,
 ) -> None:
     """Add the alias list to the project's help message
 
@@ -503,9 +503,7 @@ def project_alias(
     return target_descriptions
 
 
-def _project_help_descriptions(
-    nodes: SCons.Node.NodeList, target_descriptions: typing.Optional[dict] = None, message=""
-) -> str:
+def _project_help_descriptions(nodes: SCons.Node.NodeList, target_descriptions: dict | None = None, message="") -> str:
     """Return a help message for all nodes found in the alias and target descriptions
 
     Alias descriptions are returned from the :meth:`project_alias`. When both the alias and target descriptions
@@ -752,7 +750,7 @@ def add_cubit_python(
 def shell_environment(
     command: str,
     shell: str = "bash",
-    cache: typing.Optional[str] = None,
+    cache: str | None = None,
     overwrite_cache: bool = False,
 ) -> SCons.Environment.Environment:
     """Return an SCons shell environment from a cached file or by running a shell command
@@ -939,10 +937,10 @@ def first_target_emitter(
     target: list,
     source: list,
     env: SCons.Environment.Environment,  # noqa: ARG001
-    suffixes: typing.Optional[typing.Iterable[str]] = None,
-    appending_suffixes: typing.Optional[typing.Iterable[str]] = None,
+    suffixes: typing.Iterable[str] | None = None,
+    appending_suffixes: typing.Iterable[str] | None = None,
     stdout_extension: str = _settings._stdout_extension,
-) -> typing.Tuple[list, list]:
+) -> tuple[list, list]:
     """SCons emitter function that emits new targets based on the first target
 
     Searches for a file ending in the stdout extension. If none is found, creates a target by appending the stdout
@@ -1083,7 +1081,7 @@ def _abaqus_journal_emitter(
     target: list,
     source: list,
     env: SCons.Environment.Environment,
-) -> typing.Tuple[list, list]:
+) -> tuple[list, list]:
     """Appends the abaqus_journal builder target list with the builder managed targets
 
     Appends ``target[0]``.abaqus_v6.env and ``target[0]``.stdout to the ``target`` list. The abaqus_journal Builder
@@ -1325,7 +1323,7 @@ def _abaqus_solver_emitter(
     env: SCons.Environment.Environment,
     suffixes: typing.Iterable[str] = _settings._abaqus_common_extensions,
     stdout_extension: str = _settings._stdout_extension,
-) -> typing.Tuple[list, list]:
+) -> tuple[list, list]:
     """Appends the abaqus_solver builder target list with the builder managed targets
 
     If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
@@ -1377,17 +1375,17 @@ def _abaqus_solver_emitter(
     return string_targets, source
 
 
-def _abaqus_standard_solver_emitter(target: list, source: list, env) -> typing.Tuple[list, list]:
+def _abaqus_standard_solver_emitter(target: list, source: list, env) -> tuple[list, list]:
     """Passes the standard specific extensions to :meth:`waves.scons_extensions._abaqus_solver_emitter`"""
     return _abaqus_solver_emitter(target, source, env, _settings._abaqus_standard_extensions)
 
 
-def _abaqus_explicit_solver_emitter(target: list, source: list, env) -> typing.Tuple[list, list]:
+def _abaqus_explicit_solver_emitter(target: list, source: list, env) -> tuple[list, list]:
     """Passes the explicit specific extensions to :meth:`waves.scons_extensions._abaqus_solver_emitter`"""
     return _abaqus_solver_emitter(target, source, env, _settings._abaqus_explicit_extensions)
 
 
-def _abaqus_datacheck_solver_emitter(target: list, source: list, env) -> typing.Tuple[list, list]:
+def _abaqus_datacheck_solver_emitter(target: list, source: list, env) -> tuple[list, list]:
     """Passes the datacheck specific extensions to :meth:`waves.scons_extensions._abaqus_solver_emitter`"""
     return _abaqus_solver_emitter(target, source, env, _settings._abaqus_datacheck_extensions)
 
@@ -1514,8 +1512,8 @@ def _task_kwarg_emitter(
     target: list,
     source: list,
     env: SCons.Environment.Environment,
-    suffixes: typing.Optional[typing.Iterable[str]] = None,
-    appending_suffixes: typing.Optional[typing.Iterable[str]] = None,
+    suffixes: typing.Iterable[str] | None = None,
+    appending_suffixes: typing.Iterable[str] | None = None,
     stdout_extension: str = _settings._stdout_extension,
     required_task_kwarg: str = "",
 ):
@@ -1574,7 +1572,7 @@ def _task_kwarg_emitter(
 
 def abaqus_solver_emitter_factory(
     suffixes: typing.Iterable[str] = _settings._abaqus_common_extensions,
-    appending_suffixes: typing.Optional[typing.Iterable[str]] = None,
+    appending_suffixes: typing.Iterable[str] | None = None,
     stdout_extension: str = _settings._stdout_extension,
 ) -> collections.abc.Callable[[list, list, SCons.Environment.Environment], tuple]:
     """Abaqus solver emitter factory
@@ -1648,7 +1646,7 @@ def abaqus_datacheck_emitter(
     source: list,
     env: SCons.Environment.Environment,
     suffixes: typing.Iterable[str] = _settings._abaqus_datacheck_extensions,
-    appending_suffixes: typing.Optional[typing.Iterable[str]] = None,
+    appending_suffixes: typing.Iterable[str] | None = None,
     stdout_extension: str = _settings._stdout_extension,
 ):
     """Abaqus solver emitter for datacheck targets
@@ -1718,7 +1716,7 @@ def abaqus_explicit_emitter(
     source: list,
     env: SCons.Environment.Environment,
     suffixes: typing.Iterable[str] = _settings._abaqus_explicit_extensions,
-    appending_suffixes: typing.Optional[typing.Iterable[str]] = None,
+    appending_suffixes: typing.Iterable[str] | None = None,
     stdout_extension: str = _settings._stdout_extension,
 ):
     """Abaqus solver emitter for Explicit targets
@@ -1788,7 +1786,7 @@ def abaqus_standard_emitter(
     source: list,
     env: SCons.Environment.Environment,
     suffixes: typing.Iterable[str] = _settings._abaqus_standard_extensions,
-    appending_suffixes: typing.Optional[typing.Iterable[str]] = None,
+    appending_suffixes: typing.Iterable[str] | None = None,
     stdout_extension: str = _settings._stdout_extension,
 ):
     """Abaqus solver emitter for Standard targets
@@ -1970,7 +1968,7 @@ class AbaqusPseudoBuilder:
     def __init__(
         self,
         builder: SCons.Builder.Builder,
-        override_cpus: typing.Optional[int] = None,
+        override_cpus: int | None = None,
     ) -> None:
         self.builder = builder
         self.override_cpus = override_cpus
@@ -1981,14 +1979,14 @@ class AbaqusPseudoBuilder:
         self,
         env: SCons.Environment.Environment,  # noqa: ARG002
         job: str,
-        inp: typing.Optional[str] = None,
-        user: typing.Optional[str] = None,
+        inp: str | None = None,
+        user: str | None = None,
         cpus: int = 1,
-        oldjob: typing.Union[typing.List[str], str, None] = None,
+        oldjob: list[str] | str | None = None,
         write_restart: bool = False,
         double: str = "both",
-        extra_sources: typing.Optional[typing.List[str]] = None,
-        extra_targets: typing.Optional[typing.List[str]] = None,
+        extra_sources: list[str] | None = None,
+        extra_targets: list[str] | None = None,
         extra_options: str = "",
         **kwargs,
     ) -> SCons.Node.NodeList:
@@ -2191,7 +2189,7 @@ def sbatch_abaqus_solver(*args, **kwargs):
 def copy_substfile(
     env: SCons.Environment.Environment,
     source_list: list,
-    substitution_dictionary: typing.Optional[dict] = None,
+    substitution_dictionary: dict | None = None,
     build_subdirectory: str = ".",
     symlink: bool = False,
 ) -> SCons.Node.NodeList:
@@ -2363,7 +2361,7 @@ def _matlab_script_emitter(
     target: list,
     source: list,
     env: SCons.Environment.Environment,
-) -> typing.Tuple[list, list]:
+) -> tuple[list, list]:
     """Appends the matlab_script builder target list with the builder managed targets
 
     Appends ``target[0]``.matlab.env and ``target[0]``.stdout to the ``target`` list. The matlab_script Builder requires
@@ -2550,7 +2548,7 @@ def _abaqus_extract_emitter(
     target: list,
     source: list,
     env: SCons.Environment.Environment,
-) -> typing.Tuple[list, list]:
+) -> tuple[list, list]:
     """Prepends the abaqus extract builder target H5 file if none is specified. Appends the source[0].csv file unless
     ``delete_report_file`` is ``True``.  Always appends the ``target[0]_datasets.h5`` file.
 
@@ -2882,7 +2880,7 @@ def sphinx_latexpdf(
 def _custom_scanner(
     pattern: str,
     suffixes: typing.Iterable[str],
-    flags: typing.Optional[int] = None,
+    flags: int | None = None,
 ) -> SCons.Scanner.Scanner:
     """Custom Scons scanner
 
@@ -3797,7 +3795,7 @@ def parameter_study_sconscript(
     env: SCons.Environment.Environment,
     *args,
     variant_dir=None,
-    exports: typing.Optional[dict] = None,
+    exports: dict | None = None,
     study=None,
     set_name: str = "",
     subdirectories: bool = False,
@@ -3901,10 +3899,10 @@ def parameter_study_sconscript(
         variant_dir = pathlib.Path(variant_dir)
 
     def _variant_subdirectory(
-        variant_directory: typing.Optional[pathlib.Path],
+        variant_directory: pathlib.Path | None,
         subdirectory: str,
         subdirectories: bool = subdirectories,
-    ) -> typing.Union[pathlib.Path, None]:
+    ) -> pathlib.Path | None:
         """Determine the variant subdirectory
 
         :param variant_directory: The requested root ``variant_dir``
@@ -4018,7 +4016,7 @@ class QOIPseudoBuilder:
         self,
         env: SCons.Environment.Environment,
         calculated: pathlib.Path,
-        expected: typing.Optional[pathlib.Path] = None,
+        expected: pathlib.Path | None = None,
         archive: bool = False,
     ) -> SCons.Node.NodeList:
         """SCons Pseudo-Builder for regression testing and archiving quantities of interest (QOIs).
@@ -4339,7 +4337,7 @@ class WAVESEnvironment(SConsEnvironment):
         )
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def AbaqusPseudoBuilder(self, job, *args, override_cpus: typing.Optional[int] = None, **kwargs):
+    def AbaqusPseudoBuilder(self, job, *args, override_cpus: int | None = None, **kwargs):
         """Construction environment pseudo-builder from :class:`waves.scons_extensions.AbaqusPseudoBuilder`
 
         When using this environment pseudo-builder, do not provide the first ``env`` argument

@@ -96,7 +96,7 @@ def test_set_name_substitution(original, replacement, kwargs, expected):
     call_kwargs = copy.deepcopy(default_kwargs)
     call_kwargs.update(kwargs)
     modified = _utilities.set_name_substitution(original, replacement, **call_kwargs)
-    if isinstance(expected, (str, pathlib.Path)):
+    if isinstance(expected, str | pathlib.Path):
         assert modified == expected
     elif all(isinstance(item, str) for item in expected) or all(isinstance(item, pathlib.Path) for item in expected):
         assert sorted(modified) == sorted(expected)

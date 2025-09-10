@@ -1,6 +1,5 @@
 import argparse
 import pathlib
-import typing
 
 import gmsh
 import numpy
@@ -95,7 +94,7 @@ def main(
     gmsh.finalize()
 
 
-def tags_from_dimTags(dimTags: typing.List[typing.Tuple[int, int]]) -> typing.List[int]:
+def tags_from_dimTags(dimTags: list[tuple[int, int]]) -> list[int]:
     """Return tags from Gmsh entity ``dimTags`` list of tuples
 
     :returns: list of tags
@@ -104,10 +103,10 @@ def tags_from_dimTags(dimTags: typing.List[typing.Tuple[int, int]]) -> typing.Li
 
 
 def get_entities_at_coordinates(
-    coordinates: typing.Tuple[float, float, float],
+    coordinates: tuple[float, float, float],
     dimension: int,
     tolerance: float = 1.0e-6,
-) -> typing.List[typing.Tuple[int, int]]:
+) -> list[tuple[int, int]]:
     """Return Gmsh ``dimTags`` of entities of dimension within bounding box determined by coordinates and tolerance
 
     :param coordinates: 3D coordinates (X, Y, Z) for center of bounding box

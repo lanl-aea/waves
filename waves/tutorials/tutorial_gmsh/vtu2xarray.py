@@ -1,6 +1,5 @@
 import argparse
 import pathlib
-import typing
 import warnings
 
 import meshio
@@ -9,10 +8,10 @@ import xarray
 
 
 def main(
-    input_file: typing.Tuple[pathlib.Path],
+    input_file: tuple[pathlib.Path],
     output_file: pathlib.Path,
-    mesh_file: typing.Optional[pathlib.Path] = None,
-    time_points_file: typing.Optional[pathlib.Path] = None,
+    mesh_file: pathlib.Path | None = None,
+    time_points_file: pathlib.Path | None = None,
 ) -> None:
     """Open a ``ccx2paraview`` CalculiX-to-VTU output file and convert to Xarray
 

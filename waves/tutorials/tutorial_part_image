@@ -171,7 +171,7 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
     images.extend(
         env.AbaqusJournal(
             target=[set_path / "rectangle_compression.png"],
-            source=[str("#/modsim_package/abaqus/export_abaqus_image.py"), *solve_source_list],
+            source=["#/modsim_package/abaqus/export_abaqus_image.py", *solve_source_list],
             subcommand_options=script_options,
             model="rectangle",
         )

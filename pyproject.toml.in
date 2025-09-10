@@ -77,13 +77,6 @@ markers = [
 ]
 addopts = "--ignore='build' --ignore='install' --ignore='waves/modsim_template/' --ignore='modsim_template/' --ignore='waves/modsim_template_2/' --ignore='modsim_template_2/' --ignore='waves/tutorials/' --ignore='tutorials/' --tb=long --showlocals --failed-first --strict-markers -m 'not systemtest' --import-mode=importlib -ra"
 
-[tool.black]
-target-version = ["py39", "py310", "py311", "py312", "py313"]
-extend-exclude = ".txt|.toml|.yaml|.csv"
-force-exclude = "build*/|install*/|conda-environment*/|conda-pkgs*/"
-line-length = 120
-include = "SConstruct|SConscript|.py|.py.in"
-
 [tool.ruff]
 target-version = "py310"
 line-length = 120
@@ -91,7 +84,11 @@ extend-exclude = ["build", "install", "conda-environment", "conda-pkgs", "pip-bu
 extend-include = ["*SConstruct", "*SConscript", "*.scons"]
 
 [tool.ruff.lint]
-extend-select = ["A", "B", "E", "F", "I", "Q", "W", "ARG", "C4", "ERA", "ISC", "NPY", "PD", "PGH", "PIE", "PLC", "PLE", "PLW", "PTH", "PYI", "RSE", "SIM", "T10", "RUF"]
+extend-select = [
+    "A", "B", "E", "F", "I", "Q", "W",
+    "ARG", "C4", "ERA", "ISC", "NPY", "PD", "PGH", "PIE", "PLC", "PLE", "PLW", "PTH", "PYI", "RSE", "RUF", "SIM", "T10",
+    "UP"
+]
 extend-ignore = ["B028", "PIE808", "PIE790", "SIM108", "PLC0415"]
 
 [tool.ruff.lint.extend-per-file-ignores]
@@ -102,20 +99,21 @@ extend-ignore = ["B028", "PIE808", "PIE790", "SIM108", "PLC0415"]
 "waves/_tests/test_*.py" = ["RUF012"]
 # Tutorial/template files that are 'outside' the project
 "waves/tutorials/**/SConscript" = ["I001"]
+"waves/tutorials/modsim_package/python/*.py" = ["I001"]
 "waves/modsim_template*/**/SConscript" = ["I001"]
+"waves/modsim_template*/modsim_package/tests/*.py" = ["I001"]
 "**/cubit/rectangle_partition.py" = ["ARG001"]
 # Abaqus Python 2 compatible files
-"**/submit_cae.py" = ["SIM115", "PTH"]
-"**/export_abaqus_image.py" = ["SIM115", "PTH"]
-"**/abaqus_utilities.py" = ["SIM115", "PTH"]
-"waves/tutorials/waves_quickstart/rectangle_*.py" = ["PTH"]
-"waves/tutorials/scons_quickstart/rectangle_*.py" = ["PTH"]
-"waves/tutorials/multi_action_task/rectangle_*.py" = ["PTH"]
-"waves/tutorials/modsim_package/argparse_types/rectangle_*.py" = ["PTH", "I001"]
-"waves/tutorials/modsim_package/abaqus/*.py" = ["PTH", "I001"]
-"waves/tutorials/modsim_package/python/*.py" = ["I001"]
-"waves/modsim_template*/modsim_package/rectangle_*.py" = ["PTH"]
-"waves/modsim_template*/modsim_package/tests/*.py" = ["I001"]
+"**/submit_cae.py" = ["SIM115", "PTH", "UP"]
+"**/export_abaqus_image.py" = ["SIM115", "PTH", "UP"]
+"**/abaqus_utilities.py" = ["SIM115", "PTH", "UP"]
+"waves/tutorials/waves_quickstart/rectangle_*.py" = ["PTH", "UP"]
+"waves/tutorials/scons_quickstart/rectangle_*.py" = ["PTH", "UP"]
+"waves/tutorials/multi_action_task/rectangle_*.py" = ["PTH", "UP"]
+"waves/tutorials/modsim_package/argparse_types/rectangle_*.py" = ["PTH", "I001", "UP"]
+"waves/**/argparse_types.py" = ["PTH", "I001", "UP"]
+"waves/tutorials/modsim_package/abaqus/*.py" = ["PTH", "I001", "UP"]
+"waves/modsim_template*/modsim_package/rectangle_*.py" = ["PTH", "UP"]
 # TODO: re-enable B006 VVV
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/959
 "**/rectangle_compression_sobol_sequence.py" = ["B006"]

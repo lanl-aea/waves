@@ -67,11 +67,11 @@ def get_parser() -> argparse.ArgumentParser:
 
 def main(
     subcommand: str,
-    root_directory: typing.Union[str, pathlib.Path],
-    relative_paths: typing.Iterable[typing.Union[str, pathlib.Path]],
-    destination: typing.Union[str, pathlib.Path],
-    requested_paths: typing.Optional[typing.List[pathlib.Path]] = None,
-    tutorial: typing.Optional[_settings._allowable_tutorial_numbers_typing] = None,
+    root_directory: str | pathlib.Path,
+    relative_paths: typing.Iterable[str | pathlib.Path],
+    destination: str | pathlib.Path,
+    requested_paths: list[pathlib.Path] | None = None,
+    tutorial: _settings._allowable_tutorial_numbers_typing | None = None,
     overwrite: bool = False,
     dry_run: bool = False,
     print_available: bool = False,
@@ -117,9 +117,9 @@ def main(
 
 
 def available_files(
-    root_directory: typing.Union[str, pathlib.Path],
-    relative_paths: typing.Iterable[typing.Union[str, pathlib.Path]],
-) -> typing.Tuple[typing.List[pathlib.Path], typing.List[typing.Union[str, pathlib.Path]]]:
+    root_directory: str | pathlib.Path,
+    relative_paths: typing.Iterable[str | pathlib.Path],
+) -> tuple[list[pathlib.Path], list[str | pathlib.Path]]:
     """Build a list of files at ``relative_paths`` with respect to the root ``root_directory`` directory
 
     Returns a list of absolute paths and a list of any relative paths that were not found. Falls back to a full
@@ -156,10 +156,10 @@ def available_files(
 
 
 def build_source_files(
-    root_directory: typing.Union[str, pathlib.Path],
-    relative_paths: typing.Iterable[typing.Union[str, pathlib.Path]],
+    root_directory: str | pathlib.Path,
+    relative_paths: typing.Iterable[str | pathlib.Path],
     exclude_patterns: typing.Iterable[str] = _settings._fetch_exclude_patterns,
-) -> typing.Tuple[typing.List[pathlib.Path], typing.List[typing.Union[str, pathlib.Path]]]:
+) -> tuple[list[pathlib.Path], list[str | pathlib.Path]]:
     """Wrap :meth:`available_files` and trim list based on exclude patterns
 
     If no source files are found, an empty list is returned.
@@ -179,7 +179,7 @@ def build_source_files(
     return source_files, not_found
 
 
-def longest_common_path_prefix(file_list: typing.List[pathlib.Path]) -> pathlib.Path:
+def longest_common_path_prefix(file_list: list[pathlib.Path]) -> pathlib.Path:
     """Return the longest common file path prefix.
 
     The edge case of a single path is handled by returning the parent directory
@@ -201,9 +201,9 @@ def longest_common_path_prefix(file_list: typing.List[pathlib.Path]) -> pathlib.
 
 
 def build_destination_files(
-    destination: typing.Union[str, pathlib.Path],
-    requested_paths: typing.List[pathlib.Path],
-) -> typing.Tuple[typing.List[pathlib.Path], typing.List[pathlib.Path]]:
+    destination: str | pathlib.Path,
+    requested_paths: list[pathlib.Path],
+) -> tuple[list[pathlib.Path], list[pathlib.Path]]:
     """Build destination file paths from the requested paths, truncating the longest possible source prefix path
 
     :param destination: String or pathlike object for the destination directory
@@ -219,10 +219,10 @@ def build_destination_files(
 
 
 def build_copy_tuples(
-    destination: typing.Union[str, pathlib.Path],
-    requested_paths_resolved: typing.List[pathlib.Path],
+    destination: str | pathlib.Path,
+    requested_paths_resolved: list[pathlib.Path],
     overwrite: bool = False,
-) -> typing.List[typing.Tuple[pathlib.Path, pathlib.Path]]:
+) -> list[tuple[pathlib.Path, pathlib.Path]]:
     """
     :param destination: String or pathlike object for the destination directory
     :param requested_paths_resolved: List of absolute requested files as path-objects
@@ -243,7 +243,7 @@ def build_copy_tuples(
     return copy_tuples
 
 
-def conditional_copy(copy_tuples: typing.List[typing.Tuple[pathlib.Path, pathlib.Path]]) -> None:
+def conditional_copy(copy_tuples: list[tuple[pathlib.Path, pathlib.Path]]) -> None:
     """Copy when destination file doesn't exist or doesn't match source file content
 
     Uses Python ``shutil.copyfile``, so meta data isn't preserved. Creates intermediate parent directories prior to
@@ -270,9 +270,9 @@ def print_list(things_to_print: list, prefix: str = "\t", stream=sys.stdout) -> 
 
 
 def extend_requested_paths(
-    requested_paths: typing.List[pathlib.Path],
+    requested_paths: list[pathlib.Path],
     tutorial: _settings._allowable_tutorial_numbers_typing,
-) -> typing.List[pathlib.Path]:
+) -> list[pathlib.Path]:
     """Extend the requested_paths list with the necessary tutorial files.
 
     :param requested_paths: list of relative path-like objects that subset the files found in the
@@ -295,11 +295,11 @@ def extend_requested_paths(
 
 
 def recursive_copy(
-    root_directory: typing.Union[str, pathlib.Path],
-    relative_paths: typing.Iterable[typing.Union[str, pathlib.Path]],
-    destination: typing.Union[str, pathlib.Path],
-    requested_paths: typing.Optional[typing.List[pathlib.Path]] = None,
-    tutorial: typing.Optional[_settings._allowable_tutorial_numbers_typing] = None,
+    root_directory: str | pathlib.Path,
+    relative_paths: typing.Iterable[str | pathlib.Path],
+    destination: str | pathlib.Path,
+    requested_paths: list[pathlib.Path] | None = None,
+    tutorial: _settings._allowable_tutorial_numbers_typing | None = None,
     overwrite: bool = False,
     dry_run: bool = False,
     print_available: bool = False,

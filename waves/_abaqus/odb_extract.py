@@ -45,7 +45,6 @@ import shlex
 import shutil
 import subprocess
 import sys
-import typing
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 
 import yaml
@@ -129,7 +128,7 @@ def odb_extract(
     input_file: list,
     output_file: str,
     output_type: str = "h5",
-    odb_report_args: typing.Optional[str] = None,
+    odb_report_args: str | None = None,
     abaqus_command: str = _settings._default_abaqus_command,
     delete_report_file: bool = False,
     verbose: bool = False,
