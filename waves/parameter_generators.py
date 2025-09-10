@@ -683,7 +683,7 @@ class CartesianProduct(ParameterGenerator):
         self._parameter_names = list(self.parameter_schema.keys())
         # List, sets, and tuples are the supported PyYAML iterables that will support expected behavior
         for name in self._parameter_names:
-            if not isinstance(self.parameter_schema[name], (list, set, tuple)):
+            if not isinstance(self.parameter_schema[name], list | set | tuple):
                 raise SchemaValidationError(f"Parameter '{name}' is not one of list, set, or tuple")
 
     def _generate(self, **kwargs) -> None:  # noqa: ARG002
@@ -860,7 +860,7 @@ class OneAtATime(ParameterGenerator):
         self._parameter_names = list(self.parameter_schema.keys())
         # List and tuples are the supported PyYAML ordered iterables that will support expected behavior
         for name in self._parameter_names:
-            if not isinstance(self.parameter_schema[name], (list, tuple)):
+            if not isinstance(self.parameter_schema[name], list | tuple):
                 raise SchemaValidationError(f"Parameter '{name}' is not a list or tuple")
             if len(self.parameter_schema[name]) < 1:
                 raise SchemaValidationError(f"Parameter '{name}' must have at least one value")
@@ -1298,7 +1298,7 @@ class SALibSampler(ParameterGenerator, ABC):
             raise SchemaValidationError("'problem' must be a dictionary")
         if "names" not in self.parameter_schema["problem"]:
             raise SchemaValidationError("Parameter schema 'problem' dict is missing the required 'names' key")
-        if not isinstance(self.parameter_schema["problem"]["names"], (list, set, tuple)):
+        if not isinstance(self.parameter_schema["problem"]["names"], list | set | tuple):
             raise SchemaValidationError("Parameter 'names' is not one of list, set, or tuple")
         self._create_parameter_names()
         # Sampler specific validation

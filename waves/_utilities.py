@@ -53,7 +53,7 @@ def set_name_substitution(
         return _AtSignTemplate(original).safe_substitute(mapping)
     elif isinstance(original, pathlib.Path):
         return pathlib.Path(_AtSignTemplate(str(original)).safe_substitute(mapping))
-    elif isinstance(original, (list, set, tuple)) and all(isinstance(item, (str, pathlib.Path)) for item in original):
+    elif isinstance(original, list | set | tuple) and all(isinstance(item, str | pathlib.Path) for item in original):
         modified = []
         for node in original:
             try:

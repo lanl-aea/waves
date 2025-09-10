@@ -1903,16 +1903,16 @@ class OdbReportFileParser(AbaqusFileParser):
         for key, item in data_member.items():
             # Check for h5py types
             # FIXME: Make this if statement more robust by building the tuple from h5py metadata instead of hardcoded
-            if isinstance(item, (h5py._hl.group.ExternalLink, h5py._hl.group.Group)):
+            if isinstance(item, h5py._hl.group.ExternalLink | h5py._hl.group.Group):
                 h5file[f"{path}{key}"] = item
             # Check everything else
-            elif isinstance(item, (str, bytes)):
+            elif isinstance(item, str | bytes):
                 # If group is already created, just ignore the error
                 with contextlib.suppress(ValueError):
                     h5file.create_group(path)
                 h5file[path].attrs[key] = item
             elif isinstance(item, list):
-                if all(isinstance(x, (str, bytes)) for x in item):
+                if all(isinstance(x, str | bytes) for x in item):
                     h5file.create_dataset(f"{path}/{key}", data=numpy.array(item, dtype="S"))
                 elif all(isinstance(x, int) for x in item):
                     h5file.create_dataset(f"{path}/{key}", data=numpy.array(item))
@@ -1920,7 +1920,7 @@ class OdbReportFileParser(AbaqusFileParser):
                     h5file.create_dataset(f"{path}/{key}", data=numpy.array(item, dtype=numpy.float64))
                 else:
                     for index, list_item in enumerate(item):
-                        if isinstance(list_item, (str, bytes)):
+                        if isinstance(list_item, str | bytes):
                             h5file[f"{path}{key}/{index}"] = list_item
                         elif isinstance(list_item, int):
                             h5file[f"{path}{key}/{index}"] = numpy.int64(list_item)
@@ -1940,13 +1940,13 @@ class OdbReportFileParser(AbaqusFileParser):
                 h5file[path].attrs[key] = numpy.float64(item)
             elif isinstance(item, tuple):
                 if item:
-                    if isinstance(item[0], (str, bytes)):
+                    if isinstance(item[0], str | bytes):
                         h5file[f"{path}{key}"] = numpy.array(item, dtype="S")
                     else:
                         h5file[f"{path}{key}"] = numpy.array(item)
             elif isinstance(item, dict):
                 self.save_dict_to_group(h5file, f"{path}{key}/", item, output_file)
-            elif isinstance(item, (xarray.core.dataset.Dataset, xarray.core.dataarray.DataArray)):
+            elif isinstance(item, xarray.core.dataset.Dataset | xarray.core.dataarray.DataArray):
                 item.to_netcdf(
                     path=output_file,
                     mode="a",
