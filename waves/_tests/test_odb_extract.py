@@ -126,7 +126,8 @@ def test_odb_extract():
         odb_extract.odb_extract(["sample.odb"], None, odb_report_args="job=job_name odb=odb_file")
         mock_abaqus_file_parser.assert_called()
         mock_run_external.assert_called_with(
-            "abaqus odbreport job=job_name odb=odb_file -job sample -odb sample.odb -mode CSV -blocked"
+            "abaqus odbreport job=job_name odb=odb_file -job sample -odb sample.odb -mode CSV -blocked",
+            check=False,
         )
 
     with (
