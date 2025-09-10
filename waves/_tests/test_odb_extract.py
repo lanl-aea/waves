@@ -127,7 +127,6 @@ def test_odb_extract():
         mock_abaqus_file_parser.assert_called()
         mock_run_external.assert_called_with(
             "abaqus odbreport job=job_name odb=odb_file -job sample -odb sample.odb -mode CSV -blocked",
-            check=False,
         )
 
     with (
@@ -144,7 +143,6 @@ def test_odb_extract():
         odb_extract.odb_extract(["sample.odb"], "new_name.h5", odb_report_args="odbreport -all")
         mock_run_external.assert_called_with(
             "abaqus odbreport -all -job new_name -odb sample.odb -mode CSV -blocked",
-            check=False,
         )
 
     with (
@@ -174,6 +172,7 @@ def test_odb_extract():
                 "-blocked",
             ],
             capture_output=True,
+            check=False,
         )
 
     with (
