@@ -1045,22 +1045,24 @@ class OdbReportFileParser(AbaqusFileParser):
         value_headers = []
         value_indices = []
         for i, header in enumerate(headers):
-            header = header.strip()
-            if header == "Element":
+            stripped_header = header.strip()
+            if stripped_header == "Element":
                 element_given = True
-            elif header == "Node":
+            elif stripped_header == "Node":
                 node_given = True
-            elif header == "SP":
+            elif stripped_header == "SP":
                 section_point_given = True
-            elif header == "IP":
+            elif stripped_header == "IP":
                 integration_point_given = True
-            elif header == "Instance":
+            elif stripped_header == "Instance":
                 pass
             else:
                 number_of_data_values += 1
-                value_headers.append(header)  # Storing the names of the headers that have data
+                # Storing the names of the headers that have data
+                value_headers.append(stripped_header)
                 value_indices.append(i)
-            headers[i] = header  # Need to store stripped header, without spaces or line breaks
+            # Need to store stripped header, without spaces or line breaks
+            headers[i] = stripped_header
         line = f.readline()  # Blank line
         if not line.strip():
             line = "Ready for first line of data"
