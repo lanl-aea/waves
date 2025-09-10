@@ -40,6 +40,7 @@ ruff_check = env.Command(
 )
 env.AlwaysBuild(ruff_check)
 env.Alias("ruff-check", ruff_check)
+env.Alias("style", ruff_check)
 ruff_format = env.Command(
     target=["ruff-format.txt"],
     source=[pyproject],
