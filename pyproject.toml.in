@@ -97,6 +97,7 @@ extend-ignore = ["B028", "PIE808", "PIE790", "SIM108", "PLC0415"]
 "*.scons" = ["F821"]
 "waves/parameter_generators.py" = ["RUF005"]
 "waves/_tests/test_*.py" = ["RUF012"]
+"waves/_abaqus/abaqus_file_parser.py" = ["PERF203"]
 # Tutorial/template files that are 'outside' the project
 "waves/tutorials/**/SConscript" = ["I001"]
 "waves/tutorials/modsim_package/python/*.py" = ["I001"]
