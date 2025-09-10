@@ -13,6 +13,9 @@ import job
 default_model_name = "Model-1"
 default_cpus = None
 
+if sys.version_info[0] > 2:
+    unicode = str
+
 
 def main(input_file, job_name, model_name=default_model_name, cpus=default_cpus, write_inp=False, **kwargs):
     """Open an Abaqus CAE model file and submit the job.
@@ -157,12 +160,16 @@ def return_json_dictionary(json_file):
             dictionary = json.load(json_open)
         for key, value in dictionary.items():
             if isinstance(key, unicode):
-                key = str(key)
+                return_key = str(key)
+            else:
+                return_key = key
             if isinstance(value, unicode):
-                value = str(value)
-            if hasattr(abaqusConstants, value):
-                value = getattr(abaqusConstants, value)
-        kwargs[key] = value
+                return_value = str(value)
+            else:
+                return_value = value
+            if hasattr(abaqusConstants, return_value):
+                return_value = getattr(abaqusConstants, return_value)
+            kwargs[return_key] = return_value
     return kwargs
 
 
