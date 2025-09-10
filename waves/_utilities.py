@@ -8,20 +8,19 @@ message and non-zero exit codes.
 """
 
 import os
-import re
-import sys
-import shutil
-import string
-import typing
 import pathlib
 import platform
-import warnings
+import re
+import shutil
+import string
 import subprocess
+import sys
+import typing
+import warnings
 
 import yaml
 
 from waves import _settings
-
 
 _exclude_from_namespace = set(globals().keys())
 
@@ -55,7 +54,7 @@ def set_name_substitution(
     elif isinstance(original, pathlib.Path):
         return pathlib.Path(_AtSignTemplate(str(original)).safe_substitute(mapping))
     elif isinstance(original, (list, set, tuple)) and all(isinstance(item, (str, pathlib.Path)) for item in original):
-        modified = list()
+        modified = []
         for node in original:
             try:
                 modified.append(_AtSignTemplate(node).safe_substitute(mapping))
@@ -83,8 +82,10 @@ def _quote_spaces_in_path(path: typing.Union[str, pathlib.Path]) -> pathlib.Path
     new_path = pathlib.Path(path.root)
     for part in path.parts:
         if " " in part:
-            part = f'"{part}"'
-        new_path = new_path / part
+            new_part = f'"{part}"'
+        else:
+            new_part = part
+        new_path = new_path / new_part
     return new_path
 
 
@@ -164,8 +165,8 @@ def find_cubit_bin(options: typing.Iterable[str], bin_directory: typing.Optional
         search = cubit_bin.rglob(bin_directory)
         try:
             cubit_bin = next((path for path in search if path.name == bin_directory))
-        except StopIteration:
-            raise FileNotFoundError(message)
+        except StopIteration as err:
+            raise FileNotFoundError(message) from err
     return cubit_bin
 
 
@@ -192,8 +193,8 @@ def find_cubit_python(options: typing.Iterable[str], python_command: str = "pyth
     search = cubit_parent.rglob(python_command)
     try:
         cubit_python = next((path for path in search if path.is_file() and os.access(path, os.X_OK)))
-    except StopIteration:
-        raise FileNotFoundError(message)
+    except StopIteration as err:
+        raise FileNotFoundError(message) from err
     return cubit_python
 
 
@@ -205,8 +206,8 @@ def tee_subprocess(command: typing.List[str], **kwargs) -> typing.Tuple[int, str
 
     :returns: integer return code, string STDOUT
     """
-    from io import StringIO
     import subprocess
+    from io import StringIO
 
     with (
         subprocess.Popen(command, stdout=subprocess.PIPE, bufsize=1, text=True, **kwargs) as process,
@@ -261,7 +262,7 @@ def return_environment(
         first_key = first_key.rsplit("\n")[-1]
     variables[0] = f"{first_key}={first_value}"
 
-    environment = dict()
+    environment = {}
     for line in variables:
         if line != "":
             key, value = line.split("=", 1)
@@ -315,7 +316,7 @@ def cache_environment(
     if cache and cache.exists() and not overwrite_cache:
         if verbose:
             print(f"Sourcing the shell environment from cached file '{cache}' ...")
-        with open(cache, "r") as cache_file:
+        with pathlib.Path(cache).open(mode="r") as cache_file:
             environment = yaml.safe_load(cache_file)
     else:
         if verbose:
@@ -327,7 +328,7 @@ def cache_environment(
             raise err
 
     if cache:
-        with open(cache, "w") as cache_file:
+        with pathlib.Path(cache).open(mode="w") as cache_file:
             yaml.safe_dump(environment, cache_file)
 
     return environment

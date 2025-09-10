@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 """Example of catenating WAVES parameter study results and definition"""
 
-import sys
-import yaml
-import pathlib
 import argparse
+import pathlib
+import sys
 
-import xarray
 import matplotlib.pyplot
+import xarray
+import yaml
+
 from waves.parameter_generators import SET_COORDINATE_KEY
 
 default_selection_dict = {
@@ -180,11 +181,11 @@ def get_parser():
         "--output-file",
         type=str,
         default=default_output_file,
-        # fmt: off
-        help="The output file for the stress-strain comparison plot with extension, "
-             "e.g. ``output_file.pdf``. Extension must be supported by matplotlib. File stem is also "
-             "used for the CSV table output, e.g. ``output_file.csv``. (default: %(default)s)",
-        # fmt: on
+        help=(
+            "The output file for the stress-strain comparison plot with extension, "
+            "e.g. ``output_file.pdf``. Extension must be supported by matplotlib. File stem is also "
+            "used for the CSV table output, e.g. ``output_file.csv``. (default: %(default)s)"
+        ),
     )
     parser.add_argument(
         "-g",
@@ -210,14 +211,14 @@ def get_parser():
     parser.add_argument(
         "-s",
         "--selection-dict",
-        type=str,
+        type=pathlib.Path,
         default=None,
-        # fmt: off
-        help="The YAML formatted dictionary file to define the down selection of data to be plotted. "
-             "Dictionary key: value pairs must match the data variables and coordinates of the "
-             "expected Xarray Dataset object. If no file is provided, the a default selection dict "
-             f"will be used (default: {default_selection_dict})",
-        # fmt: on
+        help=(
+            "The YAML formatted dictionary file to define the down selection of data to be plotted. "
+            "Dictionary key: value pairs must match the data variables and coordinates of the "
+            "expected Xarray Dataset object. If no file is provided, the a default selection dict "
+            f"will be used (default: {default_selection_dict})"
+        ),
     )
     parser.add_argument(
         "-p",
@@ -236,7 +237,7 @@ if __name__ == "__main__":
     if not args.selection_dict:
         selection_dict = default_selection_dict
     else:
-        with open(args.selection_dict, "r") as input_yaml:
+        with args.selection_dict.open(mode="r") as input_yaml:
             selection_dict = yaml.safe_load(input_yaml)
     sys.exit(
         main(

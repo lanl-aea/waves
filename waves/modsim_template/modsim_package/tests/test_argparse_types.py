@@ -2,9 +2,7 @@ import argparse
 from contextlib import nullcontext as does_not_raise
 
 import pytest
-
 from modsim_package import argparse_types
-
 
 positive_float = {
     "positive float": ("1", 1.0, does_not_raise()),

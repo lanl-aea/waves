@@ -22,8 +22,8 @@ def positive_float(argument):
     MINIMUM_VALUE = 0.0
     try:
         argument = float(argument)
-    except ValueError:
-        raise argparse.ArgumentTypeError("invalid float value: '{}'".format(argument))
+    except ValueError as err:
+        raise argparse.ArgumentTypeError("invalid float value: '{}'".format(argument)) from err
     if not argument > MINIMUM_VALUE:
         raise argparse.ArgumentTypeError("invalid positive float: '{}'".format(argument))
     return argument

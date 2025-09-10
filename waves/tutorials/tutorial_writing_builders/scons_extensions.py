@@ -1,5 +1,6 @@
-import waves
 import SCons.Builder
+
+import waves
 
 
 # Write an example custom builder using the WAVES builder factory template

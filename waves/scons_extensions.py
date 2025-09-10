@@ -1,29 +1,27 @@
-import re
-import sys
-import copy
 import atexit
-import shutil
-import typing
-import pathlib
-import functools
 import collections
+import copy
+import functools
+import pathlib
+import re
+import shutil
+import sys
+import typing
 
-import SCons.Node
-import SCons.Script
 import SCons.Builder
-import SCons.Scanner
 import SCons.Defaults
 import SCons.Environment
+import SCons.Node
+import SCons.Scanner
+import SCons.Script
 from SCons.Script.SConscript import SConsEnvironment
 
-from waves import _settings
-from waves import _utilities
-
+from waves import _settings, _utilities
 
 _exclude_from_namespace = set(globals().keys())
 
 
-def print_action_signature_string(s, target, source, env) -> None:
+def print_action_signature_string(s, target, source, env) -> None:  # noqa: ARG001
     """Print the action string used to calculate the action signature
 
     Designed to behave similarly to SCons ``--debug=presub`` option using ``PRINT_CMD_LINE_FUNC`` feature:
@@ -73,7 +71,7 @@ def _print_failed_nodes_stdout() -> None:
         stdout_path_options = [path.resolve() for path in stdout_path_options]
         try:
             stdout_path = next((path for path in stdout_path_options if path.exists()))
-            with open(stdout_path, "r") as stdout_file:
+            with stdout_path.open(mode="r") as stdout_file:
                 print(
                     f"\n{failure.node} failed with STDOUT file '{stdout_path}'\n{stdout_file.read()}", file=sys.stderr
                 )
@@ -82,7 +80,7 @@ def _print_failed_nodes_stdout() -> None:
 
 
 def print_build_failures(
-    env: SCons.Environment.Environment = SCons.Environment.Environment(),
+    env: typing.Optional[SCons.Environment.Environment] = None,
     print_stdout: bool = True,
 ) -> None:
     """On exit, query the SCons reported build failures and print the associated node's STDOUT file, if it exists
@@ -106,6 +104,8 @@ def print_build_failures(
     :param env: SCons construction environment
     :param print_stdout: Boolean to set the exit behavior. If False, don't modify the exit behavior.
     """
+    if env is None:
+        env = SCons.Environment.Environment()
     if print_stdout:
         atexit.register(_print_failed_nodes_stdout)
 
@@ -369,7 +369,7 @@ def ssh_builder_actions(
 
 
 def project_help(
-    env: SCons.Environment.Environment = SCons.Environment.Environment(),
+    env: typing.Optional[SCons.Environment.Environment] = None,
     append: bool = True,
     local_only: bool = True,
     target_descriptions: typing.Optional[dict] = None,
@@ -387,12 +387,14 @@ def project_help(
     :param local_only: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     :param target_descriptions: dictionary containing target metadata.
     """
+    if env is None:
+        env = SCons.Environment.Environment()
     project_help_default_targets(env=env, append=append, local_only=local_only, target_descriptions=target_descriptions)
     project_help_aliases(env=env, append=append, local_only=local_only, target_descriptions=target_descriptions)
 
 
 def project_help_default_targets(
-    env: SCons.Environment.Environment = SCons.Environment.Environment(),
+    env: typing.Optional[SCons.Environment.Environment] = None,
     append: bool = True,
     local_only: bool = True,
     target_descriptions: typing.Optional[dict] = None,
@@ -415,6 +417,8 @@ def project_help_default_targets(
     :param local_only: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     :param target_descriptions: dictionary containing target metadata.
     """
+    if env is None:
+        env = SCons.Environment.Environment()
     default_targets_help = _project_help_descriptions(
         SCons.Script.DEFAULT_TARGETS, message="\nDefault Targets:\n", target_descriptions=target_descriptions
     )
@@ -431,7 +435,7 @@ def project_help_default_targets(
 
 
 def project_help_aliases(
-    env: SCons.Environment.Environment = SCons.Environment.Environment(),
+    env: typing.Optional[SCons.Environment.Environment] = None,
     append: bool = True,
     local_only: bool = True,
     target_descriptions: typing.Optional[dict] = None,
@@ -454,6 +458,8 @@ def project_help_aliases(
     :param local_only: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     :param target_descriptions: dictionary containing target metadata.
     """
+    if env is None:
+        env = SCons.Environment.Environment()
     alias_help = _project_help_descriptions(
         SCons.Node.Alias.default_ans, message="\nTarget Aliases:\n", target_descriptions=target_descriptions
     )
@@ -473,7 +479,8 @@ def project_alias(
     env: SCons.Environment.Environment = None,
     *args,
     description: str = "",
-    target_descriptions: dict = dict(),
+    # Normally you should not use mutables for argument defaults, but this method relies on the mutable behavior.
+    target_descriptions: dict = {},  # noqa: B006
     **kwargs,
 ) -> dict:
     """Wrapper around the `SCons Alias`_ method. Appends and returns target descriptions dictionary.
@@ -517,7 +524,7 @@ def _project_help_descriptions(
     descriptions = {**alias_descriptions, **target_descriptions}
     keys = [str(node) for node in nodes]
     for key in keys:
-        if key in descriptions.keys():
+        if key in descriptions:
             message += f"    {key}: {descriptions[key]}\n"
         else:
             message += f"    {key}\n"
@@ -525,7 +532,7 @@ def _project_help_descriptions(
 
 
 def substitution_syntax(
-    env: SCons.Environment.Environment,
+    env: SCons.Environment.Environment,  # noqa: ARG001
     substitution_dictionary: dict,
     prefix: str = "@",
     suffix: str = "@",
@@ -841,7 +848,7 @@ def _build_subdirectory(target: list) -> pathlib.Path:
     try:
         build_subdirectory = pathlib.Path(str(target[0])).parent
     except IndexError:
-        build_subdirectory = pathlib.Path(".")
+        build_subdirectory = pathlib.Path()
     return build_subdirectory
 
 
@@ -931,7 +938,7 @@ def builder_factory(
 def first_target_emitter(
     target: list,
     source: list,
-    env: SCons.Environment.Environment,
+    env: SCons.Environment.Environment,  # noqa: ARG001
     suffixes: typing.Optional[typing.Iterable[str]] = None,
     appending_suffixes: typing.Optional[typing.Iterable[str]] = None,
     stdout_extension: str = _settings._stdout_extension,
@@ -1972,7 +1979,7 @@ class AbaqusPseudoBuilder:
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/821
     def __call__(
         self,
-        env: SCons.Environment.Environment,
+        env: SCons.Environment.Environment,  # noqa: ARG002
         job: str,
         inp: typing.Optional[str] = None,
         user: typing.Optional[str] = None,
@@ -2087,8 +2094,8 @@ class AbaqusPseudoBuilder:
             env.Abaqus(job='simulation_1', cpus=4)
         """
         # Initialize with empty arguments for AbaqusSolver builder
-        sources = list()
-        targets = list()
+        sources = []
+        targets = []
         options = ""
 
         # Specify job name
@@ -2903,7 +2910,7 @@ def _custom_scanner(
         """
         return [node for node in node_list if node.path.endswith(tuple(suffixes))]
 
-    def regex_scan(node: SCons.Node.FS, env: SCons.Environment.Environment, path: str) -> list:
+    def regex_scan(node: SCons.Node.FS, env: SCons.Environment.Environment, path: str) -> list:  # noqa: ARG001
         """Scan function for extracting dependencies from the content of a file based on the given regular expression.
 
         The interface of the scan function is fixed by SCons. It must include ``node``, ``env`` and ``path``. It may
@@ -3661,7 +3668,7 @@ def truchas_builder_factory(
 
 
 def parameter_study_task(
-    env: SCons.Environment.Environment,
+    env: SCons.Environment.Environment,  # noqa: ARG001
     builder: SCons.Builder.Builder,
     *args,
     study=None,
@@ -3755,7 +3762,7 @@ def parameter_study_task(
         substitutions
 
     :return: SCons NodeList of target nodes
-    """  # noqa: E501
+    """
     # Avoid importing parameter generator module (heavy) unless necessary
     from waves import parameter_generators
 
@@ -3764,7 +3771,7 @@ def parameter_study_task(
     else:
         suffix = "_"
 
-    return_targets = list()
+    return_targets = []
     if isinstance(study, parameter_generators.ParameterGenerator):
         for set_name, parameters in study.parameter_study_to_dict().items():
             modified_args = (
@@ -3875,7 +3882,7 @@ def parameter_study_sconscript(
     :raises TypeError: if ``exports`` is not a dictionary
     """
     if exports is None:
-        exports = dict()
+        exports = {}
 
     # Avoid importing parameter generator module (heavy) unless necessary
     from waves import parameter_generators
@@ -3886,9 +3893,9 @@ def parameter_study_sconscript(
             "this function does not have access to the calling script's namespace."
         )
         raise TypeError(message)
-    exports.update({"set_name": set_name, "parameters": dict()})
+    exports.update({"set_name": set_name, "parameters": {}})
 
-    sconscript_output = list()
+    sconscript_output = []
 
     if variant_dir is not None:
         variant_dir = pathlib.Path(variant_dir)
@@ -3907,12 +3914,12 @@ def parameter_study_sconscript(
         :returns: variant directory
         """
         if subdirectories:
-            if variant_dir is not None:
-                build_directory = variant_dir / subdirectory
+            if variant_directory is not None:
+                build_directory = variant_directory / subdirectory
             else:
                 build_directory = pathlib.Path(subdirectory)
         else:
-            build_directory = variant_dir
+            build_directory = variant_directory
         return build_directory
 
     if isinstance(study, parameter_generators.ParameterGenerator):
@@ -4048,7 +4055,7 @@ class QOIPseudoBuilder:
         """
         if not expected and not archive:
             raise ValueError("Either expected or archive=True must be specified.")
-        targets = list()
+        targets = []
         collection_dir = pathlib.Path(self.collection_dir)
         file_to_archive = calculated
         if expected and self.update_expected:

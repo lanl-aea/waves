@@ -1,30 +1,30 @@
 """Test WAVES SCons builders and support functions"""
 
-import os
 import copy
+import os
 import pathlib
-from contextlib import nullcontext as does_not_raise
 import unittest
-from unittest.mock import patch, call, Mock
+from contextlib import nullcontext as does_not_raise
+from unittest.mock import Mock, call, patch
 
 import pytest
 import SCons.Node.FS
 
-from waves import parameter_generators
-from waves import scons_extensions
-from waves._settings import _cd_action_prefix
-from waves._settings import _redirect_action_suffix
-from waves._settings import _redirect_environment_suffix
-from waves._settings import _abaqus_environment_extension
-from waves._settings import _abaqus_datacheck_extensions
-from waves._settings import _abaqus_explicit_extensions
-from waves._settings import _abaqus_standard_extensions
-from waves._settings import _abaqus_standard_restart_extensions
-from waves._settings import _abaqus_common_extensions
-from waves._settings import _sbatch_wrapper_options
-from waves._settings import _stdout_extension
+from waves import parameter_generators, scons_extensions
+from waves._settings import (
+    _abaqus_common_extensions,
+    _abaqus_datacheck_extensions,
+    _abaqus_environment_extension,
+    _abaqus_explicit_extensions,
+    _abaqus_standard_extensions,
+    _abaqus_standard_restart_extensions,
+    _cd_action_prefix,
+    _redirect_action_suffix,
+    _redirect_environment_suffix,
+    _sbatch_wrapper_options,
+    _stdout_extension,
+)
 from waves._tests.common import platform_check
-
 
 # Test setup and helper functions
 fs = SCons.Node.FS.FS()
@@ -33,10 +33,10 @@ testing_windows, root_fs, testing_macos = platform_check()
 
 
 mock_decodable = Mock()
-mock_decodable.__str__ = lambda self: "mock_node"
+mock_decodable.__str__ = lambda _self: "mock_node"
 mock_decodable.get_executor.return_value.get_contents.return_value = b"action signature string"
 mock_not_decodable = Mock()
-mock_not_decodable.__str__ = lambda self: "mock_node"
+mock_not_decodable.__str__ = lambda _self: "mock_node"
 mock_not_decodable.get_executor.return_value.get_contents.return_value = b"\x81action signature string"
 test_print_action_signature_string_cases = {
     "decode-able": (mock_decodable, "action signature string"),
@@ -205,7 +205,6 @@ def test_add_program(names, checkprog_side_effect, first_found_path):
     ids=find_program_input.keys(),
 )
 def test_add_cubit(names, checkprog_side_effect, first_found_path):
-
     # Test function style interface
     env = SCons.Environment.Environment()
     original_path = env["ENV"]["PATH"]
@@ -257,7 +256,6 @@ def test_add_cubit(names, checkprog_side_effect, first_found_path):
 
 
 def test_add_cubit_python():
-
     # Test function style interface
     env = SCons.Environment.Environment()
     cubit_bin = "/path/to/cubit/bin/"
@@ -308,7 +306,7 @@ def test_add_cubit_python():
     assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[0] == str(cubit_bin)
 
 
-def dummy_emitter_for_testing(target, source, env):
+def dummy_emitter_for_testing(target, source, env):  # noqa: ARG001
     return target, source
 
 
@@ -487,7 +485,7 @@ def test_print_failed_nodes_stdout():
     with (
         patch("SCons.Script.GetBuildFailures", return_value=[mock_failure_file]),
         patch("pathlib.Path.exists", return_value=True) as mock_exists,
-        patch("builtins.open") as mock_open,
+        patch("pathlib.Path.open") as mock_open,
         patch("builtins.print") as mock_print,
     ):
         scons_extensions._print_failed_nodes_stdout()
@@ -497,7 +495,7 @@ def test_print_failed_nodes_stdout():
     with (
         patch("SCons.Script.GetBuildFailures", return_value=[mock_failure_file]),
         patch("pathlib.Path.exists", return_value=False) as mock_exists,
-        patch("builtins.open") as mock_open,
+        patch("pathlib.Path.open") as mock_open,
         patch("builtins.print") as mock_print,
     ):
         scons_extensions._print_failed_nodes_stdout()
@@ -1401,7 +1399,7 @@ abaqus_pseudobuilder_input = {
     "user": (
         {},
         {"job": "job", "user": "user.f"},
-        ["job.inp"] + ["user.f"],
+        ["job.inp", "user.f"],
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " -double both $(-cpus 1$) -user user.f",
         {"job": "job"},
@@ -1451,7 +1449,7 @@ abaqus_pseudobuilder_input = {
     "extras": (
         {},
         {"job": "job", "extra_sources": ["extra.inp"], "extra_targets": ["extra.odb"], "extra_options": "--extra-opt"},
-        ["job.inp"] + ["extra.inp"],
+        ["job.inp", "extra.inp"],
         [f"job{ext}" for ext in _abaqus_standard_extensions] + ["extra.odb"],
         " -double both $(-cpus 1$) --extra-opt",
         {"job": "job"},
@@ -1542,8 +1540,8 @@ def test_copy_substfile(source_list, expected_list):
 
 
 build_subdirectory_input = {
-    "no target": ([], pathlib.Path(".")),
-    "no parent": (["target.ext"], pathlib.Path(".")),
+    "no target": ([], pathlib.Path()),
+    "no parent": (["target.ext"], pathlib.Path()),
     "one parent": (["set1/target.ext"], pathlib.Path("set1")),
 }
 
@@ -2242,25 +2240,56 @@ def test_sbatch(builder_kwargs, task_kwargs, node_count, action_count, target_li
             assert node.env[key] == expected_value
 
 
-# fmt: off
-scanner_input = {                                   # content,       expected_dependencies
-    'has_suffix':             ('**\n*INCLUDE, INPUT=dummy.inp',               ['dummy.inp']),  # noqa: E241
-    'no_suffix':              ('**\n*INCLUDE, INPUT=dummy.out',               ['dummy.out']),  # noqa: E241
-    'pattern_not_found':       ('**\n*DUMMY, STRING=dummy.out',                          []),  # noqa: E241
-    'multiple_files':     ('**\n*INCLUDE, INPUT=dummy.out\n**'                                 # noqa: E241
-                              '**\n*INCLUDE, INPUT=dummy2.inp', ['dummy.out', 'dummy2.inp']),  # noqa: E241,E127
-    'lower_case':             ('**\n*include, input=dummy.out',               ['dummy.out']),  # noqa: E241
-    'mixed_case':             ('**\n*inClUdE, iNpuT=dummy.out',               ['dummy.out']),  # noqa: E241
-    'no_leading':                 ('*INCLUDE, INPUT=dummy.out',               ['dummy.out']),  # noqa: E241
-    'comment':                   ('**INCLUDE, INPUT=dummy.out'                                 # noqa: E241
-                              '\n***INCLUDE, INPUT=dummy2.inp',                          []),  # noqa: E241,E128
-    'mixed_keywords':     ('**\n*INCLUDE, INPUT=dummy.out\n**'                                 # noqa: E241
-                            '\n*TEMPERATURE, INPUT=dummy2.inp', ['dummy.out', 'dummy2.inp']),  # noqa: E241,E127
-    'trailing_whitespace': ('**\n*INCLUDE, INPUT=dummy.out   ',               ['dummy.out']),  # noqa: E241
-    'partial match':     ('**\n*DUMMY, MATRIX INPUT=dummy.out',                          []),  # noqa: E241
-    'extra_space':         ('**\n*INCLUDE,    INPUT=dummy.out',               ['dummy.out']),  # noqa: E241
+scanner_input = {
+    "has_suffix": (
+        "**\n*INCLUDE, INPUT=dummy.inp",
+        ["dummy.inp"],
+    ),
+    "no_suffix": (
+        "**\n*INCLUDE, INPUT=dummy.out",
+        ["dummy.out"],
+    ),
+    "pattern_not_found": (
+        "**\n*DUMMY, STRING=dummy.out",
+        [],
+    ),
+    "multiple_files": (
+        "**\n*INCLUDE, INPUT=dummy.out\n****\n*INCLUDE, INPUT=dummy2.inp",
+        ["dummy.out", "dummy2.inp"],
+    ),
+    "lower_case": (
+        "**\n*include, input=dummy.out",
+        ["dummy.out"],
+    ),
+    "mixed_case": (
+        "**\n*inClUdE, iNpuT=dummy.out",
+        ["dummy.out"],
+    ),
+    "no_leading": (
+        "*INCLUDE, INPUT=dummy.out",
+        ["dummy.out"],
+    ),
+    "comment": (
+        "**INCLUDE, INPUT=dummy.out\n***INCLUDE, INPUT=dummy2.inp",
+        [],
+    ),
+    "mixed_keywords": (
+        "**\n*INCLUDE, INPUT=dummy.out\n**\n*TEMPERATURE, INPUT=dummy2.inp",
+        ["dummy.out", "dummy2.inp"],
+    ),
+    "trailing_whitespace": (
+        "**\n*INCLUDE, INPUT=dummy.out   ",
+        ["dummy.out"],
+    ),
+    "partial match": (
+        "**\n*DUMMY, MATRIX INPUT=dummy.out",
+        [],
+    ),
+    "extra_space": (
+        "**\n*INCLUDE,    INPUT=dummy.out",
+        ["dummy.out"],
+    ),
 }
-# fmt: on
 
 
 @pytest.mark.parametrize(
@@ -2430,29 +2459,29 @@ cartesian_product = parameter_generators.CartesianProduct(
     set_name_template="set@number",
 )
 parameter_study_sconscript = {
-    "exports not a dictionary": ([], {"exports": list()}, {}, pytest.raises(TypeError)),
+    "exports not a dictionary": ([], {"exports": []}, {}, pytest.raises(TypeError)),
     "default kwargs": (
         ["SConscript"],
         {},
-        {"variant_dir": None, "exports": {"set_name": "", "parameters": dict()}},
+        {"variant_dir": None, "exports": {"set_name": "", "parameters": {}}},
         does_not_raise(),
     ),
     "added kwarg": (
         ["SConscript"],
         {"extra kwarg": "value"},
-        {"extra kwarg": "value", "variant_dir": None, "exports": {"set_name": "", "parameters": dict()}},
+        {"extra kwarg": "value", "variant_dir": None, "exports": {"set_name": "", "parameters": {}}},
         does_not_raise(),
     ),
     "variant_dir": (
         ["SConscript"],
         {"variant_dir": "build"},
-        {"variant_dir": pathlib.Path("build"), "exports": {"set_name": "", "parameters": dict()}},
+        {"variant_dir": pathlib.Path("build"), "exports": {"set_name": "", "parameters": {}}},
         does_not_raise(),
     ),
     "variant_dir subdirectories": (
         ["SConscript"],
         {"variant_dir": "build", "subdirectories": True},
-        {"variant_dir": pathlib.Path("build"), "exports": {"set_name": "", "parameters": dict()}},
+        {"variant_dir": pathlib.Path("build"), "exports": {"set_name": "", "parameters": {}}},
         does_not_raise(),
     ),
     "dictionary study": (
@@ -2588,7 +2617,6 @@ test_qoi_pseudo_builder_cases = {
     ids=test_qoi_pseudo_builder_cases.keys(),
 )
 def test_qoi_pseudo_builder(class_kwargs, call_kwargs, expected, outcome, message) -> None:
-
     # Direct call
     with outcome:
         env = SCons.Environment.Environment()

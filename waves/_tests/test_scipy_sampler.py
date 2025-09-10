@@ -2,12 +2,12 @@
 
 from unittest.mock import patch
 
-import pytest
 import numpy
+import pytest
 
-from waves.parameter_generators import ScipySampler
 from waves._settings import _set_coordinate_key, _supported_scipy_samplers
-from waves._tests.common import consistent_hash_parameter_check, self_consistency_checks, merge_samplers
+from waves._tests.common import consistent_hash_parameter_check, merge_samplers, self_consistency_checks
+from waves.parameter_generators import ScipySampler
 
 
 class TestScipySampler:
@@ -53,7 +53,7 @@ class TestScipySampler:
         ids=generate_input.keys(),
     )
     def test_generate(self, parameter_schema, kwargs):
-        parameter_names = [key for key in parameter_schema.keys() if key != "num_simulations"]
+        parameter_names = [key for key in parameter_schema if key != "num_simulations"]
         for sampler in _supported_scipy_samplers:
             # NOTE: we cannot test the samples array while simulateously iterating over available samplers because each
             # sampler will produce different samples arrays. To test expected sample arrays we must separate the test
@@ -137,8 +137,8 @@ class TestScipySampler:
         TestParameterStudyDict = ScipySampler(sampler, parameter_schema, **kwargs)
         returned_dictionary = TestParameterStudyDict.parameter_study_to_dict()
         assert expected_dictionary.keys() == returned_dictionary.keys()
-        assert all(isinstance(key, str) for key in returned_dictionary.keys())
-        for set_name in expected_dictionary.keys():
+        assert all(isinstance(key, str) for key in returned_dictionary)
+        for set_name in expected_dictionary:
             assert expected_dictionary[set_name] == returned_dictionary[set_name]
             for parameter in expected_dictionary[set_name]:
                 assert type(expected_dictionary[set_name][parameter]) == type(  # noqa: E721

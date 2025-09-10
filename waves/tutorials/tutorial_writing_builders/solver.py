@@ -27,13 +27,13 @@ Exit codes:
 3. output file exists and no overwrite was requested
 4. reached max log file integer before finding a free file name
 """
+
+import argparse
+import pathlib
 import sys
 import typing
-import pathlib
-import argparse
 
 import yaml
-
 
 _version = "1.0.0"
 _project_name = pathlib.Path(__file__).stem
@@ -98,12 +98,12 @@ def read_input(input_file: pathlib.Path) -> dict:
     input_file.resolve()
     if not input_file.is_file():
         raise RuntimeError(f"input file '{input_file}' does not exist")
-    with open(input_file, "r") as input_handle:
+    with input_file.open(mode="r") as input_handle:
         try:
             configuration = yaml.safe_load(input_handle)
         except (yaml.parser.ParserError, yaml.scanner.ScannerError) as err:
             message = f"Error loading '{input_file}'. Check the YAML syntax.\nyaml.parser.ParserError: {err}"
-            raise RuntimeError(message)
+            raise RuntimeError(message) from err
     return configuration
 
 
@@ -125,7 +125,7 @@ def configure(args: argparse.Namespace) -> dict:
     configuration["solve_cpus"] = args.solve_cpus
     configuration["overwrite"] = args.overwrite
 
-    with open(configuration["log_file"], "w+") as log_writer:
+    with pathlib.Path(configuration["log_file"]).open(mode="w+") as log_writer:
         log_writer.write(f"{configuration['version']}\n{configuration['routine']}\n")
         log_writer.write(f"{configuration['log_file']}\n{configuration['output_file']}\n")
 
@@ -160,13 +160,13 @@ def solve(configuration: dict) -> None:
     overwrite = configuration["overwrite"]
 
     output_files = solve_output_files(output_file, solve_cpus)
-    if any([output.exists() for output in output_files]) and not overwrite:
+    if any(output.exists() for output in output_files) and not overwrite:
         message = "Output file(s) already exist. Exiting."
         raise RuntimeError(message)
 
-    with open(log_file, "a+") as log_writer:
+    with log_file.open(mode="a+") as log_writer:
         for output in output_files:
-            with open(output, "w") as output_writer:
+            with output.open(mode="w") as output_writer:
                 log_writer.write(f"writing: {output}\n")
                 output_writer.write(yaml.safe_dump(configuration))
 
@@ -205,8 +205,8 @@ def positive_nonzero_int(argument):
     MINIMUM_VALUE = 1
     try:
         argument = int(argument)
-    except ValueError:
-        raise argparse.ArgumentTypeError("invalid integer value: '{}'".format(argument))
+    except ValueError as err:
+        raise argparse.ArgumentTypeError("invalid integer value: '{}'".format(argument)) from err
     if not argument >= MINIMUM_VALUE:
         raise argparse.ArgumentTypeError("invalid positive integer: '{}'".format(argument))
     return argument
@@ -237,10 +237,10 @@ def get_parser() -> argparse.ArgumentParser:
         type=pathlib.Path,
         default=None,
         required=False,
-        # fmt: off
-        help=f"The {_project_name} results file. Extension is always replaced with ``{_output_file_extension}``. "
-             f"If none is provided, uses the pattern ``input_file{_output_file_extension}``",
-        # fmt: on
+        help=(
+            f"The {_project_name} results file. Extension is always replaced with ``{_output_file_extension}``. "
+            f"If none is provided, uses the pattern ``input_file{_output_file_extension}``"
+        ),
     )
     subcommand_parser_parent.add_argument(
         "-n",

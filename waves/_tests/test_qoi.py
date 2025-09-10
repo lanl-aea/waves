@@ -1,20 +1,18 @@
 """Test QOI module"""
 
+import datetime
 import io
 import os
 import pathlib
-import datetime
-from unittest.mock import patch
 from contextlib import nullcontext as does_not_raise
+from unittest.mock import patch
 
 import numpy
 import pandas
 import pytest
 import xarray
 
-from waves import qoi
-from waves import parameter_generators
-
+from waves import parameter_generators, qoi
 
 test_create_qoi_cases = {
     "minimum input": (
@@ -991,11 +989,7 @@ test__read_qoi_set_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        (
-            f"name,calculated,expected,lower_limit,upper_limit{os.linesep}"
-            f"qoi1,,,,{os.linesep}"
-            f"qoi2,,,,{os.linesep}"
-        ),
+        f"name,calculated,expected,lower_limit,upper_limit{os.linesep}qoi1,,,,{os.linesep}qoi2,,,,{os.linesep}",
     ),
     "two qoi: recommended attributes": (
         xarray.Dataset(

@@ -1,16 +1,13 @@
-import sys
 import pathlib
-from unittest.mock import Mock
-from unittest.mock import patch, call
+import sys
 from contextlib import nullcontext as does_not_raise
+from unittest.mock import Mock, call, patch
 
 import pytest
 
-from waves import _fetch
-from waves import _settings
-from waves.exceptions import ChoicesError
+from waves import _fetch, _settings
 from waves._tests.common import platform_check
-
+from waves.exceptions import ChoicesError
 
 testing_windows, root_fs, testing_macos = platform_check()
 
@@ -305,14 +302,14 @@ build_copy_tuples_input = {
         two_file_source_tree,
         True,
         (two_file_destination_tree, [two_file_destination_tree[1]]),
-        list(zip(two_file_source_tree, two_file_destination_tree)),
+        list(zip(two_file_source_tree, two_file_destination_tree, strict=True)),
     ),
     "two files, one exists, no overwrite": (
         "/path/to/destination",
         two_file_source_tree,
         False,
         (two_file_destination_tree, [two_file_destination_tree[1]]),
-        list(zip([two_file_source_tree[0]], [two_file_destination_tree[0]])),
+        list(zip([two_file_source_tree[0]], [two_file_destination_tree[0]], strict=True)),
     ),
 }
 
@@ -362,9 +359,8 @@ def test_print_list():
     ],
 )
 def test_recursive_copy(root_directory, source_files, source_tree, destination_tree, tutorial):
-
     # Dummy modsim_template tree
-    copy_tuples = list(zip(source_tree, destination_tree))
+    copy_tuples = list(zip(source_tree, destination_tree, strict=True))
     not_found = []
     available_files_output = (source_tree, not_found)
     single_file_requested = ([source_tree[0]], not_found)
@@ -520,7 +516,7 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
 
 def test_extend_requested_paths():
     # Testing accepted tutorial keys
-    for tutorial_num in _settings._tutorial_paths.keys():
+    for tutorial_num in _settings._tutorial_paths:
         mock_list = Mock()
         _fetch.extend_requested_paths(mock_list, tutorial_num)
         assert mock_list.extend.call_count == tutorial_num + 1

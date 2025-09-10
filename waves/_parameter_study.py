@@ -6,17 +6,15 @@ Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAV
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
 
+import argparse
 import io
+import pathlib
 import sys
 import typing
-import pathlib
-import argparse
 
 import yaml
 
-from waves import _settings
-from waves import parameter_generators
-
+from waves import _settings, parameter_generators
 
 _exclude_from_namespace = set(globals().keys())
 
@@ -135,7 +133,7 @@ def read_parameter_schema(input_file: typing.Union[str, pathlib.Path, io.TextIOW
         input_file = pathlib.Path(input_file)
         if not input_file.is_file():
             raise RuntimeError(f"File '{input_file}' does not exist.")
-        with open(input_file, "r") as input_handle:
+        with pathlib.Path(input_file).open(mode="r") as input_handle:
             parameter_schema = yaml.safe_load(input_handle)
     return parameter_schema
 
@@ -169,7 +167,9 @@ def main(
     try:
         parameter_schema = read_parameter_schema(input_file)
     except yaml.parser.ParserError as err:
-        raise RuntimeError(f"Error loading '{input_file}'. Check the YAML syntax.\nyaml.parser.ParserError: {err}")
+        raise RuntimeError(
+            f"Error loading '{input_file}'. Check the YAML syntax.\nyaml.parser.ParserError: {err}"
+        ) from err
 
     # Retrieve and instantiate the subcommand class
     available_parameter_generators = {

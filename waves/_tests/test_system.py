@@ -12,24 +12,23 @@ All tests should use string template substitution instead of f-strings, if possi
 available substitutions.
 """
 
-import os
-import sys
 import copy
+import importlib
+import inspect
+import os
+import pathlib
 import shlex
 import shutil
 import string
-import typing
-import inspect
-import pathlib
-import tempfile
-import importlib
 import subprocess
-from unittest.mock import patch, Mock
+import sys
+import tempfile
+import typing
+from unittest.mock import Mock, patch
 
 import pytest
 
-from waves import _settings
-from waves import _utilities
+from waves import _settings, _utilities
 from waves._tests.common import platform_check
 
 MODULE_NAME = pathlib.Path(__file__).stem
@@ -341,7 +340,7 @@ require_third_party_system_tests = [
         [
             fetch_template,
             string.Template(
-                "scons abaqus ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
+                "scons abaqus ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"
             ),
         ],
         "tutorials/tutorial_cubit",
@@ -359,7 +358,7 @@ require_third_party_system_tests = [
         [
             fetch_template,
             string.Template(
-                "scons fierro ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
+                "scons fierro ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"
             ),
         ],
         "tutorials/tutorial_cubit",
@@ -377,7 +376,7 @@ require_third_party_system_tests = [
         [
             fetch_template,
             string.Template(
-                "scons sierra ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
+                "scons sierra ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"
             ),
         ],
         "tutorials/tutorial_cubit",
@@ -400,7 +399,7 @@ require_third_party_system_tests = [
         [
             fetch_template,
             string.Template(
-                "scons abaqus ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
+                "scons abaqus ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"
             ),
         ],
         "tutorials/tutorial_cubit_alternate",
@@ -421,7 +420,7 @@ require_third_party_system_tests = [
         [
             fetch_template,
             string.Template(
-                "scons fierro ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
+                "scons fierro ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"
             ),
         ],
         "tutorials/tutorial_cubit_alternate",
@@ -442,7 +441,7 @@ require_third_party_system_tests = [
         [
             fetch_template,
             string.Template(
-                "scons sierra ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
+                "scons sierra ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"
             ),
         ],
         "tutorials/tutorial_cubit_alternate",
@@ -467,9 +466,7 @@ require_third_party_system_tests = [
     pytest.param(
         [
             fetch_template,
-            string.Template(
-                "scons quinoa-local ${unconditional_build} --print-build-failures ${cubit_command}"  # noqa: E501
-            ),
+            string.Template("scons quinoa-local ${unconditional_build} --print-build-failures ${cubit_command}"),
         ],
         "tutorials/tutorial_quinoa",
         marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.cubit, pytest.mark.quinoa],
@@ -701,7 +698,7 @@ require_third_party_system_tests = [
                 " unit_testing"
             ),
             string.Template(
-                "${waves_command} visualize rectangle_compression-nominal --output-file nominal.png ${abaqus_command}"  # noqa: E501
+                "${waves_command} visualize rectangle_compression-nominal --output-file nominal.png ${abaqus_command}"
             ),
             string.Template(
                 "${waves_command} print_study build/rectangle_compression-mesh_convergence/mesh_convergence.h5"
@@ -741,7 +738,7 @@ require_third_party_system_tests = [
                 " unit_testing"
             ),
             string.Template(
-                "${waves_command} visualize rectangle_compression-nominal --output-file nominal.png ${abaqus_command}"  # noqa: E501
+                "${waves_command} visualize rectangle_compression-nominal --output-file nominal.png ${abaqus_command}"
             ),
             string.Template(
                 "${waves_command} print_study build/parameter_studies/rectangle_compression-mesh_convergence.h5"
@@ -812,7 +809,7 @@ def test_system(
     :param request: pytest decorator with test case meta data
     :param commands: list of command strings for the system test
     :param fetch_options: the fetch arguments for replacement in string templates
-    """
+    """  # noqa: E501
     if system_test_directory is not None:
         system_test_directory.mkdir(parents=True, exist_ok=True)
 
@@ -839,12 +836,14 @@ def test_system(
     try:
         for command in commands:
             if isinstance(command, string.Template):
-                command = command.substitute(template_substitution)
-            # TODO: Find a better way to split ``--waves-command='python -m waves._main'`` correctly for Windows
-            if "--waves-command" in command:
-                command_list = shlex.split(command, posix=True)
+                command_string = command.substitute(template_substitution)
             else:
-                command_list = shlex.split(command, posix=not testing_windows)
+                command_string = command
+            # TODO: Find a better way to split ``--waves-command='python -m waves._main'`` correctly for Windows
+            if "--waves-command" in command_string:
+                command_list = shlex.split(command_string, posix=True)
+            else:
+                command_list = shlex.split(command_string, posix=not testing_windows)
             subprocess.check_output(command_list, env=system_test_environment, cwd=temporary_path, text=True)
     except Exception as err:
         raise err

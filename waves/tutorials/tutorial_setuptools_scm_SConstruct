@@ -1,11 +1,12 @@
 #! /usr/bin/env python
 
-import os
-import sys
-import pathlib
 import inspect
+import os
+import pathlib
+import sys
 
 import setuptools_scm
+
 import waves
 
 # Comments used in tutorial code snippets: marker-1

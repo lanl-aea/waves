@@ -1,16 +1,16 @@
 """Test CartesianProduct Class"""
 
-from unittest.mock import patch, call, mock_open
 from contextlib import nullcontext as does_not_raise
+from unittest.mock import call, mock_open, patch
 
-import pytest
 import numpy
+import pytest
 
 from waves import parameter_generators
-from waves.parameter_generators import CartesianProduct
 from waves._settings import _set_coordinate_key
+from waves._tests.common import consistent_hash_parameter_check, merge_samplers, self_consistency_checks
 from waves.exceptions import SchemaValidationError
-from waves._tests.common import consistent_hash_parameter_check, self_consistency_checks, merge_samplers
+from waves.parameter_generators import CartesianProduct
 
 
 class TestCartesianProduct:
@@ -18,7 +18,7 @@ class TestCartesianProduct:
 
     validate_input = {
         "good schema": (
-            {"parameter_1": [1], "parameter_2": (2,), "parameter_3": set([3, 4])},
+            {"parameter_1": [1], "parameter_2": (2,), "parameter_3": {3, 4}},
             does_not_raise(),
         ),
         "not a dict": (
@@ -122,7 +122,7 @@ class TestCartesianProduct:
         TestGenerate = CartesianProduct(parameter_schema)
         generate_array = TestGenerate._samples
         assert numpy.all(generate_array == expected_array)
-        for key in TestGenerate.parameter_study.keys():
+        for key in TestGenerate.parameter_study:
             assert TestGenerate.parameter_study[key].dtype == expected_types[key]
         # Verify that the parameter set name creation method was called
         assert list(TestGenerate._set_names.values()) == [f"parameter_set{num}" for num in range(len(expected_array))]
@@ -136,7 +136,10 @@ class TestCartesianProduct:
         generate_io.values(),
         ids=generate_io.keys(),
     )
-    def test_verify_parameter_study(self, parameter_schema, expected_array, expected_types):
+    # FIXME: trace original use of ``expected_array`` and ``expected_types``. Either use in test or remove from test
+    # function arguments. Remove ``noqa: ARG002`` after fixing.
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/961
+    def test_verify_parameter_study(self, parameter_schema, expected_array, expected_types):  # noqa: ARG002
         TestGenerate = CartesianProduct(parameter_schema)
         parameter_generators._verify_parameter_study(TestGenerate.parameter_study)
 
@@ -223,7 +226,7 @@ class TestCartesianProduct:
             original_study, merged_study = merge_samplers(CartesianProduct, first_schema, second_schema, {})
             generate_array = merged_study._samples
             assert numpy.all(generate_array == expected_array)
-            for key in merged_study.parameter_study.keys():
+            for key in merged_study.parameter_study:
                 assert merged_study.parameter_study[key].dtype == expected_types[key]
             consistent_hash_parameter_check(original_study, merged_study)
             self_consistency_checks(merged_study)
@@ -317,7 +320,7 @@ class TestCartesianProduct:
     }
 
     @pytest.mark.parametrize(
-        "parameter_schema, output_file_template, output_file, output_type, file_count, " "expected_calls",
+        "parameter_schema, output_file_template, output_file, output_type, file_count, expected_calls",
         write_yaml.values(),
         ids=write_yaml.keys(),
     )
@@ -326,7 +329,7 @@ class TestCartesianProduct:
     ):
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-            patch("builtins.open", mock_open()) as mock_file,
+            patch("pathlib.Path.open", mock_open()) as mock_file,
             patch("xarray.Dataset.to_netcdf") as xarray_to_netcdf,
             patch("sys.stdout.write") as stdout_write,
             patch("pathlib.Path.is_file", return_value=False),
@@ -374,10 +377,8 @@ class TestCartesianProduct:
         TestParameterStudyDict = CartesianProduct(parameter_schema)
         returned_dictionary = TestParameterStudyDict.parameter_study_to_dict()
         assert expected_dictionary.keys() == returned_dictionary.keys()
-        assert all(isinstance(key, str) for key in returned_dictionary.keys())
-        for set_name in expected_dictionary.keys():
+        assert all(isinstance(key, str) for key in returned_dictionary)
+        for set_name in expected_dictionary:
             assert expected_dictionary[set_name] == returned_dictionary[set_name]
             for parameter in expected_dictionary[set_name]:
-                assert type(expected_dictionary[set_name][parameter]) == type(  # noqa: 721
-                    returned_dictionary[set_name][parameter]
-                )
+                assert type(expected_dictionary[set_name][parameter]) is type(returned_dictionary[set_name][parameter])

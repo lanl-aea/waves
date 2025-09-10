@@ -28,7 +28,7 @@ def main(output_file, xlength, ylength, zlength):
     cubit.cmd(f"webcut volume 1 with plane xplane offset {xlength * 0.5} noimprint nomerge")
     cubit.cmd("merge volume 1 2")
 
-    # Sets (partition)
+    # Create sets (partition)
     cubit.cmd("sideset 1 add surface 8 15")
     cubit.cmd("sideset 2 add surface 9 16")
     cubit.cmd("sideset 3 add surface 10 14")
@@ -73,10 +73,10 @@ def get_parser():
         "--output-file",
         type=str,
         required=True,
-        # fmt: off
-        help="The output file for the Cubit model. Will be stripped of the extension and ``.cub`` and ``.exo`` will "
-             "be used for the model and mesh files, respectively.",
-        # fmt: on
+        help=(
+            "The output file for the Cubit model. Will be stripped of the extension and ``.cub`` and ``.exo`` will "
+            "be used for the model and mesh files, respectively."
+        ),
     )
     parser.add_argument("--xlength", type=float, required=True, help="box edge length on global x axis")
     parser.add_argument("--ylength", type=float, required=True, help="box edge length on global y axis")

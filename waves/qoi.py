@@ -8,26 +8,26 @@
    the output plotting and reporting formatting is subject to change.
 """
 
+import collections.abc
+import contextlib
+import itertools
 import pathlib
 import typing
-import collections.abc
-import itertools
 
-import numpy
-import xarray
-import pandas
 import matplotlib.pyplot
+import numpy
+import pandas
+import xarray
 from matplotlib.backends.backend_pdf import PdfPages
 
 from waves import _settings
-
 
 _exclude_from_namespace = set(globals().keys())
 
 _version_key = "version"
 
 
-def _propagate_identical_attrs(all_attrs, context):
+def _propagate_identical_attrs(all_attrs, context):  # noqa: ARG001
     first_attrs = all_attrs[0]
     identical_pairs = {}
 
@@ -203,7 +203,7 @@ def create_qoi_set(qois: typing.Iterable[xarray.DataArray]) -> xarray.Dataset:
     """
     qoi_set = xarray.merge(qois, **_merge_constants)
     # Keep all attributes at the data variable level
-    qoi_set.attrs = dict()
+    qoi_set.attrs = {}
     return qoi_set
 
 
@@ -308,12 +308,12 @@ def _create_qoi_study(
             [qoi.expand_dims(set_name=[qoi.attrs[_settings._set_coordinate_key]]) for qoi in qois],
             **_merge_constants,
         )
-    except KeyError:
+    except KeyError as err:
         raise RuntimeError(
             f"Each DataArray in ``qois`` must have an attribute named '{_settings._set_coordinate_key}'."
-        )
+        ) from err
     # Keep all attributes at the data variable level
-    qoi_study.attrs = dict()
+    qoi_study.attrs = {}
     # Merge in parameter study definition
     if parameter_study:
         # Convert parameter study variables to coordinates
@@ -417,15 +417,15 @@ def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataT
     """
     archive = xarray.DataTree()
     # Creates a group for each "group" attribute
-    for group, qois in itertools.groupby(sorted(qois, key=_qoi_group), key=_qoi_group):
+    for group, group_qois in itertools.groupby(sorted(qois, key=_qoi_group), key=_qoi_group):
         # Move "version" from attribute to dimension for each DataArray and merge to Dataset
-        qois = [qoi.expand_dims(version=[qoi.attrs[_version_key]]) for qoi in qois]
-        # Try to add date as a coordinate if available
-        try:
-            qois = [qoi.assign_coords(date=(_version_key, [numpy.datetime64(qoi.attrs["date"])])) for qoi in qois]
-        except KeyError:
-            pass  # date coordinate is not needed
-        qoi_set = create_qoi_set(qois)
+        set_qois = [qoi.expand_dims(version=[qoi.attrs[_version_key]]) for qoi in group_qois]
+        # Try to add date as a coordinate if available, but allow failure because date coordinate is not needed
+        with contextlib.suppress(KeyError):
+            set_qois = [
+                qoi.assign_coords(date=(_version_key, [numpy.datetime64(qoi.attrs["date"])])) for qoi in set_qois
+            ]
+        qoi_set = create_qoi_set(set_qois)
         # Add dataset as a node in the DataTree
         archive[group] = qoi_set
     return archive
@@ -486,10 +486,10 @@ def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
     """
     suffix = from_file.suffix.lower()
     if suffix == ".csv":
-        df = pandas.read_csv(from_file)
+        raw_dataframe = pandas.read_csv(from_file)
         # Empty entries in the CSV end up as NaN in the DataFrame.
         # Drop NaNs so they aren't passed as kwargs to `create_qoi()`
-        qoi_kwargs = [row.dropna().to_dict() for idx, row in df.iterrows()]
+        qoi_kwargs = [row.dropna().to_dict() for idx, row in raw_dataframe.iterrows()]
         return create_qoi_set([create_qoi(**kwargs) for kwargs in qoi_kwargs])
     elif suffix == ".h5":
         return xarray.open_dataset(from_file, engine="h5netcdf")
@@ -537,11 +537,11 @@ def write_qoi_set_to_csv(qoi_set: xarray.Dataset, output: pathlib.Path) -> None:
         load,5.0,4.5,3.5,5.5,N,Axial Load,Axial load through component XYZ,Assembly ABC Preload,abcdef,2025-01-01
         gap,1.0,0.8,0.7000000000000001,0.9,mm,Radial gap,Radial gap between components A and B,Assembly ABC Preload,abcdef,2025-01-01
     """  # noqa: E501
-    df = qoi_set.to_dataarray("name").to_pandas()
+    csv_dataframes = qoi_set.to_dataarray("name").to_pandas()
     # Convert attributes to data variables so they end up as columns in the CSV
     attrs = pandas.DataFrame.from_dict({qoi: qoi_set[qoi].attrs for qoi in qoi_set}, orient="index")
     attrs.index.name = "name"
-    pandas.concat((df, attrs), axis="columns").to_csv(output)
+    pandas.concat((csv_dataframes, attrs), axis="columns").to_csv(output)
 
 
 def _plot_qoi_tolerance_check(qoi: xarray.DataArray, axes: matplotlib.axes.Axes) -> None:
@@ -575,7 +575,8 @@ def _can_plot_qoi_tolerance_check(qoi: xarray.DataArray) -> bool:
         return False
     qoi_dim = len(qoi.squeeze().dims)  # Count includes the "value_type" dim
     if qoi_dim == 1:  # Scalar QOI
-        if qoi.isnull().any():
+        # Not a pandas object in the unit tests, so the linter suggestion is wrong.
+        if qoi.isnull().any():  # noqa: PD003
             return False
     else:
         return False
@@ -646,13 +647,7 @@ def _plot_scalar_tolerance_check(
         color = "black"
         fontweight = "normal"
     axes.annotate(
-        text=(
-            f"{name}\n"
-            f" min: {lower_limit:.2e},"
-            f" max: {upper_limit:.2e},"
-            f" exp: {expected:.2e},"
-            f" calc: {calculated:.2e}"
-        ),
+        text=f"{name}\n min: {lower_limit:.2e}, max: {upper_limit:.2e}, exp: {expected:.2e}, calc: {calculated:.2e}",
         xy=(-0.05, 0.5),
         textcoords="axes fraction",
         annotation_clip=False,
@@ -677,13 +672,13 @@ def _write_qoi_report(qoi_archive: xarray.DataTree, output: pathlib.Path, plots_
     qois = [
         qoi for leaf in qoi_archive.leaves for qoi in leaf.ds.data_vars.values() if _can_plot_qoi_tolerance_check(qoi)
     ]
-    page_margins = dict(
-        left=0.6,  # plot on right half of page because text will go on left side
-        right=0.9,  # leave margin on right edge
-        top=(1.0 - 1.0 / plots_per_page),  # top margin equal to single plot height
-        bottom=(0.5 / plots_per_page),  # bottom margin equal to half of single plot height
-        hspace=1.0,
-    )
+    page_margins = {
+        "left": 0.6,  # plot on right half of page because text will go on left side
+        "right": 0.9,  # leave margin on right edge
+        "top": (1.0 - 1.0 / plots_per_page),  # top margin equal to single plot height
+        "bottom": (0.5 / plots_per_page),  # bottom margin equal to half of single plot height
+        "hspace": 1.0,
+    }
     _pdf_report(qois, output, page_margins, plots_per_page, _plot_qoi_tolerance_check, {})
 
 
@@ -755,14 +750,14 @@ def _qoi_history_report(
         for qoi in leaf.ds.data_vars.values()
         if _can_plot_scalar_qoi_history(qoi)
     ]
-    plotting_kwargs = dict(date_min=min(qoi.date.min() for qoi in qois), date_max=max(qoi.date.max() for qoi in qois))
-    page_margins = dict(
-        left=0.1,  # leave margin on left edge
-        right=0.9,  # leave margin on right edge
-        top=(1.0 - 0.5 / plots_per_page),  # top margin equal to half of single plot height
-        bottom=(0.5 / plots_per_page),  # bottom margin equal to half of single plot height
-        hspace=1.0,
-    )
+    plotting_kwargs = {"date_min": min(qoi.date.min() for qoi in qois), "date_max": max(qoi.date.max() for qoi in qois)}
+    page_margins = {
+        "left": 0.1,  # leave margin on left edge
+        "right": 0.9,  # leave margin on right edge
+        "top": (1.0 - 0.5 / plots_per_page),  # top margin equal to half of single plot height
+        "bottom": (0.5 / plots_per_page),  # bottom margin equal to half of single plot height
+        "hspace": 1.0,
+    }
     _pdf_report(qois, output, page_margins, plots_per_page, _plot_scalar_qoi_history, plotting_kwargs)
 
 
@@ -777,7 +772,8 @@ def _can_plot_scalar_qoi_history(qoi: xarray.DataArray) -> bool:
     """
     if _version_key not in qoi.dims:
         return False
-    if qoi.where(numpy.isfinite(qoi)).dropna(_version_key, how="all").size == 0:  # Avoid empty plots
+    # Avoid empty plots
+    if qoi.where(numpy.isfinite(qoi)).dropna(_version_key, how="all").size == 0:  # noqa: SIM103
         return False
     return True
 
@@ -804,8 +800,8 @@ def _pdf_report(
     """
     open_figure = False
     with PdfPages(output_pdf) as pdf:
-        for group, qois in itertools.groupby(sorted(qois, key=groupby), key=groupby):
-            for plot_num, qoi in enumerate(qois):
+        for group, group_qois in itertools.groupby(sorted(qois, key=groupby), key=groupby):
+            for plot_num, qoi in enumerate(group_qois):
                 ax_num = plot_num % plots_per_page  # ax_num goes from 0 to (plots_per_page - 1)
                 if ax_num == 0:  # Starting new page
                     open_figure = True
@@ -821,7 +817,7 @@ def _pdf_report(
                     matplotlib.pyplot.close()
                     open_figure = False
             if open_figure:  # If a figure is still open (hasn't been saved to a page)
-                for ax in axes[ax_num + 1 :]:  # noqa: E203
+                for ax in axes[ax_num + 1 :]:
                     ax.clear()
                     ax.axis("off")
                 pdf.savefig()

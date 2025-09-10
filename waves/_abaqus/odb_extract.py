@@ -36,23 +36,22 @@ path. The '/xarray/Dataset' group path contains a list of group paths that conta
    /xarray/          # Group with a dataset that lists the location of all data written from xarray datasets
 """
 
-import os
-import sys
-import json
-import yaml
-import shlex
-import select
-import shutil
-import typing
-import pathlib
 import datetime
+import json
+import os
+import pathlib
+import select
+import shlex
+import shutil
 import subprocess
+import sys
+import typing
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 
-from waves._abaqus import _settings
-from waves._abaqus import abaqus_file_parser
-from waves._utilities import _quote_spaces_in_path
+import yaml
 
+from waves._abaqus import _settings, abaqus_file_parser
+from waves._utilities import _quote_spaces_in_path
 
 _exclude_from_namespace = set(globals().keys())
 
@@ -174,7 +173,7 @@ def odb_extract(
     time_stamp = datetime.datetime.now().strftime(_settings._default_timestamp_format)
     job_name = path_output_file.with_suffix(".csv")
     if path_output_file.exists():
-        new_output_file = f"{str(path_output_file.with_suffix(''))}_{time_stamp}.{file_suffix}"
+        new_output_file = f"{path_output_file.with_suffix('')!s}_{time_stamp}.{file_suffix}"
         print(f"{output_file} already exists. Will use {new_output_file} instead.", file=sys.stderr)
         output_file = new_output_file
 
@@ -230,10 +229,10 @@ def odb_extract(
 
         # Write parsed output
         if output_type == "json":
-            with open(output_file, "w") as f:
+            with pathlib.Path(output_file).open(mode="w") as f:
                 json.dump(parsed_odb, f, indent=4)
         elif output_type == "yaml":
-            with open(output_file, "w") as f:
+            with pathlib.Path(output_file).open(mode="w") as f:
                 yaml.safe_dump(parsed_odb, f)  # With safe_dump, tuples are converted to lists
     # Remove odbreport file, don't raise exception if it doesn't exist
     if delete_report_file:
@@ -272,14 +271,13 @@ def get_odb_report_args(odb_report_args: str, input_file: pathlib.Path, job_name
 
 
 def run_external(cmd):
-    """
-    Execute an external command and get its exitcode, stdout and stderr.
+    """Execute an external command and get its exitcode, stdout and stderr.
 
     :param str cmd: command line command to run
     :returns: output, return_code, error_code
     """
     args = shlex.split(cmd, posix=(os.name == "posix"))
-    process = subprocess.run(args, capture_output=True)
+    process = subprocess.run(args, capture_output=True, check=False)
     return process.returncode, process.stdout.decode(), process.stderr.decode()
 
 

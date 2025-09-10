@@ -1,16 +1,16 @@
 """Test OneAtATime Class"""
 
-from unittest.mock import patch, call, mock_open
 from contextlib import nullcontext as does_not_raise
+from unittest.mock import call, mock_open, patch
 
-import pytest
 import numpy
+import pytest
 import xarray
 
-from waves.parameter_generators import OneAtATime
 from waves._settings import _set_coordinate_key
+from waves._tests.common import consistent_hash_parameter_check, merge_samplers, self_consistency_checks
 from waves.exceptions import SchemaValidationError
-from waves._tests.common import consistent_hash_parameter_check, self_consistency_checks, merge_samplers
+from waves.parameter_generators import OneAtATime
 
 
 class TestOneAtATime:
@@ -42,7 +42,7 @@ class TestOneAtATime:
             pytest.raises(SchemaValidationError),
         ),
         "bad schema set": (
-            {"parameter_1": set([1, 2])},
+            {"parameter_1": {1, 2}},
             pytest.raises(SchemaValidationError),
         ),
     }
@@ -261,7 +261,7 @@ class TestOneAtATime:
     def test_generate(self, parameter_schema, kwargs, expected_dataset, expected_types):
         TestGenerate = OneAtATime(parameter_schema, **kwargs)
         xarray.testing.assert_identical(TestGenerate.parameter_study, expected_dataset)
-        for key in TestGenerate.parameter_study.keys():
+        for key in TestGenerate.parameter_study:
             assert TestGenerate.parameter_study[key].dtype == expected_types[key]
         # Verify that the parameter set name creation method was called
         # TODO: _set_names is an ordered object (dictionary). Fix test to compare dictionary-to-dictionary instead of
@@ -349,7 +349,7 @@ class TestOneAtATime:
             original_study, merged_study = merge_samplers(OneAtATime, first_schema, second_schema, {})
             generate_array = merged_study._samples
             assert numpy.all(generate_array == expected_array)
-            for key in merged_study.parameter_study.keys():
+            for key in merged_study.parameter_study:
                 assert merged_study.parameter_study[key].dtype == expected_types[key]
             consistent_hash_parameter_check(original_study, merged_study)
             self_consistency_checks(merged_study)
@@ -438,7 +438,7 @@ class TestOneAtATime:
     }
 
     @pytest.mark.parametrize(
-        "parameter_schema, output_file_template, output_file, output_type, file_count, " "expected_calls",
+        "parameter_schema, output_file_template, output_file, output_type, file_count, expected_calls",
         write_yaml.values(),
         ids=write_yaml.keys(),
     )
@@ -447,7 +447,7 @@ class TestOneAtATime:
     ):
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-            patch("builtins.open", mock_open()) as mock_file,
+            patch("pathlib.Path.open", mock_open()) as mock_file,
             patch("xarray.Dataset.to_netcdf") as xarray_to_netcdf,
             patch("sys.stdout.write") as stdout_write,
             patch("pathlib.Path.is_file", return_value=False),
@@ -495,10 +495,8 @@ class TestOneAtATime:
         TestParameterStudyDict = OneAtATime(parameter_schema)
         returned_dictionary = TestParameterStudyDict.parameter_study_to_dict()
         assert expected_dictionary.keys() == returned_dictionary.keys()
-        assert all(isinstance(key, str) for key in returned_dictionary.keys())
-        for set_name in expected_dictionary.keys():
+        assert all(isinstance(key, str) for key in returned_dictionary)
+        for set_name in expected_dictionary:
             assert expected_dictionary[set_name] == returned_dictionary[set_name]
             for parameter in expected_dictionary[set_name]:
-                assert type(expected_dictionary[set_name][parameter]) == type(  # noqa: 721
-                    returned_dictionary[set_name][parameter]
-                )
+                assert type(expected_dictionary[set_name][parameter]) is type(returned_dictionary[set_name][parameter])

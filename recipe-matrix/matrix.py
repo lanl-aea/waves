@@ -1,7 +1,7 @@
-import os
-import string
-import pathlib
 import itertools
+import os
+import pathlib
+import string
 import subprocess
 
 import pytest

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-import sys
-import pathlib
 import argparse
+import pathlib
+import sys
 
 import pandas
 import yaml
@@ -26,7 +26,7 @@ def main(
     second_data = pandas.read_csv(second_file)
     regression_results.update({"CSV comparison": modsim_package.utilities.csv_files_match(first_data, second_data)})
 
-    with open(output_file, "w") as output:
+    with output_file.open(mode="w") as output:
         output.write(yaml.safe_dump(regression_results))
 
     if len(regression_results.values()) < 1 or not all(regression_results.values()):

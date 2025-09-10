@@ -1,6 +1,6 @@
-import sys
-import pathlib
 import argparse
+import pathlib
+import sys
 
 import cubit
 
@@ -46,11 +46,11 @@ def get_parser():
         "--output-file",
         type=str,
         default=default_output_file,
-        # fmt: off
-        help="The output file for the Cubit model. "
-             "Will be stripped of the extension and ``.cub`` will be used, e.g. ``output_file``.cub "
-             "(default: %(default)s",
-        # fmt: on
+        help=(
+            "The output file for the Cubit model. "
+            "Will be stripped of the extension and ``.cub`` will be used, e.g. ``output_file``.cub "
+            "(default: %(default)s"
+        ),
     )
     parser.add_argument(
         "--width",

@@ -1,18 +1,16 @@
 """Test ParameterGenerator Abstract Base Class"""
 
-import typing
-import pathlib
 import contextlib
-from unittest.mock import patch, mock_open
+import pathlib
+import typing
+from unittest.mock import mock_open, patch
 
-import pytest
 import numpy
+import pytest
 import xarray
 
-from waves import parameter_generators
+from waves import _settings, _utilities, parameter_generators
 from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
-from waves import _settings
-from waves import _utilities
 
 does_not_raise = contextlib.nullcontext()
 
@@ -77,7 +75,7 @@ set_hashes = {
     ids=set_hashes.keys(),
 )
 def test_calculate_set_hash(parameter_names, samples, expected_hashes):
-    for row, expected_hash in zip(samples, expected_hashes):
+    for row, expected_hash in zip(samples, expected_hashes, strict=True):
         set_hash = parameter_generators._calculate_set_hash(parameter_names, row)
         assert set_hash == expected_hash
 
@@ -539,7 +537,7 @@ propagate_parameter_space_cases = {
     propagate_parameter_space_cases.values(),
     ids=propagate_parameter_space_cases.keys(),
 )
-def test_propagate_parameter_space(studies, expected_study, expected_types, propagate_space, outcome):
+def test_propagate_parameter_space(studies, expected_study, expected_types, propagate_space, outcome):  # noqa: ARG001
     """Check the propagation of parameter space between two studies.
 
     :param studies: list of N number of parameter study Xarray datasets to merge, where the first study in the list is
@@ -553,7 +551,7 @@ def test_propagate_parameter_space(studies, expected_study, expected_types, prop
     with outcome:
         try:
             propagated_study = parameter_generators._propagate_parameter_space(study_base, study_other)
-            for key in expected_types.keys():
+            for key in expected_types:
                 assert propagated_study[key].dtype == expected_types[key]
             xarray.testing.assert_identical(propagated_study, expected_study)
             parameter_generators._verify_parameter_study(propagated_study)
@@ -820,7 +818,7 @@ def test_merge_parameter_space(studies, expected_study, expected_types, propagat
             studies = [study.swap_dims(swap_to_hash_index) for study in studies]
             merged_study = parameter_generators._merge_parameter_space(studies)
             merged_study = merged_study.swap_dims(swap_to_set_index)
-            for key in expected_types.keys():
+            for key in expected_types:
                 assert merged_study[key].dtype == expected_types[key]
             xarray.testing.assert_identical(merged_study, expected_study)
             parameter_generators._verify_parameter_study(merged_study)
@@ -877,7 +875,7 @@ def test_merge_parameter_studies(studies, expected_study, expected_types, propag
     with outcome:
         try:
             merged_study = parameter_generators._merge_parameter_studies(studies)
-            for key in expected_types.keys():
+            for key in expected_types:
                 assert merged_study[key].dtype == expected_types[key]
             xarray.testing.assert_identical(merged_study, expected_study)
             parameter_generators._verify_parameter_study(merged_study)
@@ -1624,14 +1622,12 @@ class TestParameterGenerator:
             sconsWrite._scons_write([], [], env)
         mock_write.assert_called_once_with(**expected_kwargs)
 
-    # fmt: off
-    templates = {       # schema, file_template, set_template,           expected
-        "no template":   (    {},          None,         None, ["parameter_set0"]),  # noqa: E241,E201
-        "file template": (    {},         "out",         None,           ["out0"]),  # noqa: E241,E201
-        "set template":  (    {},          None, "out@number",           ["out0"]),  # noqa: E241,E201
-        "set template, overridden": ({}, "out", "overridden",            ["out0"]),  # noqa: E241,E201
+    templates = {
+        "no template": ({}, None, None, ["parameter_set0"]),
+        "file template": ({}, "out", None, ["out0"]),
+        "set template": ({}, None, "out@number", ["out0"]),
+        "set template, overridden": ({}, "out", "overridden", ["out0"]),
     }
-    # fmt: on
 
     def test_merge_parameter_studies_with_missing_previous_parameter_study(self):
         # Test exception on missing previous parameter study attribute
@@ -1654,11 +1650,11 @@ class TestParameterGenerator:
         sconsIterator = DummyGenerator({}, **kwargs)
         set_samples = sconsIterator.parameter_study_to_dict()
         assert set_samples == expected
-        assert all(isinstance(key, str) for key in set_samples.keys())
-        for set_name in expected.keys():
-            assert expected[set_name] == set_samples[set_name]
-            for parameter in expected[set_name].keys():
-                assert type(set_samples[set_name][parameter]) == type(expected[set_name][parameter])  # fmt:skip # noqa: 721,E501
+        assert all(isinstance(key, str) for key in set_samples)
+        for set_name, set_value in expected.items():
+            assert set_value == set_samples[set_name]
+            for parameter in set_value:
+                assert type(set_samples[set_name][parameter]) is type(set_value[parameter])
 
     @pytest.mark.parametrize(
         "schema, file_template, set_template, expected",
@@ -1721,18 +1717,16 @@ class TestParameterGenerator:
             assert list(TemplateGenerator._set_names.values()) == expected
             assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
 
-    # fmt: off
-    init_write_stdout = {# schema, template, overwrite, dry_run,         is_file,  sets, stdout_calls  # noqa: E261
-        "no-template-1": (     {},     None,     False,  False,          [False],    1,            1),  # noqa: E241,E201,E501
-        "no-template-2": (     {},     None,      True,  False,          [False],    1,            1),  # noqa: E241,E201,E501
-        "no-template-3": (     {},     None,     False,   True,   [False, False],    2,            1),  # noqa: E241,E201,E501
-        "no-template-4": (     {},     None,     False,  False,   [ True,  True],    2,            1),  # noqa: E241,E201,E501
-        "dry_run-1":     (     {},    "out",     False,   True,          [False],    1,            1),  # noqa: E241,E201,E501
-        "dry_run-2":     (     {},    "out",      True,   True,          [False],    1,            1),  # noqa: E241,E201,E501
-        "dry_run-3":     (     {},    "out",      True,   True,   [ True, False],    2,            2),  # noqa: E241,E201,E501
-        "dry_run-4":     (     {},    "out",     False,   True,   [False,  True],    1,            1),  # noqa: E241,E201,E501
+    init_write_stdout = {
+        "no-template-1": ({}, None, False, False, [False], 1, 1),
+        "no-template-2": ({}, None, True, False, [False], 1, 1),
+        "no-template-3": ({}, None, False, True, [False, False], 2, 1),
+        "no-template-4": ({}, None, False, False, [True, True], 2, 1),
+        "dry_run-1": ({}, "out", False, True, [False], 1, 1),
+        "dry_run-2": ({}, "out", True, True, [False], 1, 1),
+        "dry_run-3": ({}, "out", True, True, [True, False], 2, 2),
+        "dry_run-4": ({}, "out", False, True, [False, True], 1, 1),
     }
-    # fmt: on
 
     @pytest.mark.parametrize(
         "schema, template, overwrite, dry_run, is_file, sets, stdout_calls",
@@ -1762,7 +1756,7 @@ class TestParameterGenerator:
             )
             with (
                 patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-                patch("builtins.open", mock_open()) as mock_file,
+                patch("pathlib.Path.open", mock_open()) as mock_file,
                 patch("sys.stdout.write") as stdout_write,
                 patch("xarray.Dataset.to_netcdf") as xarray_to_netcdf,
                 patch("pathlib.Path.is_file", side_effect=is_file),
@@ -1773,17 +1767,15 @@ class TestParameterGenerator:
                 xarray_to_netcdf.assert_not_called()
                 assert stdout_write.call_count == stdout_calls
 
-    # fmt: off
-    init_write_files = {# schema, template, overwrite,        is_file, sets, files  # noqa: E261,E721
-        "template-1":  (      {},    "out",     False,        [False],    1,     1),  # noqa: E241,E201
-        "template-2":  (      {},    "out",     False, [False, False],    2,     2),  # noqa: E241,E201
-        "template-3":  (      {},    "out",     False, [ True,  True],    2,     0),  # noqa: E241,E201
-        "template-4":  (      {},    "out",     False, [ True, False],    2,     1),  # noqa: E241,E201
-        "overwrite-2": (      {},    "out",      True, [False, False],    2,     2),  # noqa: E241,E201
-        "overwrite-3": (      {},    "out",      True, [ True,  True],    2,     2),  # noqa: E241,E201
-        "overwrite-4": (      {},    "out",      True, [ True, False],    2,     2),  # noqa: E241,E201
+    init_write_files = {
+        "template-1": ({}, "out", False, [False], 1, 1),
+        "template-2": ({}, "out", False, [False, False], 2, 2),
+        "template-3": ({}, "out", False, [True, True], 2, 0),
+        "template-4": ({}, "out", False, [True, False], 2, 1),
+        "overwrite-2": ({}, "out", True, [False, False], 2, 2),
+        "overwrite-3": ({}, "out", True, [True, True], 2, 2),
+        "overwrite-4": ({}, "out", True, [True, False], 2, 2),
     }
-    # fmt: on
 
     @pytest.mark.parametrize(
         "schema, template, overwrite, is_file, sets, files",
@@ -1896,15 +1888,13 @@ class TestParameterGenerator:
             mock_write_yaml.assert_not_called()
             assert mock_write_dataset.call_count == files
 
-    # fmt: off
-    init_write_dataset_files = {# equals, is_file, overwrite, expected_call_count  # noqa: E261
-        "equal-datasets":      (    True,  [True],     False,                   0),  # noqa: E241,E201
-        "equal-overwrite":     (    True,  [True],      True,                   1),  # noqa: E241,E201
-        "different-datasets":  (   False,  [True],     False,                   1),  # noqa: E241,E201
-        "not-file-1":          (    True, [False],     False,                   1),  # noqa: E241,E201
-        "not-file-2":          (   False, [False],     False,                   1),  # noqa: E241,E201
+    init_write_dataset_files = {
+        "equal-datasets": (True, [True], False, 0),
+        "equal-overwrite": (True, [True], True, 1),
+        "different-datasets": (False, [True], False, 1),
+        "not-file-1": (True, [False], False, 1),
+        "not-file-2": (False, [False], False, 1),
     }
-    # fmt: on
 
     @pytest.mark.parametrize(
         "equals, is_file, overwrite, expected_call_count",
@@ -1947,7 +1937,7 @@ class TestParameterGenerator:
         existing_dict = {"dummy": "dict"} if equals else {"smart": "dict"}
 
         with (
-            patch("builtins.open", mock_open()) as write_yaml_file,
+            patch("pathlib.Path.open", mock_open()) as write_yaml_file,
             patch("yaml.safe_load", return_value=existing_dict),
             patch("pathlib.Path.is_file", side_effect=is_file),
         ):
@@ -2030,7 +2020,7 @@ class TestParameterGenerator:
     def test_write_meta(self):
         WriteMetaParameterGenerator = DummyGenerator({})
         with (
-            patch("builtins.open", mock_open()) as mock_file,
+            patch("pathlib.Path.open", mock_open()) as mock_file,
             patch("pathlib.Path.resolve", return_value=pathlib.Path("parameter_set1.h5")),
         ):
             WriteMetaParameterGenerator._write_meta()
@@ -2039,7 +2029,7 @@ class TestParameterGenerator:
 
         WriteMetaParameterGenerator.output_file = pathlib.Path("dummy.h5")
         with (
-            patch("builtins.open", mock_open()) as mock_file,
+            patch("pathlib.Path.open", mock_open()) as mock_file,
             patch("pathlib.Path.resolve", return_value=pathlib.Path("dummy.h5")),
         ):
             WriteMetaParameterGenerator._write_meta()
@@ -2175,12 +2165,11 @@ class TestParameterDistributions:
     def test_generate_parameter_distributions(self, parameter_schema, expected_scipy_kwds):
         TestDistributions = ParameterDistributions(parameter_schema)
         assert TestDistributions._parameter_names == list(TestDistributions.parameter_distributions.keys())
-        for parameter_name, expected_kwds in zip(TestDistributions._parameter_names, expected_scipy_kwds):
+        for parameter_name, expected_kwds in zip(TestDistributions._parameter_names, expected_scipy_kwds, strict=True):
             assert TestDistributions.parameter_distributions[parameter_name].kwds == expected_kwds
 
 
 class DummyGenerator(parameter_generators.ParameterGenerator):
-
     def _validate(self):
         self._parameter_names = ["parameter_1"]
 
@@ -2194,6 +2183,5 @@ class DummyGenerator(parameter_generators.ParameterGenerator):
 
 
 class ParameterDistributions(parameter_generators._ScipyGenerator):
-
     def _generate(self):
         pass

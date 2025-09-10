@@ -1,15 +1,14 @@
-import os
-import sys
-import shutil
-import inspect
 import argparse
+import inspect
+import os
+import shutil
+import sys
 import tempfile
 
 import abaqus
 import abaqusConstants
 
 import modsim_package.abaqus.abaqus_utilities as abaqus_utilities
-
 
 default_x_angle = 0.0
 default_y_angle = 0.0
@@ -23,10 +22,10 @@ cli_description = "Save an assembly view image of an Abaqus model from an input 
 # Sphinx documentation
 # fmt: off
 color_map_choices = [
-    'Material', 'Section', 'Composite layup', 'Composite ply', 'Part', 'Part instance', 'Element set',
-    'Averaging region', 'Element type', 'Default', 'Assembly', 'Part geometry', 'Load', 'Boundary condition',
-    'Interaction', 'Constraint', 'Property', 'Meshability', 'Instance type', 'Set', 'Surface', 'Internal set',
-    'Internal surface', 'Display group', 'Selection group', 'Skin', 'Stringer', 'Cell', 'Face'
+    "Material", "Section", "Composite layup", "Composite ply", "Part", "Part instance", "Element set",
+    "Averaging region", "Element type", "Default", "Assembly", "Part geometry", "Load", "Boundary condition",
+    "Interaction", "Constraint", "Property", "Meshability", "Instance type", "Set", "Surface", "Internal set",
+    "Internal surface", "Display group", "Selection group", "Skin", "Stringer", "Cell", "Face"
 ]
 # fmt: on
 

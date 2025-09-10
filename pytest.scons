@@ -35,7 +35,7 @@ env.Clean("pytest", Dir("./coverage"))
 env.AlwaysBuild(pytest_node)
 
 # System tests
-source = pytest_source_list + [env["package_dir"] / "_tests/test_system.py"]
+source = [*pytest_source_list, env["package_dir"] / "_tests/test_system.py"]
 systemtest_node = env.Command(
     target=["systemtest_results.xml"],
     source=source,
@@ -50,8 +50,8 @@ systemtest_node = env.Command(
     ],
     pytest_command=pytest_command,
     system_test_directory=build_directory,
-    abaqus=env["abaqus"] if "abaqus" in env else None,
-    cubit=env["cubit"] if "cubit" in env else None,
+    abaqus=env.get("abaqus", None),
+    cubit=env.get("cubit", None),
 )
 env.Alias("systemtest", systemtest_node)
 env.AlwaysBuild(systemtest_node)

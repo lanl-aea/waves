@@ -1,8 +1,8 @@
-import os
-import sys
-import shutil
-import inspect
 import argparse
+import inspect
+import os
+import shutil
+import sys
 
 import abaqus
 import abaqusConstants
@@ -12,7 +12,7 @@ import mesh
 # Most end-users will implement only one of these structures and should replace
 # the try/except structure with a single import line, e.g.
 #
-# import modsim_package.abaqus.abaqus_utilities as abaqus_utilities
+# ``import modsim_package.abaqus.abaqus_utilities as abaqus_utilities``
 try:
     import modsim_package.abaqus.abaqus_utilities as abaqus_utilities
 except ImportError:
@@ -105,19 +105,19 @@ def get_parser():
         "--input-file",
         type=str,
         default=default_input_file,
-        # fmt: off
-        help="The Abaqus model file created by ``rectangle_partition.py``. "
-             "Will be stripped of the extension and ``.cae`` will be used, e.g. ``input_file``.cae",
-        # fmt: on
+        help=(
+            "The Abaqus model file created by ``rectangle_partition.py``. "
+            "Will be stripped of the extension and ``.cae`` will be used, e.g. ``input_file``.cae"
+        ),
     )
     parser.add_argument(
         "--output-file",
         type=str,
         default=default_output_file,
-        # fmt: off
-        help="The output file for the Abaqus model. "
-             "Will be stripped of the extension and ``.cae`` will be used, e.g. ``output_file``.cae",
-        # fmt: on
+        help=(
+            "The output file for the Abaqus model. "
+            "Will be stripped of the extension and ``.cae`` will be used, e.g. ``output_file``.cae"
+        ),
     )
     parser.add_argument(
         "--model-name",

@@ -2,7 +2,7 @@
 
 
 def parameter_schema(
-    global_seed=[1.0, 0.5, 0.25, 0.125],
+    global_seed=(1.0, 0.5, 0.25, 0.125),
 ):
     """Return mesh convergence WAVES CartesianProduct parameter schema
 
@@ -12,6 +12,6 @@ def parameter_schema(
     :rtype: dict
     """
     schema = {
-        "global_seed": global_seed,
+        "global_seed": list(global_seed),
     }
     return schema

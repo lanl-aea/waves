@@ -4,14 +4,12 @@ Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAV
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
 
+import argparse
+import pathlib
 import sys
 import typing
-import pathlib
-import argparse
 
-from waves import _settings
-from waves import _utilities
-
+from waves import _settings, _utilities
 
 _exclude_from_namespace = set(globals().keys())
 
@@ -101,7 +99,7 @@ def main(
         count += 1
         if count > max_iterations:
             raise RuntimeError(
-                f"Exceeded maximum iterations '{max_iterations}' before finding '{stop_trigger}' " "for every target"
+                f"Exceeded maximum iterations '{max_iterations}' before finding '{stop_trigger}' for every target"
             )
         print(
             f"\n{_settings._project_name_short.lower()} build iteration {count}: '{' '.join(command)}'\n",

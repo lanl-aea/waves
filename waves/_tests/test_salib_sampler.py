@@ -1,15 +1,15 @@
 """Test SALibSampler Class"""
 
-from unittest.mock import patch
 from contextlib import nullcontext as does_not_raise
+from unittest.mock import patch
 
-import pytest
 import numpy
+import pytest
 
-from waves.parameter_generators import SALibSampler
 from waves._settings import _set_coordinate_key, _supported_salib_samplers
+from waves._tests.common import consistent_hash_parameter_check, merge_samplers, self_consistency_checks
 from waves.exceptions import SchemaValidationError
-from waves._tests.common import consistent_hash_parameter_check, self_consistency_checks, merge_samplers
+from waves.parameter_generators import SALibSampler
 
 
 class TestSALibSampler:
@@ -226,11 +226,11 @@ class TestSALibSampler:
         return [f"parameter_set{num}" for num in range(number_of_simulations)]
 
     def _big_enough(self, sampler, N, num_vars):
-        if sampler == "sobol" and num_vars < 2:
-            return False
-        elif sampler == "fast_sampler" and N < 64:
-            return False
-        elif sampler == "morris" and num_vars < 2:
+        if (  # noqa: SIM103
+            (sampler == "sobol" and num_vars < 2)
+            or (sampler == "fast_sampler" and N < 64)
+            or (sampler == "morris" and num_vars < 2)
+        ):
             return False
         return True
 
@@ -250,7 +250,7 @@ class TestSALibSampler:
             assert samples_array.shape[1] == parameter_schema["problem"]["num_vars"]
             # Verify that the parameter set name creation method was called
             # Morris produces inconsistent set counts depending on seed. Rely on the variable count shape check above.
-            if not sampler == "morris":
+            if sampler != "morris":
                 expected_set_names = self._expected_set_names(
                     sampler, parameter_schema["N"], parameter_schema["problem"]["num_vars"]
                 )

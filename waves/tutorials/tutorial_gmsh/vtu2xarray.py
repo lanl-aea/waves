@@ -1,10 +1,10 @@
-import typing
-import pathlib
 import argparse
+import pathlib
+import typing
 import warnings
 
-import numpy
 import meshio
+import numpy
 import xarray
 
 
@@ -35,7 +35,7 @@ def main(
         raise RuntimeError("If time points are provided, the length must match the number of VTU files provided")
 
     data_arrays = []
-    for infile, time in zip(input_file, time_points):
+    for infile, time in zip(input_file, time_points, strict=True):
         increment_data = []
         results = meshio.read(infile)
         coordinate = ["x", "y", "z"]

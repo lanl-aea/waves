@@ -1,5 +1,5 @@
-import pathlib
 import argparse
+import pathlib
 
 import meshio
 
@@ -54,8 +54,7 @@ def main():
     pts_per_cell = cells.shape[1]
 
     outfile = pathlib.Path(args.outfile).resolve()
-    with open(outfile, "w") as mesh_out:
-
+    with outfile.open(mode="w") as mesh_out:
         mesh_out.write("# vtk DataFile Version 2.0\n")
         mesh_out.write("meshio converted to Fierro VTK\n")
         mesh_out.write("ASCII\n")
@@ -78,10 +77,10 @@ def main():
         mesh_out.write("\n")
         mesh_out.write(f"CELL_TYPES {ncells}\n")
         if ndim == 2:
-            for n in range(ncells):
+            for _n in range(ncells):
                 mesh_out.write("9\n")
         else:
-            for n in range(ncells):
+            for _n in range(ncells):
                 mesh_out.write("12\n")
 
 

@@ -1,13 +1,12 @@
 import pathlib
-from unittest.mock import patch, mock_open
 from contextlib import nullcontext as does_not_raise
+from unittest.mock import mock_open, patch
 
-import pytest
 import pandas
+import pytest
 import xarray
 
-from waves import _settings
-from waves import _print_study
+from waves import _print_study, _settings
 
 
 def test_print_study():
@@ -21,7 +20,7 @@ def test_print_study():
     with (
         patch("pathlib.Path.is_file", return_value=False),
         patch("builtins.print") as mock_print,
-        patch("builtins.open", mock_open(read_data="")),
+        patch("pathlib.Path.open", mock_open(read_data="")),
         patch("yaml.safe_load", return_value={}),
         pytest.raises(RuntimeError),
     ):
@@ -34,7 +33,7 @@ def test_print_study():
     with (
         patch("pathlib.Path.is_file", return_value=True),
         patch("builtins.print") as mock_print,
-        patch("builtins.open", mock_open(read_data="")),
+        patch("pathlib.Path.open", mock_open(read_data="")),
         patch("yaml.safe_load", side_effect=Exception()),
         pytest.raises(RuntimeError),
     ):
@@ -47,7 +46,7 @@ def test_print_study():
     with (
         patch("pathlib.Path.is_file", return_value=True),
         patch("builtins.print") as mock_print,
-        patch("builtins.open", mock_open(read_data=read_data)),
+        patch("pathlib.Path.open", mock_open(read_data=read_data)),
         patch("yaml.safe_load", return_value=safe_load),
         does_not_raise(),
     ):
@@ -60,7 +59,7 @@ def test_print_study():
     with (
         patch("pathlib.Path.is_file", return_value=True),
         patch("builtins.print") as mock_print,
-        patch("builtins.open", mock_open(read_data=read_data)),
+        patch("pathlib.Path.open", mock_open(read_data=read_data)),
         patch("yaml.safe_load", side_effect=UnicodeDecodeError("utf-8", b"", 0, 1, "invalid start byte")),
         patch("waves.parameter_generators._open_parameter_study", return_value=study_xarray),
         does_not_raise(),

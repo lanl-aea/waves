@@ -4,26 +4,24 @@ Will raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAVES
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
 
-from abc import ABC, abstractmethod
-import sys
 import copy
-import string
-import typing
 import hashlib
-import pathlib
-import warnings
 import itertools
+import pathlib
+import string
+import sys
+import typing
+import warnings
+from abc import ABC, abstractmethod
 
-import yaml
 import numpy
-import xarray
-import scipy.stats
 import SALib
+import scipy.stats
+import xarray
+import yaml
 
-from waves import _settings
-from waves import _utilities
-from waves._settings import _hash_coordinate_key
-from waves._settings import _set_coordinate_key
+from waves import _settings, _utilities
+from waves._settings import _hash_coordinate_key, _set_coordinate_key
 from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
 
 _exclude_from_namespace = set(globals().keys())
@@ -134,7 +132,7 @@ class ParameterGenerator(ABC):
         if self.output_file_template:
             self.output_directory = pathlib.Path(self.output_file_template.safe_substitute()).parent
         else:
-            self.output_directory = pathlib.Path(".").resolve()
+            self.output_directory = pathlib.Path().resolve()
         self.parameter_study_meta_file = self.output_directory / _settings._parameter_study_meta_file
 
         self._validate()
@@ -249,7 +247,7 @@ class ParameterGenerator(ABC):
             dry_run=dry_run,
         )
 
-    def _scons_write(self, target: list, source: list, env) -> None:
+    def _scons_write(self, target: list, source: list, env) -> None:  # noqa: ARG002
         """`SCons Python build function`_ wrapper for the parameter generator's write() function.
 
         Reference: https://scons.org/doc/production/HTML/scons-user/ch17s04.html
@@ -336,12 +334,14 @@ class ParameterGenerator(ABC):
         """
         write = True
         if not self.overwrite and pathlib.Path(output_file).is_file():
-            with open(output_file, "r") as existing_file:
+            # FIXME: simplify class API/attributes type handling to avoid the explict type cast
+            with pathlib.Path(output_file).open(mode="r") as existing_file:
                 existing_yaml_object = yaml.safe_load(existing_file)
                 if existing_yaml_object == parameter_dictionary:
                     write = False
         if write:
-            with open(output_file, "w") as outfile:
+            # FIXME: simplify class API/attributes type handling to avoid the explict type cast
+            with pathlib.Path(output_file).open(mode="w") as outfile:
                 outfile.write(yaml.dump(parameter_dictionary))
 
     def _write_meta(self) -> None:
@@ -352,7 +352,7 @@ class ParameterGenerator(ABC):
         """
         set_files = [pathlib.Path(set_name) for set_name in self.parameter_study.coords[_set_coordinate_key].values]
         # Always overwrite the meta data file to ensure that *all* parameter file names are included.
-        with open(self.parameter_study_meta_file, "w") as meta_file:
+        with self.parameter_study_meta_file.open(mode="w") as meta_file:
             if self.output_file:
                 meta_file.write(f"{self.output_file.resolve()}\n")
             else:
@@ -431,7 +431,7 @@ class ParameterGenerator(ABC):
                 dims=[_hash_coordinate_key],
                 coords={_hash_coordinate_key: self._set_hashes},
             )
-            for name, values in zip(self._parameter_names, self._samples.T)
+            for name, values in zip(self._parameter_names, self._samples.T, strict=True)
         ]
         self.parameter_study = xarray.merge(sample_arrays, join="outer", compat="no_conflicts")
         self._merge_set_names_array()
@@ -504,7 +504,6 @@ class ParameterGenerator(ABC):
 
 
 class _ScipyGenerator(ParameterGenerator, ABC):
-
     def _validate(self) -> None:
         """Validate the parameter distribution schema. Executed by class initiation.
 
@@ -537,7 +536,7 @@ class _ScipyGenerator(ParameterGenerator, ABC):
         if not isinstance(self.parameter_schema, dict):
             raise SchemaValidationError("parameter_schema must be a dictionary")
         # TODO: Settle on an input file schema and validation library
-        if "num_simulations" not in self.parameter_schema.keys():
+        if "num_simulations" not in self.parameter_schema:
             raise SchemaValidationError("Parameter schema is missing the required 'num_simulations' key")
         elif not isinstance(self.parameter_schema["num_simulations"], int):
             raise SchemaValidationError("Parameter schema 'num_simulations' must be an integer.")
@@ -549,7 +548,7 @@ class _ScipyGenerator(ParameterGenerator, ABC):
                 raise SchemaValidationError(f"Parameter '{name}' does not contain the required 'distribution' key")
             elif (
                 not isinstance(parameter_definition["distribution"], str)
-                or not parameter_definition["distribution"].isidentifier()  # noqa: W503
+                or not parameter_definition["distribution"].isidentifier()
             ):
                 raise SchemaValidationError(
                     f"Parameter '{name}' distribution '{parameter_definition['distribution']}' "
@@ -609,7 +608,7 @@ class _ScipyGenerator(ParameterGenerator, ABC):
 
     def _create_parameter_names(self) -> None:
         """Construct the parameter names from a distribution parameter schema"""
-        self._parameter_names = [key for key in self.parameter_schema.keys() if key != "num_simulations"]
+        self._parameter_names = [key for key in self.parameter_schema if key != "num_simulations"]
 
 
 class CartesianProduct(ParameterGenerator):
@@ -687,7 +686,7 @@ class CartesianProduct(ParameterGenerator):
             if not isinstance(self.parameter_schema[name], (list, set, tuple)):
                 raise SchemaValidationError(f"Parameter '{name}' is not one of list, set, or tuple")
 
-    def _generate(self, **kwargs) -> None:
+    def _generate(self, **kwargs) -> None:  # noqa: ARG002
         """Generate the Cartesian Product parameter sets."""
         self._samples = numpy.array(list(itertools.product(*self.parameter_schema.values())), dtype=object)
         super()._generate()
@@ -866,7 +865,7 @@ class OneAtATime(ParameterGenerator):
             if len(self.parameter_schema[name]) < 1:
                 raise SchemaValidationError(f"Parameter '{name}' must have at least one value")
 
-    def _generate(self, **kwargs) -> None:
+    def _generate(self, **kwargs) -> None:  # noqa: ARG002
         """Generate the parameter sets from the user provided parameter values."""
         # Count how many total sets will be generated (= nominal set + number of off-nominal values)
         set_count = 1 + numpy.sum([len(self.parameter_schema[name]) - 1 for name in self._parameter_names])
@@ -977,8 +976,8 @@ class CustomStudy(ParameterGenerator):
             raise SchemaValidationError("parameter_schema must be a dictionary")
         try:
             self._parameter_names = self.parameter_schema["parameter_names"]
-        except KeyError:
-            raise SchemaValidationError("parameter_schema must contain the key: parameter_names")
+        except KeyError as err:
+            raise SchemaValidationError("parameter_schema must contain the key: parameter_names") from err
         if "parameter_samples" not in self.parameter_schema:
             raise SchemaValidationError("parameter_schema must contain the key: parameter_samples")
         # Always convert to numpy array for shape check and _generate()
@@ -988,14 +987,14 @@ class CustomStudy(ParameterGenerator):
             )
         if (
             self.parameter_schema["parameter_samples"].ndim != 2
-            or len(self._parameter_names) != self.parameter_schema["parameter_samples"].shape[1]  # noqa: W503
+            or len(self._parameter_names) != self.parameter_schema["parameter_samples"].shape[1]
         ):
             raise SchemaValidationError(
                 "The parameter samples must be an array of shape MxN, where N is the number of parameters."
             )
         return
 
-    def _generate(self, **kwargs) -> None:
+    def _generate(self, **kwargs) -> None:  # noqa: ARG002
         """Generate the parameter study dataset from the user provided parameter array."""
         # Converted to numpy array by _validate. Simply assign to correct attribute
         self._samples = self.parameter_schema["parameter_samples"]
@@ -1288,16 +1287,16 @@ class SALibSampler(ParameterGenerator, ABC):
         if not isinstance(self.parameter_schema, dict):
             raise SchemaValidationError("parameter_schema must be a dictionary")
         # TODO: Settle on an input file schema and validation library
-        if "N" not in self.parameter_schema.keys():
+        if "N" not in self.parameter_schema:
             raise SchemaValidationError("Parameter schema is missing the required 'N' key")
         elif not isinstance(self.parameter_schema["N"], int):
             raise SchemaValidationError("Parameter schema 'N' must be an integer.")
         # Check the SALib owned "problem" dictionary for necessary WAVES elements
-        if "problem" not in self.parameter_schema.keys():
+        if "problem" not in self.parameter_schema:
             raise SchemaValidationError("Parameter schema is missing the required 'problem' key")
         elif not isinstance(self.parameter_schema["problem"], dict):
             raise SchemaValidationError("'problem' must be a dictionary")
-        if "names" not in self.parameter_schema["problem"].keys():
+        if "names" not in self.parameter_schema["problem"]:
             raise SchemaValidationError("Parameter schema 'problem' dict is missing the required 'names' key")
         if not isinstance(self.parameter_schema["problem"]["names"], (list, set, tuple)):
             raise SchemaValidationError("Parameter 'names' is not one of list, set, or tuple")
@@ -1373,8 +1372,8 @@ def _calculate_set_hash(parameter_names: typing.List[str], set_samples: numpy.nd
     if len(parameter_names) != len(set_samples):
         raise RuntimeError("Expected length of parameter names to match number of sample values")
     set_samples = numpy.array(set_samples, dtype=object)
-    sorted_contents = sorted(zip(parameter_names, set_samples))
-    set_catenation = "\n".join(f"{name}:{repr(sample)}" for name, sample in sorted_contents)
+    sorted_contents = sorted(zip(parameter_names, set_samples, strict=True))
+    set_catenation = "\n".join(f"{name}:{sample!r}" for name, sample in sorted_contents)
     set_hash = hashlib.md5(set_catenation.encode("utf-8"), usedforsecurity=False).hexdigest()
     return set_hash
 
@@ -1400,8 +1399,8 @@ def _parameter_study_to_numpy(parameter_study: xarray.Dataset) -> numpy.ndarray:
     :return: data
     """
     data = []
-    for set_hash, data_row in parameter_study.groupby(_hash_coordinate_key):
-        data.append([data_row[key].item() for key in data_row.keys()])
+    for _set_hash, data_row in parameter_study.groupby(_hash_coordinate_key):
+        data.append([data_row[key].item() for key in data_row])
     return numpy.array(data, dtype=object)
 
 
@@ -1460,8 +1459,8 @@ def _return_dataset_types(original_dataset: xarray.Dataset, update_dataset: xarr
     :raises RuntimeError: if data variables with matching names have different types
     """
     # TODO: Accept an arbitrarily long list of positional arguments
-    original_types = {key: original_dataset[key].dtype for key in original_dataset.keys()}
-    update_types = {key: update_dataset[key].dtype for key in update_dataset.keys()}
+    original_types = {key: original_dataset[key].dtype for key in original_dataset}
+    update_types = {key: update_dataset[key].dtype for key in update_dataset}
     matching_keys = set(original_types.keys()) & set(update_types.keys())
     for key in matching_keys:
         original_type = original_types[key]
@@ -1495,7 +1494,7 @@ def _open_parameter_study(parameter_study_file: typing.Union[pathlib.Path, str])
             "Was the parameter study file modified by hand? "
             "Was the parameter study file generated on a system with differing machine precision? "
             f"Was the parameter study file generated by an older version of {_settings._project_name_short}?"
-        )
+        ) from err
     return parameter_study
 
 
@@ -1507,7 +1506,7 @@ def _coerce_values(values: typing.Iterable, name: typing.Optional[str] = None) -
 
     :return: 1D numpy array of a consistent datatype
     """
-    datatypes = set(type(value) for value in values)
+    datatypes = {type(value) for value in values}
     values_coerced = numpy.array(values)
     if len(datatypes) > 1:
         warnings.warn(
@@ -1569,9 +1568,10 @@ def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.D
                     study_other.isel(set_name=set_index)[parameter].to_numpy().item()
                 )
 
-    parameter_schema = dict(
-        parameter_samples=propagated_study_samples, parameter_names=propagated_study_parameters.flatten()
-    )
+    parameter_schema = {
+        "parameter_samples": propagated_study_samples,
+        "parameter_names": propagated_study_parameters.flatten(),
+    }
     propagated_study = CustomStudy(parameter_schema).parameter_study
     return propagated_study
 
@@ -1649,8 +1649,8 @@ def _merge_parameter_studies(
     studies_iterator = studies  # Copy list to avoid index shifting from item removal
     for study_other in studies_iterator:
         # Find and propagate any nonuniform parameter spaces
-        study_base_parameters = [parameter for parameter in study_base.data_vars]
-        study_other_parameters = [parameter for parameter in study_other.data_vars]
+        study_base_parameters = list(study_base.data_vars)
+        study_other_parameters = list(study_other.data_vars)
         extra_parameters = set(study_base_parameters) ^ set(study_other_parameters)
         shared_parameters = set(study_base_parameters) & set(study_other_parameters)
         if any(shared_parameters) and any(extra_parameters):
@@ -1723,10 +1723,10 @@ def _update_set_names(
     if any(null_set_names):
         try:
             parameter_study.coords[_set_coordinate_key][null_set_names] = new_set_names
-        except ValueError:
+        except ValueError as err:
             raise RuntimeError(
                 "Could not fill merged parameter set names. Does the parameter set naming convention match?"
-            )
+            ) from err
 
     return parameter_study
 

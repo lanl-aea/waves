@@ -1,17 +1,16 @@
 """System test API calls with real file I/O"""
 
-import sys
-import shutil
-import typing
 import inspect
 import pathlib
+import shutil
+import sys
 import tempfile
+import typing
 
 import pytest
 import xarray
 
 import waves
-
 
 test_previous_parameter_study_cases = {
     "int": {"int": [1]},

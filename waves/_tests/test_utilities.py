@@ -1,15 +1,14 @@
-import sys
 import copy
 import pathlib
-import warnings
 import subprocess
-from unittest.mock import patch
+import sys
+import warnings
 from contextlib import nullcontext as does_not_raise
+from unittest.mock import patch
 
 import pytest
 
 from waves import _utilities
-
 
 set_name_substitution = {
     "default behavior": (
@@ -295,7 +294,7 @@ def test_return_environment(command, kwargs, stdout, expected):
     expected_kwargs.update(kwargs)
     expected_command = (
         f"{expected_kwargs['shell']} {expected_kwargs['string_option']} "
-        f"\"{command} {expected_kwargs['separator']} {expected_kwargs['environment']}\""
+        f'"{command} {expected_kwargs["separator"]} {expected_kwargs["environment"]}"'
     )
 
     mock_run_return = subprocess.CompletedProcess(args=command, returncode=0, stdout=stdout)
@@ -335,7 +334,7 @@ def test_cache_environment(kwargs, cache, overwrite_cache, verbose, expected, fi
         patch("yaml.safe_load", return_value=expected) as yaml_load,
         patch("pathlib.Path.exists", return_value=file_exists),
         patch("yaml.safe_dump") as yaml_dump,
-        patch("builtins.open"),
+        patch("pathlib.Path.open"),
         patch("builtins.print") as mock_print,
     ):
         environment_dictionary = _utilities.cache_environment(
@@ -396,7 +395,6 @@ def test_create_valid_identifier(identifier, expected) -> None:
 
 
 def test_warn_only_once():
-
     def test_warning():
         warnings.warn("test warning")
 

@@ -4,17 +4,16 @@ Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAV
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
 
-import os
-import sys
-import shutil
-import typing
-import filecmp
-import pathlib
 import argparse
+import filecmp
+import os
+import pathlib
+import shutil
+import sys
+import typing
 
 from waves import _settings
 from waves.exceptions import ChoicesError
-
 
 _exclude_from_namespace = set(globals().keys())
 
@@ -233,7 +232,7 @@ def build_copy_tuples(
     destination_files, existing_files = build_destination_files(destination, requested_paths_resolved)
     copy_tuples = [
         (requested_path, destination_file)
-        for requested_path, destination_file in zip(requested_paths_resolved, destination_files)
+        for requested_path, destination_file in zip(requested_paths_resolved, destination_files, strict=True)
     ]
     if not overwrite and existing_files:
         copy_tuples = [
@@ -284,7 +283,7 @@ def extend_requested_paths(
 
     :raises ChoicesError: If the requested tutorial number doesn't exist
     """
-    if tutorial not in _settings._tutorial_paths.keys():
+    if tutorial not in _settings._tutorial_paths:
         raise ChoicesError(
             f"Requested tutorial number '{tutorial}' does not exist. "
             f"Must be one of {_settings._allowable_tutorial_numbers}."

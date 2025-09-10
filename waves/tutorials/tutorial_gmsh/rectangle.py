@@ -1,10 +1,9 @@
-import typing
-import pathlib
 import argparse
+import pathlib
+import typing
 
-import numpy
 import gmsh
-
+import numpy
 
 script_name = pathlib.Path(__file__)
 # Set default parameter values
@@ -48,30 +47,30 @@ def main(
     top_right = get_entities_at_coordinates((width, height, 0.0), 0)
     # fmt: off
     top = gmsh.model.getEntitiesInBoundingBox(
-        0.0    - tolerance,  # noqa: E221 X-min
-        height - tolerance,  # noqa: E221 Y-min
-        0.0    - tolerance,  # noqa: E221 Z-min
-        width  + tolerance,  # noqa: E221 X-max
-        height + tolerance,  # noqa: E221 Y-max
-        0.0    + tolerance,  # noqa: E221 Z-max
+        0.0    - tolerance,
+        height - tolerance,
+        0.0    - tolerance,
+        width  + tolerance,
+        height + tolerance,
+        0.0    + tolerance,
         0  # Entity dimension: points
     )
     bottom = gmsh.model.getEntitiesInBoundingBox(
-        0.0    - tolerance,  # noqa: E221 X-min
-        0.0    - tolerance,  # noqa: E221 Y-min
-        0.0    - tolerance,  # noqa: E221 Z-min
-        width  + tolerance,  # noqa: E221 X-max
-        0.0    + tolerance,  # noqa: E221 Y-max
-        0.0    + tolerance,  # noqa: E221 Z-max
+        0.0    - tolerance,
+        0.0    - tolerance,
+        0.0    - tolerance,
+        width  + tolerance,
+        0.0    + tolerance,
+        0.0    + tolerance,
         0  # Entity dimension: points
     )
     left = gmsh.model.getEntitiesInBoundingBox(
-        0.0    - tolerance,  # noqa: E221 X-min
-        0.0    - tolerance,  # noqa: E221 Y-min
-        0.0    - tolerance,  # noqa: E221 Z-min
-        0.0    + tolerance,  # noqa: E221 X-max
-        height + tolerance,  # noqa: E221 Y-max
-        0.0    + tolerance,  # noqa: E221 Z-max
+        0.0    - tolerance,
+        0.0    - tolerance,
+        0.0    - tolerance,
+        0.0    + tolerance,
+        height + tolerance,
+        0.0    + tolerance,
         0  # Entity dimension: points
     )
     # fmt: on
@@ -134,10 +133,10 @@ def get_parser():
         "--output-file",
         type=pathlib.Path,
         default=default_output_file,
-        # fmt: off
-        help="The output file for the Gmsh model. Extension must match a supported Gmsh file type, e.g. "
-             "``output_file``.msh (default: %(default)s",
-        # fmt: on
+        help=(
+            "The output file for the Gmsh model. Extension must match a supported Gmsh file type, e.g. "
+            "``output_file``.msh (default: %(default)s"
+        ),
     )
     parser.add_argument(
         "--width",

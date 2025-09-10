@@ -3,11 +3,10 @@
 # TODO: Remove custom python script if/when black supports magic file type searches
 # https://github.com/psf/black/issues/491
 
+import argparse
+import pathlib
 import re
 import typing
-import pathlib
-import argparse
-
 
 default_shebang = "#!.*python"
 
@@ -54,8 +53,8 @@ def recurse_files(paths: typing.Iterable[pathlib.Path], exclude_dir: typing.Iter
                     path
                     for path in path.rglob("*")
                     if path.is_file()
-                    and not path.is_symlink()  # noqa: W503
-                    and not any(exclude in str(path) for exclude in exclude_dir)  # noqa: W503
+                    and not path.is_symlink()
+                    and not any(exclude in str(path) for exclude in exclude_dir)
                 ]
             )
         else:
@@ -69,7 +68,7 @@ def find_shebang(path: pathlib.Path, shebang: str = default_shebang) -> None:
     :param path: file to check for shebang
     :param shebang: shebang regular expression to look for
     """
-    with open(path) as infile:
+    with path.open() as infile:
         try:
             first_line = infile.readline()
             if re.match(shebang, first_line):

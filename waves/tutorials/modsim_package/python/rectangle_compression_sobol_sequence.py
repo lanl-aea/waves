@@ -6,13 +6,13 @@ def parameter_schema(
     width={"distribution": "uniform", "loc": 0.9, "scale": 0.2},
     height={"distribution": "uniform", "loc": 0.9, "scale": 0.2},
 ):
-    """Return WAVES Scipy Sobol parameter schema
+    """Return WAVES SciPy Sobol parameter schema
 
     :param int num_simulations: Number of samples to generate
-    :param dict width: The rectangle width Scipy distribution definition
-    :param dict height: The rectangle height Scipy distribution definition
+    :param dict width: The rectangle width SciPy distribution definition
+    :param dict height: The rectangle height SciPy distribution definition
 
-    :returns: WAVES Scipy Sobol parameter schema
+    :returns: WAVES SciPy Sobol parameter schema
     :rtype: dict
     """
     schema = {
