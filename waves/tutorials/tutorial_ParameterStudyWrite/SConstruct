@@ -2,7 +2,6 @@
 
 import waves
 
-
 env = Environment()
 env.AddMethod(waves.scons_extensions.parameter_study_write, "ParameterStudyWrite")
 

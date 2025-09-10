@@ -2,10 +2,9 @@
 import os
 import pathlib
 
-import waves
-
 import scons_extensions
 
+import waves
 
 AddOption(
     "--build-dir",

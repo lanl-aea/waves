@@ -88,14 +88,14 @@ include = "SConstruct|SConscript|.py|.py.in"
 target-version = "py310"
 line-length = 120
 extend-exclude = ["build", "install", "conda-environment", "conda-pkgs", "pip-build-test"]
-extend-include = ["SConstruct", "SConscript", "*.scons"]
+extend-include = ["*SConstruct", "SConscript", "*.scons"]
 
 [tool.ruff.lint]
 extend-select = ["A", "B", "E", "F", "I", "Q", "W", "ARG", "C4", "ERA", "ISC", "NPY", "PD", "PGH", "PIE", "PLC", "PLE", "PLW", "PTH", "PYI", "RSE", "SIM", "T10", "RUF"]
 extend-ignore = ["B028", "PIE808", "PIE790", "SIM108", "PLC0415"]
 
 [tool.ruff.lint.extend-per-file-ignores]
-"SConstruct" = ["F821"]
+"*SConstruct" = ["F821"]
 "SConscript" = ["F821"]
 "*.scons" = ["F821"]
 "waves/parameter_generators.py" = ["RUF005"]

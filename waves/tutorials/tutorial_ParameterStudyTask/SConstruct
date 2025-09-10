@@ -2,7 +2,6 @@ import os
 
 import waves
 
-
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
 )

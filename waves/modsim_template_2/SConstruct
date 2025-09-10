@@ -1,8 +1,8 @@
 #! /usr/bin/env python
-import os
-import sys
-import pathlib
 import inspect
+import os
+import pathlib
+import sys
 
 import waves
 
@@ -228,7 +228,7 @@ for alias, artifacts in workflow_artifacts.items():
     SConscript(
         modsim_package_dir / "archive",
         variant_dir=env["variant_dir_base"] / alias,
-        exports={"env": env, "alias": alias, "artifacts": artifacts + [str(project_configuration)]},
+        exports={"env": env, "alias": alias, "artifacts": [*artifacts, str(project_configuration)]},
     )
 
 # Add unit test target
