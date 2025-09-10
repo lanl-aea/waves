@@ -128,7 +128,7 @@ env["ENV"]["PYTHONDONTWRITEBYTECODE"] = 1
 env.Default()
 
 # Find required programs for conditional target ignoring
-required_programs = ["pytest", "sphinx-build", "latexmk", "flake8", "black", "mypy"]
+required_programs = ["pytest", "sphinx-build", "latexmk", "ruff", "mypy"]
 for program in required_programs:
     absolute_path = env[program.replace("-", "_")] = shutil.which(program, path=env["ENV"]["PATH"])
     print(f"Checking whether '{program}' program exists...{absolute_path}")
