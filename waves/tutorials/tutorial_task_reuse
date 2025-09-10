@@ -50,7 +50,7 @@ parameter_generator.write()
 
 # Parameterized targets must live inside current simulation_variables for loop
 for set_name, parameters in parameter_generator.parameter_study_to_dict().items():
-    set_name = pathlib.Path(set_name)
+    set_path = pathlib.Path(set_name)
     simulation_variables = parameters
 
     # Comment used in tutorial code snippets: marker-4
@@ -58,7 +58,7 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
     # Geometry, Partition
     workflow, datacheck = env.SConscript(
         geometry_configuration,
-        variant_dir=set_name.name,
+        variant_dir=set_path.name,
         exports={
             "env": env,
             "simulation_variables": simulation_variables,
@@ -71,7 +71,7 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
     # Mesh, SolverPrep, Abaqus Solve, Extract Abaqus
     workflow, datacheck = env.SConscript(
         simulation_configuration,
-        variant_dir=set_name.name,
+        variant_dir=set_path.name,
         exports={
             "env": env,
             "simulation_variables": simulation_variables,
