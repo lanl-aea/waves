@@ -56,10 +56,10 @@ def set_name_substitution(
     elif isinstance(original, list | set | tuple) and all(isinstance(item, str | pathlib.Path) for item in original):
         modified = []
         for node in original:
-            try:
-                modified.append(_AtSignTemplate(node).safe_substitute(mapping))
-            except TypeError:
+            if isinstance(node, pathlib.Path):
                 modified.append(pathlib.Path(_AtSignTemplate(str(node)).safe_substitute(mapping)))
+            else:
+                modified.append(_AtSignTemplate(node).safe_substitute(mapping))
         return modified
     else:
         return original
