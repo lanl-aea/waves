@@ -1,5 +1,5 @@
-from contextlib import nullcontext as does_not_raise
 import pathlib
+from contextlib import nullcontext as does_not_raise
 from unittest.mock import patch
 
 import matplotlib.pyplot
@@ -7,7 +7,6 @@ import networkx
 import pytest
 
 from waves import _visualize
-
 
 test_ancestor_subgraph_cases = {
     "node not found": (
