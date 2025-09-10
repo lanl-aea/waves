@@ -5,38 +5,18 @@ Import("env")
 
 pyproject = env.FindFile("pyproject.toml", "#")
 
-flake8 = env.Command(
-    target=["flake8.txt"],
-    source=[".flake8"],
-    action=["flake8 . $$(python find_shebang.py .) --jobs=4 --tee --output-file=${TARGET.abspath}"],
-)
-env.AlwaysBuild(flake8)
-env.Alias("flake8", flake8)
-env.Alias("style", flake8)
-
-black_check = env.Command(
-    target=["black-check.txt"],
-    source=[pyproject],
-    action=["black . $$(python find_shebang.py .) --check --verbose"],
-)
-env.AlwaysBuild(black_check)
-env.Alias("black-check", black_check)
-env.Alias("style", black_check)
-
-# TODO: Remove custom python script if/when black supports magic file type searches
-# https://github.com/psf/black/issues/491
-black_format = env.Command(
-    target=["black-format.txt"],
-    source=[pyproject],
-    action=["black . $$(python find_shebang.py .)"],
-)
-env.AlwaysBuild(black_format)
-env.Alias("black-format", black_format)
-
 ruff_check = env.Command(
     target=["ruff-check.txt"],
     source=[pyproject],
-    action=["ruff check . && ruff format . --check"],
+    action=[
+        "ruff check . && ruff format . --check",
+        # TODO: Remove the second command with a custom script
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/971
+        (
+            "ruff check . $$(python find_shebang.py .) --extend-ignore F821,I001 &&"
+            " ruff format . $$(python find_shebang.py .) --check"
+        ),
+    ],
 )
 env.AlwaysBuild(ruff_check)
 env.Alias("ruff-check", ruff_check)
@@ -44,7 +24,15 @@ env.Alias("style", ruff_check)
 ruff_format = env.Command(
     target=["ruff-format.txt"],
     source=[pyproject],
-    action=["ruff check . --fix; ruff format ."],
+    action=[
+        "ruff check . --fix; ruff format .",
+        # TODO: Remove the second command with a custom script
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/971
+        (
+            "ruff check . $$(python find_shebang.py .) --extend-ignore F821,I001 --fix;"
+            " ruff format . $$(python find_shebang.py .)"
+        ),
+    ],
 )
 env.AlwaysBuild(ruff_format)
 env.Alias("ruff-format", ruff_format)

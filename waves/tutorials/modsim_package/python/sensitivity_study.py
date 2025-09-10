@@ -12,9 +12,9 @@ import SALib.analyze.delta
 import seaborn
 import xarray
 import yaml
+from waves.parameter_generators import SET_COORDINATE_KEY
 
 from modsim_package.python.rectangle_compression_sensitivity_study import parameter_schema
-from waves.parameter_generators import SET_COORDINATE_KEY
 
 default_selection_dict = {
     "E values": "E22",

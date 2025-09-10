@@ -10,6 +10,7 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``project_variables`` - The project variables for use in Sphinx documentation parameters
 """
+
 import pathlib
 
 
@@ -71,7 +72,7 @@ html = env.SphinxBuild(
     source=sources,
     options=sphinx_options,
 )
-env.Clean(html, [Dir("html")] + sources)
+env.Clean(html, [Dir("html"), *sources])
 env.Alias("html", html)
 
 targets = [f"latex/{project_variables['documentation_pdf']}"]
@@ -81,7 +82,7 @@ latexpdf = env.SphinxPDF(
     source=sources,
     options=sphinx_options,
 )
-env.Clean(latexpdf, [Dir("latex")] + sources)
+env.Clean(latexpdf, [Dir("latex"), *sources])
 env.Alias("latexpdf", latexpdf)
 
 # Collector alias to build all documentation

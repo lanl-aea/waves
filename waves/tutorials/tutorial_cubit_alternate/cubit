@@ -14,6 +14,7 @@ Requires the following ``SConscript(..., exports={})``
 * ``element_type`` - The Cubit 4 node quadrilateral element type
 * ``solver`` - The target solver to use when writing a mesh file
 """
+
 import pathlib
 
 # Inherit the parent construction environment

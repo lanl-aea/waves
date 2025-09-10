@@ -9,6 +9,7 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``parameters`` - The current simulation parameter set
 """
+
 import inspect
 import pathlib
 

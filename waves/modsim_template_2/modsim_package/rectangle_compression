@@ -14,6 +14,7 @@ Requires the following ``SConscript(..., exports={})``
 * ``alias`` - The workflow name alias root
 * ``parameters`` - The current simulation parameter set
 """
+
 import inspect
 import pathlib
 
@@ -100,7 +101,7 @@ script_options += " --output-file ${TARGET.file} --x-units 'mm/mm' --y-units 'MP
 workflow.extend(
     env.PythonScript(
         target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
-        source=[modsim_package_abspath / "post_processing.py"] + post_processing_source,
+        source=[modsim_package_abspath / "post_processing.py", *post_processing_source],
         subcommand_options=script_options,
         post_processing_source=post_processing_source,
     )

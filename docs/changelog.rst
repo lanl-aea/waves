@@ -13,6 +13,8 @@ Internal Changes
 - Implement a more complete set of linting and formatting rules with Ruff (:issue:`958`, :merge:`1244`). By `Kyle
   Brindley`_.
 - Miscellaneous linting, formatting, and logical fixes (:issue:`958`, :merge:`1244`). By `Kyle Brindley`_.
+- Replace flake8/black with the more comprehensive ruff linter/formatter (:issue:`968`, :merge:`1245`). By `Kyle
+  Brindley`_.
 
 ********************
 0.13.15 (2025-08-27)

@@ -13,6 +13,7 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``parameters`` - The current simulation parameter set
 """
+
 import pathlib
 
 
@@ -56,7 +57,7 @@ script_options = (
 images.extend(
     env.AbaqusJournal(
         target=["rectangle_compression.png"],
-        source=[modsim_package_abspath / "export_abaqus_image.py"] + solve_source_list,
+        source=[modsim_package_abspath / "export_abaqus_image.py", *solve_source_list],
         subcommand_options=script_options,
         model="rectangle",
     )
@@ -103,7 +104,7 @@ script_options += " --output-file ${TARGET.file} --x-units mm/mm --y-units MPa"
 workflow.extend(
     env.PythonScript(
         target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
-        source=[script] + post_processing_source,
+        source=[script, *post_processing_source],
         subcommand_options=script_options,
     )
 )

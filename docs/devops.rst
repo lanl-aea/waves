@@ -280,9 +280,8 @@ software, so the CI tests on this server require the full build as
 
    $ scons regression --unconditional-build
 
-The continuous integration server also performs a separate style guide check using ``flake8``, ``black``, and `Ruff`_
-with associated aliases or the collector alias ``style``. The project is transitioning to ``ruff`` as a replacement for
-``flake8`` and ``black``, so the ``style`` alias is the preferred style check.
+The continuous integration server also performs a separate style guide check using `Ruff`_ with associated aliases or
+the collector alias ``style``.
 
 .. code-block::
 

@@ -1149,19 +1149,13 @@ class OdbReportFileParser(AbaqusFileParser):
                     if element_size:
                         if just_added:
                             values[value_instance]["integrationPoint"].append([None for _ in range(element_size)])
-                            # TODO: remove the formatter toggle when black is fully replaced by ruff
-                            # fmt: off
                             values[value_instance]["integrationPoint"][index_key][element_index] = (
                                 current_integration_point
                             )
-                            # fmt: on
                         else:
-                            # TODO: remove the formatter toggle when black is fully replaced by ruff
-                            # fmt: off
                             values[value_instance]["integrationPoint"][index_key][element_index] = (
                                 current_integration_point
                             )
-                            # fmt: on
                     else:
                         if just_added:
                             values[value_instance]["integrationPoint"].append(current_integration_point)
@@ -1322,23 +1316,17 @@ class OdbReportFileParser(AbaqusFileParser):
                             if index_key == len(values[value_instance]["values"][self.current_step_count][time_index]):
                                 values[value_instance]["values"][self.current_step_count][time_index].append(data_value)
                             else:
-                                # TODO: remove the formatter toggle when black is fully replaced by ruff
-                                # fmt: off
                                 values[value_instance]["values"][self.current_step_count][time_index][index_key] = (
                                     data_value
                                 )
-                                # fmt: on
                     else:
                         if index_key == len(values[value_instance]["values"][self.current_step_count][time_index]):
                             # If the index_key is the length of the list, then it's one more index than currently exists
                             values[value_instance]["values"][self.current_step_count][time_index].append(data_value)
                         else:
-                            # TODO: remove the formatter toggle when black is fully replaced by ruff
-                            # fmt: off
                             values[value_instance]["values"][self.current_step_count][time_index][index_key] = (
                                 data_value
                             )
-                            # fmt: on
         return line
 
     def get_position_index(self, position, position_type, values):

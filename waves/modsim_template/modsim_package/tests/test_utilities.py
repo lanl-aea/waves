@@ -3,9 +3,9 @@ import unittest.mock
 import numpy
 import pandas
 import xarray
-from modsim_package import utilities
-
 from waves.parameter_generators import SET_COORDINATE_KEY, CartesianProduct
+
+from modsim_package import utilities
 
 
 def test_combine_data():
