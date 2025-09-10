@@ -84,7 +84,7 @@ report.extend(
         source=sources,
     )
 )
-env.Clean(report, [Dir("latex")] + sources)
+env.Clean(report, [Dir("latex"), *sources])
 env.Alias("report", report)
 env.Alias(env["regression_alias"], report)
 

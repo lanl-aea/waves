@@ -178,7 +178,7 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
 # Post-processing
 post_processing_source = [
     pathlib.Path(set_name) / "rectangle_compression_datasets.h5"
-    for set_name in parameter_generator.parameter_study_to_dict().keys()
+    for set_name in parameter_generator.parameter_study_to_dict()
 ]
 script_options = "--input-file ${SOURCES[2:].abspath}"
 script_options += " --output-file ${TARGET.file}"
@@ -186,7 +186,7 @@ script_options += " --parameter-study-file ${SOURCES[1].abspath}"
 workflow.extend(
     env.PythonScript(
         target=["sensitivity_study.pdf", "sensitivity_study.csv", "sensitivity_study.yaml"],
-        source=["#/modsim_package/python/sensitivity_study.py", parameter_study_file.name] + post_processing_source,
+        source=["#/modsim_package/python/sensitivity_study.py", parameter_study_file.name, *post_processing_source],
         subcommand_options=script_options,
     )
 )

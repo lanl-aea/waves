@@ -35,7 +35,7 @@ time_points = vtu2xarray.time_points_from_file(time_points_source_file)
 time_point_indices = range(1, len(time_points) + 1, 1)
 vtu_files = [f"rectangle_compression.{increment:02}.vtu" for increment in time_point_indices]
 env.Command(
-    target=vtu_files + ["rectangle_compression.vtu.stdout"],
+    target=[*vtu_files, "rectangle_compression.vtu.stdout"],
     source=["rectangle_compression.frd"],
     action=["cd ${TARGET.dir.abspath} && ccx2paraview ${SOURCES[0].abspath} vtu > ${TARGETS[-1].abspath} 2>&1"],
 )

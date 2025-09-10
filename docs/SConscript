@@ -309,7 +309,7 @@ html = env.SphinxBuild(
     source=source_files,
     builder="html",
 )
-env.Clean(html, [Dir(html_directory)] + documentation_file_list)
+env.Clean(html, [Dir(html_directory), *documentation_file_list])
 env.Alias(html_directory, html)
 
 # TODO: Combine the two html build logic
@@ -321,7 +321,7 @@ internal = env.SphinxBuild(
     builder="html",
     tags="-t aea",
 )
-env.Clean(internal, [Dir(internal_directory)] + documentation_file_list)
+env.Clean(internal, [Dir(internal_directory), *documentation_file_list])
 env.Alias(internal_directory, internal)
 
 waves_pdf = pathlib.Path(f"latex/{project_substitution_dictionary['@documentation_pdf@']}")
@@ -331,7 +331,7 @@ latexpdf = env.SphinxPDF(
     target=latex_target,
     source=source_files,
 )
-env.Clean(latexpdf, [Dir(latex_directory)] + documentation_file_list)
+env.Clean(latexpdf, [Dir(latex_directory), *documentation_file_list])
 env.Alias("latexpdf", latexpdf)
 
 man_directory = "man"
@@ -346,7 +346,7 @@ man = env.SphinxBuild(
     builder="man",
     tags="-t man",
 )
-env.Clean(man, [Dir(man_directory)] + documentation_file_list)
+env.Clean(man, [Dir(man_directory), *documentation_file_list])
 env.Alias(man_directory, man)
 
 # TODO: Depends on ``imagemagick`` package, which isn't part of the CI environment yet
@@ -362,10 +362,10 @@ epub_directory = "epub"
 epub_target = [f"{epub_directory}/{waves_epub}"]
 epub = env.SphinxBuild(
     target=epub_target,
-    source=source_files + [f"epub/_static/{epub_cover}"],
+    source=[*source_files, f"epub/_static/{epub_cover}"],
     builder="epub",
 )
-env.Clean(epub, [Dir(epub_directory)] + documentation_file_list)
+env.Clean(epub, [Dir(epub_directory), *documentation_file_list])
 env.Alias(epub_directory, epub)
 
 # Collector alias to build all documentation and regression

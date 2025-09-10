@@ -183,7 +183,7 @@ workflow.extend(
         target=[parameter_study_file.name],
         source=[
             pathlib.Path(set_name) / "rectangle_compression.odb"
-            for set_name in parameter_generator.parameter_study_to_dict().keys()
+            for set_name in parameter_generator.parameter_study_to_dict()
         ],
         action=[write_parameter_study],
         parameter_generator=parameter_generator,

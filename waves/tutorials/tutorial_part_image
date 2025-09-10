@@ -171,7 +171,7 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
     images.extend(
         env.AbaqusJournal(
             target=[set_name / "rectangle_compression.png"],
-            source=[str("#/modsim_package/abaqus/export_abaqus_image.py")] + solve_source_list,
+            source=[str("#/modsim_package/abaqus/export_abaqus_image.py"), *solve_source_list],
             subcommand_options=script_options,
             model="rectangle",
         )
@@ -182,7 +182,7 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
 # Post-processing
 post_processing_source = [
     pathlib.Path(set_name) / "rectangle_compression_datasets.h5"
-    for set_name in parameter_generator.parameter_study_to_dict().keys()
+    for set_name in parameter_generator.parameter_study_to_dict()
 ]
 script_options = "--input-file ${SOURCES[2:].abspath}"
 script_options += " --output-file ${TARGET.file} --x-units mm/mm --y-units MPa"
@@ -190,7 +190,7 @@ script_options += " --parameter-study-file ${SOURCES[1].abspath}"
 workflow.extend(
     env.PythonScript(
         target=["stress_strain_comparison.pdf", "stress_strain_comparison.csv"],
-        source=["#/modsim_package/python/post_processing.py", parameter_study_file.name] + post_processing_source,
+        source=["#/modsim_package/python/post_processing.py", parameter_study_file.name, *post_processing_source],
         subcommand_options=script_options,
     )
 )
