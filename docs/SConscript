@@ -1,6 +1,6 @@
 #! /usr/bin/env python
-import re
 import pathlib
+import re
 
 import SCons.Scanner
 
@@ -18,7 +18,7 @@ def sphinx_scanner():
     def suffix_only(node_list):
         return [node for node in node_list if node.path.endswith(tuple(suffixes))]
 
-    def regex_scan(node, env, path):
+    def regex_scan(node, env, path):  # noqa: ARG001
         contents = node.get_text_contents()
         includes = expression.findall(contents)
         includes = [file.strip() for file in includes]
