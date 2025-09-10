@@ -142,7 +142,10 @@ def test_odb_extract():
     ):
         # Test case where output name doesn't match odb name
         odb_extract.odb_extract(["sample.odb"], "new_name.h5", odb_report_args="odbreport -all")
-        mock_run_external.assert_called_with("abaqus odbreport -all -job new_name -odb sample.odb -mode CSV -blocked")
+        mock_run_external.assert_called_with(
+            "abaqus odbreport -all -job new_name -odb sample.odb -mode CSV -blocked",
+            check=False,
+        )
 
     with (
         patch("pathlib.Path.exists", return_value=True),
