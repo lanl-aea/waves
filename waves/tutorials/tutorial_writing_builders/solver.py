@@ -31,7 +31,6 @@ Exit codes:
 import argparse
 import pathlib
 import sys
-import typing
 
 import yaml
 
@@ -132,7 +131,7 @@ def configure(args: argparse.Namespace) -> dict:
     return configuration
 
 
-def solve_output_files(output_file: pathlib.Path, solve_cpus: int) -> typing.List[pathlib.Path]:
+def solve_output_files(output_file: pathlib.Path, solve_cpus: int) -> list[pathlib.Path]:
     """Return the solve output file list to match the number of solve cpus
 
     :param output_file: base name for the output file
@@ -206,9 +205,9 @@ def positive_nonzero_int(argument):
     try:
         argument = int(argument)
     except ValueError as err:
-        raise argparse.ArgumentTypeError("invalid integer value: '{}'".format(argument)) from err
+        raise argparse.ArgumentTypeError(f"invalid integer value: '{argument}'") from err
     if not argument >= MINIMUM_VALUE:
-        raise argparse.ArgumentTypeError("invalid positive integer: '{}'".format(argument))
+        raise argparse.ArgumentTypeError(f"invalid positive integer: '{argument}'")
     return argument
 
 

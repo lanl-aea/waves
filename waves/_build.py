@@ -7,7 +7,6 @@ to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 import argparse
 import pathlib
 import sys
-import typing
 
 from waves import _settings, _utilities
 
@@ -57,10 +56,10 @@ def get_parser() -> argparse.ArgumentParser:
 
 def main(
     targets: list,
-    scons_args: typing.Optional[list] = None,
+    scons_args: list | None = None,
     max_iterations: int = 5,
-    working_directory: typing.Union[str, pathlib.Path, None] = None,
-    git_clone_directory: typing.Union[str, pathlib.Path, None] = None,
+    working_directory: str | pathlib.Path | None = None,
+    git_clone_directory: str | pathlib.Path | None = None,
 ) -> None:
     """Submit an iterative SCons command
 

@@ -147,17 +147,17 @@ def get_parser() -> argparse.ArgumentParser:
 
 
 def main(
-    targets: typing.List[str],
-    scons_args: typing.Optional[list] = None,
+    targets: list[str],
+    scons_args: list | None = None,
     sconstruct: pathlib.Path = _settings._default_sconstruct,
-    output_file: typing.Optional[pathlib.Path] = None,
+    output_file: pathlib.Path | None = None,
     height: int = _settings._visualize_default_height,
     width: int = _settings._visualize_default_width,
     font_size: int = _settings._visualize_default_font_size,
     node_color: str = _settings._default_node_color,
     edge_color: str = _settings._default_edge_color,
-    exclude_list: typing.List[str] = _settings._visualize_exclude,
-    exclude_regex: typing.Optional[str] = None,
+    exclude_list: list[str] = _settings._visualize_exclude,
+    exclude_regex: str | None = None,
     print_graphml: bool = False,
     print_tree: bool = False,
     vertical: bool = False,
@@ -165,7 +165,7 @@ def main(
     node_count: bool = False,
     transparent: bool = False,
     break_paths: bool = False,
-    input_file: typing.Union[str, pathlib.Path, None] = None,
+    input_file: str | pathlib.Path | None = None,
 ) -> None:
     """Visualize the directed acyclic graph created by a SCons build
 
@@ -306,9 +306,9 @@ def graph_to_graphml(graph: networkx.DiGraph) -> str:
 
 
 def parse_output(
-    tree_lines: typing.List[str],
-    exclude_list: typing.List[str] = _settings._visualize_exclude,
-    exclude_regex: typing.Optional[str] = None,
+    tree_lines: list[str],
+    exclude_list: list[str] = _settings._visualize_exclude,
+    exclude_regex: str | None = None,
     no_labels: bool = False,
     break_paths: bool = False,
 ) -> networkx.DiGraph:
@@ -384,7 +384,7 @@ def check_regex_exclude(
     current_indent: int,
     exclude_indent: int,
     exclude_node: bool = False,
-) -> typing.Tuple[bool, int]:
+) -> tuple[bool, int]:
     """Excludes node names that match the regular expression
 
     :param str exclude_regex: Regular expression
@@ -478,7 +478,7 @@ def visualize(
 
 def plot(
     figure: matplotlib.figure.Figure,
-    output_file: typing.Optional[pathlib.Path] = None,
+    output_file: pathlib.Path | None = None,
     transparent: bool = False,
 ) -> None:
     """Open a matplotlib plot or save to file

@@ -5,7 +5,6 @@ import pathlib
 import shutil
 import sys
 import tempfile
-import typing
 
 import pytest
 import xarray
@@ -34,7 +33,7 @@ test_previous_parameter_study_cases = {
     ids=test_previous_parameter_study_cases.keys(),
 )
 def test_previous_parameter_study(
-    system_test_directory: typing.Optional[pathlib.Path],
+    system_test_directory: pathlib.Path | None,
     keep_system_tests: bool,
     request: pytest.FixtureRequest,
     schema: dict,
@@ -111,7 +110,7 @@ def test_previous_parameter_study(
 
 @pytest.mark.systemtest
 def test_qoi_example(
-    system_test_directory: typing.Optional[pathlib.Path],
+    system_test_directory: pathlib.Path | None,
     keep_system_tests: bool,
 ) -> None:
     """Run real system I/O for the waves.qoi API

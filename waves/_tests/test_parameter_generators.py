@@ -2,7 +2,6 @@
 
 import contextlib
 import pathlib
-import typing
 from unittest.mock import mock_open, patch
 
 import numpy
@@ -1506,7 +1505,7 @@ def test_update_set_names(
     parameter_study: xarray.Dataset,
     kwargs: dict,
     expected: xarray.Dataset,
-    outcome: typing.Union[contextlib.nullcontext, pytest.RaisesExc],
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
 ) -> None:
     """Check the generated and updated parameter set names against template arguments
 

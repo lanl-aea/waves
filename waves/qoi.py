@@ -209,7 +209,7 @@ def create_qoi_set(qois: typing.Iterable[xarray.DataArray]) -> xarray.Dataset:
 
 def _create_qoi_study(
     qois: typing.Iterable[xarray.DataArray],
-    parameter_study: typing.Optional[xarray.Dataset] = None,
+    parameter_study: xarray.Dataset | None = None,
 ) -> xarray.Dataset:
     """Create a QOI Dataset spanning multiple simulations.
 
@@ -781,10 +781,10 @@ def _can_plot_scalar_qoi_history(qoi: xarray.DataArray) -> bool:
 def _pdf_report(
     qois: typing.Iterable[xarray.DataArray],
     output_pdf: pathlib.Path,
-    page_margins: typing.Dict[str, float],
+    page_margins: dict[str, float],
     plots_per_page: int,
     plotting_method: collections.abc.Callable,
-    plotting_kwargs: typing.Dict,
+    plotting_kwargs: dict,
     groupby: collections.abc.Callable = _qoi_group,
 ) -> None:
     """Generate a multi-page PDF report of QOI plots.
@@ -901,7 +901,7 @@ def _plot_archive(output: pathlib.Path, qoi_archive_h5: typing.Iterable[pathlib.
     :param output: report output file path
     :param qoi_archive_h5: QOI archive file(s)
     """
-    qoi_archive = _merge_qoi_archives((xarray.open_datatree(archive, engine="h5netcdf") for archive in qoi_archive_h5))
+    qoi_archive = _merge_qoi_archives(xarray.open_datatree(archive, engine="h5netcdf") for archive in qoi_archive_h5)
     _qoi_history_report(qoi_archive, output)
 
 

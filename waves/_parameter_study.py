@@ -10,7 +10,6 @@ import argparse
 import io
 import pathlib
 import sys
-import typing
 
 import yaml
 
@@ -116,7 +115,7 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def read_parameter_schema(input_file: typing.Union[str, pathlib.Path, io.TextIOWrapper, None]) -> dict:
+def read_parameter_schema(input_file: str | pathlib.Path | io.TextIOWrapper | None) -> dict:
     """Read a YAML dictionary from STDIN or a file
 
     :param input_file: STDIN stream or file path
@@ -140,12 +139,12 @@ def read_parameter_schema(input_file: typing.Union[str, pathlib.Path, io.TextIOW
 
 def main(
     subcommand: str,
-    input_file: typing.Union[str, pathlib.Path, io.TextIOWrapper, None],
-    output_file_template: typing.Optional[str] = _settings._default_output_file_template,
-    output_file: typing.Optional[str] = _settings._default_output_file,
+    input_file: str | pathlib.Path | io.TextIOWrapper | None,
+    output_file_template: str | None = _settings._default_output_file_template,
+    output_file: str | None = _settings._default_output_file,
     output_file_type: _settings._allowable_output_file_typing = _settings._default_output_file_type_cli,
     set_name_template: str = _settings._default_set_name_template,
-    previous_parameter_study: typing.Optional[str] = _settings._default_previous_parameter_study,
+    previous_parameter_study: str | None = _settings._default_previous_parameter_study,
     require_previous_parameter_study: bool = _settings._default_require_previous_parameter_study,
     overwrite: bool = _settings._default_overwrite,
     dry_run: bool = _settings._default_dry_run,

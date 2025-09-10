@@ -74,11 +74,11 @@ class ParameterGenerator(ABC):
     def __init__(
         self,
         parameter_schema: dict,
-        output_file_template: typing.Optional[str] = _settings._default_output_file_template,
-        output_file: typing.Optional[str] = _settings._default_output_file,
+        output_file_template: str | None = _settings._default_output_file_template,
+        output_file: str | None = _settings._default_output_file,
         output_file_type: _settings._allowable_output_file_typing = _settings._default_output_file_type_api,
         set_name_template: str = _settings._default_set_name_template,
-        previous_parameter_study: typing.Optional[str] = _settings._default_previous_parameter_study,
+        previous_parameter_study: str | None = _settings._default_previous_parameter_study,
         require_previous_parameter_study: bool = _settings._default_require_previous_parameter_study,
         overwrite: bool = _settings._default_overwrite,
         write_meta: bool = _settings._default_write_meta,
@@ -194,8 +194,8 @@ class ParameterGenerator(ABC):
 
     def write(
         self,
-        output_file_type: typing.Union[_settings._allowable_output_file_typing, None] = None,
-        dry_run: typing.Optional[bool] = _settings._default_dry_run,
+        output_file_type: _settings._allowable_output_file_typing | None = None,
+        dry_run: bool | None = _settings._default_dry_run,
     ) -> None:
         """Write the parameter study to STDOUT or an output file.
 
@@ -324,7 +324,7 @@ class ParameterGenerator(ABC):
 
     def _conditionally_write_yaml(
         self,
-        output_file: typing.Union[str, pathlib.Path],
+        output_file: str | pathlib.Path,
         parameter_dictionary: dict,
     ) -> None:
         """Write YAML file over previous study if the datasets have changed or self.overwrite is True
@@ -444,7 +444,7 @@ class ParameterGenerator(ABC):
         """
         return _parameter_study_to_numpy(self.parameter_study)
 
-    def parameter_study_to_dict(self) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
+    def parameter_study_to_dict(self) -> dict[str, dict[str, typing.Any]]:
         """Return parameter study as a dictionary
 
         Used for iterating on parameter sets in an SCons workflow with parameter substitution dictionaries, e.g.
@@ -1322,7 +1322,7 @@ class SALibSampler(ParameterGenerator, ABC):
         if self.sampler_class == "morris" and parameter_count < 2:
             raise SchemaValidationError("The SALib Morris sampler requires at least two parameters")
 
-    def _sampler_overrides(self, override_kwargs: typing.Optional[dict] = None) -> dict:
+    def _sampler_overrides(self, override_kwargs: dict | None = None) -> dict:
         """Provide sampler specific kwarg override dictionaries
 
         * sobol produces duplicate parameter sets for two parameters when ``calc_second_order`` is ``True``. Override
@@ -1359,7 +1359,7 @@ class SALibSampler(ParameterGenerator, ABC):
         super()._generate()
 
 
-def _calculate_set_hash(parameter_names: typing.List[str], set_samples: numpy.ndarray) -> str:
+def _calculate_set_hash(parameter_names: list[str], set_samples: numpy.ndarray) -> str:
     """Calculate the unique, repeatable parameter set content hash for a single parameter set
 
     :param parameter_names: list of parameter names in matching order with parameter samples
@@ -1378,7 +1378,7 @@ def _calculate_set_hash(parameter_names: typing.List[str], set_samples: numpy.nd
     return set_hash
 
 
-def _calculate_set_hashes(parameter_names: typing.List[str], samples: numpy.ndarray) -> typing.List[str]:
+def _calculate_set_hashes(parameter_names: list[str], samples: numpy.ndarray) -> list[str]:
     """Calculate the unique, repeatable parameter set content hashes from a :class:`ParameterGenerator` object with
     populated ``self._samples`` attribute.
 
@@ -1471,7 +1471,7 @@ def _return_dataset_types(original_dataset: xarray.Dataset, update_dataset: xarr
     return original_types
 
 
-def _open_parameter_study(parameter_study_file: typing.Union[pathlib.Path, str]) -> xarray.Dataset:
+def _open_parameter_study(parameter_study_file: pathlib.Path | str) -> xarray.Dataset:
     """Return a :class:`ParameterGenerator` parameter study xarray Dataset after verifying contents
 
     :param parameter_study_file: Xarray parameter study file to open
@@ -1498,7 +1498,7 @@ def _open_parameter_study(parameter_study_file: typing.Union[pathlib.Path, str])
     return parameter_study
 
 
-def _coerce_values(values: typing.Iterable, name: typing.Optional[str] = None) -> numpy.ndarray:
+def _coerce_values(values: typing.Iterable, name: str | None = None) -> numpy.ndarray:
     """Coerces values of an iterable into a single datatype. Warns the user if coercion was necessary.
 
     :param values: list of values
@@ -1577,8 +1577,8 @@ def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.D
 
 
 def _merge_parameter_space(
-    studies: typing.List[xarray.Dataset],
-    template: typing.Optional[string.Template] = None,
+    studies: list[xarray.Dataset],
+    template: string.Template | None = None,
 ) -> xarray.Dataset:
     """Merge a list of parameter studies with the same parameter space into one study. Studies should have set hash as
     the active dimension.
@@ -1618,7 +1618,7 @@ def _merge_parameter_space(
 
 
 def _merge_parameter_studies(
-    studies: typing.List[xarray.Dataset], template: typing.Optional[string.Template] = None
+    studies: list[xarray.Dataset], template: string.Template | None = None
 ) -> xarray.Dataset:
     """Merge a list of parameter studies into one study.
 
@@ -1674,7 +1674,7 @@ def _merge_parameter_studies(
     return study_combined
 
 
-def _create_set_names(set_hashes: typing.List[str], template: typing.Optional[string.Template] = None) -> dict:
+def _create_set_names(set_hashes: list[str], template: string.Template | None = None) -> dict:
     """Construct parameter set names from the set name template and number of parameter set hashes. Set names are
     assigned to set hashes in hash ascending alphabetical order.
 
@@ -1696,7 +1696,7 @@ def _create_set_names(set_hashes: typing.List[str], template: typing.Optional[st
 
 
 def _update_set_names(
-    parameter_study: xarray.Dataset, template: typing.Optional[string.Template] = None
+    parameter_study: xarray.Dataset, template: string.Template | None = None
 ) -> xarray.Dataset:
     """Update the parameter set names after a parameter study dataset merge operation. Hashes that are missing set
     names are assigned a new set name in hash ascending alphabetical order.

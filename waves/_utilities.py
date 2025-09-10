@@ -32,11 +32,11 @@ class _AtSignTemplate(string.Template):
 
 
 def set_name_substitution(
-    original: typing.Union[typing.Iterable[typing.Union[str, pathlib.Path]], str, pathlib.Path],
+    original: typing.Iterable[str | pathlib.Path] | str | pathlib.Path,
     replacement: str,
     identifier: str = "set_name",
     suffix: str = "/",
-) -> typing.Union[typing.List[typing.Union[str, pathlib.Path]], str, pathlib.Path]:
+) -> list[str | pathlib.Path] | str | pathlib.Path:
     """Replace ``@identifier`` with replacement text in a list of strings and pathlib Path objects
 
     If the original is not a string, Path, or an iterable of strings and Paths, return without modification.
@@ -65,7 +65,7 @@ def set_name_substitution(
         return original
 
 
-def _quote_spaces_in_path(path: typing.Union[str, pathlib.Path]) -> pathlib.Path:
+def _quote_spaces_in_path(path: str | pathlib.Path) -> pathlib.Path:
     """Traverse parts of a path and place in double quotes if there are spaces in the part
 
     >>> import pathlib
@@ -89,7 +89,7 @@ def _quote_spaces_in_path(path: typing.Union[str, pathlib.Path]) -> pathlib.Path
     return new_path
 
 
-def search_commands(options: typing.Iterable[str]) -> typing.Optional[str]:
+def search_commands(options: typing.Iterable[str]) -> str | None:
     """Return the first found command in the list of options. Return None if none are found.
 
     :param list options: executable path(s) to test
@@ -134,7 +134,7 @@ def cubit_os_bin() -> str:
     return bin_directory
 
 
-def find_cubit_bin(options: typing.Iterable[str], bin_directory: typing.Optional[str] = None) -> pathlib.Path:
+def find_cubit_bin(options: typing.Iterable[str], bin_directory: str | None = None) -> pathlib.Path:
     """Provided a few options for the Cubit executable, search for the bin directory.
 
     Recommend first checking to see if cubit will import.
@@ -164,7 +164,7 @@ def find_cubit_bin(options: typing.Iterable[str], bin_directory: typing.Optional
     else:
         search = cubit_bin.rglob(bin_directory)
         try:
-            cubit_bin = next((path for path in search if path.name == bin_directory))
+            cubit_bin = next(path for path in search if path.name == bin_directory)
         except StopIteration as err:
             raise FileNotFoundError(message) from err
     return cubit_bin
@@ -192,13 +192,13 @@ def find_cubit_python(options: typing.Iterable[str], python_command: str = "pyth
     cubit_parent = pathlib.Path(cubit_command).parent
     search = cubit_parent.rglob(python_command)
     try:
-        cubit_python = next((path for path in search if path.is_file() and os.access(path, os.X_OK)))
+        cubit_python = next(path for path in search if path.is_file() and os.access(path, os.X_OK))
     except StopIteration as err:
         raise FileNotFoundError(message) from err
     return cubit_python
 
 
-def tee_subprocess(command: typing.List[str], **kwargs) -> typing.Tuple[int, str]:
+def tee_subprocess(command: list[str], **kwargs) -> tuple[int, str]:
     """Stream STDOUT to terminal while saving buffer to variable
 
     :param command: Command to execute provided a list of strings
@@ -274,7 +274,7 @@ def return_environment(
 def cache_environment(
     command: str,
     shell: str = "bash",
-    cache: typing.Optional[typing.Union[str, pathlib.Path]] = None,
+    cache: str | pathlib.Path | None = None,
     overwrite_cache: bool = False,
     verbose: bool = False,
 ) -> dict:

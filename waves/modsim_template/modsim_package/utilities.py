@@ -2,7 +2,6 @@
 
 import pathlib
 import sys
-import typing
 
 import matplotlib.pyplot
 import pandas
@@ -126,7 +125,7 @@ def csv_files_match(current_csv, expected_csv, index_column="time", sort_columns
 
 
 def write_study_definition(
-    study_definition: typing.Union[waves.parameter_generators.ParameterGenerator, dict],
+    study_definition: waves.parameter_generators.ParameterGenerator | dict,
     path: pathlib.Path,
     alias: str,
 ) -> None:

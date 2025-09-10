@@ -67,7 +67,7 @@ class AbaqusFileParser(ABC):
         try:
             with Path(self.output_file).open(mode="w") as f:
                 yaml.safe_dump(self.parsed, f)
-        except EnvironmentError as e:
+        except OSError as e:
             sys.exit(f"Couldn't write file {self.output_file}: {e}")
 
     def print_warning(self, message):
@@ -139,7 +139,7 @@ class OdbReportFileParser(AbaqusFileParser):
         # TODO: Refactor to use a context manager
         try:
             f = Path(input_file).open(mode="r")  # noqa: SIM115
-        except EnvironmentError as e:
+        except OSError as e:
             sys.exit(f"Couldn't read file {input_file}: {e}")
 
         if not time_stamp:
@@ -1590,7 +1590,7 @@ class OdbReportFileParser(AbaqusFileParser):
         datasets = []
         try:
             extract_h5 = h5py.File(h5_file, "a")
-        except EnvironmentError as e:
+        except OSError as e:
             sys.exit(f"Couldn't open file {h5_file}: {e}")
 
         # Format Mesh information

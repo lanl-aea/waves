@@ -766,14 +766,14 @@ require_third_party_system_tests = [
 @pytest.mark.systemtest
 @pytest.mark.parametrize("commands, fetch_options", system_tests + require_third_party_system_tests)
 def test_system(
-    system_test_directory: typing.Optional[pathlib.Path],
+    system_test_directory: pathlib.Path | None,
     keep_system_tests: bool,
     unconditional_build: bool,
-    abaqus_command: typing.Optional[pathlib.Path],
-    cubit_command: typing.Optional[pathlib.Path],
+    abaqus_command: pathlib.Path | None,
+    cubit_command: pathlib.Path | None,
     request: pytest.FixtureRequest,
     commands: typing.Iterable[str],
-    fetch_options: typing.Optional[str],
+    fetch_options: str | None,
 ) -> None:
     """Run shell commands as system tests in a temporary directory.
 
@@ -876,7 +876,7 @@ def test_create_test_prefix(kwargs, expected, request: pytest.FixtureRequest) ->
 
 
 def return_temporary_directory_kwargs(
-    system_test_directory: typing.Optional[pathlib.Path],
+    system_test_directory: pathlib.Path | None,
     keep_system_tests: bool,
 ) -> dict:
     kwargs = {}
