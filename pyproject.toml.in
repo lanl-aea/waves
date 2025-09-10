@@ -77,13 +77,6 @@ markers = [
 ]
 addopts = "--ignore='build' --ignore='install' --ignore='waves/modsim_template/' --ignore='modsim_template/' --ignore='waves/modsim_template_2/' --ignore='modsim_template_2/' --ignore='waves/tutorials/' --ignore='tutorials/' --tb=long --showlocals --failed-first --strict-markers -m 'not systemtest' --import-mode=importlib -ra"
 
-[tool.black]
-target-version = ["py39", "py310", "py311", "py312", "py313"]
-extend-exclude = ".txt|.toml|.yaml|.csv"
-force-exclude = "build*/|install*/|conda-environment*/|conda-pkgs*/"
-line-length = 120
-include = "SConstruct|SConscript|.py|.py.in"
-
 [tool.ruff]
 target-version = "py310"
 line-length = 120
