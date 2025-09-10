@@ -28,6 +28,24 @@ test_ancestor_subgraph_cases = {
         does_not_raise(),
         networkx.DiGraph([("parent", "child")]).subgraph("parent"),
     ),
+    "parent1/2-child1/2: request child": (
+        networkx.DiGraph([("parent", "child"), ("parent2", "child2")]),
+        ["child"],
+        does_not_raise(),
+        networkx.DiGraph([("parent", "child")]),
+    ),
+    "parent1/2-child1/2: request child2": (
+        networkx.DiGraph([("parent", "child"), ("parent2", "child2")]),
+        ["child2"],
+        does_not_raise(),
+        networkx.DiGraph([("parent2", "child2")]),
+    ),
+    "parent1/2-child1/2: request child1/2": (
+        networkx.DiGraph([("parent", "child"), ("parent2", "child2")]),
+        ["child", "child2"],
+        does_not_raise(),
+        networkx.DiGraph([("parent", "child"), ("parent2", "child2")]),
+    ),
     "grandparent-parent-child: request child": (
         networkx.DiGraph([("grandparent", "parent"), ("parent", "child")]),
         ["child"],

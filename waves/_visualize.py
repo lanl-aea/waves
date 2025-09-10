@@ -267,7 +267,8 @@ def ancestor_subgraph(
     missing = [node for node in nodes if not graph.has_node(node)]
     if missing:
         raise RuntimeError(f"Nodes '{' '.join(missing)}' not found in the graph")
-    sources = sources.union(networkx.ancestors(graph, nodes[-1]))
+    for node in nodes:
+        sources = sources.union(networkx.ancestors(graph, node))
     return networkx.DiGraph(graph.subgraph(sources))
 
 
