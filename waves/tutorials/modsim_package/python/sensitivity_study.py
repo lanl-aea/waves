@@ -108,8 +108,10 @@ def main(input_files, output_file, group_path, selection_dict, parameter_study_f
     sensitivity_yaml = {}
     for key, value in sensitivity.items():
         if isinstance(value, numpy.ndarray):
-            value = value.tolist()
-        sensitivity_yaml[key] = value
+            yaml_compatible_value = value.tolist()
+        else:
+            yaml_compatible_value = value
+        sensitivity_yaml[key] = yaml_compatible_value
     with output_yaml.open(mode="w") as output:
         output.write(yaml.safe_dump(sensitivity_yaml))
 

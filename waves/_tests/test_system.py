@@ -836,12 +836,14 @@ def test_system(
     try:
         for command in commands:
             if isinstance(command, string.Template):
-                command = command.substitute(template_substitution)
-            # TODO: Find a better way to split ``--waves-command='python -m waves._main'`` correctly for Windows
-            if "--waves-command" in command:
-                command_list = shlex.split(command, posix=True)
+                command_string = command.substitute(template_substitution)
             else:
-                command_list = shlex.split(command, posix=not testing_windows)
+                command_string = command
+            # TODO: Find a better way to split ``--waves-command='python -m waves._main'`` correctly for Windows
+            if "--waves-command" in command_string:
+                command_list = shlex.split(command_string, posix=True)
+            else:
+                command_list = shlex.split(command_string, posix=not testing_windows)
             subprocess.check_output(command_list, env=system_test_environment, cwd=temporary_path, text=True)
     except Exception as err:
         raise err

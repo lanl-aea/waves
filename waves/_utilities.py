@@ -82,8 +82,10 @@ def _quote_spaces_in_path(path: typing.Union[str, pathlib.Path]) -> pathlib.Path
     new_path = pathlib.Path(path.root)
     for part in path.parts:
         if " " in part:
-            part = f'"{part}"'
-        new_path = new_path / part
+            new_part = f'"{part}"'
+        else:
+            new_part = part
+        new_path = new_path / new_part
     return new_path
 
 
