@@ -109,8 +109,10 @@ extend-ignore = ["B028", "PIE808", "PIE790", "SIM108", "PLC0415"]
 "waves/tutorials/scons_quickstart/rectangle_*.py" = ["PTH"]
 "waves/tutorials/multi_action_task/rectangle_*.py" = ["PTH"]
 "waves/tutorials/modsim_package/argparse_types/rectangle_*.py" = ["PTH", "I001"]
-"waves/tutorials/modsim_package/abaqus/*.py" = ["PTH"]
+"waves/tutorials/modsim_package/abaqus/*.py" = ["PTH", "I001"]
+"waves/tutorials/modsim_package/python/*.py" = ["I001"]
 "waves/modsim_template*/modsim_package/rectangle_*.py" = ["PTH"]
+"waves/modsim_template*/modsim_package/tests/*.py" = ["I001"]
 # TODO: re-enable B006 VVV
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/959
 "**/rectangle_compression_sobol_sequence.py" = ["B006"]
