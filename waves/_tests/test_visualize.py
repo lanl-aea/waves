@@ -16,17 +16,59 @@ test_ancestor_subgraph_cases = {
         pytest.raises(RuntimeError, match="Nodes 'notanode' not found in the graph"),
         None,
     ),
-    "single parent-child: request child": (
+    "parent-child: request child": (
         networkx.DiGraph([("parent", "child")]),
         ["child"],
         does_not_raise(),
         networkx.DiGraph([("parent", "child")]),
     ),
-    "single parent-child: request parent": (
+    "parent-child: request parent": (
         networkx.DiGraph([("parent", "child")]),
         ["parent"],
         does_not_raise(),
         networkx.DiGraph([("parent", "child")]).subgraph("parent"),
+    ),
+    "grandparent-parent-child: request child": (
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child")]),
+        ["child"],
+        does_not_raise(),
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child")]),
+    ),
+    "grandparent-parent-child: request parent": (
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child")]),
+        ["parent"],
+        does_not_raise(),
+        networkx.DiGraph([("grandparent", "parent")]),
+    ),
+    "grandparent-parent-child/child2: request child": (
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child"), ("parent", "child2")]),
+        ["child"],
+        does_not_raise(),
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child")]),
+    ),
+    "grandparent-parent-child/child2: request child2": (
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child"), ("parent", "child2")]),
+        ["child2"],
+        does_not_raise(),
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child2")]),
+    ),
+    "grandparent-parent-child/child2: request child/child2": (
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child"), ("parent", "child2")]),
+        ["child", "child2"],
+        does_not_raise(),
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child"), ("parent", "child2")]),
+    ),
+    "grandparent-parent-child/child2: request parent": (
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child"), ("parent", "child2")]),
+        ["parent"],
+        does_not_raise(),
+        networkx.DiGraph([("grandparent", "parent")]),
+    ),
+    "grandparent-parent-child/child2: request grandparent": (
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child"), ("parent", "child2")]),
+        ["grandparent"],
+        does_not_raise(),
+        networkx.DiGraph([("grandparent", "parent")]).subgraph("grandparent"),
     ),
 }
 
