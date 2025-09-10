@@ -86,8 +86,8 @@ extend-include = ["*SConstruct", "*SConscript", "*.scons"]
 [tool.ruff.lint]
 extend-select = [
     "A", "B", "E", "F", "I", "Q", "W",
-    "ARG", "C4", "ERA", "ISC", "NPY", "PD", "PGH", "PIE", "PLC", "PLE", "PLW", "PTH", "PYI", "RSE", "RUF", "SIM", "T10",
-    "UP"
+    "ARG", "C4", "FURB", "ERA", "ISC", "NPY", "PD", "PGH", "PIE", "PLC", "PLE", "PLW", "PTH", "PYI", "RSE", "RUF",
+    "SIM", "T10", "UP"
 ]
 extend-ignore = ["B028", "PIE808", "PIE790", "SIM108", "PLC0415"]
 
@@ -104,16 +104,16 @@ extend-ignore = ["B028", "PIE808", "PIE790", "SIM108", "PLC0415"]
 "waves/modsim_template*/modsim_package/tests/*.py" = ["I001"]
 "**/cubit/rectangle_partition.py" = ["ARG001"]
 # Abaqus Python 2 compatible files
-"**/submit_cae.py" = ["SIM115", "PTH", "UP"]
-"**/export_abaqus_image.py" = ["SIM115", "PTH", "UP"]
-"**/abaqus_utilities.py" = ["SIM115", "PTH", "UP"]
-"waves/tutorials/waves_quickstart/rectangle_*.py" = ["PTH", "UP"]
-"waves/tutorials/scons_quickstart/rectangle_*.py" = ["PTH", "UP"]
-"waves/tutorials/multi_action_task/rectangle_*.py" = ["PTH", "UP"]
-"waves/tutorials/modsim_package/argparse_types/rectangle_*.py" = ["PTH", "I001", "UP"]
-"waves/**/argparse_types.py" = ["PTH", "I001", "UP"]
-"waves/tutorials/modsim_package/abaqus/*.py" = ["PTH", "I001", "UP"]
-"waves/modsim_template*/modsim_package/rectangle_*.py" = ["PTH", "UP"]
+"**/submit_cae.py" = ["SIM115", "PTH", "UP", "FURB188"]
+"**/export_abaqus_image.py" = ["SIM115", "PTH", "UP", "FURB188"]
+"**/abaqus_utilities.py" = ["SIM115", "PTH", "UP", "FURB188"]
+"waves/tutorials/waves_quickstart/rectangle_*.py" = ["PTH", "UP", "FURB188"]
+"waves/tutorials/scons_quickstart/rectangle_*.py" = ["PTH", "UP", "FURB188"]
+"waves/tutorials/multi_action_task/rectangle_*.py" = ["PTH", "UP", "FURB188"]
+"waves/tutorials/modsim_package/argparse_types/rectangle_*.py" = ["PTH", "I001", "UP", "FURB188"]
+"waves/**/argparse_types.py" = ["PTH", "I001", "UP", "FURB188"]
+"waves/tutorials/modsim_package/abaqus/*.py" = ["PTH", "I001", "UP", "FURB188"]
+"waves/modsim_template*/modsim_package/rectangle_*.py" = ["PTH", "UP", "FURB188"]
 # TODO: re-enable B006 VVV
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/959
 "**/rectangle_compression_sobol_sequence.py" = ["B006"]
