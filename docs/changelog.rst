@@ -8,6 +8,12 @@ Changelog
 0.13.16 (unreleased)
 ********************
 
+Internal Changes
+================
+- Implement a more complete set of linting and formatting rules with Ruff (:issue:`958`, :merge:`1244`). By `Kyle
+  Brindley`_.
+- Miscellaneous linting, formatting, and logical fixes (:issue:`958`, :merge:`1244`). By `Kyle Brindley`_.
+
 ********************
 0.13.15 (2025-08-27)
 ********************
