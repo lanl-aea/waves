@@ -118,7 +118,7 @@ extend-ignore = ["B028", "PIE808", "PIE790", "SIM108", "PLC0415"]
 "waves/tutorials/scons_quickstart/rectangle_*.py" = ["PTH", "UP"]
 "waves/tutorials/multi_action_task/rectangle_*.py" = ["PTH", "UP"]
 "waves/tutorials/modsim_package/argparse_types/rectangle_*.py" = ["PTH", "I001", "UP"]
-"waves/tutorials/modsim_package/argparse_types.py" = ["PTH", "I001", "UP"]
+"waves/**/argparse_types.py" = ["PTH", "I001", "UP"]
 "waves/tutorials/modsim_package/abaqus/*.py" = ["PTH", "I001", "UP"]
 "waves/modsim_template*/modsim_package/rectangle_*.py" = ["PTH", "UP"]
 # TODO: re-enable B006 VVV
