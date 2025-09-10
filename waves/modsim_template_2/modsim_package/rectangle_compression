@@ -14,6 +14,7 @@ Requires the following ``SConscript(..., exports={})``
 * ``alias`` - The workflow name alias root
 * ``parameters`` - The current simulation parameter set
 """
+
 import inspect
 import pathlib
 

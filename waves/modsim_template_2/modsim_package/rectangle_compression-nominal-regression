@@ -9,6 +9,7 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``alias`` - The workflow name alias root
 """
+
 import pathlib
 
 # Inherit the parent construction environment

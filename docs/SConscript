@@ -296,7 +296,7 @@ for file_path in tutorial_files_list:
         source=str(file_path),
         action=Copy("$TARGET", "$SOURCE"),
     )
-    copied_file_list.append(target),
+    copied_file_list.append(target)
 source_files = sphinx_configuration_source_list + documentation_file_list + copied_file_list
 
 html_targets = [
