@@ -221,7 +221,7 @@ SConscript(
 )
 
 # Add pytests, style checks, and static type checking
-workflow_configurations = ["pytest", "style", "mypy"]
+workflow_configurations = ["pytest.scons", "style.scons", "mypy.scons"]
 for workflow in workflow_configurations:
     variant_directory = build_directory / workflow
     SConscript(variant_directory.name, variant_dir=variant_directory, exports={"env": env}, duplicate=False)
