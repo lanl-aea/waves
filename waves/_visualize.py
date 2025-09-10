@@ -11,7 +11,6 @@ import pathlib
 import re
 import subprocess
 import sys
-import typing
 
 import matplotlib.pyplot
 import networkx
@@ -253,7 +252,7 @@ def main(
 
 def ancestor_subgraph(
     graph: networkx.DiGraph,
-    nodes: typing.Iterable[str],
+    nodes: list[str],
 ) -> networkx.DiGraph:
     """Return a new directed graph containing nodes and their ancestors
 
@@ -265,16 +264,11 @@ def ancestor_subgraph(
     :raises RuntimeError: If one or more nodes are missing from the graph
     """
     sources = set(nodes)
-    missing = []
-    for node in nodes:
-        try:
-            sources = sources.union(networkx.ancestors(graph, node))
-        except networkx.NetworkXError:
-            missing.append(node)
-
+    missing = [node for node in nodes if not graph.has_node(node)]
     if missing:
         raise RuntimeError(f"Nodes '{' '.join(missing)}' not found in the graph")
-
+    for node in nodes:
+        sources = sources.union(networkx.ancestors(graph, node))
     return networkx.DiGraph(graph.subgraph(sources))
 
 

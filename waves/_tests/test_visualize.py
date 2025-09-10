@@ -1,4 +1,5 @@
 import pathlib
+from contextlib import nullcontext as does_not_raise
 from unittest.mock import patch
 
 import matplotlib.pyplot
@@ -7,22 +8,98 @@ import pytest
 
 from waves import _visualize
 
+test_ancestor_subgraph_cases = {
+    "node not found": (
+        networkx.DiGraph([("parent", "child")]),
+        ["notanode"],
+        pytest.raises(RuntimeError, match="Nodes 'notanode' not found in the graph"),
+        None,
+    ),
+    "parent-child: request child": (
+        networkx.DiGraph([("parent", "child")]),
+        ["child"],
+        does_not_raise(),
+        networkx.DiGraph([("parent", "child")]),
+    ),
+    "parent-child: request parent": (
+        networkx.DiGraph([("parent", "child")]),
+        ["parent"],
+        does_not_raise(),
+        networkx.DiGraph([("parent", "child")]).subgraph("parent"),
+    ),
+    "parent1/2-child1/2: request child": (
+        networkx.DiGraph([("parent", "child"), ("parent2", "child2")]),
+        ["child"],
+        does_not_raise(),
+        networkx.DiGraph([("parent", "child")]),
+    ),
+    "parent1/2-child1/2: request child2": (
+        networkx.DiGraph([("parent", "child"), ("parent2", "child2")]),
+        ["child2"],
+        does_not_raise(),
+        networkx.DiGraph([("parent2", "child2")]),
+    ),
+    "parent1/2-child1/2: request child1/2": (
+        networkx.DiGraph([("parent", "child"), ("parent2", "child2")]),
+        ["child", "child2"],
+        does_not_raise(),
+        networkx.DiGraph([("parent", "child"), ("parent2", "child2")]),
+    ),
+    "grandparent-parent-child: request child": (
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child")]),
+        ["child"],
+        does_not_raise(),
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child")]),
+    ),
+    "grandparent-parent-child: request parent": (
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child")]),
+        ["parent"],
+        does_not_raise(),
+        networkx.DiGraph([("grandparent", "parent")]),
+    ),
+    "grandparent-parent-child/child2: request child": (
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child"), ("parent", "child2")]),
+        ["child"],
+        does_not_raise(),
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child")]),
+    ),
+    "grandparent-parent-child/child2: request child2": (
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child"), ("parent", "child2")]),
+        ["child2"],
+        does_not_raise(),
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child2")]),
+    ),
+    "grandparent-parent-child/child2: request child/child2": (
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child"), ("parent", "child2")]),
+        ["child", "child2"],
+        does_not_raise(),
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child"), ("parent", "child2")]),
+    ),
+    "grandparent-parent-child/child2: request parent": (
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child"), ("parent", "child2")]),
+        ["parent"],
+        does_not_raise(),
+        networkx.DiGraph([("grandparent", "parent")]),
+    ),
+    "grandparent-parent-child/child2: request grandparent": (
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child"), ("parent", "child2")]),
+        ["grandparent"],
+        does_not_raise(),
+        networkx.DiGraph([("grandparent", "parent")]).subgraph("grandparent"),
+    ),
+}
 
-def test_ancestor_subgraph():
-    graph = networkx.DiGraph()
-    graph.add_edge("parent", "child")
 
+@pytest.mark.parametrize(
+    "graph, nodes, outcome, expected",
+    test_ancestor_subgraph_cases.values(),
+    ids=test_ancestor_subgraph_cases.keys(),
+)
+def test_ancestor_subgraph(graph, nodes, outcome, expected):
     # Check for a runtime error on empty subgraph/missing node
-    with pytest.raises(RuntimeError):
-        subgraph = _visualize.ancestor_subgraph(graph, ["notanode"])
-
-    # Check subgraph(s)
-    subgraph = _visualize.ancestor_subgraph(graph, ["child"])
-    assert subgraph.nodes == graph.nodes
-
-    # Check subgraph(s)
-    subgraph = _visualize.ancestor_subgraph(graph, ["parent"])
-    assert list(subgraph.nodes) == ["parent"]
+    with outcome:
+        subgraph = _visualize.ancestor_subgraph(graph, nodes)
+        assert subgraph.nodes == expected.nodes
 
 
 def test_add_node_count():

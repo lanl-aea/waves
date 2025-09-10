@@ -615,7 +615,7 @@ def append_env_path(
 def find_program(
     env: SCons.Environment.Environment,
     names: typing.Iterable[str],
-) -> str:
+) -> str | None:
     """Search for a program from a list of possible program names.
 
     Returns the absolute path of the first program name found. If path parts contain spaces, the part will be wrapped in
@@ -637,9 +637,7 @@ def find_program(
     """
     if isinstance(names, str):
         names = [names]
-    program_paths = []
-    for name in names:
-        program_paths.append(check_program(env, name))
+    program_paths = [check_program(env, name) for name in names]
     # Return first non-None path. Default to None if no program path was found.
     first_found_path = next((path for path in program_paths if path is not None), None)
     if first_found_path:
