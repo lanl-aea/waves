@@ -45,13 +45,13 @@ parameter_generator.write()
 
 # Parameterized targets must live inside current parameters for loop
 for set_name, parameters in parameter_generator.parameter_study_to_dict().items():
-    set_name = pathlib.Path(set_name)
+    set_path = pathlib.Path(set_name)
 
     # Rectangle part
     artifacts.extend(
         SConscript(
             "rectangle",
-            variant_dir=set_name,
+            variant_dir=set_path,
             exports={"env": env, "parameters": parameters},
         )
     )
@@ -60,7 +60,7 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
     artifacts.extend(
         SConscript(
             "rectangle_compression",
-            variant_dir=set_name,
+            variant_dir=set_path,
             exports={"env": env, "parameters": parameters, "workflow_name": workflow_name},
         )
     )
