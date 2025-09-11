@@ -3,7 +3,6 @@ import os
 import pathlib
 
 import scons_extensions
-
 import waves
 
 AddOption(

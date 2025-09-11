@@ -8,7 +8,6 @@ import sys
 import matplotlib.pyplot
 import xarray
 import yaml
-
 from waves.parameter_generators import SET_COORDINATE_KEY
 
 default_selection_dict = {
