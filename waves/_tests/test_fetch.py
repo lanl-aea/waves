@@ -250,7 +250,11 @@ def test_build_source_files(
 expected_path = root_directory
 longest_common_path_prefix_input = {
     "no list": ([], expected_path, pytest.raises(RuntimeError)),
-    "one file, str": (str(one_file_source_tree[0]), expected_path, pytest.raises(ValueError)),
+    "one file, str": (
+        str(one_file_source_tree[0]),
+        expected_path,
+        pytest.raises(ValueError, match="Can't mix absolute and relative paths"),
+    ),
     "one file, path": (one_file_source_tree[0], expected_path, pytest.raises(TypeError)),
     "one file, list": (one_file_source_tree, expected_path, does_not_raise()),
     "two files": (two_file_source_tree, expected_path, does_not_raise()),
@@ -264,11 +268,8 @@ longest_common_path_prefix_input = {
 )
 def test_longest_common_path_prefix(file_list, expected_path, outcome):
     with outcome:
-        try:
-            path_prefix = _fetch.longest_common_path_prefix(file_list)
-            assert path_prefix == expected_path
-        finally:
-            pass
+        path_prefix = _fetch.longest_common_path_prefix(file_list)
+        assert path_prefix == expected_path
 
 
 build_destination_files_input = {
