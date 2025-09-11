@@ -165,27 +165,27 @@ test_create_qoi_cases = {
     "lower_rtol, missing expected: should raise ValueError": (
         {"name": "qoi1", "lower_rtol": 1.0e-2},
         None,
-        pytest.raises(ValueError),
+        pytest.raises(ValueError, match=r"Relative and absolute tolerances were specified without an expected value."),
     ),
     "upper_rtol, missing expected: should raise ValueError": (
         {"name": "qoi1", "upper_rtol": 1.0e-2},
         None,
-        pytest.raises(ValueError),
+        pytest.raises(ValueError, match=r"Relative and absolute tolerances were specified without an expected value."),
     ),
     "lower_atol, missing expected: should raise ValueError": (
         {"name": "qoi1", "lower_atol": 1.0e-2},
         None,
-        pytest.raises(ValueError),
+        pytest.raises(ValueError, match=r"Relative and absolute tolerances were specified without an expected value."),
     ),
     "upper_atol, missing expected: should raise ValueError": (
         {"name": "qoi1", "upper_atol": 1.0e-2},
         None,
-        pytest.raises(ValueError),
+        pytest.raises(ValueError, match=r"Relative and absolute tolerances were specified without an expected value."),
     ),
     "lower > upper: should raise ValueError": (
         {"name": "qoi1", "lower_limit": 1.0, "upper_limit": -1.0},
         None,
-        pytest.raises(ValueError),
+        pytest.raises(ValueError, match=r"Upper limit is lower than the lower limit."),
     ),
 }
 
