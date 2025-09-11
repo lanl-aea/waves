@@ -8,7 +8,7 @@ Requires the following ``SConscript(..., exports={})``
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``abaqus`` - String path for the Abaqus executable
 
-* ``envCubit`` - The Cubit Python SCons construction environment with the following required keys
+* ``env_cubit`` - The Cubit Python SCons construction environment with the following required keys
 
   * ``python`` - String path for the Cubit Python intepreter
 """
@@ -17,7 +17,7 @@ import pathlib
 import platform
 
 # Inherit the parent construction environment
-Import("env", "envCubit")
+Import("env", "env_cubit")
 
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
@@ -31,7 +31,7 @@ element_type = "QUAD"
 solver = "abaqus"
 SConscript(
     "cubit",
-    exports={"env": env, "envCubit": envCubit, "element_type": element_type, "solver": solver},
+    exports={"env": env, "env_cubit": env_cubit, "element_type": element_type, "solver": solver},
     duplicate=False,
 )
 

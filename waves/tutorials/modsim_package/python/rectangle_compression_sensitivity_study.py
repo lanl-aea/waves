@@ -2,7 +2,7 @@
 
 
 def parameter_schema(
-    N=5,
+    N=5,  # noqa: N803
     width_distribution="norm",
     width_bounds=[1.0, 0.1],
     height_distribution="norm",

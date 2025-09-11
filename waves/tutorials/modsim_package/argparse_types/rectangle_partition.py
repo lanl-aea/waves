@@ -68,25 +68,25 @@ def main(input_file, output_file, model_name, part_name, width, height):
     )
     part.Set(vertices=vertices, name="top_left")
 
-    side1Edges = part.edges.findAt(
+    left_edge = part.edges.findAt(
         ((0, height / 2.0, 0),),
     )
-    part.Set(edges=side1Edges, name="left")
+    part.Set(edges=left_edge, name="left")
 
-    side1Edges = part.edges.findAt(
+    top_edge = part.edges.findAt(
         ((width / 2.0, height, 0),),
     )
-    part.Set(edges=side1Edges, name="top")
+    part.Set(edges=top_edge, name="top")
 
-    side1Edges = part.edges.findAt(
+    right_edge = part.edges.findAt(
         ((width, height / 2.0, 0),),
     )
-    part.Set(edges=side1Edges, name="right")
+    part.Set(edges=right_edge, name="right")
 
-    side1Edges = part.edges.findAt(
+    bottom_edge = part.edges.findAt(
         ((width / 2.0, 0, 0),),
     )
-    part.Set(edges=side1Edges, name="bottom")
+    part.Set(edges=bottom_edge, name="bottom")
 
     abaqus.mdb.save()
 

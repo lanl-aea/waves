@@ -56,8 +56,8 @@ class TestOneAtATime:
         with outcome:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
-                TestValidate = OneAtATime(parameter_schema)
-                assert isinstance(TestValidate, OneAtATime)
+                test_validate = OneAtATime(parameter_schema)
+                assert isinstance(test_validate, OneAtATime)
             finally:
                 pass
 
@@ -259,14 +259,14 @@ class TestOneAtATime:
         ids=generate_io.keys(),
     )
     def test_generate(self, parameter_schema, kwargs, expected_dataset, expected_types):
-        TestGenerate = OneAtATime(parameter_schema, **kwargs)
-        xarray.testing.assert_identical(TestGenerate.parameter_study, expected_dataset)
-        for key in TestGenerate.parameter_study:
-            assert TestGenerate.parameter_study[key].dtype == expected_types[key]
+        test_generate = OneAtATime(parameter_schema, **kwargs)
+        xarray.testing.assert_identical(test_generate.parameter_study, expected_dataset)
+        for key in test_generate.parameter_study:
+            assert test_generate.parameter_study[key].dtype == expected_types[key]
         # Verify that the parameter set name creation method was called
         # TODO: _set_names is an ordered object (dictionary). Fix test to compare dictionary-to-dictionary instead of
         # implied consistency according to value order.
-        assert list(TestGenerate._set_names.values()) == list(expected_dataset[_set_coordinate_key].to_numpy())
+        assert list(test_generate._set_names.values()) == list(expected_dataset[_set_coordinate_key].to_numpy())
 
     merge_test = {
         "single set unchanged": (
@@ -452,13 +452,13 @@ class TestOneAtATime:
             patch("sys.stdout.write") as stdout_write,
             patch("pathlib.Path.is_file", return_value=False),
         ):
-            TestWriteYAML = OneAtATime(
+            test_write_yaml = OneAtATime(
                 parameter_schema,
                 output_file_template=output_file_template,
                 output_file=output_file,
                 output_file_type=output_type,
             )
-            TestWriteYAML.write()
+            test_write_yaml.write()
             stdout_write.assert_not_called()
             xarray_to_netcdf.assert_not_called()
             assert mock_file.call_count == file_count
@@ -492,8 +492,8 @@ class TestOneAtATime:
     )
     def test_parameter_study_to_dict(self, parameter_schema, expected_dictionary) -> None:
         """Test parameter study dictionary conversion"""
-        TestParameterStudyDict = OneAtATime(parameter_schema)
-        returned_dictionary = TestParameterStudyDict.parameter_study_to_dict()
+        test_parameter_study_dict = OneAtATime(parameter_schema)
+        returned_dictionary = test_parameter_study_dict.parameter_study_to_dict()
         assert expected_dictionary.keys() == returned_dictionary.keys()
         assert all(isinstance(key, str) for key in returned_dictionary)
         for set_name in expected_dictionary:

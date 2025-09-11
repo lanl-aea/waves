@@ -2526,12 +2526,12 @@ def test_parameter_study_sconscript(args, kwargs, expected, outcome):
     # Git commit 7a95cef7: Normally you expect something like ``patch("SCons.Script.SConscript.SConsEnvironment...")``
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with (
-        patch("waves.scons_extensions.SConsEnvironment.SConscript") as mock_SConscript,
+        patch("waves.scons_extensions.SConsEnvironment.SConscript") as mock_sconscript,
         outcome,
     ):
         try:
             scons_extensions.parameter_study_sconscript(env, *args, **kwargs)
-            mock_SConscript.assert_called_once_with(*args, **expected)
+            mock_sconscript.assert_called_once_with(*args, **expected)
         finally:
             pass
 
@@ -2540,12 +2540,12 @@ def test_parameter_study_sconscript(args, kwargs, expected, outcome):
     # Git commit 7a95cef7: Normally you expect something like ``patch("SCons.Script.SConscript.SConsEnvironment...")``
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with (
-        patch("waves.scons_extensions.SConsEnvironment.SConscript") as mock_SConscript,
+        patch("waves.scons_extensions.SConsEnvironment.SConscript") as mock_sconscript,
         outcome,
     ):
         try:
             env.ParameterStudySConscript(*args, **kwargs)
-            mock_SConscript.assert_called_once_with(*args, **expected)
+            mock_sconscript.assert_called_once_with(*args, **expected)
         finally:
             pass
 
@@ -2621,10 +2621,10 @@ def test_qoi_pseudo_builder(class_kwargs, call_kwargs, expected, outcome, messag
     with outcome:
         env = SCons.Environment.Environment()
         try:
-            QOIPseudoBuilder = scons_extensions.QOIPseudoBuilder(
+            qoi_pseudo_builder = scons_extensions.QOIPseudoBuilder(
                 pathlib.Path("collection_directory"), pathlib.Path("build_dir"), **class_kwargs
             )
-            targets = QOIPseudoBuilder(env, pathlib.Path("calculated"), **call_kwargs)
+            targets = qoi_pseudo_builder(env, pathlib.Path("calculated"), **call_kwargs)
             assert targets == expected
         except ValueError as err:
             assert message in str(err)

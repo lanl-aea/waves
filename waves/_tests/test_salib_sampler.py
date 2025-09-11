@@ -50,8 +50,8 @@ class TestSALibSampler:
         ids=sampler_overrides.keys(),
     )
     def test_sampler_overrides(self, sampler_class, parameter_schema, kwargs, expected):
-        TestValidate = SALibSampler(sampler_class, parameter_schema)
-        override_kwargs = TestValidate._sampler_overrides(**kwargs)
+        test_validate = SALibSampler(sampler_class, parameter_schema)
+        override_kwargs = test_validate._sampler_overrides(**kwargs)
         assert override_kwargs == expected
 
     validate_input = {
@@ -147,8 +147,8 @@ class TestSALibSampler:
         with outcome:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
-                TestValidate = SALibSampler(sampler_class, parameter_schema)
-                assert isinstance(TestValidate, SALibSampler)
+                test_validate = SALibSampler(sampler_class, parameter_schema)
+                assert isinstance(test_validate, SALibSampler)
             finally:
                 pass
 
@@ -210,7 +210,7 @@ class TestSALibSampler:
         ),
     }
 
-    def _expected_set_names(self, sampler, N, num_vars):
+    def _expected_set_names(self, sampler, N, num_vars):  # noqa: N803
         number_of_simulations = N
         if sampler == "sobol" and num_vars <= 2:
             number_of_simulations = N * (num_vars + 2)
@@ -225,7 +225,7 @@ class TestSALibSampler:
             number_of_simulations = int((num_vars + 1) * N)
         return [f"parameter_set{num}" for num in range(number_of_simulations)]
 
-    def _big_enough(self, sampler, N, num_vars):
+    def _big_enough(self, sampler, N, num_vars):  # noqa: N803
         if (  # noqa: SIM103
             (sampler == "sobol" and num_vars < 2)
             or (sampler == "fast_sampler" and N < 64)
@@ -245,8 +245,8 @@ class TestSALibSampler:
             if not self._big_enough(sampler, parameter_schema["N"], parameter_schema["problem"]["num_vars"]):
                 return
             # Unit tests
-            TestGenerate = SALibSampler(sampler, parameter_schema, **kwargs)
-            samples_array = TestGenerate._samples
+            test_generate = SALibSampler(sampler, parameter_schema, **kwargs)
+            samples_array = test_generate._samples
             assert samples_array.shape[1] == parameter_schema["problem"]["num_vars"]
             # Verify that the parameter set name creation method was called
             # Morris produces inconsistent set counts depending on seed. Rely on the variable count shape check above.
@@ -255,9 +255,9 @@ class TestSALibSampler:
                     sampler, parameter_schema["N"], parameter_schema["problem"]["num_vars"]
                 )
                 assert samples_array.shape[0] == len(expected_set_names)
-                assert list(TestGenerate._set_names.values()) == expected_set_names
+                assert list(test_generate._set_names.values()) == expected_set_names
                 # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
-                set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
+                set_names = list(test_generate.parameter_study[_set_coordinate_key])
                 assert numpy.all(set_names == expected_set_names)
 
     merge_test = {

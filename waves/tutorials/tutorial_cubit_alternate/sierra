@@ -7,11 +7,11 @@ Requires the following ``SConscript(..., exports={})``
 
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
 
-* ``envCubit`` - The Cubit Python SCons construction environment with the following required keys
+* ``env_cubit`` - The Cubit Python SCons construction environment with the following required keys
 
   * ``python`` - String path for the Cubit Python intepreter
 
-* ``envSierra`` - The Sierra SCons construction environment with the following required keys
+* ``env_sierra`` - The Sierra SCons construction environment with the following required keys
 
   * ``sierra`` - String path for the Sierra executable
 """
@@ -19,7 +19,7 @@ Requires the following ``SConscript(..., exports={})``
 import pathlib
 
 # Inherit the parent construction environment
-Import("env", "envCubit", "envSierra")
+Import("env", "env_cubit", "env_sierra")
 
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
@@ -32,7 +32,7 @@ element_type = "SHELL"
 solver = "sierra"
 SConscript(
     "cubit",
-    exports={"env": env, "envCubit": envCubit, "element_type": element_type, "solver": solver},
+    exports={"env": env, "env_cubit": env_cubit, "element_type": element_type, "solver": solver},
     duplicate=False,
 )
 
@@ -45,7 +45,7 @@ workflow.extend(env.CopySubstfile(sierra_source_list))
 solve_source_list = [source_file.name for source_file in sierra_source_list]
 solve_source_list.append("rectangle_mesh.g")
 workflow.extend(
-    envSierra.Sierra(
+    env_sierra.Sierra(
         target=["rectangle_compression.e"],
         source=solve_source_list,
     )
@@ -55,6 +55,6 @@ workflow.extend(
 env.Alias(workflow_name, workflow)
 
 # Developer note: CI system configuration for Sierra is inconsistent. Do not force with ``unconditional build`` option.
-if not envSierra["sierra"]:
+if not env_sierra["sierra"]:
     print(f"Program 'sierra' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
     Ignore([".", workflow_name], workflow)

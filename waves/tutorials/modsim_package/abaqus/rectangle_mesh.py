@@ -56,12 +56,10 @@ def main(input_file, output_file, model_name, part_name, global_seed):
     part.seedPart(size=global_seed, deviationFactor=0.1, minSizeFactor=0.1)
     part.generateMesh()
 
-    elemType1 = mesh.ElemType(elemCode=abaqusConstants.CPS4R, elemLibrary=abaqusConstants.STANDARD)
+    element_type = mesh.ElemType(elemCode=abaqusConstants.CPS4R, elemLibrary=abaqusConstants.STANDARD)
 
     faces = part.faces
-    pickedRegions = (faces,)
-
-    part.setElementType(regions=pickedRegions, elemTypes=(elemType1,))
+    part.setElementType(regions=(faces,), elemTypes=(element_type,))
     part.Set(faces=faces, name="ELEMENTS")
     part.Set(faces=faces, name="NODES")
 

@@ -1345,7 +1345,7 @@ class SALibSampler(ParameterGenerator, ABC):
 
     def _generate(self, **kwargs) -> None:
         """Generate the `SALib.sample`_ ``sampler_class`` parameter sets"""
-        N = self.parameter_schema["N"]
+        N = self.parameter_schema["N"]  # noqa: N806
         override_kwargs = self._sampler_overrides()
         if kwargs:
             kwargs.update(override_kwargs)
