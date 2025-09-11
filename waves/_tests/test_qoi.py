@@ -1066,11 +1066,9 @@ def test__read_qoi_set_unknown():
         patch("xarray.open_dataset") as mock_open_dataset,
         pytest.raises(RuntimeError),
     ):
-        try:
-            qoi._read_qoi_set(from_file)
-        finally:
-            mock_read_csv.assert_not_called()
-            mock_open_dataset.assert_not_called()
+        qoi._read_qoi_set(from_file)
+    mock_read_csv.assert_not_called()
+    mock_open_dataset.assert_not_called()
 
 
 test__add_tolerance_attribute_cases = {
