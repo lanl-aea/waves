@@ -48,8 +48,8 @@ class TestCartesianProduct:
         with outcome:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
-                TestValidate = CartesianProduct(parameter_schema)
-                assert isinstance(TestValidate, CartesianProduct)
+                test_validate = CartesianProduct(parameter_schema)
+                assert isinstance(test_validate, CartesianProduct)
             finally:
                 pass
 
@@ -119,16 +119,16 @@ class TestCartesianProduct:
         ids=generate_io.keys(),
     )
     def test_generate(self, parameter_schema, expected_array, expected_types):
-        TestGenerate = CartesianProduct(parameter_schema)
-        generate_array = TestGenerate._samples
+        test_generate = CartesianProduct(parameter_schema)
+        generate_array = test_generate._samples
         assert numpy.all(generate_array == expected_array)
-        for key in TestGenerate.parameter_study:
-            assert TestGenerate.parameter_study[key].dtype == expected_types[key]
+        for key in test_generate.parameter_study:
+            assert test_generate.parameter_study[key].dtype == expected_types[key]
         # Verify that the parameter set name creation method was called
-        assert list(TestGenerate._set_names.values()) == [f"parameter_set{num}" for num in range(len(expected_array))]
+        assert list(test_generate._set_names.values()) == [f"parameter_set{num}" for num in range(len(expected_array))]
         # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
         expected_set_names = [f"parameter_set{num}" for num in range(len(expected_array))]
-        set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
+        set_names = list(test_generate.parameter_study[_set_coordinate_key])
         assert numpy.all(set_names == expected_set_names)
 
     @pytest.mark.parametrize(
@@ -140,8 +140,8 @@ class TestCartesianProduct:
     # function arguments. Remove ``noqa: ARG002`` after fixing.
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/961
     def test_verify_parameter_study(self, parameter_schema, expected_array, expected_types):  # noqa: ARG002
-        TestGenerate = CartesianProduct(parameter_schema)
-        parameter_generators._verify_parameter_study(TestGenerate.parameter_study)
+        test_generate = CartesianProduct(parameter_schema)
+        parameter_generators._verify_parameter_study(test_generate.parameter_study)
 
     merge_test = {
         "single set unchanged": (
@@ -334,13 +334,13 @@ class TestCartesianProduct:
             patch("sys.stdout.write") as stdout_write,
             patch("pathlib.Path.is_file", return_value=False),
         ):
-            TestWriteYAML = CartesianProduct(
+            test_write_yaml = CartesianProduct(
                 parameter_schema,
                 output_file_template=output_file_template,
                 output_file=output_file,
                 output_file_type=output_type,
             )
-            TestWriteYAML.write()
+            test_write_yaml.write()
             stdout_write.assert_not_called()
             xarray_to_netcdf.assert_not_called()
             assert mock_file.call_count == file_count
@@ -374,8 +374,8 @@ class TestCartesianProduct:
     )
     def test_parameter_study_to_dict(self, parameter_schema, expected_dictionary) -> None:
         """Test parameter study dictionary conversion"""
-        TestParameterStudyDict = CartesianProduct(parameter_schema)
-        returned_dictionary = TestParameterStudyDict.parameter_study_to_dict()
+        test_parameter_study_dict = CartesianProduct(parameter_schema)
+        returned_dictionary = test_parameter_study_dict.parameter_study_to_dict()
         assert expected_dictionary.keys() == returned_dictionary.keys()
         assert all(isinstance(key, str) for key in returned_dictionary)
         for set_name in expected_dictionary:

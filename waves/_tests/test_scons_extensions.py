@@ -2621,7 +2621,7 @@ def test_qoi_pseudo_builder(class_kwargs, call_kwargs, expected, outcome, messag
     with outcome:
         env = SCons.Environment.Environment()
         try:
-            qoi_pseudo_builder = scons_extensions.qoi_pseudo_builder(
+            qoi_pseudo_builder = scons_extensions.QOIPseudoBuilder(
                 pathlib.Path("collection_directory"), pathlib.Path("build_dir"), **class_kwargs
             )
             targets = qoi_pseudo_builder(env, pathlib.Path("calculated"), **call_kwargs)
