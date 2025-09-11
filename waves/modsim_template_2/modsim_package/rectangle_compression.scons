@@ -34,7 +34,7 @@ workflow = []
 # Rectangle part
 artifacts.extend(
     SConscript(
-        "rectangle",
+        "rectangle.scons",
         exports={"env": env, "parameters": parameters},
     )
 )
