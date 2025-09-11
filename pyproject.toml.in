@@ -86,8 +86,8 @@ extend-include = ["*SConstruct", "*SConscript", "*.scons"]
 [tool.ruff.lint]
 extend-select = [
     "A", "B", "E", "F", "I", "N", "Q", "W",
-    "ARG", "C4", "FURB", "ERA", "ISC", "NPY", "PD", "PERF", "PGH", "PIE", "PLC", "PLE", "PLW", "PTH", "PYI", "RSE",
-    "RUF", "SIM", "T10", "UP"
+    "ARG", "C4", "FURB", "ERA", "ISC", "NPY", "PD", "PERF", "PGH", "PIE", "PLC", "PLE", "PLW", "PT", "PTH", "PYI",
+    "RSE", "RUF", "SIM", "T10", "UP"
 ]
 extend-ignore = ["B028", "PIE808", "PIE790", "SIM108", "PLC0415"]
 
