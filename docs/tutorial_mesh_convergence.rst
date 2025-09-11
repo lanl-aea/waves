@@ -43,14 +43,14 @@ Directory Structure
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Download and copy the ``tutorial_11_regression_testing`` file to a new file named ``tutorial_mesh_convergence``
+4. Download and copy the ``tutorial_11_regression_testing.scons`` file to a new file named ``tutorial_mesh_convergence.scons``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_11_regression_testing && cp tutorial_11_regression_testing tutorial_mesh_convergence
+   $ waves fetch --overwrite tutorials/tutorial_11_regression_testing && cp tutorial_11_regression_testing.scons tutorial_mesh_convergence.scons
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -85,9 +85,9 @@ This file defines a YAML formatted dictionary that will be used to change the de
 SConscript
 **********
 
-7. A ``diff`` against the ``tutorial_11_regression_testing`` file from :ref:`tutorial_regression_testing` is
+7. A ``diff`` against the ``tutorial_11_regression_testing.scons`` file from :ref:`tutorial_regression_testing` is
    included below to help identify the changes made in this tutorial. Use the diff to update your
-   ``tutorial_mesh_convergence`` file, and then review the paragraphs that follow to understand the meaning of these
+   ``tutorial_mesh_convergence.scons`` file, and then review the paragraphs that follow to understand the meaning of these
    changes.
 
 .. admonition:: waves-tutorials/tutorial_mesh_convergence.scons

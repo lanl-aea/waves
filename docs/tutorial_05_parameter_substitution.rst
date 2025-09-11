@@ -62,7 +62,7 @@ Directory Structure
                WAVES fetch
                Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
-4. Download and copy the ``tutorial_04_simulation`` file to a new file named ``tutorial_05_parameter_substitution``
+4. Download and copy the ``tutorial_04_simulation.scons`` file to a new file named ``tutorial_05_parameter_substitution.scons``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. only:: not epub
@@ -77,7 +77,7 @@ Directory Structure
 
             $ pwd
             /home/roppenheimer/waves-tutorials
-            $ waves fetch --overwrite tutorials/tutorial_04_simulation && cp tutorial_04_simulation tutorial_05_parameter_substitution
+            $ waves fetch --overwrite tutorials/tutorial_04_simulation && cp tutorial_04_simulation.scons tutorial_05_parameter_substitution.scons
             WAVES fetch
             Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -92,7 +92,7 @@ Directory Structure
             ----
             C:\Users\roppenheimer\waves-tutorials
 
-            PS > waves fetch --overwrite tutorials\tutorial_04_simulation && Copy-Item tutorial_04_simulation tutorial_05_parameter_substitution
+            PS > waves fetch --overwrite tutorials\tutorial_04_simulation && Copy-Item tutorial_04_simulation.scons tutorial_05_parameter_substitution.scons
             WAVES fetch
             Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
@@ -158,7 +158,7 @@ the substitution occurs.
 SConscript
 **********
 
-7. Modify your ``tutorial_05_parameter_substitution`` file by adding the contents shown below to the code
+7. Modify your ``tutorial_05_parameter_substitution.scons`` file by adding the contents shown below to the code
    pertaining to ``# Simulation variables``. The entire code snippet shows how your code should look after editing, and
    the highlghted portion is what needs to be added to your existing code.
 
@@ -191,7 +191,7 @@ command-line interface. Recall from earlier in this tutorial, we created a new f
 the primary reason the ``@`` characters are required in the ``simulation_variables`` keys.  Disussion of exactly how
 this is implemented with the :meth:`waves.scons_extensions.copy_substfile` method will come later in this tutorial.
 
-8. Modify your ``tutorial_05_parameter_substitution`` file by using the highlighed lines below to modify the
+8. Modify your ``tutorial_05_parameter_substitution.scons`` file by using the highlighed lines below to modify the
    ``subcommand_options`` for the code pertaining to ``# Geometry``, ``# Partition``, and ``# Mesh``.
 
 .. admonition:: waves-tutorials/tutorial_05_parameter_substitution.scons
@@ -223,7 +223,7 @@ the completed action string as part of the task definition. If the substituted p
 recognize that the tasks need to be re-executed in the same way that tasks need to be re-executed when the contents of a
 source file change.
 
-9. Modify your ``tutorial_05_parameter_substitution`` file by using the highlighed lines below to modify the
+9. Modify your ``tutorial_05_parameter_substitution.scons`` file by using the highlighed lines below to modify the
    code pertaining to ``# SolverPrep``.
 
 .. admonition:: waves-tutorials/tutorial_05_parameter_substitution.scons
@@ -238,7 +238,7 @@ source file change.
 Per the changes you made earlier in this tutorial, the ``abaqus_source_list`` must be updated to reflect the replacement
 of ``rectangle_compression.inp`` with the parameterized ``rectangle_compression.inp.in`` file.
 
-The final change to be made in the ``tutorial_05_parameter_substitution`` file is to utilize the
+The final change to be made in the ``tutorial_05_parameter_substitution.scons`` file is to utilize the
 ``substitution_dictionary`` parameter in the usage of the :meth:`waves.scons_extensions.copy_substfile` method.
 
 In this tutorial, we leverage two different builder behaviors when defining sources and targets for the
@@ -262,7 +262,7 @@ clearly when we investigate the :ref:`tutorial_parameter_substitution_waves_outp
 ``substitution`` dictionary becomes part of the task signature for all ``*.in`` files. When the dictionary changes, the
 copy and substitute operations will be re-executed.
 
-In summary of the changes you just made to the ``tutorial_05_parameter_substitution`` file, a ``diff`` against the
+In summary of the changes you just made to the ``tutorial_05_parameter_substitution.scons`` file, a ``diff`` against the
 ``SConscript`` file from :ref:`tutorial_simulation` is included below to help identify the
 changes made in this tutorial.
 

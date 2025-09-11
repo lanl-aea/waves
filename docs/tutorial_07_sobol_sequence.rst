@@ -40,14 +40,14 @@ Directory Structure
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Download and copy the ``tutorial_07_cartesian_product`` file to a new file named ``tutorial_07_sobol_sequence``
+4. Download and copy the ``tutorial_07_cartesian_product.scons`` file to a new file named ``tutorial_07_sobol_sequence.scons``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_07_cartesian_product && cp tutorial_07_cartesian_product tutorial_07_sobol_sequence
+   $ waves fetch --overwrite tutorials/tutorial_07_cartesian_product && cp tutorial_07_cartesian_product.scons tutorial_07_sobol_sequence.scons
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 

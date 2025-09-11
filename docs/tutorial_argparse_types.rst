@@ -45,14 +45,14 @@ Directory Structure
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Download and copy the ``tutorial_02_partition_mesh`` file to a new file named ``tutorial_argparse_types``
+4. Download and copy the ``tutorial_02_partition_mesh.scons`` file to a new file named ``tutorial_argparse_types.scons``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_02_partition_mesh && cp tutorial_02_partition_mesh tutorial_argparse_types
+   $ waves fetch --overwrite tutorials/tutorial_02_partition_mesh && cp tutorial_02_partition_mesh.scons tutorial_argparse_types.scons
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -160,8 +160,8 @@ Build Targets
    scons: done building targets.
 
 The build process, targets, and output files should be identical to that of :ref:`tutorial_partition_mesh`. You
-can explore changes in behavior by modifying the ``subcommand_options`` of both ``tutorial_02_partition_mesh`` and
-``tutorial_argparse_types`` to include negative floats and re-running both workflows. For instance, by adding the
+can explore changes in behavior by modifying the ``subcommand_options`` of both ``tutorial_02_partition_mesh.scons`` and
+``tutorial_argparse_types.scons`` to include negative floats and re-running both workflows. For instance, by adding the
 following to the Geometry task definition.
 
 .. code-block:: Python

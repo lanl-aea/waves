@@ -75,7 +75,7 @@ Directory Structure
                WAVES fetch
                Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
-4. Download and copy the ``tutorial_11_regression_testing`` file to a new file named ``tutorial_12_archival``
+4. Download and copy the ``tutorial_11_regression_testing.scons`` file to a new file named ``tutorial_12_archival.scons``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. only:: not epub
@@ -90,7 +90,7 @@ Directory Structure
 
             $ pwd
             /home/roppenheimer/waves-tutorials
-            $ waves fetch --overwrite tutorials/tutorial_11_regression_testing && cp tutorial_11_regression_testing tutorial_12_archival
+            $ waves fetch --overwrite tutorials/tutorial_11_regression_testing && cp tutorial_11_regression_testing.scons tutorial_12_archival.scons
             WAVES fetch
             Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -105,7 +105,7 @@ Directory Structure
             ----
             C:\Users\roppenheimer\waves-tutorials
 
-            PS > waves fetch --overwrite tutorials\tutorial_11_regression_testing && Copy-Item tutorial_11_regression_testing tutorial_12_archival
+            PS > waves fetch --overwrite tutorials\tutorial_11_regression_testing && Copy-Item tutorial_11_regression_testing.scons tutorial_12_archival.scons
             WAVES fetch
             Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
@@ -113,7 +113,7 @@ Directory Structure
 SConscript
 **********
 
-A ``diff`` against the ``tutorial_11_regression_testing`` file from :ref:`tutorial_regression_testing` is included
+A ``diff`` against the ``tutorial_11_regression_testing.scons`` file from :ref:`tutorial_regression_testing` is included
 below to help identify the changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_12_archival.scons

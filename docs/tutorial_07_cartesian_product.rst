@@ -64,7 +64,7 @@ Directory Structure
                WAVES fetch
                Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
-4. Download and copy the ``tutorial_06_include_files`` file to a new file named ``tutorial_07_cartesian_product``
+4. Download and copy the ``tutorial_06_include_files.scons`` file to a new file named ``tutorial_07_cartesian_product.scons``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. only:: not epub
@@ -79,7 +79,7 @@ Directory Structure
 
             $ pwd
             /home/roppenheimer/waves-tutorials
-            $ waves fetch --overwrite tutorials/tutorial_06_include_files && cp tutorial_06_include_files tutorial_07_cartesian_product
+            $ waves fetch --overwrite tutorials/tutorial_06_include_files && cp tutorial_06_include_files.scons tutorial_07_cartesian_product.scons
             WAVES fetch
             Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -94,7 +94,7 @@ Directory Structure
             ----
             C:\Users\roppenheimer\waves-tutorials
 
-            PS > waves fetch --overwrite tutorials\tutorial_06_include_files && Copy-Item tutorial_06_include_files tutorial_07_cartesian_product
+            PS > waves fetch --overwrite tutorials\tutorial_06_include_files && Copy-Item tutorial_06_include_files.scons tutorial_07_cartesian_product.scons
             WAVES fetch
             Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
@@ -146,13 +146,13 @@ wholesale copy and paste when creating the new ``SConscript`` file.
 .. note::
 
    In the :ref:`tutorial_cartesian_product_waves_directory_structure` section of this tutorial, you were instructed to
-   copy the ``tutorial_06_include_files`` file to the ``tutorial_07_cartesian_product`` file. If you prefer, you may
-   start with a blank ``tutorial_07_cartesian_product`` file and simply copy and paste the contents below into your
+   copy the ``tutorial_06_include_files.scons`` file to the ``tutorial_07_cartesian_product.scons`` file. If you prefer, you may
+   start with a blank ``tutorial_07_cartesian_product.scons`` file and simply copy and paste the contents below into your
    blank file.
 
 After viewing the full file contents below, continue to read the
 :ref:`tutorial_cartesian_product_waves_step_by_step_sconscript_discussion` for building the
-``tutorial_07_cartesian_product`` file from scratch.
+``tutorial_07_cartesian_product.scons`` file from scratch.
 
 .. admonition:: waves-tutorials/tutorial_07_cartesian_product.scons
 

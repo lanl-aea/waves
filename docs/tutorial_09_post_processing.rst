@@ -67,7 +67,7 @@ Directory Structure
                WAVES fetch
                Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
-4. Download and copy the ``tutorial_08_data_extraction`` file to a new file named ``tutorial_09_post_processing``
+4. Download and copy the ``tutorial_08_data_extraction.scons`` file to a new file named ``tutorial_09_post_processing.scons``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. only:: not epub
@@ -82,7 +82,7 @@ Directory Structure
 
             $ pwd
             /home/roppenheimer/waves-tutorials
-            $ waves fetch --overwrite tutorials/tutorial_08_data_extraction && cp tutorial_08_data_extraction tutorial_09_post_processing
+            $ waves fetch --overwrite tutorials/tutorial_08_data_extraction && cp tutorial_08_data_extraction.scons tutorial_09_post_processing.scons
             WAVES fetch
             Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -97,7 +97,7 @@ Directory Structure
             ----
             C:\Users\roppenheimer\waves-tutorials
 
-            PS > waves fetch --overwrite tutorials\tutorial_08_data_extraction && Copy-Item tutorial_08_data_extraction tutorial_09_post_processing
+            PS > waves fetch --overwrite tutorials\tutorial_08_data_extraction && Copy-Item tutorial_08_data_extraction.scons tutorial_09_post_processing.scons
             WAVES fetch
             Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
@@ -105,7 +105,7 @@ Directory Structure
 SConscript
 **********
 
-A ``diff`` against the ``tutorial_08_data_extraction`` file from :ref:`tutorial_data_extraction` is included below to help identify the
+A ``diff`` against the ``tutorial_08_data_extraction.scons`` file from :ref:`tutorial_data_extraction` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_09_post_processing.scons

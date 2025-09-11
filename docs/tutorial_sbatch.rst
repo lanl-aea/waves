@@ -39,14 +39,14 @@ Directory Structure
         $ waves fetch --overwrite --tutorial 4 && mv tutorial_04_simulation_SConstruct SConstruct
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Download and copy the ``tutorial_04_simulation`` file to a new file named ``tutorial_sbatch``
+4. Download and copy the ``tutorial_04_simulation.scons`` file to a new file named ``tutorial_sbatch.scons``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_04_simulation && cp tutorial_04_simulation tutorial_sbatch
+   $ waves fetch --overwrite tutorials/tutorial_04_simulation && cp tutorial_04_simulation.scons tutorial_sbatch.scons
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -56,7 +56,7 @@ Directory Structure
 SConscript
 **********
 
-A ``diff`` against the ``tutorial_04_simulation`` file from :ref:`tutorial_simulation` is included below to help identify the
+A ``diff`` against the ``tutorial_04_simulation.scons`` file from :ref:`tutorial_simulation` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_sbatch.scons

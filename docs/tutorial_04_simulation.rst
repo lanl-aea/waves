@@ -62,7 +62,7 @@ Directory Structure
                WAVES fetch
                Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
-4. Fetch the ``tutorial_03_solverprep`` file and create a new file named ``tutorial_04_simulation``
+4. Fetch the ``tutorial_03_solverprep.scons`` file and create a new file named ``tutorial_04_simulation.scons``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. only:: not epub
@@ -77,7 +77,7 @@ Directory Structure
 
             $ pwd
             /home/roppenheimer/waves-tutorials
-            $ waves fetch --overwrite tutorials/tutorial_03_solverprep && cp tutorial_03_solverprep tutorial_04_simulation
+            $ waves fetch --overwrite tutorials/tutorial_03_solverprep && cp tutorial_03_solverprep.scons tutorial_04_simulation.scons
             WAVES fetch
             Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -92,7 +92,7 @@ Directory Structure
             ----
             C:\Users\roppenheimer\waves-tutorials
 
-            PS > waves fetch --overwrite tutorials\tutorial_03_solverprep && Copy-Item tutorial_03_solverprep tutorial_04_simulation
+            PS > waves fetch --overwrite tutorials\tutorial_03_solverprep && Copy-Item tutorial_03_solverprep.scons tutorial_04_simulation.scons
             WAVES fetch
             Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
@@ -111,7 +111,7 @@ SConscript
 .. _tutorial_simulation_waves_running_datacheck:
 
 
-5. Add the highlighted section shown below to the ``tutorial_04_simulation`` file.
+5. Add the highlighted section shown below to the ``tutorial_04_simulation.scons`` file.
    This will initialize the datacheck list.
 
 .. admonition:: waves-tutorials/tutorial_04_simulation.scons
@@ -123,7 +123,7 @@ SConscript
        :start-after: marker-1
        :end-before: marker-2
 
-6. Add the highlighted sections shown below to the ``tutorial_04_simulation`` file.
+6. Add the highlighted sections shown below to the ``tutorial_04_simulation.scons`` file.
    This will create the datackeck alias.
 
 .. admonition:: waves-tutorials/tutorial_04_simulation.scons
@@ -137,7 +137,7 @@ SConscript
 Running a Datacheck
 ===================
 
-7. Modify your ``tutorial_04_simulation`` file by adding the contents shown below immediately after the code
+7. Modify your ``tutorial_04_simulation.scons`` file by adding the contents shown below immediately after the code
    pertaining to ``# SolverPrep`` from the previous tutorial.
 
 .. admonition:: waves-tutorials/tutorial_04_simulation.scons
@@ -176,7 +176,7 @@ from a list comprehension and Python f-strings.
 Running the Analysis
 ====================
 
-8. Modify your ``tutorial_04_simulation`` file by adding the contents below immediately after the Abaqus
+8. Modify your ``tutorial_04_simulation.scons`` file by adding the contents below immediately after the Abaqus
    datacheck code that was just discussed.
 
 .. admonition:: waves-tutorials/tutorial_04_simulation.scons
@@ -199,7 +199,7 @@ The ``program_options`` are again hardcoded for clarity in the tutorials, but Py
 an opportunity to collect the common datacheck and solve task options in a common variable to ensure consistency in
 Abaqus options.
 
-In summary of the changes you just made to the ``tutorial_04_simulation`` file, a ``diff`` against the ``SConscript``
+In summary of the changes you just made to the ``tutorial_04_simulation.scons`` file, a ``diff`` against the ``SConscript``
 file from :ref:`tutorial_solverprep` is included below to help identify the changes made in this tutorial. Note the
 addition of a separate datacheck alias, which will be used in :ref:`tutorial_regression_testing`.
 

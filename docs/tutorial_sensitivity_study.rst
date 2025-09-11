@@ -39,14 +39,14 @@ Directory Structure
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Download and copy the ``tutorial_12_archival`` file to a new file named ``tutorial_sensitivity_study`` with the
+4. Download and copy the ``tutorial_12_archival.scons`` file to a new file named ``tutorial_sensitivity_study.scons`` with the
    :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_12_archival && cp tutorial_12_archival tutorial_sensitivity_study
+   $ waves fetch --overwrite tutorials/tutorial_12_archival && cp tutorial_12_archival.scons tutorial_sensitivity_study.scons
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -74,7 +74,7 @@ strategy to their needs.
 SConscript
 **********
 
-A ``diff`` against the ``tutorial_12_archival`` file from :ref:`tutorial_archival` is included below to help identify
+A ``diff`` against the ``tutorial_12_archival.scons`` file from :ref:`tutorial_archival` is included below to help identify
 the changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_sensitivity_study.scons

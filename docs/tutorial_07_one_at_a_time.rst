@@ -40,14 +40,14 @@ Directory Structure
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Download and copy the ``tutorial_07_cartesian_product`` file to a new file named ``tutorial_07_one_at_a_time``
+4. Download and copy the ``tutorial_07_cartesian_product.scons`` file to a new file named ``tutorial_07_one_at_a_time.scons``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_07_cartesian_product && cp tutorial_07_cartesian_product tutorial_07_one_at_a_time
+   $ waves fetch --overwrite tutorials/tutorial_07_cartesian_product && cp tutorial_07_cartesian_product.scons tutorial_07_one_at_a_time.scons
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -69,10 +69,10 @@ changed compared to the nominal values.
 SConscript
 **********
 
-5. Modify the SConscript file ``tutorial_07_one_at_a_time`` to utilize the :meth:`waves.parameter_generators.OneAtATime`
+5. Modify the SConscript file ``tutorial_07_one_at_a_time.scons`` to utilize the :meth:`waves.parameter_generators.OneAtATime`
 builder.
 
-A ``diff`` against the ``tutorial_07_cartesian_product`` file from :ref:`tutorial_cartesian_product` is included
+A ``diff`` against the ``tutorial_07_cartesian_product.scons`` file from :ref:`tutorial_cartesian_product` is included
 below to help identify the differences between the two parameter generators.
 
 .. admonition:: waves-tutorials/tutorial_07_one_at_a_time.scons

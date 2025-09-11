@@ -48,14 +48,14 @@ Directory Structure
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Download and copy the ``tutorial_07_sobol_sequence`` file to a new file named ``tutorial_extend_study``
+4. Download and copy the ``tutorial_07_sobol_sequence.scons`` file to a new file named ``tutorial_extend_study.scons``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_07_sobol_sequence && cp tutorial_07_sobol_sequence tutorial_extend_study
+   $ waves fetch --overwrite tutorials/tutorial_07_sobol_sequence && cp tutorial_07_sobol_sequence.scons tutorial_extend_study.scons
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -63,7 +63,7 @@ Directory Structure
 SConscript
 **********
 
-A ``diff`` against the ``tutorial_07_sobol_sequence`` file from :ref:`tutorial_sobol_sequence` is included below to help identify the
+A ``diff`` against the ``tutorial_07_sobol_sequence.scons`` file from :ref:`tutorial_sobol_sequence` is included below to help identify the
 differences between the two parameter generators.
 
 .. admonition:: waves-tutorials/tutorial_extend_study.scons

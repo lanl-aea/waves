@@ -61,7 +61,7 @@ Directory Structure
                WAVES fetch
                Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
-4. Download and copy the ``tutorial_05_parameter_substitution`` file to a new file named ``tutorial_06_include_files``
+4. Download and copy the ``tutorial_05_parameter_substitution.scons`` file to a new file named ``tutorial_06_include_files.scons``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. only:: not epub
@@ -76,7 +76,7 @@ Directory Structure
 
             $ pwd
             /home/roppenheimer/waves-tutorials
-            $ waves fetch --overwrite tutorials/tutorial_05_parameter_substitution && cp tutorial_05_parameter_substitution tutorial_06_include_files
+            $ waves fetch --overwrite tutorials/tutorial_05_parameter_substitution && cp tutorial_05_parameter_substitution.scons tutorial_06_include_filess.scons
             WAVES fetch
             Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -91,7 +91,7 @@ Directory Structure
             ----
             C:\Users\roppenheimer\waves-tutorials
 
-            PS > waves fetch --overwrite tutorials\tutorial_05_parameter_substitution && Copy-Item tutorial_05_parameter_substitution tutorial_06_include_files
+            PS > waves fetch --overwrite tutorials\tutorial_05_parameter_substitution && Copy-Item tutorial_05_parameter_substitution.scons tutorial_06_include_files.scons
             WAVES fetch
             Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
@@ -141,7 +141,7 @@ reuse between simulations.
    .. literalinclude:: python_rectangle_compression_nominal.py
       :language: Python
 
-The file you just created is similar to the code snippet in your ``tutorial_05_parameter_substitution`` file that
+The file you just created is similar to the code snippet in your ``tutorial_05_parameter_substitution.scons`` file that
 defines the parameter key-value pairs. Here we have added a function to make documentation of the default values easier,
 as shown in the :ref:`waves_tutorial_api` for :ref:`python_rectangle_compression_nominal_api`.
 
@@ -208,7 +208,7 @@ need any content. You can read more about `Python Modules`_ in the `Python docum
 SConscript
 **********
 
-8. Use the ``diff`` below to make the following modifications to your ``tutorial_06_include_files`` file:
+8. Use the ``diff`` below to make the following modifications to your ``tutorial_06_include_files.scons`` file:
 
    * Import ``rectangle_compression_nominal`` from the ``modsim_package.python`` module
    * Remove the ``simulation_variables`` dictionary that was created in :ref:`tutorial_parameter_substitution`'s
@@ -237,7 +237,7 @@ information about importing modules. You can access those variables with the fol
 The second change removes the code that defines ``simulation_variables`` that remained from
 :ref:`tutorial_parameter_substitution`'s code.
 
-The final change made in the ``tutorial_06_include_files`` file is to re-define the ``simulation_variables``
+The final change made in the ``tutorial_06_include_files.scons`` file is to re-define the ``simulation_variables``
 from the ``rectangle_compression_nominal`` module. The end result at this point in the code is the same between
 this tutorial and :ref:`tutorial_parameter_substitution`.  However, now we import variables from a separate file,
 list that file as a source dependency of the parameterized targets, and allow ourselves the ability to change parameters
@@ -263,7 +263,7 @@ changes made in this tutorial.
       :diff: tutorials_tutorial_05_parameter_substitution_SConstruct
 
 The first change you made allows for us to import modules from the ``modsim_package`` package. This step is neccessary to
-be able to import the ``modsim_package.python`` module in the ``tutorial_06_include_files`` file.
+be able to import the ``modsim_package.python`` module in the ``tutorial_06_include_files.scons`` file.
 
 The last change to be made is adding ``tutorial_06_include_files`` to the ``workflow_configurations`` list. This
 process should be quite familiar by now.
