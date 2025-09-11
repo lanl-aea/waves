@@ -18,6 +18,10 @@ Internal Changes
 - Enable the ruff naming convention checks 'N' (:issue:`963`, :merge:`1250`). By `Kyle Brindley`_.
 - Enable the ruff pytest convention checks 'PT' (:issue:`970`, :merge:`1251`). By `Kyle Brindley`_.
 
+Enhancements
+============
+- Add example ruff linter/formatter configuration to the modsim templates. By `Kyle Brindley`_.
+
 ********************
 0.13.15 (2025-08-27)
 ********************
