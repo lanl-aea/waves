@@ -56,7 +56,7 @@ Directory Structure
    /home/roppenheimer/waves-tutorials
    $ waves fetch --destination tutorial_cubit tutorials/tutorial_cubit
    $ ls tutorial_cubit
-   modsim_package/  abaqus  cubit  SConstruct  sierra fierro
+   modsim_package/ abaqus.scons cubit.scons SConstruct sierra.scons fierro.scons
 
 5. Make the new ``tutorial_cubit`` directory the current working directory
 
@@ -68,17 +68,18 @@ Directory Structure
    $ pwd
    /home/roppenheimer/waves-tutorials/tutorial_cubit
    $ ls
-   modsim_package/  abaqus  cubit  SConstruct  sierra fierro
+   modsim_package/ abaqus.scons cubit.scons SConstruct sierra.scons fierro.scons
 
 **********
 SConscript
 **********
 
-Note that the ``tutorial_cubit`` directory has four SConscript files: ``cubit``, ``abaqus``, ``sierra``, and ``fierro``.
-The ``cubit`` and ``fierro`` files are relevant to the current tutorial. The ``abaqus`` and ``sierra`` workflows are
-described in the complementary :ref:`tutorial_cubit_abaqus` and :ref:`tutorial_cubit_sierra`.
+Note that the ``tutorial_cubit`` directory has four SConscript files: ``cubit.scons``, ``abaqus.scons``,
+``sierra.scons``, and ``fierro.scons``.  The ``cubit.scons`` and ``fierro.scons`` files are relevant to the current
+tutorial. The ``abaqus.scons`` and ``sierra.scons`` workflows are described in the complementary
+:ref:`tutorial_cubit_abaqus` and :ref:`tutorial_cubit_sierra`.
 
-6. Review the ``cubit`` and ``fierro`` tutorials and compare them against the :ref:`tutorial_simulation` files.
+6. Review the ``cubit.scons`` and ``fierro.scons`` tutorials and compare them against the :ref:`tutorial_simulation` files.
 
 The structure has changed enough that a diff view is not as useful. Instead the contents of the new SConscript files are
 duplicated below.
