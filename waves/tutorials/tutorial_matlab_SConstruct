@@ -78,7 +78,7 @@ env.Append(
 
 # Add simulation targets
 workflow_configurations = [
-    "tutorial_matlab",
+    "tutorial_matlab.scons",
 ]
 for workflow in workflow_configurations:
     build_dir = env["variant_dir_base"] / workflow

@@ -107,11 +107,11 @@ env.Append(BUILDERS={})
 
 # Add simulation targets
 workflow_configurations = [
-    "tutorial_01_geometry",
-    "tutorial_02_partition_mesh",
-    "tutorial_03_solverprep",
-    "tutorial_04_simulation",
-    "tutorial_escape_sequences",
+    "tutorial_01_geometry.scons",
+    "tutorial_02_partition_mesh.scons",
+    "tutorial_03_solverprep.scons",
+    "tutorial_04_simulation.scons",
+    "tutorial_escape_sequences.scons",
 ]
 for workflow in workflow_configurations:
     build_dir = env["variant_dir_base"] / workflow
