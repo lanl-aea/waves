@@ -328,7 +328,7 @@ def recursive_copy(
         requested_paths = extend_requested_paths(requested_paths, tutorial)
 
     # Build source tree
-    source_files, missing_relative_paths = build_source_files(root_directory, relative_paths)
+    source_files, _missing_relative_paths = build_source_files(root_directory, relative_paths)
     longest_common_source_path = longest_common_path_prefix(source_files)
     if print_available:
         print("Available source files:")

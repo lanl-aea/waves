@@ -194,7 +194,7 @@ def odb_extract(
     if pathlib.Path(job_name).exists() and not odbreport_file:
         call_odbreport = False  # Don't call odbreport again if the report file already exists
         print(f"Report file {job_name} already exists, would you like to use this file?")
-        i, o, e = select.select([sys.stdin], [], [], 15)  # Wait 15 seconds for user input
+        i, _o, _e = select.select([sys.stdin], [], [], 15)  # Wait 15 seconds for user input
         if i:
             answer = sys.stdin.readline().strip()
             if answer[:1].lower() != "y":
@@ -202,7 +202,7 @@ def odb_extract(
     if call_odbreport:
         if verbose:
             print(f"Running Abaqus command: '{abaqus_command}'")
-        return_code, output, error_code = run_external(abaqus_command)
+        return_code, output, _error_code = run_external(abaqus_command)
         if return_code != 0:
             sys.exit(f"Abaqus odbreport command failed to execute. Abaqus output: '{output}'")
         if not pathlib.Path(job_name).exists():
