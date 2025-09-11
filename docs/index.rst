@@ -19,13 +19,13 @@
    :maxdepth: 1
    :caption: Computational Practices
 
-   computational_practices_introduction
-   computational_practices_version_control
-   computational_practices_documentation
-   computational_practices_build_system
-   computational_practices_compute_environment
-   computational_practices_regression_testing
-   computational_practices_archival
+   computational_practices_introduction.rst
+   computational_practices_version_control.rst
+   computational_practices_documentation.rst
+   computational_practices_build_system.rst
+   computational_practices_compute_environment.rst
+   computational_practices_regression_testing.rst
+   computational_practices_archival.rst
 
 .. raw:: latex
 
@@ -38,16 +38,16 @@
    :maxdepth: 1
    :caption: User Manual
 
-   abstract
-   installation
-   tutorial_quickstart
-   tutorial_introduction
-   tutorial_core
-   tutorial_supplemental
-   tutorial_wip
-   templates
-   api
-   cli
+   abstract.rst
+   installation.rst
+   tutorial_quickstart.rst
+   tutorial_introduction.rst
+   tutorial_core.rst
+   tutorial_supplemental.rst
+   tutorial_wip.rst
+   templates.rst
+   api.rst
+   cli.rst
 
 .. raw:: latex
 
@@ -58,14 +58,14 @@
    :caption: Help and Reference
    :maxdepth: 1
 
-   license
-   citation
-   internal_api
-   devops
-   release_philosophy
-   changelog
-   zreferences
-   glossary
+   license.rst
+   citation.rst
+   internal_api.rst
+   devops.rst
+   release_philosophy.rst
+   changelog.rst
+   zreferences.rst
+   glossary.rst
 
 .. raw:: latex
 
@@ -76,8 +76,8 @@
    :caption: Appendices
    :maxdepth: 1
 
-   tutorial_api
-   tutorial_cli
+   tutorial_api.rst
+   tutorial_cli.rst
 
 .. raw:: latex
 

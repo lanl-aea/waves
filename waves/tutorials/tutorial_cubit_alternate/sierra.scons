@@ -6,7 +6,10 @@ Requires the following ``SConscript(..., exports={})``
 * ``env`` - The SCons construction environment with the following required keys
 
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
-  * ``cubit`` - String path for the Cubit executable
+
+* ``env_cubit`` - The Cubit Python SCons construction environment with the following required keys
+
+  * ``python`` - String path for the Cubit Python intepreter
 
 * ``env_sierra`` - The Sierra SCons construction environment with the following required keys
 
@@ -16,7 +19,7 @@ Requires the following ``SConscript(..., exports={})``
 import pathlib
 
 # Inherit the parent construction environment
-Import("env", "env_sierra")
+Import("env", "env_cubit", "env_sierra")
 
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
@@ -28,8 +31,8 @@ workflow = []
 element_type = "SHELL"
 solver = "sierra"
 SConscript(
-    "cubit",
-    exports={"env": env, "element_type": element_type, "solver": solver},
+    "cubit.scons",
+    exports={"env": env, "env_cubit": env_cubit, "element_type": element_type, "solver": solver},
     duplicate=False,
 )
 

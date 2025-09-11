@@ -41,7 +41,7 @@ Directory Structure
    /home/roppenheimer/waves-tutorials
    $ waves fetch --destination tutorial_cubit tutorials/tutorial_cubit
    $ ls tutorial_cubit
-   modsim_package/  abaqus  cubit  SConstruct  sierra fierro
+   modsim_package/ abaqus.scons cubit.scons SConstruct sierra.scons fierro.scons
 
 5. Make the new ``tutorial_cubit`` directory the current working directory
 
@@ -53,30 +53,31 @@ Directory Structure
    $ pwd
    /home/roppenheimer/waves-tutorials/tutorial_cubit
    $ ls
-   modsim_package/  abaqus  cubit  SConstruct  sierra fierro
+   modsim_package/ abaqus.scons cubit.scons SConstruct sierra.scons fierro.scons
 
 **********
 SConscript
 **********
 
-Note that the ``tutorial_cubit`` directory has four SConscript files: ``cubit``, ``abaqus``, ``sierra``, and ``fierro``.
-The ``cubit`` and ``sierra`` files are relevant to the current tutorial. The ``abaqus`` and ``fierro`` workflows are
-described in the complementary :ref:`tutorial_cubit_abaqus` and :ref:`tutorial_cubit_fierro`.
+Note that the ``tutorial_cubit`` directory has four SConscript files: ``cubit.scons``, ``abaqus.scons``,
+``sierra.scons``, and ``fierro.scons``.  The ``cubit.scons`` and ``sierra.scons`` files are relevant to the current
+tutorial. The ``abaqus.scons`` and ``fierro.scons`` workflows are described in the complementary
+:ref:`tutorial_cubit_abaqus` and :ref:`tutorial_cubit_fierro`.
 
-6. Review the ``cubit`` and ``sierra`` tutorials and compare them against the :ref:`tutorial_simulation` files.
+6. Review the ``cubit.scons`` and ``sierra.scons`` tutorials and compare them against the :ref:`tutorial_simulation` files.
 
 The structure has changed enough that a diff view is not as useful. Instead the contents of the new SConscript files are
 duplicated below.
 
-.. admonition:: waves-tutorials/tutorial_cubit/cubit
+.. admonition:: waves-tutorials/tutorial_cubit/cubit.scons
 
-   .. literalinclude:: tutorial_cubit_cubit
+   .. literalinclude:: tutorial_cubit_cubit.scons
       :language: Python
       :lineno-match:
 
-.. admonition:: waves-tutorials/tutorial_cubit/sierra
+.. admonition:: waves-tutorials/tutorial_cubit/sierra.scons
 
-   .. literalinclude:: tutorial_cubit_sierra
+   .. literalinclude:: tutorial_cubit_sierra.scons
       :language: Python
       :lineno-match:
 

@@ -110,25 +110,25 @@ env.Append(
 
 # Add simulation targets
 workflow_configurations = [
-    "tutorial_01_geometry",
-    "tutorial_02_partition_mesh",
-    "tutorial_03_solverprep",
-    "tutorial_04_simulation",
-    "tutorial_05_parameter_substitution",
-    "tutorial_06_include_files",
-    "tutorial_07_cartesian_product",
-    "tutorial_08_data_extraction",
-    "tutorial_09_post_processing",
-    "tutorial_11_regression_testing",
-    "tutorial_12_archival",
+    "tutorial_01_geometry.scons",
+    "tutorial_02_partition_mesh.scons",
+    "tutorial_03_solverprep.scons",
+    "tutorial_04_simulation.scons",
+    "tutorial_05_parameter_substitution.scons",
+    "tutorial_06_include_files.scons",
+    "tutorial_07_cartesian_product.scons",
+    "tutorial_08_data_extraction.scons",
+    "tutorial_09_post_processing.scons",
+    "tutorial_11_regression_testing.scons",
+    "tutorial_12_archival.scons",
 ]
 for workflow in workflow_configurations:
-    build_dir = env["variant_dir_base"] / workflow
+    build_dir = env["variant_dir_base"] / pathlib.Path(workflow).stem
     SConscript(workflow, variant_dir=build_dir, exports={"env": env}, duplicate=False)
 
 # Add unit test target
-test_workflow = "unit_testing"
-test_build_dir = env["variant_dir_base"] / test_workflow
+test_workflow = pathlib.Path("unit_testing.scons")
+test_build_dir = env["variant_dir_base"] / test_workflow.stem
 SConscript(test_workflow, variant_dir=test_build_dir, exports={"env": env}, duplicate=False)
 
 # Comments used in tutorial code snippets: marker-7

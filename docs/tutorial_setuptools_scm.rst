@@ -42,8 +42,8 @@ Directory Structure
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Download the ``tutorial_12_archival`` file with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand. The
-   ``SConscript`` file ``tutorial_12_archival`` does not need to change because we are already using the project
+4. Download the ``tutorial_12_archival.scons`` file with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand. The
+   ``SConscript`` file ``tutorial_12_archival.scons`` does not need to change because we are already using the project
    configuration ``env["version"]`` in the archive file name.
 
 .. code-block:: bash

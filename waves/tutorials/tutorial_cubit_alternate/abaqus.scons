@@ -30,7 +30,7 @@ datacheck = []
 element_type = "QUAD"
 solver = "abaqus"
 SConscript(
-    "cubit",
+    "cubit.scons",
     exports={"env": env, "env_cubit": env_cubit, "element_type": element_type, "solver": solver},
     duplicate=False,
 )

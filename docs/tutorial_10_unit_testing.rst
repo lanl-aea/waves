@@ -106,9 +106,9 @@ SConscript
 
 6. In the ``waves-tutorials`` directory, create a new file named ``unit_testing`` from the contents below
 
-.. admonition:: waves-tutorials/unit_testing
+.. admonition:: waves-tutorials/unit_testing.scons
 
-    .. literalinclude:: tutorials_unit_testing
+    .. literalinclude:: tutorials_unit_testing.scons
         :language: Python
         :lineno-match:
 

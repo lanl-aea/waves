@@ -87,14 +87,14 @@ Directory Structure
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Download and copy the ``tutorial_12_archival`` file to a new file named ``tutorial_task_reuse``
+4. Download and copy the ``tutorial_12_archival.scons`` file to a new file named ``tutorial_task_reuse.scons``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_12_archival && cp tutorial_12_archival tutorial_task_reuse
+   $ waves fetch --overwrite tutorials/tutorial_12_archival.scons && cp tutorial_12_archival.scons tutorial_task_reuse.scons
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -102,14 +102,14 @@ Directory Structure
 SConscript
 **********
 
-A ``diff`` against the ``tutorial_12_archival`` file from :ref:`tutorial_archival` is included below to help identify the
+A ``diff`` against the ``tutorial_12_archival.scons`` file from :ref:`tutorial_archival` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-tutorials/tutorial_task_reuse
+.. admonition:: waves-tutorials/tutorial_task_reuse.scons
 
-   .. literalinclude:: tutorials_tutorial_task_reuse
+   .. literalinclude:: tutorials_tutorial_task_reuse.scons
       :language: Python
-      :diff: tutorials_tutorial_12_archival
+      :diff: tutorials_tutorial_12_archival.scons
 
 5. Create a new file named ``rectangle_geometry_partition.scons`` from the contents below
 

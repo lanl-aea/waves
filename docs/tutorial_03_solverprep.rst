@@ -62,7 +62,7 @@ Directory Structure
                WAVES fetch
                Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
-4. Fetch the ``tutorial_02_partition_mesh`` file and create a new file named ``tutorial_03_solverprep``
+4. Fetch the ``tutorial_02_partition_mesh.scons`` file and create a new file named ``tutorial_03_solverprep.scons``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. only:: not epub
@@ -77,7 +77,7 @@ Directory Structure
 
             $ pwd
             /home/roppenheimer/waves-tutorials
-            $ waves fetch --overwrite tutorials/tutorial_02_partition_mesh && cp tutorial_02_partition_mesh tutorial_03_solverprep
+            $ waves fetch --overwrite tutorials/tutorial_02_partition_mesh.scons && cp tutorial_02_partition_mesh.scons tutorial_03_solverprep.scons
             WAVES fetch
             Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -92,7 +92,7 @@ Directory Structure
             ----
             C:\Users\roppenheimer\waves-tutorials
 
-            PS > waves fetch --overwrite tutorials\tutorial_02_partition_mesh && Copy-Item tutorial_02_partition_mesh tutorial_03_solverprep
+            PS > waves fetch --overwrite tutorials\tutorial_02_partition_mesh.scons && Copy-Item tutorial_02_partition_mesh.scons tutorial_03_solverprep.scons
             WAVES fetch
             Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
@@ -135,7 +135,7 @@ Solver Input Files
             Destination directory: 'modsim_package\abaqus'
 
 This action will fetch the source files we included in the
-``tutorial_03_solverprep`` file into the ``waves-tutorials/modsim_package/abaqus/``
+``tutorial_03_solverprep.scons`` file into the ``waves-tutorials/modsim_package/abaqus/``
 directory. Check the contents of this directory with the commands below.
 
 .. only:: not epub
@@ -200,12 +200,12 @@ SConscript
     end of the :ref:`tutorials_tutorial_solverprep` section will demonstrate this
     more clearly.
 
-6. Modify your ``tutorial_03_solverprep`` file by adding the contents shown below immediately after the code
+6. Modify your ``tutorial_03_solverprep.scons`` file by adding the contents shown below immediately after the code
    pertaining to ``# Mesh`` from the previous tutorial, and above the ``# Collector alias`` code.
 
-.. admonition:: waves-tutorials/tutorial_03_solverprep
+.. admonition:: waves-tutorials/tutorial_03_solverprep.scons
 
-    .. literalinclude:: tutorials_tutorial_03_solverprep
+    .. literalinclude:: tutorials_tutorial_03_solverprep.scons
        :language: Python
        :lineno-match:
        :start-after: marker-3
@@ -232,14 +232,14 @@ source files instead of defining a unique task for each item in the ``abaqus_sou
 :meth:`waves.scons_extensions.copy_substfile` pseudo-builder will construct the per-file tasks automatically and return
 the complete list of targets.
 
-In summary of the changes you just made to the ``tutorial_03_solverprep`` file, a ``diff`` against the ``SConscript``
+In summary of the changes you just made to the ``tutorial_03_solverprep.scons`` file, a ``diff`` against the ``SConscript``
 file from :ref:`tutorial_partition_mesh` is included below to help identify the changes made in this tutorial.
 
-.. admonition:: waves-tutorials/tutorial_03_solverprep
+.. admonition:: waves-tutorials/tutorial_03_solverprep.scons
 
-   .. literalinclude:: tutorials_tutorial_03_solverprep
+   .. literalinclude:: tutorials_tutorial_03_solverprep.scons
       :language: Python
-      :diff: tutorials_tutorial_02_partition_mesh
+      :diff: tutorials_tutorial_02_partition_mesh.scons
 
 **********
 SConstruct

@@ -95,7 +95,7 @@ Directory Structure
                WAVES fetch
                Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
-4. Download and copy the ``tutorial_09_post_processing`` file to a new file named ``tutorial_11_regression_testing``
+4. Download and copy the ``tutorial_09_post_processing.scons`` file to a new file named ``tutorial_11_regression_testing.scons``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. only:: not epub
@@ -110,7 +110,7 @@ Directory Structure
 
             $ pwd
             /home/roppenheimer/waves-tutorials
-            $ waves fetch --overwrite tutorials/tutorial_09_post_processing && cp tutorial_09_post_processing tutorial_11_regression_testing
+            $ waves fetch --overwrite tutorials/tutorial_09_post_processing.scons && cp tutorial_09_post_processing.scons tutorial_11_regression_testing.scons
             WAVES fetch
             Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -125,7 +125,7 @@ Directory Structure
             ----
             C:\Users\roppenheimer\waves-tutorials
 
-            PS > waves fetch --overwrite tutorials\tutorial_09_post_processing && Copy-Item tutorial_09_post_processing tutorial_11_regression_testing
+            PS > waves fetch --overwrite tutorials\tutorial_09_post_processing.scons && Copy-Item tutorial_09_post_processing.scons tutorial_11_regression_testing.scons
             WAVES fetch
             Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
@@ -162,14 +162,14 @@ during the post-processing task introduced in :ref:`tutorial_post_processing`
 SConscript
 **********
 
-A ``diff`` against the ``tutorial_09_post_processing`` file from :ref:`tutorial_post_processing` is included below to help identify the
+A ``diff`` against the ``tutorial_09_post_processing.scons`` file from :ref:`tutorial_post_processing` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-tutorials/tutorial_11_regression_testing
+.. admonition:: waves-tutorials/tutorial_11_regression_testing.scons
 
-   .. literalinclude:: tutorials_tutorial_11_regression_testing
+   .. literalinclude:: tutorials_tutorial_11_regression_testing.scons
       :language: Python
-      :diff: tutorials_tutorial_09_post_processing
+      :diff: tutorials_tutorial_09_post_processing.scons
 
 There are two changes made in this tutorial. The first is to compare the expected simulation results to the current
 simulation's output. A new task compares the expected results as the CSV file created above against the current

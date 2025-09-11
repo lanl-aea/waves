@@ -39,7 +39,7 @@ Directory Structure
    /home/roppenheimer/waves-tutorials
    $ waves fetch --destination tutorial_cubit tutorials/tutorial_cubit
    $ ls tutorial_cubit
-   modsim_package/  abaqus  cubit  SConstruct  sierra
+   modsim_package/ abaqus.scons cubit.scons SConstruct sierra.scons fierro.scons
 
 5. Make the new ``tutorial_cubit`` directory the current working directory
 
@@ -51,7 +51,7 @@ Directory Structure
    $ pwd
    /home/roppenheimer/waves-tutorials/tutorial_cubit
    $ ls
-   modsim_package/  abaqus  cubit  SConstruct  sierra
+   modsim_package/ abaqus.scons cubit.scons SConstruct sierra.scons fierro.scons
 
 .. _tutorials_tutorial_cubit:
 
@@ -59,24 +59,24 @@ Directory Structure
 SConscript
 **********
 
-Note that the ``tutorial_cubit`` directory has three SConscript files: ``cubit``, ``abaqus``, ``sierra``. The first two
-are relevant to the current tutorial. The ``sierra`` workflow is described in the complementary
-:ref:`tutorial_cubit_sierra`.
+Note that the ``tutorial_cubit`` directory has three SConscript files: ``cubit.scons``, ``abaqus.scons``,
+``sierra.scons``. The first two are relevant to the current tutorial. The ``sierra.scons`` workflow is described in the
+complementary :ref:`tutorial_cubit_sierra`.
 
-6. Review the ``cubit`` and ``abaqus`` tutorials and compare them against the :ref:`tutorial_simulation` files.
+6. Review the ``cubit.scons`` and ``abaqus.scons`` tutorials and compare them against the :ref:`tutorial_simulation` files.
 
 The structure has changed enough that a diff view is not as useful. Instead the contents of the new SConscript files are
 duplicated below.
 
-.. admonition:: waves-tutorials/tutorial_cubit/cubit
+.. admonition:: waves-tutorials/tutorial_cubit/cubit.scons
 
-   .. literalinclude:: tutorial_cubit_cubit
+   .. literalinclude:: tutorial_cubit_cubit.scons
       :language: Python
       :lineno-match:
 
-.. admonition:: waves-tutorials/tutorial_cubit/abaqus
+.. admonition:: waves-tutorials/tutorial_cubit/abaqus.scons
 
-   .. literalinclude:: tutorial_cubit_abaqus
+   .. literalinclude:: tutorial_cubit_abaqus.scons
       :language: Python
       :lineno-match:
 

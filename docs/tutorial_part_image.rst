@@ -42,14 +42,14 @@ Directory Structure
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Download and copy the ``tutorial_12_archival`` file to a new file named ``tutorial_part_image`` with the
+4. Download and copy the ``tutorial_12_archival.scons`` file to a new file named ``tutorial_part_image.scons`` with the
    :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_12_archival && cp tutorial_12_archival tutorial_part_image
+   $ waves fetch --overwrite tutorials/tutorial_12_archival.scons && cp tutorial_12_archival.scons tutorial_part_image.scons
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -92,15 +92,15 @@ specified.
 SConscript
 **********
 
-7. Add the ``images`` task list and alias to the ``tutorial_part_image`` SConscript file. A``diff`` against the
-   ``tutorial_12_archival`` file from :ref:`tutorial_archival` is included below to help identify the changes made in
+7. Add the ``images`` task list and alias to the ``tutorial_part_image.scons`` SConscript file. A``diff`` against the
+   ``tutorial_12_archival.scons`` file from :ref:`tutorial_archival` is included below to help identify the changes made in
    this tutorial.
 
-.. admonition:: waves-tutorials/tutorial_part_image
+.. admonition:: waves-tutorials/tutorial_part_image.scons
 
-   .. literalinclude:: tutorials_tutorial_part_image
+   .. literalinclude:: tutorials_tutorial_part_image.scons
       :language: Python
-      :diff: tutorials_tutorial_12_archival
+      :diff: tutorials_tutorial_12_archival.scons
 
 Generating images will be part of a separate workflow. To do this we have created an ``images`` list that will capture
 the `SCons`_ tasks and have mapped a new alias to that list.
@@ -109,7 +109,7 @@ the `SCons`_ tasks and have mapped a new alias to that list.
 SConstruct
 **********
 
-8. Add the ``tutorial_part_image`` SConscript file to the workflow. A ``diff`` against the ``SConstruct`` file from
+8. Add the ``tutorial_part_image.scons`` SConscript file to the workflow. A ``diff`` against the ``SConstruct`` file from
    :ref:`tutorial_archival` is included below to help identify the changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct

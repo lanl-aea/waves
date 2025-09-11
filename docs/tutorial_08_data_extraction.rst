@@ -80,7 +80,7 @@ Directory Structure
                WAVES fetch
                Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
-4. Download and copy the ``tutorial_07_cartesian_product`` file to a new file named ``tutorial_08_data_extraction``
+4. Download and copy the ``tutorial_07_cartesian_product.scons`` file to a new file named ``tutorial_08_data_extraction.scons``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. only:: not epub
@@ -95,7 +95,7 @@ Directory Structure
 
             $ pwd
             /home/roppenheimer/waves-tutorials
-            $ waves fetch --overwrite tutorials/tutorial_07_cartesian_product && cp tutorial_07_cartesian_product tutorial_08_data_extraction
+            $ waves fetch --overwrite tutorials/tutorial_07_cartesian_product.scons && cp tutorial_07_cartesian_product.scons tutorial_08_data_extraction.scons
             WAVES fetch
             Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -110,7 +110,7 @@ Directory Structure
             ----
             C:\Users\roppenheimer\waves-tutorials
 
-            PS > waves fetch --overwrite tutorials\tutorial_07_cartesian_product && Copy-Item tutorial_07_cartesian_product tutorial_08_data_extraction
+            PS > waves fetch --overwrite tutorials\tutorial_07_cartesian_product.scons && Copy-Item tutorial_07_cartesian_product.scons tutorial_08_data_extraction.scons
             WAVES fetch
             Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
@@ -118,14 +118,14 @@ Directory Structure
 SConscript
 **********
 
-A ``diff`` against the ``tutorial_07_cartesian_product`` file from :ref:`tutorial_cartesian_product` is included
+A ``diff`` against the ``tutorial_07_cartesian_product.scons`` file from :ref:`tutorial_cartesian_product` is included
 below to help identify the changes made in this tutorial.
 
-.. admonition:: waves-tutorials/tutorial_08_data_extraction
+.. admonition:: waves-tutorials/tutorial_08_data_extraction.scons
 
-   .. literalinclude:: tutorials_tutorial_08_data_extraction
+   .. literalinclude:: tutorials_tutorial_08_data_extraction.scons
       :language: Python
-      :diff: tutorials_tutorial_07_cartesian_product
+      :diff: tutorials_tutorial_07_cartesian_product.scons
 
 The only new code in this tutorial adds the :meth:`waves.scons_extensions.abaqus_extract` builder task. Note that this task
 falls within the parameterization loop and will be executed once per parameter set. :ref:`odb_extract_cli` will output
@@ -230,7 +230,7 @@ Output Files
             Path
             ----
             C:\Users\roppenheimer\waves-tutorials
-   
+
             PS > Get-ChildItem -Path build\tutorial_08_data_extraction\ -Recurse "*.h5"
 
                 Directory: C:\Users\roppenheimer\waves-tutorials\build\tutorial_08_data_extraction
