@@ -179,7 +179,16 @@ available_files_input = {
 
 
 @pytest.mark.parametrize(
-    ("root_directory", "relative_paths", "is_file_side_effect", "is_dir_side_effect", "rglob_side_effect", "expected_files", "expected_missing", "mock_rglob_argument"),  # noqa: E501
+    (
+        "root_directory",
+        "relative_paths",
+        "is_file_side_effect",
+        "is_dir_side_effect",
+        "rglob_side_effect",
+        "expected_files",
+        "expected_missing",
+        "mock_rglob_argument",
+    ),  # noqa: E501
     available_files_input.values(),
     ids=available_files_input.keys(),
 )
@@ -316,7 +325,13 @@ build_copy_tuples_input = {
 
 
 @pytest.mark.parametrize(
-    ("destination", "requested_paths_resolved", "overwrite", "build_destination_files_side_effect", "expected_copy_tuples"),
+    (
+        "destination",
+        "requested_paths_resolved",
+        "overwrite",
+        "build_destination_files_side_effect",
+        "expected_copy_tuples",
+    ),
     build_copy_tuples_input.values(),
     ids=build_copy_tuples_input.keys(),
 )

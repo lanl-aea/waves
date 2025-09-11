@@ -488,7 +488,9 @@ class TestOneAtATime:
     }
 
     @pytest.mark.parametrize(
-        ("parameter_schema", "expected_dictionary"), parameter_study_to_dict.values(), ids=parameter_study_to_dict.keys()
+        ("parameter_schema", "expected_dictionary"),
+        parameter_study_to_dict.values(),
+        ids=parameter_study_to_dict.keys(),
     )
     def test_parameter_study_to_dict(self, parameter_schema, expected_dictionary) -> None:
         """Test parameter study dictionary conversion"""

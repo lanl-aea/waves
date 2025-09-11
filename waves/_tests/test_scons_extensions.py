@@ -1805,7 +1805,16 @@ builder_factory_tests.update(
 
 
 @pytest.mark.parametrize(
-    ("factory_name", "default_kwargs", "builder_kwargs", "task_kwargs", "target", "default_emitter", "emitter", "expected_node_count"),
+    (
+        "factory_name",
+        "default_kwargs",
+        "builder_kwargs",
+        "task_kwargs",
+        "target",
+        "default_emitter",
+        "emitter",
+        "expected_node_count",
+    ),
     builder_factory_tests.values(),
     ids=builder_factory_tests.keys(),
 )
