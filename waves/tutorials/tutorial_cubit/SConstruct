@@ -141,12 +141,12 @@ env_sierra.Append(
 
 # Add simulation targets
 workflow_configurations = [
-    "abaqus",
-    "sierra",
-    "fierro",
+    "abaqus.scons",
+    "sierra.scons",
+    "fierro.scons",
 ]
 for workflow in workflow_configurations:
-    build_dir = env["variant_dir_base"] / workflow
+    build_dir = env["variant_dir_base"] / pathlib.Path(workflow).stem
     SConscript(
         workflow,
         variant_dir=build_dir,
