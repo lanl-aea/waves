@@ -48,10 +48,9 @@ def test_main():
     with (
         patch("sys.argv", ["solver.py", "explicit", "-i", "dummy_input.yaml"]),
         patch("solver.explicit", side_effect=RuntimeError("message")),
-        pytest.raises(SystemExit) as err,
+        pytest.raises(SystemExit, match="message"),
     ):
         solver.main()
-        assert str(err) == "message"
 
 
 name_output_file = {
