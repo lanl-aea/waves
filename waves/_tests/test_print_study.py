@@ -24,10 +24,8 @@ def test_print_study():
         patch("yaml.safe_load", return_value={}),
         pytest.raises(RuntimeError),
     ):
-        try:
-            _print_study.main(pathlib.Path("badpath.yaml"))
-        finally:
-            mock_print.assert_not_called()
+        _print_study.main(pathlib.Path("badpath.yaml"))
+    mock_print.assert_not_called()
 
     # Test an unexpected YAML exception not associated with trying to read an H5 file
     with (
@@ -37,10 +35,8 @@ def test_print_study():
         patch("yaml.safe_load", side_effect=Exception()),
         pytest.raises(RuntimeError),
     ):
-        try:
-            _print_study.main(pathlib.Path("notayamlfile.h5"))
-        finally:
-            mock_print.assert_not_called()
+        _print_study.main(pathlib.Path("notayamlfile.h5"))
+    mock_print.assert_not_called()
 
     # Test the YAML read behavior
     with (
