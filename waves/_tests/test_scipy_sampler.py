@@ -58,17 +58,17 @@ class TestScipySampler:
             # NOTE: we cannot test the samples array while simulateously iterating over available samplers because each
             # sampler will produce different samples arrays. To test expected sample arrays we must separate the test
             # expectations with hardcoded duplicate tests, one per sampler.
-            TestGenerate = ScipySampler(sampler, parameter_schema, **kwargs)
+            test_generate = ScipySampler(sampler, parameter_schema, **kwargs)
             # Verify that the parameter set name creation method was called
             expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
-            assert list(TestGenerate._set_names.values()) == expected_set_names
+            assert list(test_generate._set_names.values()) == expected_set_names
             # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
             expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
-            set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
+            set_names = list(test_generate.parameter_study[_set_coordinate_key])
             assert numpy.all(set_names == expected_set_names)
             # Check that the parameter names are correct
-            assert parameter_names == TestGenerate._parameter_names
-            assert parameter_names == list(TestGenerate.parameter_study.keys())
+            assert parameter_names == test_generate._parameter_names
+            assert parameter_names == list(test_generate.parameter_study.keys())
 
     merge_test = {
         "new sets": (
@@ -134,8 +134,8 @@ class TestScipySampler:
     )
     def test_parameter_study_to_dict(self, sampler, parameter_schema, kwargs, expected_dictionary) -> None:
         """Test parameter study dictionary conversion"""
-        TestParameterStudyDict = ScipySampler(sampler, parameter_schema, **kwargs)
-        returned_dictionary = TestParameterStudyDict.parameter_study_to_dict()
+        test_parameter_study_dict = ScipySampler(sampler, parameter_schema, **kwargs)
+        returned_dictionary = test_parameter_study_dict.parameter_study_to_dict()
         assert expected_dictionary.keys() == returned_dictionary.keys()
         assert all(isinstance(key, str) for key in returned_dictionary)
         for set_name in expected_dictionary:

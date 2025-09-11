@@ -61,22 +61,22 @@ class TestSobolSequence:
             SobolSequence(parameter_schema, **kwargs),
             ScipySampler("Sobol", parameter_schema, **kwargs),
         )
-        for TestGenerate in generator_classes:
-            samples_array = TestGenerate._samples
+        for test_generate in generator_classes:
+            samples_array = test_generate._samples
             assert numpy.allclose(samples_array, expected_samples)
             # Check for type preservation
-            for key in TestGenerate.parameter_study:
-                assert TestGenerate.parameter_study[key].dtype == numpy.float64
+            for key in test_generate.parameter_study:
+                assert test_generate.parameter_study[key].dtype == numpy.float64
             # Verify that the parameter set name creation method was called
             expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
-            assert list(TestGenerate._set_names.values()) == expected_set_names
+            assert list(test_generate._set_names.values()) == expected_set_names
             # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
             expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
-            set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
+            set_names = list(test_generate.parameter_study[_set_coordinate_key])
             assert numpy.all(set_names == expected_set_names)
             # Check that the parameter names are correct
-            assert parameter_names == TestGenerate._parameter_names
-            assert parameter_names == list(TestGenerate.parameter_study.keys())
+            assert parameter_names == test_generate._parameter_names
+            assert parameter_names == list(test_generate.parameter_study.keys())
 
     merge_test = {
         "new sets": (
