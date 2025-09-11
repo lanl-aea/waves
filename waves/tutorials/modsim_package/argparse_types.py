@@ -19,11 +19,11 @@ def positive_float(argument):
         * The argument can't be cast to float
         * The argument is less than 0.0 in a float comparison
     """
-    MINIMUM_VALUE = 0.0
+    minimum_value = 0.0
     try:
         argument = float(argument)
     except ValueError as err:
         raise argparse.ArgumentTypeError("invalid float value: '{}'".format(argument)) from err
-    if not argument > MINIMUM_VALUE:
+    if not argument > minimum_value:
         raise argparse.ArgumentTypeError("invalid positive float: '{}'".format(argument))
     return argument
