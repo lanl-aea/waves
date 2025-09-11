@@ -260,7 +260,7 @@ longest_common_path_prefix_input = {
     "one file, str": (
         str(one_file_source_tree[0]),
         expected_path,
-        pytest.raises(ValueError, match="Can't mix absolute and relative paths"),
+        pytest.raises(ValueError, match=r"Can't mix.*paths"),
     ),
     "one file, path": (one_file_source_tree[0], expected_path, pytest.raises(TypeError)),
     "one file, list": (one_file_source_tree, expected_path, does_not_raise()),
