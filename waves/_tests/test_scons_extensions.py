@@ -2605,46 +2605,37 @@ test_qoi_pseudo_builder_cases = {
         {},
         {},
         None,
-        pytest.raises(ValueError),
-        "Either expected or archive=True must be specified",
+        pytest.raises(ValueError, match="Either expected or archive=True must be specified"),
     ),
 }
 
 
 @pytest.mark.parametrize(
-    ("class_kwargs", "call_kwargs", "expected", "outcome", "message"),
+    ("class_kwargs", "call_kwargs", "expected", "outcome"),
     test_qoi_pseudo_builder_cases.values(),
     ids=test_qoi_pseudo_builder_cases.keys(),
 )
-def test_qoi_pseudo_builder(class_kwargs, call_kwargs, expected, outcome, message) -> None:
+def test_qoi_pseudo_builder(class_kwargs, call_kwargs, expected, outcome) -> None:
     # Direct call
     with outcome:
         env = SCons.Environment.Environment()
-        try:
-            qoi_pseudo_builder = scons_extensions.QOIPseudoBuilder(
-                pathlib.Path("collection_directory"), pathlib.Path("build_dir"), **class_kwargs
-            )
-            targets = qoi_pseudo_builder(env, pathlib.Path("calculated"), **call_kwargs)
-            assert targets == expected
-        except ValueError as err:
-            assert message in str(err)
-            raise err
+        qoi_pseudo_builder = scons_extensions.QOIPseudoBuilder(
+            pathlib.Path("collection_directory"), pathlib.Path("build_dir"), **class_kwargs
+        )
+        targets = qoi_pseudo_builder(env, pathlib.Path("calculated"), **call_kwargs)
+        assert targets == expected
 
     # Environment method
     with outcome:
         env = SCons.Environment.Environment()
-        try:
-            env.AddMethod(
-                scons_extensions.QOIPseudoBuilder(
-                    pathlib.Path("collection_directory"), pathlib.Path("build_dir"), **class_kwargs
-                ),
-                "QOI",
-            )
-            targets = env.QOI(pathlib.Path("calculated"), **call_kwargs)
-            assert targets == expected
-        except ValueError as err:
-            assert message in str(err)
-            raise err
+        env.AddMethod(
+            scons_extensions.QOIPseudoBuilder(
+                pathlib.Path("collection_directory"), pathlib.Path("build_dir"), **class_kwargs
+            ),
+            "QOI",
+        )
+        targets = env.QOI(pathlib.Path("calculated"), **call_kwargs)
+        assert targets == expected
 
 
 waves_environment_attributes = {
