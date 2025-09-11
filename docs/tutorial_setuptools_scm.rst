@@ -85,7 +85,7 @@ Version control system
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ git add SConstruct pyproject.toml tutorial_12_archival
+   $ git add SConstruct tutorial_12_archival
    $ git commit -m "Initial commit for git tag version numbers using setuptools_scm"
    <output truncated>
 
