@@ -4124,17 +4124,17 @@ class WAVESEnvironment(SConsEnvironment):
     def __init__(
         self,
         *args,
-        ABAQUS_PROGRAM: str = "abaqus",
-        ANSYS_PROGRAM: str = "ansys",
-        CCX_PROGRAM: str = "ccx",
-        CHARMRUN_PROGRAM: str = "charmrun",
-        FIERRO_EXPLICIT_PROGRAM: str = "fierro-parallel-explicit",
-        FIERRO_IMPLICIT_PROGRAM: str = "fierro-parallel-implicit",
-        INCITER_PROGRAM: str = "inciter",
-        MPIRUN_PROGRAM: str = "mpirun",
-        PYTHON_PROGRAM: str = "python",
-        SIERRA_PROGRAM: str = "sierra",
-        SPHINX_BUILD_PROGRAM: str = "sphinx-build",
+        ABAQUS_PROGRAM: str = "abaqus",  # noqa: N803
+        ANSYS_PROGRAM: str = "ansys",  # noqa: N803
+        CCX_PROGRAM: str = "ccx",  # noqa: N803
+        CHARMRUN_PROGRAM: str = "charmrun",  # noqa: N803
+        FIERRO_EXPLICIT_PROGRAM: str = "fierro-parallel-explicit",  # noqa: N803
+        FIERRO_IMPLICIT_PROGRAM: str = "fierro-parallel-implicit",  # noqa: N803
+        INCITER_PROGRAM: str = "inciter",  # noqa: N803
+        MPIRUN_PROGRAM: str = "mpirun",  # noqa: N803
+        PYTHON_PROGRAM: str = "python",  # noqa: N803
+        SIERRA_PROGRAM: str = "sierra",  # noqa: N803
+        SPHINX_BUILD_PROGRAM: str = "sphinx-build",  # noqa: N803
         **kwargs,
     ):
         super().__init__(
@@ -4153,98 +4153,98 @@ class WAVESEnvironment(SConsEnvironment):
             **kwargs,
         )
 
-    def PrintBuildFailures(self, *args, **kwargs):
+    def PrintBuildFailures(self, *args, **kwargs):  # noqa: N802
         """Construction environment method from :meth:`waves.scons_extensions.print_build_failures`
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return print_build_failures(self, *args, **kwargs)
 
-    def CheckProgram(self, *args, **kwargs):
+    def CheckProgram(self, *args, **kwargs):  # noqa: N802
         """Construction environment method from :meth:`waves.scons_extensions.check_program`
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return check_program(self, *args, **kwargs)
 
-    def FindProgram(self, *args, **kwargs):
+    def FindProgram(self, *args, **kwargs):  # noqa: N802
         """Construction environment method from :meth:`waves.scons_extensions.find_program`
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return find_program(self, *args, **kwargs)
 
-    def AddProgram(self, *args, **kwargs):
+    def AddProgram(self, *args, **kwargs):  # noqa: N802
         """Construction environment method from :meth:`waves.scons_extensions.add_program`
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return add_program(self, *args, **kwargs)
 
-    def AddCubit(self, *args, **kwargs):
+    def AddCubit(self, *args, **kwargs):  # noqa: N802
         """Construction environment method from :meth:`waves.scons_extensions.add_cubit`
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return add_cubit(self, *args, **kwargs)
 
-    def AddCubitPython(self, *args, **kwargs):
+    def AddCubitPython(self, *args, **kwargs):  # noqa: N802
         """Construction environment method from :meth:`waves.scons_extensions.add_cubit_python`
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return add_cubit_python(self, *args, **kwargs)
 
-    def CopySubstfile(self, *args, **kwargs):
+    def CopySubstfile(self, *args, **kwargs):  # noqa: N802
         """Construction environment method from :meth:`waves.scons_extensions.copy_substfile`
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return copy_substfile(self, *args, **kwargs)
 
-    def ProjectHelp(self, *args, **kwargs):
+    def ProjectHelp(self, *args, **kwargs):  # noqa: N802
         """Construction environment method from :meth:`waves.scons_extensions.project_help`
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return project_help(self, *args, **kwargs)
 
-    def ProjectAlias(self, *args, **kwargs):
+    def ProjectAlias(self, *args, **kwargs):  # noqa: N802
         """Construction environment method from :meth:`waves.scons_extensions.project_alias`
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return project_alias(self, *args, **kwargs)
 
-    def SubstitutionSyntax(self, *args, **kwargs):
+    def SubstitutionSyntax(self, *args, **kwargs):  # noqa: N802
         """Construction environment method from :meth:`waves.scons_extensions.substitution_syntax`
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return substitution_syntax(self, *args, **kwargs)
 
-    def ParameterStudyTask(self, *args, **kwargs):
+    def ParameterStudyTask(self, *args, **kwargs):  # noqa: N802
         """Construction environment pseudo-builder from :meth:`waves.scons_extensions.parameter_study_task`
 
         When using this environment pseudo-builder, do not provide the first ``env`` argument
         """
         return parameter_study_task(self, *args, **kwargs)
 
-    def ParameterStudySConscript(self, *args, **kwargs):
+    def ParameterStudySConscript(self, *args, **kwargs):  # noqa: N802
         """Construction environment method from :meth:`waves.scons_extensions.parameter_study_sconscript`
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return parameter_study_sconscript(self, *args, **kwargs)
 
-    def ParameterStudyWrite(self, *args, **kwargs):
+    def ParameterStudyWrite(self, *args, **kwargs):  # noqa: N802
         """Construction environment method from :meth:`waves.scons_extensions.parameter_study_write`
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return parameter_study_write(self, *args, **kwargs)
 
-    def FirstTargetBuilder(self, target, source, *args, **kwargs):
+    def FirstTargetBuilder(self, target, source, *args, **kwargs):  # noqa: N802
         """Builder from factory :meth:`waves.scons_extensions.first_target_builder_factory`
 
         :param target: The task target list
@@ -4255,7 +4255,7 @@ class WAVESEnvironment(SConsEnvironment):
         builder = first_target_builder_factory()
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def AbaqusJournal(self, target, source, *args, **kwargs):
+    def AbaqusJournal(self, target, source, *args, **kwargs):  # noqa: N802
         """Builder from factory :meth:`waves.scons_extensions.abaqus_journal_builder_factory`
 
         :var program: ``${ABAQUS_PROGRAM}``
@@ -4268,7 +4268,7 @@ class WAVESEnvironment(SConsEnvironment):
         builder = abaqus_journal_builder_factory(program="${ABAQUS_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def AbaqusSolver(self, target, source, *args, **kwargs):
+    def AbaqusSolver(self, target, source, *args, **kwargs):  # noqa: N802
         """Builder from factory :meth:`waves.scons_extensions.abaqus_solver_builder_factory`
 
         :var program: ``${ABAQUS_PROGRAM}``
@@ -4281,7 +4281,7 @@ class WAVESEnvironment(SConsEnvironment):
         builder = abaqus_solver_builder_factory(program="${ABAQUS_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def AbaqusDatacheck(self, target, source, *args, **kwargs):
+    def AbaqusDatacheck(self, target, source, *args, **kwargs):  # noqa: N802
         """Builder from factory :meth:`waves.scons_extensions.abaqus_solver_builder_factory` using the
         :meth:`waves.scons_extensions.abaqus_datacheck_emitter`.
 
@@ -4299,7 +4299,7 @@ class WAVESEnvironment(SConsEnvironment):
         )
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def AbaqusExplicit(self, target, source, *args, **kwargs):
+    def AbaqusExplicit(self, target, source, *args, **kwargs):  # noqa: N802
         """Builder from factory :meth:`waves.scons_extensions.abaqus_solver_builder_factory` using the
         :meth:`waves.scons_extensions.abaqus_explicit_emitter`.
 
@@ -4317,7 +4317,7 @@ class WAVESEnvironment(SConsEnvironment):
         )
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def AbaqusStandard(self, target, source, *args, **kwargs):
+    def AbaqusStandard(self, target, source, *args, **kwargs):  # noqa: N802
         """Builder from factory :meth:`waves.scons_extensions.abaqus_solver_builder_factory` using the
         :meth:`waves.scons_extensions.abaqus_standard_emitter`.
 
@@ -4335,7 +4335,7 @@ class WAVESEnvironment(SConsEnvironment):
         )
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def AbaqusPseudoBuilder(self, job, *args, override_cpus: int | None = None, **kwargs):
+    def AbaqusPseudoBuilder(self, job, *args, override_cpus: int | None = None, **kwargs):  # noqa: N802
         """Construction environment pseudo-builder from :class:`waves.scons_extensions.AbaqusPseudoBuilder`
 
         When using this environment pseudo-builder, do not provide the first ``env`` argument
@@ -4352,7 +4352,7 @@ class WAVESEnvironment(SConsEnvironment):
         pseudo_builder = AbaqusPseudoBuilder(builder=self.AbaqusSolver, override_cpus=override_cpus)
         return pseudo_builder(self, job, *args, **kwargs)
 
-    def PythonScript(self, target, source, *args, **kwargs):
+    def PythonScript(self, target, source, *args, **kwargs):  # noqa: N802
         """Builder from factory :meth:`waves.scons_extensions.python_builder_factory`
 
         :var program: ``${PYTHON_PROGRAM}``
@@ -4365,7 +4365,7 @@ class WAVESEnvironment(SConsEnvironment):
         builder = python_builder_factory(program="${PYTHON_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def QuinoaSolver(self, target, source, *args, **kwargs):
+    def QuinoaSolver(self, target, source, *args, **kwargs):  # noqa: N802
         """Builder from factory :meth:`waves.scons_extensions.quinoa_builder_factory`
 
         :var program: ``${CHARMRUN_PROGRAM}``
@@ -4379,7 +4379,7 @@ class WAVESEnvironment(SConsEnvironment):
         builder = quinoa_builder_factory(program="${CHARMRUN_PROGRAM}", subcommand="${INCITER_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def CalculiX(self, target, source, *args, **kwargs):
+    def CalculiX(self, target, source, *args, **kwargs):  # noqa: N802
         """Builder from factory :meth:`waves.scons_extensions.calculix_builder_factory`
 
         :var program: ``${CCX_PROGRAM}``
@@ -4392,7 +4392,7 @@ class WAVESEnvironment(SConsEnvironment):
         builder = calculix_builder_factory(program="${CCX_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def FierroExplicit(self, target, source, *args, **kwargs):
+    def FierroExplicit(self, target, source, *args, **kwargs):  # noqa: N802
         """Builder from factory :meth:`waves.scons_extensions.fierro_explicit_builder_factory`
 
         :var program: ``${MPIRUN_PROGRAM}``
@@ -4406,7 +4406,7 @@ class WAVESEnvironment(SConsEnvironment):
         builder = fierro_explicit_builder_factory(program="${MPIRUN_PROGRAM}", subcommand="${FIERRO_EXPLICIT_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def FierroImplicit(self, target, source, *args, **kwargs):
+    def FierroImplicit(self, target, source, *args, **kwargs):  # noqa: N802
         """Builder from factory :meth:`waves.scons_extensions.fierro_implicit_builder_factory`
 
         :var program: ``${MPIRUN_PROGRAM}``
@@ -4420,7 +4420,7 @@ class WAVESEnvironment(SConsEnvironment):
         builder = fierro_implicit_builder_factory(program="${MPIRUN_PROGRAM}", subcommand="${FIERRO_IMPLICIT_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def Sierra(self, target, source, *args, **kwargs):
+    def Sierra(self, target, source, *args, **kwargs):  # noqa: N802
         """Builder from factory :meth:`waves.scons_extensions.sierra_builder_factory`
 
         :var program: ``${SIERRA_PROGRAM}``
@@ -4433,7 +4433,7 @@ class WAVESEnvironment(SConsEnvironment):
         builder = sierra_builder_factory(program="${SIERRA_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def AnsysAPDL(self, target, source, *args, **kwargs):
+    def AnsysAPDL(self, target, source, *args, **kwargs):  # noqa: N802
         """Builder from factory :meth:`waves.scons_extensions.ansys_apdl_builder_factory`
 
         :var program: ``${ANSYS_PROGRAM}``
@@ -4446,7 +4446,7 @@ class WAVESEnvironment(SConsEnvironment):
         builder = ansys_apdl_builder_factory(program="${ANSYS_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def Truchas(self, target, source, *args, **kwargs):
+    def Truchas(self, target, source, *args, **kwargs):  # noqa: N802
         """Builder from factory :meth:`waves.scons_extensions.truchas_builder_factory`
 
         :var program: ``${MPIRUN_PROGRAM}``
@@ -4460,7 +4460,7 @@ class WAVESEnvironment(SConsEnvironment):
         builder = truchas_builder_factory(program="${MPIRUN_PROGRAM}", subcommand="${TRUCHAS_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def SphinxBuild(self, target, source, *args, **kwargs):
+    def SphinxBuild(self, target, source, *args, **kwargs):  # noqa: N802
         """Builder from factory :meth:`waves.scons_extensions.sphinx_build`
 
         :var program: ``${SPHINX_BUILD_PROGRAM}``
@@ -4473,7 +4473,7 @@ class WAVESEnvironment(SConsEnvironment):
         builder = sphinx_build(program="${SPHINX_BUILD_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def SphinxPDF(self, target, source, *args, **kwargs):
+    def SphinxPDF(self, target, source, *args, **kwargs):  # noqa: N802
         """Builder from factory :meth:`waves.scons_extensions.sphinx_latexpdf`
 
         :var program: ``${SPHINX_BUILD_PROGRAM}``
