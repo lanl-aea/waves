@@ -109,7 +109,7 @@ changes made in this tutorial.
 
    .. literalinclude:: tutorials_tutorial_task_reuse.scons
       :language: Python
-      :diff: tutorials_tutorial_12_archival
+      :diff: tutorials_tutorial_12_archival.scons
 
 5. Create a new file named ``rectangle_geometry_partition.scons`` from the contents below
 

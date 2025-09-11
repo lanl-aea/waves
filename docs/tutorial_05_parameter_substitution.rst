@@ -270,7 +270,7 @@ changes made in this tutorial.
 
    .. literalinclude:: tutorials_tutorial_05_parameter_substitution.scons
       :language: Python
-      :diff: tutorials_tutorial_04_simulation
+      :diff: tutorials_tutorial_04_simulation.scons
 
 **********
 SConstruct

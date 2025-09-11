@@ -207,7 +207,7 @@ addition of a separate datacheck alias, which will be used in :ref:`tutorial_reg
 
    .. literalinclude:: tutorials_tutorial_04_simulation.scons
       :language: Python
-      :diff: tutorials_tutorial_03_solverprep
+      :diff: tutorials_tutorial_03_solverprep.scons
 
 **********
 SConstruct

@@ -94,7 +94,7 @@ SConscript
 
    .. literalinclude:: tutorials_tutorial_mesh_convergence.scons
       :language: Python
-      :diff: tutorials_tutorial_11_regression_testing
+      :diff: tutorials_tutorial_11_regression_testing.scons
 
 .. admonition:: waves-tutorials/tutorial_mesh_convergence.scons
 

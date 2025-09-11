@@ -222,7 +222,7 @@ identify the changes made in this tutorial.
 
    .. literalinclude:: tutorials_tutorial_06_include_files.scons
       :language: Python
-      :diff: tutorials_tutorial_05_parameter_substitution
+      :diff: tutorials_tutorial_05_parameter_substitution.scons
 
 The first change to be made is importing the ``rectangle_compression_nominal`` module from the
 ``modsim_package.python`` module you created in the :ref:`tutorial_include_files_waves_python_parameter_file` section of

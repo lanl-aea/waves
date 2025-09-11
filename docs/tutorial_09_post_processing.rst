@@ -112,7 +112,7 @@ changes made in this tutorial.
 
    .. literalinclude:: tutorials_tutorial_09_post_processing.scons
       :language: Python
-      :diff: tutorials_tutorial_08_data_extraction
+      :diff: tutorials_tutorial_08_data_extraction.scons
 
 The Python 3 post-processing script is executed with the :meth:`waves.scons_extensions.python_builder_factory` builder
 from the :class:`waves.scons_extensions.WAVESEnvironment` construction environment. This builder behaves similarly to

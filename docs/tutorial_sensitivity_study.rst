@@ -81,7 +81,7 @@ the changes made in this tutorial.
 
    .. literalinclude:: tutorials_tutorial_sensitivity_study.scons
       :language: Python
-      :diff: tutorials_tutorial_12_archival
+      :diff: tutorials_tutorial_12_archival.scons
 
 **********************
 Post-processing script

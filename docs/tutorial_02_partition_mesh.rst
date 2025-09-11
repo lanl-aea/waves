@@ -172,7 +172,7 @@ tutorial.
 
    .. literalinclude:: tutorials_tutorial_02_partition_mesh.scons
       :language: Python
-      :diff: tutorials_tutorial_01_geometry
+      :diff: tutorials_tutorial_01_geometry.scons
 
 *******************
 Abaqus Journal File

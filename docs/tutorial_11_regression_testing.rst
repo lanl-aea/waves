@@ -169,7 +169,7 @@ changes made in this tutorial.
 
    .. literalinclude:: tutorials_tutorial_11_regression_testing.scons
       :language: Python
-      :diff: tutorials_tutorial_09_post_processing
+      :diff: tutorials_tutorial_09_post_processing.scons
 
 There are two changes made in this tutorial. The first is to compare the expected simulation results to the current
 simulation's output. A new task compares the expected results as the CSV file created above against the current

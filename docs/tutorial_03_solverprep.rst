@@ -239,7 +239,7 @@ file from :ref:`tutorial_partition_mesh` is included below to help identify the 
 
    .. literalinclude:: tutorials_tutorial_03_solverprep.scons
       :language: Python
-      :diff: tutorials_tutorial_02_partition_mesh
+      :diff: tutorials_tutorial_02_partition_mesh.scons
 
 **********
 SConstruct

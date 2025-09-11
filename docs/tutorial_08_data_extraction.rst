@@ -125,7 +125,7 @@ below to help identify the changes made in this tutorial.
 
    .. literalinclude:: tutorials_tutorial_08_data_extraction.scons
       :language: Python
-      :diff: tutorials_tutorial_07_cartesian_product
+      :diff: tutorials_tutorial_07_cartesian_product.scons
 
 The only new code in this tutorial adds the :meth:`waves.scons_extensions.abaqus_extract` builder task. Note that this task
 falls within the parameterization loop and will be executed once per parameter set. :ref:`odb_extract_cli` will output

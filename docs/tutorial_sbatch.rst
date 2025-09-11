@@ -63,7 +63,7 @@ changes made in this tutorial.
 
    .. literalinclude:: tutorials_tutorial_sbatch.scons
       :language: Python
-      :diff: tutorials_tutorial_04_simulation
+      :diff: tutorials_tutorial_04_simulation.scons
 
 Note that the new ``AbaqusSolver`` builder will be conditionally defined in the ``SConstruct`` file according to the
 availability of the ``sbatch`` command. If ``sbatch`` is not available, the ``slurm_job`` variable will go unused by the

@@ -120,7 +120,7 @@ below to help identify the changes made in this tutorial.
 
    .. literalinclude:: tutorials_tutorial_12_archival.scons
       :language: Python
-      :diff: tutorials_tutorial_11_regression_testing
+      :diff: tutorials_tutorial_11_regression_testing.scons
 
 First, we add the new environment keys required by the ``SConscript`` file that will be used by the archive task.
 Second, we build a list of all required SCons configuration files for the current workflow, where the

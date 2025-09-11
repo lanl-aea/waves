@@ -100,7 +100,7 @@ SConscript
 
    .. literalinclude:: tutorials_tutorial_part_image.scons
       :language: Python
-      :diff: tutorials_tutorial_12_archival
+      :diff: tutorials_tutorial_12_archival.scons
 
 Generating images will be part of a separate workflow. To do this we have created an ``images`` list that will capture
 the `SCons`_ tasks and have mapped a new alias to that list.

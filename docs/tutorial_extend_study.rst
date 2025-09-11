@@ -70,7 +70,7 @@ differences between the two parameter generators.
 
    .. literalinclude:: tutorials_tutorial_extend_study.scons
       :language: Python
-      :diff: tutorials_tutorial_07_sobol_sequence
+      :diff: tutorials_tutorial_07_sobol_sequence.scons
 
 **********
 SConstruct
