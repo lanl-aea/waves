@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-import pathlib
 
 # Inherit the parent construction environment
 Import("env")
@@ -13,9 +12,7 @@ pytest_command = "pytest --junitxml=${TARGETS[0].abspath}"
 workflow = env.Command(
     target=["test_results.xml"],
     source=pytest_source_list,
-    action=[
-        "${pytest_command} -vvv",
-    ],
+    action=["${pytest_command} -vvv"],
     pytest_command=pytest_command,
 )
 env.Alias("pytest", workflow)
