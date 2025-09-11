@@ -23,7 +23,7 @@ workflow = []
 
 element_type = "HEX"
 solver = "sierra"
-SConscript("cubit", exports={"env": env, "element_type": element_type, "solver": solver}, duplicate=False)
+SConscript("cubit.scons", exports={"env": env, "element_type": element_type, "solver": solver}, duplicate=False)
 
 # Convert mesh file type for Fierro
 env.PythonScript(
