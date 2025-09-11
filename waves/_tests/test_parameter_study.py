@@ -55,10 +55,8 @@ def test_main():
         patch("waves.parameter_generators.ParameterGenerator") as mock_class,
         pytest.raises(RuntimeError),
     ):
-        try:
-            _parameter_study.main("cartesian_product", "dummy.yaml")
-        finally:
-            mock_class.assert_not_called()
+        _parameter_study.main("cartesian_product", "dummy.yaml")
+    mock_class.assert_not_called()
 
     # Check correct subcommand/ParameterGenerator class associations
     associations = (
