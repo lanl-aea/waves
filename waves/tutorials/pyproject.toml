@@ -1,1 +1,22 @@
-[tool.pytest.ini_options]
+[tool.ruff]
+extend = "../../pyproject.toml"
+
+[tool.ruff.lint.extend-per-file-ignores]
+# Tutorial Python 3 files that are 'outside' the project
+"**/cubit/rectangle_partition.py" = ["ARG001"]
+# Abaqus Python 2 compatible files
+"**/abaqus_utilities.py" = ["SIM115", "PTH", "UP", "FURB188"]
+"**/argparse_types.py" = ["PTH", "UP", "FURB188"]
+"**/argparse_types/rectangle_*.py" = ["PTH", "UP", "FURB188"]
+"**/export_abaqus_image.py" = ["SIM115", "PTH", "UP", "FURB188"]
+"**/modsim_package/abaqus/*.py" = ["PTH", "UP", "FURB188"]
+"**/submit_cae.py" = ["SIM115", "PTH", "UP", "FURB188"]
+"multi_action_task/rectangle_*.py" = ["PTH", "UP", "FURB188"]
+"scons_quickstart/rectangle_*.py" = ["PTH", "UP", "FURB188"]
+"waves_quickstart/rectangle_*.py" = ["PTH", "UP", "FURB188"]
+# TODO: re-enable B006 VVV
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/959
+"**/rectangle_compression_sobol_sequence.py" = ["B006"]
+"**/rectangle_compression_sensitivity_study.py" = ["B006"]
+"**/rectangle_compression_latin_hypercube.py" = ["B006"]
+# TODO: re-enable B006 ^^^

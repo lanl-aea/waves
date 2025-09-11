@@ -1,7 +1,6 @@
 import pytest
 import SCons.Environment
 import scons_extensions
-
 import waves
 
 

@@ -7,9 +7,9 @@ import sys
 
 import pandas
 import yaml
+from waves.parameter_generators import SET_COORDINATE_KEY
 
 import modsim_package.utilities
-from waves.parameter_generators import SET_COORDINATE_KEY
 
 default_selection_dict = {
     "E values": "E22",

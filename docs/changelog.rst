@@ -8,6 +8,12 @@ Changelog
 0.13.16 (unreleased)
 ********************
 
+Documentation
+=============
+- Add example ruff linter/formatter configuration to the modsim templates (:merge:`1252`). By `Kyle Brindley`_.
+- Adopt ``*.scons`` file extension naming convention for SCons configuration files in the modsim templates
+  for improved ruff linter/formatter rules (:merge:`1252`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Implement a more complete set of linting and formatting rules with Ruff (:issue:`958`, :merge:`1244`). By `Kyle
@@ -17,6 +23,8 @@ Internal Changes
   Brindley`_.
 - Enable the ruff naming convention checks 'N' (:issue:`963`, :merge:`1250`). By `Kyle Brindley`_.
 - Enable the ruff pytest convention checks 'PT' (:issue:`970`, :merge:`1251`). By `Kyle Brindley`_.
+- Hierarchical ruff configuration for improved linting of tutorial files, which should lint as if they are external to
+  the project (:merge:`1252`). By `Kyle Brindley`_.
 
 ********************
 0.13.15 (2025-08-27)

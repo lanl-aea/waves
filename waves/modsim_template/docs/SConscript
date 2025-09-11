@@ -13,7 +13,6 @@ Requires the following ``SConscript(..., exports={})``
 
 import pathlib
 
-
 # Inherit the parent construction environment
 Import(["env", "project_variables"])
 

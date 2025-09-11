@@ -96,29 +96,6 @@ extend-ignore = ["B028", "PIE808", "PIE790", "SIM108", "PLC0415"]
 "*SConscript" = ["F821"]
 "*.scons" = ["F821"]
 "waves/_tests/test_*.py" = ["RUF012"]
-# Tutorial/template files that are 'outside' the project
-"waves/tutorials/**/SConscript" = ["I001"]
-"waves/tutorials/modsim_package/python/*.py" = ["I001"]
-"waves/modsim_template*/**/SConscript" = ["I001"]
-"waves/modsim_template*/modsim_package/tests/*.py" = ["I001"]
-"**/cubit/rectangle_partition.py" = ["ARG001"]
-# Abaqus Python 2 compatible files
-"**/submit_cae.py" = ["SIM115", "PTH", "UP", "FURB188"]
-"**/export_abaqus_image.py" = ["SIM115", "PTH", "UP", "FURB188"]
-"**/abaqus_utilities.py" = ["SIM115", "PTH", "UP", "FURB188"]
-"waves/tutorials/waves_quickstart/rectangle_*.py" = ["PTH", "UP", "FURB188"]
-"waves/tutorials/scons_quickstart/rectangle_*.py" = ["PTH", "UP", "FURB188"]
-"waves/tutorials/multi_action_task/rectangle_*.py" = ["PTH", "UP", "FURB188"]
-"waves/tutorials/modsim_package/argparse_types/rectangle_*.py" = ["PTH", "I001", "UP", "FURB188"]
-"waves/**/argparse_types.py" = ["PTH", "I001", "UP", "FURB188"]
-"waves/tutorials/modsim_package/abaqus/*.py" = ["PTH", "I001", "UP", "FURB188"]
-"waves/modsim_template*/modsim_package/rectangle_*.py" = ["PTH", "UP", "FURB188"]
-# TODO: re-enable B006 VVV
-# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/959
-"**/rectangle_compression_sobol_sequence.py" = ["B006"]
-"**/rectangle_compression_sensitivity_study.py" = ["B006"]
-"**/rectangle_compression_latin_hypercube.py" = ["B006"]
-# TODO: re-enable B006 ^^^
 
 [tool.mypy]
 disable_error_code = "import-untyped"

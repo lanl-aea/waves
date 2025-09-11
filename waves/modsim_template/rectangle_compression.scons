@@ -5,47 +5,49 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``modsim_package_abspath`` - Absolute path to the project package
-  * ``solve_cpus`` - Integer number of cpus to use in the Abaqus solve task
+  * ``modsim_package_abspath`` - String absolute path to the project package
+  * ``solve_cpus`` - Number of cpus to use in Abaqus solve task
   * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
   * ``regression_alias`` - String for the alias collecting the regression workflow targets
   * ``abaqus`` - String path for the Abaqus executable
 
-* ``alias`` - The workflow name alias root
 * ``parameters`` - The current simulation parameter set
 """
 
-import inspect
 import pathlib
 
 # Inherit the parent construction environment
-Import("env", "alias", "parameters")
+Import("env", "parameters", "workflow_name")
 
 # Set project-wide paths with os-agnostic path separators
 modsim_package_abspath = env["modsim_package_abspath"]
 
 # Collect the target nodes to build concise target alias(es)
-workflow_file = pathlib.Path(inspect.getfile(lambda: None))
-artifacts = [str(workflow_file)]
+artifacts = []
+workflow = []
 datacheck = []
 images = []
-workflow = []
-
-# Rectangle part
-artifacts.extend(
-    SConscript(
-        "rectangle",
-        exports={"env": env, "parameters": parameters},
-    )
-)
 
 # SolverPrep
+abaqus_source_list = [
+    modsim_package_abspath / "rectangle_compression.inp.in",
+    modsim_package_abspath / "assembly.inp",
+    modsim_package_abspath / "boundary.inp",
+    modsim_package_abspath / "field_output.inp",
+    modsim_package_abspath / "materials.inp",
+    modsim_package_abspath / "parts.inp",
+    modsim_package_abspath / "history_output.inp",
+]
+abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
 artifacts.extend(
     env.CopySubstfile(
-        [modsim_package_abspath / "rectangle_compression.inp.in"],
+        abaqus_source_list,
         substitution_dictionary=env.SubstitutionSyntax(parameters),
     )
 )
+
+solve_source_list = [source_file.name.rstrip(".in") for source_file in abaqus_source_list]
+solve_source_list.append("rectangle_mesh.inp")
 
 # Part images
 script_options = (
@@ -54,7 +56,7 @@ script_options = (
 images.extend(
     env.AbaqusJournal(
         target=["rectangle_compression.png"],
-        source=["export_abaqus_image.py", "rectangle_compression.inp"],
+        source=[modsim_package_abspath / "export_abaqus_image.py", *solve_source_list],
         subcommand_options=script_options,
         model="rectangle",
     )
@@ -66,17 +68,16 @@ abaqus_options = "-double both"
 datacheck.extend(
     env.AbaqusDatacheck(
         target=["rectangle_compression_DATACHECK.odb"],
-        source=["rectangle_compression.inp"],
+        source=solve_source_list,
         job="rectangle_compression_DATACHECK",
         program_options=f"{abaqus_options} -datacheck",
     )
 )
 
-standard_extensions = ("odb", "dat", "msg", "com", "prt", "sta")
 artifacts.extend(
     env.AbaqusStandard(
         target=["rectangle_compression.odb"],
-        source=["rectangle_compression.inp"],
+        source=solve_source_list,
         job="rectangle_compression",
         program_options="${abaqus_options} -cpus $(${solve_cpus}$)",
         abaqus_options=abaqus_options,
@@ -94,31 +95,30 @@ artifacts.extend(
 )
 
 # Post-processing
+script = modsim_package_abspath / "post_processing.py"
 plot_name = "stress_strain_comparison"
 post_processing_source = ["rectangle_compression_datasets.h5"]
-script_options = "--input-file ${post_processing_source}"
-script_options += " --output-file ${TARGET.file} --x-units 'mm/mm' --y-units 'MPa'"
+script_options = "--input-file ${SOURCES[1:].abspath}"
+script_options += " --output-file ${TARGET.file} --x-units mm/mm --y-units MPa"
 workflow.extend(
     env.PythonScript(
         target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
-        source=[modsim_package_abspath / "post_processing.py", *post_processing_source],
+        source=[script, *post_processing_source],
         subcommand_options=script_options,
-        post_processing_source=post_processing_source,
     )
 )
 artifacts.extend(workflow)
 
-# Collector alias(es)
+# Collector alias based on build directory name
 env.Alias(env["regression_alias"], datacheck)
 env.Alias(env["datacheck_alias"], datacheck)
-env.Alias(f"{alias}-datacheck", datacheck)
-env.Alias(f"{alias}-images", images)
-env.Alias(alias, workflow)
+env.Alias(f"{workflow_name}-datacheck", datacheck)
+env.Alias(f"{workflow_name}-images", images)
+env.Alias(workflow_name, workflow)
 
 if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
-    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{alias}' target(s)")
-    Ignore([".", alias], workflow)
-    Ignore([".", f"{alias}-images"], images)
-    Ignore([".", env["datacheck_alias"], env["regression_alias"], f"{alias}-datacheck"], datacheck)
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+    Ignore([".", env["regression_alias"], env["datacheck_alias"], f"{workflow_name}-datacheck"], datacheck)
+    Ignore([".", f"{workflow_name}-images"], images)
 
 Return("artifacts")

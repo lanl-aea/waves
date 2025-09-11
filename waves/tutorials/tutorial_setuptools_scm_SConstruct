@@ -6,7 +6,6 @@ import pathlib
 import sys
 
 import setuptools_scm
-
 import waves
 
 # Comments used in tutorial code snippets: marker-1

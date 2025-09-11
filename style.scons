@@ -13,8 +13,8 @@ ruff_check = env.Command(
         # TODO: Remove the second command with a custom script
         # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/971
         (
-            "ruff check . $$(python find_shebang.py .) --extend-ignore F821,I001 &&"
-            " ruff format . $$(python find_shebang.py .) --check"
+            "ruff check $$(python find_shebang.py waves/tutorials) --extend-ignore F821,I001 &&"
+            " ruff format $$(python find_shebang.py waves/tutorials) --check"
         ),
     ],
 )
@@ -29,8 +29,8 @@ ruff_format = env.Command(
         # TODO: Remove the second command with a custom script
         # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/971
         (
-            "ruff check . $$(python find_shebang.py .) --extend-ignore F821,I001 --fix;"
-            " ruff format . $$(python find_shebang.py .)"
+            "ruff check $$(python find_shebang.py waves/tutorials) --extend-ignore F821,I001 --fix;"
+            " ruff format $$(python find_shebang.py waves/tutorials)"
         ),
     ],
 )
