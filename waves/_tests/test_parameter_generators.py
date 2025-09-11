@@ -77,12 +77,8 @@ def test_calculate_set_hash(parameter_names, samples, expected_hashes):
     for row, expected_hash in zip(samples, expected_hashes, strict=True):
         set_hash = parameter_generators._calculate_set_hash(parameter_names, row)
         assert set_hash == expected_hash
-
         with pytest.raises(RuntimeError):
-            try:
-                set_hash = parameter_generators._calculate_set_hash([], row)
-            finally:
-                pass
+            set_hash = parameter_generators._calculate_set_hash([], row)
 
 
 @pytest.mark.parametrize(
@@ -1539,10 +1535,8 @@ def test_open_parameter_study():
         patch("waves.parameter_generators._verify_parameter_study"),
         pytest.raises(RuntimeError),
     ):
-        try:
-            parameter_generators._open_parameter_study(mock_file)
-        finally:
-            mock_open_dataset.assert_not_called()
+        parameter_generators._open_parameter_study(mock_file)
+    mock_open_dataset.assert_not_called()
 
     # Test verification failure
     with (
@@ -1551,10 +1545,8 @@ def test_open_parameter_study():
         patch("waves.parameter_generators._verify_parameter_study", side_effect=RuntimeError),
         pytest.raises(RuntimeError),
     ):
-        try:
-            parameter_generators._open_parameter_study(mock_file)
-        finally:
-            mock_open_dataset.assert_called_once_with(mock_file, engine="h5netcdf")
+        parameter_generators._open_parameter_study(mock_file)
+    mock_open_dataset.assert_called_once_with(mock_file, engine="h5netcdf")
 
 
 class TestParameterGenerator:
@@ -1562,17 +1554,11 @@ class TestParameterGenerator:
 
     def test_output_file_conflict(self):
         with pytest.raises(MutuallyExclusiveError):
-            try:
-                DummyGenerator({}, output_file_template="out@number", output_file="single_output_file")
-            finally:
-                pass
+            DummyGenerator({}, output_file_template="out@number", output_file="single_output_file")
 
     def test_output_file_type(self):
         with pytest.raises(ChoicesError):
-            try:
-                DummyGenerator({}, output_file_type="notsupported")
-            finally:
-                pass
+            DummyGenerator({}, output_file_type="notsupported")
 
     def test_missing_previous_parameter_study_file(self):
         with (
@@ -1580,12 +1566,10 @@ class TestParameterGenerator:
             patch("waves.parameter_generators.ParameterGenerator._merge_parameter_studies") as mock_merge,
             pytest.raises(RuntimeError),
         ):
-            try:
-                missing_previous_study = DummyGenerator(
-                    {}, previous_parameter_study="doesnotexist.h5", require_previous_parameter_study=True
-                )
-            finally:
-                mock_merge.assert_not_called()
+            missing_previous_study = DummyGenerator(
+                {}, previous_parameter_study="doesnotexist.h5", require_previous_parameter_study=True
+            )
+        mock_merge.assert_not_called()
 
         with (
             patch("pathlib.Path.is_file", return_value=False),
@@ -1999,10 +1983,8 @@ class TestParameterGenerator:
             patch("waves.parameter_generators.ParameterGenerator._write") as mock_private_write,
             pytest.raises(ChoicesError),
         ):
-            try:
-                write_parameter_generator.write(output_file_type="unsupported")
-            finally:
-                mock_private_write.assert_not_called()
+            write_parameter_generator.write(output_file_type="unsupported")
+        mock_private_write.assert_not_called()
 
     def test_write_call_to_write_meta(self):
         write_parameter_generator = DummyGenerator({})
