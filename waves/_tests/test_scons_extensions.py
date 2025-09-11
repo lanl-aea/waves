@@ -45,7 +45,7 @@ test_print_action_signature_string_cases = {
 
 
 @pytest.mark.parametrize(
-    "mock_node, action_signature_string",
+    ("mock_node", "action_signature_string"),
     test_print_action_signature_string_cases.values(),
     ids=test_print_action_signature_string_cases.keys(),
 )
@@ -68,7 +68,7 @@ check_program = {
 
 
 @pytest.mark.parametrize(
-    "prog_name, shutil_return_value, message",
+    ("prog_name", "shutil_return_value", "message"),
     check_program.values(),
     ids=check_program.keys(),
 )
@@ -134,7 +134,7 @@ find_program_input = {
     reason="Tests trigger 'SCons user error' on Windows. Believed to be a test construction error, not a test failure.",
 )
 @pytest.mark.parametrize(
-    "names, checkprog_side_effect, first_found_path",
+    ("names", "checkprog_side_effect", "first_found_path"),
     find_program_input.values(),
     ids=find_program_input.keys(),
 )
@@ -158,7 +158,7 @@ def test_find_program(names, checkprog_side_effect, first_found_path):
     reason="Tests trigger 'SCons user error' on Windows. Believed to be a test construction error, not a test failure.",
 )
 @pytest.mark.parametrize(
-    "names, checkprog_side_effect, first_found_path",
+    ("names", "checkprog_side_effect", "first_found_path"),
     find_program_input.values(),
     ids=find_program_input.keys(),
 )
@@ -200,7 +200,7 @@ def test_add_program(names, checkprog_side_effect, first_found_path):
     reason="Tests trigger 'SCons user error' on Windows. Believed to be a test construction error, not a test failure.",
 )
 @pytest.mark.parametrize(
-    "names, checkprog_side_effect, first_found_path",
+    ("names", "checkprog_side_effect", "first_found_path"),
     find_program_input.values(),
     ids=find_program_input.keys(),
 )
@@ -536,7 +536,7 @@ action_list_scons = {
 
 
 @pytest.mark.parametrize(
-    "actions, expected",
+    ("actions", "expected"),
     action_list_scons.values(),
     ids=action_list_scons.keys(),
 )
@@ -552,7 +552,7 @@ action_list_strings = {
 
 
 @pytest.mark.parametrize(
-    "builder, expected",
+    ("builder", "expected"),
     action_list_strings.values(),
     ids=action_list_strings.keys(),
 )
@@ -569,7 +569,7 @@ catenate_builder_actions = {
 
 
 @pytest.mark.parametrize(
-    "action_list, catenated_actions",
+    ("action_list", "catenated_actions"),
     catenate_builder_actions.values(),
     ids=catenate_builder_actions.keys(),
 )
@@ -625,7 +625,7 @@ ssh_builder_actions = {
 
 
 @pytest.mark.parametrize(
-    "target, builder_kwargs, task_kwargs",
+    ("target", "builder_kwargs", "task_kwargs"),
     ssh_builder_actions.values(),
     ids=ssh_builder_actions.keys(),
 )
@@ -719,7 +719,7 @@ prepend_env_input = {
 
 
 @pytest.mark.parametrize(
-    "program, mock_exists, outcome",
+    ("program", "mock_exists", "outcome"),
     prepend_env_input.values(),
     ids=prepend_env_input.keys(),
 )
@@ -772,7 +772,7 @@ substitution_syntax_input = {
 
 
 @pytest.mark.parametrize(
-    "substitution_dictionary, keyword_arguments, expected_dictionary",
+    ("substitution_dictionary", "keyword_arguments", "expected_dictionary"),
     substitution_syntax_input.values(),
     ids=substitution_syntax_input.keys(),
 )
@@ -815,7 +815,7 @@ shell_environment = {
 
 @pytest.mark.skipif(testing_windows, reason="BASH shell specific function incompatible with Windows")
 @pytest.mark.parametrize(
-    "kwargs, expected_environment",
+    ("kwargs", "expected_environment"),
     shell_environment.values(),
     ids=shell_environment.keys(),
 )
@@ -850,7 +850,7 @@ construct_action_list = {
 
 
 @pytest.mark.parametrize(
-    "actions, prefix, suffix, expected",
+    ("actions", "prefix", "suffix", "expected"),
     construct_action_list.values(),
     ids=construct_action_list.keys(),
 )
@@ -875,7 +875,7 @@ journal_emitter_input = {
 
 
 @pytest.mark.parametrize(
-    "target, source, expected",
+    ("target", "source", "expected"),
     journal_emitter_input.values(),
     ids=journal_emitter_input.keys(),
 )
@@ -919,7 +919,7 @@ abaqus_journal_input = {
 
 
 @pytest.mark.parametrize(
-    "builder_kwargs, task_kwargs, node_count, action_count, target_list",
+    ("builder_kwargs", "task_kwargs", "node_count", "action_count", "target_list"),
     abaqus_journal_input.values(),
     ids=abaqus_journal_input.keys(),
 )
@@ -1059,7 +1059,7 @@ solver_emitter_input = {
 
 
 @pytest.mark.parametrize(
-    "job_name, suffixes, target, source, expected, outcome",
+    ("job_name", "suffixes", "target", "source", "expected", "outcome"),
     solver_emitter_input.values(),
     ids=solver_emitter_input.keys(),
 )
@@ -1124,7 +1124,7 @@ abaqus_solver_input = {
 
 
 @pytest.mark.parametrize(
-    "builder_kwargs, task_kwargs, node_count, action_count, source_list, suffixes",
+    ("builder_kwargs", "task_kwargs", "node_count", "action_count", "source_list", "suffixes"),
     abaqus_solver_input.values(),
     ids=abaqus_solver_input.keys(),
 )
@@ -1208,7 +1208,7 @@ test_task_kwarg_emitter_cases = {
 
 
 @pytest.mark.parametrize(
-    "positional, kwargs, expected_target, expected_source, outcome",
+    ("positional", "kwargs", "expected_target", "expected_source", "outcome"),
     test_task_kwarg_emitter_cases.values(),
     ids=test_task_kwarg_emitter_cases.keys(),
 )
@@ -1313,7 +1313,7 @@ abaqus_solver_emitter_factory_emitters_cases = {
 
 
 @pytest.mark.parametrize(
-    "emitter_name, default_factory_kwargs, factory_kwargs",
+    ("emitter_name", "default_factory_kwargs", "factory_kwargs"),
     abaqus_solver_emitter_factory_emitters_cases.values(),
     ids=abaqus_solver_emitter_factory_emitters_cases.keys(),
 )
@@ -1486,7 +1486,7 @@ abaqus_pseudobuilder_input = {
 
 
 @pytest.mark.parametrize(
-    "class_kwargs, call_kwargs, sources, targets, options, builder_kwargs",
+    ("class_kwargs", "call_kwargs", "sources", "targets", "options", "builder_kwargs"),
     abaqus_pseudobuilder_input.values(),
     ids=abaqus_pseudobuilder_input.keys(),
 )
@@ -1522,7 +1522,7 @@ copy_substfile_input = {
 
 
 @pytest.mark.parametrize(
-    "source_list, expected_list",
+    ("source_list", "expected_list"),
     copy_substfile_input.values(),
     ids=copy_substfile_input.keys(),
 )
@@ -1547,7 +1547,7 @@ build_subdirectory_input = {
 
 
 @pytest.mark.parametrize(
-    "target, expected",
+    ("target", "expected"),
     build_subdirectory_input.values(),
     ids=build_subdirectory_input.keys(),
 )
@@ -1601,7 +1601,7 @@ first_target_emitter_input = {
 
 
 @pytest.mark.parametrize(
-    "target, source, expected",
+    ("target", "source", "expected"),
     first_target_emitter_input.values(),
     ids=first_target_emitter_input.keys(),
 )
@@ -1805,7 +1805,16 @@ builder_factory_tests.update(
 
 
 @pytest.mark.parametrize(
-    "factory_name, default_kwargs, builder_kwargs, task_kwargs, target, default_emitter, emitter, expected_node_count",
+    (
+        "factory_name",
+        "default_kwargs",
+        "builder_kwargs",
+        "task_kwargs",
+        "target",
+        "default_emitter",
+        "emitter",
+        "expected_node_count",
+    ),
     builder_factory_tests.values(),
     ids=builder_factory_tests.keys(),
 )
@@ -1921,7 +1930,7 @@ matlab_emitter_input = {
 
 
 @pytest.mark.parametrize(
-    "target, source, expected",
+    ("target", "source", "expected"),
     matlab_emitter_input.values(),
     ids=matlab_emitter_input.keys(),
 )
@@ -1963,7 +1972,7 @@ matlab_script_input = {
 
 
 @pytest.mark.parametrize(
-    "builder_kwargs, task_kwargs, node_count, action_count, target_list",
+    ("builder_kwargs", "task_kwargs", "node_count", "action_count", "target_list"),
     matlab_script_input.values(),
     ids=matlab_script_input.keys(),
 )
@@ -2031,7 +2040,7 @@ conda_environment_input = {
 
 
 @pytest.mark.parametrize(
-    "builder_kwargs, task_kwargs, target",
+    ("builder_kwargs", "task_kwargs", "target"),
     conda_environment_input.values(),
     ids=conda_environment_input.keys(),
 )
@@ -2110,7 +2119,7 @@ abaqus_extract_emitter_input = {
 
 
 @pytest.mark.parametrize(
-    "target, source, expected, env",
+    ("target", "source", "expected", "env"),
     abaqus_extract_emitter_input.values(),
     ids=abaqus_extract_emitter_input.keys(),
 )
@@ -2164,7 +2173,7 @@ build_odb_extract_input = {
 
 
 @pytest.mark.parametrize(
-    "target, source, env, calls",
+    ("target", "source", "env", "calls"),
     build_odb_extract_input.values(),
     ids=build_odb_extract_input.keys(),
 )
@@ -2209,7 +2218,7 @@ sbatch_input = {
 
 
 @pytest.mark.parametrize(
-    "builder_kwargs, task_kwargs, node_count, action_count, target_list",
+    ("builder_kwargs", "task_kwargs", "node_count", "action_count", "target_list"),
     sbatch_input.values(),
     ids=sbatch_input.keys(),
 )
@@ -2293,7 +2302,7 @@ scanner_input = {
 
 
 @pytest.mark.parametrize(
-    "content, expected_dependencies",
+    ("content", "expected_dependencies"),
     scanner_input.values(),
     ids=scanner_input.keys(),
 )
@@ -2332,7 +2341,7 @@ sphinx_scanner_input = {
 
 
 @pytest.mark.parametrize(
-    "content, expected_dependencies",
+    ("content", "expected_dependencies"),
     sphinx_scanner_input.values(),
     ids=sphinx_scanner_input.keys(),
 )
@@ -2428,7 +2437,7 @@ python_script_input = {
 
 
 @pytest.mark.parametrize(
-    "node_count, action_count, args, kwargs, study, expected_targets",
+    ("node_count", "action_count", "args", "kwargs", "study", "expected_targets"),
     python_script_input.values(),
     ids=python_script_input.keys(),
 )
@@ -2515,7 +2524,7 @@ parameter_study_sconscript = {
 
 
 @pytest.mark.parametrize(
-    "args, kwargs, expected, outcome",
+    ("args", "kwargs", "expected", "outcome"),
     parameter_study_sconscript.values(),
     ids=parameter_study_sconscript.keys(),
 )
@@ -2583,7 +2592,7 @@ parameter_study_write_cases = {
 
 
 @pytest.mark.parametrize(
-    "parameter_generator, kwargs, expected, outcome",
+    ("parameter_generator", "kwargs", "expected", "outcome"),
     parameter_study_write_cases.values(),
     ids=parameter_study_write_cases.keys(),
 )
@@ -2605,46 +2614,37 @@ test_qoi_pseudo_builder_cases = {
         {},
         {},
         None,
-        pytest.raises(ValueError),
-        "Either expected or archive=True must be specified",
+        pytest.raises(ValueError, match="Either expected or archive=True must be specified"),
     ),
 }
 
 
 @pytest.mark.parametrize(
-    "class_kwargs, call_kwargs, expected, outcome, message",
+    ("class_kwargs", "call_kwargs", "expected", "outcome"),
     test_qoi_pseudo_builder_cases.values(),
     ids=test_qoi_pseudo_builder_cases.keys(),
 )
-def test_qoi_pseudo_builder(class_kwargs, call_kwargs, expected, outcome, message) -> None:
+def test_qoi_pseudo_builder(class_kwargs, call_kwargs, expected, outcome) -> None:
     # Direct call
     with outcome:
         env = SCons.Environment.Environment()
-        try:
-            qoi_pseudo_builder = scons_extensions.QOIPseudoBuilder(
-                pathlib.Path("collection_directory"), pathlib.Path("build_dir"), **class_kwargs
-            )
-            targets = qoi_pseudo_builder(env, pathlib.Path("calculated"), **call_kwargs)
-            assert targets == expected
-        except ValueError as err:
-            assert message in str(err)
-            raise err
+        qoi_pseudo_builder = scons_extensions.QOIPseudoBuilder(
+            pathlib.Path("collection_directory"), pathlib.Path("build_dir"), **class_kwargs
+        )
+        targets = qoi_pseudo_builder(env, pathlib.Path("calculated"), **call_kwargs)
+        assert targets == expected
 
     # Environment method
     with outcome:
         env = SCons.Environment.Environment()
-        try:
-            env.AddMethod(
-                scons_extensions.QOIPseudoBuilder(
-                    pathlib.Path("collection_directory"), pathlib.Path("build_dir"), **class_kwargs
-                ),
-                "QOI",
-            )
-            targets = env.QOI(pathlib.Path("calculated"), **call_kwargs)
-            assert targets == expected
-        except ValueError as err:
-            assert message in str(err)
-            raise err
+        env.AddMethod(
+            scons_extensions.QOIPseudoBuilder(
+                pathlib.Path("collection_directory"), pathlib.Path("build_dir"), **class_kwargs
+            ),
+            "QOI",
+        )
+        targets = env.QOI(pathlib.Path("calculated"), **call_kwargs)
+        assert targets == expected
 
 
 waves_environment_attributes = {
@@ -2708,7 +2708,7 @@ waves_environment_methods = {
 
 
 @pytest.mark.parametrize(
-    "method, function",
+    ("method", "function"),
     waves_environment_methods.values(),
     ids=waves_environment_methods.keys(),
 )
@@ -2779,7 +2779,7 @@ waves_environment_builders = {
 
 
 @pytest.mark.parametrize(
-    "builder, factory, factory_kwargs",
+    ("builder", "factory", "factory_kwargs"),
     waves_environment_builders.values(),
     ids=waves_environment_builders.keys(),
 )

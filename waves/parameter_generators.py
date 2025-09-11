@@ -1428,7 +1428,7 @@ def _verify_parameter_study(parameter_study: xarray.Dataset):
     # Check for the assigned dimensions
     if _set_coordinate_key not in parameter_study.dims:
         raise RuntimeError(f"Parameter study missing dimension '{_set_coordinate_key}'")
-    keys = list(parameter_study.keys()) + [_hash_coordinate_key]
+    keys = [*list(parameter_study.keys()), _hash_coordinate_key]
     for key in keys:
         if _set_coordinate_key not in parameter_study[key].dims:
             raise RuntimeError(f"Parameter study key '{key}' missing dimension '{_set_coordinate_key}'")
@@ -1603,7 +1603,7 @@ def _merge_parameter_space(
         studies_other.append(study_other.drop_vars(_set_coordinate_key))
 
     # Combine all studies after dropping set names from all but `study_base`
-    merged_study = xarray.merge([study_base] + studies_other, join="outer", compat="no_conflicts")
+    merged_study = xarray.merge([study_base, *studies_other], join="outer", compat="no_conflicts")
 
     # Coerce types back to their original type. Especially necessary for ints, which xarray.merge converts to float
     for parameter, old_dtype in types_dictionary.items():
@@ -1666,7 +1666,7 @@ def _merge_parameter_studies(studies: list[xarray.Dataset], template: string.Tem
             ).swap_dims(swap_to_hash_index)
             studies.remove(study_other)
 
-    study_combined = _merge_parameter_space([study_base] + studies, template)
+    study_combined = _merge_parameter_space([study_base, *studies], template)
     study_combined = study_combined.swap_dims(swap_to_set_index)
 
     return study_combined

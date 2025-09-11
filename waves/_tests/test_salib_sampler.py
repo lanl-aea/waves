@@ -45,7 +45,7 @@ class TestSALibSampler:
     }
 
     @pytest.mark.parametrize(
-        "sampler_class, parameter_schema, kwargs, expected",
+        ("sampler_class", "parameter_schema", "kwargs", "expected"),
         sampler_overrides.values(),
         ids=sampler_overrides.keys(),
     )
@@ -141,7 +141,7 @@ class TestSALibSampler:
     }
 
     @pytest.mark.parametrize(
-        "sampler_class, parameter_schema, outcome", validate_input.values(), ids=validate_input.keys()
+        ("sampler_class", "parameter_schema", "outcome"), validate_input.values(), ids=validate_input.keys()
     )
     def test_validate(self, sampler_class, parameter_schema, outcome):
         with outcome:
@@ -235,7 +235,7 @@ class TestSALibSampler:
         return True
 
     @pytest.mark.parametrize(
-        "parameter_schema, kwargs",
+        ("parameter_schema", "kwargs"),
         generate_input.values(),
         ids=generate_input.keys(),
     )
@@ -378,7 +378,7 @@ class TestSALibSampler:
     }
 
     @pytest.mark.parametrize(
-        "first_schema, second_schema, kwargs",
+        ("first_schema", "second_schema", "kwargs"),
         merge_test.values(),
         ids=merge_test.keys(),
     )

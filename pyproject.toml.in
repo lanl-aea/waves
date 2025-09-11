@@ -86,8 +86,8 @@ extend-include = ["*SConstruct", "*SConscript", "*.scons"]
 [tool.ruff.lint]
 extend-select = [
     "A", "B", "E", "F", "I", "N", "Q", "W",
-    "ARG", "C4", "FURB", "ERA", "ISC", "NPY", "PD", "PERF", "PGH", "PIE", "PLC", "PLE", "PLW", "PTH", "PYI", "RSE",
-    "RUF", "SIM", "T10", "UP"
+    "ARG", "C4", "FURB", "ERA", "ISC", "NPY", "PD", "PERF", "PGH", "PIE", "PLC", "PLE", "PLW", "PT", "PTH", "PYI",
+    "RSE", "RUF", "SIM", "T10", "UP"
 ]
 extend-ignore = ["B028", "PIE808", "PIE790", "SIM108", "PLC0415"]
 
@@ -95,9 +95,7 @@ extend-ignore = ["B028", "PIE808", "PIE790", "SIM108", "PLC0415"]
 "*SConstruct" = ["F821"]
 "*SConscript" = ["F821"]
 "*.scons" = ["F821"]
-"waves/parameter_generators.py" = ["RUF005"]
 "waves/_tests/test_*.py" = ["RUF012"]
-"waves/_abaqus/abaqus_file_parser.py" = ["PERF203"]
 # Tutorial/template files that are 'outside' the project
 "waves/tutorials/**/SConscript" = ["I001"]
 "waves/tutorials/modsim_package/python/*.py" = ["I001"]

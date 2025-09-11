@@ -54,7 +54,7 @@ class TestLatinHypercube:
     }
 
     @pytest.mark.parametrize(
-        "parameter_schema, seed, expected_samples, expected_scipy_kwds",
+        ("parameter_schema", "seed", "expected_samples", "expected_scipy_kwds"),
         generate_input.values(),
         ids=generate_input.keys(),
     )
@@ -109,7 +109,7 @@ class TestLatinHypercube:
     }
 
     @pytest.mark.parametrize(
-        "first_schema, second_schema, seed, expected_samples",
+        ("first_schema", "second_schema", "seed", "expected_samples"),
         merge_test.values(),
         ids=merge_test.keys(),
     )

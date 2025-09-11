@@ -73,7 +73,7 @@ test_prepend_path_cases = {
 
 
 @pytest.mark.parametrize(
-    "args, expected",
+    ("args", "expected"),
     test_prepend_path_cases.values(),
     ids=test_prepend_path_cases.keys(),
 )
@@ -106,7 +106,7 @@ test_augment_system_test_environment_cases = {
 
 
 @pytest.mark.parametrize(
-    "args, expected",
+    ("args", "expected"),
     test_augment_system_test_environment_cases.values(),
     ids=test_augment_system_test_environment_cases.keys(),
 )
@@ -764,7 +764,7 @@ require_third_party_system_tests = [
 
 
 @pytest.mark.systemtest
-@pytest.mark.parametrize("commands, fetch_options", system_tests + require_third_party_system_tests)
+@pytest.mark.parametrize(("commands", "fetch_options"), system_tests + require_third_party_system_tests)
 def test_system(
     system_test_directory: pathlib.Path | None,
     keep_system_tests: bool,
@@ -867,7 +867,7 @@ test_create_test_prefix_cases = {
 
 
 @pytest.mark.parametrize(
-    "kwargs, expected",
+    ("kwargs", "expected"),
     test_create_test_prefix_cases.values(),
     ids=test_create_test_prefix_cases.keys(),
 )
@@ -912,7 +912,7 @@ test_return_temporary_directory_kwargs_cases = {
 
 
 @pytest.mark.parametrize(
-    "system_test_directory, keep_system_tests, available_args, available_kwargs, expected",
+    ("system_test_directory", "keep_system_tests", "available_args", "available_kwargs", "expected"),
     test_return_temporary_directory_kwargs_cases.values(),
     ids=test_return_temporary_directory_kwargs_cases.keys(),
 )

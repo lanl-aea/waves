@@ -12,7 +12,7 @@ positive_float = {
 
 
 @pytest.mark.parametrize(
-    "argument, expected, outcome",
+    ("argument", "expected", "outcome"),
     positive_float.values(),
     ids=positive_float.keys(),
 )

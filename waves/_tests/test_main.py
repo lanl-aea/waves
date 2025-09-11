@@ -127,7 +127,7 @@ parameter_study_args = {
 
 
 @pytest.mark.parametrize(
-    "subcommand, class_name, argument, option, argument_value",
+    ("subcommand", "class_name", "argument", "option", "argument_value"),
     parameter_study_args.values(),
     ids=list(parameter_study_args.keys()),
 )

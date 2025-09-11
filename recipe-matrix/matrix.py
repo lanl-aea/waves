@@ -24,7 +24,7 @@ conda_build_test_matrix = list(itertools.product(python_versions, scons_versions
 conda_build_test_matrix.remove(("3.13", "4.6"))  # SCons 4.6 not available for Python 3.13
 
 
-@pytest.mark.parametrize("python_version, scons_version", conda_build_test_matrix)
+@pytest.mark.parametrize(("python_version", "scons_version"), conda_build_test_matrix)
 def test_matrix(python_version: str, scons_version: str) -> None:
     template = command_template
     command = template.safe_substitute(

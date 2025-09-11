@@ -48,10 +48,9 @@ def test_main():
     with (
         patch("sys.argv", ["solver.py", "explicit", "-i", "dummy_input.yaml"]),
         patch("solver.explicit", side_effect=RuntimeError("message")),
-        pytest.raises(SystemExit) as err,
+        pytest.raises(SystemExit, match="message"),
     ):
         solver.main()
-        assert str(err) == "message"
 
 
 name_output_file = {
@@ -76,7 +75,7 @@ name_output_file = {
 
 
 @pytest.mark.parametrize(
-    "input_file, output_file, expected",
+    ("input_file", "output_file", "expected"),
     name_output_file.values(),
     ids=name_output_file.keys(),
 )
@@ -118,7 +117,7 @@ name_log_file = {
 
 
 @pytest.mark.parametrize(
-    "log_file, max_iterations, exists_side_effect, expected, outcome",
+    ("log_file", "max_iterations", "exists_side_effect", "expected", "outcome"),
     name_log_file.values(),
     ids=name_log_file.keys(),
 )
@@ -142,7 +141,7 @@ read_input = {
 
 
 @pytest.mark.parametrize(
-    "input_file, is_file_result, mock_data, expected, outcome",
+    ("input_file", "is_file_result", "mock_data", "expected", "outcome"),
     read_input.values(),
     ids=read_input.keys(),
 )
@@ -200,7 +199,7 @@ configure = {
 
 
 @pytest.mark.parametrize(
-    "args, read_input, expected, outcome",
+    ("args", "read_input", "expected", "outcome"),
     configure.values(),
     ids=configure.keys(),
 )
@@ -233,7 +232,7 @@ solve_output_files = {
 
 
 @pytest.mark.parametrize(
-    "output_file, solve_cpus, expected",
+    ("output_file", "solve_cpus", "expected"),
     solve_output_files.values(),
     ids=solve_output_files.keys(),
 )
@@ -262,7 +261,7 @@ solve = {
 
 
 @pytest.mark.parametrize(
-    "configuration, exists, outcome",
+    ("configuration", "exists", "outcome"),
     solve.values(),
     ids=solve.keys(),
 )
@@ -312,7 +311,7 @@ positive_nonzero_int = {
 
 
 @pytest.mark.parametrize(
-    "argument, expected, outcome",
+    ("argument", "expected", "outcome"),
     positive_nonzero_int.values(),
     ids=positive_nonzero_int.keys(),
 )

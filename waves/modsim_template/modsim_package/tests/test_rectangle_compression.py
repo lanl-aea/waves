@@ -14,7 +14,7 @@ nominal_tests = {
 
 
 @pytest.mark.parametrize(
-    "kwargs, expected",
+    ("kwargs", "expected"),
     nominal_tests.values(),
     ids=nominal_tests.keys(),
 )
@@ -41,7 +41,7 @@ mesh_convergence_tests = {
 
 
 @pytest.mark.parametrize(
-    "kwargs, expected",
+    ("kwargs", "expected"),
     mesh_convergence_tests.values(),
     ids=mesh_convergence_tests.keys(),
 )

@@ -51,7 +51,7 @@ class TestSobolSequence:
     }
 
     @pytest.mark.parametrize(
-        "parameter_schema, kwargs, expected_samples",
+        ("parameter_schema", "kwargs", "expected_samples"),
         generate_input.values(),
         ids=generate_input.keys(),
     )
@@ -131,7 +131,7 @@ class TestSobolSequence:
     }
 
     @pytest.mark.parametrize(
-        "first_schema, second_schema, kwargs, expected_samples",
+        ("first_schema", "second_schema", "kwargs", "expected_samples"),
         merge_test.values(),
         ids=merge_test.keys(),
     )
