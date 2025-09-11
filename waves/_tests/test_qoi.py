@@ -191,7 +191,7 @@ test_create_qoi_cases = {
 
 
 @pytest.mark.parametrize(
-    "kwargs, expected, outcome",
+    ("kwargs", "expected", "outcome"),
     test_create_qoi_cases.values(),
     ids=test_create_qoi_cases.keys(),
 )
@@ -322,7 +322,7 @@ test_create_qoi_set_cases = {
 
 
 @pytest.mark.parametrize(
-    "qoi_list, expected",
+    ("qoi_list", "expected"),
     test_create_qoi_set_cases.values(),
     ids=test_create_qoi_set_cases.keys(),
 )
@@ -602,7 +602,7 @@ test__create_qoi_study_cases = {
 
 
 @pytest.mark.parametrize(
-    "qoi_list, parameter_study, expected, outcome",
+    ("qoi_list", "parameter_study", "expected", "outcome"),
     test__create_qoi_study_cases.values(),
     ids=test__create_qoi_study_cases.keys(),
 )
@@ -650,7 +650,7 @@ test__qoi_group_cases = {
 
 
 @pytest.mark.parametrize(
-    "qoi_set, expected, outcome",
+    ("qoi_set", "expected", "outcome"),
     test__qoi_group_cases.values(),
     ids=test__qoi_group_cases.keys(),
 )
@@ -672,7 +672,7 @@ test__node_path_cases = {
 
 
 @pytest.mark.parametrize(
-    "qoi_set, expected",
+    ("qoi_set", "expected"),
     test__node_path_cases.values(),
     ids=test__node_path_cases.keys(),
 )
@@ -717,7 +717,7 @@ test__propagate_identical_attrs_cases = {
 
 
 @pytest.mark.parametrize(
-    "input_attrs, common_attrs",
+    ("input_attrs", "common_attrs"),
     test__propagate_identical_attrs_cases.values(),
     ids=test__propagate_identical_attrs_cases.keys(),
 )
@@ -1030,7 +1030,7 @@ test__read_qoi_set_cases = {
 
 
 @pytest.mark.parametrize(
-    "expected, mock_csv_data",
+    ("expected", "mock_csv_data"),
     test__read_qoi_set_cases.values(),
     ids=test__read_qoi_set_cases.keys(),
 )
@@ -1338,7 +1338,7 @@ test__add_tolerance_attribute_cases = {
 
 
 @pytest.mark.parametrize(
-    "qoi_set, expected",
+    ("qoi_set", "expected"),
     test__add_tolerance_attribute_cases.values(),
     ids=test__add_tolerance_attribute_cases.keys(),
 )
@@ -1351,7 +1351,7 @@ test_write_qoi_set_to_csv_cases = test__read_qoi_set_cases
 
 
 @pytest.mark.parametrize(
-    "qoi_set, expected",
+    ("qoi_set", "expected"),
     test_write_qoi_set_to_csv_cases.values(),
     ids=test_write_qoi_set_to_csv_cases.keys(),
 )
@@ -1433,7 +1433,7 @@ test__get_plotting_name_cases = {
 
 
 @pytest.mark.parametrize(
-    "qoi_array, expected",
+    ("qoi_array", "expected"),
     test__get_plotting_name_cases.values(),
     ids=test__get_plotting_name_cases.keys(),
 )
@@ -1492,7 +1492,7 @@ test__can_plot_scalar_qoi_history_cases = {
 
 
 @pytest.mark.parametrize(
-    "qoi_array, expected",
+    ("qoi_array", "expected"),
     test__can_plot_scalar_qoi_history_cases.values(),
     ids=test__can_plot_scalar_qoi_history_cases.keys(),
 )
@@ -1560,7 +1560,7 @@ test__can_plot_qoi_tolerance_check_cases = {
 
 
 @pytest.mark.parametrize(
-    "qoi_array, expected",
+    ("qoi_array", "expected"),
     test__can_plot_qoi_tolerance_check_cases.values(),
     ids=test__can_plot_qoi_tolerance_check_cases.keys(),
 )

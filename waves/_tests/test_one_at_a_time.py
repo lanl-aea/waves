@@ -48,7 +48,7 @@ class TestOneAtATime:
     }
 
     @pytest.mark.parametrize(
-        "parameter_schema, outcome",
+        ("parameter_schema", "outcome"),
         validate_input.values(),
         ids=validate_input.keys(),
     )
@@ -254,7 +254,7 @@ class TestOneAtATime:
     }
 
     @pytest.mark.parametrize(
-        "parameter_schema, kwargs, expected_dataset, expected_types",
+        ("parameter_schema", "kwargs", "expected_dataset", "expected_types"),
         generate_io.values(),
         ids=generate_io.keys(),
     )
@@ -340,7 +340,7 @@ class TestOneAtATime:
     }
 
     @pytest.mark.parametrize(
-        "first_schema, second_schema, expected_array, expected_types",
+        ("first_schema", "second_schema", "expected_array", "expected_types"),
         merge_test.values(),
         ids=merge_test.keys(),
     )
@@ -438,7 +438,7 @@ class TestOneAtATime:
     }
 
     @pytest.mark.parametrize(
-        "parameter_schema, output_file_template, output_file, output_type, file_count, expected_calls",
+        ("parameter_schema", "output_file_template", "output_file", "output_type", "file_count", "expected_calls"),
         write_yaml.values(),
         ids=write_yaml.keys(),
     )
@@ -488,7 +488,7 @@ class TestOneAtATime:
     }
 
     @pytest.mark.parametrize(
-        "parameter_schema, expected_dictionary", parameter_study_to_dict.values(), ids=parameter_study_to_dict.keys()
+        ("parameter_schema", "expected_dictionary"), parameter_study_to_dict.values(), ids=parameter_study_to_dict.keys()
     )
     def test_parameter_study_to_dict(self, parameter_schema, expected_dictionary) -> None:
         """Test parameter study dictionary conversion"""

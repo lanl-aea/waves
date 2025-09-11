@@ -69,7 +69,7 @@ set_hashes = {
 
 
 @pytest.mark.parametrize(
-    "parameter_names, samples, expected_hashes",
+    ("parameter_names", "samples", "expected_hashes"),
     set_hashes.values(),
     ids=set_hashes.keys(),
 )
@@ -86,7 +86,7 @@ def test_calculate_set_hash(parameter_names, samples, expected_hashes):
 
 
 @pytest.mark.parametrize(
-    "parameter_names, samples, expected_hashes",
+    ("parameter_names", "samples", "expected_hashes"),
     set_hashes.values(),
     ids=set_hashes.keys(),
 )
@@ -99,7 +99,7 @@ def test_calculate_set_hashes(parameter_names, samples, expected_hashes):
 
 
 @pytest.mark.parametrize(
-    "parameter_names, samples, expected_hashes",
+    ("parameter_names", "samples", "expected_hashes"),
     set_hashes.values(),
     ids=set_hashes.keys(),
 )
@@ -245,7 +245,7 @@ return_dataset_types_cases = {
 
 
 @pytest.mark.parametrize(
-    "dataset_1, dataset_2, expected_types, outcome",
+    ("dataset_1", "dataset_2", "expected_types", "outcome"),
     return_dataset_types_cases.values(),
     ids=return_dataset_types_cases.keys(),
 )
@@ -305,7 +305,7 @@ coerce_values_cases = {
 
 
 @pytest.mark.parametrize(
-    "values, name, expected_output_type, should_warn",
+    ("values", "name", "expected_output_type", "should_warn"),
     coerce_values_cases.values(),
     ids=coerce_values_cases.keys(),
 )
@@ -532,7 +532,7 @@ propagate_parameter_space_cases = {
 
 
 @pytest.mark.parametrize(
-    "studies, expected_study, expected_types, propagate_space, outcome",
+    ("studies", "expected_study", "expected_types", "propagate_space", "outcome"),
     propagate_parameter_space_cases.values(),
     ids=propagate_parameter_space_cases.keys(),
 )
@@ -796,7 +796,7 @@ merge_parameter_space_cases = {
 
 
 @pytest.mark.parametrize(
-    "studies, expected_study, expected_types, propagate_space, outcome",
+    ("studies", "expected_study", "expected_types", "propagate_space", "outcome"),
     merge_parameter_space_cases.values(),
     ids=merge_parameter_space_cases.keys(),
 )
@@ -857,7 +857,7 @@ merge_parameter_studies_cases.update(
 
 
 @pytest.mark.parametrize(
-    "studies, expected_study, expected_types, propagate_space, outcome",
+    ("studies", "expected_study", "expected_types", "propagate_space", "outcome"),
     merge_parameter_studies_cases.values(),
     ids=merge_parameter_studies_cases.keys(),
 )
@@ -913,7 +913,7 @@ test_create_set_names_cases = {
 
 
 @pytest.mark.parametrize(
-    "test_set_hashes, template, expected_set_names",
+    ("test_set_hashes", "template", "expected_set_names"),
     test_create_set_names_cases.values(),
     ids=test_create_set_names_cases.keys(),
 )
@@ -1497,7 +1497,7 @@ test_update_set_names_cases = {
 
 
 @pytest.mark.parametrize(
-    "parameter_study, kwargs, expected, outcome",
+    ("parameter_study", "kwargs", "expected", "outcome"),
     test_update_set_names_cases.values(),
     ids=test_update_set_names_cases.keys(),
 )
@@ -1610,7 +1610,7 @@ class TestParameterGenerator:
     }
 
     @pytest.mark.parametrize(
-        "env, expected_kwargs",
+        ("env", "expected_kwargs"),
         scons_write_cases.values(),
         ids=scons_write_cases.keys(),
     )
@@ -1656,7 +1656,7 @@ class TestParameterGenerator:
                 assert type(set_samples[set_name][parameter]) is type(set_value[parameter])
 
     @pytest.mark.parametrize(
-        "schema, file_template, set_template, expected",
+        ("schema", "file_template", "set_template", "expected"),
         templates.values(),
         ids=templates.keys(),
     )
@@ -1679,7 +1679,7 @@ class TestParameterGenerator:
         assert list(template_generator.parameter_study[_settings._set_coordinate_key].values) == expected
 
     @pytest.mark.parametrize(
-        "schema, file_template, set_template, expected",
+        ("schema", "file_template", "set_template", "expected"),
         templates.values(),
         ids=templates.keys(),
     )
@@ -1728,7 +1728,7 @@ class TestParameterGenerator:
     }
 
     @pytest.mark.parametrize(
-        "schema, template, overwrite, dry_run, is_file, sets, stdout_calls",
+        ("schema", "template", "overwrite", "dry_run", "is_file", "sets", "stdout_calls"),
         init_write_stdout.values(),
         ids=init_write_stdout.keys(),
     )
@@ -1777,7 +1777,7 @@ class TestParameterGenerator:
     }
 
     @pytest.mark.parametrize(
-        "schema, template, overwrite, is_file, sets, files",
+        ("schema", "template", "overwrite", "is_file", "sets", "files"),
         init_write_files.values(),
         ids=init_write_files.keys(),
     )
@@ -1831,7 +1831,7 @@ class TestParameterGenerator:
             assert mock_write_yaml.call_count == files
 
     @pytest.mark.parametrize(
-        "schema, template, overwrite, is_file, sets, files",
+        ("schema", "template", "overwrite", "is_file", "sets", "files"),
         init_write_files.values(),
         ids=init_write_files.keys(),
     )
@@ -1896,7 +1896,7 @@ class TestParameterGenerator:
     }
 
     @pytest.mark.parametrize(
-        "equals, is_file, overwrite, expected_call_count",
+        ("equals", "is_file", "overwrite", "expected_call_count"),
         init_write_dataset_files.values(),
         ids=init_write_dataset_files.keys(),
     )
@@ -1920,7 +1920,7 @@ class TestParameterGenerator:
             assert xarray_to_netcdf.call_count == expected_call_count
 
     @pytest.mark.parametrize(
-        "equals, is_file, overwrite, expected_call_count",
+        ("equals", "is_file", "overwrite", "expected_call_count"),
         init_write_dataset_files.values(),
         ids=init_write_dataset_files.keys(),
     )
@@ -2036,7 +2036,7 @@ class TestParameterGenerator:
             handle.write.assert_called_once_with("dummy.h5\n")
 
     @pytest.mark.parametrize(
-        "parameter_names, samples, expected_hashes",
+        ("parameter_names", "samples", "expected_hashes"),
         set_hashes.values(),
         ids=set_hashes.keys(),
     )
@@ -2113,7 +2113,7 @@ class TestParameterDistributions:
     }
 
     @pytest.mark.parametrize(
-        "parameter_schema, outcome",
+        ("parameter_schema", "outcome"),
         validate_input.values(),
         ids=validate_input.keys(),
     )
@@ -2157,7 +2157,7 @@ class TestParameterDistributions:
     }
 
     @pytest.mark.parametrize(
-        "parameter_schema, expected_scipy_kwds",
+        ("parameter_schema", "expected_scipy_kwds"),
         generate_input.values(),
         ids=generate_input.keys(),
     )

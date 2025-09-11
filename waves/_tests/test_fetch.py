@@ -85,7 +85,7 @@ conditional_copy_input = {
 
 
 @pytest.mark.parametrize(
-    "copy_tuples, exists_side_effect, filecmp_side_effect, copyfile_call",
+    ("copy_tuples", "exists_side_effect", "filecmp_side_effect", "copyfile_call"),
     conditional_copy_input.values(),
     ids=conditional_copy_input.keys(),
 )
@@ -179,7 +179,7 @@ available_files_input = {
 
 
 @pytest.mark.parametrize(
-    "root_directory, relative_paths, is_file_side_effect, is_dir_side_effect, rglob_side_effect, expected_files, expected_missing, mock_rglob_argument",  # noqa: E501
+    ("root_directory", "relative_paths", "is_file_side_effect", "is_dir_side_effect", "rglob_side_effect", "expected_files", "expected_missing", "mock_rglob_argument"),  # noqa: E501
     available_files_input.values(),
     ids=available_files_input.keys(),
 )
@@ -233,7 +233,7 @@ build_source_files_input = {
 
 
 @pytest.mark.parametrize(
-    "root_directory, relative_paths, exclude_patterns, available_files_side_effect, expected_source_files",
+    ("root_directory", "relative_paths", "exclude_patterns", "available_files_side_effect", "expected_source_files"),
     build_source_files_input.values(),
     ids=build_source_files_input.keys(),
 )
@@ -258,7 +258,7 @@ longest_common_path_prefix_input = {
 
 
 @pytest.mark.parametrize(
-    "file_list, expected_path, outcome",
+    ("file_list", "expected_path", "outcome"),
     longest_common_path_prefix_input.values(),
     ids=longest_common_path_prefix_input.keys(),
 )
@@ -283,7 +283,7 @@ build_destination_files_input = {
 
 
 @pytest.mark.parametrize(
-    "destination, requested_paths, exists_side_effect, expected_destination_files, expected_existing_files",
+    ("destination", "requested_paths", "exists_side_effect", "expected_destination_files", "expected_existing_files"),
     build_destination_files_input.values(),
     ids=build_destination_files_input.keys(),
 )
@@ -315,7 +315,7 @@ build_copy_tuples_input = {
 
 
 @pytest.mark.parametrize(
-    "destination, requested_paths_resolved, overwrite, build_destination_files_side_effect, expected_copy_tuples",
+    ("destination", "requested_paths_resolved", "overwrite", "build_destination_files_side_effect", "expected_copy_tuples"),
     build_copy_tuples_input.values(),
     ids=build_copy_tuples_input.keys(),
 )
@@ -352,7 +352,7 @@ def test_print_list():
 
 
 @pytest.mark.parametrize(
-    "root_directory, source_files, source_tree, destination_tree, tutorial",
+    ("root_directory", "source_files", "source_tree", "destination_tree", "tutorial"),
     [
         (root_directory, source_files, two_file_source_tree, two_file_destination_tree, None),
         (root_directory, source_files, two_file_source_tree, two_file_destination_tree, 6),

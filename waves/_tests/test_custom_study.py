@@ -47,7 +47,7 @@ class TestCustomStudy:
     }
 
     @pytest.mark.parametrize(
-        "parameter_schema, outcome",
+        ("parameter_schema", "outcome"),
         validate_input.values(),
         ids=validate_input.keys(),
     )
@@ -74,7 +74,7 @@ class TestCustomStudy:
     }
 
     @pytest.mark.parametrize(
-        "parameter_schema, expected_array, expected_types",
+        ("parameter_schema", "expected_array", "expected_types"),
         test_generate_cases.values(),
         ids=test_generate_cases.keys(),
     )
@@ -145,7 +145,7 @@ class TestCustomStudy:
     }
 
     @pytest.mark.parametrize(
-        "first_schema, second_schema, expected_array, expected_types",
+        ("first_schema", "second_schema", "expected_array", "expected_types"),
         merge_test.values(),
         ids=merge_test.keys(),
     )
@@ -203,7 +203,7 @@ class TestCustomStudy:
     }
 
     @pytest.mark.parametrize(
-        "parameter_schema, output_file_template, output_file, output_type, file_count, expected_calls",
+        ("parameter_schema", "output_file_template", "output_file", "output_type", "file_count", "expected_calls"),
         test_write_yaml_cases.values(),
         ids=test_write_yaml_cases.keys(),
     )

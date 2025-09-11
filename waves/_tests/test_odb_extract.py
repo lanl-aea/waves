@@ -303,7 +303,7 @@ odb_report_arguments = {
 
 
 @pytest.mark.parametrize(
-    "odb_report_args, input_file, job_name, expected",
+    ("odb_report_args", "input_file", "job_name", "expected"),
     odb_report_arguments.values(),
     ids=odb_report_arguments.keys(),
 )

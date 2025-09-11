@@ -48,7 +48,7 @@ class TestScipySampler:
     }
 
     @pytest.mark.parametrize(
-        "parameter_schema, kwargs",
+        ("parameter_schema", "kwargs"),
         generate_input.values(),
         ids=generate_input.keys(),
     )
@@ -99,7 +99,7 @@ class TestScipySampler:
         ),
     }
 
-    @pytest.mark.parametrize("first_schema, second_schema, kwargs", merge_test.values(), ids=merge_test.keys())
+    @pytest.mark.parametrize(("first_schema", "second_schema", "kwargs"), merge_test.values(), ids=merge_test.keys())
     def test_merge(self, first_schema, second_schema, kwargs):
         with patch("waves.parameter_generators._verify_parameter_study"):
             for sampler in _supported_scipy_samplers:
@@ -128,7 +128,7 @@ class TestScipySampler:
     }
 
     @pytest.mark.parametrize(
-        "sampler, parameter_schema, kwargs, expected_dictionary",
+        ("sampler", "parameter_schema", "kwargs", "expected_dictionary"),
         parameter_study_to_dict.values(),
         ids=parameter_study_to_dict.keys(),
     )

@@ -87,7 +87,7 @@ set_name_substitution = {
 
 
 @pytest.mark.parametrize(
-    "original, replacement, kwargs, expected",
+    ("original", "replacement", "kwargs", "expected"),
     set_name_substitution.values(),
     ids=set_name_substitution.keys(),
 )
@@ -137,7 +137,7 @@ quote_spaces_in_path_input = {
 
 
 @pytest.mark.parametrize(
-    "path, expected",
+    ("path", "expected"),
     quote_spaces_in_path_input.values(),
     ids=quote_spaces_in_path_input.keys(),
 )
@@ -164,7 +164,7 @@ find_command = {
 
 
 @pytest.mark.parametrize(
-    "options, found, outcome",
+    ("options", "found", "outcome"),
     find_command.values(),
     ids=find_command.keys(),
 )
@@ -276,7 +276,7 @@ return_environment = {
 
 
 @pytest.mark.parametrize(
-    "command, kwargs, stdout, expected",
+    ("command", "kwargs", "stdout", "expected"),
     return_environment.values(),
     ids=return_environment.keys(),
 )
@@ -319,7 +319,7 @@ cache_environment = {
 
 
 @pytest.mark.parametrize(
-    "kwargs, cache, overwrite_cache, verbose, expected, file_exists",
+    ("kwargs", "cache", "overwrite_cache", "verbose", "expected", "file_exists"),
     cache_environment.values(),
     ids=cache_environment.keys(),
 )
@@ -385,7 +385,7 @@ create_valid_identifier = {
 
 
 @pytest.mark.parametrize(
-    "identifier, expected",
+    ("identifier", "expected"),
     create_valid_identifier.values(),
     ids=create_valid_identifier.keys(),
 )

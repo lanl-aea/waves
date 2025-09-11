@@ -91,7 +91,7 @@ test_ancestor_subgraph_cases = {
 
 
 @pytest.mark.parametrize(
-    "graph, nodes, outcome, expected",
+    ("graph", "nodes", "outcome", "expected"),
     test_ancestor_subgraph_cases.values(),
     ids=test_ancestor_subgraph_cases.keys(),
 )
@@ -170,7 +170,7 @@ parse_output_input = {
 
 
 @pytest.mark.parametrize(
-    "tree_output, break_path_separator, expected_nodes, expected_edge_count, no_labels",
+    ("tree_output", "break_path_separator", "expected_nodes", "expected_edge_count", "no_labels"),
     parse_output_input.values(),
     ids=parse_output_input.keys(),
 )

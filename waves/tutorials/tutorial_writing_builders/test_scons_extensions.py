@@ -53,7 +53,7 @@ solver_builder_factory_tests = {
 
 # TODO: Expose WAVES builder factory test functions for end users
 @pytest.mark.parametrize(
-    "builder_kwargs, task_kwargs, target, emitter, expected_node_count, expected_action_count",
+    ("builder_kwargs", "task_kwargs", "target", "emitter", "expected_node_count", "expected_action_count"),
     solver_builder_factory_tests.values(),
     ids=solver_builder_factory_tests.keys(),
 )
