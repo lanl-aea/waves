@@ -1,4 +1,5 @@
 import pytest
+
 from modsim_package import rectangle_compression
 
 nominal_tests = {

@@ -5,10 +5,9 @@ import sys
 
 import matplotlib.pyplot
 import pandas
+import waves
 import xarray
 import yaml
-
-import waves
 
 
 def combine_data(input_files, group_path, concat_coord):
