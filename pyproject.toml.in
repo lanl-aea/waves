@@ -99,8 +99,6 @@ extend-ignore = ["B028", "PIE808", "PIE790", "SIM108", "PLC0415"]
 # Tutorial/template files that are 'outside' the project
 "waves/tutorials/**/SConscript" = ["I001"]
 "waves/tutorials/modsim_package/python/*.py" = ["I001"]
-"waves/modsim_template*/**/SConscript" = ["I001"]
-"waves/modsim_template*/modsim_package/tests/*.py" = ["I001"]
 "**/cubit/rectangle_partition.py" = ["ARG001"]
 # Abaqus Python 2 compatible files
 "**/submit_cae.py" = ["SIM115", "PTH", "UP", "FURB188"]
