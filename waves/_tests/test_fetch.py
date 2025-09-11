@@ -35,15 +35,13 @@ def test_fetch():
         patch("waves._fetch.recursive_copy") as mock_recursive_copy,
         pytest.raises(RuntimeError),
     ):
-        try:
-            _fetch.main(
-                "dummy_subcommand",
-                pathlib.Path("/directory/assumptions/are/wrong"),
-                ["dummy/relative/path"],
-                "/dummy/destination",
-            )
-        finally:
-            mock_recursive_copy.assert_not_called()
+        _fetch.main(
+            "dummy_subcommand",
+            pathlib.Path("/directory/assumptions/are/wrong"),
+            ["dummy/relative/path"],
+            "/dummy/destination",
+        )
+    mock_recursive_copy.assert_not_called()
 
 
 def test_fetch_settings():
@@ -518,16 +516,14 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
         patch("filecmp.cmp", return_value=False),
         pytest.raises(RuntimeError),
     ):
-        try:
-            _fetch.recursive_copy(
-                root_directory.parent,
-                root_directory.name,
-                destination,
-                requested_paths=bad_file_requests,
-            )
-        finally:
-            mock_print_list.assert_not_called()
-            mock_conditional_copy.assert_not_called()
+        _fetch.recursive_copy(
+            root_directory.parent,
+            root_directory.name,
+            destination,
+            requested_paths=bad_file_requests,
+        )
+    mock_print_list.assert_not_called()
+    mock_conditional_copy.assert_not_called()
 
 
 def test_extend_requested_paths():
