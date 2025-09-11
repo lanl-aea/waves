@@ -13,6 +13,8 @@ Documentation
 - Add example ruff linter/formatter configuration to the modsim templates (:merge:`1252`). By `Kyle Brindley`_.
 - Adopt ``*.scons`` file extension naming convention for SCons configuration files in the modsim templates
   for improved ruff linter/formatter rules (:merge:`1252`). By `Kyle Brindley`_.
+- Adopt ``*.scons`` file extension naming convention for SCons configuration files in the tutorials for improved ruff
+  linter/formatter rules (:merge:`1252`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
