@@ -98,7 +98,7 @@ SConscript
 
 .. admonition:: waves-tutorials/tutorial_part_image
 
-   .. literalinclude:: tutorials_tutorial_part_image
+   .. literalinclude:: tutorials_tutorial_part_image.scons
       :language: Python
       :diff: tutorials_tutorial_12_archival
 

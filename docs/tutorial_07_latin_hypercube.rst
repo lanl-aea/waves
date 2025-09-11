@@ -81,7 +81,7 @@ below to help identify the differences between the two parameter generators.
 
 .. admonition:: waves-tutorials/tutorial_07_latin_hypercube
 
-   .. literalinclude:: tutorials_tutorial_07_latin_hypercube
+   .. literalinclude:: tutorials_tutorial_07_latin_hypercube.scons
       :language: Python
       :diff: tutorials_tutorial_07_cartesian_product
 

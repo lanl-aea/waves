@@ -201,7 +201,7 @@ might prefer to use an `SCons AddPreAction`_ to perform log file cleaning even w
 implementation, users must remember to clean their build directory regularly to avoid solver exits from accumulated log
 files.
 
-.. literalinclude:: tutorial_writing_builders_implicit_workflow
+.. literalinclude:: tutorial_writing_builders_implicit_workflow.scons
    :language: Python
    :lineno-match:
 

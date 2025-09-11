@@ -108,7 +108,7 @@ SConscript
 
 .. admonition:: waves-tutorials/unit_testing
 
-    .. literalinclude:: tutorials_unit_testing
+    .. literalinclude:: tutorials_unit_testing.scons
         :language: Python
         :lineno-match:
 

@@ -70,13 +70,13 @@ duplicated below.
 
 .. admonition:: waves-tutorials/tutorial_cubit/cubit
 
-   .. literalinclude:: tutorial_cubit_cubit
+   .. literalinclude:: tutorial_cubit_cubit.scons
       :language: Python
       :lineno-match:
 
 .. admonition:: waves-tutorials/tutorial_cubit/abaqus
 
-   .. literalinclude:: tutorial_cubit_abaqus
+   .. literalinclude:: tutorial_cubit_abaqus.scons
       :language: Python
       :lineno-match:
 

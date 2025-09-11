@@ -165,7 +165,7 @@ rectangle part using the :meth:`waves.scons_extensions.abaqus_journal_builder_fa
 
 .. admonition:: waves-tutorials/tutorial_01_geometry
 
-    .. literalinclude:: tutorials_tutorial_01_geometry
+    .. literalinclude:: tutorials_tutorial_01_geometry.scons
        :language: Python
        :lineno-match:
        :end-before: marker-1
@@ -180,7 +180,7 @@ and is imported so settings variables are not hard-coded more than once.
 
 .. admonition:: waves-tutorials/tutorial_01_geometry
 
-     .. literalinclude:: tutorials_tutorial_01_geometry
+     .. literalinclude:: tutorials_tutorial_01_geometry.scons
          :language: Python
          :lineno-match:
          :start-after: marker-1
@@ -210,7 +210,7 @@ is defined in the :ref:`waves_scons_api` API.
 
 .. admonition:: waves-tutorials/tutorial_01_geometry
 
-     .. literalinclude:: tutorials_tutorial_01_geometry
+     .. literalinclude:: tutorials_tutorial_01_geometry.scons
          :language: Python
          :lineno-match:
          :start-after: marker-3

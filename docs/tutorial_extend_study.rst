@@ -68,7 +68,7 @@ differences between the two parameter generators.
 
 .. admonition:: waves-tutorials/tutorial_extend_study
 
-   .. literalinclude:: tutorials_tutorial_extend_study
+   .. literalinclude:: tutorials_tutorial_extend_study.scons
       :language: Python
       :diff: tutorials_tutorial_07_sobol_sequence
 

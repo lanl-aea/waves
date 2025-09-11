@@ -123,7 +123,7 @@ below to help identify the changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_08_data_extraction
 
-   .. literalinclude:: tutorials_tutorial_08_data_extraction
+   .. literalinclude:: tutorials_tutorial_08_data_extraction.scons
       :language: Python
       :diff: tutorials_tutorial_07_cartesian_product
 

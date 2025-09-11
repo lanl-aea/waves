@@ -61,7 +61,7 @@ changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_sbatch
 
-   .. literalinclude:: tutorials_tutorial_sbatch
+   .. literalinclude:: tutorials_tutorial_sbatch.scons
       :language: Python
       :diff: tutorials_tutorial_04_simulation
 

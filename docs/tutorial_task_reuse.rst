@@ -107,7 +107,7 @@ changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_task_reuse
 
-   .. literalinclude:: tutorials_tutorial_task_reuse
+   .. literalinclude:: tutorials_tutorial_task_reuse.scons
       :language: Python
       :diff: tutorials_tutorial_12_archival
 

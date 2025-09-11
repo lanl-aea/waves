@@ -110,7 +110,7 @@ SConscript
 
 .. admonition:: waves-tutorials/tutorial_02_partition_mesh
 
-   .. literalinclude:: tutorials_tutorial_02_partition_mesh
+   .. literalinclude:: tutorials_tutorial_02_partition_mesh.scons
       :language: Python
       :lineno-match:
       :start-after: marker-2
@@ -170,7 +170,7 @@ tutorial.
 
 .. admonition:: waves-tutorials/tutorial_02_partition_mesh
 
-   .. literalinclude:: tutorials_tutorial_02_partition_mesh
+   .. literalinclude:: tutorials_tutorial_02_partition_mesh.scons
       :language: Python
       :diff: tutorials_tutorial_01_geometry
 

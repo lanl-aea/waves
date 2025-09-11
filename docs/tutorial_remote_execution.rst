@@ -68,7 +68,7 @@ changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_remote_execution
 
-   .. literalinclude:: tutorials_tutorial_remote_execution
+   .. literalinclude:: tutorials_tutorial_remote_execution.scons
       :language: Python
       :diff: tutorials_tutorial_04_simulation
 

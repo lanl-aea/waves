@@ -79,7 +79,7 @@ the changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_sensitivity_study
 
-   .. literalinclude:: tutorials_tutorial_sensitivity_study
+   .. literalinclude:: tutorials_tutorial_sensitivity_study.scons
       :language: Python
       :diff: tutorials_tutorial_12_archival
 

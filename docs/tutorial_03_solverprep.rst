@@ -205,7 +205,7 @@ SConscript
 
 .. admonition:: waves-tutorials/tutorial_03_solverprep
 
-    .. literalinclude:: tutorials_tutorial_03_solverprep
+    .. literalinclude:: tutorials_tutorial_03_solverprep.scons
        :language: Python
        :lineno-match:
        :start-after: marker-3
@@ -237,7 +237,7 @@ file from :ref:`tutorial_partition_mesh` is included below to help identify the 
 
 .. admonition:: waves-tutorials/tutorial_03_solverprep
 
-   .. literalinclude:: tutorials_tutorial_03_solverprep
+   .. literalinclude:: tutorials_tutorial_03_solverprep.scons
       :language: Python
       :diff: tutorials_tutorial_02_partition_mesh
 

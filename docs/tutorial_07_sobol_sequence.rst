@@ -71,7 +71,7 @@ differences between the two parameter generators.
 
 .. admonition:: waves-tutorials/tutorial_07_sobol_sequence
 
-   .. literalinclude:: tutorials_tutorial_07_sobol_sequence
+   .. literalinclude:: tutorials_tutorial_07_sobol_sequence.scons
       :language: Python
       :diff: tutorials_tutorial_07_cartesian_product
 

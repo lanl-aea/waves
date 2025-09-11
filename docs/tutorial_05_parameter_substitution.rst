@@ -164,7 +164,7 @@ SConscript
 
 .. admonition:: waves-tutorials/tutorial_05_parameter_substitution
 
-   .. literalinclude:: tutorials_tutorial_05_parameter_substitution
+   .. literalinclude:: tutorials_tutorial_05_parameter_substitution.scons
       :language: Python
       :lineno-match:
       :start-after: marker-0
@@ -196,7 +196,7 @@ this is implemented with the :meth:`waves.scons_extensions.copy_substfile` metho
 
 .. admonition:: waves-tutorials/tutorial_05_parameter_substitution
 
-   .. literalinclude:: tutorials_tutorial_05_parameter_substitution
+   .. literalinclude:: tutorials_tutorial_05_parameter_substitution.scons
       :language: Python
       :lineno-match:
       :start-after: marker-1
@@ -228,7 +228,7 @@ source file change.
 
 .. admonition:: waves-tutorials/tutorial_05_parameter_substitution
 
-   .. literalinclude:: tutorials_tutorial_05_parameter_substitution
+   .. literalinclude:: tutorials_tutorial_05_parameter_substitution.scons
       :language: Python
       :lineno-match:
       :start-after: marker-3
@@ -268,7 +268,7 @@ changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_05_parameter_substitution
 
-   .. literalinclude:: tutorials_tutorial_05_parameter_substitution
+   .. literalinclude:: tutorials_tutorial_05_parameter_substitution.scons
       :language: Python
       :diff: tutorials_tutorial_04_simulation
 

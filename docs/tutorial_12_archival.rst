@@ -118,7 +118,7 @@ below to help identify the changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_12_archival
 
-   .. literalinclude:: tutorials_tutorial_12_archival
+   .. literalinclude:: tutorials_tutorial_12_archival.scons
       :language: Python
       :diff: tutorials_tutorial_11_regression_testing
 

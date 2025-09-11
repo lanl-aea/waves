@@ -220,7 +220,7 @@ identify the changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_06_include_files
 
-   .. literalinclude:: tutorials_tutorial_06_include_files
+   .. literalinclude:: tutorials_tutorial_06_include_files.scons
       :language: Python
       :diff: tutorials_tutorial_05_parameter_substitution
 

@@ -69,7 +69,7 @@ changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_escape_sequences
 
-   .. literalinclude:: tutorials_tutorial_escape_sequences
+   .. literalinclude:: tutorials_tutorial_escape_sequences.scons
       :language: Python
       :diff: tutorials_tutorial_04_simulation
 

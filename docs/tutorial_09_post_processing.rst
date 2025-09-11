@@ -110,7 +110,7 @@ changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_09_post_processing
 
-   .. literalinclude:: tutorials_tutorial_09_post_processing
+   .. literalinclude:: tutorials_tutorial_09_post_processing.scons
       :language: Python
       :diff: tutorials_tutorial_08_data_extraction
 

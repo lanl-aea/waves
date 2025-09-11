@@ -116,7 +116,7 @@ SConscript
 
 .. admonition:: waves-tutorials/tutorial_04_simulation
 
-    .. literalinclude:: tutorials_tutorial_04_simulation
+    .. literalinclude:: tutorials_tutorial_04_simulation.scons
        :language: Python
        :lineno-match:
        :emphasize-lines: 3
@@ -128,7 +128,7 @@ SConscript
 
 .. admonition:: waves-tutorials/tutorial_04_simulation
 
-    .. literalinclude:: tutorials_tutorial_04_simulation
+    .. literalinclude:: tutorials_tutorial_04_simulation.scons
        :language: Python
        :lineno-match:
        :emphasize-lines: 3,8
@@ -142,7 +142,7 @@ Running a Datacheck
 
 .. admonition:: waves-tutorials/tutorial_04_simulation
 
-    .. literalinclude:: tutorials_tutorial_04_simulation
+    .. literalinclude:: tutorials_tutorial_04_simulation.scons
        :language: Python
        :lineno-match:
        :start-after: marker-4
@@ -181,7 +181,7 @@ Running the Analysis
 
 .. admonition:: waves-tutorials/tutorial_04_simulation
 
-    .. literalinclude:: tutorials_tutorial_04_simulation
+    .. literalinclude:: tutorials_tutorial_04_simulation.scons
        :language: Python
        :lineno-match:
        :start-after: marker-5
@@ -205,7 +205,7 @@ addition of a separate datacheck alias, which will be used in :ref:`tutorial_reg
 
 .. admonition:: waves-tutorials/tutorial_04_simulation
 
-   .. literalinclude:: tutorials_tutorial_04_simulation
+   .. literalinclude:: tutorials_tutorial_04_simulation.scons
       :language: Python
       :diff: tutorials_tutorial_03_solverprep
 

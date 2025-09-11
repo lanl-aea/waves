@@ -167,7 +167,7 @@ changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_11_regression_testing
 
-   .. literalinclude:: tutorials_tutorial_11_regression_testing
+   .. literalinclude:: tutorials_tutorial_11_regression_testing.scons
       :language: Python
       :diff: tutorials_tutorial_09_post_processing
 

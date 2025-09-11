@@ -92,13 +92,13 @@ SConscript
 
 .. admonition:: waves-tutorials/tutorial_mesh_convergence
 
-   .. literalinclude:: tutorials_tutorial_mesh_convergence
+   .. literalinclude:: tutorials_tutorial_mesh_convergence.scons
       :language: Python
       :diff: tutorials_tutorial_11_regression_testing
 
 .. admonition:: waves-tutorials/tutorial_mesh_convergence
 
-   .. literalinclude:: tutorials_tutorial_mesh_convergence
+   .. literalinclude:: tutorials_tutorial_mesh_convergence.scons
       :language: Python
       :lineno-match:
       :end-before: marker-2
@@ -116,7 +116,7 @@ dictionaries will be combined later in the ``SConscript`` file.
 
 .. admonition:: waves-tutorials/tutorial_mesh_convergence
 
-   .. literalinclude:: tutorials_tutorial_mesh_convergence
+   .. literalinclude:: tutorials_tutorial_mesh_convergence.scons
       :language: Python
       :lineno-match:
       :start-after: marker-3
@@ -141,7 +141,7 @@ differences:
 
 .. admonition:: waves-tutorials/tutorial_mesh_convergence
 
-   .. literalinclude:: tutorials_tutorial_mesh_convergence
+   .. literalinclude:: tutorials_tutorial_mesh_convergence.scons
       :language: Python
       :lineno-match:
       :start-after: marker-4
@@ -166,7 +166,7 @@ specified ``rectangle_partition.cae`` as a target in the ``# Partition`` workflo
 
 .. admonition:: waves-tutorials/tutorial_mesh_convergence
 
-   .. literalinclude:: tutorials_tutorial_mesh_convergence
+   .. literalinclude:: tutorials_tutorial_mesh_convergence.scons
       :language: Python
       :lineno-match:
       :start-after: marker-6

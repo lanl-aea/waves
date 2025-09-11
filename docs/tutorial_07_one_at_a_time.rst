@@ -77,7 +77,7 @@ below to help identify the differences between the two parameter generators.
 
 .. admonition:: waves-tutorials/tutorial_07_one_at_a_time
 
-   .. literalinclude:: tutorials_tutorial_07_one_at_a_time
+   .. literalinclude:: tutorials_tutorial_07_one_at_a_time.scons
       :language: Python
       :diff: tutorials_tutorial_07_cartesian_product
 

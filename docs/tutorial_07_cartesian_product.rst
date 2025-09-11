@@ -156,7 +156,7 @@ After viewing the full file contents below, continue to read the
 
 .. admonition:: waves-tutorials/tutorial_07_cartesian_product
 
-   .. literalinclude:: tutorials_tutorial_07_cartesian_product
+   .. literalinclude:: tutorials_tutorial_07_cartesian_product.scons
       :language: Python
 
 .. _tutorial_cartesian_product_waves_step_by_step_sconscript_discussion:
@@ -166,7 +166,7 @@ Step-By-Step SConscript Discussion
 
 .. admonition:: waves-tutorials/tutorial_07_cartesian_product
 
-   .. literalinclude:: tutorials_tutorial_07_cartesian_product
+   .. literalinclude:: tutorials_tutorial_07_cartesian_product.scons
       :language: Python
       :lineno-match:
       :end-before: marker-1
@@ -183,7 +183,7 @@ dictionary in previous tutorials.
 
 .. admonition:: waves-tutorials/tutorial_07_cartesian_product
 
-   .. literalinclude:: tutorials_tutorial_07_cartesian_product
+   .. literalinclude:: tutorials_tutorial_07_cartesian_product.scons
       :language: Python
       :lineno-match:
       :start-after: marker-1
@@ -194,7 +194,7 @@ to extend previously executed parameter studies without re-computing existing pa
 
 .. admonition:: waves-tutorials/tutorial_07_cartesian_product
 
-   .. literalinclude:: tutorials_tutorial_07_cartesian_product
+   .. literalinclude:: tutorials_tutorial_07_cartesian_product.scons
       :language: Python
       :lineno-match:
       :start-after: marker-2
@@ -219,7 +219,7 @@ post-processing tasks introduced in :ref:`tutorial_post_processing`.
 
 .. admonition:: waves-tutorials/tutorial_07_cartesian_product
 
-   .. literalinclude:: tutorials_tutorial_07_cartesian_product
+   .. literalinclude:: tutorials_tutorial_07_cartesian_product.scons
       :language: Python
       :lineno-match:
       :start-after: marker-3
@@ -244,7 +244,7 @@ text file parameter substitution.
 
 .. admonition:: waves-tutorials/tutorial_07_cartesian_product
 
-   .. literalinclude:: tutorials_tutorial_07_cartesian_product
+   .. literalinclude:: tutorials_tutorial_07_cartesian_product.scons
       :language: Python
       :lineno-match:
       :start-after: marker-4
@@ -265,7 +265,7 @@ Note the following two important aspects of the code above:
 
 .. admonition:: waves-tutorials/tutorial_07_cartesian_product
 
-   .. literalinclude:: tutorials_tutorial_07_cartesian_product
+   .. literalinclude:: tutorials_tutorial_07_cartesian_product.scons
       :language: Python
       :lineno-match:
       :start-after: marker-5
@@ -279,7 +279,7 @@ this case, we will solve four Abaqus simulations.
 
 .. admonition:: waves-tutorials/tutorial_07_cartesian_product
 
-   .. literalinclude:: tutorials_tutorial_07_cartesian_product
+   .. literalinclude:: tutorials_tutorial_07_cartesian_product.scons
       :language: Python
       :lineno-match:
       :start-after: marker-6
