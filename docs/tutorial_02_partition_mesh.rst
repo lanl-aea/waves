@@ -65,7 +65,7 @@ Directory Structure
                WAVES fetch
                Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
-4. Fetch the ``tutorial_01_geometry`` file and create a new file named ``tutorial_02_partition_mesh``
+4. Fetch the ``tutorial_01_geometry.scons`` file and create a new file named ``tutorial_02_partition_mesh.scons``
    using the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. only:: not epub
@@ -105,7 +105,7 @@ Directory Structure
 SConscript
 **********
 
-5. Modify your ``tutorial_02_partition_mesh`` file by adding the contents below immediately after the code
+5. Modify your ``tutorial_02_partition_mesh.scons`` file by adding the contents below immediately after the code
    pertaining to ``# Geometry`` from the previous tutorial, and above the ``# Collector alias`` code.
 
 .. admonition:: waves-tutorials/tutorial_02_partition_mesh.scons
@@ -164,7 +164,7 @@ target files are created. The orphan mesh file is created by calling the ``expor
 ``rectangle_mesh.py`` file. See the :ref:`sphinx_abaqus_utilities_api` file for more information about the
 ``export_mesh()`` function.
 
-In summary of the changes you just made to the ``tutorial_02_partition_mesh`` file, a ``diff`` against the
+In summary of the changes you just made to the ``tutorial_02_partition_mesh.scons`` file, a ``diff`` against the
 ``SConscript`` file from :ref:`tutorial_geometry` is included below to help identify the changes made in this
 tutorial.
 
@@ -296,7 +296,7 @@ All other aspects of the ``rectangle_mesh.py`` file are the same as ``rectangle_
 SConstruct
 **********
 
-10. Add ``tutorial_02_partition_mesh`` to the ``workflow_configurations`` list in the
+10. Add ``tutorial_02_partition_mesh.scons`` to the ``workflow_configurations`` list in the
     ``waves-tutorials/SConscruct`` file.
 
 A ``diff`` against the SConstruct file from :ref:`tutorial_geometry` is included below to help identify the
@@ -448,7 +448,7 @@ partition and mesh targets. There is an important distinction to be made here. T
 outputs from :ref:`tutorial_geometry`'s
 :ref:`tutorial_geometry_waves_build_targets` section when we executed the ``$ scons tutorial_01_geometry`` command. This
 tutorial is using the outputs generated from executing the same code, but from our new
-``tutorial_02_partition_mesh`` file. For this reason, we see the same outputs from the
+``tutorial_02_partition_mesh.scons`` file. For this reason, we see the same outputs from the
 ``build/tutorial_01_geometry`` directory in the ``build/tutorial_02_partition_mesh`` directory (along with other
 :ref:`tutorial_partition_mesh` output files).
 
