@@ -62,11 +62,11 @@ env.Append(
 
 # Add simulation targets
 workflow_configurations = [
-    "pytest",
-    "implicit_workflow",
+    "pytest.scons",
+    "implicit_workflow.scons",
 ]
 for workflow in workflow_configurations:
-    build_dir = env["variant_dir_base"] / workflow
+    build_dir = env["variant_dir_base"] / pathlib.Path(workflow).stem
     SConscript(workflow, variant_dir=build_dir, exports={"env": env}, duplicate=False)
 
 # Print project local help
