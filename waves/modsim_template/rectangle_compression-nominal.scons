@@ -12,6 +12,7 @@ Requires the following ``SConscript(..., exports={})``
   * ``abaqus`` - String path for the Abaqus executable
 """
 
+import inspect
 import pathlib
 
 from modsim_package import rectangle_compression
@@ -25,7 +26,8 @@ modsim_package_abspath = env["modsim_package_abspath"]
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
-workflow_configuration = [env["project_configuration"], workflow_name]
+workflow_file = pathlib.Path(inspect.getfile(lambda: None)).name
+workflow_configuration = [env["project_configuration"], workflow_file]
 parameters = rectangle_compression.nominal()
 
 # Collect the target nodes to build concise target alias(es)
@@ -35,7 +37,7 @@ workflow = []
 # Rectangle part
 artifacts.extend(
     SConscript(
-        "rectangle",
+        "rectangle.scons",
         exports={"env": env, "parameters": parameters},
     )
 )
@@ -43,7 +45,7 @@ artifacts.extend(
 # Rectangle compression simulation
 artifacts.extend(
     SConscript(
-        "rectangle_compression",
+        "rectangle_compression.scons",
         exports={"env": env, "parameters": parameters, "workflow_name": workflow_name},
     )
 )
