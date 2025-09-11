@@ -96,7 +96,7 @@ SConscript
    ``tutorial_12_archival`` file from :ref:`tutorial_archival` is included below to help identify the changes made in
    this tutorial.
 
-.. admonition:: waves-tutorials/tutorial_part_image
+.. admonition:: waves-tutorials/tutorial_part_image.scons
 
    .. literalinclude:: tutorials_tutorial_part_image.scons
       :language: Python

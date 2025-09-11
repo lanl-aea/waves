@@ -114,7 +114,7 @@ SConscript
 5. Add the highlighted section shown below to the ``tutorial_04_simulation`` file.
    This will initialize the datacheck list.
 
-.. admonition:: waves-tutorials/tutorial_04_simulation
+.. admonition:: waves-tutorials/tutorial_04_simulation.scons
 
     .. literalinclude:: tutorials_tutorial_04_simulation.scons
        :language: Python
@@ -126,7 +126,7 @@ SConscript
 6. Add the highlighted sections shown below to the ``tutorial_04_simulation`` file.
    This will create the datackeck alias.
 
-.. admonition:: waves-tutorials/tutorial_04_simulation
+.. admonition:: waves-tutorials/tutorial_04_simulation.scons
 
     .. literalinclude:: tutorials_tutorial_04_simulation.scons
        :language: Python
@@ -140,7 +140,7 @@ Running a Datacheck
 7. Modify your ``tutorial_04_simulation`` file by adding the contents shown below immediately after the code
    pertaining to ``# SolverPrep`` from the previous tutorial.
 
-.. admonition:: waves-tutorials/tutorial_04_simulation
+.. admonition:: waves-tutorials/tutorial_04_simulation.scons
 
     .. literalinclude:: tutorials_tutorial_04_simulation.scons
        :language: Python
@@ -179,7 +179,7 @@ Running the Analysis
 8. Modify your ``tutorial_04_simulation`` file by adding the contents below immediately after the Abaqus
    datacheck code that was just discussed.
 
-.. admonition:: waves-tutorials/tutorial_04_simulation
+.. admonition:: waves-tutorials/tutorial_04_simulation.scons
 
     .. literalinclude:: tutorials_tutorial_04_simulation.scons
        :language: Python
@@ -203,7 +203,7 @@ In summary of the changes you just made to the ``tutorial_04_simulation`` file, 
 file from :ref:`tutorial_solverprep` is included below to help identify the changes made in this tutorial. Note the
 addition of a separate datacheck alias, which will be used in :ref:`tutorial_regression_testing`.
 
-.. admonition:: waves-tutorials/tutorial_04_simulation
+.. admonition:: waves-tutorials/tutorial_04_simulation.scons
 
    .. literalinclude:: tutorials_tutorial_04_simulation.scons
       :language: Python

@@ -66,7 +66,7 @@ SConscript
 A ``diff`` against the ``tutorial_07_sobol_sequence`` file from :ref:`tutorial_sobol_sequence` is included below to help identify the
 differences between the two parameter generators.
 
-.. admonition:: waves-tutorials/tutorial_extend_study
+.. admonition:: waves-tutorials/tutorial_extend_study.scons
 
    .. literalinclude:: tutorials_tutorial_extend_study.scons
       :language: Python

@@ -218,7 +218,7 @@ SConscript
 A ``diff`` against the ``SConscript`` file from :ref:`tutorial_parameter_substitution` is included below to help
 identify the changes made in this tutorial.
 
-.. admonition:: waves-tutorials/tutorial_06_include_files
+.. admonition:: waves-tutorials/tutorial_06_include_files.scons
 
    .. literalinclude:: tutorials_tutorial_06_include_files.scons
       :language: Python

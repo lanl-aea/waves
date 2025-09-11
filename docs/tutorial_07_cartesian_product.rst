@@ -154,7 +154,7 @@ After viewing the full file contents below, continue to read the
 :ref:`tutorial_cartesian_product_waves_step_by_step_sconscript_discussion` for building the
 ``tutorial_07_cartesian_product`` file from scratch.
 
-.. admonition:: waves-tutorials/tutorial_07_cartesian_product
+.. admonition:: waves-tutorials/tutorial_07_cartesian_product.scons
 
    .. literalinclude:: tutorials_tutorial_07_cartesian_product.scons
       :language: Python
@@ -164,7 +164,7 @@ After viewing the full file contents below, continue to read the
 Step-By-Step SConscript Discussion
 ==================================
 
-.. admonition:: waves-tutorials/tutorial_07_cartesian_product
+.. admonition:: waves-tutorials/tutorial_07_cartesian_product.scons
 
    .. literalinclude:: tutorials_tutorial_07_cartesian_product.scons
       :language: Python
@@ -181,7 +181,7 @@ look familiar, but is worth pointing out again. Here, we import the ``env`` vari
 environment. This will provide access to variables we added to the ``SConstruct`` file's ``project_variables``
 dictionary in previous tutorials.
 
-.. admonition:: waves-tutorials/tutorial_07_cartesian_product
+.. admonition:: waves-tutorials/tutorial_07_cartesian_product.scons
 
    .. literalinclude:: tutorials_tutorial_07_cartesian_product.scons
       :language: Python
@@ -192,7 +192,7 @@ dictionary in previous tutorials.
 Most of the code snippet has been seen before. The ``parameter_study_file`` variable will allow the parameter generator
 to extend previously executed parameter studies without re-computing existing parameter set output files.
 
-.. admonition:: waves-tutorials/tutorial_07_cartesian_product
+.. admonition:: waves-tutorials/tutorial_07_cartesian_product.scons
 
    .. literalinclude:: tutorials_tutorial_07_cartesian_product.scons
       :language: Python
@@ -217,7 +217,7 @@ study file whenever the contents of the parameter study have changed. The conten
 ``previous_parameter_study`` file if it exists. The conditional re-write behavior will be important for
 post-processing tasks introduced in :ref:`tutorial_post_processing`.
 
-.. admonition:: waves-tutorials/tutorial_07_cartesian_product
+.. admonition:: waves-tutorials/tutorial_07_cartesian_product.scons
 
    .. literalinclude:: tutorials_tutorial_07_cartesian_product.scons
       :language: Python
@@ -242,7 +242,7 @@ is a dictionary whose keys are the names of the parameters and whose values are 
 is used again when passing the simulation variables dictionary to the :meth:`waves.scons_extensions.copy_substfile` method for
 text file parameter substitution.
 
-.. admonition:: waves-tutorials/tutorial_07_cartesian_product
+.. admonition:: waves-tutorials/tutorial_07_cartesian_product.scons
 
    .. literalinclude:: tutorials_tutorial_07_cartesian_product.scons
       :language: Python
@@ -263,7 +263,7 @@ Note the following two important aspects of the code above:
   :meth:`waves.scons_extensions.substitution_syntax` method to modify the parameter name keys for parameter substitution in text
   files.
 
-.. admonition:: waves-tutorials/tutorial_07_cartesian_product
+.. admonition:: waves-tutorials/tutorial_07_cartesian_product.scons
 
    .. literalinclude:: tutorials_tutorial_07_cartesian_product.scons
       :language: Python
@@ -277,7 +277,7 @@ the parameter set directory, ``set_name``, as part of source and target definiti
 code is still within the ``for`` loop, so the Abaqus Solver will be called as many times as we have parameter sets. In
 this case, we will solve four Abaqus simulations.
 
-.. admonition:: waves-tutorials/tutorial_07_cartesian_product
+.. admonition:: waves-tutorials/tutorial_07_cartesian_product.scons
 
    .. literalinclude:: tutorials_tutorial_07_cartesian_product.scons
       :language: Python

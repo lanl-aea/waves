@@ -203,7 +203,7 @@ SConscript
 6. Modify your ``tutorial_03_solverprep`` file by adding the contents shown below immediately after the code
    pertaining to ``# Mesh`` from the previous tutorial, and above the ``# Collector alias`` code.
 
-.. admonition:: waves-tutorials/tutorial_03_solverprep
+.. admonition:: waves-tutorials/tutorial_03_solverprep.scons
 
     .. literalinclude:: tutorials_tutorial_03_solverprep.scons
        :language: Python
@@ -235,7 +235,7 @@ the complete list of targets.
 In summary of the changes you just made to the ``tutorial_03_solverprep`` file, a ``diff`` against the ``SConscript``
 file from :ref:`tutorial_partition_mesh` is included below to help identify the changes made in this tutorial.
 
-.. admonition:: waves-tutorials/tutorial_03_solverprep
+.. admonition:: waves-tutorials/tutorial_03_solverprep.scons
 
    .. literalinclude:: tutorials_tutorial_03_solverprep.scons
       :language: Python

@@ -75,7 +75,7 @@ builder.
 A ``diff`` against the ``tutorial_07_cartesian_product`` file from :ref:`tutorial_cartesian_product` is included
 below to help identify the differences between the two parameter generators.
 
-.. admonition:: waves-tutorials/tutorial_07_one_at_a_time
+.. admonition:: waves-tutorials/tutorial_07_one_at_a_time.scons
 
    .. literalinclude:: tutorials_tutorial_07_one_at_a_time.scons
       :language: Python

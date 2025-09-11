@@ -59,7 +59,7 @@ SConscript
 A ``diff`` against the ``tutorial_04_simulation`` file from :ref:`tutorial_simulation` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-tutorials/tutorial_sbatch
+.. admonition:: waves-tutorials/tutorial_sbatch.scons
 
    .. literalinclude:: tutorials_tutorial_sbatch.scons
       :language: Python

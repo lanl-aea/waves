@@ -66,7 +66,7 @@ SConscript
 A ``diff`` against the ``tutorial_04_simulation`` file from :ref:`tutorial_simulation` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-tutorials/tutorial_remote_execution
+.. admonition:: waves-tutorials/tutorial_remote_execution.scons
 
    .. literalinclude:: tutorials_tutorial_remote_execution.scons
       :language: Python

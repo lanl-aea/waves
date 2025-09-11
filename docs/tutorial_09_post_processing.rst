@@ -108,7 +108,7 @@ SConscript
 A ``diff`` against the ``tutorial_08_data_extraction`` file from :ref:`tutorial_data_extraction` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-tutorials/tutorial_09_post_processing
+.. admonition:: waves-tutorials/tutorial_09_post_processing.scons
 
    .. literalinclude:: tutorials_tutorial_09_post_processing.scons
       :language: Python

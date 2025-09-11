@@ -69,7 +69,7 @@ SConscript
 A ``diff`` against the ``SConscript`` file from :ref:`tutorial_cartesian_product` is included below to help identify the
 differences between the two parameter generators.
 
-.. admonition:: waves-tutorials/tutorial_07_sobol_sequence
+.. admonition:: waves-tutorials/tutorial_07_sobol_sequence.scons
 
    .. literalinclude:: tutorials_tutorial_07_sobol_sequence.scons
       :language: Python

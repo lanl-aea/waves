@@ -165,7 +165,7 @@ SConscript
 A ``diff`` against the ``tutorial_09_post_processing`` file from :ref:`tutorial_post_processing` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-tutorials/tutorial_11_regression_testing
+.. admonition:: waves-tutorials/tutorial_11_regression_testing.scons
 
    .. literalinclude:: tutorials_tutorial_11_regression_testing.scons
       :language: Python

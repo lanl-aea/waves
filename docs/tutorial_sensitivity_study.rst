@@ -77,7 +77,7 @@ SConscript
 A ``diff`` against the ``tutorial_12_archival`` file from :ref:`tutorial_archival` is included below to help identify
 the changes made in this tutorial.
 
-.. admonition:: waves-tutorials/tutorial_sensitivity_study
+.. admonition:: waves-tutorials/tutorial_sensitivity_study.scons
 
    .. literalinclude:: tutorials_tutorial_sensitivity_study.scons
       :language: Python

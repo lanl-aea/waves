@@ -116,7 +116,7 @@ SConscript
 A ``diff`` against the ``tutorial_11_regression_testing`` file from :ref:`tutorial_regression_testing` is included
 below to help identify the changes made in this tutorial.
 
-.. admonition:: waves-tutorials/tutorial_12_archival
+.. admonition:: waves-tutorials/tutorial_12_archival.scons
 
    .. literalinclude:: tutorials_tutorial_12_archival.scons
       :language: Python

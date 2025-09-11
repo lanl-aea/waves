@@ -121,7 +121,7 @@ SConscript
 A ``diff`` against the ``tutorial_07_cartesian_product`` file from :ref:`tutorial_cartesian_product` is included
 below to help identify the changes made in this tutorial.
 
-.. admonition:: waves-tutorials/tutorial_08_data_extraction
+.. admonition:: waves-tutorials/tutorial_08_data_extraction.scons
 
    .. literalinclude:: tutorials_tutorial_08_data_extraction.scons
       :language: Python

@@ -79,7 +79,7 @@ below to help identify the differences between the two parameter generators.
    generate the parameter study manually and use the :meth:`waves.parameter_generators.CustomStudy` to instantiate the
    parameter study object.
 
-.. admonition:: waves-tutorials/tutorial_07_latin_hypercube
+.. admonition:: waves-tutorials/tutorial_07_latin_hypercube.scons
 
    .. literalinclude:: tutorials_tutorial_07_latin_hypercube.scons
       :language: Python

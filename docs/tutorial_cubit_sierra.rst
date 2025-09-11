@@ -68,13 +68,13 @@ described in the complementary :ref:`tutorial_cubit_abaqus` and :ref:`tutorial_c
 The structure has changed enough that a diff view is not as useful. Instead the contents of the new SConscript files are
 duplicated below.
 
-.. admonition:: waves-tutorials/tutorial_cubit/cubit
+.. admonition:: waves-tutorials/tutorial_cubit/cubit.scons
 
    .. literalinclude:: tutorial_cubit_cubit.scons
       :language: Python
       :lineno-match:
 
-.. admonition:: waves-tutorials/tutorial_cubit/sierra
+.. admonition:: waves-tutorials/tutorial_cubit/sierra.scons
 
    .. literalinclude:: tutorial_cubit_sierra.scons
       :language: Python

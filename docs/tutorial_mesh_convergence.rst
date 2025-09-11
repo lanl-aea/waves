@@ -90,13 +90,13 @@ SConscript
    ``tutorial_mesh_convergence`` file, and then review the paragraphs that follow to understand the meaning of these
    changes.
 
-.. admonition:: waves-tutorials/tutorial_mesh_convergence
+.. admonition:: waves-tutorials/tutorial_mesh_convergence.scons
 
    .. literalinclude:: tutorials_tutorial_mesh_convergence.scons
       :language: Python
       :diff: tutorials_tutorial_11_regression_testing
 
-.. admonition:: waves-tutorials/tutorial_mesh_convergence
+.. admonition:: waves-tutorials/tutorial_mesh_convergence.scons
 
    .. literalinclude:: tutorials_tutorial_mesh_convergence.scons
       :language: Python
@@ -114,7 +114,7 @@ the ``global_seed`` and ``displacement`` parameters in :ref:`tutorial_cartesian_
 in the parameter study definition. The individual parameters from the ``parameter_schema`` and ``simulation_constants``
 dictionaries will be combined later in the ``SConscript`` file.
 
-.. admonition:: waves-tutorials/tutorial_mesh_convergence
+.. admonition:: waves-tutorials/tutorial_mesh_convergence.scons
 
    .. literalinclude:: tutorials_tutorial_mesh_convergence.scons
       :language: Python
@@ -139,7 +139,7 @@ differences:
 * The final highlighted line shows how the ``simulation_variables`` dictionary is constructed by combining the
   ``simulation_constants`` and the ``global_seed`` parameters for every simulation.
 
-.. admonition:: waves-tutorials/tutorial_mesh_convergence
+.. admonition:: waves-tutorials/tutorial_mesh_convergence.scons
 
    .. literalinclude:: tutorials_tutorial_mesh_convergence.scons
       :language: Python
@@ -164,7 +164,7 @@ Rather than pointing to the ``rectangle_partition.cae`` file via absolute path, 
 for us in the build directory. This is achieved by simply pointing to the ``SCons`` file object that was created when we
 specified ``rectangle_partition.cae`` as a target in the ``# Partition`` workflow.
 
-.. admonition:: waves-tutorials/tutorial_mesh_convergence
+.. admonition:: waves-tutorials/tutorial_mesh_convergence.scons
 
    .. literalinclude:: tutorials_tutorial_mesh_convergence.scons
       :language: Python

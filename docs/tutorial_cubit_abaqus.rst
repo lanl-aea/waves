@@ -68,13 +68,13 @@ are relevant to the current tutorial. The ``sierra`` workflow is described in th
 The structure has changed enough that a diff view is not as useful. Instead the contents of the new SConscript files are
 duplicated below.
 
-.. admonition:: waves-tutorials/tutorial_cubit/cubit
+.. admonition:: waves-tutorials/tutorial_cubit/cubit.scons
 
    .. literalinclude:: tutorial_cubit_cubit.scons
       :language: Python
       :lineno-match:
 
-.. admonition:: waves-tutorials/tutorial_cubit/abaqus
+.. admonition:: waves-tutorials/tutorial_cubit/abaqus.scons
 
    .. literalinclude:: tutorial_cubit_abaqus.scons
       :language: Python

@@ -162,7 +162,7 @@ SConscript
    pertaining to ``# Simulation variables``. The entire code snippet shows how your code should look after editing, and
    the highlghted portion is what needs to be added to your existing code.
 
-.. admonition:: waves-tutorials/tutorial_05_parameter_substitution
+.. admonition:: waves-tutorials/tutorial_05_parameter_substitution.scons
 
    .. literalinclude:: tutorials_tutorial_05_parameter_substitution.scons
       :language: Python
@@ -194,7 +194,7 @@ this is implemented with the :meth:`waves.scons_extensions.copy_substfile` metho
 8. Modify your ``tutorial_05_parameter_substitution`` file by using the highlighed lines below to modify the
    ``subcommand_options`` for the code pertaining to ``# Geometry``, ``# Partition``, and ``# Mesh``.
 
-.. admonition:: waves-tutorials/tutorial_05_parameter_substitution
+.. admonition:: waves-tutorials/tutorial_05_parameter_substitution.scons
 
    .. literalinclude:: tutorials_tutorial_05_parameter_substitution.scons
       :language: Python
@@ -226,7 +226,7 @@ source file change.
 9. Modify your ``tutorial_05_parameter_substitution`` file by using the highlighed lines below to modify the
    code pertaining to ``# SolverPrep``.
 
-.. admonition:: waves-tutorials/tutorial_05_parameter_substitution
+.. admonition:: waves-tutorials/tutorial_05_parameter_substitution.scons
 
    .. literalinclude:: tutorials_tutorial_05_parameter_substitution.scons
       :language: Python
@@ -266,7 +266,7 @@ In summary of the changes you just made to the ``tutorial_05_parameter_substitut
 ``SConscript`` file from :ref:`tutorial_simulation` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-tutorials/tutorial_05_parameter_substitution
+.. admonition:: waves-tutorials/tutorial_05_parameter_substitution.scons
 
    .. literalinclude:: tutorials_tutorial_05_parameter_substitution.scons
       :language: Python

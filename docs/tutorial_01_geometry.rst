@@ -163,7 +163,7 @@ rectangle part using the :meth:`waves.scons_extensions.abaqus_journal_builder_fa
 
 6. Create an ``SConscript`` file with the non-default name ``tutorial_01_geometry`` using the contents below.
 
-.. admonition:: waves-tutorials/tutorial_01_geometry
+.. admonition:: waves-tutorials/tutorial_01_geometry.scons
 
     .. literalinclude:: tutorials_tutorial_01_geometry.scons
        :language: Python
@@ -178,7 +178,7 @@ and is imported so settings variables are not hard-coded more than once.
 
 7. Continue editing the file ``tutorial_01_geometry`` using the contents below.
 
-.. admonition:: waves-tutorials/tutorial_01_geometry
+.. admonition:: waves-tutorials/tutorial_01_geometry.scons
 
      .. literalinclude:: tutorials_tutorial_01_geometry.scons
          :language: Python
@@ -208,7 +208,7 @@ is defined in the :ref:`waves_scons_api` API.
 
 8. Continue editing the file ``tutorial_01_geometry`` using the contents below.
 
-.. admonition:: waves-tutorials/tutorial_01_geometry
+.. admonition:: waves-tutorials/tutorial_01_geometry.scons
 
      .. literalinclude:: tutorials_tutorial_01_geometry.scons
          :language: Python

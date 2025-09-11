@@ -108,7 +108,7 @@ SConscript
 5. Modify your ``tutorial_02_partition_mesh`` file by adding the contents below immediately after the code
    pertaining to ``# Geometry`` from the previous tutorial, and above the ``# Collector alias`` code.
 
-.. admonition:: waves-tutorials/tutorial_02_partition_mesh
+.. admonition:: waves-tutorials/tutorial_02_partition_mesh.scons
 
    .. literalinclude:: tutorials_tutorial_02_partition_mesh.scons
       :language: Python
@@ -168,7 +168,7 @@ In summary of the changes you just made to the ``tutorial_02_partition_mesh`` fi
 ``SConscript`` file from :ref:`tutorial_geometry` is included below to help identify the changes made in this
 tutorial.
 
-.. admonition:: waves-tutorials/tutorial_02_partition_mesh
+.. admonition:: waves-tutorials/tutorial_02_partition_mesh.scons
 
    .. literalinclude:: tutorials_tutorial_02_partition_mesh.scons
       :language: Python
