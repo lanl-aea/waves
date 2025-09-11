@@ -125,7 +125,7 @@ workflow_configurations = [
     "tutorial_task_reuse.scons",
 ]
 for workflow in workflow_configurations:
-    build_dir = env["variant_dir_base"] / workflow
+    build_dir = env["variant_dir_base"] / pathlib.Path(workflow).stem
     SConscript(workflow, variant_dir=build_dir, exports={"env": env}, duplicate=False)
 
 # Add unit test target
