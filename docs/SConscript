@@ -225,7 +225,6 @@ tutorial_files_list = [
     env["tutorials_dir"] / "rectangle_geometry_partition.scons",
     env["tutorials_dir"] / "rectangle_mesh_solverprep_solve_extract.scons",
     env["tutorials_dir"] / "gitignore",
-    env["tutorials_dir"] / "pyproject.toml",
     env["tutorials_dir"] / env["abaqus_dir"] / "rectangle_geometry.py",
     env["tutorials_dir"] / env["abaqus_dir"] / "rectangle_partition.py",
     env["tutorials_dir"] / env["abaqus_dir"] / "rectangle_mesh.py",
