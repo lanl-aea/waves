@@ -370,10 +370,8 @@ def test_cache_environment_exception_handling():
         patch("builtins.print") as mock_print,
         pytest.raises(subprocess.CalledProcessError),
     ):
-        try:
-            _utilities.cache_environment("dummy command")
-        finally:
-            mock_print.assert_called_once_with("output", file=sys.stderr)
+        _utilities.cache_environment("dummy command")
+    mock_print.assert_called_once_with("output", file=sys.stderr)
 
 
 create_valid_identifier = {
