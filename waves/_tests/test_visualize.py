@@ -220,7 +220,7 @@ def test_visualize():
 
 def test_plot():
     """Check that the expected plot output function is called"""
-    figure, axes = matplotlib.pyplot.subplots()
+    figure, _axes = matplotlib.pyplot.subplots()
     with (
         patch("matplotlib.pyplot.show") as mock_show,
         patch("matplotlib.figure.Figure.savefig") as mock_savefig,

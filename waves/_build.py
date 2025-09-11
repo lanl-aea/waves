@@ -83,7 +83,7 @@ def main(
         git_clone_directory.mkdir(parents=True, exist_ok=True)
         working_directory = str(git_clone_directory)
         command = ["git", "clone", "--no-hardlinks", str(current_directory), working_directory]
-        git_clone_return_code, git_clone_stdout = _utilities.tee_subprocess(command)
+        git_clone_return_code, _git_clone_stdout = _utilities.tee_subprocess(command)
         if git_clone_return_code != 0:
             raise RuntimeError(f"command '{' '.join(command)}' failed")
     stop_trigger = "is up to date."

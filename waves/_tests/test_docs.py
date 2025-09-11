@@ -21,7 +21,7 @@ def test_docs():
     with (
         patch("builtins.print") as mock_print,
         patch("webbrowser.open", return_value=False) as mock_webbrowser_open,
-        pytest.raises(RuntimeError, match="Could not open a web browser."),
+        pytest.raises(RuntimeError, match=r"Could not open a web browser."),
     ):
         try:
             _docs.main(_settings._installed_docs_index)

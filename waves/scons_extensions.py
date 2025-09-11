@@ -1394,7 +1394,7 @@ def abaqus_solver(
     action_prefix: str = _settings._cd_action_prefix,
     action_suffix: str = _settings._redirect_action_suffix,
     environment_suffix: str = _settings._redirect_environment_suffix,
-    emitter: typing.Literal["standard", "explicit", "datacheck", None] = None,
+    emitter: typing.Literal["standard", "explicit", "datacheck"] | None = None,
 ) -> SCons.Builder.Builder:
     """Construct and return an Abaqus solver SCons builder
 

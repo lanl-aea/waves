@@ -77,7 +77,7 @@ def get_parser():
     # The global '__file__' variable doesn't appear to be set when executing from Abaqus CAE
     filename = inspect.getfile(lambda: None)
     basename = os.path.basename(filename)
-    basename_without_extension, extension = os.path.splitext(basename)
+    basename_without_extension, _extension = os.path.splitext(basename)
     # Construct a part name from the filename less the workflow step
     default_part_name = basename_without_extension
     suffix = "_mesh"

@@ -241,7 +241,7 @@ def test_build_source_files(
     root_directory, relative_paths, exclude_patterns, available_files_side_effect, expected_source_files
 ):
     with patch("waves._fetch.available_files", return_value=available_files_side_effect):
-        source_files, not_found = _fetch.build_source_files(
+        source_files, _not_found = _fetch.build_source_files(
             root_directory, relative_paths, exclude_patterns=exclude_patterns
         )
         assert source_files == expected_source_files

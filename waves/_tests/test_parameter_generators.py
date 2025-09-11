@@ -1344,7 +1344,7 @@ test_update_set_names_cases = {
         None,
         pytest.raises(
             RuntimeError,
-            match="Could not fill merged parameter set names. Does the parameter set naming convention match?",
+            match=r"Could not fill merged parameter set names. Does the parameter set naming convention match?",
         ),
     ),
     "filled dataset, no kwargs, should return as original, single parameter set": (
