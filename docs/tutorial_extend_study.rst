@@ -55,7 +55,7 @@ Directory Structure
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_07_sobol_sequence && cp tutorial_07_sobol_sequence.scons tutorial_extend_study.scons
+   $ waves fetch --overwrite tutorials/tutorial_07_sobol_sequence.scons && cp tutorial_07_sobol_sequence.scons tutorial_extend_study.scons
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 

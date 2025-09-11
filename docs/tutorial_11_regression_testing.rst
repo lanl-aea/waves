@@ -110,7 +110,7 @@ Directory Structure
 
             $ pwd
             /home/roppenheimer/waves-tutorials
-            $ waves fetch --overwrite tutorials/tutorial_09_post_processing && cp tutorial_09_post_processing.scons tutorial_11_regression_testing.scons
+            $ waves fetch --overwrite tutorials/tutorial_09_post_processing.scons && cp tutorial_09_post_processing.scons tutorial_11_regression_testing.scons
             WAVES fetch
             Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -125,7 +125,7 @@ Directory Structure
             ----
             C:\Users\roppenheimer\waves-tutorials
 
-            PS > waves fetch --overwrite tutorials\tutorial_09_post_processing && Copy-Item tutorial_09_post_processing.scons tutorial_11_regression_testing.scons
+            PS > waves fetch --overwrite tutorials\tutorial_09_post_processing.scons && Copy-Item tutorial_09_post_processing.scons tutorial_11_regression_testing.scons
             WAVES fetch
             Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 

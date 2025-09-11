@@ -50,7 +50,7 @@ Directory Structure
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_11_regression_testing && cp tutorial_11_regression_testing.scons tutorial_mesh_convergence.scons
+   $ waves fetch --overwrite tutorials/tutorial_11_regression_testing.scons && cp tutorial_11_regression_testing.scons tutorial_mesh_convergence.scons
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 

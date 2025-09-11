@@ -82,7 +82,7 @@ Directory Structure
 
             $ pwd
             /home/roppenheimer/waves-tutorials
-            $ waves fetch --overwrite tutorials/tutorial_08_data_extraction && cp tutorial_08_data_extraction.scons tutorial_09_post_processing.scons
+            $ waves fetch --overwrite tutorials/tutorial_08_data_extraction.scons && cp tutorial_08_data_extraction.scons tutorial_09_post_processing.scons
             WAVES fetch
             Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -97,7 +97,7 @@ Directory Structure
             ----
             C:\Users\roppenheimer\waves-tutorials
 
-            PS > waves fetch --overwrite tutorials\tutorial_08_data_extraction && Copy-Item tutorial_08_data_extraction.scons tutorial_09_post_processing.scons
+            PS > waves fetch --overwrite tutorials\tutorial_08_data_extraction.scons && Copy-Item tutorial_08_data_extraction.scons tutorial_09_post_processing.scons
             WAVES fetch
             Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 

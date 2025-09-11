@@ -46,7 +46,7 @@ Directory Structure
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_04_simulation && cp tutorial_04_simulation.scons tutorial_sbatch.scons
+   $ waves fetch --overwrite tutorials/tutorial_04_simulation.scons && cp tutorial_04_simulation.scons tutorial_sbatch.scons
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 

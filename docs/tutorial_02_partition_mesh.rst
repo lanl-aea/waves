@@ -80,7 +80,7 @@ Directory Structure
 
             $ pwd
             /home/roppenheimer/waves-tutorials
-            $ waves fetch --overwrite tutorials/tutorial_01_geometry && cp tutorial_01_geometry.scons tutorial_02_partition_mesh.scons
+            $ waves fetch --overwrite tutorials/tutorial_01_geometry.scons && cp tutorial_01_geometry.scons tutorial_02_partition_mesh.scons
             WAVES fetch
             Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -95,7 +95,7 @@ Directory Structure
             ----
             C:\Users\roppenheimer\waves-tutorials
 
-            PS > waves fetch --overwrite tutorials\tutorial_01_geometry && Copy-Item tutorial_01_geometry.scons tutorial_02_partition_mesh.scons
+            PS > waves fetch --overwrite tutorials\tutorial_01_geometry.scons && Copy-Item tutorial_01_geometry.scons tutorial_02_partition_mesh.scons
             WAVES fetch
             Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 

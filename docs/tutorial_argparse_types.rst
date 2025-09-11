@@ -52,7 +52,7 @@ Directory Structure
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_02_partition_mesh && cp tutorial_02_partition_mesh.scons tutorial_argparse_types.scons
+   $ waves fetch --overwrite tutorials/tutorial_02_partition_mesh.scons && cp tutorial_02_partition_mesh.scons tutorial_argparse_types.scons
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 

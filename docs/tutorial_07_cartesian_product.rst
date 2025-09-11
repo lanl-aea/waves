@@ -79,7 +79,7 @@ Directory Structure
 
             $ pwd
             /home/roppenheimer/waves-tutorials
-            $ waves fetch --overwrite tutorials/tutorial_06_include_files && cp tutorial_06_include_files.scons tutorial_07_cartesian_product.scons
+            $ waves fetch --overwrite tutorials/tutorial_06_include_files.scons && cp tutorial_06_include_files.scons tutorial_07_cartesian_product.scons
             WAVES fetch
             Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -94,7 +94,7 @@ Directory Structure
             ----
             C:\Users\roppenheimer\waves-tutorials
 
-            PS > waves fetch --overwrite tutorials\tutorial_06_include_files && Copy-Item tutorial_06_include_files.scons tutorial_07_cartesian_product.scons
+            PS > waves fetch --overwrite tutorials\tutorial_06_include_files.scons && Copy-Item tutorial_06_include_files.scons tutorial_07_cartesian_product.scons
             WAVES fetch
             Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 

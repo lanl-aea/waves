@@ -77,7 +77,7 @@ Directory Structure
 
             $ pwd
             /home/roppenheimer/waves-tutorials
-            $ waves fetch --overwrite tutorials/tutorial_04_simulation && cp tutorial_04_simulation.scons tutorial_05_parameter_substitution.scons
+            $ waves fetch --overwrite tutorials/tutorial_04_simulation.scons && cp tutorial_04_simulation.scons tutorial_05_parameter_substitution.scons
             WAVES fetch
             Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -92,7 +92,7 @@ Directory Structure
             ----
             C:\Users\roppenheimer\waves-tutorials
 
-            PS > waves fetch --overwrite tutorials\tutorial_04_simulation && Copy-Item tutorial_04_simulation.scons tutorial_05_parameter_substitution.scons
+            PS > waves fetch --overwrite tutorials\tutorial_04_simulation.scons && Copy-Item tutorial_04_simulation.scons tutorial_05_parameter_substitution.scons
             WAVES fetch
             Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 

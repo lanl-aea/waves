@@ -47,7 +47,7 @@ Directory Structure
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_07_cartesian_product && cp tutorial_07_cartesian_product.scons tutorial_07_one_at_a_time.scons
+   $ waves fetch --overwrite tutorials/tutorial_07_cartesian_product.scons && cp tutorial_07_cartesian_product.scons tutorial_07_one_at_a_time.scons
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
