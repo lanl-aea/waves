@@ -105,12 +105,12 @@ def test_calculate_set_hashes(parameter_names, samples, expected_hashes):
 )
 def test_verify_parameter_study(parameter_names, samples, expected_hashes):
     # Borrow setup from class test. See :meth:`test_create_set_hashes`
-    HashesParameterGenerator = DummyGenerator({})
-    HashesParameterGenerator._parameter_names = parameter_names
-    HashesParameterGenerator._samples = samples
-    HashesParameterGenerator._create_set_hashes()
-    assert HashesParameterGenerator._set_hashes == expected_hashes
-    parameter_study = HashesParameterGenerator.parameter_study
+    hashes_parameter_generator = DummyGenerator({})
+    hashes_parameter_generator._parameter_names = parameter_names
+    hashes_parameter_generator._samples = samples
+    hashes_parameter_generator._create_set_hashes()
+    assert hashes_parameter_generator._set_hashes == expected_hashes
+    parameter_study = hashes_parameter_generator.parameter_study
 
     with does_not_raise:
         parameter_generators._verify_parameter_study(parameter_study)
@@ -1581,7 +1581,7 @@ class TestParameterGenerator:
             pytest.raises(RuntimeError),
         ):
             try:
-                MissingPreviousStudy = DummyGenerator(
+                missing_previous_study = DummyGenerator(
                     {}, previous_parameter_study="doesnotexist.h5", require_previous_parameter_study=True
                 )
             finally:
@@ -1594,10 +1594,10 @@ class TestParameterGenerator:
             does_not_raise,
         ):
             try:
-                MissingPreviousStudy = DummyGenerator(
+                missing_previous_study = DummyGenerator(
                     {}, previous_parameter_study="doesnotexist.h5", require_previous_parameter_study=False
                 )
-                assert isinstance(MissingPreviousStudy, parameter_generators.ParameterGenerator)
+                assert isinstance(missing_previous_study, parameter_generators.ParameterGenerator)
                 mock_merge.assert_not_called()
                 mock_warn.assert_called_once()
             finally:
@@ -1615,10 +1615,10 @@ class TestParameterGenerator:
         ids=scons_write_cases.keys(),
     )
     def test_scons_write(self, env, expected_kwargs):
-        sconsWrite = DummyGenerator({})
+        scons_write = DummyGenerator({})
         with patch("waves.parameter_generators.ParameterGenerator.write") as mock_write:
             # Fake an SCons environment with a dictionary. SCons environment object not required for unit testing
-            sconsWrite._scons_write([], [], env)
+            scons_write._scons_write([], [], env)
         mock_write.assert_called_once_with(**expected_kwargs)
 
     templates = {
@@ -1630,10 +1630,10 @@ class TestParameterGenerator:
 
     def test_merge_parameter_studies_with_missing_previous_parameter_study(self):
         # Test exception on missing previous parameter study attribute
-        dummyGenerator = DummyGenerator({})
-        dummyGenerator.previous_parameter_study = None
+        dummy_generator = DummyGenerator({})
+        dummy_generator.previous_parameter_study = None
         with pytest.raises(RuntimeError):
-            dummyGenerator._merge_parameter_studies()
+            dummy_generator._merge_parameter_studies()
 
     @pytest.mark.parametrize("length", range(1, 20, 5))
     def test_parameter_study_to_dict(self, length):
@@ -1646,8 +1646,8 @@ class TestParameterGenerator:
             for index, item in enumerate(sorted(expected_by_hash.keys()))
         }
         kwargs = {"sets": length}
-        sconsIterator = DummyGenerator({}, **kwargs)
-        set_samples = sconsIterator.parameter_study_to_dict()
+        scons_iterator = DummyGenerator({}, **kwargs)
+        set_samples = scons_iterator.parameter_study_to_dict()
         assert set_samples == expected
         assert all(isinstance(key, str) for key in set_samples)
         for set_name, set_value in expected.items():
@@ -1670,13 +1670,13 @@ class TestParameterGenerator:
         """
         kwargs = {"sets": 1}
         if not set_template:
-            TemplateGenerator = DummyGenerator(schema, output_file_template=file_template, **kwargs)
+            template_generator = DummyGenerator(schema, output_file_template=file_template, **kwargs)
         else:
-            TemplateGenerator = DummyGenerator(
+            template_generator = DummyGenerator(
                 schema, output_file_template=file_template, set_name_template=set_template, **kwargs
             )
-        assert list(TemplateGenerator._set_names.values()) == expected
-        assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
+        assert list(template_generator._set_names.values()) == expected
+        assert list(template_generator.parameter_study[_settings._set_coordinate_key].values) == expected
 
     @pytest.mark.parametrize(
         "schema, file_template, set_template, expected",
@@ -1695,14 +1695,14 @@ class TestParameterGenerator:
         mock_previous_study_name = "dummy_study.h5"
         if not set_template:
             mock_previous_study = DummyGenerator(schema, output_file_template=file_template, **kwargs).parameter_study
-            TemplateGenerator = DummyGenerator(
+            template_generator = DummyGenerator(
                 schema, output_file_template=file_template, previous_parameter_study=mock_previous_study_name, **kwargs
             )
         else:
             mock_previous_study = DummyGenerator(
                 schema, output_file_template=file_template, set_name_template=set_template, **kwargs
             ).parameter_study
-            TemplateGenerator = DummyGenerator(
+            template_generator = DummyGenerator(
                 schema,
                 output_file_template=file_template,
                 set_name_template=set_template,
@@ -1710,11 +1710,11 @@ class TestParameterGenerator:
                 **kwargs,
             )
         with patch("waves.parameter_generators._open_parameter_study", return_value=mock_previous_study):
-            assert list(TemplateGenerator._set_names.values()) == expected
-            assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
-            TemplateGenerator._merge_parameter_studies()
-            assert list(TemplateGenerator._set_names.values()) == expected
-            assert list(TemplateGenerator.parameter_study[_settings._set_coordinate_key].values) == expected
+            assert list(template_generator._set_names.values()) == expected
+            assert list(template_generator.parameter_study[_settings._set_coordinate_key].values) == expected
+            template_generator._merge_parameter_studies()
+            assert list(template_generator._set_names.values()) == expected
+            assert list(template_generator.parameter_study[_settings._set_coordinate_key].values) == expected
 
     init_write_stdout = {
         "no-template-1": ({}, None, False, False, [False], 1, 1),
@@ -1746,7 +1746,7 @@ class TestParameterGenerator:
         """
         kwargs = {"sets": sets}
         for output_file_type in _settings._allowable_output_file_types:
-            WriteParameterGenerator = DummyGenerator(
+            write_parameter_generator = DummyGenerator(
                 schema,
                 output_file_template=template,
                 output_file_type=output_file_type,
@@ -1761,7 +1761,7 @@ class TestParameterGenerator:
                 patch("pathlib.Path.is_file", side_effect=is_file),
                 patch("pathlib.Path.mkdir"),
             ):
-                WriteParameterGenerator.write(dry_run=dry_run)
+                write_parameter_generator.write(dry_run=dry_run)
                 mock_file.assert_not_called()
                 xarray_to_netcdf.assert_not_called()
                 assert stdout_write.call_count == stdout_calls
@@ -1792,7 +1792,7 @@ class TestParameterGenerator:
         :param int files: integer number of files that should be written
         """
         kwargs = {"sets": sets}
-        WriteParameterGenerator = DummyGenerator(
+        write_parameter_generator = DummyGenerator(
             schema,
             output_file_template=template,
             output_file_type="yaml",
@@ -1806,12 +1806,12 @@ class TestParameterGenerator:
             patch("sys.stdout.write") as stdout_write,
             patch("pathlib.Path.is_file", side_effect=is_file),
         ):
-            WriteParameterGenerator.write()
+            write_parameter_generator.write()
             stdout_write.assert_not_called()
             mock_write_dataset.assert_not_called()
             assert mock_write_yaml.call_count == files
 
-        MismatchedOutputType = DummyGenerator(
+        mismatched_output_type = DummyGenerator(
             schema,
             output_file_template=template,
             output_file_type="h5",
@@ -1825,7 +1825,7 @@ class TestParameterGenerator:
             patch("sys.stdout.write") as stdout_write,
             patch("pathlib.Path.is_file", side_effect=is_file),
         ):
-            MismatchedOutputType.write(output_file_type="yaml")
+            mismatched_output_type.write(output_file_type="yaml")
             stdout_write.assert_not_called()
             mock_write_dataset.assert_not_called()
             assert mock_write_yaml.call_count == files
@@ -1846,7 +1846,7 @@ class TestParameterGenerator:
         :param int files: integer number of files that should be written
         """
         kwargs = {"sets": sets}
-        WriteParameterGenerator = DummyGenerator(
+        write_parameter_generator = DummyGenerator(
             schema,
             output_file_template=template,
             output_file_type="h5",
@@ -1861,13 +1861,13 @@ class TestParameterGenerator:
             patch("pathlib.Path.is_file", side_effect=is_file),
             patch("pathlib.Path.mkdir"),
         ):
-            WriteParameterGenerator.write()
+            write_parameter_generator.write()
             stdout_write.assert_not_called()
             mock_write_yaml.assert_not_called()
             assert mock_write_dataset.call_count == files
 
         kwargs = {"sets": sets}
-        MismatchedOutputType = DummyGenerator(
+        mismatched_output_type = DummyGenerator(
             schema,
             output_file_template=template,
             output_file_type="yaml",
@@ -1882,7 +1882,7 @@ class TestParameterGenerator:
             patch("pathlib.Path.is_file", side_effect=is_file),
             patch("pathlib.Path.mkdir"),
         ):
-            MismatchedOutputType.write(output_file_type="h5")
+            mismatched_output_type.write(output_file_type="h5")
             stdout_write.assert_not_called()
             mock_write_yaml.assert_not_called()
             assert mock_write_dataset.call_count == files
@@ -1908,7 +1908,7 @@ class TestParameterGenerator:
         :param bool overwrite: parameter that identifies when the file should always be overwritten
         :param int expected_call_count: amount of times that the xarray.Dataset.to_netcdf function should be called
         """
-        WriteParameterGenerator = DummyGenerator({}, overwrite=overwrite)
+        write_parameter_generator = DummyGenerator({}, overwrite=overwrite)
 
         with (
             patch("xarray.Dataset.to_netcdf") as xarray_to_netcdf,
@@ -1916,7 +1916,7 @@ class TestParameterGenerator:
             patch("xarray.Dataset.equals", return_value=equals),
             patch("pathlib.Path.is_file", side_effect=is_file),
         ):
-            WriteParameterGenerator._conditionally_write_dataset(pathlib.Path("dummy_string"), xarray.Dataset())
+            write_parameter_generator._conditionally_write_dataset(pathlib.Path("dummy_string"), xarray.Dataset())
             assert xarray_to_netcdf.call_count == expected_call_count
 
     @pytest.mark.parametrize(
@@ -1932,7 +1932,7 @@ class TestParameterGenerator:
         :param bool overwrite: parameter that identifies when the file should always be overwritten
         :param int expected_call_count: amount of times that the open.write function should be called
         """
-        WriteParameterGenerator = DummyGenerator({}, overwrite=overwrite)
+        write_parameter_generator = DummyGenerator({}, overwrite=overwrite)
         existing_dict = {"dummy": "dict"} if equals else {"smart": "dict"}
 
         with (
@@ -1940,22 +1940,22 @@ class TestParameterGenerator:
             patch("yaml.safe_load", return_value=existing_dict),
             patch("pathlib.Path.is_file", side_effect=is_file),
         ):
-            WriteParameterGenerator._conditionally_write_yaml("dummy_string", {"dummy": "dict"})
+            write_parameter_generator._conditionally_write_yaml("dummy_string", {"dummy": "dict"})
             assert write_yaml_file.return_value.write.call_count == expected_call_count
 
     def test_write_type_override(self):
         for instantiated_type, override_type in (("yaml", "h5"), ("h5", "yaml")):
-            WriteParameterGenerator = DummyGenerator({}, output_file_type=instantiated_type)
+            write_parameter_generator = DummyGenerator({}, output_file_type=instantiated_type)
             private_write_arguments = {
                 "yaml": (
-                    WriteParameterGenerator.parameter_study_to_dict(),
-                    WriteParameterGenerator.parameter_study_to_dict().items(),
-                    WriteParameterGenerator._conditionally_write_yaml,
+                    write_parameter_generator.parameter_study_to_dict(),
+                    write_parameter_generator.parameter_study_to_dict().items(),
+                    write_parameter_generator._conditionally_write_yaml,
                 ),
                 "h5": (
-                    WriteParameterGenerator.parameter_study,
-                    WriteParameterGenerator.parameter_study.groupby(_settings._set_coordinate_key),
-                    WriteParameterGenerator._conditionally_write_dataset,
+                    write_parameter_generator.parameter_study,
+                    write_parameter_generator.parameter_study.groupby(_settings._set_coordinate_key),
+                    write_parameter_generator._conditionally_write_dataset,
                 ),
             }
             instantiated_arguments = private_write_arguments[instantiated_type]
@@ -1967,7 +1967,7 @@ class TestParameterGenerator:
                 patch("waves.parameter_generators.ParameterGenerator._write_meta"),
                 patch("waves.parameter_generators.ParameterGenerator._write") as mock_private_write,
             ):
-                WriteParameterGenerator.write()
+                write_parameter_generator.write()
                 mock_private_write.assert_called_once()
                 assert mock_private_write.call_args[0][0] == instantiated_arguments[0]
                 # FIXME: Can't do boolean comparisons on xarray.Dataset.GroupBy objects.
@@ -1982,7 +1982,7 @@ class TestParameterGenerator:
                 patch("waves.parameter_generators.ParameterGenerator._write_meta"),
                 patch("waves.parameter_generators.ParameterGenerator._write") as mock_private_write,
             ):
-                WriteParameterGenerator.write(output_file_type=override_type)
+                write_parameter_generator.write(output_file_type=override_type)
                 mock_private_write.assert_called_once()
                 assert mock_private_write.call_args[0][0] == override_arguments[0]
                 # FIXME: Can't do boolean comparisons on xarray.Dataset.GroupBy objects.
@@ -1993,45 +1993,45 @@ class TestParameterGenerator:
 
     def test_write_exception(self):
         """Calling a non-supported format string should raise an exception"""
-        WriteParameterGenerator = DummyGenerator({})
+        write_parameter_generator = DummyGenerator({})
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta"),
             patch("waves.parameter_generators.ParameterGenerator._write") as mock_private_write,
             pytest.raises(ChoicesError),
         ):
             try:
-                WriteParameterGenerator.write(output_file_type="unsupported")
+                write_parameter_generator.write(output_file_type="unsupported")
             finally:
                 mock_private_write.assert_not_called()
 
     def test_write_call_to_write_meta(self):
-        WriteParameterGenerator = DummyGenerator({})
-        WriteParameterGenerator.write_meta = True
-        WriteParameterGenerator.provided_output_file_template = True
+        write_parameter_generator = DummyGenerator({})
+        write_parameter_generator.write_meta = True
+        write_parameter_generator.provided_output_file_template = True
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta") as mock_write_meta,
             patch("waves.parameter_generators.ParameterGenerator._write") as mock_private_write,
         ):
-            WriteParameterGenerator.write()
+            write_parameter_generator.write()
             mock_write_meta.assert_called_once()
             mock_private_write.assert_called_once()
 
     def test_write_meta(self):
-        WriteMetaParameterGenerator = DummyGenerator({})
+        write_meta_parameter_generator = DummyGenerator({})
         with (
             patch("pathlib.Path.open", mock_open()) as mock_file,
             patch("pathlib.Path.resolve", return_value=pathlib.Path("parameter_set1.h5")),
         ):
-            WriteMetaParameterGenerator._write_meta()
+            write_meta_parameter_generator._write_meta()
             handle = mock_file()
             handle.write.assert_called_once_with("parameter_set1.h5\n")
 
-        WriteMetaParameterGenerator.output_file = pathlib.Path("dummy.h5")
+        write_meta_parameter_generator.output_file = pathlib.Path("dummy.h5")
         with (
             patch("pathlib.Path.open", mock_open()) as mock_file,
             patch("pathlib.Path.resolve", return_value=pathlib.Path("dummy.h5")),
         ):
-            WriteMetaParameterGenerator._write_meta()
+            write_meta_parameter_generator._write_meta()
             handle = mock_file()
             handle.write.assert_called_once_with("dummy.h5\n")
 
@@ -2041,37 +2041,37 @@ class TestParameterGenerator:
         ids=set_hashes.keys(),
     )
     def test_create_set_hashes(self, parameter_names, samples, expected_hashes):
-        HashesParameterGenerator = DummyGenerator({})
-        HashesParameterGenerator._parameter_names = parameter_names
-        HashesParameterGenerator._samples = samples
-        del HashesParameterGenerator._set_hashes
-        assert not hasattr(HashesParameterGenerator, "_set_hashes")
+        hashes_parameter_generator = DummyGenerator({})
+        hashes_parameter_generator._parameter_names = parameter_names
+        hashes_parameter_generator._samples = samples
+        del hashes_parameter_generator._set_hashes
+        assert not hasattr(hashes_parameter_generator, "_set_hashes")
         # Check the function setting the set hashes attribute.
-        HashesParameterGenerator._create_set_hashes()
-        assert HashesParameterGenerator._set_hashes == expected_hashes
+        hashes_parameter_generator._create_set_hashes()
+        assert hashes_parameter_generator._set_hashes == expected_hashes
 
     def test_create_set_names(self):
         """Test the parameter set name generation"""
-        SetNamesParameterGenerator = DummyGenerator({}, output_file_template="out")
-        SetNamesParameterGenerator._samples = numpy.array([[1], [2]])
-        SetNamesParameterGenerator._create_set_hashes()
-        SetNamesParameterGenerator._create_set_names()
-        assert list(SetNamesParameterGenerator._set_names.values()) == ["out0", "out1"]
+        set_names_parameter_generator = DummyGenerator({}, output_file_template="out")
+        set_names_parameter_generator._samples = numpy.array([[1], [2]])
+        set_names_parameter_generator._create_set_hashes()
+        set_names_parameter_generator._create_set_names()
+        assert list(set_names_parameter_generator._set_names.values()) == ["out0", "out1"]
 
     def test_parameter_study_to_numpy(self):
         """Test the self-consistency of the parameter study dataset construction and deconstruction"""
         # Setup
-        DataParameterGenerator = DummyGenerator({})
-        DataParameterGenerator._parameter_names = ["ints", "floats", "strings", "bools"]
-        DataParameterGenerator._samples = numpy.array([[1, 10.1, "a", True], [2, 20.2, "b", False]], dtype=object)
-        DataParameterGenerator._create_set_hashes()
-        DataParameterGenerator._create_set_names()
-        DataParameterGenerator._create_parameter_study()
+        data_parameter_generator = DummyGenerator({})
+        data_parameter_generator._parameter_names = ["ints", "floats", "strings", "bools"]
+        data_parameter_generator._samples = numpy.array([[1, 10.1, "a", True], [2, 20.2, "b", False]], dtype=object)
+        data_parameter_generator._create_set_hashes()
+        data_parameter_generator._create_set_names()
+        data_parameter_generator._create_parameter_study()
         # Test class method
-        returned_samples = DataParameterGenerator._parameter_study_to_numpy()
-        assert numpy.all(returned_samples == DataParameterGenerator._samples)
+        returned_samples = data_parameter_generator._parameter_study_to_numpy()
+        assert numpy.all(returned_samples == data_parameter_generator._samples)
         # Test module function
-        returned_samples = parameter_generators._parameter_study_to_numpy(DataParameterGenerator.parameter_study)
+        returned_samples = parameter_generators._parameter_study_to_numpy(data_parameter_generator.parameter_study)
 
 
 class TestParameterDistributions:
@@ -2124,8 +2124,8 @@ class TestParameterDistributions:
         ):
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
-                TestValidate = ParameterDistributions(parameter_schema)
-                assert isinstance(TestValidate, parameter_generators.ParameterGenerator)
+                test_validate = ParameterDistributions(parameter_schema)
+                assert isinstance(test_validate, parameter_generators.ParameterGenerator)
                 mock_distros.assert_called_once()
             finally:
                 pass
@@ -2162,10 +2162,10 @@ class TestParameterDistributions:
         ids=generate_input.keys(),
     )
     def test_generate_parameter_distributions(self, parameter_schema, expected_scipy_kwds):
-        TestDistributions = ParameterDistributions(parameter_schema)
-        assert TestDistributions._parameter_names == list(TestDistributions.parameter_distributions.keys())
-        for parameter_name, expected_kwds in zip(TestDistributions._parameter_names, expected_scipy_kwds, strict=True):
-            assert TestDistributions.parameter_distributions[parameter_name].kwds == expected_kwds
+        test_distributions = ParameterDistributions(parameter_schema)
+        assert test_distributions._parameter_names == list(test_distributions.parameter_distributions.keys())
+        for parameter_name, expected_kwds in zip(test_distributions._parameter_names, expected_scipy_kwds, strict=True):
+            assert test_distributions.parameter_distributions[parameter_name].kwds == expected_kwds
 
 
 class DummyGenerator(parameter_generators.ParameterGenerator):

@@ -50,8 +50,8 @@ class TestSALibSampler:
         ids=sampler_overrides.keys(),
     )
     def test_sampler_overrides(self, sampler_class, parameter_schema, kwargs, expected):
-        TestValidate = SALibSampler(sampler_class, parameter_schema)
-        override_kwargs = TestValidate._sampler_overrides(**kwargs)
+        test_validate = SALibSampler(sampler_class, parameter_schema)
+        override_kwargs = test_validate._sampler_overrides(**kwargs)
         assert override_kwargs == expected
 
     validate_input = {
@@ -147,8 +147,8 @@ class TestSALibSampler:
         with outcome:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
-                TestValidate = SALibSampler(sampler_class, parameter_schema)
-                assert isinstance(TestValidate, SALibSampler)
+                test_validate = SALibSampler(sampler_class, parameter_schema)
+                assert isinstance(test_validate, SALibSampler)
             finally:
                 pass
 
