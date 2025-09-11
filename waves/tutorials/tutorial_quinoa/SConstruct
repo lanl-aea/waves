@@ -114,31 +114,31 @@ env.Append(
 
 # Source the Quinoa environment and store it separately from the Conda/Cubit environment to avoid PATH interference
 if quinoa_modulefile:
-    envQuinoa = waves.scons_extensions.shell_environment(
+    env_quinoa = waves.scons_extensions.shell_environment(
         "module unload aea-nightly aea-weekly aea-quarterly aea-release && "
         f"module use {quinoa_modulefile.parent} && "
         f"module load {quinoa_modulefile.name}"
     )
 else:
-    envQuinoa = Environment()
-envQuinoa.AddMethod(waves.scons_extensions.add_program, "AddProgram")
-envQuinoa["inciter"] = envQuinoa.AddProgram(["inciter"])
-envQuinoa["charmrun"] = envQuinoa.AddProgram(["charmrun"])
+    env_quinoa = Environment()
+env_quinoa.AddMethod(waves.scons_extensions.add_program, "AddProgram")
+env_quinoa["inciter"] = env_quinoa.AddProgram(["inciter"])
+env_quinoa["charmrun"] = env_quinoa.AddProgram(["charmrun"])
 
 # Add WAVES builders. If sbatch is found, use it.
 # Should allow the same scons alias to run directly on sstbigbird, but submit as an sbatch job on HPC
 quinoa_builder_factory = waves.scons_extensions.quinoa_builder_factory
 if env["SBATCH_PROGRAM"] is not None:
     quinoa_builder_factory = waves.scons_extensions.sbatch_quinoa_builder_factory
-envQuinoa.Append(
-    BUILDERS={"QuinoaSolver": quinoa_builder_factory(program=envQuinoa["charmrun"], subcommand=envQuinoa["inciter"])}
+env_quinoa.Append(
+    BUILDERS={"QuinoaSolver": quinoa_builder_factory(program=env_quinoa["charmrun"], subcommand=env_quinoa["inciter"])}
 )
 
 # Comments used in tutorial code snippets: marker-6
 
 # Add simulation targets
 SConscript(
-    "SConscript", variant_dir=env["variant_dir_base"], exports={"env": env, "envQuinoa": envQuinoa}, duplicate=True
+    "SConscript", variant_dir=env["variant_dir_base"], exports={"env": env, "env_quinoa": env_quinoa}, duplicate=True
 )
 
 # Comments used in tutorial code snippets: marker-7

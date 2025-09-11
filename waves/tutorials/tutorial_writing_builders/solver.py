@@ -201,12 +201,12 @@ def positive_nonzero_int(argument):
         * The argument can't be cast to int
         * The argument is less than 1
     """
-    MINIMUM_VALUE = 1
+    minimum_value = 1
     try:
         argument = int(argument)
     except ValueError as err:
         raise argparse.ArgumentTypeError(f"invalid integer value: '{argument}'") from err
-    if not argument >= MINIMUM_VALUE:
+    if not argument >= minimum_value:
         raise argparse.ArgumentTypeError(f"invalid positive integer: '{argument}'")
     return argument
 
