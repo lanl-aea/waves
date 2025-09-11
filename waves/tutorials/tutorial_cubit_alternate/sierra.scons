@@ -31,7 +31,7 @@ workflow = []
 element_type = "SHELL"
 solver = "sierra"
 SConscript(
-    "cubit",
+    "cubit.scons",
     exports={"env": env, "env_cubit": env_cubit, "element_type": element_type, "solver": solver},
     duplicate=False,
 )
