@@ -210,7 +210,7 @@ class TestSALibSampler:
         ),
     }
 
-    def _expected_set_names(self, sampler, N, num_vars):
+    def _expected_set_names(self, sampler, N, num_vars):  # noqa: N803
         number_of_simulations = N
         if sampler == "sobol" and num_vars <= 2:
             number_of_simulations = N * (num_vars + 2)
