@@ -94,7 +94,7 @@ def main(
     gmsh.finalize()
 
 
-def tags_from_dimTags(dimTags: list[tuple[int, int]]) -> list[int]:
+def tags_from_dimTags(dimTags: list[tuple[int, int]]) -> list[int]:  # noqa: N802,N803
     """Return tags from Gmsh entity ``dimTags`` list of tuples
 
     :returns: list of tags
