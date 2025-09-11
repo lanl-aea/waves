@@ -23,11 +23,9 @@ def test_build():
         patch("pathlib.Path.mkdir") as mock_mkdir,
         pytest.raises(RuntimeError),
     ):
-        try:
-            _build.main([], git_clone_directory="dummy/clone")
-        finally:
-            mock_tee_subprocess.assert_not_called()
-            mock_mkdir.assert_not_called()
+        _build.main([], git_clone_directory="dummy/clone")
+    mock_tee_subprocess.assert_not_called()
+    mock_mkdir.assert_not_called()
 
     # Git clone non-zero exit codes should raise a RuntimeError
     with (
@@ -35,10 +33,8 @@ def test_build():
         patch("pathlib.Path.mkdir") as mock_mkdir,
         pytest.raises(RuntimeError),
     ):
-        try:
-            _build.main(["dummy.target"], git_clone_directory="dummy/clone")
-        finally:
-            mock_mkdir.assert_called_once()
+        _build.main(["dummy.target"], git_clone_directory="dummy/clone")
+    mock_mkdir.assert_called_once()
 
     # If the "is up to date" trigger text is never found, should raise RuntimeError
     max_iterations = 2
@@ -47,12 +43,10 @@ def test_build():
         patch("pathlib.Path.mkdir") as mock_mkdir,
         pytest.raises(RuntimeError),
     ):
-        try:
-            _build.main(["dummy.target"], git_clone_directory="dummy/clone", max_iterations=max_iterations)
-        finally:
-            # tee subprocess called once for Git clone and up to max iterations
-            assert mock_tee_subprocess.call_count == max_iterations + 1
-            mock_mkdir.assert_called_once()
+        _build.main(["dummy.target"], git_clone_directory="dummy/clone", max_iterations=max_iterations)
+    # tee subprocess called once for Git clone and up to max iterations
+    assert mock_tee_subprocess.call_count == max_iterations + 1
+    mock_mkdir.assert_called_once()
 
     # SCons non-zero exit codes should raise a RuntimeError. Don't use git clone feature, so no mkdir and only one
     # subprocess call.
@@ -61,8 +55,6 @@ def test_build():
         patch("pathlib.Path.mkdir") as mock_mkdir,
         pytest.raises(RuntimeError),
     ):
-        try:
-            _build.main(["dummy.target"])
-        finally:
-            mock_tee_subprocess.assert_called_once()
-            mock_mkdir.assert_not_called()
+        _build.main(["dummy.target"])
+    mock_tee_subprocess.assert_called_once()
+    mock_mkdir.assert_not_called()
