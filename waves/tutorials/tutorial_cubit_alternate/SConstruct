@@ -91,9 +91,9 @@ env["FIERRO_IMPLICIT_PROGRAM"] = env.AddProgram(["fierro-parallel-implicit"])
 
 # Cubit Python requires a separate construction environment to avoid putting Cubit distributed Python packages in the
 # parent Python 3 environment's PYTHONPATH
-envCubit = Environment(ENV=os.environ.copy())
-envCubit["python"] = waves.scons_extensions.add_cubit_python(
-    envCubit,
+env_cubit = Environment(ENV=os.environ.copy())
+env_cubit["python"] = waves.scons_extensions.add_cubit_python(
+    env_cubit,
     env["cubit_commands"] if env["cubit_commands"] is not None else default_cubit_commands,
 )
 
@@ -109,11 +109,13 @@ sierra_modules = [
 ]
 sierra_modulefile_parent = return_modulepath(sierra_modules)
 try:
-    envSierra = waves.scons_extensions.shell_environment(f"module use {sierra_modulefile_parent} && module load sierra")
+    env_sierra = waves.scons_extensions.shell_environment(
+        f"module use {sierra_modulefile_parent} && module load sierra"
+    )
 except subprocess.CalledProcessError:
     print("Failed to initialize the Sierra environment", file=sys.stderr)
-    envSierra = Environment()
-envSierra["sierra"] = waves.scons_extensions.add_program(envSierra, ["sierra"])
+    env_sierra = Environment()
+env_sierra["sierra"] = waves.scons_extensions.add_program(env_sierra, ["sierra"])
 
 # Comments used in tutorial code snippets: marker-4
 
@@ -134,15 +136,15 @@ for key, value in project_variables.items():
 # Add builders and pseudo-builders
 env.Append(BUILDERS={})
 
-envCubit.Append(
+env_cubit.Append(
     BUILDERS={
-        "PythonScript": waves.scons_extensions.python_builder_factory(program=envCubit["python"]),
+        "PythonScript": waves.scons_extensions.python_builder_factory(program=env_cubit["python"]),
     }
 )
 
-envSierra.Append(
+env_sierra.Append(
     BUILDERS={
-        "Sierra": waves.scons_extensions.sierra_builder_factory(program=envSierra["sierra"]),
+        "Sierra": waves.scons_extensions.sierra_builder_factory(program=env_sierra["sierra"]),
     }
 )
 
@@ -159,7 +161,7 @@ for workflow in workflow_configurations:
     SConscript(
         workflow,
         variant_dir=build_dir,
-        exports={"env": env, "envSierra": envSierra, "envCubit": envCubit},
+        exports={"env": env, "env_sierra": env_sierra, "env_cubit": env_cubit},
         duplicate=False,
     )
 
