@@ -23,11 +23,9 @@ def test_docs():
         patch("webbrowser.open", return_value=False) as mock_webbrowser_open,
         pytest.raises(RuntimeError, match=r"Could not open a web browser."),
     ):
-        try:
-            _docs.main(_settings._installed_docs_index)
-        finally:
-            mock_webbrowser_open.assert_called_with(str(_settings._installed_docs_index))
-            mock_print.assert_not_called()
+        _docs.main(_settings._installed_docs_index)
+    mock_webbrowser_open.assert_called_with(str(_settings._installed_docs_index))
+    mock_print.assert_not_called()
 
     # Request print local path. Should print instead of webbrowser open.
     with (
@@ -48,8 +46,6 @@ def test_docs():
         patch("pathlib.Path.exists", return_value=False),
         pytest.raises(RuntimeError, match="Could not find package documentation HTML index file"),
     ):
-        try:
-            _docs.main(_settings._installed_docs_index, print_local_path=True)
-        finally:
-            mock_webbrowser_open.assert_not_called()
-            mock_print.assert_not_called()
+        _docs.main(_settings._installed_docs_index, print_local_path=True)
+    mock_webbrowser_open.assert_not_called()
+    mock_print.assert_not_called()
