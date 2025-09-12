@@ -2,20 +2,19 @@
 
 
 def parameter_schema(
-    width=1.0,
-    height=1.0,
-    global_seed=1.0,
-    displacement=-0.01,
-):
+    width: float = 1.0,
+    height: float = 1.0,
+    global_seed: float = 1.0,
+    displacement: float = -0.01,
+) -> dict[str, float]:
     """Return nominal simulation variables dictionary
 
-    :param float width: The rectangle width
-    :param float height: The rectangle height
-    :param float global_seed: The global mesh seed size
-    :param float displacement: The rectangle top surface displacement
+    :param width: The rectangle width
+    :param height: The rectangle height
+    :param global_seed: The global mesh seed size
+    :param displacement: The rectangle top surface displacement
 
     :returns: nominal simulation variables
-    :rtype: dict
     """
     simulation_variables = {
         "width": width,

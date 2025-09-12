@@ -1,23 +1,28 @@
 """Parameter sets and schemas for the rectangle compression simulation"""
 
+import types
+import typing
+
+default_width = types.MappingProxyType({"distribution": "norm", "loc": 1, "scale": 0.1})
+default_height = types.MappingProxyType({"distribution": "norm", "loc": 1, "scale": 0.1})
+
 
 def parameter_schema(
-    num_simulations=4,
-    width={"distribution": "norm", "loc": 1, "scale": 0.1},
-    height={"distribution": "norm", "loc": 1, "scale": 0.1},
-):
+    num_simulations: int = 4,
+    width: dict[str, typing.Any] | types.MappingProxyType = default_width,
+    height: dict[str, typing.Any] | types.MappingProxyType = default_height,
+) -> dict[str, typing.Any]:
     """Return WAVES Scipy LatinHypercube parameter schema
 
-    :param int num_simulations: Number of samples to generate
-    :param dict width: The rectangle width Scipy distribution definition
-    :param dict height: The rectangle height Scipy distribution definition
+    :param num_simulations: Number of samples to generate
+    :param width: The rectangle width Scipy distribution definition
+    :param height: The rectangle height Scipy distribution definition
 
     :returns: WAVES Scipy LatinHypercube parameter schema
-    :rtype: dict
     """
     schema = {
         "num_simulations": num_simulations,
-        "width": width,
-        "height": height,
+        "width": dict(width),
+        "height": dict(height),
     }
     return schema
