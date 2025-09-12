@@ -1,3 +1,4 @@
+"""Mesh the simple rectangle geometry partitioned by ``rectangle_partition.py``."""
 import argparse
 import inspect
 import os

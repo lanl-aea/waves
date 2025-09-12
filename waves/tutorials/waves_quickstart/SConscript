@@ -1,3 +1,4 @@
+"""Configure the rectangle compression simulation workflow."""
 Import("env", "alias", "parameters")
 
 # Geometry

@@ -1,3 +1,4 @@
+"""Create a simple rectangle geometry."""
 import argparse
 import inspect
 import os

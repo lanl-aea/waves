@@ -1,3 +1,4 @@
+"""Partition the simple rectangle geometry created by ``rectangle_geometry.py``."""
 import argparse
 import inspect
 import os
