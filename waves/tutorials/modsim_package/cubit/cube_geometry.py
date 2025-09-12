@@ -32,6 +32,7 @@ def main(output_file, width, height, depth):
 
 
 def get_parser():
+    """Return the command-line interface parser."""
     script_name = pathlib.Path(__file__)
     # Set default parameter values
     default_output_file = script_name.with_suffix(".cub").name

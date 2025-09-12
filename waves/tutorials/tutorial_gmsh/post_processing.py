@@ -131,6 +131,7 @@ def main(
 
 
 def get_parser():
+    """Return the command-line interface parser."""
     script_name = pathlib.Path(__file__)
     default_output_file = f"{script_name.stem}.pdf"
     default_group_path = "/"

@@ -68,6 +68,7 @@ def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaq
 
 
 def get_parser():
+    """Return the command-line interface parser."""
     script_name = pathlib.Path(__file__)
     # Set default parameter values
     default_input_file = script_name.with_suffix(".cub").name.replace("_mesh", "_partition")

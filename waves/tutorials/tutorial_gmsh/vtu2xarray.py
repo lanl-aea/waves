@@ -131,6 +131,7 @@ def existing_file(argument: str) -> pathlib.Path:
 
 
 def get_parser() -> argparse.ArgumentParser:
+    """Return the command-line interface parser."""
     script_name = pathlib.Path(__file__)
     prog = f"python {script_name.name} "
     cli_description = "Open a CalculiX-to-VTU output file produced by ``ccx2paraview`` and convert to Xarray"
