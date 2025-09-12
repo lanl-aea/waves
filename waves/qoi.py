@@ -502,7 +502,7 @@ def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
 
 
 def _add_tolerance_attribute(qoi_set: xarray.Dataset) -> None:
-    """Adds a ``"within_tolerance"`` attribute to each QOI in a QOI Dataset in place.
+    """Add a ``"within_tolerance"`` attribute to each QOI in a QOI Dataset in place.
 
     :param qoi_set: QOI set.
     """
@@ -515,7 +515,7 @@ def _add_tolerance_attribute(qoi_set: xarray.Dataset) -> None:
 
 
 def write_qoi_set_to_csv(qoi_set: xarray.Dataset, output: pathlib.Path) -> None:
-    """Writes a QOI Dataset to a CSV file.
+    """Write a QOI Dataset to a CSV file.
 
     :param qoi_set: QOI set.
     :param output: Output CSV file.
@@ -564,7 +564,7 @@ def _plot_qoi_tolerance_check(qoi: xarray.DataArray, axes: matplotlib.axes.Axes)
 
 
 def _can_plot_qoi_tolerance_check(qoi: xarray.DataArray) -> bool:
-    """Checks if a QOI meets requirements to be plotted by `_plot_qoi_tolerance_check()`.
+    """Check if a QOI meets requirements to be plotted by `_plot_qoi_tolerance_check()`.
 
     Requires the following:
         1. "value_type" is a dimension
@@ -592,7 +592,7 @@ def _plot_scalar_tolerance_check(
     qoi: xarray.DataArray,
     axes: matplotlib.axes.Axes,
 ) -> None:
-    """Plots a tolerance check for a scalar QOI DataArray.
+    """Plot a tolerance check for a scalar QOI DataArray.
 
     :param qoi: Quantity of interest data array as built by :meth:`create_qoi`
     :param axes: Matplotlib axes for plotting
@@ -767,7 +767,7 @@ def _qoi_history_report(
 
 
 def _can_plot_scalar_qoi_history(qoi: xarray.DataArray) -> bool:
-    """Checks if a QOI meets requirements to be plotted by :meth:`_plot_scalar_qoi_history`.
+    """Check if a QOI meets requirements to be plotted by :meth:`_plot_scalar_qoi_history`.
 
     Requires the following:
         1. The QOI contains at least 1 finite value
