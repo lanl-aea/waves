@@ -1,5 +1,5 @@
-"""Configure the WAVES include files tutorial."""
 #! /usr/bin/env python
+"""Configure the WAVES include files tutorial."""
 
 import os
 import pathlib

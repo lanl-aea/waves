@@ -1,5 +1,5 @@
-"""Configure the WAVES sensitivity analysis tutorial."""
 #! /usr/bin/env python
+"""Configure the WAVES sensitivity analysis tutorial."""
 
 import inspect
 import os

@@ -1,5 +1,5 @@
-"""Configure the WAVES Truchas tutorial."""
 #! /usr/bin/env python
+"""Configure the WAVES Truchas tutorial."""
 
 import os
 import pathlib

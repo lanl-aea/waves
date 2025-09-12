@@ -1,5 +1,5 @@
-"""Configure the WAVES Quinoa tutorial simulation workflow."""
 #! /usr/bin/env python
+"""Configure the WAVES Quinoa tutorial simulation workflow."""
 Import("env", "env_quinoa")
 
 # TODO: move parameters to a dedicated dictionary file read

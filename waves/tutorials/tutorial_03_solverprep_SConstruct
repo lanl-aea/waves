@@ -1,5 +1,5 @@
-"""Configure the WAVES solver preparation tutorial."""
 #! /usr/bin/env python
+"""Configure the WAVES solver preparation tutorial."""
 
 import os
 import pathlib

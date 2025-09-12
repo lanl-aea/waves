@@ -1,5 +1,5 @@
-"""Configure the WAVES escape sequences tutorial."""
 #! /usr/bin/env python
+"""Configure the WAVES escape sequences tutorial."""
 
 import os
 import pathlib

@@ -1,5 +1,5 @@
-"""Configure the WAVES data extraction tutorial."""
 #! /usr/bin/env python
+"""Configure the WAVES data extraction tutorial."""
 
 import os
 import pathlib

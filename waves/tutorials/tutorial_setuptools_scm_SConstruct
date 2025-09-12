@@ -1,5 +1,5 @@
-"""Configure the WAVES ``setuptools_scm`` tutorial."""
 #! /usr/bin/env python
+"""Configure the WAVES ``setuptools_scm`` tutorial."""
 
 import inspect
 import os

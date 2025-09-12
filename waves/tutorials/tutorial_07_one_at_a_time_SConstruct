@@ -1,5 +1,5 @@
-"""Configure the WAVES parameter study tutorial using the one-at-a-time parameter generator."""
 #! /usr/bin/env python
+"""Configure the WAVES parameter study tutorial using the one-at-a-time parameter generator."""
 
 import os
 import pathlib

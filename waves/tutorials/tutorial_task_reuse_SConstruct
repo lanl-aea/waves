@@ -1,5 +1,5 @@
-"""Configure the WAVES task re-use tutorial."""
 #! /usr/bin/env python
+"""Configure the WAVES task re-use tutorial."""
 
 import inspect
 import os

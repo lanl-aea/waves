@@ -1,5 +1,5 @@
-"""Configure the WAVES post-processing tutorial."""
 #! /usr/bin/env python
+"""Configure the WAVES post-processing tutorial."""
 
 import os
 import pathlib

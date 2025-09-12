@@ -1,5 +1,5 @@
-"""Configure the WAVES part image tutorial."""
 #! /usr/bin/env python
+"""Configure the WAVES part image tutorial."""
 
 import inspect
 import os

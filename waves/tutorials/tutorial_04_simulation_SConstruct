@@ -1,5 +1,5 @@
-"""Configure the WAVES simulation tutorial."""
 #! /usr/bin/env python
+"""Configure the WAVES simulation tutorial."""
 
 import os
 import pathlib

@@ -1,5 +1,5 @@
-"""Configure the project pytest workflow."""
 #! /usr/bin/env python
+"""Configure the project pytest workflow."""
 
 # Inherit the parent construction environment
 Import("env")

@@ -1,5 +1,5 @@
-"""Configure the WAVES ``ParameterStudyWrite`` tutorial."""
 #! /usr/bin/env python
+"""Configure the WAVES ``ParameterStudyWrite`` tutorial."""
 
 import waves
 

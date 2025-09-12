@@ -1,5 +1,5 @@
-"""Configure the WAVES parameter substitution tutorial."""
 #! /usr/bin/env python
+"""Configure the WAVES parameter substitution tutorial."""
 
 import os
 import pathlib

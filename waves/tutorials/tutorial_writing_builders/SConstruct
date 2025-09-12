@@ -1,5 +1,5 @@
-"""Configure the WAVES writing builders tutorial."""
 #! /usr/bin/env python
+"""Configure the WAVES writing builders tutorial."""
 import os
 import pathlib
 

@@ -1,5 +1,5 @@
-"""Configure the WAVES archive tutorial."""
 #! /usr/bin/env python
+"""Configure the WAVES archive tutorial."""
 
 import inspect
 import os

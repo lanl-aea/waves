@@ -1,5 +1,5 @@
-"""Compare CSV files and return an error code if they differ."""
 #!/usr/bin/env python
+"""Compare CSV files and return an error code if they differ."""
 import argparse
 import pathlib
 import sys

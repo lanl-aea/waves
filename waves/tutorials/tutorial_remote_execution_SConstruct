@@ -1,5 +1,5 @@
-"""Configure the WAVES remote execution tutorial."""
 #! /usr/bin/env python
+"""Configure the WAVES remote execution tutorial."""
 
 import getpass
 import os

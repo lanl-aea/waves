@@ -1,5 +1,5 @@
-"""Configure the WAVES regression testing tutorial."""
 #! /usr/bin/env python
+"""Configure the WAVES regression testing tutorial."""
 
 import os
 import pathlib

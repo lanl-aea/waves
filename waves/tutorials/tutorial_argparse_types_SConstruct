@@ -1,5 +1,5 @@
-"""Configure the WAVES argparse types tutorial."""
 #! /usr/bin/env python
+"""Configure the WAVES argparse types tutorial."""
 
 import os
 import pathlib

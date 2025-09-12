@@ -1,5 +1,5 @@
-"""Configure the WAVES Gmsh tutorial."""
 #! /usr/bin/env python
+"""Configure the WAVES Gmsh tutorial."""
 import inspect
 import os
 import pathlib

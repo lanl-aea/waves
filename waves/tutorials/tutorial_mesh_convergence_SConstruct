@@ -1,5 +1,5 @@
-"""Configure the WAVES mesh convergence tutorial."""
 #! /usr/bin/env python
+"""Configure the WAVES mesh convergence tutorial."""
 
 import os
 import pathlib

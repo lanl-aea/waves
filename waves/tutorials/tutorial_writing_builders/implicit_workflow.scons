@@ -1,5 +1,5 @@
-"""Configure the project's implicit solve workflow."""
 #! /usr/bin/env python
+"""Configure the project's implicit solve workflow."""
 import pathlib
 
 Import("env")

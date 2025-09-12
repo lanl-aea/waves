@@ -1,5 +1,5 @@
-"""Configure the WAVES parameter study tutorial using the cartesian product parameter generator."""
 #! /usr/bin/env python
+"""Configure the WAVES parameter study tutorial using the cartesian product parameter generator."""
 
 import os
 import pathlib

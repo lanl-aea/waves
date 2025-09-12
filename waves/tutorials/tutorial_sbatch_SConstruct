@@ -1,5 +1,5 @@
-"""Configure the WAVES SLURM sbatch tutorial."""
 #! /usr/bin/env python
+"""Configure the WAVES SLURM sbatch tutorial."""
 
 import os
 import pathlib

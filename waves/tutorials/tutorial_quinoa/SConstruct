@@ -1,5 +1,5 @@
-"""Configure the WAVES Quinoa tutorial."""
 #! /usr/bin/env python
+"""Configure the WAVES Quinoa tutorial."""
 
 import getpass
 import os

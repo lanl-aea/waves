@@ -1,5 +1,5 @@
-"""Configure the WAVES Abaqus CAE tutorial workflow."""
 #! /usr/bin/env python
+"""Configure the WAVES Abaqus CAE tutorial workflow."""
 
 # Inherit the parent construction environment
 Import("env")

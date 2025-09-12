@@ -1,5 +1,5 @@
-"""Configure the pure SCons quickstart tutorial."""
 #! /usr/bin/env python
+"""Configure the pure SCons quickstart tutorial."""
 
 import os
 import pathlib

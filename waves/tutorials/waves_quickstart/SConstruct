@@ -1,5 +1,5 @@
-"""Configure the WAVES quickstart project."""
 #! /usr/bin/env python
+"""Configure the WAVES quickstart project."""
 
 import os
 import pathlib
