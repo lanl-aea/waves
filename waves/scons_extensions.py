@@ -162,9 +162,9 @@ def catenate_builder_actions(
 
 
 def catenate_actions(**outer_kwargs):
-    """Decorator factory to apply the ``catenate_builder_actions`` to a function that returns an SCons Builder.
+    """Apply the :function:`catenate_builder_actions` action modifications to a function that returns an SCons Builder.
 
-    Accepts the same keyword arguments as the :meth:`waves.scons_extensions.catenate_builder_actions`
+    Accepts the same keyword arguments as the :function:`waves.scons_extensions.catenate_builder_actions`
 
     .. code-block::
 
@@ -484,7 +484,9 @@ def project_alias(
     target_descriptions: dict = {},  # noqa: B006
     **kwargs,
 ) -> dict:
-    """Wrapper around the `SCons Alias`_ method. Appends and returns target descriptions dictionary.
+    """Compile and return a dictionary of ``{alias: description}`` pairs.
+
+    Wrapper around the `SCons Alias`_ method. Appends and returns target descriptions dictionary.
 
     :param env: The SCons construction environment object to modify.
     :param args: All other positional arguments are passed to the `SCons Alias`_ method.
@@ -563,7 +565,9 @@ def check_program(
     env: SCons.Environment.Environment,
     prog_name: str,
 ) -> str:
-    """Replacement for `SCons CheckProg`_ like behavior without an SCons configure object.
+    """Return the absolute path of the requested program or ``None``.
+
+    Replacement for `SCons CheckProg`_ like behavior without an SCons configure object.
 
     .. code-block::
        :caption: Example search for an executable named "program"
@@ -680,7 +684,7 @@ def add_cubit(
     env: SCons.Environment.Environment,
     names: typing.Iterable[str],
 ) -> str:
-    """Modifies environment variables with the paths required to ``import cubit`` in a Python3 environment.
+    """Modify environment variables with the paths required to ``import cubit`` in a Python3 environment.
 
     Returns the absolute path of the first program name found. Appends ``PATH`` with first program's parent directory if
     a program is found and the directory is not already on ``PATH``. Prepends ``PYTHONPATH`` with ``parent/bin``.
@@ -715,7 +719,7 @@ def add_cubit_python(
     env: SCons.Environment.Environment,
     names: typing.Iterable[str],
 ) -> str:
-    """Modifies environment variables with the paths required to ``import cubit`` with the Cubit Python interpreter.
+    """Modify environment variables with the paths required to ``import cubit`` with the Cubit Python interpreter.
 
     Returns the absolute path of the first Cubit Python intepreter found. Appends ``PATH`` with Cubit Python parent
     directory if a program is found and the directory is not already on ``PATH``. Prepends ``PYTHONPATH`` with
@@ -1081,7 +1085,7 @@ def _abaqus_journal_emitter(
     source: list,
     env: SCons.Environment.Environment,
 ) -> tuple[list, list]:
-    """Appends the abaqus_journal builder target list with the builder managed targets.
+    """Emit the :meth:`abaqus_journal` builder target list with the builder managed targets.
 
     Appends ``target[0]``.abaqus_v6.env and ``target[0]``.stdout to the ``target`` list. The abaqus_journal Builder
     requires at least one target.
@@ -1323,7 +1327,7 @@ def _abaqus_solver_emitter(
     suffixes: typing.Iterable[str] = _settings._abaqus_common_extensions,
     stdout_extension: str = _settings._stdout_extension,
 ) -> tuple[list, list]:
-    """Appends the abaqus_solver builder target list with the builder managed targets.
+    """Emit the :meth:`abaqus_solver` builder target list with the builder managed targets.
 
     If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
     directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
@@ -1375,17 +1379,17 @@ def _abaqus_solver_emitter(
 
 
 def _abaqus_standard_solver_emitter(target: list, source: list, env) -> tuple[list, list]:
-    """Passes the standard specific extensions to :meth:`waves.scons_extensions._abaqus_solver_emitter`."""
+    """Emit the standard specific extensions with :meth:`waves.scons_extensions._abaqus_solver_emitter`."""
     return _abaqus_solver_emitter(target, source, env, _settings._abaqus_standard_extensions)
 
 
 def _abaqus_explicit_solver_emitter(target: list, source: list, env) -> tuple[list, list]:
-    """Passes the explicit specific extensions to :meth:`waves.scons_extensions._abaqus_solver_emitter`."""
+    """Emit the explicit specific extensions with :meth:`waves.scons_extensions._abaqus_solver_emitter`."""
     return _abaqus_solver_emitter(target, source, env, _settings._abaqus_explicit_extensions)
 
 
 def _abaqus_datacheck_solver_emitter(target: list, source: list, env) -> tuple[list, list]:
-    """Passes the datacheck specific extensions to :meth:`waves.scons_extensions._abaqus_solver_emitter`."""
+    """Emit the datacheck specific extensions with :meth:`waves.scons_extensions._abaqus_solver_emitter`."""
     return _abaqus_solver_emitter(target, source, env, _settings._abaqus_datacheck_extensions)
 
 
@@ -1516,8 +1520,7 @@ def _task_kwarg_emitter(
     stdout_extension: str = _settings._stdout_extension,
     required_task_kwarg: str = "",
 ):
-    """SCons emitter function template designed for :meth:`waves.scons_extensions.abaqus_solver_builder_factory` based
-    builders.
+    """Emit modified target/source lists for :meth:`waves.scons_extensions.abaqus_solver_builder_factory` builders.
 
     This emitter prepends the target list with the value of the ``env[required_task_kwarg]`` task keyword argument named
     targets before passing through the :meth:`waves.scons_extensions.first_target_emitter` emitter.
@@ -2361,7 +2364,7 @@ def _matlab_script_emitter(
     source: list,
     env: SCons.Environment.Environment,
 ) -> tuple[list, list]:
-    """Appends the matlab_script builder target list with the builder managed targets.
+    """Append the matlab_script builder target list with the builder managed targets.
 
     Appends ``target[0]``.matlab.env and ``target[0]``.stdout to the ``target`` list. The matlab_script Builder requires
     at least one target. The build tree copy of the Matlab script is not added to the target list to avoid multiply
@@ -2548,8 +2551,10 @@ def _abaqus_extract_emitter(
     source: list,
     env: SCons.Environment.Environment,
 ) -> tuple[list, list]:
-    """Prepends the abaqus extract builder target H5 file if none is specified. Appends the source[0].csv file unless
-    ``delete_report_file`` is ``True``.  Always appends the ``target[0]_datasets.h5`` file.
+    """Prepend the abaqus extract builder target H5 file if none is specified.
+
+    Appends the source[0].csv file unless ``delete_report_file`` is ``True``.  Always appends the
+    ``target[0]_datasets.h5`` file.
 
     If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
     directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
@@ -2881,7 +2886,7 @@ def _custom_scanner(
     suffixes: typing.Iterable[str],
     flags: int | None = None,
 ) -> SCons.Scanner.Scanner:
-    """Custom Scons scanner.
+    """Return a custom Scons scanner.
 
     constructs a scanner object based on a regular expression pattern. Will only search for files matching the list of
     suffixes provided. ``_custom_scanner`` will always use the ``re.MULTILINE`` flag
