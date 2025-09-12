@@ -22,7 +22,7 @@ def parameter_schema(
     """
     schema = {
         "num_simulations": num_simulations,
-        "width": width,
-        "height": height,
+        "width": dict(width),
+        "height": dict(height),
     }
     return schema
