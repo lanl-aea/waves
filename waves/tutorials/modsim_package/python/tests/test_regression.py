@@ -4,7 +4,8 @@ import pandas
 from modsim_package.python import regression
 
 
-def test_sort_dataframe():
+def test_sort_dataframe() -> None:
+    """Test :function:`regression.sort_dataframe`."""
     data = {
         "time": [0.0, 0.5, 1.0],
         "Column1": [1, 2, 3],
@@ -19,7 +20,8 @@ def test_sort_dataframe():
     pandas.testing.assert_frame_equal(sorted_control, sorted_copy)
 
 
-def test_csv_files_match():
+def test_csv_files_match() -> None:
+    """Test :function:`regression.csv_files_match`."""
     data = {
         "time": [0.0, 0.5, 1.0],
         "Column1": [1, 2, 3],
