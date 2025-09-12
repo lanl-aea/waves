@@ -63,7 +63,7 @@ def save_plot(
 ) -> None:
     """Save scatter plot with given x and y labels
 
-    :param XArray Dataset that will be plotted.
+    :param combined_data: XArray Dataset that will be plotted.
     :param x_var: The independent (x-axis) variable key name for the Xarray Dataset "data variable"
     :param y_var: The dependent (y-axis) variable key name for the Xarray Dataset "data variable"
     :param selection_dict: Dictionary to define the down selection of data to be plotted. Dictionary ``key: value``
