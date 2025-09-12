@@ -29,6 +29,7 @@ Internal Changes
 - Enable the ruff pytest convention checks 'PT' (:issue:`970`, :merge:`1251`). By `Kyle Brindley`_.
 - Hierarchical ruff configuration for improved linting of tutorial files, which should lint as if they are external to
   the project (:merge:`1252`). By `Kyle Brindley`_.
+- Enable the ruff pydocstyle documentation checks 'D' (:issue:`970`, :merge:`1251`). By `Kyle Brindley`_.
 
 ********************
 0.13.15 (2025-08-27)
