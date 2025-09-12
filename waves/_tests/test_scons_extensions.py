@@ -361,8 +361,7 @@ def first_target_builder_factory_test_cases(
     default_emitter=scons_extensions.first_target_emitter,
     expected_node_count=2,
 ) -> dict:
-    """Returns template test cases for builder factories based on
-    :meth:`waves.scons_extensions.first_target_builder_factory`.
+    """Return template tests for builder factories based on :meth:`waves.scons_extensions.first_target_builder_factory`.
 
     Intended to work in conjunction with :meth:`test_builder_factory` template test function.
 
