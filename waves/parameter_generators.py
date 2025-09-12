@@ -784,8 +784,9 @@ class LatinHypercube(_ScipyGenerator):
 
 
 class OneAtATime(ParameterGenerator):
-    """Builds a parameter study with single-value changes from a nominal parameter set. The nominal parameter set is
-    created from the first value of every parameter iterable.
+    """Build a parameter study with single-value changes from a nominal parameter set.
+
+    The nominal parameter set is created from the first value of every parameter iterable.
 
     Parameters must be scalar valued integers, floats, strings, or booleans
 
@@ -1385,8 +1386,9 @@ def _calculate_set_hash(parameter_names: list[str], set_samples: numpy.ndarray) 
 
 
 def _calculate_set_hashes(parameter_names: list[str], samples: numpy.ndarray) -> list[str]:
-    """Calculate the unique, repeatable parameter set content hashes from a :class:`ParameterGenerator` object with
-    populated ``self._samples`` attribute.
+    """Calculate the unique, repeatable parameter set content hashes from a :class:`ParameterGenerator` object.
+
+    The object must have a populated ``self._samples`` attribute.
 
     Expects parameter names to correspond to the columns of the samples array
 
@@ -1524,6 +1526,7 @@ def _coerce_values(values: typing.Iterable, name: str | None = None) -> numpy.nd
 
 def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.Dataset) -> xarray.Dataset:
     """Propagate unique parameters from a new study into the base study, creating a new study using CustomStudy.
+
     Assumes that the parameter studies do not share any parameters. The incoming studies should have set name as the
     active dimension.
 
@@ -1586,8 +1589,9 @@ def _merge_parameter_space(
     studies: list[xarray.Dataset],
     template: string.Template | None = None,
 ) -> xarray.Dataset:
-    """Merge a list of parameter studies with the same parameter space into one study. Studies should have set hash as
-    the active dimension.
+    """Merge a list of parameter studies with the same parameter space into one study.
+
+    Studies should have set hash as the active dimension.
 
     Preserves the first given parameter study set name to set contents associations by dropping subsequent studies'
     set names during merge.
@@ -1679,8 +1683,9 @@ def _merge_parameter_studies(studies: list[xarray.Dataset], template: string.Tem
 
 
 def _create_set_names(set_hashes: list[str], template: string.Template | None = None) -> dict:
-    """Construct parameter set names from the set name template and number of parameter set hashes. Set names are
-    assigned to set hashes in hash ascending alphabetical order.
+    """Construct parameter set names from the set name template and number of parameter set hashes.
+
+    Set names are assigned to set hashes in hash ascending alphabetical order.
 
     :param set_hashes: parameter set content hashes identifying rows of parameter study
     :param template: parameter set naming :class:`string.Template`. If none is provided, fetch the default template
@@ -1700,8 +1705,9 @@ def _create_set_names(set_hashes: list[str], template: string.Template | None = 
 
 
 def _update_set_names(parameter_study: xarray.Dataset, template: string.Template | None = None) -> xarray.Dataset:
-    """Update the parameter set names after a parameter study dataset merge operation. Hashes that are missing set
-    names are assigned a new set name in hash ascending alphabetical order.
+    """Update the parameter set names after a parameter study dataset merge operation.
+
+    Hashes that are missing set names are assigned a new set name in hash ascending alphabetical order.
 
     :param parameter_study: A :class:`ParameterGenerator` parameter study Xarray Dataset with swapped set hash and set
         name dimensions
