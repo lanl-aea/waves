@@ -26,7 +26,7 @@ def parameter_schema(
             "num_vars": 2,
             "names": ["width", "height"],
             "bounds": [list(width_bounds), list(height_bounds)],
-            "dists": [list(width_distribution), list(height_distribution)],
+            "dists": [width_distribution, height_distribution],
         },
     }
     return schema
