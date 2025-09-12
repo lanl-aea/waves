@@ -24,7 +24,7 @@ def combine_data(
     group_path: str,
     concat_coord: str,
 ) -> xarray.Dataset:
-    """Combine input data files into one dataset
+    """Combine input data files into one dataset.
 
     :param input_files: list of path-like or file-like objects pointing to h5netcdf files
         containing Xarray Datasets
@@ -48,7 +48,7 @@ def merge_parameter_study(
     parameter_study_file: str | pathlib.Path,
     combined_data: xarray.Dataset,
 ) -> xarray.Dataset:
-    """Merge parameter study to existing dataset
+    """Merge parameter study to existing dataset.
 
     :param parameter_study_file: path-like or file-like object containing the parameter study dataset. Assumes the
         h5netcdf file contains only a single dataset at the root group path, .e.g. ``/``.
@@ -111,7 +111,7 @@ def main(
     y_units: str,
     selection_dict: dict,
     parameter_study_file: pathlib.Path | None = None,
-):
+) -> None:
     """Catenate ``input_files`` datasets along the ``set_name`` dimension and plot selected data.
 
     Optionally merges the parameter study results datasets with the parameter study definition dataset, where the
