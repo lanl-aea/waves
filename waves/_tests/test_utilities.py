@@ -281,7 +281,9 @@ return_environment = {
     ids=return_environment.keys(),
 )
 def test_return_environment(command, kwargs, stdout, expected):
-    """:param bytes stdout: byte string with null delimited shell environment variables
+    """Test :function:`waves._utilities.return_environment`.
+
+    :param bytes stdout: byte string with null delimited shell environment variables
     :param dict expected: expected dictionary output containing string key:value pairs and preserving newlines
     """
     expected_kwargs = {
