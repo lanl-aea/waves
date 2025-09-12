@@ -6,10 +6,9 @@ def parameter_schema(
 ) -> dict[str, list[float]]:
     """Return mesh convergence WAVES CartesianProduct parameter schema
 
-    :param float global_seed: The global mesh seed size
+    :param global_seed: The global mesh seed size
 
     :returns: WAVES CartesianProduct parameter schema
-    :rtype: dict
     """
     schema = {
         "global_seed": list(global_seed),

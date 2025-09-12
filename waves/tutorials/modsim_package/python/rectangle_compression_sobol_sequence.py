@@ -14,12 +14,11 @@ def parameter_schema(
 ) -> dict[str, typing.Any]:
     """Return WAVES SciPy Sobol parameter schema
 
-    :param int num_simulations: Number of samples to generate
-    :param dict width: The rectangle width SciPy distribution definition
-    :param dict height: The rectangle height SciPy distribution definition
+    :param num_simulations: Number of samples to generate
+    :param width: The rectangle width SciPy distribution definition
+    :param height: The rectangle height SciPy distribution definition
 
     :returns: WAVES SciPy Sobol parameter schema
-    :rtype: dict
     """
     schema = {
         "num_simulations": num_simulations,

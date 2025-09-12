@@ -14,12 +14,11 @@ def parameter_schema(
 ) -> dict[str, typing.Any]:
     """Return WAVES Scipy LatinHypercube parameter schema
 
-    :param int num_simulations: Number of samples to generate
-    :param dict width: The rectangle width Scipy distribution definition
-    :param dict height: The rectangle height Scipy distribution definition
+    :param num_simulations: Number of samples to generate
+    :param width: The rectangle width Scipy distribution definition
+    :param height: The rectangle height Scipy distribution definition
 
     :returns: WAVES Scipy LatinHypercube parameter schema
-    :rtype: dict
     """
     schema = {
         "num_simulations": num_simulations,
