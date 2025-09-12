@@ -1,5 +1,4 @@
-"""Abaqus File Parser
-Parse various file types created via Abaqus.
+"""Parse various file types created via Abaqus.
 
 .. moduleauthor:: Prabhu S. Khalsa <pkhalsa@lanl.gov>
 """
@@ -88,7 +87,8 @@ class AbaqusFileParser(ABC):
 
 
 class OdbReportFileParser(AbaqusFileParser):
-    """Class for parsing Abaqus odbreport files.
+    """Return class for parsing Abaqus odbreport files.
+
     Expected input includes only files that are in the csv format and which have used the 'blocked' option.
 
     Results are stored either in a dictionary which mimics the format of the odb file (see Abaqus documentation),
@@ -120,6 +120,7 @@ class OdbReportFileParser(AbaqusFileParser):
 
     def parse(self, data_format="extract", h5_file=f"extract{_settings._default_h5_extension}", time_stamp=None):
         """Parse the file and store the results in the self.parsed dictionary.
+
          Can parse csv formatted output with the blocked option from the odbreport command.
 
         :param str data_format: Format in which to store data can be 'odb' or 'extract'
