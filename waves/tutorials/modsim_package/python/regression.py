@@ -18,6 +18,10 @@ def sort_dataframe(
     2. sort rows by column values ``sort_columns``
     3. set an index
 
+    :param dataframe: dataframe to sort
+    :param index_column: name of the column to use an index
+    :param sort_columns: name of the column(s) to sort by
+
     :returns: sorted and indexed dataframe
     """
     return dataframe.reindex(sorted(dataframe.columns), axis=1).sort_values(list(sort_columns)).set_index(index_column)
@@ -31,8 +35,10 @@ def csv_files_match(
 ) -> bool:
     """Compare two pandas DataFrame objects and determine if they match.
 
-    :param pandas.DataFrame current_csv: Current CSV data of generated plot.
-    :param pandas.DataFrame expected_csv: Expected CSV data.
+    :param current_csv: Current CSV data of generated plot.
+    :param expected_csv: Expected CSV data.
+    :param index_column: name of the column to use an index
+    :param sort_columns: name of the column(s) to sort by. Defaults to ``["time", "set_name"]``
 
     :returns: True if the CSV files match, False otherwise.
     """
