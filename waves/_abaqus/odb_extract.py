@@ -133,7 +133,9 @@ def odb_extract(
     delete_report_file: bool = False,
     verbose: bool = False,
 ):
-    """The odb_extract Abaqus data extraction tool. Most users should use the associated command line interface.
+    """Run the odb_extract Abaqus data extraction tool.
+
+    Users should use the associated command line interface, not this API.
 
     :param input_file: A list of ``*.odb`` files to extract. Current implementation only supports extraction on the
         first file in the list.
@@ -238,7 +240,7 @@ def odb_extract(
 
 
 def get_odb_report_args(odb_report_args: str, input_file: pathlib.Path, job_name: pathlib.Path):
-    """Generates odb_report arguments.
+    """Generate odb_report arguments.
 
     :param odb_report_args: String of command line options to pass to ``abaqus odbreport``.
     :param input_file: ``.odb`` file.
