@@ -16,7 +16,7 @@ _exclude_from_namespace = set(globals().keys())
 
 
 def get_parser() -> argparse.ArgumentParser:
-    """Return a 'no-help' parser for the print_study subcommand
+    """Return a 'no-help' parser for the print_study subcommand.
 
     :return: parser
     """
@@ -30,7 +30,7 @@ def get_parser() -> argparse.ArgumentParser:
 
 
 def main(parameter_study_file: pathlib.Path) -> None:
-    """Open and print a WAVES parameter study file as a table
+    """Open and print a WAVES parameter study file as a table.
 
     :param parameter_study_file: The parameter study file to open
 

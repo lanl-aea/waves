@@ -1,4 +1,4 @@
-"""Test WAVES SCons builders and support functions"""
+"""Test WAVES SCons builders and support functions."""
 
 import copy
 import os
@@ -311,7 +311,7 @@ def dummy_emitter_for_testing(target, source, env):  # noqa: ARG001
 
 
 def check_action_string(nodes, expected_node_count, expected_action_count, expected_string):
-    """Verify the expected action string against a builder's target nodes
+    """Verify the expected action string against a builder's target nodes.
 
     :param SCons.Node.NodeList nodes: Target node list returned by a builder
     :param int expected_node_count: expected length of ``nodes``
@@ -333,7 +333,7 @@ def check_action_string(nodes, expected_node_count, expected_action_count, expec
 
 
 def check_abaqus_solver_targets(nodes, solver, stem, suffixes):
-    """Verify the expected action string against a builder's target nodes
+    """Verify the expected action string against a builder's target nodes.
 
     :param SCons.Node.NodeList nodes: Target node list returned by a builder
     :param str solver: emit file extensions based on the value of this variable (standard/explicit/datacheck).
@@ -362,7 +362,7 @@ def first_target_builder_factory_test_cases(
     expected_node_count=2,
 ) -> dict:
     """Returns template test cases for builder factories based on
-    :meth:`waves.scons_extensions.first_target_builder_factory`
+    :meth:`waves.scons_extensions.first_target_builder_factory`.
 
     Intended to work in conjunction with :meth:`test_builder_factory` template test function.
 
@@ -1828,7 +1828,7 @@ def test_builder_factory(
     emitter,
     expected_node_count: int,
 ) -> None:
-    """Template test for builder factories based on :meth:`waves.scons_extensions.builder_factory`
+    """Template test for builder factories based on :meth:`waves.scons_extensions.builder_factory`.
 
     :param factory_name: Name of the factory to test
     :param default_kwargs: Set the default keyword argument values. Expected to be constant as a function of builder
@@ -1888,7 +1888,7 @@ sbatch_first_target_builder_factory_names = [
 
 @pytest.mark.parametrize("name", sbatch_first_target_builder_factory_names)
 def test_sbatch_first_target_builder_factories(name: str):
-    """Test the sbatch builder factories created as
+    """Test the sbatch builder factories created as.
 
     .. code-block::
 

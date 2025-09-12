@@ -1,4 +1,4 @@
-"""Quantity of Interest (QOI) tools
+"""Quantity of Interest (QOI) tools.
 
 .. warning::
 
@@ -688,7 +688,7 @@ def _write_qoi_report(qoi_archive: xarray.DataTree, output: pathlib.Path, plots_
 
 
 def _get_plotting_name(qoi: xarray.DataArray) -> str:
-    """Return a QOI label with optional units as ``name`` or ``name [units]``
+    """Return a QOI label with optional units as ``name`` or ``name [units]``.
 
     Construct a QOI label from the following preference ordered list of attributes. The ``name`` attribute _must_ exist
     if the other attributes do not exist.
@@ -849,7 +849,7 @@ def _accept(calculated: pathlib.Path, expected: pathlib.Path) -> None:
 
 
 def _check(diff: pathlib.Path) -> None:
-    """Check results of calculated vs expected QOI comparison
+    """Check results of calculated vs expected QOI comparison.
 
     :param diff: path for differences between calculated and expected QOI values
 

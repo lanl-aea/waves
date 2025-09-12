@@ -1,4 +1,4 @@
-"""Test Sobol Sequence Class"""
+"""Test Sobol Sequence Class."""
 
 from unittest.mock import patch
 
@@ -11,7 +11,7 @@ from waves.parameter_generators import ScipySampler, SobolSequence
 
 
 class TestSobolSequence:
-    """Class for testing Sobol Sequence parameter study generator class"""
+    """Class for testing Sobol Sequence parameter study generator class."""
 
     generate_input = {
         "good schema 5x2": (

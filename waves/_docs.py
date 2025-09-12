@@ -12,7 +12,7 @@ _exclude_from_namespace = set(globals().keys())
 
 
 def get_parser() -> argparse.ArgumentParser:
-    """Return a 'no-help' parser for the docs subcommand
+    """Return a 'no-help' parser for the docs subcommand.
 
     :return: parser
     """

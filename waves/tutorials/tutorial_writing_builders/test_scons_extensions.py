@@ -64,7 +64,7 @@ def test_solver_builder_factory(
     expected_node_count: int,
     expected_action_count: int,
 ) -> None:
-    """Template test for builder factories based on :meth:`waves.scons_extensions.builder_factory`
+    """Template test for builder factories based on :meth:`waves.scons_extensions.builder_factory`.
 
     :param builder_kwargs: Keyword arguments unpacked at the builder instantiation
     :param task_kwargs: Keyword arguments unpacked at the task instantiation

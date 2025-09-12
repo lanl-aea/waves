@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Example for common commercial and research solver behavior and handling
+"""Example for common commercial and research solver behavior and handling.
 
 .. warning::
 
@@ -45,7 +45,7 @@ _default_solve_cpus = 1
 
 
 def main():
-    """Main function implementing the command line interface and program flow"""
+    """Main function implementing the command line interface and program flow."""
     parser = get_parser()
     subcommand_list = parser._subparsers._group_actions[0].choices.keys()
     args = parser.parse_args()
@@ -61,7 +61,7 @@ def main():
 
 
 def name_output_file(input_file: pathlib.Path, output_file: pathlib.Path) -> pathlib.Path:
-    """Create the output file name from the input file if not specified"""
+    """Create the output file name from the input file if not specified."""
     if output_file is None:
         output_file = input_file.with_suffix(_output_file_extension)
     output_file = output_file.with_suffix(_output_file_extension)
@@ -69,7 +69,7 @@ def name_output_file(input_file: pathlib.Path, output_file: pathlib.Path) -> pat
 
 
 def name_log_file(log_file: pathlib.Path, max_iterations: int = 10) -> pathlib.Path:
-    """Return the first free log file name
+    """Return the first free log file name.
 
     :param log_file: Log file base name
     :param max_iterations: Maximum number of allowable log files
@@ -88,7 +88,7 @@ def name_log_file(log_file: pathlib.Path, max_iterations: int = 10) -> pathlib.P
 
 
 def read_input(input_file: pathlib.Path) -> dict:
-    """Return the configuration by reading the input file and handling common errors
+    """Return the configuration by reading the input file and handling common errors.
 
     :param input_file: The input YAML file absolute or relative path
 
@@ -107,7 +107,7 @@ def read_input(input_file: pathlib.Path) -> dict:
 
 
 def configure(args: argparse.Namespace) -> dict:
-    """Return the configuration with appended executable information
+    """Return the configuration with appended executable information.
 
     :param args: The command line argument namespace
 
@@ -132,7 +132,7 @@ def configure(args: argparse.Namespace) -> dict:
 
 
 def solve_output_files(output_file: pathlib.Path, solve_cpus: int) -> list[pathlib.Path]:
-    """Return the solve output file list to match the number of solve cpus
+    """Return the solve output file list to match the number of solve cpus.
 
     :param output_file: base name for the output file
     :param solve_cpus: integer number of solve cpus
@@ -147,7 +147,7 @@ def solve_output_files(output_file: pathlib.Path, solve_cpus: int) -> list[pathl
 
 
 def solve(configuration: dict) -> None:
-    """Common solve logic because we do not really have separate routines
+    """Common solve logic because we do not really have separate routines.
 
     :param configuration: The solver configuration
 
@@ -171,7 +171,7 @@ def solve(configuration: dict) -> None:
 
 
 def implicit(args: argparse.Namespace) -> None:
-    """Implicit routine
+    """Implicit routine.
 
     :param args: The command line argument namespace
     """
@@ -180,7 +180,7 @@ def implicit(args: argparse.Namespace) -> None:
 
 
 def explicit(args: argparse.Namespace) -> None:
-    """Explicit routine
+    """Explicit routine.
 
     :param args: The command line argument namespace
     """
@@ -189,7 +189,7 @@ def explicit(args: argparse.Namespace) -> None:
 
 
 def positive_nonzero_int(argument):
-    """Type function for argparse - positive, non-zero integers
+    """Type function for argparse - positive, non-zero integers.
 
     :param str argument: string argument from argparse
 
@@ -212,7 +212,7 @@ def positive_nonzero_int(argument):
 
 
 def get_parser() -> argparse.ArgumentParser:
-    """Return the argparse CLI parser"""
+    """Return the argparse CLI parser."""
     main_parser = argparse.ArgumentParser(description=_cli_description)
     main_parser.add_argument(
         "-V",

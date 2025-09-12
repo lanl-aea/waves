@@ -1,4 +1,4 @@
-"""Test WAVES SCons builders and support functions"""
+"""Test WAVES SCons builders and support functions."""
 
 from unittest.mock import ANY, call, patch
 

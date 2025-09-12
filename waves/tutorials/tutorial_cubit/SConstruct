@@ -95,7 +95,7 @@ env["FIERRO_IMPLICIT_PROGRAM"] = env.AddProgram(["fierro-parallel-implicit"])
 
 # Sierra requires a separate construction environment
 def return_modulepath(modules: typing.Iterable[str]) -> pathlib.Path:
-    """Return parent path of first found module or the current working directory"""
+    """Return parent path of first found module or the current working directory."""
     return next((pathlib.Path(path).parent for path in modules if pathlib.Path(path).exists()), pathlib.Path())
 
 

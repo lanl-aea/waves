@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-"""Extracts data from an Abaqus odb file. Writes two files 'output_file.h5' and 'output_file_datasets.h5'
+"""Extracts data from an Abaqus odb file. Writes two files 'output_file.h5' and 'output_file_datasets.h5'.
 
 Calls odbreport feature of Abaqus, parses resultant file, and creates output file. Most simulation data lives in a
 group path following the instance and set name, e.g. '/INSTANCE/FieldOutputs/ELEMENT_SET', and can be accessed with
@@ -56,7 +56,7 @@ _exclude_from_namespace = set(globals().keys())
 
 
 def get_parser():
-    """Get parser object for command line options
+    """Get parser object for command line options.
 
     :return: argument parser
     :rtype: parser
@@ -238,7 +238,7 @@ def odb_extract(
 
 
 def get_odb_report_args(odb_report_args: str, input_file: pathlib.Path, job_name: pathlib.Path):
-    """Generates odb_report arguments
+    """Generates odb_report arguments.
 
     :param odb_report_args: String of command line options to pass to ``abaqus odbreport``.
     :param input_file: ``.odb`` file.

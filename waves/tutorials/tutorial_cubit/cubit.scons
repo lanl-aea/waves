@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-"""Rectangle compression workflow: geometry, partition, mesh
+"""Rectangle compression workflow: geometry, partition, mesh.
 
 Requires the following ``SConscript(..., exports={})``
 

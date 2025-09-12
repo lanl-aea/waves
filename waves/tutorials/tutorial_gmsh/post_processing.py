@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Example of catenating WAVES parameter study results and definition"""
+"""Example of catenating WAVES parameter study results and definition."""
 
 import argparse
 import pathlib
@@ -18,7 +18,7 @@ default_selection_dict = {
 
 
 def combine_data(input_files, group_path, concat_coord):
-    """Combine input data files into one dataset
+    """Combine input data files into one dataset.
 
     :param list input_files: list of path-like or file-like objects pointing to h5netcdf files
         containing Xarray Datasets
@@ -40,7 +40,7 @@ def combine_data(input_files, group_path, concat_coord):
 
 
 def merge_parameter_study(parameter_study_file, combined_data):
-    """Merge parameter study to existing dataset
+    """Merge parameter study to existing dataset.
 
     :param str parameter_study_file: path-like or file-like object containing the parameter study dataset. Assumes the
         h5netcdf file contains only a single dataset at the root group path, .e.g. ``/``.
@@ -56,7 +56,7 @@ def merge_parameter_study(parameter_study_file, combined_data):
 
 
 def save_plot(combined_data, x_var, y_var, selection_dict, concat_coord, output_file):
-    """Save scatter plot with given x and y labels
+    """Save scatter plot with given x and y labels.
 
     :param xarray.DataArray combined_data: XArray Dataset that will be plotted.
     :param str x_var: The independent (x-axis) variable key name for the Xarray Dataset "data variable"
@@ -73,7 +73,7 @@ def save_plot(combined_data, x_var, y_var, selection_dict, concat_coord, output_
 
 
 def save_table(combined_data, selection_dict, output_file):
-    """Save csv table
+    """Save csv table.
 
     :param xarray.DataArray combined_data: XArray Dataset to be written as a CSV.
     :param dict selection_dict: Dictionary to define the down selection of data to be plotted. Dictionary ``key: value``

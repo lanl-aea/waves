@@ -21,7 +21,7 @@ _exclude_from_namespace = set(globals().keys())
 
 
 def get_parser() -> argparse.ArgumentParser:
-    """Return a 'no-help' parser for the visualize subcommand
+    """Return a 'no-help' parser for the visualize subcommand.
 
     :return: parser
     """
@@ -166,7 +166,7 @@ def main(
     break_paths: bool = False,
     input_file: str | pathlib.Path | None = None,
 ) -> None:
-    """Visualize the directed acyclic graph created by a SCons build
+    """Visualize the directed acyclic graph created by a SCons build.
 
     Uses matplotlib and networkx to build out an acyclic directed graph showing the relationships of the various
     dependencies using boxes and arrows. The visualization can be saved as an svg and graphml output can be printed
@@ -254,7 +254,7 @@ def ancestor_subgraph(
     graph: networkx.DiGraph,
     nodes: list[str],
 ) -> networkx.DiGraph:
-    """Return a new directed graph containing nodes and their ancestors
+    """Return a new directed graph containing nodes and their ancestors.
 
     :param graph: original directed graph
     :param nodes: iterable of nodes name strings
@@ -273,7 +273,7 @@ def ancestor_subgraph(
 
 
 def add_node_count(graph: networkx.DiGraph, text: str = "Node count: ") -> networkx.DiGraph:
-    """Add an orphan node with the total node count to a directed graph
+    """Add an orphan node with the total node count to a directed graph.
 
     The graph nodes must contain a ``layer`` attribute with integer values. Orphan node is assigned to the minimum
     layer.
@@ -289,7 +289,7 @@ def add_node_count(graph: networkx.DiGraph, text: str = "Node count: ") -> netwo
 
 
 def graph_to_graphml(graph: networkx.DiGraph) -> str:
-    """Return the networkx graphml text
+    """Return the networkx graphml text.
 
     :param graph: networkx directed graph
     """
@@ -306,7 +306,7 @@ def parse_output(
     no_labels: bool = False,
     break_paths: bool = False,
 ) -> networkx.DiGraph:
-    """Parse the string that has the tree output and return as a networkx directed graph
+    """Parse the string that has the tree output and return as a networkx directed graph.
 
     :param tree_lines: output of the scons tree command pre-split on newlines to a list of strings
     :param exclude_list: exclude nodes starting with strings in this list(e.g. /usr/bin)
@@ -379,7 +379,7 @@ def check_regex_exclude(
     exclude_indent: int,
     exclude_node: bool = False,
 ) -> tuple[bool, int]:
-    """Excludes node names that match the regular expression
+    """Excludes node names that match the regular expression.
 
     :param str exclude_regex: Regular expression
     :param str node_name: Name of the node
@@ -404,7 +404,7 @@ def visualize(
     edge_color: str = _settings._default_edge_color,
     vertical: bool = False,
 ) -> matplotlib.figure.Figure:
-    """Create a visualization showing the tree
+    """Create a visualization showing the tree.
 
     Nodes in graph require the ``layer`` and ``label`` attributes.
 
@@ -475,7 +475,7 @@ def plot(
     output_file: pathlib.Path | None = None,
     transparent: bool = False,
 ) -> None:
-    """Open a matplotlib plot or save to file
+    """Open a matplotlib plot or save to file.
 
     :param figure: The matplotlib figure
     :param output_file: File for saving the visualization

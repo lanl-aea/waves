@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-"""Rectangle compression workflow: Fierro solve
+"""Rectangle compression workflow: Fierro solve.
 
 Requires the following ``SConscript(..., exports={})``
 

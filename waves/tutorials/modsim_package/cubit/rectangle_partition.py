@@ -7,7 +7,7 @@ import cubit
 
 
 def main(input_file, output_file, width, height):
-    """Partition the simple rectangle geometry created by ``rectangle_geometry.py``
+    """Partition the simple rectangle geometry created by ``rectangle_geometry.py``.
 
     This script partitions a simple Cubit model with a single rectangle part.
 

@@ -95,7 +95,7 @@ def main(
 
 
 def tags_from_dimTags(dimTags: list[tuple[int, int]]) -> list[int]:  # noqa: N802,N803
-    """Return tags from Gmsh entity ``dimTags`` list of tuples
+    """Return tags from Gmsh entity ``dimTags`` list of tuples.
 
     :returns: list of tags
     """
@@ -107,7 +107,7 @@ def get_entities_at_coordinates(
     dimension: int,
     tolerance: float = 1.0e-6,
 ) -> list[tuple[int, int]]:
-    """Return Gmsh ``dimTags`` of entities of dimension within bounding box determined by coordinates and tolerance
+    """Return Gmsh ``dimTags`` of entities of dimension within bounding box determined by coordinates and tolerance.
 
     :param coordinates: 3D coordinates (X, Y, Z) for center of bounding box
     :param dimension: Return entities matching dimension

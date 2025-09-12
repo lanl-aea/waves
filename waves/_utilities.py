@@ -26,7 +26,7 @@ _exclude_from_namespace = set(globals().keys())
 
 
 class _AtSignTemplate(string.Template):
-    """Use the CMake '@' delimiter in a Python 'string.Template' to avoid clashing with bash variable syntax"""
+    """Use the CMake '@' delimiter in a Python 'string.Template' to avoid clashing with bash variable syntax."""
 
     delimiter = _settings._template_delimiter
 
@@ -37,7 +37,7 @@ def set_name_substitution(
     identifier: str = "set_name",
     suffix: str = "/",
 ) -> list[str | pathlib.Path] | str | pathlib.Path:
-    """Replace ``@identifier`` with replacement text in a list of strings and pathlib Path objects
+    """Replace ``@identifier`` with replacement text in a list of strings and pathlib Path objects.
 
     If the original is not a string, Path, or an iterable of strings and Paths, return without modification.
 
@@ -66,7 +66,7 @@ def set_name_substitution(
 
 
 def _quote_spaces_in_path(path: str | pathlib.Path) -> pathlib.Path:
-    """Traverse parts of a path and place in double quotes if there are spaces in the part
+    """Traverse parts of a path and place in double quotes if there are spaces in the part.
 
     >>> import pathlib
     >>> import waves
@@ -117,7 +117,7 @@ def find_command(options: typing.Iterable[str]) -> str:
 
 
 def cubit_os_bin() -> str:
-    """Return the OS specific Cubit bin directory name
+    """Return the OS specific Cubit bin directory name.
 
     Making Cubit importable requires putting the Cubit bin directory on PYTHONPATH. On MacOS, the directory is "MacOS".
     On other systems it is "bin".
@@ -199,7 +199,7 @@ def find_cubit_python(options: typing.Iterable[str], python_command: str = "pyth
 
 
 def tee_subprocess(command: list[str], **kwargs) -> tuple[int, str]:
-    """Stream STDOUT to terminal while saving buffer to variable
+    """Stream STDOUT to terminal while saving buffer to variable.
 
     :param command: Command to execute provided a list of strings
     :param dict kwargs: Any additional keyword arguments are passed through to subprocess.Popen
@@ -227,7 +227,7 @@ def return_environment(
     separator: str = "&&",
     environment: str = "env -0",
 ) -> dict:
-    """Run a shell command and return the shell environment as a dictionary
+    """Run a shell command and return the shell environment as a dictionary.
 
     .. code-block::
 
@@ -278,7 +278,7 @@ def cache_environment(
     overwrite_cache: bool = False,
     verbose: bool = False,
 ) -> dict:
-    """Retrieve cached environment dictionary or run a shell command to generate environment dictionary
+    """Retrieve cached environment dictionary or run a shell command to generate environment dictionary.
 
     .. warning::
 
@@ -335,7 +335,7 @@ def cache_environment(
 
 
 def create_valid_identifier(identifier: str) -> str:
-    """Create a valid Python identifier from an arbitray string by replacing invalid characters with underscores
+    """Create a valid Python identifier from an arbitray string by replacing invalid characters with underscores.
 
     :param identifier: String to convert to valid Python identifier
     """
@@ -343,7 +343,7 @@ def create_valid_identifier(identifier: str) -> str:
 
 
 def warn_only_once(function):
-    """Decorator to suppress warnings raised by successive function calls
+    """Decorator to suppress warnings raised by successive function calls.
 
     :param function: The function to wrap
 
@@ -352,7 +352,7 @@ def warn_only_once(function):
     function.already_warned = False
 
     def wrapper(*args, **kwargs):
-        """Wrapper logic for the function warning suppression
+        """Wrapper logic for the function warning suppression.
 
         :param args: all positional arguments passed through to wrapped function
         :param kwargs: all keyword arguments passed through to wrapped function

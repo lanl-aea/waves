@@ -7,7 +7,7 @@ import cubit
 
 
 def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaqus"):
-    """Mesh the simple cube geometry partitioned by ``cube_partition.py``
+    """Mesh the simple cube geometry partitioned by ``cube_partition.py``.
 
     This script meshes a simple Cubit model with a single cube part.
 

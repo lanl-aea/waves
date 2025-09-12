@@ -1,4 +1,4 @@
-"""Parameter sets and schemas for the rectangle compression simulation"""
+"""Parameter sets and schemas for the rectangle compression simulation."""
 
 import typing
 
@@ -10,7 +10,7 @@ def parameter_schema(
     height_distribution: str = "norm",
     height_bounds: list[float] | tuple[float, ...] = (1.0, 0.1),
 ) -> dict[str, typing.Any]:
-    """Return WAVES SALibSampler Sobol schema
+    """Return WAVES SALibSampler Sobol schema.
 
     :param N: Number of samples to generate
     :param width_distribution: SALib distribution name

@@ -6,7 +6,7 @@ from waves._settings import _hash_coordinate_key, _set_coordinate_key
 
 
 def platform_check():
-    """Check platform and set platform specific variables
+    """Check platform and set platform specific variables.
 
     :return: tuple (root_fs, testing_windows)
     :rtype: (str, bool)

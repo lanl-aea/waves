@@ -181,7 +181,7 @@ def test_parse_output(
     expected_edge_count,
     no_labels,
 ):
-    """Test raises behavior and regression test a sample SCons tree output parsing"""
+    """Test raises behavior and regression test a sample SCons tree output parsing."""
     # Check for a runtime error on empty parsing
     with pytest.raises(RuntimeError):
         graph = _visualize.parse_output([])
@@ -199,7 +199,7 @@ def test_parse_output(
 
 
 def test_check_regex_exclude():
-    """Test the regular expression exclusion of the visualize subcommand"""
+    """Test the regular expression exclusion of the visualize subcommand."""
     exclude_regex = "dummy_name[0-7]+"
     # If node name matches the regular expression
     assert _visualize.check_regex_exclude(exclude_regex, "dummy_name5", 3, 0, False) == (True, 3)
@@ -210,7 +210,7 @@ def test_check_regex_exclude():
 
 
 def test_visualize():
-    """Sign-of-life test for the visualize figure"""
+    """Sign-of-life test for the visualize figure."""
     graph = networkx.DiGraph()
     graph.add_node(1, label="one", layer=1)
     graph.add_node(2, label="two", layer=2)
@@ -219,7 +219,7 @@ def test_visualize():
 
 
 def test_plot():
-    """Check that the expected plot output function is called"""
+    """Check that the expected plot output function is called."""
     figure, _axes = matplotlib.pyplot.subplots()
     with (
         patch("matplotlib.pyplot.show") as mock_show,

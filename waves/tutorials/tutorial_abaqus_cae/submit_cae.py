@@ -58,7 +58,7 @@ def main(input_file, job_name, model_name=default_model_name, cpus=default_cpus,
 
 
 def get_parser():
-    """Return parser for CLI options
+    """Return parser for CLI options.
 
     All options should use the double-hyphen ``--option VALUE`` syntax to avoid clashes with the Abaqus option syntax,
     including flag style arguments ``--flag``. Single hyphen ``-f`` flag syntax often clashes with the Abaqus command
@@ -144,7 +144,7 @@ class AbaqusNamedTemporaryFile:
 
 
 def return_json_dictionary(json_file):
-    """Open a JSON file and return a dictionary compatible with Abaqus keyword arguments
+    """Open a JSON file and return a dictionary compatible with Abaqus keyword arguments.
 
     If the JSON file is ``None``, return an empty dictionary. Convert unicode strings to str. If a value is found in
     ``abaqusConstants`` convert the value.

@@ -1,4 +1,4 @@
-"""Test ParameterGenerator Abstract Base Class"""
+"""Test ParameterGenerator Abstract Base Class."""
 
 import contextlib
 import pathlib
@@ -858,7 +858,7 @@ merge_parameter_studies_cases.update(
     ids=merge_parameter_studies_cases.keys(),
 )
 def test_merge_parameter_studies(studies, expected_study, expected_types, propagate_space, outcome):
-    """Check the merged parameter study contents and verify unchanged base study set_name-to-set_hash relationships
+    """Check the merged parameter study contents and verify unchanged base study set_name-to-set_hash relationships.
 
     :param studies: list of N number of parameter study Xarray datasets to merge, where the first study in the list is
         the base study
@@ -914,7 +914,7 @@ test_create_set_names_cases = {
     ids=test_create_set_names_cases.keys(),
 )
 def test_create_set_names(test_set_hashes, template, expected_set_names):
-    """Test the parameter set name generation. Test that the same hashes get the same parameter set names
+    """Test the parameter set name generation. Test that the same hashes get the same parameter set names.
 
     :param test_set_hashes: list of arbitrary hash strings for test purposes
     :param template: ``_AtSignTemplate`` typed string with substitution character
@@ -1503,7 +1503,7 @@ def test_update_set_names(
     expected: xarray.Dataset,
     outcome: contextlib.nullcontext | pytest.RaisesExc,
 ) -> None:
-    """Check the generated and updated parameter set names against template arguments
+    """Check the generated and updated parameter set names against template arguments.
 
     :param parameter_study: parameter study Xarray dataset
     :param kwargs: optional keyword arguments dictionary to pass through to the function under test
@@ -1550,7 +1550,7 @@ def test_open_parameter_study():
 
 
 class TestParameterGenerator:
-    """Class for testing ABC ParameterGenerator"""
+    """Class for testing ABC ParameterGenerator."""
 
     def test_output_file_conflict(self):
         with pytest.raises(MutuallyExclusiveError):
@@ -1645,7 +1645,7 @@ class TestParameterGenerator:
         ids=templates.keys(),
     )
     def test_set_names(self, schema, file_template, set_template, expected):
-        """Check the generated parameter set names against template arguments
+        """Check the generated parameter set names against template arguments.
 
         :param str schema: placeholder string standing in for the schema read from an input file
         :param str file_template: user supplied string to be used as a template for output file names
@@ -1668,7 +1668,7 @@ class TestParameterGenerator:
         ids=templates.keys(),
     )
     def test_merge_parameter_studies(self, schema, file_template, set_template, expected):
-        """Check the generated parameter set names against template arguments after a merge operation
+        """Check the generated parameter set names against template arguments after a merge operation.
 
         :param str schema: placeholder string standing in for the schema read from an input file
         :param str file_template: user supplied string to be used as a template for output file names
@@ -1717,7 +1717,7 @@ class TestParameterGenerator:
         ids=init_write_stdout.keys(),
     )
     def test_write_to_stdout(self, schema, template, overwrite, dry_run, is_file, sets, stdout_calls):
-        """Check for conditions that should result in calls to stdout
+        """Check for conditions that should result in calls to stdout.
 
         :param str schema: placeholder string standing in for the schema read from an input file
         :param str template: user supplied string to be used as a template for output file names
@@ -1766,7 +1766,7 @@ class TestParameterGenerator:
         ids=init_write_files.keys(),
     )
     def test_write_yaml(self, schema, template, overwrite, is_file, sets, files):
-        """Check for conditions that should result in calls to builtins.open
+        """Check for conditions that should result in calls to builtins.open.
 
         :param str schema: placeholder string standing in for the schema read from an input file
         :param str template: user supplied string to be used as a template for output file names
@@ -1820,7 +1820,7 @@ class TestParameterGenerator:
         ids=init_write_files.keys(),
     )
     def test_write_dataset(self, schema, template, overwrite, is_file, sets, files):
-        """Check for conditions that should result in calls to ParameterGenerator._write_netcdf
+        """Check for conditions that should result in calls to ParameterGenerator._write_netcdf.
 
         :param str schema: placeholder string standing in for the schema read from an input file
         :param str template: user supplied string to be used as a template for output file names
@@ -1885,7 +1885,7 @@ class TestParameterGenerator:
         ids=init_write_dataset_files.keys(),
     )
     def test_conditionally_write_dataset(self, equals, is_file, overwrite, expected_call_count):
-        """Check for conditions that should result in calls to xarray.Dataset.to_netcdf
+        """Check for conditions that should result in calls to xarray.Dataset.to_netcdf.
 
         :param bool equals: parameter that identifies when the xarray.Dataset objects should be equal
         :param list is_file: test specific argument mocks changing output for pathlib.Path().is_file() repeat calls
@@ -1909,7 +1909,7 @@ class TestParameterGenerator:
         ids=init_write_dataset_files.keys(),
     )
     def test_conditionally_write_yaml(self, equals, is_file, overwrite, expected_call_count):
-        """Check for conditions that should result in writing out to file
+        """Check for conditions that should result in writing out to file.
 
         :param bool equals: parameter that identifies when the dictionaries should be equal
         :param list is_file: test specific argument mocks changing output for pathlib.Path().is_file() repeat calls
@@ -1976,7 +1976,7 @@ class TestParameterGenerator:
                 assert mock_private_write.call_args[0][2] == override_arguments[2]
 
     def test_write_exception(self):
-        """Calling a non-supported format string should raise an exception"""
+        """Calling a non-supported format string should raise an exception."""
         write_parameter_generator = DummyGenerator({})
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta"),
@@ -2033,7 +2033,7 @@ class TestParameterGenerator:
         assert hashes_parameter_generator._set_hashes == expected_hashes
 
     def test_create_set_names(self):
-        """Test the parameter set name generation"""
+        """Test the parameter set name generation."""
         set_names_parameter_generator = DummyGenerator({}, output_file_template="out")
         set_names_parameter_generator._samples = numpy.array([[1], [2]])
         set_names_parameter_generator._create_set_hashes()
@@ -2041,7 +2041,7 @@ class TestParameterGenerator:
         assert list(set_names_parameter_generator._set_names.values()) == ["out0", "out1"]
 
     def test_parameter_study_to_numpy(self):
-        """Test the self-consistency of the parameter study dataset construction and deconstruction"""
+        """Test the self-consistency of the parameter study dataset construction and deconstruction."""
         # Setup
         data_parameter_generator = DummyGenerator({})
         data_parameter_generator._parameter_names = ["ints", "floats", "strings", "bools"]
@@ -2057,7 +2057,7 @@ class TestParameterGenerator:
 
 
 class TestParameterDistributions:
-    """Class for testing _ScipyGenerator ABC class common methods"""
+    """Class for testing _ScipyGenerator ABC class common methods."""
 
     validate_input = {
         "good schema": (
@@ -2155,7 +2155,7 @@ class DummyGenerator(parameter_generators.ParameterGenerator):
         self._parameter_names = ["parameter_1"]
 
     def _generate(self, sets=1):
-        """Generate float samples for all parameters. Value matches parameter set index"""
+        """Generate float samples for all parameters. Value matches parameter set index."""
         parameter_count = len(self._parameter_names)
         self._samples = numpy.ones((sets, parameter_count))
         for row in range(sets):

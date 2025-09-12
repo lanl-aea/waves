@@ -1,4 +1,4 @@
-"""System test wrapper for executing shell commands with pytest results reporting
+"""System test wrapper for executing shell commands with pytest results reporting.
 
 Test are constructed as a list of strings or string templates to run as shell commands. Success is defined as a shell 0
 return code.
@@ -58,7 +58,7 @@ def test_check_installed() -> None:
 
 
 def prepend_path(environment: dict, key: str, prepend_item: str) -> dict:
-    """Return a copy of the environment dictionary with updated key using operating system pathsep"""
+    """Return a copy of the environment dictionary with updated key using operating system pathsep."""
     new_environment = copy.deepcopy(environment)
     new_path = os.pathsep.join(filter(None, (prepend_item, environment.get(key))))
     new_environment.update({key: new_path})

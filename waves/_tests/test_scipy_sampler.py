@@ -1,4 +1,4 @@
-"""Test ScipySampler Class"""
+"""Test ScipySampler Class."""
 
 from unittest.mock import patch
 
@@ -11,7 +11,7 @@ from waves.parameter_generators import ScipySampler
 
 
 class TestScipySampler:
-    """Class for testing Scipy Sequence parameter study generator class"""
+    """Class for testing Scipy Sequence parameter study generator class."""
 
     generate_input = {
         "good schema 5x2": (
@@ -133,7 +133,7 @@ class TestScipySampler:
         ids=parameter_study_to_dict.keys(),
     )
     def test_parameter_study_to_dict(self, sampler, parameter_schema, kwargs, expected_dictionary) -> None:
-        """Test parameter study dictionary conversion"""
+        """Test parameter study dictionary conversion."""
         test_parameter_study_dict = ScipySampler(sampler, parameter_schema, **kwargs)
         returned_dictionary = test_parameter_study_dict.parameter_study_to_dict()
         assert expected_dictionary.keys() == returned_dictionary.keys()

@@ -19,7 +19,7 @@ _exclude_from_namespace = set(globals().keys())
 
 
 def get_parser() -> argparse.ArgumentParser:
-    """Return a 'no-help' parser for the parameter study subcommand(s)
+    """Return a 'no-help' parser for the parameter study subcommand(s).
 
     :return: parser
     """
@@ -116,7 +116,7 @@ def get_parser() -> argparse.ArgumentParser:
 
 
 def read_parameter_schema(input_file: str | pathlib.Path | io.TextIOWrapper | None) -> dict:
-    """Read a YAML dictionary from STDIN or a file
+    """Read a YAML dictionary from STDIN or a file.
 
     :param input_file: STDIN stream or file path
 
@@ -150,7 +150,7 @@ def main(
     dry_run: bool = _settings._default_dry_run,
     write_meta: bool = _settings._default_write_meta,
 ) -> None:
-    """Build parameter studies
+    """Build parameter studies.
 
     :param str subcommand: parameter study type to build
     :param str input_file: path to YAML formatted parameter study schema file

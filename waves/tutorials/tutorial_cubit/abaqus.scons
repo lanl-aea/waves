@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-"""Rectangle compression workflow: Abaqus solve
+"""Rectangle compression workflow: Abaqus solve.
 
 Requires the following ``SConscript(..., exports={})``
 

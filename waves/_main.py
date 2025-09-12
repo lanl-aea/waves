@@ -1,4 +1,4 @@
-"""Internal module implementing the command line utility behavior
+"""Internal module implementing the command line utility behavior.
 
 Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAVESError` to allow
 :meth:`waves._main.main` to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
@@ -90,7 +90,7 @@ def main() -> None:
 
 
 def get_parser() -> argparse.ArgumentParser:
-    """Get parser object for command line options
+    """Get parser object for command line options.
 
     :return: parser
     """

@@ -1,4 +1,4 @@
-"""Test CustomStudy Class"""
+"""Test CustomStudy Class."""
 
 from contextlib import nullcontext as does_not_raise
 from unittest.mock import call, mock_open, patch
@@ -13,7 +13,7 @@ from waves.parameter_generators import CustomStudy
 
 
 class TestCustomStudy:
-    """Class for testing CustomStudy parameter study generator class"""
+    """Class for testing CustomStudy parameter study generator class."""
 
     validate_input = {
         "good schema list of lists": (

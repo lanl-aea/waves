@@ -1,5 +1,5 @@
 """Test odb extract
-Test odb_extract.py
+Test odb_extract.py.
 
 .. moduleauthor:: Prabhu S. Khalsa <pkhalsa@lanl.gov>
 """

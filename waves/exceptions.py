@@ -37,4 +37,4 @@ class ChoicesError(APIError):
 
 
 class SchemaValidationError(APIError):
-    """Raised when a WAVES parameter generator schema validation fails"""
+    """Raised when a WAVES parameter generator schema validation fails."""
