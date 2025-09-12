@@ -135,7 +135,7 @@ def cubit_os_bin() -> str:
 
 
 def find_cubit_bin(options: typing.Iterable[str], bin_directory: str | None = None) -> pathlib.Path:
-    """Provided a few options for the Cubit executable, search for the bin directory.
+    """Search for the Cubit bin directory given a few options for the Cubit executable.
 
     Recommend first checking to see if cubit will import.
 
@@ -171,7 +171,7 @@ def find_cubit_bin(options: typing.Iterable[str], bin_directory: str | None = No
 
 
 def find_cubit_python(options: typing.Iterable[str], python_command: str = "python3*") -> pathlib.Path:
-    """Provided a few options for the Cubit executable, search for the Cubit Python interpreter.
+    """Search for the Cubit Python interpreter given a few options for the Cubit executable.
 
     Recommend first checking to see if cubit will import.
 
@@ -343,7 +343,7 @@ def create_valid_identifier(identifier: str) -> str:
 
 
 def warn_only_once(function):
-    """Decorator to suppress warnings raised by successive function calls.
+    """Suppress warnings raised by successive function calls.
 
     :param function: The function to wrap
 
@@ -352,7 +352,7 @@ def warn_only_once(function):
     function.already_warned = False
 
     def wrapper(*args, **kwargs):
-        """Wrapper logic for the function warning suppression.
+        """Add wrapper logic for the function warning suppression.
 
         :param args: all positional arguments passed through to wrapped function
         :param kwargs: all keyword arguments passed through to wrapped function
