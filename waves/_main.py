@@ -14,7 +14,7 @@ _exclude_from_namespace = set(globals().keys())
 
 
 def main() -> None:
-    """This is the main function that performs actions based on command line arguments."""
+    """Run the WAVES command line interface."""
     parser = get_parser()
     args, unknown = parser.parse_known_args()
 
