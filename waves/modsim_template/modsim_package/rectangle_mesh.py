@@ -1,3 +1,4 @@
+"""Mesh the simple rectangle geometry partitioned by ``rectangle_partition.py``."""
 import argparse
 import inspect
 import os
@@ -13,7 +14,7 @@ from modsim_package.argparse_types import positive_float
 
 
 def main(input_file, output_file, model_name, part_name, global_seed):
-    """Mesh the simple rectangle geometry partitioned by ``rectangle_partition.py``
+    """Mesh the simple rectangle geometry partitioned by ``rectangle_partition.py``.
 
     This script meshes a simple Abaqus model with a single rectangle part.
 

@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+"""Configure the Ruff style checks and formatting commands."""
 
 # Inherit the parent construction environment
 Import("env")

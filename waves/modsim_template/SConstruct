@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+"""Configure the WAVES modsim template project."""
 
 import inspect
 import os

@@ -1,3 +1,4 @@
+"""Test the Python 3 and Abaqus Python 2/3 compatible argparse types module."""
 import argparse
 from contextlib import nullcontext as does_not_raise
 

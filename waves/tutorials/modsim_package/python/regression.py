@@ -1,3 +1,4 @@
+"""Perform regression testing on simulation output."""
 #!/usr/bin/env python
 import argparse
 import pathlib

@@ -1,3 +1,4 @@
+"""Provide common extension SCons with utility functions, builders, and construction environment methods."""
 import atexit
 import collections
 import copy

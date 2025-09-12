@@ -1,3 +1,5 @@
+"""Define the project's custom pytest options and CLI extensions."""
+
 import pathlib
 
 import pytest
