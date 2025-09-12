@@ -16,8 +16,7 @@ def solver_builder_factory(
     emitter=waves.scons_extensions.first_target_emitter,
     **kwargs,
 ) -> SCons.Builder.Builder:
-    """
-    This builder factory extends :meth:`waves.scons_extensions.first_target_builder_factory`. This builder factory uses
+    """This builder factory extends :meth:`waves.scons_extensions.first_target_builder_factory`. This builder factory uses
     the :meth:`waves.scons_extensions.first_target_emitter`. At least one task target must be specified in the task
     definition and the last target will always be the expected STDOUT and STDERR redirection output file,
     ``TARGETS[-1]`` ending in ``*.stdout``.

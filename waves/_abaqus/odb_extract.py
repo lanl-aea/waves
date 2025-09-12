@@ -145,7 +145,6 @@ def odb_extract(
         ``output_file``.
     :param verbose: Boolean to print more verbose messages
     """
-
     # Handle arguments
     input_file = input_file[0]
     path_input_file = pathlib.Path(input_file)
@@ -239,8 +238,7 @@ def odb_extract(
 
 
 def get_odb_report_args(odb_report_args: str, input_file: pathlib.Path, job_name: pathlib.Path):
-    """
-    Generates odb_report arguments
+    """Generates odb_report arguments
 
     :param odb_report_args: String of command line options to pass to ``abaqus odbreport``.
     :param input_file: ``.odb`` file.

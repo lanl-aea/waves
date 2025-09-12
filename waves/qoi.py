@@ -78,7 +78,7 @@ def create_qoi(
 
     :returns: QOI
 
-    Example
+    Example:
 
     .. code-block::
 
@@ -104,6 +104,7 @@ def create_qoi(
             group:        Assembly ABC Preload
             version:      abcdef
             date:         2025-01-01
+
     """
     if numpy.isnan(expected) & numpy.isfinite([lower_rtol, upper_rtol, lower_atol, upper_atol]).any():
         raise ValueError("Relative and absolute tolerances were specified without an expected value.")
@@ -152,7 +153,7 @@ def create_qoi_set(qois: typing.Iterable[xarray.DataArray]) -> xarray.Dataset:
 
     :returns: QOI Set containing each QOI as a separate data variable.
 
-    Example
+    Example:
 
     .. code-block::
 
@@ -199,6 +200,7 @@ def create_qoi_set(qois: typing.Iterable[xarray.DataArray]) -> xarray.Dataset:
             group:        Assembly ABC Preload
             version:      abcdef
             date:         2025-01-01
+
     """
     qoi_set = xarray.merge(qois, **_merge_constants)
     # Keep all attributes at the data variable level
@@ -227,7 +229,7 @@ def _create_qoi_study(
 
     :returns: QOI study
 
-    Example
+    Example:
 
     .. code-block::
 
@@ -300,6 +302,7 @@ def _create_qoi_study(
             parameter_sets  (set_name) <U5 80B 'set_0' 'set_1' 'set_2' 'set_3'
         Data variables:
             load            (set_name, value_type) float64 128B 5.0 nan nan ... nan nan
+
     """
     # Move "group" from attribute to dimension for each DataArray, and merge
     try:
@@ -338,7 +341,7 @@ def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataT
 
     :returns: QOI archive
 
-    Example
+    Example:
 
     .. code-block::
 
@@ -413,6 +416,7 @@ def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataT
                 Data variables:
                     load        (version, value_type) float64 32B 35.0 nan nan nan
                     stress      (version, value_type) float64 32B 110.0 nan nan nan
+
     """
     archive = xarray.DataTree()
     # Creates a group for each "group" attribute
@@ -463,7 +467,7 @@ def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
 
     :returns: QOI set
 
-    Example
+    Example:
 
     .. csv-table::
         :header-rows: 1
@@ -482,6 +486,7 @@ def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
         Data variables:
             load        (value_type) float64 32B nan 4.5 3.5 5.5
             gap         (value_type) float64 32B nan 0.8 0.7 0.9
+
     """
     suffix = from_file.suffix.lower()
     if suffix == ".csv":
@@ -515,7 +520,7 @@ def write_qoi_set_to_csv(qoi_set: xarray.Dataset, output: pathlib.Path) -> None:
     :param qoi_set: QOI set.
     :param output: Output CSV file.
 
-    Example
+    Example:
 
     .. code-block::
 
@@ -535,6 +540,7 @@ def write_qoi_set_to_csv(qoi_set: xarray.Dataset, output: pathlib.Path) -> None:
         name,calculated,expected,lower_limit,upper_limit,units,long_name,description,group,version,date
         load,5.0,4.5,3.5,5.5,N,Axial Load,Axial load through component XYZ,Assembly ABC Preload,abcdef,2025-01-01
         gap,1.0,0.8,0.7000000000000001,0.9,mm,Radial gap,Radial gap between components A and B,Assembly ABC Preload,abcdef,2025-01-01
+
     """  # noqa: E501
     csv_dataframes = qoi_set.to_dataarray("name").to_pandas()
     # Convert attributes to data variables so they end up as columns in the CSV

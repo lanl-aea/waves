@@ -72,7 +72,6 @@ def main(
     :param working_directory: Change the SCons command working directory
     :param git_clone_directory: Destination directory for a Git clone operation
     """
-
     if not scons_args:
         scons_args = []
     if not targets:

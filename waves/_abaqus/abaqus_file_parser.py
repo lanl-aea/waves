@@ -954,7 +954,6 @@ class OdbReportFileParser(AbaqusFileParser):
         :return: current line of file
         :rtype: str
         """
-
         if line.strip()[-1] == "/":  # Line has continuation
             continuation_line = f.readline()
             line += continuation_line

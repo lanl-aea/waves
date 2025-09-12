@@ -24,7 +24,8 @@ class WAVESError(Exception):
 
 class APIError(WAVESError):
     """Raised when an API validation fails, e.g. an argument value is outside the list of acceptable choices. Intended
-    to mirror an associated ``argparse`` CLI option validation."""
+    to mirror an associated ``argparse`` CLI option validation.
+    """
 
 
 class MutuallyExclusiveError(APIError):

@@ -654,7 +654,7 @@ class CartesianProduct(ParameterGenerator):
         * Parameter schema is not a dictionary
         * Parameter key is not a supported iterable: set, tuple, list
 
-    Example
+    Example:
 
     .. code-block::
 
@@ -673,6 +673,7 @@ class CartesianProduct(ParameterGenerator):
        Data variables:
            parameter_1   (set_hash) object 1 1 2 2
            parameter_2   (set_hash) object 'a' 'b' 'a' 'b'
+
     """
 
     def _validate(self) -> None:
@@ -741,7 +742,7 @@ class LatinHypercube(_ScipyGenerator):
     keyword argument is internally managed and will be overwritten to match the number of parameters defined in the
     parameter schema.
 
-    Example
+    Example:
 
     .. code-block::
 
@@ -770,6 +771,7 @@ class LatinHypercube(_ScipyGenerator):
        Data variables:
            parameter_1   (set_hash) float64 0.125 ... 51.15
            parameter_2   (set_hash) float64 0.625 ... 30.97
+
     """
 
     def __init__(self, *args, **kwargs) -> None:
@@ -829,7 +831,7 @@ class OneAtATime(ParameterGenerator):
         * Parameter key is not a supported iterable: tuple, list
         * Parameter key is empty
 
-    Example
+    Example:
 
     .. code-block::
 
@@ -851,6 +853,7 @@ class OneAtATime(ParameterGenerator):
            parameter_1     (set_name) float64 32B 1.0 1.0 1.0 1.0
            parameter_2     (set_name) <U1 16B 'a' 'b' 'a' 'a'
            parameter_3     (set_name) int64 32B 5 5 3 7
+
     """
 
     def _validate(self) -> None:
@@ -948,7 +951,7 @@ class CustomStudy(ParameterGenerator):
         * Parameter schema does not contain the ``parameter_samples`` key
         * The ``parameter_samples`` value is an improperly shaped array
 
-    Example
+    Example:
 
     .. code-block::
 
@@ -968,6 +971,7 @@ class CustomStudy(ParameterGenerator):
            height        (set_hash) object 1.0 2.0
            prefix        (set_hash) object 'a' 'b'
            index         (set_hash) object 5 6
+
     """
 
     def _validate(self) -> None:
@@ -1049,7 +1053,7 @@ class SobolSequence(_ScipyGenerator):
     details.  The ``d`` keyword argument is internally managed and will be overwritten to match the number of parameters
     defined in the parameter schema.
 
-    Example
+    Example:
 
     .. code-block::
 
@@ -1077,6 +1081,7 @@ class SobolSequence(_ScipyGenerator):
        Data variables:
            parameter_1   (set_name) float64 0.0 0.5 ... 7.5 2.5
            parameter_2   (set_name) float64 0.0 0.5 ... 4.25
+
     """
 
     def __init__(self, *args, **kwargs) -> None:
@@ -1143,7 +1148,7 @@ class ScipySampler(_ScipyGenerator):
     Keyword arguments for the ``scipy.stats.qmc`` ``sampler_class``. The ``d`` keyword argument is internally managed
     and will be overwritten to match the number of parameters defined in the parameter schema.
 
-    Example
+    Example:
 
     .. code-block::
 
@@ -1172,6 +1177,7 @@ class ScipySampler(_ScipyGenerator):
        Data variables:
            parameter_1   (set_hash) float64 0.125 ... 51.15
            parameter_2   (set_hash) float64 0.625 ... 30.97
+
     """
 
     def __init__(self, sampler_class, *args, **kwargs) -> None:
