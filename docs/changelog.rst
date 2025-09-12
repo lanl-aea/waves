@@ -15,6 +15,8 @@ Documentation
   for improved ruff linter/formatter rules (:merge:`1252`). By `Kyle Brindley`_.
 - Adopt ``*.scons`` file extension naming convention for SCons configuration files in the tutorials for improved ruff
   linter/formatter rules (:merge:`1252`). By `Kyle Brindley`_.
+- Use immutable default arguments in tutorial parameter schema modules (:issue:`959`, :merge:`1254`). By `Kyle
+  Brindley`_.
 
 Internal Changes
 ================
