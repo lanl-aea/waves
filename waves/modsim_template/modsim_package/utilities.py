@@ -1,4 +1,4 @@
-"""Python 3 utilities not compatible with Abaqus Python 2"""
+"""Python 3 utilities not compatible with Abaqus Python 2."""
 
 import pathlib
 import sys
@@ -15,7 +15,7 @@ def combine_data(
     group_path: str,
     concat_coord: str,
 ) -> xarray.Dataset:
-    """Combine input data files into one dataset
+    """Combine input data files into one dataset.
 
     :param input_files: list of path-like or file-like objects pointing to h5netcdf files
         containing Xarray Datasets
@@ -39,7 +39,7 @@ def merge_parameter_study(
     parameter_study_file: str | pathlib.Path,
     combined_data: xarray.Dataset,
 ) -> xarray.Dataset:
-    """Merge parameter study to existing dataset
+    """Merge parameter study to existing dataset.
 
     :param parameter_study_file: path-like or file-like object containing the parameter study dataset. Assumes the
         h5netcdf file contains only a single dataset at the root group path, .e.g. ``/``.
@@ -61,7 +61,7 @@ def save_plot(
     concat_coord: str,
     output_file: str | pathlib.Path,
 ) -> None:
-    """Save scatter plot with given x and y labels
+    """Save scatter plot with given x and y labels.
 
     :param combined_data: XArray Dataset that will be plotted.
     :param x_var: The independent (x-axis) variable key name for the Xarray Dataset "data variable"
@@ -82,7 +82,7 @@ def save_table(
     selection_dict: dict,
     output_file: str | pathlib.Path,
 ) -> None:
-    """Save csv table
+    """Save csv table.
 
     :param combined_data: XArray Dataset to be written as a CSV.
     :param selection_dict: Dictionary to define the down selection of data to be plotted. Dictionary ``key: value``
@@ -97,7 +97,7 @@ def sort_dataframe(
     index_column: str = "time",
     sort_columns: list[str] | tuple[str, ...] = ("time", "set_name"),
 ) -> pandas.DataFrame:
-    """Return a sorted dataframe and set an index
+    """Return a sorted dataframe and set an index.
 
     1. sort columns by column name
     2. sort rows by column values ``sort_columns``
@@ -147,7 +147,7 @@ def write_study_definition(
     path: pathlib.Path,
     alias: str,
 ) -> None:
-    """Write parameter study definition files to path
+    """Write parameter study definition files to path.
 
     Calls parameter generator write function or writes a YAML dictionary
 
