@@ -1,3 +1,5 @@
+"""Run the conda-recipe build against a matrix of dependencies."""
+
 import itertools
 import os
 import pathlib
@@ -26,6 +28,11 @@ conda_build_test_matrix.remove(("3.13", "4.6"))  # SCons 4.6 not available for P
 
 @pytest.mark.parametrize(("python_version", "scons_version"), conda_build_test_matrix)
 def test_matrix(python_version: str, scons_version: str) -> None:
+    """Run the conda-recipe build against a matrix of dependencies.
+
+    :param python_version: the Python version with major and minor version numbers, e.g. "3.10"
+    :param scons_version: the SCons version with major and minor version numbers, e.g. "4.6"
+    """
     template = command_template
     command = template.safe_substitute(
         {

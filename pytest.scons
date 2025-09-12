@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+"""Configure the unit and system test workflows."""
 
 import pathlib
 

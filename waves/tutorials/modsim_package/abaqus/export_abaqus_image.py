@@ -1,3 +1,5 @@
+"""Save an assembly view image of an Abaqus model from an input or CAE file."""
+
 import argparse
 import inspect
 import os
@@ -163,21 +165,24 @@ class AbaqusNamedTemporaryFile:
     """
 
     def __init__(self, input_file, *args, **kwargs):
+        """Initialize the Abaqus temporary file class."""
         self.temporary_file = tempfile.NamedTemporaryFile(*args, delete=False, **kwargs)
         shutil.copyfile(input_file, self.temporary_file.name)
         abaqus.openMdb(pathName=self.temporary_file.name)
 
     def __enter__(self):
+        """Define the context manager construction method."""
         return self.temporary_file
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        """Define the context manager cleanup method."""
         abaqus.mdb.close()
         self.temporary_file.close()
         os.remove(self.temporary_file.name)
 
 
 def get_parser():
-    """Return parser for CLI options
+    """Return parser for CLI options.
 
     All options should use the double-hyphen ``--option VALUE`` syntax to avoid clashes with the Abaqus option syntax,
     including flag style arguments ``--flag``. Single hyphen ``-f`` flag syntax often clashes with the Abaqus command

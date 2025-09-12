@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+"""Configure the MyPy static type checking workflow."""
 
 # Inherit the parent construction environment
 Import("env")

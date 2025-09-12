@@ -1,3 +1,5 @@
+"""Open a ``ccx2paraview`` CalculiX-to-VTU output file and convert to Xarray."""
+
 import argparse
 import pathlib
 import warnings
@@ -13,7 +15,7 @@ def main(
     mesh_file: pathlib.Path | None = None,
     time_points_file: pathlib.Path | None = None,
 ) -> None:
-    """Open a ``ccx2paraview`` CalculiX-to-VTU output file and convert to Xarray
+    """Open a ``ccx2paraview`` CalculiX-to-VTU output file and convert to Xarray.
 
     Assumes
 
@@ -100,7 +102,7 @@ def main(
 
 
 def time_points_from_file(time_points_file: pathlib.Path) -> numpy.ndarray:
-    """Return time points array from CalculiX ``*TIME POINTS`` CSV file
+    """Return time points array from CalculiX ``*TIME POINTS`` CSV file.
 
     :param time_points_file: A CalculiX ``*TIME POINTS`` CSV file
 
@@ -115,7 +117,7 @@ def time_points_from_file(time_points_file: pathlib.Path) -> numpy.ndarray:
 
 
 def existing_file(argument: str) -> pathlib.Path:
-    """Argparse existing pathlib.Path custom type
+    """Argparse existing pathlib.Path custom type.
 
     :param argument: string argument from command line argument
 
@@ -130,6 +132,7 @@ def existing_file(argument: str) -> pathlib.Path:
 
 
 def get_parser() -> argparse.ArgumentParser:
+    """Return the command-line interface parser."""
     script_name = pathlib.Path(__file__)
     prog = f"python {script_name.name} "
     cli_description = "Open a CalculiX-to-VTU output file produced by ``ccx2paraview`` and convert to Xarray"

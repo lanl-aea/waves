@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+"""Configure the WAVES Abaqus pseudo-builder tutorial."""
 
 import inspect
 import os

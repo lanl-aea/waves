@@ -1,4 +1,4 @@
-"""Test command line utility and associated functions"""
+"""Test command line utility and associated functions."""
 
 import pathlib
 from contextlib import nullcontext as does_not_raise

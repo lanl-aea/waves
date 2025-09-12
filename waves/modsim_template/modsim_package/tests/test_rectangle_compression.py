@@ -1,3 +1,5 @@
+"""Test the rectangle compression module."""
+
 import pytest
 
 from modsim_package import rectangle_compression
@@ -20,6 +22,11 @@ nominal_tests = {
     ids=nominal_tests.keys(),
 )
 def test_nominal(kwargs, expected):
+    """Test :func:`rectangle_compression.nominal`.
+
+    :param kwargs: the tested function's keyword arguments
+    :param expected: the tested function's expected return value
+    """
     # Set default expectations to match default argument values
     expected_kwargs = {"width": 1.0, "height": 1.0, "global_seed": 1.0, "displacement": -0.01}
     # Update expected arguments to match test case
@@ -46,7 +53,12 @@ mesh_convergence_tests = {
     mesh_convergence_tests.values(),
     ids=mesh_convergence_tests.keys(),
 )
-def test_mesh_convergence(kwargs, expected):
+def test_mesh_convergence(kwargs, expected) -> None:
+    """Test :func:`rectangle_compression.mesh_convergence`.
+
+    :param kwargs: the tested function's keyword arguments
+    :param expected: the tested function's expected return value
+    """
     # Set default expectations to match default argument values
     expected_kwargs = {"width": [1.0], "height": [1.0], "global_seed": [1.0, 0.5, 0.25, 0.125], "displacement": [-0.01]}
 

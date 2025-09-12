@@ -1,3 +1,5 @@
+"""Mesh the simple cube geometry partitioned by ``cube_partition.py``."""
+
 import argparse
 import pathlib
 import shutil
@@ -7,7 +9,7 @@ import cubit
 
 
 def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaqus"):
-    """Mesh the simple cube geometry partitioned by ``cube_partition.py``
+    """Mesh the simple cube geometry partitioned by ``cube_partition.py``.
 
     This script meshes a simple Cubit model with a single cube part.
 
@@ -67,6 +69,7 @@ def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaq
 
 
 def get_parser():
+    """Return the command-line interface parser."""
     script_name = pathlib.Path(__file__)
     # Set default parameter values
     default_input_file = script_name.with_suffix(".cub").name.replace("_mesh", "_partition")

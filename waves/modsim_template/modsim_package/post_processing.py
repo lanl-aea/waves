@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Post-process with data catenation and plotting"""
+"""Post-process with data catenation and plotting."""
 
 import argparse
 import pathlib

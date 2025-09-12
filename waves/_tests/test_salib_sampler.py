@@ -1,4 +1,4 @@
-"""Test SALibSampler Class"""
+"""Test SALibSampler Class."""
 
 from contextlib import nullcontext as does_not_raise
 from unittest.mock import patch
@@ -13,7 +13,7 @@ from waves.parameter_generators import SALibSampler
 
 
 class TestSALibSampler:
-    """Class for testing SALib Sampler parameter study generator class"""
+    """Class for testing SALib Sampler parameter study generator class."""
 
     sampler_overrides = {
         "sobol: two parameter": (

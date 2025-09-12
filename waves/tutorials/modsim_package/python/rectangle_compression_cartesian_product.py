@@ -1,4 +1,4 @@
-"""Parameter sets and schemas for the rectangle compression simulation"""
+"""Parameter sets and schemas for the rectangle compression simulation."""
 
 
 def parameter_schema(
@@ -7,7 +7,7 @@ def parameter_schema(
     global_seed: list[float] | tuple[float, ...] = (1.0,),
     displacement: list[float] | tuple[float, ...] = (-0.01,),
 ) -> dict[str, list[float]]:
-    """Return WAVES CartesianProduct parameter schema
+    """Return WAVES CartesianProduct parameter schema.
 
     :param width: The rectangle width
     :param height: The rectangle height

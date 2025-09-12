@@ -1,4 +1,4 @@
-"""Parameter sets and schemas for the rectangle compression simulation"""
+"""Parameter sets and schemas for the rectangle compression simulation."""
 
 
 def parameter_schema(
@@ -7,7 +7,7 @@ def parameter_schema(
     global_seed: float = 1.0,
     displacement: float = -0.01,
 ) -> dict[str, float]:
-    """Return nominal simulation variables dictionary
+    """Return nominal simulation variables dictionary.
 
     :param width: The rectangle width
     :param height: The rectangle height

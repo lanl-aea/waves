@@ -1,3 +1,5 @@
+"""Test the project solver module."""
+
 import argparse
 import pathlib
 from contextlib import nullcontext as does_not_raise
@@ -7,7 +9,8 @@ import pytest
 import solver
 
 
-def test_main():
+def test_main() -> None:
+    """Test :func:`solver.main`."""
     # Check print help
     with (
         patch("sys.argv", ["solver.py"]),
@@ -79,7 +82,13 @@ name_output_file = {
     name_output_file.values(),
     ids=name_output_file.keys(),
 )
-def test_name_output_file(input_file, output_file, expected):
+def test_name_output_file(input_file, output_file, expected) -> None:
+    """Test :func:`solver.name_output_file`.
+
+    :param input_file: the tested function's first positional argument
+    :param output_file: the tested function's second positional argument
+    :param expected: the tested function's expected return value
+    """
     returned_output_file = solver.name_output_file(input_file, output_file)
     assert returned_output_file == expected
 
@@ -121,7 +130,15 @@ name_log_file = {
     name_log_file.values(),
     ids=name_log_file.keys(),
 )
-def test_name_log_file(log_file, max_iterations, exists_side_effect, expected, outcome):
+def test_name_log_file(log_file, max_iterations, exists_side_effect, expected, outcome) -> None:
+    """Test :func:`solver.name_log_file`.
+
+    :param log_file: the tested function's first positional argument
+    :param max_iterations: the tested function's second positional argument
+    :param exists_side_effect: the mock log file's existence check
+    :param expected: the tested function's expected return value
+    :param outcome: the tested function's expected side effect
+    """
     with (
         patch("pathlib.Path.exists", side_effect=exists_side_effect),
         outcome,
@@ -145,7 +162,15 @@ read_input = {
     read_input.values(),
     ids=read_input.keys(),
 )
-def test_read_input(input_file, is_file_result, mock_data, expected, outcome):
+def test_read_input(input_file, is_file_result, mock_data, expected, outcome) -> None:
+    """Test :func:`solver.read_input`.
+
+    :param input_file: the tested function's first positional argument
+    :param is_file_result: the mock input file's existence check
+    :param mock_data: the mock data returned from the input file
+    :param expected: the tested function's expected return value
+    :param outcome: the tested function's expected side effect
+    """
     with (
         patch("pathlib.Path.is_file", side_effect=[is_file_result]),
         patch("pathlib.Path.open", mock_open(read_data=mock_data)),
@@ -204,6 +229,13 @@ configure = {
     ids=configure.keys(),
 )
 def test_configure(args, read_input, expected, outcome):
+    """Test :func:`solver.configure`.
+
+    :param args: the tested function's first positional argument
+    :param read_input: the mock return value from :meth:`solver.read_input`
+    :param expected: the tested function's expected return value
+    :param outcome: the tested function's expected side effect
+    """
     log_file = pathlib.Path("solver.log")
     output_file = pathlib.Path(expected["output_file"])
     mocked_configuration = {
@@ -236,7 +268,13 @@ solve_output_files = {
     solve_output_files.values(),
     ids=solve_output_files.keys(),
 )
-def test_solve_output_files(output_file, solve_cpus, expected):
+def test_solve_output_files(output_file, solve_cpus, expected) -> None:
+    """Test :func:`solver.solve_output_files`.
+
+    :param output_file: the tested function's first positional argument
+    :param solve_cpus: the tested function's second positional argument
+    :param expected: the tested function's expected return value
+    """
     output_files = solver.solve_output_files(output_file, solve_cpus)
     assert output_files == expected
 
@@ -266,6 +304,12 @@ solve = {
     ids=solve.keys(),
 )
 def test_solve(configuration, exists, outcome):
+    """Test :func:`solver.solve`.
+
+    :param configuration: the tested function's positional argument
+    :param exists: the mock input file's existence check
+    :param outcome: the tested function's expected side effect
+    """
     with (
         patch("pathlib.Path.exists", return_value=exists),
         patch("pathlib.Path.open", mock_open()),
@@ -278,6 +322,7 @@ def test_solve(configuration, exists, outcome):
 
 
 def test_implicit():
+    """Test :func:`solver.implicit`."""
     dummy_namespace = {"dummy": "namespace"}
     dummy_configuration = {"configuration": "value"}
     with (
@@ -290,6 +335,7 @@ def test_implicit():
 
 
 def test_explicit():
+    """Test :func:`solver.explicit`."""
     dummy_namespace = {"dummy": "namespace"}
     dummy_configuration = {"configuration": "value"}
     with (
@@ -315,7 +361,13 @@ positive_nonzero_int = {
     positive_nonzero_int.values(),
     ids=positive_nonzero_int.keys(),
 )
-def test_positive_nonzero_int(argument, expected, outcome):
+def test_positive_nonzero_int(argument, expected, outcome) -> None:
+    """Test :func:`solver.positive_nonzero_int`.
+
+    :param argument: the tested function's positional argument
+    :param expected: the tested function's expected return value
+    :param outcome: the tested function's expected side effect
+    """
     with outcome:
         try:
             answer = solver.positive_nonzero_int(argument)
@@ -324,5 +376,7 @@ def test_positive_nonzero_int(argument, expected, outcome):
             pass
 
 
-def test_get_parser():
+@pytest.mark.skip(reason="Not yet implemented")
+def test_get_parser() -> None:
+    """Test :func:`solver.get_parser`."""
     pass

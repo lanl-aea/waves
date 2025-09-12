@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Example of catenating WAVES parameter study results and definition"""
+"""Example of catenating WAVES parameter study results and definition."""
 
 import argparse
 import pathlib
@@ -70,7 +70,7 @@ def save_plot(
     concat_coord: str,
     output_file: str | pathlib.Path,
 ) -> None:
-    """Save scatter plot with given x and y labels
+    """Save scatter plot with given x and y labels.
 
     :param combined_data: XArray Dataset that will be plotted.
     :param x_var: The independent (x-axis) variable key name for the Xarray Dataset "data variable"
@@ -91,7 +91,7 @@ def save_table(
     selection_dict: dict,
     output_file: str | pathlib.Path,
 ) -> None:
-    """Save csv table
+    """Save csv table.
 
     :param combined_data: XArray Dataset to be written as a CSV.
     :param selection_dict: Dictionary to define the down selection of data to be plotted. Dictionary ``key: value``

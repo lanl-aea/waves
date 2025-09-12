@@ -1,4 +1,6 @@
 #! /usr/bin/env python
+"""Configure the WAVES ``ParameterStudySConscript`` tutorial workflow."""
+
 Import("env", "set_name", "parameters")
 
 env.Command(

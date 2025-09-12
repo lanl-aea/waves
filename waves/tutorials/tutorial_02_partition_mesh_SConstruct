@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+"""Configure the WAVES partition and mesh tutorial."""
 
 import os
 import pathlib

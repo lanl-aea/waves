@@ -1,4 +1,4 @@
-"""Test CartesianProduct Class"""
+"""Test CartesianProduct Class."""
 
 from contextlib import nullcontext as does_not_raise
 from unittest.mock import call, mock_open, patch
@@ -14,7 +14,7 @@ from waves.parameter_generators import CartesianProduct
 
 
 class TestCartesianProduct:
-    """Class for testing CartesianProduct parameter study generator class"""
+    """Class for testing CartesianProduct parameter study generator class."""
 
     validate_input = {
         "good schema": (
@@ -375,7 +375,7 @@ class TestCartesianProduct:
         ids=parameter_study_to_dict.keys(),
     )
     def test_parameter_study_to_dict(self, parameter_schema, expected_dictionary) -> None:
-        """Test parameter study dictionary conversion"""
+        """Test parameter study dictionary conversion."""
         test_parameter_study_dict = CartesianProduct(parameter_schema)
         returned_dictionary = test_parameter_study_dict.parameter_study_to_dict()
         assert expected_dictionary.keys() == returned_dictionary.keys()

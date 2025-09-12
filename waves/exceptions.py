@@ -17,14 +17,17 @@ exceptions differently.
 
 
 class WAVESError(Exception):
-    """The base class for WAVES exceptions. All exceptions that must be caught by the CLI should derive from this
-    class.
+    """Define the base class for WAVES exceptions.
+
+    All exceptions that must be caught by the CLI should derive from this class.
     """
 
 
 class APIError(WAVESError):
-    """Raised when an API validation fails, e.g. an argument value is outside the list of acceptable choices. Intended
-    to mirror an associated ``argparse`` CLI option validation."""
+    """Raised when an API validation fails, e.g. an argument value is outside the list of acceptable choices.
+
+    Intended to mirror an associated ``argparse`` CLI option validation.
+    """
 
 
 class MutuallyExclusiveError(APIError):
@@ -36,4 +39,4 @@ class ChoicesError(APIError):
 
 
 class SchemaValidationError(APIError):
-    """Raised when a WAVES parameter generator schema validation fails"""
+    """Raised when a WAVES parameter generator schema validation fails."""

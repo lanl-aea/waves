@@ -1,4 +1,4 @@
-"""Parameter sets and schemas for the rectangle compression simulation"""
+"""Parameter sets and schemas for the rectangle compression simulation."""
 
 import types
 import typing
@@ -12,7 +12,7 @@ def parameter_schema(
     width: dict[str, typing.Any] | types.MappingProxyType = default_width,
     height: dict[str, typing.Any] | types.MappingProxyType = default_height,
 ) -> dict[str, typing.Any]:
-    """Return WAVES Scipy LatinHypercube parameter schema
+    """Return WAVES Scipy LatinHypercube parameter schema.
 
     :param num_simulations: Number of samples to generate
     :param width: The rectangle width Scipy distribution definition

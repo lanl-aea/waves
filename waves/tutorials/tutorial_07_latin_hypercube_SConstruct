@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+"""Configure the WAVES parameter study tutorial using the Latin hypercube parameter generator."""
 
 import os
 import pathlib

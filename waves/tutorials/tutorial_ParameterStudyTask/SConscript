@@ -1,3 +1,5 @@
+"""Configure the WAVES ``ParameterStudyTask`` tutorial workflow."""
+
 Import("env", "study", "subdirectories")
 
 targets = []

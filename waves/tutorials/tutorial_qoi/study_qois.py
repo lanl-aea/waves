@@ -1,9 +1,12 @@
+"""Create example quantities of interest (QOIs) for the WAVES QoI module tutorial."""
+
 import argparse
 
 from waves import qoi
 
 
-def main():
+def main() -> None:
+    """Create example quantities of interest (QOIs) for the WAVES QoI module tutorial."""
     parser = argparse.ArgumentParser()
     parser.add_argument("--width", type=float)
     parser.add_argument("--height", type=float)

@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+"""Configure the WAVES Matlab tutorial."""
 
 import os
 import pathlib

@@ -1,3 +1,5 @@
+"""Test the Python 3 and Abaqus Python 2/3 compatible argparse types module."""
+
 import argparse
 from contextlib import nullcontext as does_not_raise
 
@@ -18,6 +20,12 @@ positive_float = {
     ids=positive_float.keys(),
 )
 def test_positive_float(argument, expected, outcome):
+    """Test :func:`argparse_types.positive_float`.
+
+    :param argument: the tested function's positional argument
+    :param expected: the tested function's expected return value
+    :param outcome: the tested function's expected side effect
+    """
     with outcome:
         try:
             answer = argparse_types.positive_float(argument)

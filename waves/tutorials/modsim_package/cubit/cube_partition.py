@@ -1,3 +1,5 @@
+"""Partition the simple cube geometry created by ``cube_geometry.py``."""
+
 import argparse
 import pathlib
 import shutil
@@ -7,7 +9,7 @@ import cubit
 
 
 def main(input_file, output_file):
-    """Partition the simple cube geometry created by ``cube_geometry.py``
+    """Partition the simple cube geometry created by ``cube_geometry.py``.
 
     This script partitions a simple Cubit model with a single cube part.
 
@@ -75,6 +77,7 @@ def main(input_file, output_file):
 
 
 def get_parser():
+    """Return the command-line interface parser."""
     script_name = pathlib.Path(__file__)
     # Set default parameter values
     default_input_file = script_name.with_suffix(".cub").name.replace("_partition", "_geometry")

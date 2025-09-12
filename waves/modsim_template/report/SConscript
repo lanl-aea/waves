@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-"""modsim_template report workflow
+"""Configure modsim_template report workflow.
 
 Requires the following ``SConscript(..., exports={})``
 

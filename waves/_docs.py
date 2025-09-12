@@ -12,7 +12,7 @@ _exclude_from_namespace = set(globals().keys())
 
 
 def get_parser() -> argparse.ArgumentParser:
-    """Return a 'no-help' parser for the docs subcommand
+    """Return a 'no-help' parser for the docs subcommand.
 
     :return: parser
     """
@@ -33,12 +33,13 @@ def get_parser() -> argparse.ArgumentParser:
 
 
 def main(documentation_index: pathlib.Path, print_local_path: bool = False) -> None:
-    """Open the package HTML documentation in the system default web browser or print the path to the documentation
-    index file.
+    """Open the package HTML documentation in the system default web browser or print documentation index path.
 
     :param print_local_path: Flag to print the local path to terminal instead of calling the default web browser
-    """
 
+    :raises RuntimeError: if the installed documentation path is not found
+    :raises RuntimeError: if a web browser fails to open
+    """
     if print_local_path:
         if documentation_index.exists():
             print(documentation_index, file=sys.stdout)

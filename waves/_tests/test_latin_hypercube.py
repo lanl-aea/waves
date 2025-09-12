@@ -1,4 +1,4 @@
-"""Test LatinHypercube Class"""
+"""Test LatinHypercube Class."""
 
 from unittest.mock import patch
 
@@ -11,7 +11,7 @@ from waves.parameter_generators import LatinHypercube, ScipySampler
 
 
 class TestLatinHypercube:
-    """Class for testing LatinHypercube parameter study generator class"""
+    """Class for testing LatinHypercube parameter study generator class."""
 
     generate_input = {
         "good schema 5x2": (

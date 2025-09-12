@@ -1,3 +1,5 @@
+"""Create a simple rectangle geometry."""
+
 import argparse
 import pathlib
 import sys
@@ -5,7 +7,7 @@ import sys
 import cubit
 
 
-def main(output_file, width, height):
+def main(output_file, width, height) -> None:
     """Create a simple rectangle geometry.
 
     This script creates a simple Cubit model with a single rectangle part.
@@ -32,7 +34,8 @@ def main(output_file, width, height):
     cubit.cmd(f"save as '{output_file}' overwrite")
 
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
+    """Return the command-line interface parser."""
     script_name = pathlib.Path(__file__)
     # Set default parameter values
     default_output_file = script_name.with_suffix(".cub").name

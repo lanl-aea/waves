@@ -1,3 +1,5 @@
+"""Create a simple rectangle geometry."""
+
 import argparse
 import pathlib
 
@@ -95,7 +97,7 @@ def main(
 
 
 def tags_from_dimTags(dimTags: list[tuple[int, int]]) -> list[int]:  # noqa: N802,N803
-    """Return tags from Gmsh entity ``dimTags`` list of tuples
+    """Return tags from Gmsh entity ``dimTags`` list of tuples.
 
     :returns: list of tags
     """
@@ -107,7 +109,7 @@ def get_entities_at_coordinates(
     dimension: int,
     tolerance: float = 1.0e-6,
 ) -> list[tuple[int, int]]:
-    """Return Gmsh ``dimTags`` of entities of dimension within bounding box determined by coordinates and tolerance
+    """Return Gmsh ``dimTags`` of entities of dimension within bounding box determined by coordinates and tolerance.
 
     :param coordinates: 3D coordinates (X, Y, Z) for center of bounding box
     :param dimension: Return entities matching dimension
@@ -124,7 +126,8 @@ def get_entities_at_coordinates(
     return gmsh.model.getEntitiesInBoundingBox(*min_coordinate, *max_coordinate, dimension)
 
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
+    """Return the command-line interface parser."""
     prog = f"python {script_name.name} "
     cli_description = "Create a simple rectangle geometry and write an ``output_file``.msh Gmsh model file."
     parser = argparse.ArgumentParser(description=cli_description, prog=prog)

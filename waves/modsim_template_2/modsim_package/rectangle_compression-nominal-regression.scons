@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-"""Rectangle compression nominal regression testing workflow
+"""Rectangle compression nominal regression testing workflow.
 
 Requires the following ``SConscript(..., exports={})``
 

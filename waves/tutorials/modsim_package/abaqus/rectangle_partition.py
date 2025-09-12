@@ -1,3 +1,5 @@
+"""Partition the simple rectangle geometry created by ``rectangle_geometry.py``."""
+
 import argparse
 import inspect
 import os
@@ -8,7 +10,7 @@ import abaqus
 
 
 def main(input_file, output_file, model_name, part_name, width, height):
-    """Partition the simple rectangle geometry created by ``rectangle_geometry.py``
+    """Partition the simple rectangle geometry created by ``rectangle_geometry.py``.
 
     This script partitions a simple Abaqus model with a single rectangle part.
 
@@ -90,7 +92,7 @@ def main(input_file, output_file, model_name, part_name, width, height):
 
 
 def get_parser():
-    """Return parser for CLI options
+    """Return parser for CLI options.
 
     All options should use the double-hyphen ``--option VALUE`` syntax to avoid clashes with the Abaqus option syntax,
     including flag style arguments ``--flag``. Single hyphen ``-f`` flag syntax often clashes with the Abaqus command

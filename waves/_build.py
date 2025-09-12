@@ -14,7 +14,7 @@ _exclude_from_namespace = set(globals().keys())
 
 
 def get_parser() -> argparse.ArgumentParser:
-    """Return a 'no-help' parser for the build subcommand
+    """Return a 'no-help' parser for the build subcommand.
 
     :return: parser
     """
@@ -61,7 +61,7 @@ def main(
     working_directory: str | pathlib.Path | None = None,
     git_clone_directory: str | pathlib.Path | None = None,
 ) -> None:
-    """Submit an iterative SCons command
+    """Submit an iterative SCons command.
 
     SCons command is re-submitted until SCons reports that the target 'is up to date.' or the iteration count is
     reached.
@@ -72,7 +72,6 @@ def main(
     :param working_directory: Change the SCons command working directory
     :param git_clone_directory: Destination directory for a Git clone operation
     """
-
     if not scons_args:
         scons_args = []
     if not targets:

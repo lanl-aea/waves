@@ -1,5 +1,4 @@
-"""Test odb extract
-Test odb_extract.py
+"""Test :module:`waves._abaqus.odb_extract`.
 
 .. moduleauthor:: Prabhu S. Khalsa <pkhalsa@lanl.gov>
 """

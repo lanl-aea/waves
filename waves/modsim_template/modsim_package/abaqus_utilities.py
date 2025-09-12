@@ -1,4 +1,4 @@
-"""Abaqus utilities to be re-used in multiple places"""
+"""Abaqus utilities to be re-used in multiple places."""
 
 import os
 import re
@@ -10,7 +10,7 @@ import abaqusConstants
 
 
 def export_mesh(model_object, part_name, orphan_mesh_file):
-    """Export an orphan mesh for the specified part instance in an Abaqus model
+    """Export an orphan mesh for the specified part instance in an Abaqus model.
 
     Using an abaqus model object (``model_object = abaqus.mdb.models[model_name]``) with part(s) that are meshed and
     instanced in an assembly, get the ``*.inp`` keyword blocks and save an orphan mesh file, ``orphan_mesh_file``.inp,
@@ -65,14 +65,17 @@ class AbaqusNamedTemporaryFile:
     """
 
     def __init__(self, input_file, *args, **kwargs):
+        """Initialize the Abaqus temporary file class."""
         self.temporary_file = tempfile.NamedTemporaryFile(*args, delete=False, **kwargs)
         shutil.copyfile(input_file, self.temporary_file.name)
         abaqus.openMdb(pathName=self.temporary_file.name)
 
     def __enter__(self):
+        """Define the context manager construction method."""
         return self.temporary_file
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        """Define the context manager cleanup method."""
         abaqus.mdb.close()
         self.temporary_file.close()
         os.remove(self.temporary_file.name)

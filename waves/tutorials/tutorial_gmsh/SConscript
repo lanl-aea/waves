@@ -1,4 +1,6 @@
 #! /usr/bin/env python
+"""Configure the WAVES Gmsh tutorial workflow."""
+
 import vtu2xarray
 
 Import("env", "alias", "parameters")

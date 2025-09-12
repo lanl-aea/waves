@@ -1,4 +1,4 @@
-"""Test QOI module"""
+"""Test QOI module."""
 
 import datetime
 import io

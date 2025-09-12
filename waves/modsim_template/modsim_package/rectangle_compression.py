@@ -1,4 +1,4 @@
-"""Parameter sets and schemas for the rectangle compression simulation"""
+"""Parameter sets and schemas for the rectangle compression simulation."""
 
 
 def nominal(
@@ -7,7 +7,7 @@ def nominal(
     global_seed: float = 1.0,
     displacement: float = -0.01,
 ) -> dict[str, float]:
-    """Return nominal simulation variables dictionary
+    """Return nominal simulation variables dictionary.
 
     :param width: The rectangle width
     :param height: The rectangle height
@@ -31,7 +31,7 @@ def mesh_convergence(
     global_seed: list[float] | tuple[float, ...] = (1.0, 0.5, 0.25, 0.125),
     displacement: list[float] | tuple[float, ...] = (-0.01,),
 ) -> dict[str, list[float]]:
-    """Return mesh convergence WAVES CartesianProduct schema dictionary
+    """Return mesh convergence WAVES CartesianProduct schema dictionary.
 
     :param width: The rectangle width
     :param height: The rectangle height

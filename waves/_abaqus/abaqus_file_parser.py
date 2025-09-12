@@ -1,5 +1,4 @@
-"""Abaqus File Parser
-Parse various file types created via Abaqus
+"""Parse various file types created via Abaqus.
 
 .. moduleauthor:: Prabhu S. Khalsa <pkhalsa@lanl.gov>
 """
@@ -55,7 +54,7 @@ class AbaqusFileParser(ABC):
     # must create a method called parse
 
     def write_yaml(self, output_file=None):
-        """Write the data in yaml format to the output file
+        """Write the data in yaml format to the output file.
 
         :param str output_file: Name of output file to write yaml (default: <input file>.parsed)
         """
@@ -71,7 +70,7 @@ class AbaqusFileParser(ABC):
             sys.exit(f"Couldn't write file {self.output_file}: {e}")
 
     def print_warning(self, message):
-        """Print a warning message
+        """Print a warning message.
 
         :param str message: string with a message to print
         """
@@ -79,7 +78,7 @@ class AbaqusFileParser(ABC):
             print(message)
 
     def print_error(self, message):
-        """Print an error message
+        """Print an error message.
 
         :param str message: string with a message to print
         """
@@ -88,7 +87,8 @@ class AbaqusFileParser(ABC):
 
 
 class OdbReportFileParser(AbaqusFileParser):
-    """Class for parsing Abaqus odbreport files.
+    """Return class for parsing Abaqus odbreport files.
+
     Expected input includes only files that are in the csv format and which have used the 'blocked' option.
 
     Results are stored either in a dictionary which mimics the format of the odb file (see Abaqus documentation),
@@ -120,7 +120,8 @@ class OdbReportFileParser(AbaqusFileParser):
 
     def parse(self, data_format="extract", h5_file=f"extract{_settings._default_h5_extension}", time_stamp=None):
         """Parse the file and store the results in the self.parsed dictionary.
-         Can parse csv formatted output with the blocked option from the odbreport command
+
+         Can parse csv formatted output with the blocked option from the odbreport command.
 
         :param str data_format: Format in which to store data can be 'odb' or 'extract'
         :param str h5_file: Name of hdf5 file to store data into when using the extract format
@@ -229,7 +230,7 @@ class OdbReportFileParser(AbaqusFileParser):
             self.parsed = self.create_extract_format(self.parsed, h5_file, time_stamp)
 
     def parse_section_categories(self, f, categories, number_of_categories):
-        """Parse the section that contains section categories
+        """Parse the section that contains section categories.
 
         :param file object f: open file
         :param dict categories: dictionary for storing the section categories
@@ -257,7 +258,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 break
 
     def parse_instances(self, f, instances, number_of_instances):
-        """Parse the section that contains instances
+        """Parse the section that contains instances.
 
         :param file object f: open file
         :param dict instances: dictionary for storing the instances
@@ -320,7 +321,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 break
 
     def parse_nodes(self, f, instance, number_of_nodes, embedded_space):
-        """Parse the section that contains nodes
+        """Parse the section that contains nodes.
 
         :param file object f: open file
         :param dict instance: dictionary for storing the nodes
@@ -363,7 +364,7 @@ class OdbReportFileParser(AbaqusFileParser):
                     break
 
     def parse_element_classes(self, f, instance, number_of_element_classes):
-        """Parse the section that contains element classes
+        """Parse the section that contains element classes.
 
         :param file object f: open file
         :param dict instance: dictionary for storing the elements
@@ -407,7 +408,7 @@ class OdbReportFileParser(AbaqusFileParser):
                     line = f.readline()
 
     def parse_elements(self, f, instance, number_of_elements):
-        """Parse the section that contains elements
+        """Parse the section that contains elements.
 
         :param file object f: open file
         :param dict instance: dictionary for storing the elements
@@ -472,7 +473,7 @@ class OdbReportFileParser(AbaqusFileParser):
                     break
 
     def parse_node_set(self, f, instance, number_of_node_sets):
-        """Parse the section that contains node sets
+        """Parse the section that contains node sets.
 
         :param file object f: open file
         :param dict instance: dictionary for storing the node sets
@@ -525,7 +526,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 break
 
     def parse_element_set(self, f, instance, number_of_element_sets):
-        """Parse the section that contains element sets
+        """Parse the section that contains element sets.
 
         :param file object f: open file
         :param dict instance: dictionary for storing the element sets
@@ -601,7 +602,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 break
 
     def parse_surfaces(self, f, instance, number_of_surfaces):
-        """Parse the section that contains surfaces
+        """Parse the section that contains surfaces.
 
         :param file object f: open file
         :param dict instance: dictionary for storing the surfaces
@@ -708,7 +709,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 break
 
     def parse_analytic_surface(self, f, instance, line):
-        """Parse the section that contains analytic surface
+        """Parse the section that contains analytic surface.
 
         :param file object f: open file
         :param dict instance: dictionary for storing the analytic surface
@@ -743,7 +744,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 instance["analyticSurface"]["segments"][segment["name"]] = segment
 
     def parse_rigid_bodies(self, f, instance, number_of_rigid_bodies):
-        """Parse the section that contains rigid_bodies
+        """Parse the section that contains rigid_bodies.
 
         :param file object f: open file
         :param dict instance: dictionary for storing the rigid bodies
@@ -800,7 +801,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 break
 
     def parse_steps(self, f, steps, number_of_steps):
-        """Parse the section that contains the data for steps
+        """Parse the section that contains the data for steps.
 
         :param file object f: open file
         :param dict steps: dictionary for storing the steps
@@ -846,7 +847,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 break
 
     def parse_frames(self, f, frames, number_of_frames):
-        """Parse the section that contains the data for frames
+        """Parse the section that contains the data for frames.
 
         :param file object f: open file
         :param list frames: list for storing the frames
@@ -892,7 +893,7 @@ class OdbReportFileParser(AbaqusFileParser):
         return line
 
     def parse_fields(self, f, fields, line):
-        """Parse the section that contains the data for field outputs
+        """Parse the section that contains the data for field outputs.
 
         :param file object f: open file
         :param dict fields: dictionary for storing the field outputs
@@ -946,7 +947,7 @@ class OdbReportFileParser(AbaqusFileParser):
         return line
 
     def parse_components_of_field(self, f, line, field):
-        """Parse the section that contains the data for field outputs found after the 'Components of field' heading
+        """Parse the section that contains the data for field outputs found after the 'Components of field' heading.
 
         :param file object f: open file
         :param str line: current line of file
@@ -954,7 +955,6 @@ class OdbReportFileParser(AbaqusFileParser):
         :return: current line of file
         :rtype: str
         """
-
         if line.strip()[-1] == "/":  # Line has continuation
             continuation_line = f.readline()
             line += continuation_line
@@ -975,7 +975,7 @@ class OdbReportFileParser(AbaqusFileParser):
         return line
 
     def setup_extract_field_format(self, field, line):
-        """Do setup of field output formatting for extract format
+        """Do setup of field output formatting for extract format.
 
         :param dict field: dictionary with field data
         :param str line: current line of file
@@ -1015,7 +1015,7 @@ class OdbReportFileParser(AbaqusFileParser):
         return current_output
 
     def parse_field_values(self, f, line, values):
-        """Parse the section that contains the data for field values
+        """Parse the section that contains the data for field values.
 
         :param file object f: open file
         :param str line: current line
@@ -1330,7 +1330,7 @@ class OdbReportFileParser(AbaqusFileParser):
         return line
 
     def get_position_index(self, position, position_type, values):
-        """Get the index of the position (node or element) currently used
+        """Get the index of the position (node or element) currently used.
 
         :param int position: integer representing a node or element
         :param str position_type: string of either 'nodes' or 'elements'
@@ -1355,7 +1355,7 @@ class OdbReportFileParser(AbaqusFileParser):
         return index_key, just_added
 
     def pad_none_values(self, step_number, frame_number, position_length, data_length, element_size, values):
-        """Pad the values list with None or lists of None values in the locations indicated by the parameters
+        """Pad the values list with None or lists of None values in the locations indicated by the parameters.
 
         :param int step_number: index of current step
         :param int frame_number: index of current frame
@@ -1384,7 +1384,7 @@ class OdbReportFileParser(AbaqusFileParser):
     # arguments. Remove ``noqa: ARG002`` after fixing.
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/962
     def parse_history_regions(self, f, line, regions, number_of_history_regions):  # noqa: ARG002
-        """Parse the section that contains history regions
+        """Parse the section that contains history regions.
 
         :param file object f: open file
         :param str line: current line of file
@@ -1448,7 +1448,7 @@ class OdbReportFileParser(AbaqusFileParser):
         return line
 
     def setup_extract_history_format(self, output, current_history_output):
-        """Do setup of history output formatting for extract format
+        """Do setup of history output formatting for extract format.
 
         :param dict output: dictionary with history output data
         :param int current_history_output: current history output count
@@ -1529,7 +1529,7 @@ class OdbReportFileParser(AbaqusFileParser):
         current_output["previous_step"] = self.current_step_name
 
     def parse_history_outputs(self, f, outputs, line):
-        """Parse the section that contains history outputs
+        """Parse the section that contains history outputs.
 
         :param file object f: open file
         :param dict outputs: dict for storing the history output data
@@ -1576,7 +1576,7 @@ class OdbReportFileParser(AbaqusFileParser):
         return line
 
     def create_extract_format(self, odb_dict, h5_file, time_stamp):
-        """Format the dictionary with the odb data into something that resembles previous abaqus extract method
+        """Format the dictionary with the odb data into something that resembles previous abaqus extract method.
 
         :param dict odb_dict: Dictionary with odb data
         :param str h5_file: Name of h5_file to use for storing data

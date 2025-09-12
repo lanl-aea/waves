@@ -1,3 +1,5 @@
+"""Open an Abaqus CAE model file and submit the job."""
+
 import argparse
 import inspect
 import json
@@ -58,7 +60,7 @@ def main(input_file, job_name, model_name=default_model_name, cpus=default_cpus,
 
 
 def get_parser():
-    """Return parser for CLI options
+    """Return parser for CLI options.
 
     All options should use the double-hyphen ``--option VALUE`` syntax to avoid clashes with the Abaqus option syntax,
     including flag style arguments ``--flag``. Single hyphen ``-f`` flag syntax often clashes with the Abaqus command
@@ -130,21 +132,24 @@ class AbaqusNamedTemporaryFile:
     """
 
     def __init__(self, input_file, *args, **kwargs):
+        """Initialize the Abaqus temporary file class."""
         self.temporary_file = tempfile.NamedTemporaryFile(*args, delete=False, **kwargs)
         shutil.copyfile(input_file, self.temporary_file.name)
         abaqus.openMdb(pathName=self.temporary_file.name)
 
     def __enter__(self):
+        """Define the context manager construction method."""
         return self.temporary_file
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        """Define the context manager cleanup method."""
         abaqus.mdb.close()
         self.temporary_file.close()
         os.remove(self.temporary_file.name)
 
 
 def return_json_dictionary(json_file):
-    """Open a JSON file and return a dictionary compatible with Abaqus keyword arguments
+    """Open a JSON file and return a dictionary compatible with Abaqus keyword arguments.
 
     If the JSON file is ``None``, return an empty dictionary. Convert unicode strings to str. If a value is found in
     ``abaqusConstants`` convert the value.

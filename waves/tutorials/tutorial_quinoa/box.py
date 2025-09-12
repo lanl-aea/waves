@@ -1,3 +1,5 @@
+"""Write brick geometry with specified dimensions."""
+
 import argparse
 import pathlib
 
@@ -5,7 +7,7 @@ import cubit
 
 
 def main(output_file, xlength, ylength, zlength):
-    """Write brick geometry with specified dimensions
+    """Write brick geometry with specified dimensions.
 
     :param str output_file: The output file for the Cubit model. Will be stripped of the extension and ``.cub`` and
         ``.exo`` will be used for the model and mesh files, respectively.
@@ -64,7 +66,7 @@ def main(output_file, xlength, ylength, zlength):
 
 
 def get_parser():
-    """Return the command line parser"""
+    """Return the command line parser."""
     script_name = pathlib.Path(__file__)
     prog = f"python {script_name.name} "
     cli_description = "Write brick geometry ``output_file``.cub and ``output_file``.exo with specified dimensions"

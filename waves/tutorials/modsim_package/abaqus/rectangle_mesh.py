@@ -1,3 +1,5 @@
+"""Mesh the simple rectangle geometry partitioned by ``rectangle_partition.py``."""
+
 import argparse
 import inspect
 import os
@@ -20,7 +22,7 @@ except ImportError:
 
 
 def main(input_file, output_file, model_name, part_name, global_seed):
-    """Mesh the simple rectangle geometry partitioned by ``rectangle_partition.py``
+    """Mesh the simple rectangle geometry partitioned by ``rectangle_partition.py``.
 
     This script meshes a simple Abaqus model with a single rectangle part.
 
@@ -70,7 +72,7 @@ def main(input_file, output_file, model_name, part_name, global_seed):
 
 
 def get_parser():
-    """Return parser for CLI options
+    """Return parser for CLI options.
 
     All options should use the double-hyphen ``--option VALUE`` syntax to avoid clashes with the Abaqus option syntax,
     including flag style arguments ``--flag``. Single hyphen ``-f`` flag syntax often clashes with the Abaqus command

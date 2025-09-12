@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+"""Perform regression testing on simulation output."""
+
 import argparse
 import pathlib
 import sys
@@ -12,7 +14,7 @@ def sort_dataframe(
     index_column: str = "time",
     sort_columns: list[str] | tuple[str, ...] = ("time", "set_name"),
 ) -> pandas.DataFrame:
-    """Return a sorted dataframe and set an index
+    """Return a sorted dataframe and set an index.
 
     1. sort columns by column name
     2. sort rows by column values ``sort_columns``
@@ -62,7 +64,7 @@ def main(
     second_file: pathlib.Path,
     output_file: pathlib.Path,
 ) -> None:
-    """Compare CSV files and return an error code if they differ
+    """Compare CSV files and return an error code if they differ.
 
     :param first_file: path-like or file-like object containing the first CSV dataset
     :param second_file: path-like or file-like object containing the second CSV dataset
@@ -82,7 +84,7 @@ def main(
 
 
 def get_parser() -> argparse.ArgumentParser:
-    """Return parser for CLI options
+    """Return parser for CLI options.
 
     All options should use the double-hyphen ``--option VALUE`` syntax to avoid clashes with the Abaqus option syntax,
     including flag style arguments ``--flag``. Single hyphen ``-f`` flag syntax often clashes with the Abaqus command
