@@ -1,3 +1,4 @@
+"""Configure the WAVES data extraction tutorial."""
 #! /usr/bin/env python
 
 import os

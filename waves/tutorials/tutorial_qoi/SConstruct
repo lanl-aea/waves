@@ -1,3 +1,4 @@
+"""Configure the WAVES quantity-of-interest (QOI) tutorial."""
 #! /usr/bin/env python
 import os
 import pathlib

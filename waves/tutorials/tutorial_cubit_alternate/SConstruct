@@ -1,3 +1,4 @@
+"""Configure the WAVES Cubit+Abaqus/Fierro/Sierra alternate tutorial."""
 #! /usr/bin/env python
 
 import os

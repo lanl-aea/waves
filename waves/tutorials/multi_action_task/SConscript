@@ -1,3 +1,4 @@
+"""Configure the pure SCons mult-action task tutorial workflow."""
 Import("env")
 
 # Write project builders for re-use in task definitions

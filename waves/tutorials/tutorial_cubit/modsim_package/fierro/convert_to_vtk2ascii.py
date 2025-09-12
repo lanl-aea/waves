@@ -1,10 +1,12 @@
+"""Convert VTK mesh files to the older VTK ASCII version 2 files required by Fierro."""
 import argparse
 import pathlib
 
 import meshio
 
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
+    """Return the command-line interface parser."""
     cli_description = (
         "Convert mesh files to older VTK ASCII version 2 mesh files required by Fierro with MeshIO API. "
         "This output is not supported by the MeshIO CLI and must be constructed manually."
@@ -30,7 +32,8 @@ def get_parser():
     return parser
 
 
-def main():
+def main() -> None:
+    """Convert VTK mesh files to the older VTK ASCII version 2 files required by Fierro."""
     parser = get_parser()
     args = parser.parse_args()
 

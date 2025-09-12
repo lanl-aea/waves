@@ -1,3 +1,4 @@
+"""Configure the WAVES regression testing tutorial."""
 #! /usr/bin/env python
 
 import os

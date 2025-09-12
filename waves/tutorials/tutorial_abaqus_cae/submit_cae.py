@@ -1,3 +1,4 @@
+"""Open an Abaqus CAE model file and submit the job."""
 import argparse
 import inspect
 import json

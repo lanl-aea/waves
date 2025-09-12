@@ -1,3 +1,4 @@
+"""Create a simple rectangle geometry."""
 import argparse
 import pathlib
 
@@ -124,7 +125,8 @@ def get_entities_at_coordinates(
     return gmsh.model.getEntitiesInBoundingBox(*min_coordinate, *max_coordinate, dimension)
 
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
+    """Return the command-line interface parser."""
     prog = f"python {script_name.name} "
     cli_description = "Create a simple rectangle geometry and write an ``output_file``.msh Gmsh model file."
     parser = argparse.ArgumentParser(description=cli_description, prog=prog)

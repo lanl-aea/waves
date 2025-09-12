@@ -1,3 +1,4 @@
+"""Configure the WAVES Matlab tutorial."""
 #! /usr/bin/env python
 
 import os

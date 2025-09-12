@@ -1,3 +1,4 @@
+"""Strip the heading keyword from an Abaqus input file."""
 import argparse
 import pathlib
 import re
@@ -18,7 +19,8 @@ def main(input_file: pathlib.Path, output_file: pathlib.Path) -> None:
         write_file.write(write_text)
 
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
+    """Return the command-line interface parser."""
     script_name = pathlib.Path(__file__)
 
     prog = f"python {script_name.name} "

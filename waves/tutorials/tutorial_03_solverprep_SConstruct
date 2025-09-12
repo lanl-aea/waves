@@ -1,3 +1,4 @@
+"""Configure the WAVES solver preparation tutorial."""
 #! /usr/bin/env python
 
 import os

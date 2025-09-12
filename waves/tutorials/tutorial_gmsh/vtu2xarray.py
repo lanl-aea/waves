@@ -1,3 +1,4 @@
+"""Open a ``ccx2paraview`` CalculiX-to-VTU output file and convert to Xarray."""
 import argparse
 import pathlib
 import warnings

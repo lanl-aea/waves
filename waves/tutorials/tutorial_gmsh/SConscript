@@ -1,3 +1,4 @@
+"""Configure the WAVES Gmsh tutorial workflow."""
 #! /usr/bin/env python
 import vtu2xarray
 

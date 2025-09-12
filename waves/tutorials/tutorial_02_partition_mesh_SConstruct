@@ -1,3 +1,4 @@
+"""Configure the WAVES partition and mesh tutorial."""
 #! /usr/bin/env python
 
 import os

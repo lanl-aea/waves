@@ -1,3 +1,4 @@
+"""Configure the WAVES ``ParameterStudyWrite`` tutorial."""
 #! /usr/bin/env python
 
 import waves

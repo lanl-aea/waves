@@ -1,3 +1,4 @@
+"""Configure the WAVES mesh convergence tutorial."""
 #! /usr/bin/env python
 
 import os

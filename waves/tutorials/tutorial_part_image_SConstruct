@@ -1,3 +1,4 @@
+"""Configure the WAVES part image tutorial."""
 #! /usr/bin/env python
 
 import inspect

@@ -1,3 +1,4 @@
+"""Configure the pure SCons quickstart tutorial."""
 #! /usr/bin/env python
 
 import os
