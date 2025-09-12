@@ -45,7 +45,7 @@ _default_solve_cpus = 1
 
 
 def main():
-    """Main function implementing the command line interface and program flow."""
+    """Run the solver command line interface and program flow."""
     parser = get_parser()
     subcommand_list = parser._subparsers._group_actions[0].choices.keys()
     args = parser.parse_args()
@@ -147,7 +147,9 @@ def solve_output_files(output_file: pathlib.Path, solve_cpus: int) -> list[pathl
 
 
 def solve(configuration: dict) -> None:
-    """Common solve logic because we do not really have separate routines.
+    """Run the solver 'simulation' and create output files.
+
+    Common solve logic because we do not really have separate routines.
 
     :param configuration: The solver configuration
 
@@ -171,7 +173,7 @@ def solve(configuration: dict) -> None:
 
 
 def implicit(args: argparse.Namespace) -> None:
-    """Implicit routine.
+    """Run the implicit 'solve' routine.
 
     :param args: The command line argument namespace
     """
@@ -180,7 +182,7 @@ def implicit(args: argparse.Namespace) -> None:
 
 
 def explicit(args: argparse.Namespace) -> None:
-    """Explicit routine.
+    """Run the explicit 'solve' routine.
 
     :param args: The command line argument namespace
     """
