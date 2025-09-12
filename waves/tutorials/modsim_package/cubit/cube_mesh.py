@@ -1,4 +1,5 @@
 """Mesh the simple cube geometry partitioned by ``cube_partition.py``."""
+
 import argparse
 import pathlib
 import shutil

@@ -1,4 +1,5 @@
 """Save an assembly view image of an Abaqus model from an input or CAE file."""
+
 import argparse
 import inspect
 import os

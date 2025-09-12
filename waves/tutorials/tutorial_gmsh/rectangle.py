@@ -1,4 +1,5 @@
 """Create a simple rectangle geometry."""
+
 import argparse
 import pathlib
 

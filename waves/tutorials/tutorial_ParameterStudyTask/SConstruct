@@ -1,4 +1,5 @@
 """Configure the WAVES ``ParameterStudyTask`` tutorial."""
+
 import os
 
 import waves

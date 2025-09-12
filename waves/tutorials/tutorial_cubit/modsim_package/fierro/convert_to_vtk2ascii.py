@@ -1,4 +1,5 @@
 """Convert VTK mesh files to the older VTK ASCII version 2 files required by Fierro."""
+
 import argparse
 import pathlib
 

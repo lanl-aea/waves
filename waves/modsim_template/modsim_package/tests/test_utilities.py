@@ -1,4 +1,5 @@
 """Test the utilities module."""
+
 import unittest.mock
 
 import numpy

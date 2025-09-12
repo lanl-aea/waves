@@ -1,4 +1,5 @@
 """Provide project specific extensions to SCons."""
+
 import SCons.Builder
 import waves
 

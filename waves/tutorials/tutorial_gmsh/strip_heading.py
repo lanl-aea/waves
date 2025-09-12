@@ -1,4 +1,5 @@
 """Strip the heading keyword from an Abaqus input file."""
+
 import argparse
 import pathlib
 import re

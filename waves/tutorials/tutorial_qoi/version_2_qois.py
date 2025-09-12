@@ -1,4 +1,5 @@
 """Provide quantity of interest (QoI) archives for use in the WAVES QOI module tutorial."""
+
 from waves import qoi
 
 version_2_qois = qoi._create_qoi_archive(

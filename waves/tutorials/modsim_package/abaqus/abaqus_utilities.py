@@ -1,4 +1,5 @@
 """Provide Abaqus Python 2/3 compatible utilities for Abaqus CAE journal files."""
+
 import os
 import re
 

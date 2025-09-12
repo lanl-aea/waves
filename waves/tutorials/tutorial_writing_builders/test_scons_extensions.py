@@ -1,4 +1,5 @@
 """Test the project SCons extensions module."""
+
 import pytest
 import SCons.Environment
 import scons_extensions
@@ -8,7 +9,7 @@ import waves
 def dummy_emitter_for_testing(
     target: list,
     source: list,
-    env: SCons.Environment.Environment  # noqa: ARG001
+    env: SCons.Environment.Environment,  # noqa: ARG001
 ) -> tuple[list, list]:
     """Return the SCons task's target and source node lists.
 

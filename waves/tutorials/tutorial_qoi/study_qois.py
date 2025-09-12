@@ -1,4 +1,5 @@
 """Create example quantities of interest (QOIs) for the WAVES QoI module tutorial."""
+
 import argparse
 
 from waves import qoi

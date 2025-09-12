@@ -1,4 +1,5 @@
 """Test the rectangle compression module."""
+
 import pytest
 
 from modsim_package import rectangle_compression

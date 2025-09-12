@@ -1,4 +1,5 @@
 """Create a simple cube geometry."""
+
 import argparse
 import pathlib
 import sys

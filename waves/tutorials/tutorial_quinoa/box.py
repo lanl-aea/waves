@@ -1,4 +1,5 @@
 """Write brick geometry with specified dimensions."""
+
 import argparse
 import pathlib
 

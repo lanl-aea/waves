@@ -1,4 +1,5 @@
 """Create fictitious simulation output quantities of interest (QOIs) for use in the WAVES QOI module tutorial."""
+
 import argparse
 
 from waves import qoi
