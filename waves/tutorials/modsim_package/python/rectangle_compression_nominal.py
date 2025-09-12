@@ -2,10 +2,10 @@
 
 
 def parameter_schema(
-    width=1.0,
-    height=1.0,
-    global_seed=1.0,
-    displacement=-0.01,
+    width: float = 1.0,
+    height: float = 1.0,
+    global_seed: float = 1.0,
+    displacement: float = -0.01,
 ):
     """Return nominal simulation variables dictionary
 

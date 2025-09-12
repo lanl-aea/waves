@@ -2,11 +2,11 @@
 
 
 def parameter_schema(
-    N=5,  # noqa: N803
-    width_distribution="norm",
-    width_bounds=[1.0, 0.1],
-    height_distribution="norm",
-    height_bounds=[1.0, 0.1],
+    N: int = 5,  # noqa: N803
+    width_distribution: str = "norm",
+    width_bounds: list[float] | tuple[float, ...] = (1.0, 0.1),
+    height_distribution: str = "norm",
+    height_bounds: list[float] | tuple[float, ...] = (1.0, 0.1),
 ):
     """Return WAVES SALibSampler Sobol schema
 
@@ -24,8 +24,8 @@ def parameter_schema(
         "problem": {
             "num_vars": 2,
             "names": ["width", "height"],
-            "bounds": [width_bounds, height_bounds],
-            "dists": [width_distribution, height_distribution],
+            "bounds": [list(width_bounds), list(height_bounds)],
+            "dists": [list(width_distribution), list(height_distribution)],
         },
     }
     return schema

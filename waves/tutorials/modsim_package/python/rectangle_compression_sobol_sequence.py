@@ -1,11 +1,17 @@
 """Parameter sets and schemas for the rectangle compression simulation"""
 
+import types
+import typing
+
+default_width = types.MappingProxyType({"distribution": "uniform", "loc": 0.9, "scale": 0.2})
+default_height = types.MappingProxyType({"distribution": "uniform", "loc": 0.9, "scale": 0.2})
+
 
 def parameter_schema(
-    num_simulations=4,
-    width={"distribution": "uniform", "loc": 0.9, "scale": 0.2},
-    height={"distribution": "uniform", "loc": 0.9, "scale": 0.2},
-):
+    num_simulations: int = 4,
+    width: dict[str, typing.Any] | types.MappingProxyType = default_width,
+    height: dict[str, typing.Any] | types.MappingProxyType = default_height,
+) -> dict[str, typing.Any]:
     """Return WAVES SciPy Sobol parameter schema
 
     :param int num_simulations: Number of samples to generate

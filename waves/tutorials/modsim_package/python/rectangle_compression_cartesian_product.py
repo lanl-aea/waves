@@ -2,11 +2,11 @@
 
 
 def parameter_schema(
-    width=(1.0, 1.1),
-    height=(1.0, 1.1),
-    global_seed=(1.0,),
-    displacement=(-0.01,),
-):
+    width: list[float] | tuple[float, ...] = (1.0, 1.1),
+    height: list[float] | tuple[float, ...] = (1.0, 1.1),
+    global_seed: list[float] | tuple[float, ...] = (1.0,),
+    displacement: list[float] | tuple[float, ...] = (-0.01,),
+) -> dict[str, list[float]]:
     """Return WAVES CartesianProduct parameter schema
 
     :param list width: The rectangle width
