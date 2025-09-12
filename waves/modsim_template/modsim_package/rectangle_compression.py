@@ -5,7 +5,7 @@ def nominal(
     width: float = 1.0,
     height: float = 1.0,
     global_seed: float = 1.0,
-    displacement: float =-0.01,
+    displacement: float = -0.01,
 ) -> dict[str, float]:
     """Return nominal simulation variables dictionary
 
