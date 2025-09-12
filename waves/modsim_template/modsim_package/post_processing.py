@@ -21,38 +21,37 @@ default_selection_dict = {
 
 
 def main(
-    input_files,
-    output_file,
-    group_path,
-    x_var,
-    x_units,
-    y_var,
-    y_units,
-    selection_dict,
-    parameter_study_file=None,
-    csv_regression_file=None,
+    input_files: list[pathlib.Path],
+    output_file: pathlib.Path,
+    group_path: str,
+    x_var: str,
+    x_units: str,
+    y_var: str,
+    y_units: str,
+    selection_dict: dict,
+    parameter_study_file: pathlib.Path | None = None,
+    csv_regression_file: pathlib.Path | None = None,
 ):
     """Catenate ``input_files`` datasets along the ``set_name`` dimension and plot selected data.
 
     Optionally merges the parameter study results datasets with the parameter study definition dataset, where the
     parameter study dataset file is assumed to be written by a WAVES parameter generator.
 
-    :param list input_files: list of path-like or file-like objects pointing to h5netcdf files containing Xarray
+    :param input_files: list of path-like or file-like objects pointing to h5netcdf files containing Xarray
         Datasets
-    :param str output_file: The plot file name. Relative or absolute path.
-    :param str group_path: The h5netcdf group path locating the Xarray Dataset in the input files.
-    :param str x_var: The independent (x-axis) variable key name for the Xarray Dataset "data variable"
-    :param str x_units: The independent (x-axis) units
-    :param str y_var: The dependent (y-axis) variable key name for the Xarray Dataset "data variable"
-    :param str y_units: The dependent (y-axis) units
-    :param dict selection_dict: Dictionary to define the down selection of data to be plotted. Dictionary ``key: value``
+    :param output_file: The plot file name. Relative or absolute path.
+    :param group_path: The h5netcdf group path locating the Xarray Dataset in the input files.
+    :param x_var: The independent (x-axis) variable key name for the Xarray Dataset "data variable"
+    :param x_units: The independent (x-axis) units
+    :param y_var: The dependent (y-axis) variable key name for the Xarray Dataset "data variable"
+    :param y_units: The dependent (y-axis) units
+    :param selection_dict: Dictionary to define the down selection of data to be plotted. Dictionary ``key: value``
         pairs must match the data variables and coordinates of the expected Xarray Dataset object.
-    :param str parameter_study_file: path-like or file-like object containing the parameter study dataset. Assumes the
+    :param parameter_study_file: path-like or file-like object containing the parameter study dataset. Assumes the
         h5netcdf file contains only a single dataset at the root group path, .e.g. ``/``.
-    :param str csv_regression_file: path-like or file-like object containing the CSV dataset to compare with the current
+    :param csv_regression_file: path-like or file-like object containing the CSV dataset to compare with the current
         plot data. If the data sets do not match a non-zero exit code is returned.
     """
-    output_file = pathlib.Path(output_file)
     output_csv = output_file.with_suffix(".csv")
     if csv_regression_file:
         csv_regression_file = pathlib.Path(csv_regression_file)
@@ -86,15 +85,14 @@ def main(
         sys.exit("One or more regression tests failed")
 
 
-def get_parser():
-    """Return parser for CLI options
+def get_parser() -> argparse.ArgumentParser:
+    """Return parser for CLI options.
 
     All options should use the double-hyphen ``--option VALUE`` syntax to avoid clashes with the Abaqus option syntax,
     including flag style arguments ``--flag``. Single hyphen ``-f`` flag syntax often clashes with the Abaqus command
     line options and should be avoided.
 
     :returns: parser
-    :rtype: argparse.ArgumentParser
     """
     script_name = pathlib.Path(__file__)
     default_output_file = f"{script_name.stem}.pdf"
@@ -114,6 +112,7 @@ def get_parser():
         "-i",
         "--input-file",
         nargs="+",
+        type=pathlib.Path,
         required=True,
         help="The Xarray Dataset file(s)",
     )
@@ -133,7 +132,7 @@ def get_parser():
     parser.add_argument(
         "-o",
         "--output-file",
-        type=str,
+        type=pathlib.Path,
         default=default_output_file,
         help=(
             "The output file for the stress-strain comparison plot with extension, "
@@ -177,13 +176,13 @@ def get_parser():
     parser.add_argument(
         "-p",
         "--parameter-study-file",
-        type=str,
+        type=pathlib.Path,
         default=default_parameter_study_file,
         help="An optional h5 file with a WAVES parameter study Xarray Dataset (default: %(default)s)",
     )
     parser.add_argument(
         "--csv-regression-file",
-        type=str,
+        type=pathlib.Path,
         default=None,
         help=(
             "An optional CSV file to compare with the current plot data. If the CSV file data and "
