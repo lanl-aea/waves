@@ -88,7 +88,7 @@ def test_save_table():
 
 
 def test_sort_dataframe() -> None:
-    """Test :function:`utilities.sort_dataframe`."""
+    """Test :func:`utilities.sort_dataframe`."""
     data = {
         "time": [0.0, 0.5, 1.0],
         "Column1": [1, 2, 3],
@@ -104,7 +104,7 @@ def test_sort_dataframe() -> None:
 
 
 def test_csv_files_match() -> None:
-    """Test :function:`utilities.csv_files_match`."""
+    """Test :func:`utilities.csv_files_match`."""
     data = {
         "time": [0.0, 0.5, 1.0],
         "Column1": [1, 2, 3],

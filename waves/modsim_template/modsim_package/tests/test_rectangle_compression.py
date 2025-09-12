@@ -22,7 +22,7 @@ nominal_tests = {
     ids=nominal_tests.keys(),
 )
 def test_nominal(kwargs, expected):
-    """Test :function:`rectangle_compression.nominal`.
+    """Test :func:`rectangle_compression.nominal`.
 
     :param kwargs: the tested function's keyword arguments
     :param expected: the tested function's expected return value
@@ -54,7 +54,7 @@ mesh_convergence_tests = {
     ids=mesh_convergence_tests.keys(),
 )
 def test_mesh_convergence(kwargs, expected) -> None:
-    """Test :function:`rectangle_compression.mesh_convergence`.
+    """Test :func:`rectangle_compression.mesh_convergence`.
 
     :param kwargs: the tested function's keyword arguments
     :param expected: the tested function's expected return value

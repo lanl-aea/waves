@@ -10,7 +10,7 @@ import solver
 
 
 def test_main() -> None:
-    """Test :function:`solver.main`."""
+    """Test :func:`solver.main`."""
     # Check print help
     with (
         patch("sys.argv", ["solver.py"]),
@@ -83,7 +83,7 @@ name_output_file = {
     ids=name_output_file.keys(),
 )
 def test_name_output_file(input_file, output_file, expected) -> None:
-    """Test :function:`solver.name_output_file`.
+    """Test :func:`solver.name_output_file`.
 
     :param input_file: the tested function's first positional argument
     :param output_file: the tested function's second positional argument
@@ -131,7 +131,7 @@ name_log_file = {
     ids=name_log_file.keys(),
 )
 def test_name_log_file(log_file, max_iterations, exists_side_effect, expected, outcome) -> None:
-    """Test :function:`solver.name_log_file`.
+    """Test :func:`solver.name_log_file`.
 
     :param log_file: the tested function's first positional argument
     :param max_iterations: the tested function's second positional argument
@@ -163,7 +163,7 @@ read_input = {
     ids=read_input.keys(),
 )
 def test_read_input(input_file, is_file_result, mock_data, expected, outcome) -> None:
-    """Test :function:`solver.read_input`.
+    """Test :func:`solver.read_input`.
 
     :param input_file: the tested function's first positional argument
     :param is_file_result: the mock input file's existence check
@@ -229,7 +229,7 @@ configure = {
     ids=configure.keys(),
 )
 def test_configure(args, read_input, expected, outcome):
-    """Test :function:`solver.configure`.
+    """Test :func:`solver.configure`.
 
     :param args: the tested function's first positional argument
     :param read_input: the mock return value from :meth:`solver.read_input`
@@ -269,7 +269,7 @@ solve_output_files = {
     ids=solve_output_files.keys(),
 )
 def test_solve_output_files(output_file, solve_cpus, expected) -> None:
-    """Test :function:`solver.solve_output_files`.
+    """Test :func:`solver.solve_output_files`.
 
     :param output_file: the tested function's first positional argument
     :param solve_cpus: the tested function's second positional argument
@@ -304,7 +304,7 @@ solve = {
     ids=solve.keys(),
 )
 def test_solve(configuration, exists, outcome):
-    """Test :function:`solver.solve`.
+    """Test :func:`solver.solve`.
 
     :param configuration: the tested function's positional argument
     :param exists: the mock input file's existence check
@@ -322,7 +322,7 @@ def test_solve(configuration, exists, outcome):
 
 
 def test_implicit():
-    """Test :function:`solver.implicit`."""
+    """Test :func:`solver.implicit`."""
     dummy_namespace = {"dummy": "namespace"}
     dummy_configuration = {"configuration": "value"}
     with (
@@ -335,7 +335,7 @@ def test_implicit():
 
 
 def test_explicit():
-    """Test :function:`solver.explicit`."""
+    """Test :func:`solver.explicit`."""
     dummy_namespace = {"dummy": "namespace"}
     dummy_configuration = {"configuration": "value"}
     with (
@@ -362,7 +362,7 @@ positive_nonzero_int = {
     ids=positive_nonzero_int.keys(),
 )
 def test_positive_nonzero_int(argument, expected, outcome) -> None:
-    """Test :function:`solver.positive_nonzero_int`.
+    """Test :func:`solver.positive_nonzero_int`.
 
     :param argument: the tested function's positional argument
     :param expected: the tested function's expected return value
@@ -378,5 +378,5 @@ def test_positive_nonzero_int(argument, expected, outcome) -> None:
 
 @pytest.mark.skip(reason="Not yet implemented")
 def test_get_parser() -> None:
-    """Test :function:`solver.get_parser`."""
+    """Test :func:`solver.get_parser`."""
     pass

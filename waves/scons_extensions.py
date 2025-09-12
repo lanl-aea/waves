@@ -163,9 +163,9 @@ def catenate_builder_actions(
 
 
 def catenate_actions(**outer_kwargs):
-    """Apply the :function:`catenate_builder_actions` action modifications to a function that returns an SCons Builder.
+    """Apply the :func:`catenate_builder_actions` action modifications to a function that returns an SCons Builder.
 
-    Accepts the same keyword arguments as the :function:`waves.scons_extensions.catenate_builder_actions`
+    Accepts the same keyword arguments as the :func:`waves.scons_extensions.catenate_builder_actions`
 
     .. code-block::
 
