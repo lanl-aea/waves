@@ -1,3 +1,4 @@
+"""Test the project SCons extensions module."""
 import pytest
 import SCons.Environment
 import scons_extensions

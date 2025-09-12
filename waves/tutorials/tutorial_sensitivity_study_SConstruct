@@ -1,3 +1,4 @@
+"""Configure the WAVES sensitivity analysis tutorial."""
 #! /usr/bin/env python
 
 import inspect

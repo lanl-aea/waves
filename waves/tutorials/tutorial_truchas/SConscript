@@ -1,3 +1,4 @@
+"""Configure the Truchas simulation workflow."""
 #! /usr/bin/env python
 
 Import("env", "env_cubit", "alias", "parameters")

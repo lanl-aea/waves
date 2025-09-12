@@ -1,3 +1,4 @@
+"""Configure the WAVES Quinoa tutorial."""
 #! /usr/bin/env python
 
 import getpass

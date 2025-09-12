@@ -1,3 +1,4 @@
+"""Test the project solver module."""
 import argparse
 import pathlib
 from contextlib import nullcontext as does_not_raise

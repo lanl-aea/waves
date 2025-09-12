@@ -1,3 +1,4 @@
+"""Configure the project's implicit solve workflow."""
 #! /usr/bin/env python
 import pathlib
 

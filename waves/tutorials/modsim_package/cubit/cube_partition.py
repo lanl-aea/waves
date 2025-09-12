@@ -1,3 +1,4 @@
+"""Partition the simple cube geometry created by ``cube_geometry.py``."""
 import argparse
 import pathlib
 import shutil
