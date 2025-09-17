@@ -1517,8 +1517,8 @@ def _coerce_values(values: typing.Iterable, name: typing.Optional[str] = None) -
     return values_coerced
 
 
-def _assess_parameter_spaces(studies: typing.List[xarray.Dataset]) -> dict:
-    """From a list of parameter studies, generates a dictionary of the studies separated into parameter spaces.
+def _assess_parameter_spaces(studies: typing.List[xarray.Dataset]) -> list:
+    """From a list of parameter studies, generates a dictionary of the studies separated into unique parameter spaces.
 
     The dictionary contents are split by parameter space, determined by the parameter study parameters. Each parameter
     space has keys "studies" and "parameters". The key "studies" contains a list of the parameter studies in that space,
@@ -1527,40 +1527,36 @@ def _assess_parameter_spaces(studies: typing.List[xarray.Dataset]) -> dict:
 
     :param studies: list of parameter study xarray Datasets where the first study is considered the 'base' study
 
-    :return: dictionary
+    :return: list of lists, where each sub-list is a list of parameter study datasets with shared parameter space
 
     :raises RuntimeError: if input studies contain partially overlapping parameter spaces
     """
-    study_base = studies.pop(0)
+    # Assign parameter space hash attribute to all studies
+    for index, study in enumerate(studies):
+        parameters = list(study.data_vars)
+        studies[index] = study.assign_attrs(parameter_space_hash=_calculate_set_hash(parameters, parameters))
 
-    parameter_spaces = {"parameter_space0": {"studies": [study_base], "parameters": list(study_base.data_vars)}}
-    parameter_space_index = 1
-    for study_other in studies:
-        # Compare parameters of current study with existing known parameter spaces
-        parameters = list(study_other.data_vars)
-        parameter_space_matches = []
-        for space in parameter_spaces.keys():
-            shared_parameters = set(parameters) & set(parameter_spaces[space]["parameters"])
-            unshared_parameters = set(parameters) ^ set(parameter_spaces[space]["parameters"])
+    parameter_spaces = []
+    parameter_space_hashes_unique = list(set([study.attrs["parameter_space_hash"] for study in studies]))
+    for parameter_space_hash in parameter_space_hashes_unique:
+        studies_in_space = [study for study in studies if study.attrs["parameter_space_hash"] == parameter_space_hash]
+        studies_in_space = [study.drop_attrs() for study in studies_in_space]
+        parameter_spaces.append(studies_in_space)
+
+    # Verify no partial overlapping studies
+    for space_studies in parameter_spaces:
+        parameters = list(space_studies[0].data_vars)
+        for space_studies_other in parameter_spaces:
+            parameters_other = list(space_studies_other[0].data_vars)
+            shared_parameters = set(parameters) & set(parameters_other)
+            unshared_parameters = set(parameters) ^ set(parameters_other)
             if any(shared_parameters) and any(unshared_parameters):
                 raise RuntimeError(
                     f"Found study containing partially overlapping parameter space during attempted merge operation.\n"
                     f"Unshared parameter(s): '{unshared_parameters}'\n"
                     f"Shared parameters :'{shared_parameters}'"
                 )
-            elif any(shared_parameters):
-                parameter_space_matches.append(True)
-                parameter_spaces[space]["studies"].append(study_other)
-                break
-            elif any(unshared_parameters):
-                parameter_space_matches.append(False)
 
-        if not any(parameter_space_matches):
-            parameter_spaces[f"parameter_space{parameter_space_index}"] = {
-                "studies": [study_other],
-                "parameters": parameters,
-            }
-            parameter_space_index += 1
     return parameter_spaces
 
 
@@ -1692,13 +1688,11 @@ def _merge_parameter_studies(
     parameter_spaces = _assess_parameter_spaces(studies)
 
     # Merge studies in each parameter space. Preserves the set names of the first study in each space
-    for space in parameter_spaces.keys():
-        studies = parameter_spaces[space]["studies"]
-        parameter_spaces[space]["studies"] = _merge_parameter_space(studies, template)
+    parameter_spaces = [_merge_parameter_space(studies, template) for studies in parameter_spaces]
 
     # If multiple parameter spaces, propagate into one combined study. Breaks all set name associations
     swap_to_set_index = {_hash_coordinate_key: _set_coordinate_key}
-    studies = [parameter_spaces[space]["studies"].swap_dims(swap_to_set_index) for space in parameter_spaces.keys()]
+    studies = [study.swap_dims(swap_to_set_index) for study in parameter_spaces]
     study_combined = studies.pop(0)
     if any(studies):
         for study_other in studies:
