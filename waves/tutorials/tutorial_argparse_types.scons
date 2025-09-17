@@ -1,0 +1,62 @@
+#! /usr/bin/env python
+"""Rectangle compression workflow.
+
+Requires the following ``SConscript(..., exports={})``
+
+* ``env`` - The SCons construction environment with the following required keys
+
+  * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
+  * ``abaqus`` - String path for the Abaqus executable
+"""
+
+import pathlib
+
+# Inherit the parent construction environment
+Import("env")
+
+# Simulation variables
+build_directory = pathlib.Path(Dir(".").abspath)
+workflow_name = build_directory.name
+
+# Comment used in tutorial code snippets: marker-1
+
+# Collect the target nodes to build a concise alias for all targets
+workflow = []
+
+# Geometry
+workflow.extend(
+    env.AbaqusJournal(
+        target=["rectangle_geometry.cae", "rectangle_geometry.jnl"],
+        source=["#/modsim_package/abaqus/rectangle_geometry.py"],
+        subcommand_options="",
+    )
+)
+
+# Comment used in tutorial code snippets: marker-2
+
+# Partition
+workflow.extend(
+    env.AbaqusJournal(
+        target=["rectangle_partition.cae", "rectangle_partition.jnl"],
+        source=["#/modsim_package/abaqus/rectangle_partition.py", "rectangle_geometry.cae"],
+        subcommand_options="",
+    )
+)
+
+# Mesh
+workflow.extend(
+    env.AbaqusJournal(
+        target=["rectangle_mesh.inp", "rectangle_mesh.cae", "rectangle_mesh.jnl"],
+        source=["#/modsim_package/abaqus/rectangle_mesh.py", "rectangle_partition.cae"],
+        subcommand_options="",
+    )
+)
+
+# Comment used in tutorial code snippets: marker-3
+
+# Collector alias based on parent directory name
+env.Alias(workflow_name, workflow)
+
+if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+    Ignore([".", workflow_name], workflow)

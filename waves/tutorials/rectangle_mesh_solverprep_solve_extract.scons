@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-"""Rectangle model's Geometry and Partition task definitions
+"""Rectangle model's Geometry and Partition task definitions.
 
 Requires the following ``SConscript(..., exports={})``
 
@@ -48,8 +48,8 @@ Example usage:
            exports=["env", "simulation_variables", "workflow", "datacheck")
            duplicate=False)
 """
-import pathlib
 
+import pathlib
 
 # Inherit the parent construction environment
 Import(["env", "simulation_variables", "workflow", "datacheck"])

@@ -4,20 +4,19 @@ Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAV
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
 
-import pathlib
 import argparse
+import pathlib
+
+import pandas
+import yaml
 
 from waves import _settings
-
-import yaml
-import pandas
-
 
 _exclude_from_namespace = set(globals().keys())
 
 
 def get_parser() -> argparse.ArgumentParser:
-    """Return a 'no-help' parser for the print_study subcommand
+    """Return a 'no-help' parser for the print_study subcommand.
 
     :return: parser
     """
@@ -31,7 +30,7 @@ def get_parser() -> argparse.ArgumentParser:
 
 
 def main(parameter_study_file: pathlib.Path) -> None:
-    """Open and print a WAVES parameter study file as a table
+    """Open and print a WAVES parameter study file as a table.
 
     :param parameter_study_file: The parameter study file to open
 
@@ -40,7 +39,7 @@ def main(parameter_study_file: pathlib.Path) -> None:
     if not parameter_study_file.is_file():
         raise RuntimeError(f"'{parameter_study_file}' does not exist or is not a file.")
     try:
-        with open(parameter_study_file, encoding="utf-8") as infile:
+        with parameter_study_file.open(encoding="utf-8") as infile:
             study = yaml.safe_load(infile)
             table = pandas.DataFrame(study).T
             table.index.name = _settings._set_coordinate_key
@@ -50,7 +49,7 @@ def main(parameter_study_file: pathlib.Path) -> None:
         study = _open_parameter_study(parameter_study_file)
         table = study.to_pandas()
     except Exception as err:
-        raise RuntimeError(f"'{parameter_study_file}' failed to open with: '{err}'")
+        raise RuntimeError(f"'{parameter_study_file}' failed to open with: '{err}'") from err
     print(f"{table.sort_values(_settings._set_coordinate_key)}")
 
 

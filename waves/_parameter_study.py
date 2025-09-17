@@ -6,23 +6,20 @@ Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAV
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
 
-import io
-import sys
-import typing
-import pathlib
 import argparse
+import io
+import pathlib
+import sys
 
 import yaml
 
-from waves import _settings
-from waves import parameter_generators
-
+from waves import _settings, parameter_generators
 
 _exclude_from_namespace = set(globals().keys())
 
 
 def get_parser() -> argparse.ArgumentParser:
-    """Return a 'no-help' parser for the parameter study subcommand(s)
+    """Return a 'no-help' parser for the parameter study subcommand(s).
 
     :return: parser
     """
@@ -118,8 +115,8 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def read_parameter_schema(input_file: typing.Union[str, pathlib.Path, io.TextIOWrapper, None]) -> dict:
-    """Read a YAML dictionary from STDIN or a file
+def read_parameter_schema(input_file: str | pathlib.Path | io.TextIOWrapper | None) -> dict:
+    """Read a YAML dictionary from STDIN or a file.
 
     :param input_file: STDIN stream or file path
 
@@ -135,25 +132,25 @@ def read_parameter_schema(input_file: typing.Union[str, pathlib.Path, io.TextIOW
         input_file = pathlib.Path(input_file)
         if not input_file.is_file():
             raise RuntimeError(f"File '{input_file}' does not exist.")
-        with open(input_file, "r") as input_handle:
+        with pathlib.Path(input_file).open(mode="r") as input_handle:
             parameter_schema = yaml.safe_load(input_handle)
     return parameter_schema
 
 
 def main(
     subcommand: str,
-    input_file: typing.Union[str, pathlib.Path, io.TextIOWrapper, None],
-    output_file_template: typing.Optional[str] = _settings._default_output_file_template,
-    output_file: typing.Optional[str] = _settings._default_output_file,
+    input_file: str | pathlib.Path | io.TextIOWrapper | None,
+    output_file_template: str | None = _settings._default_output_file_template,
+    output_file: str | None = _settings._default_output_file,
     output_file_type: _settings._allowable_output_file_typing = _settings._default_output_file_type_cli,
     set_name_template: str = _settings._default_set_name_template,
-    previous_parameter_study: typing.Optional[str] = _settings._default_previous_parameter_study,
+    previous_parameter_study: str | None = _settings._default_previous_parameter_study,
     require_previous_parameter_study: bool = _settings._default_require_previous_parameter_study,
     overwrite: bool = _settings._default_overwrite,
     dry_run: bool = _settings._default_dry_run,
     write_meta: bool = _settings._default_write_meta,
 ) -> None:
-    """Build parameter studies
+    """Build parameter studies.
 
     :param str subcommand: parameter study type to build
     :param str input_file: path to YAML formatted parameter study schema file
@@ -169,7 +166,9 @@ def main(
     try:
         parameter_schema = read_parameter_schema(input_file)
     except yaml.parser.ParserError as err:
-        raise RuntimeError(f"Error loading '{input_file}'. Check the YAML syntax.\nyaml.parser.ParserError: {err}")
+        raise RuntimeError(
+            f"Error loading '{input_file}'. Check the YAML syntax.\nyaml.parser.ParserError: {err}"
+        ) from err
 
     # Retrieve and instantiate the subcommand class
     available_parameter_generators = {

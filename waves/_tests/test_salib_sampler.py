@@ -1,19 +1,19 @@
-"""Test SALibSampler Class"""
+"""Test SALibSampler Class."""
 
-from unittest.mock import patch
 from contextlib import nullcontext as does_not_raise
+from unittest.mock import patch
 
-import pytest
 import numpy
+import pytest
 
-from waves.parameter_generators import SALibSampler
 from waves._settings import _set_coordinate_key, _supported_salib_samplers
+from waves._tests.common import consistent_hash_parameter_check, merge_samplers, self_consistency_checks
 from waves.exceptions import SchemaValidationError
-from waves._tests.common import consistent_hash_parameter_check, self_consistency_checks, merge_samplers
+from waves.parameter_generators import SALibSampler
 
 
 class TestSALibSampler:
-    """Class for testing SALib Sampler parameter study generator class"""
+    """Class for testing SALib Sampler parameter study generator class."""
 
     sampler_overrides = {
         "sobol: two parameter": (
@@ -45,13 +45,13 @@ class TestSALibSampler:
     }
 
     @pytest.mark.parametrize(
-        "sampler_class, parameter_schema, kwargs, expected",
+        ("sampler_class", "parameter_schema", "kwargs", "expected"),
         sampler_overrides.values(),
         ids=sampler_overrides.keys(),
     )
     def test_sampler_overrides(self, sampler_class, parameter_schema, kwargs, expected):
-        TestValidate = SALibSampler(sampler_class, parameter_schema)
-        override_kwargs = TestValidate._sampler_overrides(**kwargs)
+        test_validate = SALibSampler(sampler_class, parameter_schema)
+        override_kwargs = test_validate._sampler_overrides(**kwargs)
         assert override_kwargs == expected
 
     validate_input = {
@@ -141,14 +141,14 @@ class TestSALibSampler:
     }
 
     @pytest.mark.parametrize(
-        "sampler_class, parameter_schema, outcome", validate_input.values(), ids=validate_input.keys()
+        ("sampler_class", "parameter_schema", "outcome"), validate_input.values(), ids=validate_input.keys()
     )
     def test_validate(self, sampler_class, parameter_schema, outcome):
         with outcome:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
-                TestValidate = SALibSampler(sampler_class, parameter_schema)
-                assert isinstance(TestValidate, SALibSampler)
+                test_validate = SALibSampler(sampler_class, parameter_schema)
+                assert isinstance(test_validate, SALibSampler)
             finally:
                 pass
 
@@ -210,7 +210,7 @@ class TestSALibSampler:
         ),
     }
 
-    def _expected_set_names(self, sampler, N, num_vars):
+    def _expected_set_names(self, sampler, N, num_vars):  # noqa: N803
         number_of_simulations = N
         if sampler == "sobol" and num_vars <= 2:
             number_of_simulations = N * (num_vars + 2)
@@ -225,17 +225,17 @@ class TestSALibSampler:
             number_of_simulations = int((num_vars + 1) * N)
         return [f"parameter_set{num}" for num in range(number_of_simulations)]
 
-    def _big_enough(self, sampler, N, num_vars):
-        if sampler == "sobol" and num_vars < 2:
-            return False
-        elif sampler == "fast_sampler" and N < 64:
-            return False
-        elif sampler == "morris" and num_vars < 2:
+    def _big_enough(self, sampler, N, num_vars):  # noqa: N803
+        if (  # noqa: SIM103
+            (sampler == "sobol" and num_vars < 2)
+            or (sampler == "fast_sampler" and N < 64)
+            or (sampler == "morris" and num_vars < 2)
+        ):
             return False
         return True
 
     @pytest.mark.parametrize(
-        "parameter_schema, kwargs",
+        ("parameter_schema", "kwargs"),
         generate_input.values(),
         ids=generate_input.keys(),
     )
@@ -245,19 +245,19 @@ class TestSALibSampler:
             if not self._big_enough(sampler, parameter_schema["N"], parameter_schema["problem"]["num_vars"]):
                 return
             # Unit tests
-            TestGenerate = SALibSampler(sampler, parameter_schema, **kwargs)
-            samples_array = TestGenerate._samples
+            test_generate = SALibSampler(sampler, parameter_schema, **kwargs)
+            samples_array = test_generate._samples
             assert samples_array.shape[1] == parameter_schema["problem"]["num_vars"]
             # Verify that the parameter set name creation method was called
             # Morris produces inconsistent set counts depending on seed. Rely on the variable count shape check above.
-            if not sampler == "morris":
+            if sampler != "morris":
                 expected_set_names = self._expected_set_names(
                     sampler, parameter_schema["N"], parameter_schema["problem"]["num_vars"]
                 )
                 assert samples_array.shape[0] == len(expected_set_names)
-                assert list(TestGenerate._set_names.values()) == expected_set_names
+                assert list(test_generate._set_names.values()) == expected_set_names
                 # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
-                set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
+                set_names = list(test_generate.parameter_study[_set_coordinate_key])
                 assert numpy.all(set_names == expected_set_names)
 
     merge_test = {
@@ -378,7 +378,7 @@ class TestSALibSampler:
     }
 
     @pytest.mark.parametrize(
-        "first_schema, second_schema, kwargs",
+        ("first_schema", "second_schema", "kwargs"),
         merge_test.values(),
         ids=merge_test.keys(),
     )

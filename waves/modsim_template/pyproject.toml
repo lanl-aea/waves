@@ -1,1 +1,27 @@
 [tool.pytest.ini_options]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+extend-include = ["SConstruct", "*SConscript", "*.scons"]
+
+[tool.ruff.lint]
+extend-select = [
+    "A", "B", "D", "E", "F", "I", "N", "Q", "W",
+    "ARG", "C4", "FURB", "ERA", "ISC", "NPY", "PD", "PERF", "PGH", "PIE", "PLC", "PLE", "PLW", "PT", "PTH", "PYI",
+    "RSE", "RUF", "SIM", "T10", "UP"
+]
+extend-ignore = ["B028", "D203", "D213", "PIE808", "PIE790", "SIM108", "PLC0415"]
+
+[tool.ruff.lint.extend-per-file-ignores]
+"SConstruct" = ["F821"]
+"*SConscript" = ["F821"]
+"*.scons" = ["F821"]
+"**/__init__.py" = ["D104"]
+# Abaqus Python 2 compatible files
+"modsim_package/abaqus_utilities.py" = ["SIM115", "PTH", "UP", "FURB188"]
+"modsim_package/argparse_types.py" = ["PTH", "UP", "FURB188"]
+"modsim_package/export_abaqus_image.py" = ["PTH", "UP", "FURB188"]
+"modsim_package/rectangle_geometry.py" = ["PTH", "UP", "FURB188"]
+"modsim_package/rectangle_mesh.py" = ["PTH", "UP", "FURB188"]
+"modsim_package/rectangle_partition.py" = ["PTH", "UP", "FURB188"]

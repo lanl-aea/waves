@@ -1,0 +1,108 @@
+#! /usr/bin/env python
+"""Rectangle compression workflow.
+
+Requires the following ``SConscript(..., exports={})``
+
+* ``env`` - The SCons construction environment with the following required keys
+
+  * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
+  * ``abaqus`` - String path for the Abaqus executable
+"""
+
+import pathlib
+
+# Inherit the parent construction environment
+Import("env")
+
+# Simulation variables
+build_directory = pathlib.Path(Dir(".").abspath)
+workflow_name = build_directory.name
+
+# Comment used in tutorial code snippets: marker-1
+
+# Collect the target nodes to build a concise alias for all targets
+workflow = []
+datacheck = []
+
+# Geometry
+workflow.extend(
+    env.AbaqusJournal(
+        target=["rectangle_geometry.cae", "rectangle_geometry.jnl"],
+        source=["#/modsim_package/abaqus/rectangle_geometry.py"],
+        subcommand_options="",
+    )
+)
+
+# Comment used in tutorial code snippets: marker-2
+
+# Partition
+workflow.extend(
+    env.AbaqusJournal(
+        target=["rectangle_partition.cae", "rectangle_partition.jnl"],
+        source=["#/modsim_package/abaqus/rectangle_partition.py", "rectangle_geometry.cae"],
+        subcommand_options="",
+    )
+)
+
+# Mesh
+workflow.extend(
+    env.AbaqusJournal(
+        target=["rectangle_mesh.inp", "rectangle_mesh.cae", "rectangle_mesh.jnl"],
+        source=["#/modsim_package/abaqus/rectangle_mesh.py", "rectangle_partition.cae"],
+        subcommand_options="",
+    )
+)
+
+# Comment used in tutorial code snippets: marker-3
+
+# SolverPrep
+abaqus_source_list = [
+    "#/modsim_package/abaqus/rectangle_compression.inp",
+    "#/modsim_package/abaqus/assembly.inp",
+    "#/modsim_package/abaqus/boundary.inp",
+    "#/modsim_package/abaqus/field_output.inp",
+    "#/modsim_package/abaqus/materials.inp",
+    "#/modsim_package/abaqus/parts.inp",
+    "#/modsim_package/abaqus/history_output.inp",
+]
+abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
+workflow.extend(env.CopySubstfile(abaqus_source_list))
+
+# Comment used in tutorial code snippets: marker-4
+
+# Abaqus Solve
+solve_source_list = [source_file.name.rstrip(".in") for source_file in abaqus_source_list]
+solve_source_list.append("rectangle_mesh.inp")
+common_suffixes = ("odb", "dat", "msg", "com", "prt")
+datacheck_suffixes = ("023", "mdl", "sim", "stt")
+datacheck.extend(
+    env.AbaqusSolver(
+        target=[f"rectangle_compression_DATACHECK.{suffix}" for suffix in common_suffixes + datacheck_suffixes],
+        source=solve_source_list,
+        job="rectangle_compression_DATACHECK",
+        program_options="-double both -datacheck",
+    )
+)
+
+# Comment used in tutorial code snippets: marker-5
+
+abaqus_implicit_extensions = ("sta",)
+workflow.extend(
+    env.AbaqusSolver(
+        target=[f"rectangle_compression.{suffix}" for suffix in common_suffixes + abaqus_implicit_extensions],
+        source=solve_source_list,
+        job="rectangle_compression",
+        program_options="-double both",
+    )
+)
+
+# Comment used in tutorial code snippets: marker-6
+
+# Collector alias based on parent directory name
+env.Alias(workflow_name, workflow)
+env.Alias(f"{workflow_name}_datacheck", datacheck)
+
+if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+    Ignore([".", workflow_name], workflow)
+    Ignore([".", f"{workflow_name}_datacheck"], datacheck)

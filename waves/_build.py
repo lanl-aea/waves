@@ -4,20 +4,17 @@ Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAV
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
 
-import sys
-import typing
-import pathlib
 import argparse
+import pathlib
+import sys
 
-from waves import _settings
-from waves import _utilities
-
+from waves import _settings, _utilities
 
 _exclude_from_namespace = set(globals().keys())
 
 
 def get_parser() -> argparse.ArgumentParser:
-    """Return a 'no-help' parser for the build subcommand
+    """Return a 'no-help' parser for the build subcommand.
 
     :return: parser
     """
@@ -59,12 +56,12 @@ def get_parser() -> argparse.ArgumentParser:
 
 def main(
     targets: list,
-    scons_args: typing.Optional[list] = None,
+    scons_args: list | None = None,
     max_iterations: int = 5,
-    working_directory: typing.Union[str, pathlib.Path, None] = None,
-    git_clone_directory: typing.Union[str, pathlib.Path, None] = None,
+    working_directory: str | pathlib.Path | None = None,
+    git_clone_directory: str | pathlib.Path | None = None,
 ) -> None:
-    """Submit an iterative SCons command
+    """Submit an iterative SCons command.
 
     SCons command is re-submitted until SCons reports that the target 'is up to date.' or the iteration count is
     reached.
@@ -75,7 +72,6 @@ def main(
     :param working_directory: Change the SCons command working directory
     :param git_clone_directory: Destination directory for a Git clone operation
     """
-
     if not scons_args:
         scons_args = []
     if not targets:
@@ -86,7 +82,7 @@ def main(
         git_clone_directory.mkdir(parents=True, exist_ok=True)
         working_directory = str(git_clone_directory)
         command = ["git", "clone", "--no-hardlinks", str(current_directory), working_directory]
-        git_clone_return_code, git_clone_stdout = _utilities.tee_subprocess(command)
+        git_clone_return_code, _git_clone_stdout = _utilities.tee_subprocess(command)
         if git_clone_return_code != 0:
             raise RuntimeError(f"command '{' '.join(command)}' failed")
     stop_trigger = "is up to date."
@@ -101,7 +97,7 @@ def main(
         count += 1
         if count > max_iterations:
             raise RuntimeError(
-                f"Exceeded maximum iterations '{max_iterations}' before finding '{stop_trigger}' " "for every target"
+                f"Exceeded maximum iterations '{max_iterations}' before finding '{stop_trigger}' for every target"
             )
         print(
             f"\n{_settings._project_name_short.lower()} build iteration {count}: '{' '.join(command)}'\n",

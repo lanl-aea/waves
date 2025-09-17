@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Example for common commercial and research solver behavior and handling
+"""Example for common commercial and research solver behavior and handling.
 
 .. warning::
 
@@ -27,13 +27,12 @@ Exit codes:
 3. output file exists and no overwrite was requested
 4. reached max log file integer before finding a free file name
 """
-import sys
-import typing
-import pathlib
+
 import argparse
+import pathlib
+import sys
 
 import yaml
-
 
 _version = "1.0.0"
 _project_name = pathlib.Path(__file__).stem
@@ -46,7 +45,7 @@ _default_solve_cpus = 1
 
 
 def main():
-    """Main function implementing the command line interface and program flow"""
+    """Run the solver command line interface and program flow."""
     parser = get_parser()
     subcommand_list = parser._subparsers._group_actions[0].choices.keys()
     args = parser.parse_args()
@@ -62,7 +61,7 @@ def main():
 
 
 def name_output_file(input_file: pathlib.Path, output_file: pathlib.Path) -> pathlib.Path:
-    """Create the output file name from the input file if not specified"""
+    """Create the output file name from the input file if not specified."""
     if output_file is None:
         output_file = input_file.with_suffix(_output_file_extension)
     output_file = output_file.with_suffix(_output_file_extension)
@@ -70,7 +69,7 @@ def name_output_file(input_file: pathlib.Path, output_file: pathlib.Path) -> pat
 
 
 def name_log_file(log_file: pathlib.Path, max_iterations: int = 10) -> pathlib.Path:
-    """Return the first free log file name
+    """Return the first free log file name.
 
     :param log_file: Log file base name
     :param max_iterations: Maximum number of allowable log files
@@ -89,7 +88,7 @@ def name_log_file(log_file: pathlib.Path, max_iterations: int = 10) -> pathlib.P
 
 
 def read_input(input_file: pathlib.Path) -> dict:
-    """Return the configuration by reading the input file and handling common errors
+    """Return the configuration by reading the input file and handling common errors.
 
     :param input_file: The input YAML file absolute or relative path
 
@@ -98,17 +97,17 @@ def read_input(input_file: pathlib.Path) -> dict:
     input_file.resolve()
     if not input_file.is_file():
         raise RuntimeError(f"input file '{input_file}' does not exist")
-    with open(input_file, "r") as input_handle:
+    with input_file.open(mode="r") as input_handle:
         try:
             configuration = yaml.safe_load(input_handle)
         except (yaml.parser.ParserError, yaml.scanner.ScannerError) as err:
             message = f"Error loading '{input_file}'. Check the YAML syntax.\nyaml.parser.ParserError: {err}"
-            raise RuntimeError(message)
+            raise RuntimeError(message) from err
     return configuration
 
 
 def configure(args: argparse.Namespace) -> dict:
-    """Return the configuration with appended executable information
+    """Return the configuration with appended executable information.
 
     :param args: The command line argument namespace
 
@@ -125,15 +124,15 @@ def configure(args: argparse.Namespace) -> dict:
     configuration["solve_cpus"] = args.solve_cpus
     configuration["overwrite"] = args.overwrite
 
-    with open(configuration["log_file"], "w+") as log_writer:
+    with pathlib.Path(configuration["log_file"]).open(mode="w+") as log_writer:
         log_writer.write(f"{configuration['version']}\n{configuration['routine']}\n")
         log_writer.write(f"{configuration['log_file']}\n{configuration['output_file']}\n")
 
     return configuration
 
 
-def solve_output_files(output_file: pathlib.Path, solve_cpus: int) -> typing.List[pathlib.Path]:
-    """Return the solve output file list to match the number of solve cpus
+def solve_output_files(output_file: pathlib.Path, solve_cpus: int) -> list[pathlib.Path]:
+    """Return the solve output file list to match the number of solve cpus.
 
     :param output_file: base name for the output file
     :param solve_cpus: integer number of solve cpus
@@ -148,7 +147,9 @@ def solve_output_files(output_file: pathlib.Path, solve_cpus: int) -> typing.Lis
 
 
 def solve(configuration: dict) -> None:
-    """Common solve logic because we do not really have separate routines
+    """Run the solver 'simulation' and create output files.
+
+    Common solve logic because we do not really have separate routines.
 
     :param configuration: The solver configuration
 
@@ -160,19 +161,19 @@ def solve(configuration: dict) -> None:
     overwrite = configuration["overwrite"]
 
     output_files = solve_output_files(output_file, solve_cpus)
-    if any([output.exists() for output in output_files]) and not overwrite:
+    if any(output.exists() for output in output_files) and not overwrite:
         message = "Output file(s) already exist. Exiting."
         raise RuntimeError(message)
 
-    with open(log_file, "a+") as log_writer:
+    with log_file.open(mode="a+") as log_writer:
         for output in output_files:
-            with open(output, "w") as output_writer:
+            with output.open(mode="w") as output_writer:
                 log_writer.write(f"writing: {output}\n")
                 output_writer.write(yaml.safe_dump(configuration))
 
 
 def implicit(args: argparse.Namespace) -> None:
-    """Implicit routine
+    """Run the implicit 'solve' routine.
 
     :param args: The command line argument namespace
     """
@@ -181,7 +182,7 @@ def implicit(args: argparse.Namespace) -> None:
 
 
 def explicit(args: argparse.Namespace) -> None:
-    """Explicit routine
+    """Run the explicit 'solve' routine.
 
     :param args: The command line argument namespace
     """
@@ -190,7 +191,7 @@ def explicit(args: argparse.Namespace) -> None:
 
 
 def positive_nonzero_int(argument):
-    """Type function for argparse - positive, non-zero integers
+    """Type function for argparse - positive, non-zero integers.
 
     :param str argument: string argument from argparse
 
@@ -202,18 +203,18 @@ def positive_nonzero_int(argument):
         * The argument can't be cast to int
         * The argument is less than 1
     """
-    MINIMUM_VALUE = 1
+    minimum_value = 1
     try:
         argument = int(argument)
-    except ValueError:
-        raise argparse.ArgumentTypeError("invalid integer value: '{}'".format(argument))
-    if not argument >= MINIMUM_VALUE:
-        raise argparse.ArgumentTypeError("invalid positive integer: '{}'".format(argument))
+    except ValueError as err:
+        raise argparse.ArgumentTypeError(f"invalid integer value: '{argument}'") from err
+    if not argument >= minimum_value:
+        raise argparse.ArgumentTypeError(f"invalid positive integer: '{argument}'")
     return argument
 
 
 def get_parser() -> argparse.ArgumentParser:
-    """Return the argparse CLI parser"""
+    """Return the argparse CLI parser."""
     main_parser = argparse.ArgumentParser(description=_cli_description)
     main_parser.add_argument(
         "-V",
@@ -237,10 +238,10 @@ def get_parser() -> argparse.ArgumentParser:
         type=pathlib.Path,
         default=None,
         required=False,
-        # fmt: off
-        help=f"The {_project_name} results file. Extension is always replaced with ``{_output_file_extension}``. "
-             f"If none is provided, uses the pattern ``input_file{_output_file_extension}``",
-        # fmt: on
+        help=(
+            f"The {_project_name} results file. Extension is always replaced with ``{_output_file_extension}``. "
+            f"If none is provided, uses the pattern ``input_file{_output_file_extension}``"
+        ),
     )
     subcommand_parser_parent.add_argument(
         "-n",

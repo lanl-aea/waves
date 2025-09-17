@@ -1,5 +1,7 @@
 #! /usr/bin/env python
-Import("env", "envQuinoa")
+"""Configure the WAVES Quinoa tutorial simulation workflow."""
+
+Import("env", "env_quinoa")
 
 # TODO: move parameters to a dedicated dictionary file read
 simulation_variables = {
@@ -35,14 +37,14 @@ remote_target = env.SSHQuinoaSolver(
 env.Alias("quinoa-remote", remote_target)
 
 # Local build on local server
-local_target = envQuinoa.QuinoaSolver(
+local_target = env_quinoa.QuinoaSolver(
     target=["local.stdout"],
     source=["flow.lua", "box.exo"],
-    charmrun=envQuinoa["charmrun"],
-    inciter=envQuinoa["inciter"],
+    charmrun=env_quinoa["charmrun"],
+    inciter=env_quinoa["inciter"],
 )
-envQuinoa.Alias("quinoa-local", local_target)
+env_quinoa.Alias("quinoa-local", local_target)
 
-if not env["unconditional_build"] and not envQuinoa["inciter"]:
+if not env["unconditional_build"] and not env_quinoa["inciter"]:
     print("Program 'inciter' was not found in construction environment. Ignoring 'quinoa-local' target(s)")
     Ignore([".", "quinoa-local"], local_target)

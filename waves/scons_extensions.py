@@ -1,30 +1,30 @@
-import re
-import sys
-import copy
-import atexit
-import shutil
-import typing
-import pathlib
-import functools
-import collections
+"""Provide common extension SCons with utility functions, builders, and construction environment methods."""
 
-import SCons.Node
-import SCons.Script
+import atexit
+import collections
+import copy
+import functools
+import pathlib
+import re
+import shutil
+import sys
+import typing
+
 import SCons.Builder
-import SCons.Scanner
 import SCons.Defaults
 import SCons.Environment
+import SCons.Node
+import SCons.Scanner
+import SCons.Script
 from SCons.Script.SConscript import SConsEnvironment
 
-from waves import _settings
-from waves import _utilities
-
+from waves import _settings, _utilities
 
 _exclude_from_namespace = set(globals().keys())
 
 
-def print_action_signature_string(s, target, source, env) -> None:
-    """Print the action string used to calculate the action signature
+def print_action_signature_string(s, target, source, env) -> None:  # noqa: ARG001
+    """Print the action string used to calculate the action signature.
 
     Designed to behave similarly to SCons ``--debug=presub`` option using ``PRINT_CMD_LINE_FUNC`` feature:
     https://scons.org/doc/production/HTML/scons-man.html#cv-PRINT_CMD_LINE_FUNC
@@ -62,7 +62,7 @@ def print_action_signature_string(s, target, source, env) -> None:
 
 
 def _print_failed_nodes_stdout() -> None:
-    """Query the SCons reported build failures and print the associated node's STDOUT file, if it exists"""
+    """Query the SCons reported build failures and print the associated node's STDOUT file, if it exists."""
     build_failures = SCons.Script.GetBuildFailures()
     for failure in build_failures:
         node_path = pathlib.Path(failure.node.abspath)
@@ -72,8 +72,8 @@ def _print_failed_nodes_stdout() -> None:
         ]
         stdout_path_options = [path.resolve() for path in stdout_path_options]
         try:
-            stdout_path = next((path for path in stdout_path_options if path.exists()))
-            with open(stdout_path, "r") as stdout_file:
+            stdout_path = next(path for path in stdout_path_options if path.exists())
+            with stdout_path.open(mode="r") as stdout_file:
                 print(
                     f"\n{failure.node} failed with STDOUT file '{stdout_path}'\n{stdout_file.read()}", file=sys.stderr
                 )
@@ -82,10 +82,10 @@ def _print_failed_nodes_stdout() -> None:
 
 
 def print_build_failures(
-    env: SCons.Environment.Environment = SCons.Environment.Environment(),
+    env: SCons.Environment.Environment | None = None,
     print_stdout: bool = True,
 ) -> None:
-    """On exit, query the SCons reported build failures and print the associated node's STDOUT file, if it exists
+    """On exit, query the SCons reported build failures and print the associated node's STDOUT file, if it exists.
 
     .. code-block::
        :caption: SConstruct
@@ -106,12 +106,14 @@ def print_build_failures(
     :param env: SCons construction environment
     :param print_stdout: Boolean to set the exit behavior. If False, don't modify the exit behavior.
     """
+    if env is None:
+        env = SCons.Environment.Environment()
     if print_stdout:
         atexit.register(_print_failed_nodes_stdout)
 
 
 def action_list_scons(actions: typing.Iterable[str]) -> SCons.Action.ListAction:
-    """Convert a list of action strings to an SCons.Action.ListAction object
+    """Convert a list of action strings to an SCons.Action.ListAction object.
 
     :param actions: List of action strings
 
@@ -121,8 +123,8 @@ def action_list_scons(actions: typing.Iterable[str]) -> SCons.Action.ListAction:
     return SCons.Action.ListAction(command_actions)
 
 
-def action_list_strings(builder: SCons.Builder.Builder) -> typing.List[str]:
-    """Return a builder's action list as a list of str
+def action_list_strings(builder: SCons.Builder.Builder) -> list[str]:
+    """Return a builder's action list as a list of str.
 
     :param builder: The builder to extract the action list from
 
@@ -141,7 +143,7 @@ def catenate_builder_actions(
     program: str = "",
     options: str = "",
 ) -> SCons.Builder.Builder:
-    """Catenate a builder's arguments and prepend the program and options
+    """Catenate a builder's arguments and prepend the program and options.
 
     .. code-block::
 
@@ -161,9 +163,9 @@ def catenate_builder_actions(
 
 
 def catenate_actions(**outer_kwargs):
-    """Decorator factory to apply the ``catenate_builder_actions`` to a function that returns an SCons Builder.
+    """Apply the :func:`catenate_builder_actions` action modifications to a function that returns an SCons Builder.
 
-    Accepts the same keyword arguments as the :meth:`waves.scons_extensions.catenate_builder_actions`
+    Accepts the same keyword arguments as the :func:`waves.scons_extensions.catenate_builder_actions`
 
     .. code-block::
 
@@ -193,7 +195,7 @@ def ssh_builder_actions(
     rsync_pull_options: str = "-rlptv",
     ssh_options: str = "",
 ) -> SCons.Builder.Builder:
-    """Wrap and modify a builder's action list with remote copy operations and SSH commands
+    r"""Wrap and modify a builder's action list with remote copy operations and SSH commands.
 
     .. warning::
 
@@ -312,7 +314,7 @@ def ssh_builder_actions(
     cd_prefix = "cd ${remote_directory} &&"
 
     def ssh_action_substitutions(action: str, cd_prefix: str = cd_prefix) -> str:
-        """Perform the SSH action string substitutions
+        """Perform the SSH action string substitutions.
 
         :param action: The original action string
         :param cd_prefix: The SSH remote directory ``cd`` operation
@@ -369,12 +371,12 @@ def ssh_builder_actions(
 
 
 def project_help(
-    env: SCons.Environment.Environment = SCons.Environment.Environment(),
+    env: SCons.Environment.Environment | None = None,
     append: bool = True,
     local_only: bool = True,
-    target_descriptions: typing.Optional[dict] = None,
+    target_descriptions: dict | None = None,
 ) -> None:
-    """Add default targets and alias lists to project help message
+    """Add default targets and alias lists to project help message.
 
     See the `SCons Help`_ documentation for appending behavior. Thin wrapper around
 
@@ -387,17 +389,19 @@ def project_help(
     :param local_only: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     :param target_descriptions: dictionary containing target metadata.
     """
+    if env is None:
+        env = SCons.Environment.Environment()
     project_help_default_targets(env=env, append=append, local_only=local_only, target_descriptions=target_descriptions)
     project_help_aliases(env=env, append=append, local_only=local_only, target_descriptions=target_descriptions)
 
 
 def project_help_default_targets(
-    env: SCons.Environment.Environment = SCons.Environment.Environment(),
+    env: SCons.Environment.Environment | None = None,
     append: bool = True,
     local_only: bool = True,
-    target_descriptions: typing.Optional[dict] = None,
+    target_descriptions: dict | None = None,
 ) -> None:
-    """Add a default targets list to the project's help message
+    """Add a default targets list to the project's help message.
 
     See the `SCons Help`_ documentation for appending behavior. Adds text to the project help message formatted as
 
@@ -415,6 +419,8 @@ def project_help_default_targets(
     :param local_only: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     :param target_descriptions: dictionary containing target metadata.
     """
+    if env is None:
+        env = SCons.Environment.Environment()
     default_targets_help = _project_help_descriptions(
         SCons.Script.DEFAULT_TARGETS, message="\nDefault Targets:\n", target_descriptions=target_descriptions
     )
@@ -431,12 +437,12 @@ def project_help_default_targets(
 
 
 def project_help_aliases(
-    env: SCons.Environment.Environment = SCons.Environment.Environment(),
+    env: SCons.Environment.Environment | None = None,
     append: bool = True,
     local_only: bool = True,
-    target_descriptions: typing.Optional[dict] = None,
+    target_descriptions: dict | None = None,
 ) -> None:
-    """Add the alias list to the project's help message
+    """Add the alias list to the project's help message.
 
     See the `SCons Help`_ documentation for appending behavior. Adds text to the project help message formatted as
 
@@ -454,6 +460,8 @@ def project_help_aliases(
     :param local_only: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     :param target_descriptions: dictionary containing target metadata.
     """
+    if env is None:
+        env = SCons.Environment.Environment()
     alias_help = _project_help_descriptions(
         SCons.Node.Alias.default_ans, message="\nTarget Aliases:\n", target_descriptions=target_descriptions
     )
@@ -473,10 +481,13 @@ def project_alias(
     env: SCons.Environment.Environment = None,
     *args,
     description: str = "",
-    target_descriptions: dict = dict(),
+    # Normally you should not use mutables for argument defaults, but this method relies on the mutable behavior.
+    target_descriptions: dict = {},  # noqa: B006
     **kwargs,
 ) -> dict:
-    """Wrapper around the `SCons Alias`_ method. Appends and returns target descriptions dictionary.
+    """Compile and return a dictionary of ``{alias: description}`` pairs.
+
+    Wrapper around the `SCons Alias`_ method. Appends and returns target descriptions dictionary.
 
     :param env: The SCons construction environment object to modify.
     :param args: All other positional arguments are passed to the `SCons Alias`_ method.
@@ -496,10 +507,8 @@ def project_alias(
     return target_descriptions
 
 
-def _project_help_descriptions(
-    nodes: SCons.Node.NodeList, target_descriptions: typing.Optional[dict] = None, message=""
-) -> str:
-    """Return a help message for all nodes found in the alias and target descriptions
+def _project_help_descriptions(nodes: SCons.Node.NodeList, target_descriptions: dict | None = None, message="") -> str:
+    """Return a help message for all nodes found in the alias and target descriptions.
 
     Alias descriptions are returned from the :meth:`project_alias`. When both the alias and target descriptions
     describe the same node, the provided target description dictionary is used.
@@ -517,7 +526,7 @@ def _project_help_descriptions(
     descriptions = {**alias_descriptions, **target_descriptions}
     keys = [str(node) for node in nodes]
     for key in keys:
-        if key in descriptions.keys():
+        if key in descriptions:
             message += f"    {key}: {descriptions[key]}\n"
         else:
             message += f"    {key}\n"
@@ -525,12 +534,12 @@ def _project_help_descriptions(
 
 
 def substitution_syntax(
-    env: SCons.Environment.Environment,
+    env: SCons.Environment.Environment,  # noqa: ARG001
     substitution_dictionary: dict,
     prefix: str = "@",
     suffix: str = "@",
 ) -> dict:
-    """Return a dictionary copy with the pre/suffix added to the key strings
+    """Return a dictionary copy with the pre/suffix added to the key strings.
 
     Assumes a flat dictionary with keys of type str. Keys that aren't strings will be converted to their string
     representation. Nested dictionaries can be supplied, but only the first layer keys will be modified. Dictionary
@@ -557,7 +566,9 @@ def check_program(
     env: SCons.Environment.Environment,
     prog_name: str,
 ) -> str:
-    """Replacement for `SCons CheckProg`_ like behavior without an SCons configure object
+    """Return the absolute path of the requested program or ``None``.
+
+    Replacement for `SCons CheckProg`_ like behavior without an SCons configure object.
 
     .. code-block::
        :caption: Example search for an executable named "program"
@@ -581,7 +592,7 @@ def append_env_path(
     env: SCons.Environment.Environment,
     program: str,
 ) -> None:
-    """Append SCons contruction environment ``PATH`` with the program's parent directory
+    """Append SCons contruction environment ``PATH`` with the program's parent directory.
 
     Uses the `SCons AppendENVPath`_ method. If the program parent directory is already on ``PATH``, the ``PATH``
     directory order is preserved.
@@ -610,7 +621,7 @@ def append_env_path(
 def find_program(
     env: SCons.Environment.Environment,
     names: typing.Iterable[str],
-) -> str:
+) -> str | None:
     """Search for a program from a list of possible program names.
 
     Returns the absolute path of the first program name found. If path parts contain spaces, the part will be wrapped in
@@ -632,9 +643,7 @@ def find_program(
     """
     if isinstance(names, str):
         names = [names]
-    program_paths = []
-    for name in names:
-        program_paths.append(check_program(env, name))
+    program_paths = [check_program(env, name) for name in names]
     # Return first non-None path. Default to None if no program path was found.
     first_found_path = next((path for path in program_paths if path is not None), None)
     if first_found_path:
@@ -676,7 +685,7 @@ def add_cubit(
     env: SCons.Environment.Environment,
     names: typing.Iterable[str],
 ) -> str:
-    """Modifies environment variables with the paths required to ``import cubit`` in a Python3 environment.
+    """Modify environment variables with the paths required to ``import cubit`` in a Python3 environment.
 
     Returns the absolute path of the first program name found. Appends ``PATH`` with first program's parent directory if
     a program is found and the directory is not already on ``PATH``. Prepends ``PYTHONPATH`` with ``parent/bin``.
@@ -711,7 +720,7 @@ def add_cubit_python(
     env: SCons.Environment.Environment,
     names: typing.Iterable[str],
 ) -> str:
-    """Modifies environment variables with the paths required to ``import cubit`` with the Cubit Python interpreter.
+    """Modify environment variables with the paths required to ``import cubit`` with the Cubit Python interpreter.
 
     Returns the absolute path of the first Cubit Python intepreter found. Appends ``PATH`` with Cubit Python parent
     directory if a program is found and the directory is not already on ``PATH``. Prepends ``PYTHONPATH`` with
@@ -745,10 +754,10 @@ def add_cubit_python(
 def shell_environment(
     command: str,
     shell: str = "bash",
-    cache: typing.Optional[str] = None,
+    cache: str | None = None,
     overwrite_cache: bool = False,
 ) -> SCons.Environment.Environment:
-    """Return an SCons shell environment from a cached file or by running a shell command
+    """Return an SCons shell environment from a cached file or by running a shell command.
 
     If the environment is created successfully and a cache file is requested, the cache file is _always_ written. The
     ``overwrite_cache`` behavior forces the shell ``command`` execution, even when the cache file is present. If the
@@ -800,7 +809,7 @@ def construct_action_list(
     prefix: str = "${action_prefix}",
     suffix: str = "",
 ) -> typing.Iterable[str]:
-    """Return an action list with a common pre/post-fix
+    """Return an action list with a common pre/post-fix.
 
     Returns the constructed action list with pre/post fix strings as
 
@@ -832,7 +841,7 @@ def construct_action_list(
 
 
 def _build_subdirectory(target: list) -> pathlib.Path:
-    """Return the build subdirectory of the first target file
+    """Return the build subdirectory of the first target file.
 
     :param target: The target file list of strings
 
@@ -841,7 +850,7 @@ def _build_subdirectory(target: list) -> pathlib.Path:
     try:
         build_subdirectory = pathlib.Path(str(target[0])).parent
     except IndexError:
-        build_subdirectory = pathlib.Path(".")
+        build_subdirectory = pathlib.Path()
     return build_subdirectory
 
 
@@ -858,7 +867,7 @@ def builder_factory(
     emitter=None,
     **kwargs,
 ) -> SCons.Builder.Builder:
-    """Template builder factory returning a builder with no emitter
+    """Template builder factory returning a builder with no emitter.
 
     This builder provides a template action string with placeholder keyword arguments in the action string. The
     default behavior will not do anything unless the ``program`` or ``subcommand`` argument is updated to include an
@@ -931,12 +940,12 @@ def builder_factory(
 def first_target_emitter(
     target: list,
     source: list,
-    env: SCons.Environment.Environment,
-    suffixes: typing.Optional[typing.Iterable[str]] = None,
-    appending_suffixes: typing.Optional[typing.Iterable[str]] = None,
+    env: SCons.Environment.Environment,  # noqa: ARG001
+    suffixes: typing.Iterable[str] | None = None,
+    appending_suffixes: typing.Iterable[str] | None = None,
     stdout_extension: str = _settings._stdout_extension,
-) -> typing.Tuple[list, list]:
-    """SCons emitter function that emits new targets based on the first target
+) -> tuple[list, list]:
+    """SCons emitter function that emits new targets based on the first target.
 
     Searches for a file ending in the stdout extension. If none is found, creates a target by appending the stdout
     extension to the first target in the ``target`` list. The associated Builder requires at least one target for this
@@ -1002,7 +1011,7 @@ def first_target_builder_factory(
     emitter=first_target_emitter,
     **kwargs,
 ) -> SCons.Builder.Builder:
-    """Template builder factory with WAVES default action behaviors and a task STDOUT file emitter
+    """Template builder factory with WAVES default action behaviors and a task STDOUT file emitter.
 
     This builder factory extends :meth:`waves.scons_extensions.builder_factory` to provide a template action string with
     placeholder keyword arguments and WAVES builder default behavior. The default behavior will not do anything unless
@@ -1076,8 +1085,8 @@ def _abaqus_journal_emitter(
     target: list,
     source: list,
     env: SCons.Environment.Environment,
-) -> typing.Tuple[list, list]:
-    """Appends the abaqus_journal builder target list with the builder managed targets
+) -> tuple[list, list]:
+    """Emit the :meth:`abaqus_journal` builder target list with the builder managed targets.
 
     Appends ``target[0]``.abaqus_v6.env and ``target[0]``.stdout to the ``target`` list. The abaqus_journal Builder
     requires at least one target.
@@ -1104,7 +1113,7 @@ def abaqus_journal(
     action_suffix: str = _settings._redirect_action_suffix,
     environment_suffix: str = _settings._redirect_environment_suffix,
 ) -> SCons.Builder.Builder:
-    """Construct and return an Abaqus journal file SCons builder
+    """Construct and return an Abaqus journal file SCons builder.
 
     This builder requires that the journal file to execute is the first source in the list. The builder returned by this
     function accepts all SCons Builder arguments. The arguments of this function are also available as keyword arguments
@@ -1183,7 +1192,7 @@ def abaqus_journal(
 
 @catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
 def sbatch_abaqus_journal(*args, **kwargs):
-    """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_journal`
+    """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_journal`.
 
     Catenate the actions and submit with `SLURM`_ `sbatch`_. Accepts the ``sbatch_options`` builder keyword argument to
     modify sbatch behavior.
@@ -1214,7 +1223,7 @@ def abaqus_journal_builder_factory(
     emitter=first_target_emitter,
     **kwargs,
 ) -> SCons.Builder.Builder:
-    """Abaqus journal builder factory
+    """Abaqus journal builder factory.
 
     This builder factory extends :meth:`waves.scons_extensions.first_target_builder_factory`. This builder factory uses
     the :meth:`waves.scons_extensions.first_target_emitter`. At least one task target must be specified in the task
@@ -1299,7 +1308,7 @@ def abaqus_journal_builder_factory(
 
 @catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
 def sbatch_abaqus_journal_builder_factory(*args, **kwargs):
-    """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_journal_builder_factory`
+    """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_journal_builder_factory`.
 
     Catenate the actions and submit with `SLURM`_ `sbatch`_. Accepts the ``sbatch_options`` builder keyword argument to
     modify sbatch behavior.
@@ -1318,8 +1327,8 @@ def _abaqus_solver_emitter(
     env: SCons.Environment.Environment,
     suffixes: typing.Iterable[str] = _settings._abaqus_common_extensions,
     stdout_extension: str = _settings._stdout_extension,
-) -> typing.Tuple[list, list]:
-    """Appends the abaqus_solver builder target list with the builder managed targets
+) -> tuple[list, list]:
+    """Emit the :meth:`abaqus_solver` builder target list with the builder managed targets.
 
     If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
     directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
@@ -1370,18 +1379,18 @@ def _abaqus_solver_emitter(
     return string_targets, source
 
 
-def _abaqus_standard_solver_emitter(target: list, source: list, env) -> typing.Tuple[list, list]:
-    """Passes the standard specific extensions to :meth:`waves.scons_extensions._abaqus_solver_emitter`"""
+def _abaqus_standard_solver_emitter(target: list, source: list, env) -> tuple[list, list]:
+    """Emit the standard specific extensions with :meth:`waves.scons_extensions._abaqus_solver_emitter`."""
     return _abaqus_solver_emitter(target, source, env, _settings._abaqus_standard_extensions)
 
 
-def _abaqus_explicit_solver_emitter(target: list, source: list, env) -> typing.Tuple[list, list]:
-    """Passes the explicit specific extensions to :meth:`waves.scons_extensions._abaqus_solver_emitter`"""
+def _abaqus_explicit_solver_emitter(target: list, source: list, env) -> tuple[list, list]:
+    """Emit the explicit specific extensions with :meth:`waves.scons_extensions._abaqus_solver_emitter`."""
     return _abaqus_solver_emitter(target, source, env, _settings._abaqus_explicit_extensions)
 
 
-def _abaqus_datacheck_solver_emitter(target: list, source: list, env) -> typing.Tuple[list, list]:
-    """Passes the datacheck specific extensions to :meth:`waves.scons_extensions._abaqus_solver_emitter`"""
+def _abaqus_datacheck_solver_emitter(target: list, source: list, env) -> tuple[list, list]:
+    """Emit the datacheck specific extensions with :meth:`waves.scons_extensions._abaqus_solver_emitter`."""
     return _abaqus_solver_emitter(target, source, env, _settings._abaqus_datacheck_extensions)
 
 
@@ -1391,9 +1400,9 @@ def abaqus_solver(
     action_prefix: str = _settings._cd_action_prefix,
     action_suffix: str = _settings._redirect_action_suffix,
     environment_suffix: str = _settings._redirect_environment_suffix,
-    emitter: typing.Literal["standard", "explicit", "datacheck", None] = None,
+    emitter: typing.Literal["standard", "explicit", "datacheck"] | None = None,
 ) -> SCons.Builder.Builder:
-    """Construct and return an Abaqus solver SCons builder
+    """Construct and return an Abaqus solver SCons builder.
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
     function accepts all SCons Builder arguments. The arguments of this function are also available as keyword arguments
@@ -1507,13 +1516,12 @@ def _task_kwarg_emitter(
     target: list,
     source: list,
     env: SCons.Environment.Environment,
-    suffixes: typing.Optional[typing.Iterable[str]] = None,
-    appending_suffixes: typing.Optional[typing.Iterable[str]] = None,
+    suffixes: typing.Iterable[str] | None = None,
+    appending_suffixes: typing.Iterable[str] | None = None,
     stdout_extension: str = _settings._stdout_extension,
     required_task_kwarg: str = "",
 ):
-    """SCons emitter function template designed for :meth:`waves.scons_extensions.abaqus_solver_builder_factory` based
-    builders.
+    """Emit modified target/source lists for :meth:`waves.scons_extensions.abaqus_solver_builder_factory` builders.
 
     This emitter prepends the target list with the value of the ``env[required_task_kwarg]`` task keyword argument named
     targets before passing through the :meth:`waves.scons_extensions.first_target_emitter` emitter.
@@ -1567,10 +1575,10 @@ def _task_kwarg_emitter(
 
 def abaqus_solver_emitter_factory(
     suffixes: typing.Iterable[str] = _settings._abaqus_common_extensions,
-    appending_suffixes: typing.Optional[typing.Iterable[str]] = None,
+    appending_suffixes: typing.Iterable[str] | None = None,
     stdout_extension: str = _settings._stdout_extension,
 ) -> collections.abc.Callable[[list, list, SCons.Environment.Environment], tuple]:
-    """Abaqus solver emitter factory
+    """Abaqus solver emitter factory.
 
     SCons emitter factory that returns emitters for :meth:`waves.scons_extensions.abaqus_solver_builder_factory` based
     builders.
@@ -1641,10 +1649,10 @@ def abaqus_datacheck_emitter(
     source: list,
     env: SCons.Environment.Environment,
     suffixes: typing.Iterable[str] = _settings._abaqus_datacheck_extensions,
-    appending_suffixes: typing.Optional[typing.Iterable[str]] = None,
+    appending_suffixes: typing.Iterable[str] | None = None,
     stdout_extension: str = _settings._stdout_extension,
 ):
-    """Abaqus solver emitter for datacheck targets
+    """Abaqus solver emitter for datacheck targets.
 
     SCons emitter for :meth:`waves.scons_extensions.abaqus_solver_builder_factory` based builders. Built on
     :meth:`waves.scons_extensions.abaqus_solver_emitter_factory`.
@@ -1711,10 +1719,10 @@ def abaqus_explicit_emitter(
     source: list,
     env: SCons.Environment.Environment,
     suffixes: typing.Iterable[str] = _settings._abaqus_explicit_extensions,
-    appending_suffixes: typing.Optional[typing.Iterable[str]] = None,
+    appending_suffixes: typing.Iterable[str] | None = None,
     stdout_extension: str = _settings._stdout_extension,
 ):
-    """Abaqus solver emitter for Explicit targets
+    """Abaqus solver emitter for Explicit targets.
 
     SCons emitter for :meth:`waves.scons_extensions.abaqus_solver_builder_factory` based builders. Built on
     :meth:`waves.scons_extensions.abaqus_solver_emitter_factory`.
@@ -1781,10 +1789,10 @@ def abaqus_standard_emitter(
     source: list,
     env: SCons.Environment.Environment,
     suffixes: typing.Iterable[str] = _settings._abaqus_standard_extensions,
-    appending_suffixes: typing.Optional[typing.Iterable[str]] = None,
+    appending_suffixes: typing.Iterable[str] | None = None,
     stdout_extension: str = _settings._stdout_extension,
 ):
-    """Abaqus solver emitter for Standard targets
+    """Abaqus solver emitter for Standard targets.
 
     SCons emitter for :meth:`waves.scons_extensions.abaqus_solver_builder_factory` based builders. Built on
     :meth:`waves.scons_extensions.abaqus_solver_emitter_factory`.
@@ -1859,7 +1867,7 @@ def abaqus_solver_builder_factory(
     emitter=first_target_emitter,
     **kwargs,
 ) -> SCons.Builder.Builder:
-    """Abaqus solver builder factory
+    """Abaqus solver builder factory.
 
     This builder factory extends :meth:`waves.scons_extensions.first_target_builder_factory`. This builder factory uses
     the :meth:`waves.scons_extensions.first_target_emitter`. At least one task target must be specified in the task
@@ -1963,7 +1971,7 @@ class AbaqusPseudoBuilder:
     def __init__(
         self,
         builder: SCons.Builder.Builder,
-        override_cpus: typing.Optional[int] = None,
+        override_cpus: int | None = None,
     ) -> None:
         self.builder = builder
         self.override_cpus = override_cpus
@@ -1972,16 +1980,16 @@ class AbaqusPseudoBuilder:
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/821
     def __call__(
         self,
-        env: SCons.Environment.Environment,
+        env: SCons.Environment.Environment,  # noqa: ARG002
         job: str,
-        inp: typing.Optional[str] = None,
-        user: typing.Optional[str] = None,
+        inp: str | None = None,
+        user: str | None = None,
         cpus: int = 1,
-        oldjob: typing.Union[typing.List[str], str, None] = None,
+        oldjob: list[str] | str | None = None,
         write_restart: bool = False,
         double: str = "both",
-        extra_sources: typing.Optional[typing.List[str]] = None,
-        extra_targets: typing.Optional[typing.List[str]] = None,
+        extra_sources: list[str] | None = None,
+        extra_targets: list[str] | None = None,
         extra_options: str = "",
         **kwargs,
     ) -> SCons.Node.NodeList:
@@ -2087,8 +2095,8 @@ class AbaqusPseudoBuilder:
             env.Abaqus(job='simulation_1', cpus=4)
         """
         # Initialize with empty arguments for AbaqusSolver builder
-        sources = list()
-        targets = list()
+        sources = []
+        targets = []
         options = ""
 
         # Specify job name
@@ -2148,7 +2156,7 @@ class AbaqusPseudoBuilder:
 
 @catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
 def sbatch_abaqus_solver_builder_factory(*args, **kwargs):
-    """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_solver_builder_factory`
+    """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_solver_builder_factory`.
 
     Catenate the actions and submit with `SLURM`_ `sbatch`_. Accepts the ``sbatch_options`` builder keyword argument to
     modify sbatch behavior.
@@ -2163,7 +2171,7 @@ def sbatch_abaqus_solver_builder_factory(*args, **kwargs):
 
 @catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
 def sbatch_abaqus_solver(*args, **kwargs):
-    """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_solver`
+    """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_solver`.
 
     Catenate the actions and submit with `SLURM`_ `sbatch`_. Accepts the ``sbatch_options`` builder keyword argument to
     modify sbatch behavior.
@@ -2184,11 +2192,11 @@ def sbatch_abaqus_solver(*args, **kwargs):
 def copy_substfile(
     env: SCons.Environment.Environment,
     source_list: list,
-    substitution_dictionary: typing.Optional[dict] = None,
+    substitution_dictionary: dict | None = None,
     build_subdirectory: str = ".",
     symlink: bool = False,
 ) -> SCons.Node.NodeList:
-    """Pseudo-builder to copy source list to build directory and perform template substitutions on ``*.in`` filenames
+    """Pseudo-builder to copy source list to build directory and perform template substitutions on ``*.in`` filenames.
 
     `SCons Pseudo-Builder`_ to chain two builders:  a builder with the `SCons Copy`_ action and the `SCons Substfile`_
     builders. Files are first copied to the build (variant) directory and then template substitution is performed on
@@ -2261,7 +2269,7 @@ def python_builder_factory(
     emitter=first_target_emitter,
     **kwargs,
 ) -> SCons.Builder.Builder:
-    """Python builder factory
+    """Python builder factory.
 
     This builder factory extends :meth:`waves.scons_extensions.first_target_builder_factory`. This builder factory uses
     the :meth:`waves.scons_extensions.first_target_emitter`. At least one task target must be specified in the task
@@ -2339,7 +2347,7 @@ def python_builder_factory(
 
 @catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
 def sbatch_python_builder_factory(*args, **kwargs):
-    """Thin pass through wrapper of :meth:`waves.scons_extensions.python_builder_factory`
+    """Thin pass through wrapper of :meth:`waves.scons_extensions.python_builder_factory`.
 
     Catenate the actions and submit with `SLURM`_ `sbatch`_. Accepts the ``sbatch_options`` builder keyword argument to
     modify sbatch behavior.
@@ -2356,8 +2364,8 @@ def _matlab_script_emitter(
     target: list,
     source: list,
     env: SCons.Environment.Environment,
-) -> typing.Tuple[list, list]:
-    """Appends the matlab_script builder target list with the builder managed targets
+) -> tuple[list, list]:
+    """Append the matlab_script builder target list with the builder managed targets.
 
     Appends ``target[0]``.matlab.env and ``target[0]``.stdout to the ``target`` list. The matlab_script Builder requires
     at least one target. The build tree copy of the Matlab script is not added to the target list to avoid multiply
@@ -2384,7 +2392,7 @@ def matlab_script(
     action_suffix: str = _settings._redirect_action_suffix,
     environment_suffix: str = _settings._redirect_environment_suffix,
 ) -> SCons.Builder.Builder:
-    """Matlab script SCons builder
+    """Matlab script SCons builder.
 
     .. warning::
 
@@ -2471,7 +2479,7 @@ def conda_environment(
     options: str = "",
     action_prefix: str = _settings._cd_action_prefix,
 ) -> SCons.Builder.Builder:
-    """Create a Conda environment file with ``conda env export``
+    """Create a Conda environment file with ``conda env export``.
 
     This builder is intended to help WAVES workflows document the Conda environment used in the current build. The
     arguments of this function are also available as keyword arguments of the builder. When provided during task
@@ -2543,9 +2551,11 @@ def _abaqus_extract_emitter(
     target: list,
     source: list,
     env: SCons.Environment.Environment,
-) -> typing.Tuple[list, list]:
-    """Prepends the abaqus extract builder target H5 file if none is specified. Appends the source[0].csv file unless
-    ``delete_report_file`` is ``True``.  Always appends the ``target[0]_datasets.h5`` file.
+) -> tuple[list, list]:
+    """Prepend the abaqus extract builder target H5 file if none is specified.
+
+    Appends the source[0].csv file unless ``delete_report_file`` is ``True``.  Always appends the
+    ``target[0]_datasets.h5`` file.
 
     If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
     directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
@@ -2571,7 +2581,7 @@ def _abaqus_extract_emitter(
 
 
 def abaqus_extract(program: str = "abaqus") -> SCons.Builder.Builder:
-    """Abaqus ODB file extraction Builder
+    """Abaqus ODB file extraction Builder.
 
     This builder executes the ``odb_extract`` command line utility against an ODB file in the source list. The ODB file
     must be the first file in the source list. If there is more than one ODB file in the source list, all but the first
@@ -2644,7 +2654,7 @@ def _build_odb_extract(
     source: list,
     env: SCons.Environment.Environment,
 ) -> None:
-    """Define the odb_extract action when used as an internal package and not a command line utility
+    """Define the odb_extract action when used as an internal package and not a command line utility.
 
     :param target: The target file list of strings
     :param source: The source file list of SCons.Node.FS.File objects
@@ -2687,7 +2697,7 @@ def sbatch(
     required: str = "--wait --output=${TARGETS[-1].abspath}",
     action_prefix: str = _settings._cd_action_prefix,
 ) -> SCons.Builder.Builder:
-    """`SLURM`_ `sbatch`_ SCons builder
+    """`SLURM`_ `sbatch`_ SCons builder.
 
     The builder returned by this function accepts all SCons Builder arguments. The arguments of this function are also
     available as keyword arguments of the builder. When provided during task definition, the keyword arguments override
@@ -2747,7 +2757,7 @@ def sbatch(
 
 
 def abaqus_input_scanner() -> SCons.Scanner.Scanner:
-    """Abaqus input file dependency scanner
+    """Abaqus input file dependency scanner.
 
     Custom SCons scanner that searches for the ``INPUT=`` parameter and associated file dependencies inside Abaqus
     ``*.inp`` files.
@@ -2759,7 +2769,7 @@ def abaqus_input_scanner() -> SCons.Scanner.Scanner:
 
 
 def sphinx_scanner() -> SCons.Scanner.Scanner:
-    """SCons scanner that searches for directives
+    """SCons scanner that searches for directives.
 
     * ``.. include::``
     * ``.. literalinclude::``
@@ -2780,7 +2790,7 @@ def sphinx_build(
     builder: str = "html",
     tags: str = "",
 ) -> SCons.Builder.Builder:
-    """Sphinx builder using the ``-b`` specifier
+    """Sphinx builder using the ``-b`` specifier.
 
     This builder does not have an emitter. It requires at least one target.
 
@@ -2875,9 +2885,9 @@ def sphinx_latexpdf(
 def _custom_scanner(
     pattern: str,
     suffixes: typing.Iterable[str],
-    flags: typing.Optional[int] = None,
+    flags: int | None = None,
 ) -> SCons.Scanner.Scanner:
-    """Custom Scons scanner
+    """Return a custom Scons scanner.
 
     constructs a scanner object based on a regular expression pattern. Will only search for files matching the list of
     suffixes provided. ``_custom_scanner`` will always use the ``re.MULTILINE`` flag
@@ -2895,7 +2905,7 @@ def _custom_scanner(
     expression = re.compile(pattern, flags)
 
     def suffix_only(node_list: list) -> list:
-        """Recursively search for files that end in the given suffixes
+        """Recursively search for files that end in the given suffixes.
 
         :param node_list: List of SCons Node objects representing the nodes to process
 
@@ -2903,7 +2913,7 @@ def _custom_scanner(
         """
         return [node for node in node_list if node.path.endswith(tuple(suffixes))]
 
-    def regex_scan(node: SCons.Node.FS, env: SCons.Environment.Environment, path: str) -> list:
+    def regex_scan(node: SCons.Node.FS, env: SCons.Environment.Environment, path: str) -> list:  # noqa: ARG001
         """Scan function for extracting dependencies from the content of a file based on the given regular expression.
 
         The interface of the scan function is fixed by SCons. It must include ``node``, ``env`` and ``path``. It may
@@ -2938,7 +2948,7 @@ def quinoa_builder_factory(
     emitter=first_target_emitter,
     **kwargs,
 ) -> SCons.Builder.Builder:
-    """Quinoa builder factory
+    """Quinoa builder factory.
 
     This builder factory extends :meth:`waves.scons_extensions.first_target_builder_factory`. This builder factory uses
     the :meth:`waves.scons_extensions.first_target_emitter`. At least one task target must be specified in the task
@@ -3022,7 +3032,7 @@ def quinoa_builder_factory(
 
 @catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
 def sbatch_quinoa_builder_factory(*args, **kwargs):
-    """Thin pass through wrapper of :meth:`waves.scons_extensions.quinoa_builder_factory`
+    """Thin pass through wrapper of :meth:`waves.scons_extensions.quinoa_builder_factory`.
 
     Catenate the actions and submit with `SLURM`_ `sbatch`_. Accepts the ``sbatch_options`` builder keyword argument to
     modify sbatch behavior.
@@ -3354,7 +3364,7 @@ def sierra_builder_factory(
     emitter=first_target_emitter,
     **kwargs,
 ) -> SCons.Builder.Builder:
-    """Sierra builder factory
+    """Sierra builder factory.
 
     This builder factory extends :meth:`waves.scons_extensions.first_target_builder_factory`. This builder factory uses
     the :meth:`waves.scons_extensions.first_target_emitter`. At least one task target must be specified in the task
@@ -3424,7 +3434,7 @@ def sierra_builder_factory(
 
 @catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
 def sbatch_sierra_builder_factory(*args, **kwargs):
-    """Thin pass through wrapper of :meth:`waves.scons_extensions.sierra_builder_factory`
+    """Thin pass through wrapper of :meth:`waves.scons_extensions.sierra_builder_factory`.
 
     Catenate the actions and submit with `SLURM`_ `sbatch`_. Accepts the ``sbatch_options`` builder keyword argument to
     modify sbatch behavior.
@@ -3661,7 +3671,7 @@ def truchas_builder_factory(
 
 
 def parameter_study_task(
-    env: SCons.Environment.Environment,
+    env: SCons.Environment.Environment,  # noqa: ARG001
     builder: SCons.Builder.Builder,
     *args,
     study=None,
@@ -3755,7 +3765,7 @@ def parameter_study_task(
         substitutions
 
     :return: SCons NodeList of target nodes
-    """  # noqa: E501
+    """
     # Avoid importing parameter generator module (heavy) unless necessary
     from waves import parameter_generators
 
@@ -3764,7 +3774,7 @@ def parameter_study_task(
     else:
         suffix = "_"
 
-    return_targets = list()
+    return_targets = []
     if isinstance(study, parameter_generators.ParameterGenerator):
         for set_name, parameters in study.parameter_study_to_dict().items():
             modified_args = (
@@ -3790,13 +3800,13 @@ def parameter_study_sconscript(
     env: SCons.Environment.Environment,
     *args,
     variant_dir=None,
-    exports: typing.Optional[dict] = None,
+    exports: dict | None = None,
     study=None,
     set_name: str = "",
     subdirectories: bool = False,
     **kwargs,
 ):
-    """Wrap the SCons SConscript call to unpack parameter generators
+    """Wrap the SCons SConscript call to unpack parameter generators.
 
     Always overrides the ``exports`` dictionary with ``set_name`` and ``parameters`` keys. When ``study`` is a
     dictionary or parameter generator, the ``parameters`` are overridden. When ``study`` is a parameter generator, the
@@ -3875,7 +3885,7 @@ def parameter_study_sconscript(
     :raises TypeError: if ``exports`` is not a dictionary
     """
     if exports is None:
-        exports = dict()
+        exports = {}
 
     # Avoid importing parameter generator module (heavy) unless necessary
     from waves import parameter_generators
@@ -3886,19 +3896,19 @@ def parameter_study_sconscript(
             "this function does not have access to the calling script's namespace."
         )
         raise TypeError(message)
-    exports.update({"set_name": set_name, "parameters": dict()})
+    exports.update({"set_name": set_name, "parameters": {}})
 
-    sconscript_output = list()
+    sconscript_output = []
 
     if variant_dir is not None:
         variant_dir = pathlib.Path(variant_dir)
 
     def _variant_subdirectory(
-        variant_directory: typing.Optional[pathlib.Path],
+        variant_directory: pathlib.Path | None,
         subdirectory: str,
         subdirectories: bool = subdirectories,
-    ) -> typing.Union[pathlib.Path, None]:
-        """Determine the variant subdirectory
+    ) -> pathlib.Path | None:
+        """Determine the variant subdirectory.
 
         :param variant_directory: The requested root ``variant_dir``
         :param subdirectory: The requested subdirectory
@@ -3907,12 +3917,12 @@ def parameter_study_sconscript(
         :returns: variant directory
         """
         if subdirectories:
-            if variant_dir is not None:
-                build_directory = variant_dir / subdirectory
+            if variant_directory is not None:
+                build_directory = variant_directory / subdirectory
             else:
                 build_directory = pathlib.Path(subdirectory)
         else:
-            build_directory = variant_dir
+            build_directory = variant_directory
         return build_directory
 
     if isinstance(study, parameter_generators.ParameterGenerator):
@@ -3933,7 +3943,7 @@ def parameter_study_write(
     parameter_generator,
     **kwargs,
 ) -> SCons.Node.NodeList:
-    """Pseudo-builder to write a parameter generator's parameter study file
+    """Pseudo-builder to write a parameter generator's parameter study file.
 
     .. code-block::
        :caption: SConstruct
@@ -4011,7 +4021,7 @@ class QOIPseudoBuilder:
         self,
         env: SCons.Environment.Environment,
         calculated: pathlib.Path,
-        expected: typing.Optional[pathlib.Path] = None,
+        expected: pathlib.Path | None = None,
         archive: bool = False,
     ) -> SCons.Node.NodeList:
         """SCons Pseudo-Builder for regression testing and archiving quantities of interest (QOIs).
@@ -4048,7 +4058,7 @@ class QOIPseudoBuilder:
         """
         if not expected and not archive:
             raise ValueError("Either expected or archive=True must be specified.")
-        targets = list()
+        targets = []
         collection_dir = pathlib.Path(self.collection_dir)
         file_to_archive = calculated
         if expected and self.update_expected:
@@ -4116,22 +4126,22 @@ class QOIPseudoBuilder:
 
 
 class WAVESEnvironment(SConsEnvironment):
-    """Thin overload of SConsEnvironment with WAVES construction environment methods and builders"""
+    """Overload SConsEnvironment with WAVES construction environment methods and builders."""
 
     def __init__(
         self,
         *args,
-        ABAQUS_PROGRAM: str = "abaqus",
-        ANSYS_PROGRAM: str = "ansys",
-        CCX_PROGRAM: str = "ccx",
-        CHARMRUN_PROGRAM: str = "charmrun",
-        FIERRO_EXPLICIT_PROGRAM: str = "fierro-parallel-explicit",
-        FIERRO_IMPLICIT_PROGRAM: str = "fierro-parallel-implicit",
-        INCITER_PROGRAM: str = "inciter",
-        MPIRUN_PROGRAM: str = "mpirun",
-        PYTHON_PROGRAM: str = "python",
-        SIERRA_PROGRAM: str = "sierra",
-        SPHINX_BUILD_PROGRAM: str = "sphinx-build",
+        ABAQUS_PROGRAM: str = "abaqus",  # noqa: N803
+        ANSYS_PROGRAM: str = "ansys",  # noqa: N803
+        CCX_PROGRAM: str = "ccx",  # noqa: N803
+        CHARMRUN_PROGRAM: str = "charmrun",  # noqa: N803
+        FIERRO_EXPLICIT_PROGRAM: str = "fierro-parallel-explicit",  # noqa: N803
+        FIERRO_IMPLICIT_PROGRAM: str = "fierro-parallel-implicit",  # noqa: N803
+        INCITER_PROGRAM: str = "inciter",  # noqa: N803
+        MPIRUN_PROGRAM: str = "mpirun",  # noqa: N803
+        PYTHON_PROGRAM: str = "python",  # noqa: N803
+        SIERRA_PROGRAM: str = "sierra",  # noqa: N803
+        SPHINX_BUILD_PROGRAM: str = "sphinx-build",  # noqa: N803
         **kwargs,
     ):
         super().__init__(
@@ -4150,99 +4160,99 @@ class WAVESEnvironment(SConsEnvironment):
             **kwargs,
         )
 
-    def PrintBuildFailures(self, *args, **kwargs):
-        """Construction environment method from :meth:`waves.scons_extensions.print_build_failures`
+    def PrintBuildFailures(self, *args, **kwargs):  # noqa: N802
+        """Call :meth:`waves.scons_extensions.print_build_failures` as a construction environment method.
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return print_build_failures(self, *args, **kwargs)
 
-    def CheckProgram(self, *args, **kwargs):
-        """Construction environment method from :meth:`waves.scons_extensions.check_program`
+    def CheckProgram(self, *args, **kwargs):  # noqa: N802
+        """Call :meth:`waves.scons_extensions.check_program` as a construction environment method.
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return check_program(self, *args, **kwargs)
 
-    def FindProgram(self, *args, **kwargs):
-        """Construction environment method from :meth:`waves.scons_extensions.find_program`
+    def FindProgram(self, *args, **kwargs):  # noqa: N802
+        """Call :meth:`waves.scons_extensions.find_program` as a construction environment method.
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return find_program(self, *args, **kwargs)
 
-    def AddProgram(self, *args, **kwargs):
-        """Construction environment method from :meth:`waves.scons_extensions.add_program`
+    def AddProgram(self, *args, **kwargs):  # noqa: N802
+        """Call :meth:`waves.scons_extensions.add_program` as a construction environment method.
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return add_program(self, *args, **kwargs)
 
-    def AddCubit(self, *args, **kwargs):
-        """Construction environment method from :meth:`waves.scons_extensions.add_cubit`
+    def AddCubit(self, *args, **kwargs):  # noqa: N802
+        """Call :meth:`waves.scons_extensions.add_cubit` as a construction environment method.
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return add_cubit(self, *args, **kwargs)
 
-    def AddCubitPython(self, *args, **kwargs):
-        """Construction environment method from :meth:`waves.scons_extensions.add_cubit_python`
+    def AddCubitPython(self, *args, **kwargs):  # noqa: N802
+        """Call :meth:`waves.scons_extensions.add_cubit_python` as a construction environment method.
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return add_cubit_python(self, *args, **kwargs)
 
-    def CopySubstfile(self, *args, **kwargs):
-        """Construction environment method from :meth:`waves.scons_extensions.copy_substfile`
+    def CopySubstfile(self, *args, **kwargs):  # noqa: N802
+        """Call :meth:`waves.scons_extensions.copy_substfile` as a construction environment method.
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return copy_substfile(self, *args, **kwargs)
 
-    def ProjectHelp(self, *args, **kwargs):
-        """Construction environment method from :meth:`waves.scons_extensions.project_help`
+    def ProjectHelp(self, *args, **kwargs):  # noqa: N802
+        """Call :meth:`waves.scons_extensions.project_help` as a construction environment method.
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return project_help(self, *args, **kwargs)
 
-    def ProjectAlias(self, *args, **kwargs):
-        """Construction environment method from :meth:`waves.scons_extensions.project_alias`
+    def ProjectAlias(self, *args, **kwargs):  # noqa: N802
+        """Call :meth:`waves.scons_extensions.project_alias` as a construction environment method.
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return project_alias(self, *args, **kwargs)
 
-    def SubstitutionSyntax(self, *args, **kwargs):
-        """Construction environment method from :meth:`waves.scons_extensions.substitution_syntax`
+    def SubstitutionSyntax(self, *args, **kwargs):  # noqa: N802
+        """Call :meth:`waves.scons_extensions.substitution_syntax` as a construction environment method.
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return substitution_syntax(self, *args, **kwargs)
 
-    def ParameterStudyTask(self, *args, **kwargs):
-        """Construction environment pseudo-builder from :meth:`waves.scons_extensions.parameter_study_task`
+    def ParameterStudyTask(self, *args, **kwargs):  # noqa: N802
+        """Call :meth:`waves.scons_extensions.parameter_study_task` as a construction environment method.
 
         When using this environment pseudo-builder, do not provide the first ``env`` argument
         """
         return parameter_study_task(self, *args, **kwargs)
 
-    def ParameterStudySConscript(self, *args, **kwargs):
-        """Construction environment method from :meth:`waves.scons_extensions.parameter_study_sconscript`
+    def ParameterStudySConscript(self, *args, **kwargs):  # noqa: N802
+        """Call :meth:`waves.scons_extensions.parameter_study_sconscript` as a construction environment method.
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return parameter_study_sconscript(self, *args, **kwargs)
 
-    def ParameterStudyWrite(self, *args, **kwargs):
-        """Construction environment method from :meth:`waves.scons_extensions.parameter_study_write`
+    def ParameterStudyWrite(self, *args, **kwargs):  # noqa: N802
+        """Define tasks with the :meth:`waves.scons_extensions.parameter_study_write`.
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return parameter_study_write(self, *args, **kwargs)
 
-    def FirstTargetBuilder(self, target, source, *args, **kwargs):
-        """Builder from factory :meth:`waves.scons_extensions.first_target_builder_factory`
+    def FirstTargetBuilder(self, target, source, *args, **kwargs):  # noqa: N802
+        """Define tasks with the builder returned by :meth:`waves.scons_extensions.first_target_builder_factory`.
 
         :param target: The task target list
         :param source: The task source list
@@ -4252,8 +4262,8 @@ class WAVESEnvironment(SConsEnvironment):
         builder = first_target_builder_factory()
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def AbaqusJournal(self, target, source, *args, **kwargs):
-        """Builder from factory :meth:`waves.scons_extensions.abaqus_journal_builder_factory`
+    def AbaqusJournal(self, target, source, *args, **kwargs):  # noqa: N802
+        """Define tasks with the builder returned by :meth:`waves.scons_extensions.abaqus_journal_builder_factory`.
 
         :var program: ``${ABAQUS_PROGRAM}``
 
@@ -4265,8 +4275,8 @@ class WAVESEnvironment(SConsEnvironment):
         builder = abaqus_journal_builder_factory(program="${ABAQUS_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def AbaqusSolver(self, target, source, *args, **kwargs):
-        """Builder from factory :meth:`waves.scons_extensions.abaqus_solver_builder_factory`
+    def AbaqusSolver(self, target, source, *args, **kwargs):  # noqa: N802
+        """Define tasks with the builder returned by :meth:`waves.scons_extensions.abaqus_solver_builder_factory`.
 
         :var program: ``${ABAQUS_PROGRAM}``
 
@@ -4278,9 +4288,10 @@ class WAVESEnvironment(SConsEnvironment):
         builder = abaqus_solver_builder_factory(program="${ABAQUS_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def AbaqusDatacheck(self, target, source, *args, **kwargs):
-        """Builder from factory :meth:`waves.scons_extensions.abaqus_solver_builder_factory` using the
-        :meth:`waves.scons_extensions.abaqus_datacheck_emitter`.
+    def AbaqusDatacheck(self, target, source, *args, **kwargs):  # noqa: N802
+        """Define tasks with builder returned by :meth:`waves.scons_extensions.abaqus_solver_builder_factory`.
+
+        Uses the :meth:`waves.scons_extensions.abaqus_datacheck_emitter`.
 
         :var program: ``${ABAQUS_PROGRAM}``
         :var emitter: :meth:`waves.scons_extensions.abaqus_datacheck_emitter`
@@ -4296,9 +4307,10 @@ class WAVESEnvironment(SConsEnvironment):
         )
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def AbaqusExplicit(self, target, source, *args, **kwargs):
-        """Builder from factory :meth:`waves.scons_extensions.abaqus_solver_builder_factory` using the
-        :meth:`waves.scons_extensions.abaqus_explicit_emitter`.
+    def AbaqusExplicit(self, target, source, *args, **kwargs):  # noqa: N802
+        """Define tasks with builder returned by :meth:`waves.scons_extensions.abaqus_solver_builder_factory`.
+
+        Uses the :meth:`waves.scons_extensions.abaqus_explicit_emitter`.
 
         :var program: ``${ABAQUS_PROGRAM}``
         :var emitter: :meth:`waves.scons_extensions.abaqus_explicit_emitter`
@@ -4314,9 +4326,10 @@ class WAVESEnvironment(SConsEnvironment):
         )
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def AbaqusStandard(self, target, source, *args, **kwargs):
-        """Builder from factory :meth:`waves.scons_extensions.abaqus_solver_builder_factory` using the
-        :meth:`waves.scons_extensions.abaqus_standard_emitter`.
+    def AbaqusStandard(self, target, source, *args, **kwargs):  # noqa: N802
+        """Define tasks with builder returned by :meth:`waves.scons_extensions.abaqus_solver_builder_factory`.
+
+        Uses the :meth:`waves.scons_extensions.abaqus_standard_emitter`.
 
         :var program: ``${ABAQUS_PROGRAM}``
         :var emitter: :meth:`waves.scons_extensions.abaqus_standard_emitter`
@@ -4332,8 +4345,8 @@ class WAVESEnvironment(SConsEnvironment):
         )
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def AbaqusPseudoBuilder(self, job, *args, override_cpus: typing.Optional[int] = None, **kwargs):
-        """Construction environment pseudo-builder from :class:`waves.scons_extensions.AbaqusPseudoBuilder`
+    def AbaqusPseudoBuilder(self, job, *args, override_cpus: int | None = None, **kwargs):  # noqa: N802
+        """Define tasks with :class:`waves.scons_extensions.AbaqusPseudoBuilder`.
 
         When using this environment pseudo-builder, do not provide the first ``env`` argument
 
@@ -4349,8 +4362,8 @@ class WAVESEnvironment(SConsEnvironment):
         pseudo_builder = AbaqusPseudoBuilder(builder=self.AbaqusSolver, override_cpus=override_cpus)
         return pseudo_builder(self, job, *args, **kwargs)
 
-    def PythonScript(self, target, source, *args, **kwargs):
-        """Builder from factory :meth:`waves.scons_extensions.python_builder_factory`
+    def PythonScript(self, target, source, *args, **kwargs):  # noqa: N802
+        """Define tasks with the builder returned by :meth:`waves.scons_extensions.python_builder_factory`.
 
         :var program: ``${PYTHON_PROGRAM}``
 
@@ -4362,8 +4375,8 @@ class WAVESEnvironment(SConsEnvironment):
         builder = python_builder_factory(program="${PYTHON_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def QuinoaSolver(self, target, source, *args, **kwargs):
-        """Builder from factory :meth:`waves.scons_extensions.quinoa_builder_factory`
+    def QuinoaSolver(self, target, source, *args, **kwargs):  # noqa: N802
+        """Define tasks with the builder returned by :meth:`waves.scons_extensions.quinoa_builder_factory`.
 
         :var program: ``${CHARMRUN_PROGRAM}``
         :var subcommand: ``${INCITER_PROGRAM}``
@@ -4376,8 +4389,8 @@ class WAVESEnvironment(SConsEnvironment):
         builder = quinoa_builder_factory(program="${CHARMRUN_PROGRAM}", subcommand="${INCITER_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def CalculiX(self, target, source, *args, **kwargs):
-        """Builder from factory :meth:`waves.scons_extensions.calculix_builder_factory`
+    def CalculiX(self, target, source, *args, **kwargs):  # noqa: N802
+        """Define tasks with the builder returned by :meth:`waves.scons_extensions.calculix_builder_factory`.
 
         :var program: ``${CCX_PROGRAM}``
 
@@ -4389,8 +4402,8 @@ class WAVESEnvironment(SConsEnvironment):
         builder = calculix_builder_factory(program="${CCX_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def FierroExplicit(self, target, source, *args, **kwargs):
-        """Builder from factory :meth:`waves.scons_extensions.fierro_explicit_builder_factory`
+    def FierroExplicit(self, target, source, *args, **kwargs):  # noqa: N802
+        """Define tasks with the builder returned by :meth:`waves.scons_extensions.fierro_explicit_builder_factory`.
 
         :var program: ``${MPIRUN_PROGRAM}``
         :var subcommand: ``${FIERRO_EXPLICIT_PROGRAM}``
@@ -4403,8 +4416,8 @@ class WAVESEnvironment(SConsEnvironment):
         builder = fierro_explicit_builder_factory(program="${MPIRUN_PROGRAM}", subcommand="${FIERRO_EXPLICIT_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def FierroImplicit(self, target, source, *args, **kwargs):
-        """Builder from factory :meth:`waves.scons_extensions.fierro_implicit_builder_factory`
+    def FierroImplicit(self, target, source, *args, **kwargs):  # noqa: N802
+        """Define tasks with the builder returned by :meth:`waves.scons_extensions.fierro_implicit_builder_factory`.
 
         :var program: ``${MPIRUN_PROGRAM}``
         :var subcommand: ``${FIERRO_IMPLICIT_PROGRAM}``
@@ -4417,8 +4430,8 @@ class WAVESEnvironment(SConsEnvironment):
         builder = fierro_implicit_builder_factory(program="${MPIRUN_PROGRAM}", subcommand="${FIERRO_IMPLICIT_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def Sierra(self, target, source, *args, **kwargs):
-        """Builder from factory :meth:`waves.scons_extensions.sierra_builder_factory`
+    def Sierra(self, target, source, *args, **kwargs):  # noqa: N802
+        """Define tasks with the builder returned by :meth:`waves.scons_extensions.sierra_builder_factory`.
 
         :var program: ``${SIERRA_PROGRAM}``
 
@@ -4430,8 +4443,8 @@ class WAVESEnvironment(SConsEnvironment):
         builder = sierra_builder_factory(program="${SIERRA_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def AnsysAPDL(self, target, source, *args, **kwargs):
-        """Builder from factory :meth:`waves.scons_extensions.ansys_apdl_builder_factory`
+    def AnsysAPDL(self, target, source, *args, **kwargs):  # noqa: N802
+        """Define tasks with the builder returned by :meth:`waves.scons_extensions.ansys_apdl_builder_factory`.
 
         :var program: ``${ANSYS_PROGRAM}``
 
@@ -4443,8 +4456,8 @@ class WAVESEnvironment(SConsEnvironment):
         builder = ansys_apdl_builder_factory(program="${ANSYS_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def Truchas(self, target, source, *args, **kwargs):
-        """Builder from factory :meth:`waves.scons_extensions.truchas_builder_factory`
+    def Truchas(self, target, source, *args, **kwargs):  # noqa: N802
+        """Define tasks with the builder returned by :meth:`waves.scons_extensions.truchas_builder_factory`.
 
         :var program: ``${MPIRUN_PROGRAM}``
         :var subcommand: ``${TRUCHAS_PROGRAM}``
@@ -4457,8 +4470,8 @@ class WAVESEnvironment(SConsEnvironment):
         builder = truchas_builder_factory(program="${MPIRUN_PROGRAM}", subcommand="${TRUCHAS_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def SphinxBuild(self, target, source, *args, **kwargs):
-        """Builder from factory :meth:`waves.scons_extensions.sphinx_build`
+    def SphinxBuild(self, target, source, *args, **kwargs):  # noqa: N802
+        """Define tasks with the builder returned by :meth:`waves.scons_extensions.sphinx_build`.
 
         :var program: ``${SPHINX_BUILD_PROGRAM}``
 
@@ -4470,8 +4483,8 @@ class WAVESEnvironment(SConsEnvironment):
         builder = sphinx_build(program="${SPHINX_BUILD_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
-    def SphinxPDF(self, target, source, *args, **kwargs):
-        """Builder from factory :meth:`waves.scons_extensions.sphinx_latexpdf`
+    def SphinxPDF(self, target, source, *args, **kwargs):  # noqa: N802
+        """Define tasks with the builder returned by :meth:`waves.scons_extensions.sphinx_latexpdf`.
 
         :var program: ``${SPHINX_BUILD_PROGRAM}``
 

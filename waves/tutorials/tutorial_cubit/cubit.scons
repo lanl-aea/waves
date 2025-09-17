@@ -1,0 +1,105 @@
+#! /usr/bin/env python
+"""Rectangle compression workflow: geometry, partition, mesh.
+
+Requires the following ``SConscript(..., exports={})``
+
+* ``env`` - The SCons construction environment with the following required keys
+
+  * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
+  * ``cubit`` - String path for the Cubit executable
+
+* ``element_type`` - The Cubit 4 node quadrilateral element type
+* ``solver`` - The target solver to use when writing a mesh file
+"""
+
+import pathlib
+
+# Inherit the parent construction environment
+Import("env", "element_type", "solver")
+
+# Simulation variables
+build_directory = pathlib.Path(Dir(".").abspath)
+workflow_name = build_directory.name
+
+# Collect the target nodes to build a concise alias for all targets
+workflow = []
+
+# Rectangle 2D
+# Geometry
+workflow.extend(
+    env.PythonScript(
+        target=["rectangle_geometry.cub"],
+        source=["#/modsim_package/cubit/rectangle_geometry.py"],
+        subcommand_options="",
+    )
+)
+
+# Partition
+workflow.extend(
+    env.PythonScript(
+        target=["rectangle_partition.cub"],
+        source=["#/modsim_package/cubit/rectangle_partition.py", "rectangle_geometry.cub"],
+        subcommand_options="",
+    )
+)
+
+# Mesh
+if solver.lower() == "abaqus":
+    mesh_extension = "inp"
+elif solver.lower() in ["sierra", "adagio"]:
+    mesh_extension = "g"
+else:
+    raise RuntimeError(f"Unknown solver '{solver}'")
+workflow.extend(
+    env.PythonScript(
+        target=[f"rectangle_mesh.{mesh_extension}", "rectangle_mesh.cub"],
+        source=["#/modsim_package/cubit/rectangle_mesh.py", "rectangle_partition.cub"],
+        subcommand_options="--element-type ${element_type} --solver ${solver}",
+        element_type=element_type,
+        solver=solver,
+    )
+)
+
+
+# Cube 3D
+# Geometry
+workflow.extend(
+    env.PythonScript(
+        target=["cube_geometry.cub"],
+        source=["#/modsim_package/cubit/cube_geometry.py"],
+        subcommand_options="",
+    )
+)
+
+# Partition
+workflow.extend(
+    env.PythonScript(
+        target=["cube_partition.cub"],
+        source=["#/modsim_package/cubit/cube_partition.py", "cube_geometry.cub"],
+        subcommand_options="",
+    )
+)
+
+# Mesh
+if solver.lower() == "abaqus":
+    mesh_extension = "inp"
+elif solver.lower() in ["sierra", "adagio"]:
+    mesh_extension = "g"
+else:
+    raise RuntimeError(f"Unknown solver '{solver}'")
+workflow.extend(
+    env.PythonScript(
+        target=[f"cube_mesh.{mesh_extension}", "cube_mesh.cub"],
+        source=["#/modsim_package/cubit/cube_mesh.py", "cube_partition.cub"],
+        subcommand_options="--element-type ${element_type} --solver ${solver}",
+        element_type=element_type,
+        solver=solver,
+    )
+)
+
+# Collector alias based on parent directory name
+env.Alias(f"{workflow_name}_cubit", workflow)
+
+if not env["unconditional_build"] and not env["CUBIT_PROGRAM"]:
+    print(f"Program 'cubit' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+    Ignore([".", workflow_name], workflow)

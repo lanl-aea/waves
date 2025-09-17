@@ -1,6 +1,6 @@
-"""Test WAVES SCons builders and support functions"""
+"""Test WAVES SCons builders and support functions."""
 
-from unittest.mock import patch, call, ANY
+from unittest.mock import ANY, call, patch
 
 import pytest
 import SCons.Environment
@@ -191,7 +191,7 @@ project_aliases = {
 
 
 @pytest.mark.parametrize(
-    "args, kwargs, expected_alias_args, expected_alias_kwargs, expected_description, expect_called",
+    ("args", "kwargs", "expected_alias_args", "expected_alias_kwargs", "expected_description", "expect_called"),
     project_aliases.values(),
     ids=project_aliases.keys(),
 )
@@ -268,7 +268,7 @@ project_help_descriptions = {
 
 
 @pytest.mark.parametrize(
-    "nodes, existing_descriptions, target_descriptions, message, expected",
+    ("nodes", "existing_descriptions", "target_descriptions", "message", "expected"),
     project_help_descriptions.values(),
     ids=project_help_descriptions.keys(),
 )

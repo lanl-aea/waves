@@ -1,0 +1,65 @@
+#! /usr/bin/env python
+"""Rectangle compression mesh convergence collective post-processing workflow.
+
+Requires the following ``SConscript(..., exports={})``
+
+* ``env`` - The SCons construction environment with the following required keys
+
+  * ``modsim_package_abspath`` - Absolute path to the project package
+
+* ``alias`` - The workflow name alias root
+* ``parameter_generator`` - The mesh convergence parameter generator class
+"""
+
+import pathlib
+
+# Inherit the parent construction environment
+Import("env", "alias", "parameter_generator")
+
+# Collect the target nodes to build concise target alias(es)
+artifacts = []
+workflow = []
+
+# Post-processing
+plot_name = "stress_strain_comparison"
+parameter_study_file = parameter_generator.output_file
+post_processing_source = [
+    pathlib.Path(set_name) / "rectangle_compression_datasets.h5"
+    for set_name in parameter_generator.parameter_study_to_dict()
+]
+script_options = "--input-file ${post_processing_source}"
+script_options += " --output-file ${TARGET.file} --x-units 'mm/mm' --y-units 'MPa'"
+script_options += f" --parameter-study-file {parameter_study_file}"
+workflow.extend(
+    env.PythonScript(
+        target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
+        source=[env["modsim_package_abspath"] / "post_processing.py", parameter_study_file, *post_processing_source],
+        subcommand_options=script_options,
+        post_processing_source=post_processing_source,
+    )
+)
+
+plot_name = "mesh_convergence_stress"
+selection_dict = env["modsim_package_abspath"] / f"{plot_name}.yaml"
+script_options = "--input-file ${post_processing_source}"
+script_options += " --output-file ${TARGET.file} --x-units 'mm' --y-units 'MPa' --x-var 'global_seed' --y-var 'S'"
+script_options += f" --parameter-study-file {parameter_study_file}"
+script_options += f" --selection-dict {selection_dict}"
+workflow.extend(
+    env.PythonScript(
+        target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
+        source=[env["modsim_package_abspath"] / "post_processing.py", parameter_study_file, *post_processing_source],
+        subcommand_options=script_options,
+        post_processing_source=post_processing_source,
+    )
+)
+artifacts.extend(workflow)
+
+# Collector alias(es)
+env.Alias(alias, workflow)
+
+if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{alias}' target(s)")
+    Ignore([".", alias], workflow)
+
+Return("artifacts")

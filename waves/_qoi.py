@@ -3,7 +3,6 @@ import pathlib
 
 from waves import qoi
 
-
 _exclude_from_namespace = set(globals().keys())
 
 

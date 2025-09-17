@@ -1,21 +1,20 @@
 #!/usr/bin/env python
-"""Example of catenating WAVES parameter study results and definition"""
+"""Example of catenating WAVES parameter study results and definition."""
 
-import sys
-import yaml
-import pathlib
 import argparse
+import pathlib
+import sys
 
-import pandas
-import xarray
 import matplotlib.pyplot
 import numpy
-import seaborn
+import pandas
 import SALib.analyze.delta
+import seaborn
+import xarray
+import yaml
 from waves.parameter_generators import SET_COORDINATE_KEY
 
 from modsim_package.python.rectangle_compression_sensitivity_study import parameter_schema
-
 
 default_selection_dict = {
     "E values": "E22",
@@ -27,16 +26,19 @@ default_selection_dict = {
 }
 
 
-def combine_data(input_files, group_path, concat_coord):
-    """Combine input data files into one dataset
+def combine_data(
+    input_files: list[str | pathlib.Path],
+    group_path: str,
+    concat_coord: str,
+) -> xarray.Dataset:
+    """Combine input data files into one dataset.
 
-    :param list input_files: list of path-like or file-like objects pointing to h5netcdf files
+    :param input_files: list of path-like or file-like objects pointing to h5netcdf files
         containing Xarray Datasets
-    :param str group_path: The h5netcdf group path locating the Xarray Dataset in the input files.
-    :param str concat_coord: Name of dimension
+    :param group_path: The h5netcdf group path locating the Xarray Dataset in the input files.
+    :param concat_coord: Name of dimension
 
     :returns: Combined data
-    :rtype: xarray.DataArray
     """
     paths = [pathlib.Path(input_file).resolve() for input_file in input_files]
     data_generator = (
@@ -49,15 +51,17 @@ def combine_data(input_files, group_path, concat_coord):
     return combined_data
 
 
-def merge_parameter_study(parameter_study_file, combined_data):
-    """Merge parameter study to existing dataset
+def merge_parameter_study(
+    parameter_study_file: str | pathlib.Path,
+    combined_data: xarray.Dataset,
+) -> xarray.Dataset:
+    """Merge parameter study to existing dataset.
 
-    :param str parameter_study_file: path-like or file-like object containing the parameter study dataset. Assumes the
+    :param parameter_study_file: path-like or file-like object containing the parameter study dataset. Assumes the
         h5netcdf file contains only a single dataset at the root group path, .e.g. ``/``.
-    :param xarray.DataArray combined_data: XArray Dataset that will be merged.
+    :param combined_data: XArray Dataset that will be merged.
 
     :returns: Combined data
-    :rtype: xarray.DataArray
     """
     parameter_study = xarray.open_dataset(parameter_study_file, engine="h5netcdf")
     combined_data = combined_data.merge(parameter_study)
@@ -65,7 +69,13 @@ def merge_parameter_study(parameter_study_file, combined_data):
     return combined_data
 
 
-def main(input_files, output_file, group_path, selection_dict, parameter_study_file=None):
+def main(
+    input_files: list[pathlib.Path],
+    output_file: pathlib.Path,
+    group_path: str,
+    selection_dict: dict,
+    parameter_study_file: pathlib.Path | None = None,
+) -> None:
     """Catenate ``input_files`` datasets along the ``set_name`` dimension and plot selected data.
 
     Merges the parameter study results datasets with the parameter study definition dataset, where the parameter study
@@ -109,16 +119,19 @@ def main(input_files, output_file, group_path, selection_dict, parameter_study_f
     sensitivity_yaml = {}
     for key, value in sensitivity.items():
         if isinstance(value, numpy.ndarray):
-            value = value.tolist()
-        sensitivity_yaml[key] = value
-    with open(output_yaml, "w") as output:
+            yaml_compatible_value = value.tolist()
+        else:
+            yaml_compatible_value = value
+        sensitivity_yaml[key] = yaml_compatible_value
+    with output_yaml.open(mode="w") as output:
         output.write(yaml.safe_dump(sensitivity_yaml))
 
     # Clean up open files
     combined_data.close()
 
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
+    """Return parser for CLI options."""
     script_name = pathlib.Path(__file__)
     default_output_file = f"{script_name.stem}.pdf"
     default_group_path = "RECTANGLE/FieldOutputs/ALL_ELEMENTS"
@@ -135,28 +148,29 @@ def get_parser():
         "-i",
         "--input-file",
         nargs="+",
+        type=pathlib.Path,
         required=True,
         help="The Xarray Dataset file(s)",
     )
     required_named.add_argument(
         "-p",
         "--parameter-study-file",
-        type=str,
+        type=pathlib.Path,
         default=default_parameter_study_file,
-        help="An optional h5 file with a WAVES parameter study Xarray Dataset " "(default: %(default)s)",
+        help="An optional h5 file with a WAVES parameter study Xarray Dataset (default: %(default)s)",
     )
 
     parser.add_argument(
         "-o",
         "--output-file",
-        type=str,
+        type=pathlib.Path,
         default=default_output_file,
-        # fmt: off
-        help="The output file for the correlation coefficients plot with extension, "
-             "e.g. ``output_file.pdf``. Extension must be supported by matplotlib. File stem is also "
-             "used for the CSV table output, e.g. ``output_file.csv``, and sensitivity results, e.g. "
-             "``output_file.yaml``. (default: %(default)s)",
-        # fmt: off
+        help=(
+            "The output file for the correlation coefficients plot with extension, "
+            "e.g. ``output_file.pdf``. Extension must be supported by matplotlib. File stem is also "
+            "used for the CSV table output, e.g. ``output_file.csv``, and sensitivity results, e.g. "
+            "``output_file.yaml``. (default: %(default)s)"
+        ),
     )
     parser.add_argument(
         "-g",
@@ -168,14 +182,14 @@ def get_parser():
     parser.add_argument(
         "-s",
         "--selection-dict",
-        type=str,
+        type=pathlib.Path,
         default=None,
-        # fmt: off
-        help="The YAML formatted dictionary file to define the down selection of data to be plotted. "
-             "Dictionary key: value pairs must match the data variables and coordinates of the "
-             "expected Xarray Dataset object. If no file is provided, the a default selection dict "
-             f"will be used (default: {default_selection_dict})",
-        # fmt: on
+        help=(
+            "The YAML formatted dictionary file to define the down selection of data to be plotted. "
+            "Dictionary key: value pairs must match the data variables and coordinates of the "
+            "expected Xarray Dataset object. If no file is provided, the a default selection dict "
+            f"will be used (default: {default_selection_dict})"
+        ),
     )
 
     return parser
@@ -187,7 +201,7 @@ if __name__ == "__main__":
     if not args.selection_dict:
         selection_dict = default_selection_dict
     else:
-        with open(args.selection_dict, "r") as input_yaml:
+        with args.selection_dict.open(mode="r") as input_yaml:
             selection_dict = yaml.safe_load(input_yaml)
     sys.exit(
         main(

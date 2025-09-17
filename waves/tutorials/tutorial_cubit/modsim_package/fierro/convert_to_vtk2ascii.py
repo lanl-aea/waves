@@ -1,10 +1,13 @@
-import pathlib
+"""Convert VTK mesh files to the older VTK ASCII version 2 files required by Fierro."""
+
 import argparse
+import pathlib
 
 import meshio
 
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
+    """Return the command-line interface parser."""
     cli_description = (
         "Convert mesh files to older VTK ASCII version 2 mesh files required by Fierro with MeshIO API. "
         "This output is not supported by the MeshIO CLI and must be constructed manually."
@@ -30,7 +33,8 @@ def get_parser():
     return parser
 
 
-def main():
+def main() -> None:
+    """Convert VTK mesh files to the older VTK ASCII version 2 files required by Fierro."""
     parser = get_parser()
     args = parser.parse_args()
 
@@ -54,8 +58,7 @@ def main():
     pts_per_cell = cells.shape[1]
 
     outfile = pathlib.Path(args.outfile).resolve()
-    with open(outfile, "w") as mesh_out:
-
+    with outfile.open(mode="w") as mesh_out:
         mesh_out.write("# vtk DataFile Version 2.0\n")
         mesh_out.write("meshio converted to Fierro VTK\n")
         mesh_out.write("ASCII\n")
@@ -78,10 +81,10 @@ def main():
         mesh_out.write("\n")
         mesh_out.write(f"CELL_TYPES {ncells}\n")
         if ndim == 2:
-            for n in range(ncells):
+            for _n in range(ncells):
                 mesh_out.write("9\n")
         else:
-            for n in range(ncells):
+            for _n in range(ncells):
                 mesh_out.write("12\n")
 
 

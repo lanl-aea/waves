@@ -8,10 +8,30 @@ Changelog
 0.13.16 (unreleased)
 ********************
 
+Documentation
+=============
+- Add example ruff linter/formatter configuration to the modsim templates (:merge:`1252`). By `Kyle Brindley`_.
+- Adopt ``*.scons`` file extension naming convention for SCons configuration files in the modsim templates
+  for improved ruff linter/formatter rules (:merge:`1252`). By `Kyle Brindley`_.
+- Adopt ``*.scons`` file extension naming convention for SCons configuration files in the tutorials for improved ruff
+  linter/formatter rules (:merge:`1252`). By `Kyle Brindley`_.
+- Use immutable default arguments in tutorial parameter schema modules (:issue:`959`, :merge:`1254`). By `Kyle
+  Brindley`_.
+
 Internal Changes
 ================
 - Sort the parameter spaces of incoming studies when merging studies. (:issue:`952`, :merge:`1236`). By
   `Chris Johnson`_.
+- Implement a more complete set of linting and formatting rules with Ruff (:issue:`958`, :merge:`1244`). By `Kyle
+  Brindley`_.
+- Miscellaneous linting, formatting, and logical fixes (:issue:`958`, :merge:`1244`). By `Kyle Brindley`_.
+- Replace flake8/black with the more comprehensive ruff linter/formatter (:issue:`968`, :merge:`1245`). By `Kyle
+  Brindley`_.
+- Enable the ruff naming convention checks 'N' (:issue:`963`, :merge:`1250`). By `Kyle Brindley`_.
+- Enable the ruff pytest convention checks 'PT' (:issue:`970`, :merge:`1251`). By `Kyle Brindley`_.
+- Hierarchical ruff configuration for improved linting of tutorial files, which should lint as if they are external to
+  the project (:merge:`1252`). By `Kyle Brindley`_.
+- Enable the ruff pydocstyle documentation checks 'D' (:issue:`970`, :merge:`1251`). By `Kyle Brindley`_.
 
 ********************
 0.13.15 (2025-08-27)

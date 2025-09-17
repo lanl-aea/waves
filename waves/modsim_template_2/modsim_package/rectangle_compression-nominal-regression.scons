@@ -1,0 +1,44 @@
+#! /usr/bin/env python
+"""Rectangle compression nominal regression testing workflow.
+
+Requires the following ``SConscript(..., exports={})``
+
+* ``env`` - The SCons construction environment with the following required keys
+
+  * ``modsim_package_abspath`` - Absolute path to the project package
+
+* ``alias`` - The workflow name alias root
+"""
+
+import pathlib
+
+# Inherit the parent construction environment
+Import("env", "alias")
+
+# Collect the target nodes to build concise target alias(es)
+artifacts = []
+workflow = []
+
+# Post-processing
+build_file = pathlib.Path("stress_strain_comparison.csv")
+workflow.extend(
+    env.PythonScript(
+        target=["regression.yaml"],
+        source=[
+            env["modsim_package_abspath"] / "regression.py",
+            env["modsim_package_abspath"] / f"{alias}-{build_file.stem}.csv",
+            build_file,
+        ],
+        subcommand_options="${SOURCES[1:].abspath}",
+    )
+)
+artifacts.extend(workflow)
+
+# Collector alias(es)
+env.Alias(alias, workflow)
+
+if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{alias}' target(s)")
+    Ignore([".", alias], workflow)
+
+Return("artifacts")

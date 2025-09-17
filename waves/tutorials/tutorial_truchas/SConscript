@@ -1,9 +1,10 @@
 #! /usr/bin/env python
+"""Configure the Truchas simulation workflow."""
 
-Import("env", "envCubit", "alias", "parameters")
+Import("env", "env_cubit", "alias", "parameters")
 
 # Geometry
-envCubit.PythonScript(
+env_cubit.PythonScript(
     target=["cube_geometry.cub"],
     source=["cube_geometry.py"],
     subcommand_options="--width ${width} --height ${height}",
@@ -11,7 +12,7 @@ envCubit.PythonScript(
 )
 
 # Partition
-envCubit.PythonScript(
+env_cubit.PythonScript(
     target=["cube_partition.cub"],
     source=["cube_partition.py", "cube_geometry.cub"],
     subcommand_options="",
@@ -19,7 +20,7 @@ envCubit.PythonScript(
 )
 
 # Mesh
-envCubit.PythonScript(
+env_cubit.PythonScript(
     target=["cube_mesh.g", "cube_mesh.cub"],
     source=["cube_mesh.py", "cube_partition.cub"],
     subcommand_options="--global-seed ${global_seed} --element-type ${element_type} --solver ${solver}",
@@ -44,7 +45,7 @@ solve_targets = env.Truchas(
 )
 env.Alias(alias, solve_targets)
 
-if not env["TRUCHAS_PROGRAM"] or not envCubit["python"]:
+if not env["TRUCHAS_PROGRAM"] or not env_cubit["python"]:
     print(
         "Program 'truchas' or Cubit 'python' was not found in construction environment. Ignoring simulation target(s)"
     )

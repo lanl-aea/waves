@@ -1,0 +1,104 @@
+#! /usr/bin/env python
+"""Rectangle compression workflow: Abaqus solve.
+
+Requires the following ``SConscript(..., exports={})``
+
+* ``env`` - The SCons construction environment with the following required keys
+
+  * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
+  * ``abaqus`` - String path for the Abaqus executable
+  * ``cubit`` - String path for the Cubit executable
+"""
+
+import pathlib
+
+# Inherit the parent construction environment
+Import("env")
+
+# Simulation variables
+build_directory = pathlib.Path(Dir(".").abspath)
+workflow_name = build_directory.name
+
+# Collect the target nodes to build a concise alias for all targets
+workflow = []
+datacheck = []
+
+element_type = "QUAD"
+solver = "abaqus"
+SConscript("cubit.scons", exports={"env": env, "element_type": element_type, "solver": solver}, duplicate=False)
+
+# Modify mesh target(s) element type.
+# Linux style sed command options must be modified for macOS. Command must be modified if on Windows.
+env.AddPostAction("rectangle_mesh.inp", "sed -i 's/CPE4/CPS4/g' ${TARGET.abspath}")
+
+# SolverPrep
+copy_source_list = [
+    "#/modsim_package/abaqus/rectangle_compression.inp",
+    "#/modsim_package/abaqus/assembly.inp",
+    "#/modsim_package/abaqus/boundary.inp",
+    "#/modsim_package/abaqus/field_output.inp",
+    "#/modsim_package/abaqus/materials.inp",
+    "#/modsim_package/abaqus/parts.inp",
+    "#/modsim_package/abaqus/history_output.inp",
+]
+workflow.extend(
+    env.CopySubstfile(
+        copy_source_list,
+    )
+)
+
+# Abaqus Solve
+solve_source_list = [
+    "rectangle_compression.inp",
+    "assembly.inp",
+    "boundary.inp",
+    "field_output.inp",
+    "materials.inp",
+    "parts.inp",
+    "history_output.inp",
+    "rectangle_mesh.inp",
+]
+
+datacheck.extend(
+    env.AbaqusSolver(
+        target=[
+            "rectangle_compression_DATACHECK.odb",
+            "rectangle_compression_DATACHECK.dat",
+            "rectangle_compression_DATACHECK.msg",
+            "rectangle_compression_DATACHECK.com",
+            "rectangle_compression_DATACHECK.prt",
+            "rectangle_compression_DATACHECK.023",
+            "rectangle_compression_DATACHECK.mdl",
+            "rectangle_compression_DATACHECK.sim",
+            "rectangle_compression_DATACHECK.stt",
+        ],
+        source=solve_source_list,
+        job="rectangle_compression_DATACHECK",
+        program_options="-double both -datacheck",
+    )
+)
+
+workflow.extend(
+    env.AbaqusSolver(
+        target=[
+            "rectangle_compression.odb",
+            "rectangle_compression.dat",
+            "rectangle_compression.msg",
+            "rectangle_compression.com",
+            "rectangle_compression.prt",
+            "rectangle_compression.sta",
+        ],
+        source=solve_source_list,
+        job="rectangle_compression",
+        program_options="-double both",
+    )
+)
+
+# Collector alias based on parent directory name
+env.Alias(workflow_name, workflow)
+env.Alias(f"{workflow_name}_datacheck", datacheck)
+
+if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+    Ignore([".", workflow_name], workflow)
+    Ignore([".", f"{workflow_name}_datacheck"], datacheck)

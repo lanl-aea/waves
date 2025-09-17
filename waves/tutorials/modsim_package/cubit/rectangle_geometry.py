@@ -1,11 +1,13 @@
-import sys
-import pathlib
+"""Create a simple rectangle geometry."""
+
 import argparse
+import pathlib
+import sys
 
 import cubit
 
 
-def main(output_file, width, height):
+def main(output_file, width, height) -> None:
     """Create a simple rectangle geometry.
 
     This script creates a simple Cubit model with a single rectangle part.
@@ -32,7 +34,8 @@ def main(output_file, width, height):
     cubit.cmd(f"save as '{output_file}' overwrite")
 
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
+    """Return the command-line interface parser."""
     script_name = pathlib.Path(__file__)
     # Set default parameter values
     default_output_file = script_name.with_suffix(".cub").name
@@ -46,11 +49,11 @@ def get_parser():
         "--output-file",
         type=str,
         default=default_output_file,
-        # fmt: off
-        help="The output file for the Cubit model. "
-             "Will be stripped of the extension and ``.cub`` will be used, e.g. ``output_file``.cub "
-             "(default: %(default)s",
-        # fmt: on
+        help=(
+            "The output file for the Cubit model. "
+            "Will be stripped of the extension and ``.cub`` will be used, e.g. ``output_file``.cub "
+            "(default: %(default)s"
+        ),
     )
     parser.add_argument(
         "--width",

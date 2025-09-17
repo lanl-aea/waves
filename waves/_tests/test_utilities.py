@@ -1,15 +1,14 @@
-import sys
 import copy
 import pathlib
-import warnings
 import subprocess
-from unittest.mock import patch
+import sys
+import warnings
 from contextlib import nullcontext as does_not_raise
+from unittest.mock import patch
 
 import pytest
 
 from waves import _utilities
-
 
 set_name_substitution = {
     "default behavior": (
@@ -88,7 +87,7 @@ set_name_substitution = {
 
 
 @pytest.mark.parametrize(
-    "original, replacement, kwargs, expected",
+    ("original", "replacement", "kwargs", "expected"),
     set_name_substitution.values(),
     ids=set_name_substitution.keys(),
 )
@@ -97,7 +96,7 @@ def test_set_name_substitution(original, replacement, kwargs, expected):
     call_kwargs = copy.deepcopy(default_kwargs)
     call_kwargs.update(kwargs)
     modified = _utilities.set_name_substitution(original, replacement, **call_kwargs)
-    if isinstance(expected, (str, pathlib.Path)):
+    if isinstance(expected, str | pathlib.Path):
         assert modified == expected
     elif all(isinstance(item, str) for item in expected) or all(isinstance(item, pathlib.Path) for item in expected):
         assert sorted(modified) == sorted(expected)
@@ -138,7 +137,7 @@ quote_spaces_in_path_input = {
 
 
 @pytest.mark.parametrize(
-    "path, expected",
+    ("path", "expected"),
     quote_spaces_in_path_input.values(),
     ids=quote_spaces_in_path_input.keys(),
 )
@@ -147,7 +146,7 @@ def test_quote_spaces_in_path(path, expected):
 
 
 def test_search_commands():
-    """Test :meth:`waves._utilities.search_command`"""
+    """Test :meth:`waves._utilities.search_command`."""
     with patch("shutil.which", return_value=None):
         command_abspath = _utilities.search_commands(["notfound"])
         assert command_abspath is None
@@ -165,12 +164,12 @@ find_command = {
 
 
 @pytest.mark.parametrize(
-    "options, found, outcome",
+    ("options", "found", "outcome"),
     find_command.values(),
     ids=find_command.keys(),
 )
 def test_find_command(options, found, outcome):
-    """Test :meth:`waves._utilities.find_command`"""
+    """Test :meth:`waves._utilities.find_command`."""
     with patch("waves._utilities.search_commands", return_value=found), outcome:
         try:
             command_abspath = _utilities.find_command(options)
@@ -277,12 +276,13 @@ return_environment = {
 
 
 @pytest.mark.parametrize(
-    "command, kwargs, stdout, expected",
+    ("command", "kwargs", "stdout", "expected"),
     return_environment.values(),
     ids=return_environment.keys(),
 )
 def test_return_environment(command, kwargs, stdout, expected):
-    """
+    """Test :func:`waves._utilities.return_environment`.
+
     :param bytes stdout: byte string with null delimited shell environment variables
     :param dict expected: expected dictionary output containing string key:value pairs and preserving newlines
     """
@@ -295,7 +295,7 @@ def test_return_environment(command, kwargs, stdout, expected):
     expected_kwargs.update(kwargs)
     expected_command = (
         f"{expected_kwargs['shell']} {expected_kwargs['string_option']} "
-        f"\"{command} {expected_kwargs['separator']} {expected_kwargs['environment']}\""
+        f'"{command} {expected_kwargs["separator"]} {expected_kwargs["environment"]}"'
     )
 
     mock_run_return = subprocess.CompletedProcess(args=command, returncode=0, stdout=stdout)
@@ -320,7 +320,7 @@ cache_environment = {
 
 
 @pytest.mark.parametrize(
-    "kwargs, cache, overwrite_cache, verbose, expected, file_exists",
+    ("kwargs", "cache", "overwrite_cache", "verbose", "expected", "file_exists"),
     cache_environment.values(),
     ids=cache_environment.keys(),
 )
@@ -335,7 +335,7 @@ def test_cache_environment(kwargs, cache, overwrite_cache, verbose, expected, fi
         patch("yaml.safe_load", return_value=expected) as yaml_load,
         patch("pathlib.Path.exists", return_value=file_exists),
         patch("yaml.safe_dump") as yaml_dump,
-        patch("builtins.open"),
+        patch("pathlib.Path.open"),
         patch("builtins.print") as mock_print,
     ):
         environment_dictionary = _utilities.cache_environment(
@@ -371,10 +371,8 @@ def test_cache_environment_exception_handling():
         patch("builtins.print") as mock_print,
         pytest.raises(subprocess.CalledProcessError),
     ):
-        try:
-            _utilities.cache_environment("dummy command")
-        finally:
-            mock_print.assert_called_once_with("output", file=sys.stderr)
+        _utilities.cache_environment("dummy command")
+    mock_print.assert_called_once_with("output", file=sys.stderr)
 
 
 create_valid_identifier = {
@@ -386,7 +384,7 @@ create_valid_identifier = {
 
 
 @pytest.mark.parametrize(
-    "identifier, expected",
+    ("identifier", "expected"),
     create_valid_identifier.values(),
     ids=create_valid_identifier.keys(),
 )
@@ -396,7 +394,6 @@ def test_create_valid_identifier(identifier, expected) -> None:
 
 
 def test_warn_only_once():
-
     def test_warning():
         warnings.warn("test warning")
 

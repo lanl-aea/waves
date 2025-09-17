@@ -1,28 +1,105 @@
 import pathlib
+from contextlib import nullcontext as does_not_raise
 from unittest.mock import patch
 
-import pytest
-import networkx
 import matplotlib.pyplot
+import networkx
+import pytest
 
 from waves import _visualize
 
+test_ancestor_subgraph_cases = {
+    "node not found": (
+        networkx.DiGraph([("parent", "child")]),
+        ["notanode"],
+        pytest.raises(RuntimeError, match="Nodes 'notanode' not found in the graph"),
+        None,
+    ),
+    "parent-child: request child": (
+        networkx.DiGraph([("parent", "child")]),
+        ["child"],
+        does_not_raise(),
+        networkx.DiGraph([("parent", "child")]),
+    ),
+    "parent-child: request parent": (
+        networkx.DiGraph([("parent", "child")]),
+        ["parent"],
+        does_not_raise(),
+        networkx.DiGraph([("parent", "child")]).subgraph("parent"),
+    ),
+    "parent1/2-child1/2: request child": (
+        networkx.DiGraph([("parent", "child"), ("parent2", "child2")]),
+        ["child"],
+        does_not_raise(),
+        networkx.DiGraph([("parent", "child")]),
+    ),
+    "parent1/2-child1/2: request child2": (
+        networkx.DiGraph([("parent", "child"), ("parent2", "child2")]),
+        ["child2"],
+        does_not_raise(),
+        networkx.DiGraph([("parent2", "child2")]),
+    ),
+    "parent1/2-child1/2: request child1/2": (
+        networkx.DiGraph([("parent", "child"), ("parent2", "child2")]),
+        ["child", "child2"],
+        does_not_raise(),
+        networkx.DiGraph([("parent", "child"), ("parent2", "child2")]),
+    ),
+    "grandparent-parent-child: request child": (
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child")]),
+        ["child"],
+        does_not_raise(),
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child")]),
+    ),
+    "grandparent-parent-child: request parent": (
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child")]),
+        ["parent"],
+        does_not_raise(),
+        networkx.DiGraph([("grandparent", "parent")]),
+    ),
+    "grandparent-parent-child/child2: request child": (
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child"), ("parent", "child2")]),
+        ["child"],
+        does_not_raise(),
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child")]),
+    ),
+    "grandparent-parent-child/child2: request child2": (
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child"), ("parent", "child2")]),
+        ["child2"],
+        does_not_raise(),
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child2")]),
+    ),
+    "grandparent-parent-child/child2: request child/child2": (
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child"), ("parent", "child2")]),
+        ["child", "child2"],
+        does_not_raise(),
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child"), ("parent", "child2")]),
+    ),
+    "grandparent-parent-child/child2: request parent": (
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child"), ("parent", "child2")]),
+        ["parent"],
+        does_not_raise(),
+        networkx.DiGraph([("grandparent", "parent")]),
+    ),
+    "grandparent-parent-child/child2: request grandparent": (
+        networkx.DiGraph([("grandparent", "parent"), ("parent", "child"), ("parent", "child2")]),
+        ["grandparent"],
+        does_not_raise(),
+        networkx.DiGraph([("grandparent", "parent")]).subgraph("grandparent"),
+    ),
+}
 
-def test_ancestor_subgraph():
-    graph = networkx.DiGraph()
-    graph.add_edge("parent", "child")
 
+@pytest.mark.parametrize(
+    ("graph", "nodes", "outcome", "expected"),
+    test_ancestor_subgraph_cases.values(),
+    ids=test_ancestor_subgraph_cases.keys(),
+)
+def test_ancestor_subgraph(graph, nodes, outcome, expected):
     # Check for a runtime error on empty subgraph/missing node
-    with pytest.raises(RuntimeError):
-        subgraph = _visualize.ancestor_subgraph(graph, ["notanode"])
-
-    # Check subgraph(s)
-    subgraph = _visualize.ancestor_subgraph(graph, ["child"])
-    assert subgraph.nodes == graph.nodes
-
-    # Check subgraph(s)
-    subgraph = _visualize.ancestor_subgraph(graph, ["parent"])
-    assert list(subgraph.nodes) == ["parent"]
+    with outcome:
+        subgraph = _visualize.ancestor_subgraph(graph, nodes)
+        assert subgraph.nodes == expected.nodes
 
 
 def test_add_node_count():
@@ -93,7 +170,7 @@ parse_output_input = {
 
 
 @pytest.mark.parametrize(
-    "tree_output, break_path_separator, expected_nodes, expected_edge_count, no_labels",
+    ("tree_output", "break_path_separator", "expected_nodes", "expected_edge_count", "no_labels"),
     parse_output_input.values(),
     ids=parse_output_input.keys(),
 )
@@ -104,13 +181,13 @@ def test_parse_output(
     expected_edge_count,
     no_labels,
 ):
-    """Test raises behavior and regression test a sample SCons tree output parsing"""
+    """Test raises behavior and regression test a sample SCons tree output parsing."""
     # Check for a runtime error on empty parsing
     with pytest.raises(RuntimeError):
         graph = _visualize.parse_output([])
 
     tree_lines = tree_output.split("\n")
-    break_paths = True if break_path_separator is not None else False
+    break_paths = True if break_path_separator is not None else False  # noqa: SIM210
     with patch("os.path.sep", new=break_path_separator):
         graph = _visualize.parse_output(tree_lines, break_paths=break_paths, no_labels=no_labels)
 
@@ -122,7 +199,7 @@ def test_parse_output(
 
 
 def test_check_regex_exclude():
-    """Test the regular expression exclusion of the visualize subcommand"""
+    """Test the regular expression exclusion of the visualize subcommand."""
     exclude_regex = "dummy_name[0-7]+"
     # If node name matches the regular expression
     assert _visualize.check_regex_exclude(exclude_regex, "dummy_name5", 3, 0, False) == (True, 3)
@@ -133,7 +210,7 @@ def test_check_regex_exclude():
 
 
 def test_visualize():
-    """Sign-of-life test for the visualize figure"""
+    """Sign-of-life test for the visualize figure."""
     graph = networkx.DiGraph()
     graph.add_node(1, label="one", layer=1)
     graph.add_node(2, label="two", layer=2)
@@ -142,8 +219,8 @@ def test_visualize():
 
 
 def test_plot():
-    """Check that the expected plot output function is called"""
-    figure, axes = matplotlib.pyplot.subplots()
+    """Check that the expected plot output function is called."""
+    figure, _axes = matplotlib.pyplot.subplots()
     with (
         patch("matplotlib.pyplot.show") as mock_show,
         patch("matplotlib.figure.Figure.savefig") as mock_savefig,

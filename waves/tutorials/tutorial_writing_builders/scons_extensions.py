@@ -1,5 +1,7 @@
-import waves
+"""Provide project specific extensions to SCons."""
+
 import SCons.Builder
+import waves
 
 
 # Write an example custom builder using the WAVES builder factory template
@@ -16,7 +18,8 @@ def solver_builder_factory(
     emitter=waves.scons_extensions.first_target_emitter,
     **kwargs,
 ) -> SCons.Builder.Builder:
-    """
+    """Define the SCons builder for the solver module's command-line interface.
+
     This builder factory extends :meth:`waves.scons_extensions.first_target_builder_factory`. This builder factory uses
     the :meth:`waves.scons_extensions.first_target_emitter`. At least one task target must be specified in the task
     definition and the last target will always be the expected STDOUT and STDERR redirection output file,

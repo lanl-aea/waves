@@ -1,6 +1,0 @@
-[flake8]
-exclude = build,install,conda-environment,conda-pkgs,pip-build-test
-max-line-length = 120
-extend-ignore = F821
-per-file-ignores =
-    test_system.py:E501

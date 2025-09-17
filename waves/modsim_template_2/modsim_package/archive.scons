@@ -1,0 +1,17 @@
+"""Configure the project's archive workflow."""
+
+# Inherit the parent construction environment
+Import("env", "alias", "artifacts")
+
+# Data archival
+archive_name = f"{env['project_name']}-{env['version']}-{alias}{env['TARSUFFIX']}"
+archive = env.Tar(target=archive_name, source=artifacts)
+
+# Collector alias(es)
+env.Alias(f"{alias}-archive", archive)
+
+if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{alias}' target(s)")
+    Ignore([".", f"{alias}-archive"], archive)
+
+Return("archive")

@@ -1,9 +1,10 @@
 #! /usr/bin/env python
-import pathlib
+"""Configure the WAVES quantity-of-interest (QOI) tutorial."""
+
 import os
+import pathlib
 
 import waves
-
 
 AddOption(
     "--build-dir",
@@ -119,7 +120,7 @@ study = waves.parameter_generators.CartesianProduct(
 env.ParameterStudyWrite(study)
 
 # Generate QOIs for each set in the parameter study
-study_qoi_targets = list()
+study_qoi_targets = []
 for name, parameters in study.parameter_study_to_dict().items():
     # Calculate QOIs from parameter study
     qoi_target = build_directory / f"{name}_qois.csv"
@@ -135,7 +136,7 @@ for name, parameters in study.parameter_study_to_dict().items():
 # Aggregate QOIs across parameter study and write to file
 env.Command(
     target=[build_directory / "study_qois.h5"],
-    source=[build_directory / "study.h5"] + study_qoi_targets,
+    source=[build_directory / "study.h5", *study_qoi_targets],
     action=(
         "${waves_command} qoi aggregate"
         " --parameter-study-file ${SOURCES[0].abspath}"

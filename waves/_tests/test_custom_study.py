@@ -1,19 +1,19 @@
-"""Test CustomStudy Class"""
+"""Test CustomStudy Class."""
 
-from unittest.mock import patch, call, mock_open
 from contextlib import nullcontext as does_not_raise
+from unittest.mock import call, mock_open, patch
 
-import pytest
 import numpy
+import pytest
 
-from waves.parameter_generators import CustomStudy
 from waves._settings import _hash_coordinate_key, _set_coordinate_key
-from waves.exceptions import SchemaValidationError
 from waves._tests.common import merge_samplers
+from waves.exceptions import SchemaValidationError
+from waves.parameter_generators import CustomStudy
 
 
 class TestCustomStudy:
-    """Class for testing CustomStudy parameter study generator class"""
+    """Class for testing CustomStudy parameter study generator class."""
 
     validate_input = {
         "good schema list of lists": (
@@ -47,7 +47,7 @@ class TestCustomStudy:
     }
 
     @pytest.mark.parametrize(
-        "parameter_schema, outcome",
+        ("parameter_schema", "outcome"),
         validate_input.values(),
         ids=validate_input.keys(),
     )
@@ -55,12 +55,12 @@ class TestCustomStudy:
         with outcome:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
-                TestValidate = CustomStudy(parameter_schema)
-                assert isinstance(TestValidate, CustomStudy)
+                test_validate = CustomStudy(parameter_schema)
+                assert isinstance(test_validate, CustomStudy)
             finally:
                 pass
 
-    generate_io = {
+    test_generate_cases = {
         "one_parameter": (
             {"parameter_names": ["a"], "parameter_samples": numpy.array([[1], [2]], dtype=object)},
             numpy.array([[1], [2]], dtype=object),
@@ -74,21 +74,21 @@ class TestCustomStudy:
     }
 
     @pytest.mark.parametrize(
-        "parameter_schema, expected_array, expected_types",
-        generate_io.values(),
-        ids=generate_io.keys(),
+        ("parameter_schema", "expected_array", "expected_types"),
+        test_generate_cases.values(),
+        ids=test_generate_cases.keys(),
     )
     def test_generate(self, parameter_schema, expected_array, expected_types):
-        TestGenerate = CustomStudy(parameter_schema)
-        generate_array = TestGenerate._samples
+        test_generate = CustomStudy(parameter_schema)
+        generate_array = test_generate._samples
         assert numpy.all(generate_array == expected_array)
-        for key in TestGenerate.parameter_study.keys():
-            assert TestGenerate.parameter_study[key].dtype == expected_types[key]
+        for key in test_generate.parameter_study:
+            assert test_generate.parameter_study[key].dtype == expected_types[key]
         # Verify that the parameter set name creation method was called
-        assert list(TestGenerate._set_names.values()) == [f"parameter_set{num}" for num in range(len(expected_array))]
+        assert list(test_generate._set_names.values()) == [f"parameter_set{num}" for num in range(len(expected_array))]
         # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
         expected_set_names = [f"parameter_set{num}" for num in range(len(expected_array))]
-        set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
+        set_names = list(test_generate.parameter_study[_set_coordinate_key])
         assert numpy.all(set_names == expected_set_names)
 
     merge_test = {
@@ -145,29 +145,29 @@ class TestCustomStudy:
     }
 
     @pytest.mark.parametrize(
-        "first_schema, second_schema, expected_array, expected_types",
+        ("first_schema", "second_schema", "expected_array", "expected_types"),
         merge_test.values(),
         ids=merge_test.keys(),
     )
     def test_merge(self, first_schema, second_schema, expected_array, expected_types):
         with patch("waves.parameter_generators._verify_parameter_study"):
-            TestMerge1, TestMerge2 = merge_samplers(CustomStudy, first_schema, second_schema, {})
-            generate_array = TestMerge2._samples
+            test_merge1, test_merge2 = merge_samplers(CustomStudy, first_schema, second_schema, {})
+            generate_array = test_merge2._samples
             assert numpy.all(generate_array == expected_array)
             # Check for type preservation
-            for key in TestMerge2.parameter_study.keys():
-                assert TestMerge2.parameter_study[key].dtype == expected_types[key]
+            for key in test_merge2.parameter_study:
+                assert test_merge2.parameter_study[key].dtype == expected_types[key]
             # Check for consistent hash-parameter set relationships
-            for set_name, parameters in TestMerge1.parameter_study.groupby(_set_coordinate_key):
-                assert parameters == TestMerge2.parameter_study.sel({_set_coordinate_key: set_name})
+            for set_name, parameters in test_merge1.parameter_study.groupby(_set_coordinate_key):
+                assert parameters == test_merge2.parameter_study.sel({_set_coordinate_key: set_name})
             # Self-consistency checks
             assert (
-                list(TestMerge2._set_names.values())
-                == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()  # noqa: W503
+                list(test_merge2._set_names.values())
+                == test_merge2.parameter_study[_set_coordinate_key].values.tolist()
             )
-            assert TestMerge2._set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
+            assert test_merge2._set_hashes == test_merge2.parameter_study[_hash_coordinate_key].values.tolist()
 
-    generate_io = {
+    test_write_yaml_cases = {
         "one parameter yaml": (
             {"parameter_names": ["a"], "parameter_samples": numpy.array([[1], [2]], dtype=object)},
             "out",
@@ -203,27 +203,27 @@ class TestCustomStudy:
     }
 
     @pytest.mark.parametrize(
-        "parameter_schema, output_file_template, output_file, output_type, file_count, expected_calls",
-        generate_io.values(),
-        ids=generate_io.keys(),
+        ("parameter_schema", "output_file_template", "output_file", "output_type", "file_count", "expected_calls"),
+        test_write_yaml_cases.values(),
+        ids=test_write_yaml_cases.keys(),
     )
     def test_write_yaml(
         self, parameter_schema, output_file_template, output_file, output_type, file_count, expected_calls
     ):
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-            patch("builtins.open", mock_open()) as mock_file,
+            patch("pathlib.Path.open", mock_open()) as mock_file,
             patch("xarray.Dataset.to_netcdf") as xarray_to_netcdf,
             patch("sys.stdout.write") as stdout_write,
             patch("pathlib.Path.is_file", return_value=False),
         ):
-            TestWriteYAML = CustomStudy(
+            test_write_yaml = CustomStudy(
                 parameter_schema,
                 output_file_template=output_file_template,
                 output_file=output_file,
                 output_file_type=output_type,
             )
-            TestWriteYAML.write()
+            test_write_yaml.write()
             stdout_write.assert_not_called()
             xarray_to_netcdf.assert_not_called()
             assert mock_file.call_count == file_count

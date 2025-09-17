@@ -1,5 +1,4 @@
-"""
-Copyright (c) 2022-2025, Triad National Security, LLC. All rights reserved.
+"""Copyright (c) 2022-2025, Triad National Security, LLC. All rights reserved.
 
 This program was produced under U.S. Government contract 89233218CNA000001 for Los Alamos National Laboratory (LANL),
 which is operated by Triad National Security, LLC for the U.S.  Department of Energy/National Nuclear Security
@@ -34,12 +33,13 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import warnings
-from importlib.metadata import version, PackageNotFoundError
+from importlib.metadata import PackageNotFoundError, version
 
-from waves import scons_extensions  # noqa: F401
-from waves import parameter_generators  # noqa: F401
-from waves import qoi  # noqa: F401
-
+from waves import (  # noqa: F401
+    parameter_generators,
+    qoi,
+    scons_extensions,
+)
 
 warnings.filterwarnings(
     action="ignore",

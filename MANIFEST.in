@@ -22,14 +22,12 @@ global-exclude *.pyc
 global-exclude config.log
 global-exclude .sconsign.dblite
 exclude waves/docs/.buildinfo*
-exclude find_shebang.py
-exclude .flake8
 exclude .git*
 exclude .pipeline*.yml
 exclude SConstruct
-exclude style
-exclude mypy
-exclude pytest
+exclude style.scons
+exclude mypy.scons
+exclude pytest.scons
 exclude pyproject.toml.in
 include waves/README.rst
 include waves/pyproject.toml

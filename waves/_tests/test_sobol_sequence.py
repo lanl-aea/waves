@@ -1,17 +1,17 @@
-"""Test Sobol Sequence Class"""
+"""Test Sobol Sequence Class."""
 
 from unittest.mock import patch
 
-import pytest
 import numpy
+import pytest
 
-from waves.parameter_generators import SobolSequence, ScipySampler
 from waves._settings import _set_coordinate_key
-from waves._tests.common import consistent_hash_parameter_check, self_consistency_checks, merge_samplers
+from waves._tests.common import consistent_hash_parameter_check, merge_samplers, self_consistency_checks
+from waves.parameter_generators import ScipySampler, SobolSequence
 
 
 class TestSobolSequence:
-    """Class for testing Sobol Sequence parameter study generator class"""
+    """Class for testing Sobol Sequence parameter study generator class."""
 
     generate_input = {
         "good schema 5x2": (
@@ -51,32 +51,32 @@ class TestSobolSequence:
     }
 
     @pytest.mark.parametrize(
-        "parameter_schema, kwargs, expected_samples",
+        ("parameter_schema", "kwargs", "expected_samples"),
         generate_input.values(),
         ids=generate_input.keys(),
     )
     def test_generate(self, parameter_schema, kwargs, expected_samples):
-        parameter_names = [key for key in parameter_schema.keys() if key != "num_simulations"]
+        parameter_names = [key for key in parameter_schema if key != "num_simulations"]
         generator_classes = (
             SobolSequence(parameter_schema, **kwargs),
             ScipySampler("Sobol", parameter_schema, **kwargs),
         )
-        for TestGenerate in generator_classes:
-            samples_array = TestGenerate._samples
+        for test_generate in generator_classes:
+            samples_array = test_generate._samples
             assert numpy.allclose(samples_array, expected_samples)
             # Check for type preservation
-            for key in TestGenerate.parameter_study.keys():
-                assert TestGenerate.parameter_study[key].dtype == numpy.float64
+            for key in test_generate.parameter_study:
+                assert test_generate.parameter_study[key].dtype == numpy.float64
             # Verify that the parameter set name creation method was called
             expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
-            assert list(TestGenerate._set_names.values()) == expected_set_names
+            assert list(test_generate._set_names.values()) == expected_set_names
             # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
             expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
-            set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
+            set_names = list(test_generate.parameter_study[_set_coordinate_key])
             assert numpy.all(set_names == expected_set_names)
             # Check that the parameter names are correct
-            assert parameter_names == TestGenerate._parameter_names
-            assert parameter_names == list(TestGenerate.parameter_study.keys())
+            assert parameter_names == test_generate._parameter_names
+            assert parameter_names == list(test_generate.parameter_study.keys())
 
     merge_test = {
         "new sets": (
@@ -131,7 +131,7 @@ class TestSobolSequence:
     }
 
     @pytest.mark.parametrize(
-        "first_schema, second_schema, kwargs, expected_samples",
+        ("first_schema", "second_schema", "kwargs", "expected_samples"),
         merge_test.values(),
         ids=merge_test.keys(),
     )
@@ -145,7 +145,7 @@ class TestSobolSequence:
             # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
             assert numpy.allclose(numpy.sort(samples_array, axis=0), numpy.sort(expected_samples, axis=0))
             # Check for type preservation
-            for key in merged_study.parameter_study.keys():
+            for key in merged_study.parameter_study:
                 assert merged_study.parameter_study[key].dtype == numpy.float64
             consistent_hash_parameter_check(original_study, merged_study)
             self_consistency_checks(merged_study)
@@ -160,7 +160,7 @@ class TestSobolSequence:
             # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
             assert numpy.allclose(numpy.sort(samples_array, axis=0), numpy.sort(expected_samples, axis=0))
             # Check for type preservation
-            for key in merged_study.parameter_study.keys():
+            for key in merged_study.parameter_study:
                 assert merged_study.parameter_study[key].dtype == numpy.float64
             consistent_hash_parameter_check(original_study, merged_study)
             self_consistency_checks(merged_study)

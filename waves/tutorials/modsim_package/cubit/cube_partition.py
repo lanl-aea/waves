@@ -1,13 +1,15 @@
-import sys
-import shutil
-import pathlib
+"""Partition the simple cube geometry created by ``cube_geometry.py``."""
+
 import argparse
+import pathlib
+import shutil
+import sys
 
 import cubit
 
 
 def main(input_file, output_file):
-    """Partition the simple cube geometry created by ``cube_geometry.py``
+    """Partition the simple cube geometry created by ``cube_geometry.py``.
 
     This script partitions a simple Cubit model with a single cube part.
 
@@ -75,6 +77,7 @@ def main(input_file, output_file):
 
 
 def get_parser():
+    """Return the command-line interface parser."""
     script_name = pathlib.Path(__file__)
     # Set default parameter values
     default_input_file = script_name.with_suffix(".cub").name.replace("_partition", "_geometry")
@@ -90,21 +93,21 @@ def get_parser():
         "--input-file",
         type=str,
         default=default_input_file,
-        # fmt: off
-        help="The Cubit model file created by ``cube_geometry.py``. "
-             "Will be stripped of the extension and ``.cub`` will be used, e.g. ``input_file``.cub "
-             "(default: %(default)s",
-        # fmt: on
+        help=(
+            "The Cubit model file created by ``cube_geometry.py``. "
+            "Will be stripped of the extension and ``.cub`` will be used, e.g. ``input_file``.cub "
+            "(default: %(default)s"
+        ),
     )
     parser.add_argument(
         "--output-file",
         type=str,
         default=default_output_file,
-        # fmt: off
-        help="The output file for the Cubit model. "
-             "Will be stripped of the extension and ``.cub`` will be used, e.g. ``output_file``.cub "
-             "(default: %(default)s",
-        # fmt: on
+        help=(
+            "The output file for the Cubit model. "
+            "Will be stripped of the extension and ``.cub`` will be used, e.g. ``output_file``.cub "
+            "(default: %(default)s"
+        ),
     )
     return parser
 

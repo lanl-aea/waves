@@ -133,18 +133,18 @@ Directory Structure
                Path
                ----
                C:\Users\roppenheimer\waves-tutorials
-   
+
                PS > waves fetch tutorials\modsim_package\__init__.py tutorials\modsim_package\abaqus\__init__.py --destination modsim_package
                PS > Get-ChildItem -Path . -Recurse "__init__.py"
-   
+
                    Directory: C:\Users\roppenheimer\waves-tutorials\modsim_package
-   
+
                Mode                 LastWriteTime         Length Name
                ----                 -------------         ------ ----
                -a---             6/9/2023 4:32 PM              0 __init__.py
-   
+
                    Directory: C:\Users\roppenheimer\waves-tutorials\modsim_package\abaqus
-   
+
                Mode                 LastWriteTime         Length Name
                ----                 -------------         ------ ----
                -a---            6/9/2023  4:32 PM              0 __init__.py
@@ -161,11 +161,11 @@ rectangle part using the :meth:`waves.scons_extensions.abaqus_journal_builder_fa
 :class:`waves.scons_extensions.WAVESEnvironment` construction environment (click the builder's name to link to the
 |PROJECT| :ref:`waves_scons_api` API).
 
-6. Create an ``SConscript`` file with the non-default name ``tutorial_01_geometry`` using the contents below.
+6. Create an ``SConscript`` file with the non-default name ``tutorial_01_geometry.scons`` using the contents below.
 
-.. admonition:: waves-tutorials/tutorial_01_geometry
+.. admonition:: waves-tutorials/tutorial_01_geometry.scons
 
-    .. literalinclude:: tutorials_tutorial_01_geometry
+    .. literalinclude:: tutorials_tutorial_01_geometry.scons
        :language: Python
        :lineno-match:
        :end-before: marker-1
@@ -176,11 +176,11 @@ highlighted line imports the ``env`` variable (``Import('env')``), which is a va
 in ``waves-tutorials/SConstruct`` file. The ``env`` variable defines project settings,
 and is imported so settings variables are not hard-coded more than once.
 
-7. Continue editing the file ``tutorial_01_geometry`` using the contents below.
+7. Continue editing the file ``tutorial_01_geometry.scons`` using the contents below.
 
-.. admonition:: waves-tutorials/tutorial_01_geometry
+.. admonition:: waves-tutorials/tutorial_01_geometry.scons
 
-     .. literalinclude:: tutorials_tutorial_01_geometry
+     .. literalinclude:: tutorials_tutorial_01_geometry.scons
          :language: Python
          :lineno-match:
          :start-after: marker-1
@@ -206,11 +206,11 @@ as discussed in :ref:`tutorialsconstruct`. For more information about the behavi
 API. The ``target`` list specifies the files created by the :meth:`waves.scons_extensions.abaqus_journal_builder_factory` task's action, which
 is defined in the :ref:`waves_scons_api` API.
 
-8. Continue editing the file ``tutorial_01_geometry`` using the contents below.
+8. Continue editing the file ``tutorial_01_geometry.scons`` using the contents below.
 
-.. admonition:: waves-tutorials/tutorial_01_geometry
+.. admonition:: waves-tutorials/tutorial_01_geometry.scons
 
-     .. literalinclude:: tutorials_tutorial_01_geometry
+     .. literalinclude:: tutorials_tutorial_01_geometry.scons
          :language: Python
          :lineno-match:
          :start-after: marker-3
@@ -412,7 +412,7 @@ SConstruct File
 
 In :ref:`tutorialsconstruct`, we created the ``SConstruct`` file. For convenience, we will add a collector alias
 matching the tutorial directory name in the SContruct file. This collector alias will point to the list of targets to
-build specified in the ``waves-tutorials/tutorial_01_geometry`` file.
+build specified in the ``waves-tutorials/tutorial_01_geometry.scons`` file.
 
 12. Modify the ``waves-tutorials/SConstruct`` file by adding the
     ``tutorial_01_geometry`` collector alias to the ``workflow_configurations`` list.
@@ -431,11 +431,10 @@ build specified in the ``waves-tutorials/tutorial_01_geometry`` file.
 Building Targets
 ****************
 
-Now that you've created the geometry task in ``tutorial_01_geometry``, this section will walk through building the
+Now that you've created the geometry task in ``tutorial_01_geometry.scons``, this section will walk through building the
 ``tutorial_01_geometry`` targets using Scons.
 
-13. To build the targets only for the ``tutorial_01_geometry`` workflow, execute the following
-    command:
+13. To build the targets only for the ``tutorial_01_geometry`` workflow, execute the following command:
 
    .. only:: not epub
 
@@ -480,8 +479,8 @@ Now that you've created the geometry task in ``tutorial_01_geometry``, this sect
                Checking whether 'abaqus' program exists...C:\SIMULIA\Commands\abaqus.BAT
                scons: done reading SConscript files.
                scons: Building targets ...
-               cd C:\Users\roppenheimer\waves-tutorials\build\tutorial_01_geometry && C:\SIMULIA\Commands\abq2024.BAT cae -noGUI 
-               C:\Users\roppenheimer\waves-tutorials\modsim_package\abaqus\rectangle_geometry.py -- > 
+               cd C:\Users\roppenheimer\waves-tutorials\build\tutorial_01_geometry && C:\SIMULIA\Commands\abq2024.BAT cae -noGUI
+               C:\Users\roppenheimer\waves-tutorials\modsim_package\abaqus\rectangle_geometry.py -- >
                C:\Users\roppenheimer\waves-tutorials\build\tutorial_01_geometry\rectangle_geometry.cae.stdout 2>&1
                scons: done building targets.
 
@@ -539,9 +538,8 @@ at the same time. :ref:`tutorial_partition_mesh` will demonstrate the importance
 
             No subfolders exist
 
-At this point, the only directory in the ``build`` directory is that pertaining to the
-specific target that was specified to be built. In this case, that is
-``tutorial_01_geometry``.
+At this point, the only directory in the ``build`` directory is that pertaining to the specific target that was
+specified to be built. In this case, that is ``tutorial_01_geometry``.
 
 The ``build/tutorial_01_geometry/`` directory should contain the following files:
 

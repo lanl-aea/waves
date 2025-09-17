@@ -1,3 +1,5 @@
+"""Configure the rectangle compression simulation workflow."""
+
 Import("env", "alias", "parameters")
 
 # Geometry
@@ -56,5 +58,5 @@ target = env.PythonScript(
 env.Alias(alias, target)
 
 if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
-    print(f"Program 'abaqus' was not found in construction environment. Ignoring 'rectangle' target(s)")
+    print("Program 'abaqus' was not found in construction environment. Ignoring 'rectangle' target(s)")
     Ignore([".", alias], target)

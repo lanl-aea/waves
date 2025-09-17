@@ -1,3 +1,5 @@
+"""Configure the pure SCons mult-action task tutorial workflow."""
+
 Import("env")
 
 # Write project builders for re-use in task definitions
@@ -75,5 +77,5 @@ target = env.AbaqusSolver(
 env.Alias("rectangle", target)
 
 if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
-    print(f"Program 'abaqus' was not found in construction environment. Ignoring 'rectangle' target(s)")
+    print("Program 'abaqus' was not found in construction environment. Ignoring 'rectangle' target(s)")
     Ignore([".", "rectangle"], target)

@@ -1,18 +1,22 @@
-import os
-import sys
-import json
-import shutil
-import inspect
-import tempfile
+"""Open an Abaqus CAE model file and submit the job."""
+
 import argparse
+import inspect
+import json
+import os
+import shutil
+import sys
+import tempfile
 
 import abaqus
 import abaqusConstants
 import job
 
-
 default_model_name = "Model-1"
 default_cpus = None
+
+if sys.version_info[0] > 2:
+    unicode = str
 
 
 def main(input_file, job_name, model_name=default_model_name, cpus=default_cpus, write_inp=False, **kwargs):
@@ -38,13 +42,12 @@ def main(input_file, job_name, model_name=default_model_name, cpus=default_cpus,
         kwargs.update({"numCpus": cpus})
 
     with AbaqusNamedTemporaryFile(input_file=input_file, suffix=".cae", dir="."):
-
-        if job in abaqus.mdb.jobs.keys():
+        if job in abaqus.mdb.jobs:
             script_job = abaqus.mdb.jobs[job]
             script_job.setValues(**kwargs)
             model_name = script_job.model
 
-        if model_name in abaqus.mdb.models.keys():
+        if model_name in abaqus.mdb.models:
             script_job = abaqus.mdb.Job(name=job_name, model=model_name, **kwargs)
         else:
             raise RuntimeError("Could not find model name '{}' in file '{}'\n".format(model_name, input_file))
@@ -57,7 +60,7 @@ def main(input_file, job_name, model_name=default_model_name, cpus=default_cpus,
 
 
 def get_parser():
-    """Return parser for CLI options
+    """Return parser for CLI options.
 
     All options should use the double-hyphen ``--option VALUE`` syntax to avoid clashes with the Abaqus option syntax,
     including flag style arguments ``--flag``. Single hyphen ``-f`` flag syntax often clashes with the Abaqus command
@@ -108,13 +111,13 @@ def get_parser():
         "--json-file",
         type=str,
         default=default_json_file,
-        help="A JSON file containing a dictionary of keyword arguments for ``abaqus.mdb.Job`` " "(default %(default)s)",
+        help="A JSON file containing a dictionary of keyword arguments for ``abaqus.mdb.Job`` (default %(default)s)",
     )
     parser.add_argument(
         "--write-inp",
         "--write-input",
         action="store_true",
-        help="Write an Abaqus ``job.inp`` file and exit without submitting the job " "(default %(default)s)",
+        help="Write an Abaqus ``job.inp`` file and exit without submitting the job (default %(default)s)",
     )
     return parser
 
@@ -129,21 +132,24 @@ class AbaqusNamedTemporaryFile:
     """
 
     def __init__(self, input_file, *args, **kwargs):
+        """Initialize the Abaqus temporary file class."""
         self.temporary_file = tempfile.NamedTemporaryFile(*args, delete=False, **kwargs)
         shutil.copyfile(input_file, self.temporary_file.name)
         abaqus.openMdb(pathName=self.temporary_file.name)
 
     def __enter__(self):
+        """Define the context manager construction method."""
         return self.temporary_file
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        """Define the context manager cleanup method."""
         abaqus.mdb.close()
         self.temporary_file.close()
         os.remove(self.temporary_file.name)
 
 
 def return_json_dictionary(json_file):
-    """Open a JSON file and return a dictionary compatible with Abaqus keyword arguments
+    """Open a JSON file and return a dictionary compatible with Abaqus keyword arguments.
 
     If the JSON file is ``None``, return an empty dictionary. Convert unicode strings to str. If a value is found in
     ``abaqusConstants`` convert the value.
@@ -159,12 +165,16 @@ def return_json_dictionary(json_file):
             dictionary = json.load(json_open)
         for key, value in dictionary.items():
             if isinstance(key, unicode):
-                key = str(key)
+                return_key = str(key)
+            else:
+                return_key = key
             if isinstance(value, unicode):
-                value = str(value)
-            if hasattr(abaqusConstants, value):
-                value = getattr(abaqusConstants, value)
-        kwargs[key] = value
+                return_value = str(value)
+            else:
+                return_value = value
+            if hasattr(abaqusConstants, return_value):
+                return_value = getattr(abaqusConstants, return_value)
+            kwargs[return_key] = return_value
     return kwargs
 
 
@@ -187,6 +197,6 @@ if __name__ == "__main__":
             model_name=args.model_name,
             cpus=args.cpus,
             write_inp=args.write_inp,
-            **kwargs  # fmt: skip
+            **kwargs,
         )
     )

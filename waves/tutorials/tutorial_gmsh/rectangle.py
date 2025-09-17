@@ -1,10 +1,10 @@
-import typing
-import pathlib
+"""Create a simple rectangle geometry."""
+
 import argparse
+import pathlib
 
-import numpy
 import gmsh
-
+import numpy
 
 script_name = pathlib.Path(__file__)
 # Set default parameter values
@@ -48,30 +48,30 @@ def main(
     top_right = get_entities_at_coordinates((width, height, 0.0), 0)
     # fmt: off
     top = gmsh.model.getEntitiesInBoundingBox(
-        0.0    - tolerance,  # noqa: E221 X-min
-        height - tolerance,  # noqa: E221 Y-min
-        0.0    - tolerance,  # noqa: E221 Z-min
-        width  + tolerance,  # noqa: E221 X-max
-        height + tolerance,  # noqa: E221 Y-max
-        0.0    + tolerance,  # noqa: E221 Z-max
+        0.0    - tolerance,
+        height - tolerance,
+        0.0    - tolerance,
+        width  + tolerance,
+        height + tolerance,
+        0.0    + tolerance,
         0  # Entity dimension: points
     )
     bottom = gmsh.model.getEntitiesInBoundingBox(
-        0.0    - tolerance,  # noqa: E221 X-min
-        0.0    - tolerance,  # noqa: E221 Y-min
-        0.0    - tolerance,  # noqa: E221 Z-min
-        width  + tolerance,  # noqa: E221 X-max
-        0.0    + tolerance,  # noqa: E221 Y-max
-        0.0    + tolerance,  # noqa: E221 Z-max
+        0.0    - tolerance,
+        0.0    - tolerance,
+        0.0    - tolerance,
+        width  + tolerance,
+        0.0    + tolerance,
+        0.0    + tolerance,
         0  # Entity dimension: points
     )
     left = gmsh.model.getEntitiesInBoundingBox(
-        0.0    - tolerance,  # noqa: E221 X-min
-        0.0    - tolerance,  # noqa: E221 Y-min
-        0.0    - tolerance,  # noqa: E221 Z-min
-        0.0    + tolerance,  # noqa: E221 X-max
-        height + tolerance,  # noqa: E221 Y-max
-        0.0    + tolerance,  # noqa: E221 Z-max
+        0.0    - tolerance,
+        0.0    - tolerance,
+        0.0    - tolerance,
+        0.0    + tolerance,
+        height + tolerance,
+        0.0    + tolerance,
         0  # Entity dimension: points
     )
     # fmt: on
@@ -96,8 +96,8 @@ def main(
     gmsh.finalize()
 
 
-def tags_from_dimTags(dimTags: typing.List[typing.Tuple[int, int]]) -> typing.List[int]:
-    """Return tags from Gmsh entity ``dimTags`` list of tuples
+def tags_from_dimTags(dimTags: list[tuple[int, int]]) -> list[int]:  # noqa: N802,N803
+    """Return tags from Gmsh entity ``dimTags`` list of tuples.
 
     :returns: list of tags
     """
@@ -105,11 +105,11 @@ def tags_from_dimTags(dimTags: typing.List[typing.Tuple[int, int]]) -> typing.Li
 
 
 def get_entities_at_coordinates(
-    coordinates: typing.Tuple[float, float, float],
+    coordinates: tuple[float, float, float],
     dimension: int,
     tolerance: float = 1.0e-6,
-) -> typing.List[typing.Tuple[int, int]]:
-    """Return Gmsh ``dimTags`` of entities of dimension within bounding box determined by coordinates and tolerance
+) -> list[tuple[int, int]]:
+    """Return Gmsh ``dimTags`` of entities of dimension within bounding box determined by coordinates and tolerance.
 
     :param coordinates: 3D coordinates (X, Y, Z) for center of bounding box
     :param dimension: Return entities matching dimension
@@ -126,7 +126,8 @@ def get_entities_at_coordinates(
     return gmsh.model.getEntitiesInBoundingBox(*min_coordinate, *max_coordinate, dimension)
 
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
+    """Return the command-line interface parser."""
     prog = f"python {script_name.name} "
     cli_description = "Create a simple rectangle geometry and write an ``output_file``.msh Gmsh model file."
     parser = argparse.ArgumentParser(description=cli_description, prog=prog)
@@ -134,10 +135,10 @@ def get_parser():
         "--output-file",
         type=pathlib.Path,
         default=default_output_file,
-        # fmt: off
-        help="The output file for the Gmsh model. Extension must match a supported Gmsh file type, e.g. "
-             "``output_file``.msh (default: %(default)s",
-        # fmt: on
+        help=(
+            "The output file for the Gmsh model. Extension must match a supported Gmsh file type, e.g. "
+            "``output_file``.msh (default: %(default)s"
+        ),
     )
     parser.add_argument(
         "--width",

@@ -1,11 +1,24 @@
-import waves
+"""Test the project SCons extensions module."""
+
 import pytest
 import SCons.Environment
-
 import scons_extensions
+import waves
 
 
-def dummy_emitter_for_testing(target, source, env):
+def dummy_emitter_for_testing(
+    target: list,
+    source: list,
+    env: SCons.Environment.Environment,  # noqa: ARG001
+) -> tuple[list, list]:
+    """Return the SCons task's target and source node lists.
+
+    :param target: The target file list of strings
+    :param source: The source file list of SCons.Node.FS.File objects
+    :param env: The builder's SCons construction environment object
+
+    :returns: target, source
+    """
     return target, source
 
 
@@ -53,7 +66,7 @@ solver_builder_factory_tests = {
 
 # TODO: Expose WAVES builder factory test functions for end users
 @pytest.mark.parametrize(
-    "builder_kwargs, task_kwargs, target, emitter, expected_node_count, expected_action_count",
+    ("builder_kwargs", "task_kwargs", "target", "emitter", "expected_node_count", "expected_action_count"),
     solver_builder_factory_tests.values(),
     ids=solver_builder_factory_tests.keys(),
 )
@@ -65,7 +78,7 @@ def test_solver_builder_factory(
     expected_node_count: int,
     expected_action_count: int,
 ) -> None:
-    """Template test for builder factories based on :meth:`waves.scons_extensions.builder_factory`
+    """Test builder factories based on :meth:`waves.scons_extensions.builder_factory`.
 
     :param builder_kwargs: Keyword arguments unpacked at the builder instantiation
     :param task_kwargs: Keyword arguments unpacked at the task instantiation
@@ -105,7 +118,7 @@ def test_solver_builder_factory(
         emitter_handling.update({"emitter": emitter})
 
     # Test builder object attributes
-    factory = getattr(scons_extensions, "solver_builder_factory")
+    factory = scons_extensions.solver_builder_factory
     builder = factory(**builder_kwargs, **emitter_handling)
     assert builder.action.cmd_list == expected_action
     assert builder.emitter == expected_emitter

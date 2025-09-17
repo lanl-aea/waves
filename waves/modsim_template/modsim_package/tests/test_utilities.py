@@ -1,16 +1,17 @@
+"""Test the utilities module."""
+
 import unittest.mock
 
 import numpy
 import pandas
 import xarray
-from waves.parameter_generators import SET_COORDINATE_KEY
-from waves.parameter_generators import CartesianProduct
+from waves.parameter_generators import SET_COORDINATE_KEY, CartesianProduct
 
 from modsim_package import utilities
 
 
 def test_combine_data():
-    """Test the Python 3 Xarray Dataset concatenation utility
+    """Test the Python 3 Xarray Dataset concatenation utility.
 
     Concatenate real datasets with coordinates representative of a WAVES parameter study workflow
     """
@@ -34,7 +35,7 @@ def test_combine_data():
 
 
 def test_merge_parameter_study():
-    """Test the Python 3 Xarray Dataset and WAVES parameter study merge utility
+    """Test the Python 3 Xarray Dataset and WAVES parameter study merge utility.
 
     Sign-of-life test that a real parameter study object merges correctly with a representative Dataset
     """
@@ -48,7 +49,7 @@ def test_merge_parameter_study():
 
 
 def test_save_plot():
-    """Test the Python 3 Xarray Dataset plotting utility
+    """Test the Python 3 Xarray Dataset plotting utility.
 
     Test that the function arguments are unpacked into the correct I/O calls
     """
@@ -71,7 +72,7 @@ def test_save_plot():
 
 
 def test_save_table():
-    """Test the Python 3 Xarray Dataset CSV file saving utility
+    """Test the Python 3 Xarray Dataset CSV file saving utility.
 
     Test that the function arguments are unpacked into the correct I/O calls
     """
@@ -86,7 +87,8 @@ def test_save_table():
     mock_to_csv.assert_called_once_with(output_file)
 
 
-def test_sort_dataframe():
+def test_sort_dataframe() -> None:
+    """Test :func:`utilities.sort_dataframe`."""
     data = {
         "time": [0.0, 0.5, 1.0],
         "Column1": [1, 2, 3],
@@ -101,7 +103,8 @@ def test_sort_dataframe():
     pandas.testing.assert_frame_equal(sorted_control, sorted_copy)
 
 
-def test_csv_files_match():
+def test_csv_files_match() -> None:
+    """Test :func:`utilities.csv_files_match`."""
     data = {
         "time": [0.0, 0.5, 1.0],
         "Column1": [1, 2, 3],

@@ -1,10 +1,11 @@
 #! /usr/bin/env python
+"""Configure the WAVES Cubit+Abaqus/Fierro/Sierra tutorial."""
 
 import os
-import sys
-import typing
 import pathlib
 import subprocess
+import sys
+import typing
 
 import waves
 
@@ -95,8 +96,8 @@ env["FIERRO_IMPLICIT_PROGRAM"] = env.AddProgram(["fierro-parallel-implicit"])
 
 # Sierra requires a separate construction environment
 def return_modulepath(modules: typing.Iterable[str]) -> pathlib.Path:
-    """Return parent path of first found module or the current working directory"""
-    return next((pathlib.Path(path).parent for path in modules if pathlib.Path(path).exists()), pathlib.Path("."))
+    """Return parent path of first found module or the current working directory."""
+    return next((pathlib.Path(path).parent for path in modules if pathlib.Path(path).exists()), pathlib.Path())
 
 
 sierra_modules = [
@@ -104,11 +105,13 @@ sierra_modules = [
 ]
 sierra_modulefile_parent = return_modulepath(sierra_modules)
 try:
-    envSierra = waves.scons_extensions.shell_environment(f"module use {sierra_modulefile_parent} && module load sierra")
+    env_sierra = waves.scons_extensions.shell_environment(
+        f"module use {sierra_modulefile_parent} && module load sierra"
+    )
 except subprocess.CalledProcessError:
     print("Failed to initialize the Sierra environment", file=sys.stderr)
-    envSierra = Environment()
-envSierra["sierra"] = waves.scons_extensions.add_program(envSierra, ["sierra"])
+    env_sierra = Environment()
+env_sierra["sierra"] = waves.scons_extensions.add_program(env_sierra, ["sierra"])
 
 # Comments used in tutorial code snippets: marker-4
 
@@ -129,9 +132,9 @@ for key, value in project_variables.items():
 # Add builders and pseudo-builders
 env.Append(BUILDERS={})
 
-envSierra.Append(
+env_sierra.Append(
     BUILDERS={
-        "Sierra": waves.scons_extensions.sierra_builder_factory(program=envSierra["sierra"]),
+        "Sierra": waves.scons_extensions.sierra_builder_factory(program=env_sierra["sierra"]),
     }
 )
 
@@ -139,16 +142,16 @@ envSierra.Append(
 
 # Add simulation targets
 workflow_configurations = [
-    "abaqus",
-    "sierra",
-    "fierro",
+    "abaqus.scons",
+    "sierra.scons",
+    "fierro.scons",
 ]
 for workflow in workflow_configurations:
-    build_dir = env["variant_dir_base"] / workflow
+    build_dir = env["variant_dir_base"] / pathlib.Path(workflow).stem
     SConscript(
         workflow,
         variant_dir=build_dir,
-        exports={"env": env, "envSierra": envSierra},
+        exports={"env": env, "env_sierra": env_sierra},
         duplicate=False,
     )
 

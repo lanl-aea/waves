@@ -1,12 +1,12 @@
 #! /usr/bin/env python
+"""Configure the WAVES project."""
 
 import os
-import shutil
 import pathlib
+import shutil
 import warnings
 
 import setuptools_scm
-
 
 warnings.filterwarnings(action="ignore", message="tag", category=UserWarning, module="setuptools_scm")
 
@@ -66,11 +66,11 @@ AddOption(
     dest="unconditional_build",
     default=False,
     action="store_true",
-    # fmt: off
-    help="Pass through argument used by system test configuration. "
-         "Boolean to force building of conditionally ignored targets, e.g. if the target's action program is missing "
-         "and it would normally be ignored. (default: '%default')"
-    # fmt: on
+    help=(
+        "Pass through argument used by system test configuration. "
+        "Boolean to force building of conditionally ignored targets, e.g. if the target's action program is missing "
+        "and it would normally be ignored. (default: '%default')"
+    ),
 )
 # Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
 default_abaqus_commands = [
@@ -129,7 +129,7 @@ env["ENV"]["PYTHONDONTWRITEBYTECODE"] = 1
 env.Default()
 
 # Find required programs for conditional target ignoring
-required_programs = ["pytest", "sphinx-build", "latexmk", "flake8", "black", "mypy"]
+required_programs = ["pytest", "sphinx-build", "latexmk", "ruff", "mypy"]
 for program in required_programs:
     absolute_path = env[program.replace("-", "_")] = shutil.which(program, path=env["ENV"]["PATH"])
     print(f"Checking whether '{program}' program exists...{absolute_path}")
@@ -146,7 +146,7 @@ env["cubit"] = next(
 )
 
 # Build variable substitution dictionary
-project_substitution_dictionary = dict()
+project_substitution_dictionary = {}
 for key, value in project_variables.items():
     env[key] = value
     project_substitution_dictionary[f"@{key}@"] = value
@@ -222,10 +222,10 @@ SConscript(
 )
 
 # Add pytests, style checks, and static type checking
-workflow_configurations = ["pytest", "style", "mypy"]
+workflow_configurations = ["pytest.scons", "style.scons", "mypy.scons"]
 for workflow in workflow_configurations:
-    variant_directory = build_directory / workflow
-    SConscript(variant_directory.name, variant_dir=variant_directory, exports={"env": env}, duplicate=False)
+    variant_directory = build_directory / workflow.replace(".scons", "")
+    SConscript(workflow, variant_dir=variant_directory, exports={"env": env}, duplicate=False)
 
 # ============================================================================================= PROJECT HELP MESSAGE ===
 # Add aliases to help message so users know what build target options are available

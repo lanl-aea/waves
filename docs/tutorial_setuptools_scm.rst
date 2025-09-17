@@ -42,8 +42,8 @@ Directory Structure
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Download the ``tutorial_12_archival`` file with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand. The
-   ``SConscript`` file ``tutorial_12_archival`` does not need to change because we are already using the project
+4. Download the ``tutorial_12_archival.scons`` file with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand. The
+   ``SConscript`` file ``tutorial_12_archival.scons`` does not need to change because we are already using the project
    configuration ``env["version"]`` in the archive file name.
 
 .. code-block:: bash
@@ -53,17 +53,6 @@ Directory Structure
    $ waves fetch --overwrite tutorials/tutorial_12_archival
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
-
-****************************
-setuptools_scm configuration
-****************************
-
-5. Create a file named ``pyproject.toml`` using the contents below.
-
-.. admonition:: waves-tutorials/pyproject.toml
-
-    .. literalinclude:: tutorials_pyproject.toml
-        :lineno-match:
 
 **********
 SConstruct
@@ -82,7 +71,7 @@ changes made in this tutorial.
 Version control system
 **********************
 
-6. Initialize a git repository in the tutorial directory
+5. Initialize a git repository in the tutorial directory
 
 .. code-block:: bash
 
@@ -90,17 +79,17 @@ Version control system
    /home/roppenheimer/waves-tutorials
    $ git init
 
-7. Put the current tutorial's files under version control
+6. Put the current tutorial's files under version control
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ git add SConstruct pyproject.toml tutorial_12_archival
+   $ git add SConstruct tutorial_12_archival
    $ git commit -m "Initial commit for git tag version numbers using setuptools_scm"
    <output truncated>
 
-8. Create a git tag version number
+7. Create a git tag version number
 
 .. code-block:: bash
 
@@ -108,7 +97,7 @@ Version control system
    /home/roppenheimer/waves-tutorials
    $ git tag 0.1.0
 
-9. Verify that setuptools_scm is correctly picking up the git tag for the version number
+8. Verify that setuptools_scm is correctly picking up the git tag for the version number
 
 .. code-block:: bash
 
@@ -121,7 +110,7 @@ Version control system
 Build Targets
 *************
 
-10. Build (or re-build) the archive target from :ref:`tutorial_archival`.
+9. Build (or re-build) the archive target from :ref:`tutorial_archival`.
 
 .. code-block:: bash
 
@@ -154,7 +143,7 @@ from the contents below
    .. literalinclude:: tutorials_gitignore
         :lineno-match:
 
-11. Place the ``.gitignore`` file under version control
+10. Place the ``.gitignore`` file under version control
 
 .. code-block:: bash
 
@@ -166,7 +155,7 @@ from the contents below
     1 file changed, 33 insertions(+)
     create mode 100644 .gitignore
 
-12. Observe the dynamic version number change. The git short hash, ``ad02fc7``, will differ for every user and is
+11. Observe the dynamic version number change. The git short hash, ``ad02fc7``, will differ for every user and is
     specific to your git repository.
 
 .. code-block:: bash
@@ -181,7 +170,7 @@ from the contents below
    The leading ``g`` before the short hash ``ad02fc7`` is not part of the hash. `setuptools_scm`_ can work with several
    version control systems and uses the leading ``g`` to indicate that this is a git repository.
 
-13. Re-build the archive target and note the archive file name change to match the version number from the previous step
+12. Re-build the archive target and note the archive file name change to match the version number from the previous step
 
 .. code-block:: bash
 

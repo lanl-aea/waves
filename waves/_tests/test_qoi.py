@@ -1,20 +1,18 @@
-"""Test QOI module"""
+"""Test QOI module."""
 
+import datetime
 import io
 import os
 import pathlib
-import datetime
-from unittest.mock import patch
 from contextlib import nullcontext as does_not_raise
+from unittest.mock import patch
 
 import numpy
 import pandas
 import pytest
 import xarray
 
-from waves import qoi
-from waves import parameter_generators
-
+from waves import parameter_generators, qoi
 
 test_create_qoi_cases = {
     "minimum input": (
@@ -167,33 +165,33 @@ test_create_qoi_cases = {
     "lower_rtol, missing expected: should raise ValueError": (
         {"name": "qoi1", "lower_rtol": 1.0e-2},
         None,
-        pytest.raises(ValueError),
+        pytest.raises(ValueError, match=r"Relative and absolute tolerances were specified without an expected value."),
     ),
     "upper_rtol, missing expected: should raise ValueError": (
         {"name": "qoi1", "upper_rtol": 1.0e-2},
         None,
-        pytest.raises(ValueError),
+        pytest.raises(ValueError, match=r"Relative and absolute tolerances were specified without an expected value."),
     ),
     "lower_atol, missing expected: should raise ValueError": (
         {"name": "qoi1", "lower_atol": 1.0e-2},
         None,
-        pytest.raises(ValueError),
+        pytest.raises(ValueError, match=r"Relative and absolute tolerances were specified without an expected value."),
     ),
     "upper_atol, missing expected: should raise ValueError": (
         {"name": "qoi1", "upper_atol": 1.0e-2},
         None,
-        pytest.raises(ValueError),
+        pytest.raises(ValueError, match=r"Relative and absolute tolerances were specified without an expected value."),
     ),
     "lower > upper: should raise ValueError": (
         {"name": "qoi1", "lower_limit": 1.0, "upper_limit": -1.0},
         None,
-        pytest.raises(ValueError),
+        pytest.raises(ValueError, match=r"Upper limit is lower than the lower limit."),
     ),
 }
 
 
 @pytest.mark.parametrize(
-    "kwargs, expected, outcome",
+    ("kwargs", "expected", "outcome"),
     test_create_qoi_cases.values(),
     ids=test_create_qoi_cases.keys(),
 )
@@ -324,7 +322,7 @@ test_create_qoi_set_cases = {
 
 
 @pytest.mark.parametrize(
-    "qoi_list, expected",
+    ("qoi_list", "expected"),
     test_create_qoi_set_cases.values(),
     ids=test_create_qoi_set_cases.keys(),
 )
@@ -604,7 +602,7 @@ test__create_qoi_study_cases = {
 
 
 @pytest.mark.parametrize(
-    "qoi_list, parameter_study, expected, outcome",
+    ("qoi_list", "parameter_study", "expected", "outcome"),
     test__create_qoi_study_cases.values(),
     ids=test__create_qoi_study_cases.keys(),
 )
@@ -652,7 +650,7 @@ test__qoi_group_cases = {
 
 
 @pytest.mark.parametrize(
-    "qoi_set, expected, outcome",
+    ("qoi_set", "expected", "outcome"),
     test__qoi_group_cases.values(),
     ids=test__qoi_group_cases.keys(),
 )
@@ -674,7 +672,7 @@ test__node_path_cases = {
 
 
 @pytest.mark.parametrize(
-    "qoi_set, expected",
+    ("qoi_set", "expected"),
     test__node_path_cases.values(),
     ids=test__node_path_cases.keys(),
 )
@@ -719,7 +717,7 @@ test__propagate_identical_attrs_cases = {
 
 
 @pytest.mark.parametrize(
-    "input_attrs, common_attrs",
+    ("input_attrs", "common_attrs"),
     test__propagate_identical_attrs_cases.values(),
     ids=test__propagate_identical_attrs_cases.keys(),
 )
@@ -991,11 +989,7 @@ test__read_qoi_set_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        (
-            f"name,calculated,expected,lower_limit,upper_limit{os.linesep}"
-            f"qoi1,,,,{os.linesep}"
-            f"qoi2,,,,{os.linesep}"
-        ),
+        f"name,calculated,expected,lower_limit,upper_limit{os.linesep}qoi1,,,,{os.linesep}qoi2,,,,{os.linesep}",
     ),
     "two qoi: recommended attributes": (
         xarray.Dataset(
@@ -1036,7 +1030,7 @@ test__read_qoi_set_cases = {
 
 
 @pytest.mark.parametrize(
-    "expected, mock_csv_data",
+    ("expected", "mock_csv_data"),
     test__read_qoi_set_cases.values(),
     ids=test__read_qoi_set_cases.keys(),
 )
@@ -1072,11 +1066,9 @@ def test__read_qoi_set_unknown():
         patch("xarray.open_dataset") as mock_open_dataset,
         pytest.raises(RuntimeError),
     ):
-        try:
-            qoi._read_qoi_set(from_file)
-        finally:
-            mock_read_csv.assert_not_called()
-            mock_open_dataset.assert_not_called()
+        qoi._read_qoi_set(from_file)
+    mock_read_csv.assert_not_called()
+    mock_open_dataset.assert_not_called()
 
 
 test__add_tolerance_attribute_cases = {
@@ -1344,7 +1336,7 @@ test__add_tolerance_attribute_cases = {
 
 
 @pytest.mark.parametrize(
-    "qoi_set, expected",
+    ("qoi_set", "expected"),
     test__add_tolerance_attribute_cases.values(),
     ids=test__add_tolerance_attribute_cases.keys(),
 )
@@ -1357,7 +1349,7 @@ test_write_qoi_set_to_csv_cases = test__read_qoi_set_cases
 
 
 @pytest.mark.parametrize(
-    "qoi_set, expected",
+    ("qoi_set", "expected"),
     test_write_qoi_set_to_csv_cases.values(),
     ids=test_write_qoi_set_to_csv_cases.keys(),
 )
@@ -1439,7 +1431,7 @@ test__get_plotting_name_cases = {
 
 
 @pytest.mark.parametrize(
-    "qoi_array, expected",
+    ("qoi_array", "expected"),
     test__get_plotting_name_cases.values(),
     ids=test__get_plotting_name_cases.keys(),
 )
@@ -1498,7 +1490,7 @@ test__can_plot_scalar_qoi_history_cases = {
 
 
 @pytest.mark.parametrize(
-    "qoi_array, expected",
+    ("qoi_array", "expected"),
     test__can_plot_scalar_qoi_history_cases.values(),
     ids=test__can_plot_scalar_qoi_history_cases.keys(),
 )
@@ -1566,7 +1558,7 @@ test__can_plot_qoi_tolerance_check_cases = {
 
 
 @pytest.mark.parametrize(
-    "qoi_array, expected",
+    ("qoi_array", "expected"),
     test__can_plot_qoi_tolerance_check_cases.values(),
     ids=test__can_plot_qoi_tolerance_check_cases.keys(),
 )

@@ -1,13 +1,13 @@
 #!/usr/bin/env python
-"""Example of catenating WAVES parameter study results and definition"""
+"""Example of catenating WAVES parameter study results and definition."""
 
-import sys
-import yaml
-import pathlib
 import argparse
+import pathlib
+import sys
 
-import xarray
 import matplotlib.pyplot
+import xarray
+import yaml
 from waves.parameter_generators import SET_COORDINATE_KEY
 
 default_selection_dict = {
@@ -18,7 +18,7 @@ default_selection_dict = {
 
 
 def combine_data(input_files, group_path, concat_coord):
-    """Combine input data files into one dataset
+    """Combine input data files into one dataset.
 
     :param list input_files: list of path-like or file-like objects pointing to h5netcdf files
         containing Xarray Datasets
@@ -40,7 +40,7 @@ def combine_data(input_files, group_path, concat_coord):
 
 
 def merge_parameter_study(parameter_study_file, combined_data):
-    """Merge parameter study to existing dataset
+    """Merge parameter study to existing dataset.
 
     :param str parameter_study_file: path-like or file-like object containing the parameter study dataset. Assumes the
         h5netcdf file contains only a single dataset at the root group path, .e.g. ``/``.
@@ -56,7 +56,7 @@ def merge_parameter_study(parameter_study_file, combined_data):
 
 
 def save_plot(combined_data, x_var, y_var, selection_dict, concat_coord, output_file):
-    """Save scatter plot with given x and y labels
+    """Save scatter plot with given x and y labels.
 
     :param xarray.DataArray combined_data: XArray Dataset that will be plotted.
     :param str x_var: The independent (x-axis) variable key name for the Xarray Dataset "data variable"
@@ -73,7 +73,7 @@ def save_plot(combined_data, x_var, y_var, selection_dict, concat_coord, output_
 
 
 def save_table(combined_data, selection_dict, output_file):
-    """Save csv table
+    """Save csv table.
 
     :param xarray.DataArray combined_data: XArray Dataset to be written as a CSV.
     :param dict selection_dict: Dictionary to define the down selection of data to be plotted. Dictionary ``key: value``
@@ -131,6 +131,7 @@ def main(
 
 
 def get_parser():
+    """Return the command-line interface parser."""
     script_name = pathlib.Path(__file__)
     default_output_file = f"{script_name.stem}.pdf"
     default_group_path = "/"
@@ -170,11 +171,11 @@ def get_parser():
         "--output-file",
         type=str,
         default=default_output_file,
-        # fmt: off
-        help="The output file for the stress-strain comparison plot with extension, "
-             "e.g. ``output_file.pdf``. Extension must be supported by matplotlib. File stem is also "
-             "used for the CSV table output, e.g. ``output_file.csv``. (default: %(default)s)",
-        # fmt: on
+        help=(
+            "The output file for the stress-strain comparison plot with extension, "
+            "e.g. ``output_file.pdf``. Extension must be supported by matplotlib. File stem is also "
+            "used for the CSV table output, e.g. ``output_file.csv``. (default: %(default)s)"
+        ),
     )
     parser.add_argument(
         "-g",
@@ -200,14 +201,14 @@ def get_parser():
     parser.add_argument(
         "-s",
         "--selection-dict",
-        type=str,
+        type=pathlib.Path,
         default=None,
-        # fmt: off
-        help="The YAML formatted dictionary file to define the down selection of data to be plotted. "
-             "Dictionary key: value pairs must match the data variables and coordinates of the "
-             "expected Xarray Dataset object. If no file is provided, the a default selection dict "
-             f"will be used (default: {default_selection_dict})",
-        # fmt: on
+        help=(
+            "The YAML formatted dictionary file to define the down selection of data to be plotted. "
+            "Dictionary key: value pairs must match the data variables and coordinates of the "
+            "expected Xarray Dataset object. If no file is provided, the a default selection dict "
+            f"will be used (default: {default_selection_dict})"
+        ),
     )
     parser.add_argument(
         "-p",
@@ -226,7 +227,7 @@ if __name__ == "__main__":
     if not args.selection_dict:
         selection_dict = default_selection_dict
     else:
-        with open(args.selection_dict, "r") as input_yaml:
+        with args.selection_dict.open(mode="r") as input_yaml:
             selection_dict = yaml.safe_load(input_yaml)
     sys.exit(
         main(

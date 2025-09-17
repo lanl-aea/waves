@@ -1,0 +1,81 @@
+#! /usr/bin/env python
+"""Rectangle compression workflow.
+
+Requires the following ``SConscript(..., exports={})``
+
+* ``env`` - The SCons construction environment with the following required keys
+
+  * ``modsim_package_abspath`` - Absolute path to the project package
+  * ``solve_cpus`` - Integer number of cpus to use in the Abaqus solve task
+  * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
+  * ``regression_alias`` - String for the alias collecting the regression workflow targets
+  * ``abaqus`` - String path for the Abaqus executable
+"""
+
+import inspect
+import pathlib
+
+from modsim_package import rectangle_compression
+
+# Inherit the parent construction environment
+Import("env")
+
+# Set project-wide paths with os-agnostic path separators
+modsim_package_abspath = env["modsim_package_abspath"]
+
+# Simulation variables
+build_directory = pathlib.Path(Dir(".").abspath)
+workflow_name = build_directory.name
+workflow_file = pathlib.Path(inspect.getfile(lambda: None)).name
+workflow_configuration = [env["project_configuration"], workflow_file]
+parameters = rectangle_compression.nominal()
+
+# Collect the target nodes to build concise target alias(es)
+artifacts = []
+workflow = []
+
+# Rectangle part
+artifacts.extend(
+    SConscript(
+        "rectangle.scons",
+        exports={"env": env, "parameters": parameters},
+    )
+)
+
+# Rectangle compression simulation
+artifacts.extend(
+    SConscript(
+        "rectangle_compression.scons",
+        exports={"env": env, "parameters": parameters, "workflow_name": workflow_name},
+    )
+)
+
+# Regression test
+plot_name = "stress_strain_comparison"
+script = modsim_package_abspath / "regression.py"
+regression_file = modsim_package_abspath / f"{workflow_name}-{plot_name}.csv"
+current_file = f"{plot_name}.csv"
+workflow.extend(
+    env.PythonScript(
+        target=["regression.yaml"],
+        source=[script, current_file, regression_file],
+        subcommand_options="${SOURCES[1:].abspath} --output-file ${TARGET.abspath}",
+    )
+)
+
+# Data archival
+artifacts.extend(workflow)
+archive_name = f"{env['project_name']}-{workflow_name}-{env['version']}"
+archive_target = env.Tar(
+    target=archive_name,
+    source=artifacts + workflow_configuration,
+)
+
+# Collector alias based on build directory name
+env.Alias(workflow_name, workflow)
+env.Alias(f"{workflow_name}-archive", archive_target)
+
+if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+    Ignore([".", workflow_name], workflow)
+    Ignore([".", f"{workflow_name}-archive"], archive_target)

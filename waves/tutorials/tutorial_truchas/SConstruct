@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+"""Configure the WAVES Truchas tutorial."""
 
 import os
 import pathlib
@@ -78,14 +79,14 @@ env.Append(
 
 # Cubit Python requires a separate construction environment to avoid putting Cubit distributed Python packages in the
 # parent Python 3 environment's PYTHONPATH
-envCubit = Environment(ENV=os.environ.copy())
-envCubit.AddMethod(waves.scons_extensions.add_cubit_python, "AddCubitPython")
-envCubit["python"] = envCubit.AddCubitPython(
+env_cubit = Environment(ENV=os.environ.copy())
+env_cubit.AddMethod(waves.scons_extensions.add_cubit_python, "AddCubitPython")
+env_cubit["python"] = env_cubit.AddCubitPython(
     env["cubit_commands"] if env["cubit_commands"] is not None else default_cubit_commands,
 )
-envCubit.Append(
+env_cubit.Append(
     BUILDERS={
-        "PythonScript": waves.scons_extensions.python_builder_factory(program=envCubit["python"]),
+        "PythonScript": waves.scons_extensions.python_builder_factory(program=env_cubit["python"]),
     }
 )
 
@@ -121,7 +122,7 @@ for study_name, study_definition in workflow_configurations:
     env.ParameterStudySConscript(
         "SConscript",
         variant_dir=env["build_dir"] / study_name,
-        exports={"env": env, "envCubit": envCubit, "alias": study_name},
+        exports={"env": env, "env_cubit": env_cubit, "alias": study_name},
         study=study_definition,
         subdirectories=True,
         duplicate=True,

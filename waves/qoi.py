@@ -1,4 +1,4 @@
-"""Quantity of Interest (QOI) tools
+"""Quantity of Interest (QOI) tools.
 
 .. warning::
 
@@ -8,33 +8,32 @@
    the output plotting and reporting formatting is subject to change.
 """
 
+import collections.abc
+import contextlib
+import itertools
 import pathlib
 import typing
-import collections.abc
-import itertools
 
-import numpy
-import xarray
-import pandas
 import matplotlib.pyplot
+import numpy
+import pandas
+import xarray
 from matplotlib.backends.backend_pdf import PdfPages
 
 from waves import _settings
-
 
 _exclude_from_namespace = set(globals().keys())
 
 _version_key = "version"
 
 
-def _propagate_identical_attrs(all_attrs, context):
+def _propagate_identical_attrs(all_attrs, context):  # noqa: ARG001
     first_attrs = all_attrs[0]
-    identical_pairs = {}
-
-    for key, value in first_attrs.items():
-        if all(key in attrs and attrs[key] == value and type(attrs[key]) is type(value) for attrs in all_attrs[1:]):
-            identical_pairs[key] = value
-
+    identical_pairs = {
+        key: value
+        for key, value in first_attrs.items()
+        if all(key in attrs and attrs[key] == value and type(attrs[key]) is type(value) for attrs in all_attrs[1:])
+    }
     return identical_pairs
 
 
@@ -79,7 +78,7 @@ def create_qoi(
 
     :returns: QOI
 
-    Example
+    Example:
 
     .. code-block::
 
@@ -105,6 +104,7 @@ def create_qoi(
             group:        Assembly ABC Preload
             version:      abcdef
             date:         2025-01-01
+
     """
     if numpy.isnan(expected) & numpy.isfinite([lower_rtol, upper_rtol, lower_atol, upper_atol]).any():
         raise ValueError("Relative and absolute tolerances were specified without an expected value.")
@@ -153,7 +153,7 @@ def create_qoi_set(qois: typing.Iterable[xarray.DataArray]) -> xarray.Dataset:
 
     :returns: QOI Set containing each QOI as a separate data variable.
 
-    Example
+    Example:
 
     .. code-block::
 
@@ -200,16 +200,17 @@ def create_qoi_set(qois: typing.Iterable[xarray.DataArray]) -> xarray.Dataset:
             group:        Assembly ABC Preload
             version:      abcdef
             date:         2025-01-01
+
     """
     qoi_set = xarray.merge(qois, **_merge_constants)
     # Keep all attributes at the data variable level
-    qoi_set.attrs = dict()
+    qoi_set.attrs = {}
     return qoi_set
 
 
 def _create_qoi_study(
     qois: typing.Iterable[xarray.DataArray],
-    parameter_study: typing.Optional[xarray.Dataset] = None,
+    parameter_study: xarray.Dataset | None = None,
 ) -> xarray.Dataset:
     """Create a QOI Dataset spanning multiple simulations.
 
@@ -228,7 +229,7 @@ def _create_qoi_study(
 
     :returns: QOI study
 
-    Example
+    Example:
 
     .. code-block::
 
@@ -301,6 +302,7 @@ def _create_qoi_study(
             parameter_sets  (set_name) <U5 80B 'set_0' 'set_1' 'set_2' 'set_3'
         Data variables:
             load            (set_name, value_type) float64 128B 5.0 nan nan ... nan nan
+
     """
     # Move "group" from attribute to dimension for each DataArray, and merge
     try:
@@ -308,12 +310,12 @@ def _create_qoi_study(
             [qoi.expand_dims(set_name=[qoi.attrs[_settings._set_coordinate_key]]) for qoi in qois],
             **_merge_constants,
         )
-    except KeyError:
+    except KeyError as err:
         raise RuntimeError(
             f"Each DataArray in ``qois`` must have an attribute named '{_settings._set_coordinate_key}'."
-        )
+        ) from err
     # Keep all attributes at the data variable level
-    qoi_study.attrs = dict()
+    qoi_study.attrs = {}
     # Merge in parameter study definition
     if parameter_study:
         # Convert parameter study variables to coordinates
@@ -339,7 +341,7 @@ def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataT
 
     :returns: QOI archive
 
-    Example
+    Example:
 
     .. code-block::
 
@@ -414,18 +416,19 @@ def _create_qoi_archive(qois: typing.Iterable[xarray.DataArray]) -> xarray.DataT
                 Data variables:
                     load        (version, value_type) float64 32B 35.0 nan nan nan
                     stress      (version, value_type) float64 32B 110.0 nan nan nan
+
     """
     archive = xarray.DataTree()
     # Creates a group for each "group" attribute
-    for group, qois in itertools.groupby(sorted(qois, key=_qoi_group), key=_qoi_group):
+    for group, group_qois in itertools.groupby(sorted(qois, key=_qoi_group), key=_qoi_group):
         # Move "version" from attribute to dimension for each DataArray and merge to Dataset
-        qois = [qoi.expand_dims(version=[qoi.attrs[_version_key]]) for qoi in qois]
-        # Try to add date as a coordinate if available
-        try:
-            qois = [qoi.assign_coords(date=(_version_key, [numpy.datetime64(qoi.attrs["date"])])) for qoi in qois]
-        except KeyError:
-            pass  # date coordinate is not needed
-        qoi_set = create_qoi_set(qois)
+        set_qois = [qoi.expand_dims(version=[qoi.attrs[_version_key]]) for qoi in group_qois]
+        # Try to add date as a coordinate if available, but allow failure because date coordinate is not needed
+        with contextlib.suppress(KeyError):
+            set_qois = [
+                qoi.assign_coords(date=(_version_key, [numpy.datetime64(qoi.attrs["date"])])) for qoi in set_qois
+            ]
+        qoi_set = create_qoi_set(set_qois)
         # Add dataset as a node in the DataTree
         archive[group] = qoi_set
     return archive
@@ -464,7 +467,7 @@ def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
 
     :returns: QOI set
 
-    Example
+    Example:
 
     .. csv-table::
         :header-rows: 1
@@ -483,13 +486,14 @@ def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
         Data variables:
             load        (value_type) float64 32B nan 4.5 3.5 5.5
             gap         (value_type) float64 32B nan 0.8 0.7 0.9
+
     """
     suffix = from_file.suffix.lower()
     if suffix == ".csv":
-        df = pandas.read_csv(from_file)
+        raw_dataframe = pandas.read_csv(from_file)
         # Empty entries in the CSV end up as NaN in the DataFrame.
         # Drop NaNs so they aren't passed as kwargs to `create_qoi()`
-        qoi_kwargs = [row.dropna().to_dict() for idx, row in df.iterrows()]
+        qoi_kwargs = [row.dropna().to_dict() for idx, row in raw_dataframe.iterrows()]
         return create_qoi_set([create_qoi(**kwargs) for kwargs in qoi_kwargs])
     elif suffix == ".h5":
         return xarray.open_dataset(from_file, engine="h5netcdf")
@@ -498,7 +502,7 @@ def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
 
 
 def _add_tolerance_attribute(qoi_set: xarray.Dataset) -> None:
-    """Adds a ``"within_tolerance"`` attribute to each QOI in a QOI Dataset in place.
+    """Add a ``"within_tolerance"`` attribute to each QOI in a QOI Dataset in place.
 
     :param qoi_set: QOI set.
     """
@@ -511,12 +515,12 @@ def _add_tolerance_attribute(qoi_set: xarray.Dataset) -> None:
 
 
 def write_qoi_set_to_csv(qoi_set: xarray.Dataset, output: pathlib.Path) -> None:
-    """Writes a QOI Dataset to a CSV file.
+    """Write a QOI Dataset to a CSV file.
 
     :param qoi_set: QOI set.
     :param output: Output CSV file.
 
-    Example
+    Example:
 
     .. code-block::
 
@@ -536,12 +540,13 @@ def write_qoi_set_to_csv(qoi_set: xarray.Dataset, output: pathlib.Path) -> None:
         name,calculated,expected,lower_limit,upper_limit,units,long_name,description,group,version,date
         load,5.0,4.5,3.5,5.5,N,Axial Load,Axial load through component XYZ,Assembly ABC Preload,abcdef,2025-01-01
         gap,1.0,0.8,0.7000000000000001,0.9,mm,Radial gap,Radial gap between components A and B,Assembly ABC Preload,abcdef,2025-01-01
+
     """  # noqa: E501
-    df = qoi_set.to_dataarray("name").to_pandas()
+    csv_dataframes = qoi_set.to_dataarray("name").to_pandas()
     # Convert attributes to data variables so they end up as columns in the CSV
     attrs = pandas.DataFrame.from_dict({qoi: qoi_set[qoi].attrs for qoi in qoi_set}, orient="index")
     attrs.index.name = "name"
-    pandas.concat((df, attrs), axis="columns").to_csv(output)
+    pandas.concat((csv_dataframes, attrs), axis="columns").to_csv(output)
 
 
 def _plot_qoi_tolerance_check(qoi: xarray.DataArray, axes: matplotlib.axes.Axes) -> None:
@@ -559,7 +564,7 @@ def _plot_qoi_tolerance_check(qoi: xarray.DataArray, axes: matplotlib.axes.Axes)
 
 
 def _can_plot_qoi_tolerance_check(qoi: xarray.DataArray) -> bool:
-    """Checks if a QOI meets requirements to be plotted by `_plot_qoi_tolerance_check()`.
+    """Check if a QOI meets requirements to be plotted by `_plot_qoi_tolerance_check()`.
 
     Requires the following:
         1. "value_type" is a dimension
@@ -575,7 +580,8 @@ def _can_plot_qoi_tolerance_check(qoi: xarray.DataArray) -> bool:
         return False
     qoi_dim = len(qoi.squeeze().dims)  # Count includes the "value_type" dim
     if qoi_dim == 1:  # Scalar QOI
-        if qoi.isnull().any():
+        # Not a pandas object in the unit tests, so the linter suggestion is wrong.
+        if qoi.isnull().any():  # noqa: PD003
             return False
     else:
         return False
@@ -586,7 +592,7 @@ def _plot_scalar_tolerance_check(
     qoi: xarray.DataArray,
     axes: matplotlib.axes.Axes,
 ) -> None:
-    """Plots a tolerance check for a scalar QOI DataArray.
+    """Plot a tolerance check for a scalar QOI DataArray.
 
     :param qoi: Quantity of interest data array as built by :meth:`create_qoi`
     :param axes: Matplotlib axes for plotting
@@ -646,13 +652,7 @@ def _plot_scalar_tolerance_check(
         color = "black"
         fontweight = "normal"
     axes.annotate(
-        text=(
-            f"{name}\n"
-            f" min: {lower_limit:.2e},"
-            f" max: {upper_limit:.2e},"
-            f" exp: {expected:.2e},"
-            f" calc: {calculated:.2e}"
-        ),
+        text=f"{name}\n min: {lower_limit:.2e}, max: {upper_limit:.2e}, exp: {expected:.2e}, calc: {calculated:.2e}",
         xy=(-0.05, 0.5),
         textcoords="axes fraction",
         annotation_clip=False,
@@ -677,18 +677,18 @@ def _write_qoi_report(qoi_archive: xarray.DataTree, output: pathlib.Path, plots_
     qois = [
         qoi for leaf in qoi_archive.leaves for qoi in leaf.ds.data_vars.values() if _can_plot_qoi_tolerance_check(qoi)
     ]
-    page_margins = dict(
-        left=0.6,  # plot on right half of page because text will go on left side
-        right=0.9,  # leave margin on right edge
-        top=(1.0 - 1.0 / plots_per_page),  # top margin equal to single plot height
-        bottom=(0.5 / plots_per_page),  # bottom margin equal to half of single plot height
-        hspace=1.0,
-    )
+    page_margins = {
+        "left": 0.6,  # plot on right half of page because text will go on left side
+        "right": 0.9,  # leave margin on right edge
+        "top": (1.0 - 1.0 / plots_per_page),  # top margin equal to single plot height
+        "bottom": (0.5 / plots_per_page),  # bottom margin equal to half of single plot height
+        "hspace": 1.0,
+    }
     _pdf_report(qois, output, page_margins, plots_per_page, _plot_qoi_tolerance_check, {})
 
 
 def _get_plotting_name(qoi: xarray.DataArray) -> str:
-    """Return a QOI label with optional units as ``name`` or ``name [units]``
+    """Return a QOI label with optional units as ``name`` or ``name [units]``.
 
     Construct a QOI label from the following preference ordered list of attributes. The ``name`` attribute _must_ exist
     if the other attributes do not exist.
@@ -755,19 +755,19 @@ def _qoi_history_report(
         for qoi in leaf.ds.data_vars.values()
         if _can_plot_scalar_qoi_history(qoi)
     ]
-    plotting_kwargs = dict(date_min=min(qoi.date.min() for qoi in qois), date_max=max(qoi.date.max() for qoi in qois))
-    page_margins = dict(
-        left=0.1,  # leave margin on left edge
-        right=0.9,  # leave margin on right edge
-        top=(1.0 - 0.5 / plots_per_page),  # top margin equal to half of single plot height
-        bottom=(0.5 / plots_per_page),  # bottom margin equal to half of single plot height
-        hspace=1.0,
-    )
+    plotting_kwargs = {"date_min": min(qoi.date.min() for qoi in qois), "date_max": max(qoi.date.max() for qoi in qois)}
+    page_margins = {
+        "left": 0.1,  # leave margin on left edge
+        "right": 0.9,  # leave margin on right edge
+        "top": (1.0 - 0.5 / plots_per_page),  # top margin equal to half of single plot height
+        "bottom": (0.5 / plots_per_page),  # bottom margin equal to half of single plot height
+        "hspace": 1.0,
+    }
     _pdf_report(qois, output, page_margins, plots_per_page, _plot_scalar_qoi_history, plotting_kwargs)
 
 
 def _can_plot_scalar_qoi_history(qoi: xarray.DataArray) -> bool:
-    """Checks if a QOI meets requirements to be plotted by :meth:`_plot_scalar_qoi_history`.
+    """Check if a QOI meets requirements to be plotted by :meth:`_plot_scalar_qoi_history`.
 
     Requires the following:
         1. The QOI contains at least 1 finite value
@@ -777,7 +777,8 @@ def _can_plot_scalar_qoi_history(qoi: xarray.DataArray) -> bool:
     """
     if _version_key not in qoi.dims:
         return False
-    if qoi.where(numpy.isfinite(qoi)).dropna(_version_key, how="all").size == 0:  # Avoid empty plots
+    # Avoid empty plots
+    if qoi.where(numpy.isfinite(qoi)).dropna(_version_key, how="all").size == 0:  # noqa: SIM103
         return False
     return True
 
@@ -785,10 +786,10 @@ def _can_plot_scalar_qoi_history(qoi: xarray.DataArray) -> bool:
 def _pdf_report(
     qois: typing.Iterable[xarray.DataArray],
     output_pdf: pathlib.Path,
-    page_margins: typing.Dict[str, float],
+    page_margins: dict[str, float],
     plots_per_page: int,
     plotting_method: collections.abc.Callable,
-    plotting_kwargs: typing.Dict,
+    plotting_kwargs: dict,
     groupby: collections.abc.Callable = _qoi_group,
 ) -> None:
     """Generate a multi-page PDF report of QOI plots.
@@ -804,8 +805,8 @@ def _pdf_report(
     """
     open_figure = False
     with PdfPages(output_pdf) as pdf:
-        for group, qois in itertools.groupby(sorted(qois, key=groupby), key=groupby):
-            for plot_num, qoi in enumerate(qois):
+        for group, group_qois in itertools.groupby(sorted(qois, key=groupby), key=groupby):
+            for plot_num, qoi in enumerate(group_qois):
                 ax_num = plot_num % plots_per_page  # ax_num goes from 0 to (plots_per_page - 1)
                 if ax_num == 0:  # Starting new page
                     open_figure = True
@@ -821,7 +822,7 @@ def _pdf_report(
                     matplotlib.pyplot.close()
                     open_figure = False
             if open_figure:  # If a figure is still open (hasn't been saved to a page)
-                for ax in axes[ax_num + 1 :]:  # noqa: E203
+                for ax in axes[ax_num + 1 :]:
                     ax.clear()
                     ax.axis("off")
                 pdf.savefig()
@@ -848,7 +849,7 @@ def _accept(calculated: pathlib.Path, expected: pathlib.Path) -> None:
 
 
 def _check(diff: pathlib.Path) -> None:
-    """Check results of calculated vs expected QOI comparison
+    """Check results of calculated vs expected QOI comparison.
 
     :param diff: path for differences between calculated and expected QOI values
 
@@ -905,7 +906,7 @@ def _plot_archive(output: pathlib.Path, qoi_archive_h5: typing.Iterable[pathlib.
     :param output: report output file path
     :param qoi_archive_h5: QOI archive file(s)
     """
-    qoi_archive = _merge_qoi_archives((xarray.open_datatree(archive, engine="h5netcdf") for archive in qoi_archive_h5))
+    qoi_archive = _merge_qoi_archives(xarray.open_datatree(archive, engine="h5netcdf") for archive in qoi_archive_h5)
     _qoi_history_report(qoi_archive, output)
 
 

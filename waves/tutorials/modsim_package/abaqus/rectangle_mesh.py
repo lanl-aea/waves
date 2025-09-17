@@ -1,8 +1,10 @@
-import os
-import sys
-import shutil
-import inspect
+"""Mesh the simple rectangle geometry partitioned by ``rectangle_partition.py``."""
+
 import argparse
+import inspect
+import os
+import shutil
+import sys
 
 import abaqus
 import abaqusConstants
@@ -12,7 +14,7 @@ import mesh
 # Most end-users will implement only one of these structures and should replace
 # the try/except structure with a single import line, e.g.
 #
-# import modsim_package.abaqus.abaqus_utilities as abaqus_utilities
+# ``import modsim_package.abaqus.abaqus_utilities as abaqus_utilities``
 try:
     import modsim_package.abaqus.abaqus_utilities as abaqus_utilities
 except ImportError:
@@ -20,7 +22,7 @@ except ImportError:
 
 
 def main(input_file, output_file, model_name, part_name, global_seed):
-    """Mesh the simple rectangle geometry partitioned by ``rectangle_partition.py``
+    """Mesh the simple rectangle geometry partitioned by ``rectangle_partition.py``.
 
     This script meshes a simple Abaqus model with a single rectangle part.
 
@@ -56,12 +58,10 @@ def main(input_file, output_file, model_name, part_name, global_seed):
     part.seedPart(size=global_seed, deviationFactor=0.1, minSizeFactor=0.1)
     part.generateMesh()
 
-    elemType1 = mesh.ElemType(elemCode=abaqusConstants.CPS4R, elemLibrary=abaqusConstants.STANDARD)
+    element_type = mesh.ElemType(elemCode=abaqusConstants.CPS4R, elemLibrary=abaqusConstants.STANDARD)
 
     faces = part.faces
-    pickedRegions = (faces,)
-
-    part.setElementType(regions=pickedRegions, elemTypes=(elemType1,))
+    part.setElementType(regions=(faces,), elemTypes=(element_type,))
     part.Set(faces=faces, name="ELEMENTS")
     part.Set(faces=faces, name="NODES")
 
@@ -72,7 +72,7 @@ def main(input_file, output_file, model_name, part_name, global_seed):
 
 
 def get_parser():
-    """Return parser for CLI options
+    """Return parser for CLI options.
 
     All options should use the double-hyphen ``--option VALUE`` syntax to avoid clashes with the Abaqus option syntax,
     including flag style arguments ``--flag``. Single hyphen ``-f`` flag syntax often clashes with the Abaqus command
@@ -84,7 +84,7 @@ def get_parser():
     # The global '__file__' variable doesn't appear to be set when executing from Abaqus CAE
     filename = inspect.getfile(lambda: None)
     basename = os.path.basename(filename)
-    basename_without_extension, extension = os.path.splitext(basename)
+    basename_without_extension, _extension = os.path.splitext(basename)
     # Construct a part name from the filename less the workflow step
     default_part_name = basename_without_extension
     suffix = "_mesh"
@@ -105,19 +105,19 @@ def get_parser():
         "--input-file",
         type=str,
         default=default_input_file,
-        # fmt: off
-        help="The Abaqus model file created by ``rectangle_partition.py``. "
-             "Will be stripped of the extension and ``.cae`` will be used, e.g. ``input_file``.cae",
-        # fmt: on
+        help=(
+            "The Abaqus model file created by ``rectangle_partition.py``. "
+            "Will be stripped of the extension and ``.cae`` will be used, e.g. ``input_file``.cae"
+        ),
     )
     parser.add_argument(
         "--output-file",
         type=str,
         default=default_output_file,
-        # fmt: off
-        help="The output file for the Abaqus model. "
-             "Will be stripped of the extension and ``.cae`` will be used, e.g. ``output_file``.cae",
-        # fmt: on
+        help=(
+            "The output file for the Abaqus model. "
+            "Will be stripped of the extension and ``.cae`` will be used, e.g. ``output_file``.cae"
+        ),
     )
     parser.add_argument(
         "--model-name",

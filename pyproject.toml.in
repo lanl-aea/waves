@@ -77,12 +77,25 @@ markers = [
 ]
 addopts = "--ignore='build' --ignore='install' --ignore='waves/modsim_template/' --ignore='modsim_template/' --ignore='waves/modsim_template_2/' --ignore='modsim_template_2/' --ignore='waves/tutorials/' --ignore='tutorials/' --tb=long --showlocals --failed-first --strict-markers -m 'not systemtest' --import-mode=importlib -ra"
 
-[tool.black]
-target-version = ["py39", "py310", "py311", "py312", "py313"]
-extend-exclude = ".txt|.toml|.yaml|.csv"
-force-exclude = "build*/|install*/|conda-environment*/|conda-pkgs*/"
+[tool.ruff]
+target-version = "py310"
 line-length = 120
-include = "SConstruct|SConscript|.py|.py.in"
+extend-exclude = ["build", "install", "conda-environment", "conda-pkgs", "pip-build-test"]
+extend-include = ["*SConstruct", "*SConscript", "*.scons"]
+
+[tool.ruff.lint]
+extend-select = [
+    "A", "B", "D", "E", "F", "I", "N", "Q", "W",
+    "ARG", "C4", "FURB", "ERA", "ISC", "NPY", "PD", "PERF", "PGH", "PIE", "PLC", "PLE", "PLW", "PT", "PTH", "PYI",
+    "RSE", "RUF", "SIM", "T10", "UP"
+]
+extend-ignore = ["B028", "D203", "D213", "PIE808", "PIE790", "SIM108", "PLC0415"]
+
+[tool.ruff.lint.extend-per-file-ignores]
+"*SConstruct" = ["F821"]
+"*SConscript" = ["F821"]
+"*.scons" = ["F821"]
+"waves/_tests/test_*.py" = ["RUF012"]
 
 [tool.mypy]
 disable_error_code = "import-untyped"

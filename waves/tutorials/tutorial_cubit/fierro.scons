@@ -1,0 +1,55 @@
+#! /usr/bin/env python
+"""Rectangle compression workflow: Fierro solve.
+
+Requires the following ``SConscript(..., exports={})``
+
+* ``env`` - The SCons construction environment with the following required keys
+
+  * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
+  * ``cubit`` - String path for the Cubit executable
+"""
+
+import pathlib
+
+# Inherit the parent construction environment
+Import("env")
+
+# Simulation variables
+build_directory = pathlib.Path(Dir(".").abspath)
+workflow_name = build_directory.name
+
+# Collect the target nodes to build a concise alias for all targets
+workflow = []
+
+element_type = "HEX"
+solver = "sierra"
+SConscript("cubit.scons", exports={"env": env, "element_type": element_type, "solver": solver}, duplicate=False)
+
+# Convert mesh file type for Fierro
+env.PythonScript(
+    target=["cube_mesh.vtk"],
+    source=["#/modsim_package/fierro/convert_to_vtk2ascii.py", "cube_mesh.g"],
+    subcommand_options="--input-format=exodus ${SOURCES[1].abspath} ${TARGET.abspath}",
+)
+
+# SolverPrep
+fierro_source_list = ["#/modsim_package/fierro/cube_compression.yaml"]
+fierro_source_list = [pathlib.Path(source_file) for source_file in fierro_source_list]
+workflow.extend(env.CopySubstfile(fierro_source_list))
+
+# Fierro Solve
+solve_source_list = [source_file.name for source_file in fierro_source_list]
+solve_source_list.append("cube_mesh.vtk")
+workflow.extend(
+    env.FierroImplicit(
+        target=["cube_compression.stdout", "TecplotTO0.dat", "TecplotTO_undeformed0.dat"],
+        source=solve_source_list,
+    )
+)
+
+# Collector alias based on parent directory name
+env.Alias(workflow_name, workflow)
+
+if not env["unconditional_build"] and not env["FIERRO_IMPLICIT_PROGRAM"]:
+    print(f"Program 'fierro' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+    Ignore([".", workflow_name], workflow)

@@ -1,14 +1,16 @@
-import os
-import sys
-import shutil
-import inspect
+"""Partition the simple rectangle geometry created by ``rectangle_geometry.py``."""
+
 import argparse
+import inspect
+import os
+import shutil
+import sys
 
 import abaqus
 
 
 def main(input_file, output_file, model_name, part_name, width, height):
-    """Partition the simple rectangle geometry created by ``rectangle_geometry.py``
+    """Partition the simple rectangle geometry created by ``rectangle_geometry.py``.
 
     This script partitions a simple Abaqus model with a single rectangle part.
 
@@ -66,31 +68,31 @@ def main(input_file, output_file, model_name, part_name, width, height):
     )
     part.Set(vertices=vertices, name="top_left")
 
-    side1Edges = part.edges.findAt(
+    left_edge = part.edges.findAt(
         ((0, height / 2.0, 0),),
     )
-    part.Set(edges=side1Edges, name="left")
+    part.Set(edges=left_edge, name="left")
 
-    side1Edges = part.edges.findAt(
+    top_edge = part.edges.findAt(
         ((width / 2.0, height, 0),),
     )
-    part.Set(edges=side1Edges, name="top")
+    part.Set(edges=top_edge, name="top")
 
-    side1Edges = part.edges.findAt(
+    right_edge = part.edges.findAt(
         ((width, height / 2.0, 0),),
     )
-    part.Set(edges=side1Edges, name="right")
+    part.Set(edges=right_edge, name="right")
 
-    side1Edges = part.edges.findAt(
+    bottom_edge = part.edges.findAt(
         ((width / 2.0, 0, 0),),
     )
-    part.Set(edges=side1Edges, name="bottom")
+    part.Set(edges=bottom_edge, name="bottom")
 
     abaqus.mdb.save()
 
 
 def get_parser():
-    """Return parser for CLI options
+    """Return parser for CLI options.
 
     All options should use the double-hyphen ``--option VALUE`` syntax to avoid clashes with the Abaqus option syntax,
     including flag style arguments ``--flag``. Single hyphen ``-f`` flag syntax often clashes with the Abaqus command
@@ -102,7 +104,7 @@ def get_parser():
     # The global '__file__' variable doesn't appear to be set when executing from Abaqus CAE
     filename = inspect.getfile(lambda: None)
     basename = os.path.basename(filename)
-    basename_without_extension, extension = os.path.splitext(basename)
+    basename_without_extension, _extension = os.path.splitext(basename)
     # Construct a part name from the filename less the workflow step
     default_part_name = basename_without_extension
     suffix = "_partition"
@@ -124,19 +126,19 @@ def get_parser():
         "--input-file",
         type=str,
         default=default_input_file,
-        # fmt: off
-        help="The Abaqus model file created by ``rectangle_geometry.py``. "
-             "Will be stripped of the extension and ``.cae`` will be used, e.g. ``input_file``.cae",
-        # fmt: on
+        help=(
+            "The Abaqus model file created by ``rectangle_geometry.py``. "
+            "Will be stripped of the extension and ``.cae`` will be used, e.g. ``input_file``.cae"
+        ),
     )
     parser.add_argument(
         "--output-file",
         type=str,
         default=default_output_file,
-        # fmt: off
-        help="The output file for the Abaqus model. "
-             "Will be stripped of the extension and ``.cae`` will be used, e.g. ``output_file``.cae",
-        # fmt: on
+        help=(
+            "The output file for the Abaqus model. "
+            "Will be stripped of the extension and ``.cae`` will be used, e.g. ``output_file``.cae"
+        ),
     )
     parser.add_argument(
         "--model-name",

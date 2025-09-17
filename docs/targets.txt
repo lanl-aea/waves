@@ -71,6 +71,7 @@
 .. _`Python`: https://www.python.org/
 .. _`Python lambda expression`: https://docs.python.org/3/tutorial/controlflow.html#lambda-expressions
 .. _`Python generator expressions`: https://docs.python.org/3/tutorial/classes.html#generator-expressions
+.. _`Ruff`: https://docs.astral.sh/ruff/
 .. _`SALib.sample`: https://salib.readthedocs.io/en/latest/api.html#
 .. _`SALib.analyze`: https://salib.readthedocs.io/en/latest/api/SALib.analyze.html
 .. _`SALib sobol`: https://salib.readthedocs.io/en/latest/api.html#sobol-sensitivity-analysis

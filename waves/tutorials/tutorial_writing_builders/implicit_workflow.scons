@@ -1,0 +1,22 @@
+#! /usr/bin/env python
+"""Configure the project's implicit solve workflow."""
+
+import pathlib
+
+Import("env")
+
+build_directory = pathlib.Path(Dir(".").abspath)
+workflow_name = build_directory.name
+
+output_file = "implicit.out"
+if env["solve_cpus"] > 1:
+    target = [f"{output_file}{number}" for number in range(env["solve_cpus"])]
+else:
+    target = [output_file]
+workflow = env.Solver(
+    target=target,
+    source=["implicit.yaml"],
+    solve_cpus=env["solve_cpus"],
+)
+env.Clean(workflow, [Dir(build_directory)])
+env.Alias(workflow_name, workflow)

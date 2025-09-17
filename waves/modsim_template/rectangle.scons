@@ -1,0 +1,52 @@
+#! /usr/bin/env python
+"""Rectangle compression workflow.
+
+Requires the following ``SConscript(..., exports={})``
+
+* ``env`` - The SCons construction environment with the following required keys
+
+  * ``modsim_package_abspath`` - String absolute path to the project package
+
+* ``parameters`` - The current simulation parameter set
+"""
+
+# Inherit the parent construction environment
+Import("env", "parameters")
+
+# Set project-wide paths with os-agnostic path separators
+modsim_package_abspath = env["modsim_package_abspath"]
+
+# Collect the target nodes to build concise target alias(es)
+artifacts = []
+
+# Geometry
+artifacts.extend(
+    env.AbaqusJournal(
+        target=["rectangle_geometry.cae", "rectangle_geometry.jnl"],
+        source=[modsim_package_abspath / "rectangle_geometry.py"],
+        subcommand_options="--width ${width} --height ${height}",
+        **parameters,
+    )
+)
+
+# Partition
+artifacts.extend(
+    env.AbaqusJournal(
+        target=["rectangle_partition.cae", "rectangle_partition.jnl"],
+        source=[modsim_package_abspath / "rectangle_partition.py", "rectangle_geometry.cae"],
+        subcommand_options="--width ${width} --height ${height}",
+        **parameters,
+    )
+)
+
+# Mesh
+artifacts.extend(
+    env.AbaqusJournal(
+        target=["rectangle_mesh.inp", "rectangle_mesh.cae", "rectangle_mesh.jnl"],
+        source=[modsim_package_abspath / "rectangle_mesh.py", "rectangle_partition.cae"],
+        subcommand_options="--global-seed ${global_seed}",
+        **parameters,
+    )
+)
+
+Return("artifacts")

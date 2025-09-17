@@ -40,14 +40,14 @@ Directory Structure
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Download and copy the ``tutorial_07_cartesian_product`` file to a new file named ``tutorial_07_latin_hypercube``
+4. Download and copy the ``tutorial_07_cartesian_product.scons`` file to a new file named ``tutorial_07_latin_hypercube.scons``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_07_cartesian_product && cp tutorial_07_cartesian_product tutorial_07_latin_hypercube
+   $ waves fetch --overwrite tutorials/tutorial_07_cartesian_product.scons && cp tutorial_07_cartesian_product.scons tutorial_07_latin_hypercube.scons
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -66,7 +66,7 @@ Parameter Study File
 SConscript
 **********
 
-A ``diff`` against the ``tutorial_07_cartesian_product`` file from :ref:`tutorial_cartesian_product` is included
+A ``diff`` against the ``tutorial_07_cartesian_product.scons`` file from :ref:`tutorial_cartesian_product` is included
 below to help identify the differences between the two parameter generators.
 
 .. note::
@@ -79,11 +79,11 @@ below to help identify the differences between the two parameter generators.
    generate the parameter study manually and use the :meth:`waves.parameter_generators.CustomStudy` to instantiate the
    parameter study object.
 
-.. admonition:: waves-tutorials/tutorial_07_latin_hypercube
+.. admonition:: waves-tutorials/tutorial_07_latin_hypercube.scons
 
-   .. literalinclude:: tutorials_tutorial_07_latin_hypercube
+   .. literalinclude:: tutorials_tutorial_07_latin_hypercube.scons
       :language: Python
-      :diff: tutorials_tutorial_07_cartesian_product
+      :diff: tutorials_tutorial_07_cartesian_product.scons
 
 **********
 SConstruct

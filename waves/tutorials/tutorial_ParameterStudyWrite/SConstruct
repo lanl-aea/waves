@@ -1,7 +1,7 @@
 #! /usr/bin/env python
+"""Configure the WAVES ``ParameterStudyWrite`` tutorial."""
 
 import waves
-
 
 env = Environment()
 env.AddMethod(waves.scons_extensions.parameter_study_write, "ParameterStudyWrite")

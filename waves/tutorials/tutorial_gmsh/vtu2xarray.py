@@ -1,20 +1,21 @@
-import typing
-import pathlib
+"""Open a ``ccx2paraview`` CalculiX-to-VTU output file and convert to Xarray."""
+
 import argparse
+import pathlib
 import warnings
 
-import numpy
 import meshio
+import numpy
 import xarray
 
 
 def main(
-    input_file: typing.Tuple[pathlib.Path],
+    input_file: tuple[pathlib.Path],
     output_file: pathlib.Path,
-    mesh_file: typing.Optional[pathlib.Path] = None,
-    time_points_file: typing.Optional[pathlib.Path] = None,
+    mesh_file: pathlib.Path | None = None,
+    time_points_file: pathlib.Path | None = None,
 ) -> None:
-    """Open a ``ccx2paraview`` CalculiX-to-VTU output file and convert to Xarray
+    """Open a ``ccx2paraview`` CalculiX-to-VTU output file and convert to Xarray.
 
     Assumes
 
@@ -35,7 +36,7 @@ def main(
         raise RuntimeError("If time points are provided, the length must match the number of VTU files provided")
 
     data_arrays = []
-    for infile, time in zip(input_file, time_points):
+    for infile, time in zip(input_file, time_points, strict=True):
         increment_data = []
         results = meshio.read(infile)
         coordinate = ["x", "y", "z"]
@@ -101,7 +102,7 @@ def main(
 
 
 def time_points_from_file(time_points_file: pathlib.Path) -> numpy.ndarray:
-    """Return time points array from CalculiX ``*TIME POINTS`` CSV file
+    """Return time points array from CalculiX ``*TIME POINTS`` CSV file.
 
     :param time_points_file: A CalculiX ``*TIME POINTS`` CSV file
 
@@ -116,7 +117,7 @@ def time_points_from_file(time_points_file: pathlib.Path) -> numpy.ndarray:
 
 
 def existing_file(argument: str) -> pathlib.Path:
-    """Argparse existing pathlib.Path custom type
+    """Argparse existing pathlib.Path custom type.
 
     :param argument: string argument from command line argument
 
@@ -131,6 +132,7 @@ def existing_file(argument: str) -> pathlib.Path:
 
 
 def get_parser() -> argparse.ArgumentParser:
+    """Return the command-line interface parser."""
     script_name = pathlib.Path(__file__)
     prog = f"python {script_name.name} "
     cli_description = "Open a CalculiX-to-VTU output file produced by ``ccx2paraview`` and convert to Xarray"

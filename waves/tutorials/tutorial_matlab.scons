@@ -1,0 +1,43 @@
+#! /usr/bin/env python
+"""Rectangle compression workflow.
+
+Requires the following ``SConscript(..., exports={})``
+
+* ``env`` - The SCons construction environment with the following required keys
+
+  * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
+  * ``matlab`` - String path for the Matlab executable
+"""
+
+import pathlib
+
+# Inherit the parent construction environment
+Import("env")
+
+# Simulation variables
+build_directory = pathlib.Path(Dir(".").abspath)
+workflow_name = build_directory.name
+
+# Comment used in tutorial code snippets: marker-1
+
+# Collect the target nodes to build a concise alias for all targets
+workflow = []
+
+# Matlab
+script_options = "'world'"
+workflow.extend(
+    env.MatlabScript(
+        target=["world.txt"],
+        source=["#/modsim_package/matlab/hello_world.m"],
+        script_options=script_options,
+    )
+)
+
+# Comment used in tutorial code snippets: marker-3
+
+# Collector alias based on parent directory name
+env.Alias(workflow_name, workflow)
+
+if not env["unconditional_build"] and not env["MATLAB_PROGRAM"]:
+    print(f"Program 'matlab' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+    Ignore([".", workflow_name], workflow)

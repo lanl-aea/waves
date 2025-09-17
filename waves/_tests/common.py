@@ -6,7 +6,7 @@ from waves._settings import _hash_coordinate_key, _set_coordinate_key
 
 
 def platform_check():
-    """Check platform and set platform specific variables
+    """Check platform and set platform specific variables.
 
     :return: tuple (root_fs, testing_windows)
     :rtype: (str, bool)
@@ -39,16 +39,14 @@ def self_consistency_checks(merged_study):
 
     :param Union[CartesianProduct, SobolSequence, ScipySampler, SALibSampler] merged_study: Sampler object
     """
-    assert (
-        list(merged_study._set_names.values())
-        == merged_study.parameter_study[_set_coordinate_key].values.tolist()  # noqa: W503
-    )
+    assert list(merged_study._set_names.values()) == merged_study.parameter_study[_set_coordinate_key].values.tolist()
     assert merged_study._set_hashes == merged_study.parameter_study[_hash_coordinate_key].values.tolist()
 
 
 def merge_samplers(sampler_class, first_schema, second_schema, kwargs, sampler=None):
-    """Return sampler objects based on the provided schemas and sampler class. Second sampler contains the
-    merged first sampler.
+    """Return sampler objects based on the provided schemas and sampler class.
+
+    Second sampler contains the merged first sampler.
 
     :param Union[CartesianProduct, SobolSequence, ScipySampler, SALibSampler] sampler_class: Class of the study objects
     :param dict first_schema: Dictionary containing parameter study data

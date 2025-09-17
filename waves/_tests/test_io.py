@@ -1,17 +1,15 @@
-"""System test API calls with real file I/O"""
+"""System test API calls with real file I/O."""
 
-import sys
-import shutil
-import typing
 import inspect
 import pathlib
+import shutil
+import sys
 import tempfile
 
 import pytest
 import xarray
 
 import waves
-
 
 test_previous_parameter_study_cases = {
     "int": {"int": [1]},
@@ -35,12 +33,12 @@ test_previous_parameter_study_cases = {
     ids=test_previous_parameter_study_cases.keys(),
 )
 def test_previous_parameter_study(
-    system_test_directory: typing.Optional[pathlib.Path],
+    system_test_directory: pathlib.Path | None,
     keep_system_tests: bool,
     request: pytest.FixtureRequest,
     schema: dict,
 ) -> None:
-    """Run real system I/O from the waves.parameter_generators API and check parameter study merge behaviors
+    """Run real system I/O from the waves.parameter_generators API and check parameter study merge behaviors.
 
     Test directory name is constructed from test ID string, with character replacements to create a valid Python
     identifier as a conservative estimate of a valid directory name. Failed tests persist on disk.
@@ -112,10 +110,10 @@ def test_previous_parameter_study(
 
 @pytest.mark.systemtest
 def test_qoi_example(
-    system_test_directory: typing.Optional[pathlib.Path],
+    system_test_directory: pathlib.Path | None,
     keep_system_tests: bool,
 ) -> None:
-    """Run real system I/O for the waves.qoi API
+    """Run real system I/O for the waves.qoi API.
 
     Test directory name is constructed from test ID string, with character replacements to create a valid Python
     identifier as a conservative estimate of a valid directory name. Failed tests persist on disk.

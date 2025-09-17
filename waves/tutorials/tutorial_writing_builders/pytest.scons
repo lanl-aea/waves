@@ -1,0 +1,20 @@
+#! /usr/bin/env python
+"""Configure the project pytest workflow."""
+
+# Inherit the parent construction environment
+Import("env")
+
+pytest_source_list = [
+    "test_solver.py",
+    "test_scons_extensions.py",
+]
+
+pytest_command = "pytest --junitxml=${TARGETS[0].abspath}"
+workflow = env.Command(
+    target=["test_results.xml"],
+    source=pytest_source_list,
+    action=["${pytest_command} -vvv"],
+    pytest_command=pytest_command,
+)
+env.Alias("pytest", workflow)
+env.AlwaysBuild(workflow)

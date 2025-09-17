@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-"""Extracts data from an Abaqus odb file. Writes two files 'output_file.h5' and 'output_file_datasets.h5'
+"""Extracts data from an Abaqus odb file. Writes two files 'output_file.h5' and 'output_file_datasets.h5'.
 
 Calls odbreport feature of Abaqus, parses resultant file, and creates output file. Most simulation data lives in a
 group path following the instance and set name, e.g. '/INSTANCE/FieldOutputs/ELEMENT_SET', and can be accessed with
@@ -36,29 +36,27 @@ path. The '/xarray/Dataset' group path contains a list of group paths that conta
    /xarray/          # Group with a dataset that lists the location of all data written from xarray datasets
 """
 
-import os
-import sys
-import json
-import yaml
-import shlex
-import select
-import shutil
-import typing
-import pathlib
 import datetime
+import json
+import os
+import pathlib
+import select
+import shlex
+import shutil
 import subprocess
+import sys
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 
-from waves._abaqus import _settings
-from waves._abaqus import abaqus_file_parser
-from waves._utilities import _quote_spaces_in_path
+import yaml
 
+from waves._abaqus import _settings, abaqus_file_parser
+from waves._utilities import _quote_spaces_in_path
 
 _exclude_from_namespace = set(globals().keys())
 
 
 def get_parser():
-    """Get parser object for command line options
+    """Get parser object for command line options.
 
     :return: argument parser
     :rtype: parser
@@ -130,12 +128,14 @@ def odb_extract(
     input_file: list,
     output_file: str,
     output_type: str = "h5",
-    odb_report_args: typing.Optional[str] = None,
+    odb_report_args: str | None = None,
     abaqus_command: str = _settings._default_abaqus_command,
     delete_report_file: bool = False,
     verbose: bool = False,
 ):
-    """The odb_extract Abaqus data extraction tool. Most users should use the associated command line interface.
+    """Run the odb_extract Abaqus data extraction tool.
+
+    Users should use the associated command line interface, not this API.
 
     :param input_file: A list of ``*.odb`` files to extract. Current implementation only supports extraction on the
         first file in the list.
@@ -147,7 +147,6 @@ def odb_extract(
         ``output_file``.
     :param verbose: Boolean to print more verbose messages
     """
-
     # Handle arguments
     input_file = input_file[0]
     path_input_file = pathlib.Path(input_file)
@@ -174,7 +173,7 @@ def odb_extract(
     time_stamp = datetime.datetime.now().strftime(_settings._default_timestamp_format)
     job_name = path_output_file.with_suffix(".csv")
     if path_output_file.exists():
-        new_output_file = f"{str(path_output_file.with_suffix(''))}_{time_stamp}.{file_suffix}"
+        new_output_file = f"{path_output_file.with_suffix('')!s}_{time_stamp}.{file_suffix}"
         print(f"{output_file} already exists. Will use {new_output_file} instead.", file=sys.stderr)
         output_file = new_output_file
 
@@ -196,7 +195,7 @@ def odb_extract(
     if pathlib.Path(job_name).exists() and not odbreport_file:
         call_odbreport = False  # Don't call odbreport again if the report file already exists
         print(f"Report file {job_name} already exists, would you like to use this file?")
-        i, o, e = select.select([sys.stdin], [], [], 15)  # Wait 15 seconds for user input
+        i, _o, _e = select.select([sys.stdin], [], [], 15)  # Wait 15 seconds for user input
         if i:
             answer = sys.stdin.readline().strip()
             if answer[:1].lower() != "y":
@@ -204,7 +203,7 @@ def odb_extract(
     if call_odbreport:
         if verbose:
             print(f"Running Abaqus command: '{abaqus_command}'")
-        return_code, output, error_code = run_external(abaqus_command)
+        return_code, output, _error_code = run_external(abaqus_command)
         if return_code != 0:
             sys.exit(f"Abaqus odbreport command failed to execute. Abaqus output: '{output}'")
         if not pathlib.Path(job_name).exists():
@@ -230,10 +229,10 @@ def odb_extract(
 
         # Write parsed output
         if output_type == "json":
-            with open(output_file, "w") as f:
+            with pathlib.Path(output_file).open(mode="w") as f:
                 json.dump(parsed_odb, f, indent=4)
         elif output_type == "yaml":
-            with open(output_file, "w") as f:
+            with pathlib.Path(output_file).open(mode="w") as f:
                 yaml.safe_dump(parsed_odb, f)  # With safe_dump, tuples are converted to lists
     # Remove odbreport file, don't raise exception if it doesn't exist
     if delete_report_file:
@@ -241,8 +240,7 @@ def odb_extract(
 
 
 def get_odb_report_args(odb_report_args: str, input_file: pathlib.Path, job_name: pathlib.Path):
-    """
-    Generates odb_report arguments
+    """Generate odb_report arguments.
 
     :param odb_report_args: String of command line options to pass to ``abaqus odbreport``.
     :param input_file: ``.odb`` file.
@@ -272,14 +270,13 @@ def get_odb_report_args(odb_report_args: str, input_file: pathlib.Path, job_name
 
 
 def run_external(cmd):
-    """
-    Execute an external command and get its exitcode, stdout and stderr.
+    """Execute an external command and get its exitcode, stdout and stderr.
 
     :param str cmd: command line command to run
     :returns: output, return_code, error_code
     """
     args = shlex.split(cmd, posix=(os.name == "posix"))
-    process = subprocess.run(args, capture_output=True)
+    process = subprocess.run(args, capture_output=True, check=False)
     return process.returncode, process.stdout.decode(), process.stderr.decode()
 
 

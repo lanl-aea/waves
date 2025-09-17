@@ -4,26 +4,24 @@ Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAV
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
 
+import argparse
 import io
 import os
-import re
-import sys
-import typing
 import pathlib
-import argparse
+import re
 import subprocess
+import sys
 
-import networkx
 import matplotlib.pyplot
+import networkx
 
 from waves import _settings
-
 
 _exclude_from_namespace = set(globals().keys())
 
 
 def get_parser() -> argparse.ArgumentParser:
-    """Return a 'no-help' parser for the visualize subcommand
+    """Return a 'no-help' parser for the visualize subcommand.
 
     :return: parser
     """
@@ -148,17 +146,17 @@ def get_parser() -> argparse.ArgumentParser:
 
 
 def main(
-    targets: typing.List[str],
-    scons_args: typing.Optional[list] = None,
+    targets: list[str],
+    scons_args: list | None = None,
     sconstruct: pathlib.Path = _settings._default_sconstruct,
-    output_file: typing.Optional[pathlib.Path] = None,
+    output_file: pathlib.Path | None = None,
     height: int = _settings._visualize_default_height,
     width: int = _settings._visualize_default_width,
     font_size: int = _settings._visualize_default_font_size,
     node_color: str = _settings._default_node_color,
     edge_color: str = _settings._default_edge_color,
-    exclude_list: typing.List[str] = _settings._visualize_exclude,
-    exclude_regex: typing.Optional[str] = None,
+    exclude_list: list[str] = _settings._visualize_exclude,
+    exclude_regex: str | None = None,
     print_graphml: bool = False,
     print_tree: bool = False,
     vertical: bool = False,
@@ -166,9 +164,9 @@ def main(
     node_count: bool = False,
     transparent: bool = False,
     break_paths: bool = False,
-    input_file: typing.Union[str, pathlib.Path, None] = None,
+    input_file: str | pathlib.Path | None = None,
 ) -> None:
-    """Visualize the directed acyclic graph created by a SCons build
+    """Visualize the directed acyclic graph created by a SCons build.
 
     Uses matplotlib and networkx to build out an acyclic directed graph showing the relationships of the various
     dependencies using boxes and arrows. The visualization can be saved as an svg and graphml output can be printed
@@ -211,7 +209,7 @@ def main(
         else:
             tree_output = input_file.read_text()
     else:
-        scons_command = [_settings._scons_command] + targets + [f"--sconstruct={sconstruct.name}"]
+        scons_command = [_settings._scons_command, *targets, f"--sconstruct={sconstruct.name}"]
         scons_command.extend(scons_args)
         scons_command.extend(_settings._scons_visualize_arguments)
         scons_stdout = subprocess.check_output(scons_command, cwd=sconstruct.parent)
@@ -254,9 +252,9 @@ def main(
 
 def ancestor_subgraph(
     graph: networkx.DiGraph,
-    nodes: typing.Iterable[str],
+    nodes: list[str],
 ) -> networkx.DiGraph:
-    """Return a new directed graph containing nodes and their ancestors
+    """Return a new directed graph containing nodes and their ancestors.
 
     :param graph: original directed graph
     :param nodes: iterable of nodes name strings
@@ -266,21 +264,16 @@ def ancestor_subgraph(
     :raises RuntimeError: If one or more nodes are missing from the graph
     """
     sources = set(nodes)
-    missing = list()
-    for node in nodes:
-        try:
-            sources = sources.union(networkx.ancestors(graph, node))
-        except networkx.NetworkXError:
-            missing.append(node)
-
+    missing = [node for node in nodes if not graph.has_node(node)]
     if missing:
         raise RuntimeError(f"Nodes '{' '.join(missing)}' not found in the graph")
-
+    for node in nodes:
+        sources = sources.union(networkx.ancestors(graph, node))
     return networkx.DiGraph(graph.subgraph(sources))
 
 
 def add_node_count(graph: networkx.DiGraph, text: str = "Node count: ") -> networkx.DiGraph:
-    """Add an orphan node with the total node count to a directed graph
+    """Add an orphan node with the total node count to a directed graph.
 
     The graph nodes must contain a ``layer`` attribute with integer values. Orphan node is assigned to the minimum
     layer.
@@ -296,7 +289,7 @@ def add_node_count(graph: networkx.DiGraph, text: str = "Node count: ") -> netwo
 
 
 def graph_to_graphml(graph: networkx.DiGraph) -> str:
-    """Return the networkx graphml text
+    """Return the networkx graphml text.
 
     :param graph: networkx directed graph
     """
@@ -307,13 +300,13 @@ def graph_to_graphml(graph: networkx.DiGraph) -> str:
 
 
 def parse_output(
-    tree_lines: typing.List[str],
-    exclude_list: typing.List[str] = _settings._visualize_exclude,
-    exclude_regex: typing.Optional[str] = None,
+    tree_lines: list[str],
+    exclude_list: list[str] = _settings._visualize_exclude,
+    exclude_regex: str | None = None,
     no_labels: bool = False,
     break_paths: bool = False,
 ) -> networkx.DiGraph:
-    """Parse the string that has the tree output and return as a networkx directed graph
+    """Parse the string that has the tree output and return as a networkx directed graph.
 
     :param tree_lines: output of the scons tree command pre-split on newlines to a list of strings
     :param exclude_list: exclude nodes starting with strings in this list(e.g. /usr/bin)
@@ -326,7 +319,7 @@ def parse_output(
     :raises RuntimeError: If the parsed input doesn't contain recognizable SCons nodes
     """
     graph = networkx.DiGraph()
-    higher_nodes = dict()
+    higher_nodes = {}
     exclude_node = False
     exclude_indent = 0
     for line in tree_lines:
@@ -385,8 +378,8 @@ def check_regex_exclude(
     current_indent: int,
     exclude_indent: int,
     exclude_node: bool = False,
-) -> typing.Tuple[bool, int]:
-    """Excludes node names that match the regular expression
+) -> tuple[bool, int]:
+    """Excludes node names that match the regular expression.
 
     :param str exclude_regex: Regular expression
     :param str node_name: Name of the node
@@ -411,7 +404,7 @@ def visualize(
     edge_color: str = _settings._default_edge_color,
     vertical: bool = False,
 ) -> matplotlib.figure.Figure:
-    """Create a visualization showing the tree
+    """Create a visualization showing the tree.
 
     Nodes in graph require the ``layer`` and ``label`` attributes.
 
@@ -421,7 +414,7 @@ def visualize(
     :param font_size: Font size of file names in points
     :param vertical: Specifies a vertical layout of graph instead of the default horizontal layout
     """
-    multipartite_kwargs = dict(align="vertical")
+    multipartite_kwargs = {"align": "vertical"}
     if vertical:
         multipartite_kwargs.update({"align": "horizontal"})
     node_positions = networkx.multipartite_layout(graph, subset_key="layer", **multipartite_kwargs)
@@ -437,22 +430,26 @@ def visualize(
         graph.edges(), key=lambda edge: min(graph.nodes[edge[0]]["layer"], graph.nodes[edge[1]]["layer"])
     )
 
-    patch_kwargs = dict(
-        xycoords="data",
-        ha="center",
-        va="center",
-        size=font_size,
-        bbox=dict(facecolor=node_color, boxstyle="round"),
-    )
+    patch_kwargs = {
+        "xycoords": "data",
+        "ha": "center",
+        "va": "center",
+        "size": font_size,
+        "bbox": {"facecolor": node_color, "boxstyle": "round"},
+    }
 
     # Labels are written on top of existing nodes, which are laid out by networkx
     for source, target in sorted_edges:
         patch_a = axes.annotate(graph.nodes[target]["label"], xy=node_positions[target], **patch_kwargs)
         patch_b = axes.annotate(graph.nodes[source]["label"], xy=node_positions[source], **patch_kwargs)
 
-        arrowprops = dict(
-            arrowstyle="<-", color=edge_color, connectionstyle="arc3,rad=0.1", patchA=patch_a, patchB=patch_b
-        )
+        arrowprops = {
+            "arrowstyle": "<-",
+            "color": edge_color,
+            "connectionstyle": "arc3,rad=0.1",
+            "patchA": patch_a,
+            "patchB": patch_b,
+        }
 
         axes.annotate(
             "",
@@ -475,10 +472,10 @@ def visualize(
 
 def plot(
     figure: matplotlib.figure.Figure,
-    output_file: typing.Optional[pathlib.Path] = None,
+    output_file: pathlib.Path | None = None,
     transparent: bool = False,
 ) -> None:
-    """Open a matplotlib plot or save to file
+    """Open a matplotlib plot or save to file.
 
     :param figure: The matplotlib figure
     :param output_file: File for saving the visualization

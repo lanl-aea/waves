@@ -1,0 +1,212 @@
+#! /usr/bin/env python
+"""Rectangle compression workflow.
+
+Requires the following ``SConscript(..., exports={})``
+
+* ``env`` - The SCons construction environment with the following required keys
+
+  * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
+  * ``regression_alias`` - String for the alias collecting the regression test suite targets
+  * ``archive_prefix`` - String prefix for archive target(s) containing identifying project and version information
+  * ``project_configuration`` - String absolute path to the project SCons configuration file
+  * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
+  * ``abaqus`` - String path for the Abaqus executable
+"""
+
+import pathlib
+
+import waves
+
+from modsim_package.python.rectangle_compression_sensitivity_study import parameter_schema
+
+# Inherit the parent construction environment
+Import("env")
+
+# Comment used in tutorial code snippets: marker-1
+
+# Simulation variables
+build_directory = pathlib.Path(Dir(".").abspath)
+workflow_name = build_directory.name
+workflow_configuration = [env["project_configuration"], workflow_name]
+parameter_study_file = build_directory / "parameter_study.h5"
+simulation_constants = {
+    "global_seed": 1,
+    "displacement": -0.01,
+}
+kwargs = {
+    "seed": 42,
+    "calc_second_order": False,
+}
+
+# Collect the target nodes to build a concise alias for all targets
+workflow = []
+datacheck = []
+
+# Comment used in tutorial code snippets: marker-2
+
+# Parameter Study with SALib Sobol sequence sampler
+parameter_generator = waves.parameter_generators.SALibSampler(
+    "sobol",
+    parameter_schema(),
+    output_file=parameter_study_file,
+    previous_parameter_study=parameter_study_file,
+    **kwargs,
+)
+parameter_generator.write()
+
+# Comment used in tutorial code snippets: marker-3
+
+# Parameterized targets must live inside current simulation_variables for loop
+for set_name, parameters in parameter_generator.parameter_study_to_dict().items():
+    set_path = pathlib.Path(set_name)
+    simulation_variables = {**parameters, **simulation_constants}
+
+    # Comment used in tutorial code snippets: marker-4
+
+    # Geometry
+    workflow.extend(
+        env.AbaqusJournal(
+            target=[set_path / "rectangle_geometry.cae", set_path / "rectangle_geometry.jnl"],
+            source=["#/modsim_package/abaqus/rectangle_geometry.py"],
+            subcommand_options="--width ${width} --height ${height}",
+            **simulation_variables,
+        )
+    )
+
+    # Partition
+    workflow.extend(
+        env.AbaqusJournal(
+            target=[set_path / "rectangle_partition.cae", set_path / "rectangle_partition.jnl"],
+            source=["#/modsim_package/abaqus/rectangle_partition.py", set_path / "rectangle_geometry.cae"],
+            subcommand_options="--width ${width} --height ${height}",
+            **simulation_variables,
+        )
+    )
+
+    # Mesh
+    workflow.extend(
+        env.AbaqusJournal(
+            target=[
+                set_path / "rectangle_mesh.inp",
+                set_path / "rectangle_mesh.cae",
+                set_path / "rectangle_mesh.jnl",
+            ],
+            source=["#/modsim_package/abaqus/rectangle_mesh.py", set_path / "rectangle_partition.cae"],
+            subcommand_options="--global-seed ${global_seed}",
+            **simulation_variables,
+        )
+    )
+
+    # SolverPrep
+    copy_source_list = [
+        "#/modsim_package/abaqus/rectangle_compression.inp.in",
+        "#/modsim_package/abaqus/assembly.inp",
+        "#/modsim_package/abaqus/boundary.inp",
+        "#/modsim_package/abaqus/field_output.inp",
+        "#/modsim_package/abaqus/materials.inp",
+        "#/modsim_package/abaqus/parts.inp",
+        "#/modsim_package/abaqus/history_output.inp",
+    ]
+    workflow.extend(
+        env.CopySubstfile(
+            copy_source_list,
+            substitution_dictionary=env.SubstitutionSyntax(simulation_variables),
+            build_subdirectory=set_path,
+        )
+    )
+
+    # Comment used in tutorial code snippets: marker-5
+
+    # Abaqus Solve
+    solve_source_list = [
+        set_path / "rectangle_compression.inp",
+        set_path / "assembly.inp",
+        set_path / "boundary.inp",
+        set_path / "field_output.inp",
+        set_path / "materials.inp",
+        set_path / "parts.inp",
+        set_path / "history_output.inp",
+        set_path / "rectangle_mesh.inp",
+    ]
+
+    datacheck.extend(
+        env.AbaqusSolver(
+            target=[
+                set_path / "rectangle_compression_DATACHECK.odb",
+                set_path / "rectangle_compression_DATACHECK.dat",
+                set_path / "rectangle_compression_DATACHECK.msg",
+                set_path / "rectangle_compression_DATACHECK.com",
+                set_path / "rectangle_compression_DATACHECK.prt",
+                set_path / "rectangle_compression_DATACHECK.023",
+                set_path / "rectangle_compression_DATACHECK.mdl",
+                set_path / "rectangle_compression_DATACHECK.sim",
+                set_path / "rectangle_compression_DATACHECK.stt",
+            ],
+            source=solve_source_list,
+            job="rectangle_compression_DATACHECK",
+            program_options="-double both -datacheck",
+        )
+    )
+
+    workflow.extend(
+        env.AbaqusSolver(
+            target=[
+                set_path / "rectangle_compression.odb",
+                set_path / "rectangle_compression.dat",
+                set_path / "rectangle_compression.msg",
+                set_path / "rectangle_compression.com",
+                set_path / "rectangle_compression.prt",
+                set_path / "rectangle_compression.sta",
+            ],
+            source=solve_source_list,
+            job="rectangle_compression",
+            program_options="-double both",
+        )
+    )
+
+    # Extract Abaqus
+    extract_source_list = [set_path / "rectangle_compression.odb"]
+    workflow.extend(
+        env.AbaqusExtract(
+            target=[set_path / "rectangle_compression.h5"],
+            source=extract_source_list,
+        )
+    )
+
+# Comment used in tutorial code snippets: marker-6
+
+# Post-processing
+post_processing_source = [
+    pathlib.Path(set_name) / "rectangle_compression_datasets.h5"
+    for set_name in parameter_generator.parameter_study_to_dict()
+]
+script_options = "--input-file ${SOURCES[2:].abspath}"
+script_options += " --output-file ${TARGET.file}"
+script_options += " --parameter-study-file ${SOURCES[1].abspath}"
+workflow.extend(
+    env.PythonScript(
+        target=["sensitivity_study.pdf", "sensitivity_study.csv", "sensitivity_study.yaml"],
+        source=["#/modsim_package/python/sensitivity_study.py", parameter_study_file.name, *post_processing_source],
+        subcommand_options=script_options,
+    )
+)
+
+# Data archival
+archive_name = f"{env['archive_prefix']}-{workflow_name}.tar.bz2"
+archive_target = env.Tar(
+    target=archive_name,
+    source=workflow + workflow_configuration,
+)
+
+# Collector alias based on parent directory name
+env.Alias(workflow_name, workflow)
+env.Alias(f"{workflow_name}_datacheck", datacheck)
+env.Alias(env["datacheck_alias"], datacheck)
+env.Alias(env["regression_alias"], datacheck)
+env.Alias(f"{workflow_name}_archive", archive_target)
+
+if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+    Ignore([".", workflow_name], workflow)
+    Ignore([".", f"{workflow_name}_datacheck"], datacheck)
+    Ignore([".", env["datacheck_alias"], env["regression_alias"]], datacheck)

@@ -1,7 +1,9 @@
 #!/usr/bin/env python
-import sys
-import pathlib
+"""Compare CSV files and return an error code if they differ."""
+
 import argparse
+import pathlib
+import sys
 
 import pandas
 import yaml
@@ -14,7 +16,7 @@ def main(
     second_file: pathlib.Path,
     output_file: pathlib.Path,
 ) -> None:
-    """Compare CSV files and return an error code if they differ
+    """Compare CSV files and return an error code if they differ.
 
     :param first_file: path-like or file-like object containing the first CSV dataset
     :param second_file: path-like or file-like object containing the second CSV dataset
@@ -26,7 +28,7 @@ def main(
     second_data = pandas.read_csv(second_file)
     regression_results.update({"CSV comparison": modsim_package.utilities.csv_files_match(first_data, second_data)})
 
-    with open(output_file, "w") as output:
+    with output_file.open(mode="w") as output:
         output.write(yaml.safe_dump(regression_results))
 
     if len(regression_results.values()) < 1 or not all(regression_results.values()):
@@ -34,7 +36,7 @@ def main(
 
 
 def get_parser() -> argparse.ArgumentParser:
-    """Return parser for CLI options
+    """Return parser for CLI options.
 
     All options should use the double-hyphen ``--option VALUE`` syntax to avoid clashes with the Abaqus option syntax,
     including flag style arguments ``--flag``. Single hyphen ``-f`` flag syntax often clashes with the Abaqus command

@@ -1,13 +1,15 @@
-import sys
-import shutil
-import pathlib
+"""Mesh the simple rectangle geometry partitioned by ``rectangle_partition.py``."""
+
 import argparse
+import pathlib
+import shutil
+import sys
 
 import cubit
 
 
-def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaqus"):
-    """Mesh the simple rectangle geometry partitioned by ``rectangle_partition.py``
+def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaqus") -> None:
+    """Mesh the simple rectangle geometry partitioned by ``rectangle_partition.py``.
 
     This script meshes a simple Cubit model with a single rectangle part.
 
@@ -66,7 +68,8 @@ def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaq
         raise RuntimeError(f"Uknown solver '{solver}'")
 
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
+    """Return the command-line interface parser."""
     script_name = pathlib.Path(__file__)
     # Set default parameter values
     default_input_file = script_name.with_suffix(".cub").name.replace("_mesh", "_partition")
@@ -85,20 +88,20 @@ def get_parser():
         "--input-file",
         type=str,
         default=default_input_file,
-        # fmt: off
-        help="The Cubit model file created by ``rectangle_partition.py``. "
-             "Will be stripped of the extension and ``.cub`` will be used, e.g. ``input_file``.cub "
-             "(default: %(default)s",
-        # fmt: on
+        help=(
+            "The Cubit model file created by ``rectangle_partition.py``. "
+            "Will be stripped of the extension and ``.cub`` will be used, e.g. ``input_file``.cub "
+            "(default: %(default)s"
+        ),
     )
     parser.add_argument(
         "--output-file",
         type=str,
         default=default_output_file,
-        # fmt: off
-        help="The output file for the Cubit model. "
-             "Will be stripped of the extension and ``.cub`` will be used, e.g. ``output_file``.cub",
-        # fmt: on
+        help=(
+            "The output file for the Cubit model. "
+            "Will be stripped of the extension and ``.cub`` will be used, e.g. ``output_file``.cub"
+        ),
     )
     parser.add_argument(
         "--global-seed",
@@ -110,7 +113,7 @@ def get_parser():
         "--element-type",
         type=str,
         default=default_element_type,
-        help="The model element type. Must be a supported Cubit 4 node element type. " "(default: %(default)s)",
+        help="The model element type. Must be a supported Cubit 4 node element type. (default: %(default)s)",
     )
     parser.add_argument(
         "--solver",

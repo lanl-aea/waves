@@ -1,23 +1,28 @@
-"""Parameter sets and schemas for the rectangle compression simulation"""
+"""Parameter sets and schemas for the rectangle compression simulation."""
+
+import types
+import typing
+
+default_width = types.MappingProxyType({"distribution": "uniform", "loc": 0.9, "scale": 0.2})
+default_height = types.MappingProxyType({"distribution": "uniform", "loc": 0.9, "scale": 0.2})
 
 
 def parameter_schema(
-    num_simulations=4,
-    width={"distribution": "uniform", "loc": 0.9, "scale": 0.2},
-    height={"distribution": "uniform", "loc": 0.9, "scale": 0.2},
-):
-    """Return WAVES Scipy Sobol parameter schema
+    num_simulations: int = 4,
+    width: dict[str, typing.Any] | types.MappingProxyType = default_width,
+    height: dict[str, typing.Any] | types.MappingProxyType = default_height,
+) -> dict[str, typing.Any]:
+    """Return WAVES SciPy Sobol parameter schema.
 
-    :param int num_simulations: Number of samples to generate
-    :param dict width: The rectangle width Scipy distribution definition
-    :param dict height: The rectangle height Scipy distribution definition
+    :param num_simulations: Number of samples to generate
+    :param width: The rectangle width SciPy distribution definition
+    :param height: The rectangle height SciPy distribution definition
 
-    :returns: WAVES Scipy Sobol parameter schema
-    :rtype: dict
+    :returns: WAVES SciPy Sobol parameter schema
     """
     schema = {
         "num_simulations": num_simulations,
-        "width": width,
-        "height": height,
+        "width": dict(width),
+        "height": dict(height),
     }
     return schema

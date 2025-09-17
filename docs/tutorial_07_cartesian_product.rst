@@ -64,7 +64,7 @@ Directory Structure
                WAVES fetch
                Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
-4. Download and copy the ``tutorial_06_include_files`` file to a new file named ``tutorial_07_cartesian_product``
+4. Download and copy the ``tutorial_06_include_files.scons`` file to a new file named ``tutorial_07_cartesian_product.scons``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. only:: not epub
@@ -79,7 +79,7 @@ Directory Structure
 
             $ pwd
             /home/roppenheimer/waves-tutorials
-            $ waves fetch --overwrite tutorials/tutorial_06_include_files && cp tutorial_06_include_files tutorial_07_cartesian_product
+            $ waves fetch --overwrite tutorials/tutorial_06_include_files.scons && cp tutorial_06_include_files.scons tutorial_07_cartesian_product.scons
             WAVES fetch
             Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -94,7 +94,7 @@ Directory Structure
             ----
             C:\Users\roppenheimer\waves-tutorials
 
-            PS > waves fetch --overwrite tutorials\tutorial_06_include_files && Copy-Item tutorial_06_include_files tutorial_07_cartesian_product
+            PS > waves fetch --overwrite tutorials\tutorial_06_include_files.scons && Copy-Item tutorial_06_include_files.scons tutorial_07_cartesian_product.scons
             WAVES fetch
             Destination directory: 'C:\Users\roppenheimer\waves-tutorials'
 
@@ -146,17 +146,17 @@ wholesale copy and paste when creating the new ``SConscript`` file.
 .. note::
 
    In the :ref:`tutorial_cartesian_product_waves_directory_structure` section of this tutorial, you were instructed to
-   copy the ``tutorial_06_include_files`` file to the ``tutorial_07_cartesian_product`` file. If you prefer, you may
-   start with a blank ``tutorial_07_cartesian_product`` file and simply copy and paste the contents below into your
+   copy the ``tutorial_06_include_files.scons`` file to the ``tutorial_07_cartesian_product.scons`` file. If you prefer, you may
+   start with a blank ``tutorial_07_cartesian_product.scons`` file and simply copy and paste the contents below into your
    blank file.
 
 After viewing the full file contents below, continue to read the
 :ref:`tutorial_cartesian_product_waves_step_by_step_sconscript_discussion` for building the
-``tutorial_07_cartesian_product`` file from scratch.
+``tutorial_07_cartesian_product.scons`` file from scratch.
 
-.. admonition:: waves-tutorials/tutorial_07_cartesian_product
+.. admonition:: waves-tutorials/tutorial_07_cartesian_product.scons
 
-   .. literalinclude:: tutorials_tutorial_07_cartesian_product
+   .. literalinclude:: tutorials_tutorial_07_cartesian_product.scons
       :language: Python
 
 .. _tutorial_cartesian_product_waves_step_by_step_sconscript_discussion:
@@ -164,9 +164,9 @@ After viewing the full file contents below, continue to read the
 Step-By-Step SConscript Discussion
 ==================================
 
-.. admonition:: waves-tutorials/tutorial_07_cartesian_product
+.. admonition:: waves-tutorials/tutorial_07_cartesian_product.scons
 
-   .. literalinclude:: tutorials_tutorial_07_cartesian_product
+   .. literalinclude:: tutorials_tutorial_07_cartesian_product.scons
       :language: Python
       :lineno-match:
       :end-before: marker-1
@@ -181,9 +181,9 @@ look familiar, but is worth pointing out again. Here, we import the ``env`` vari
 environment. This will provide access to variables we added to the ``SConstruct`` file's ``project_variables``
 dictionary in previous tutorials.
 
-.. admonition:: waves-tutorials/tutorial_07_cartesian_product
+.. admonition:: waves-tutorials/tutorial_07_cartesian_product.scons
 
-   .. literalinclude:: tutorials_tutorial_07_cartesian_product
+   .. literalinclude:: tutorials_tutorial_07_cartesian_product.scons
       :language: Python
       :lineno-match:
       :start-after: marker-1
@@ -192,9 +192,9 @@ dictionary in previous tutorials.
 Most of the code snippet has been seen before. The ``parameter_study_file`` variable will allow the parameter generator
 to extend previously executed parameter studies without re-computing existing parameter set output files.
 
-.. admonition:: waves-tutorials/tutorial_07_cartesian_product
+.. admonition:: waves-tutorials/tutorial_07_cartesian_product.scons
 
-   .. literalinclude:: tutorials_tutorial_07_cartesian_product
+   .. literalinclude:: tutorials_tutorial_07_cartesian_product.scons
       :language: Python
       :lineno-match:
       :start-after: marker-2
@@ -217,9 +217,9 @@ study file whenever the contents of the parameter study have changed. The conten
 ``previous_parameter_study`` file if it exists. The conditional re-write behavior will be important for
 post-processing tasks introduced in :ref:`tutorial_post_processing`.
 
-.. admonition:: waves-tutorials/tutorial_07_cartesian_product
+.. admonition:: waves-tutorials/tutorial_07_cartesian_product.scons
 
-   .. literalinclude:: tutorials_tutorial_07_cartesian_product
+   .. literalinclude:: tutorials_tutorial_07_cartesian_product.scons
       :language: Python
       :lineno-match:
       :start-after: marker-3
@@ -242,9 +242,9 @@ is a dictionary whose keys are the names of the parameters and whose values are 
 is used again when passing the simulation variables dictionary to the :meth:`waves.scons_extensions.copy_substfile` method for
 text file parameter substitution.
 
-.. admonition:: waves-tutorials/tutorial_07_cartesian_product
+.. admonition:: waves-tutorials/tutorial_07_cartesian_product.scons
 
-   .. literalinclude:: tutorials_tutorial_07_cartesian_product
+   .. literalinclude:: tutorials_tutorial_07_cartesian_product.scons
       :language: Python
       :lineno-match:
       :start-after: marker-4
@@ -263,9 +263,9 @@ Note the following two important aspects of the code above:
   :meth:`waves.scons_extensions.substitution_syntax` method to modify the parameter name keys for parameter substitution in text
   files.
 
-.. admonition:: waves-tutorials/tutorial_07_cartesian_product
+.. admonition:: waves-tutorials/tutorial_07_cartesian_product.scons
 
-   .. literalinclude:: tutorials_tutorial_07_cartesian_product
+   .. literalinclude:: tutorials_tutorial_07_cartesian_product.scons
       :language: Python
       :lineno-match:
       :start-after: marker-5
@@ -277,9 +277,9 @@ the parameter set directory, ``set_name``, as part of source and target definiti
 code is still within the ``for`` loop, so the Abaqus Solver will be called as many times as we have parameter sets. In
 this case, we will solve four Abaqus simulations.
 
-.. admonition:: waves-tutorials/tutorial_07_cartesian_product
+.. admonition:: waves-tutorials/tutorial_07_cartesian_product.scons
 
-   .. literalinclude:: tutorials_tutorial_07_cartesian_product
+   .. literalinclude:: tutorials_tutorial_07_cartesian_product.scons
       :language: Python
       :lineno-match:
       :start-after: marker-6

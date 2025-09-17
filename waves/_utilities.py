@@ -8,37 +8,36 @@ message and non-zero exit codes.
 """
 
 import os
-import re
-import sys
-import shutil
-import string
-import typing
 import pathlib
 import platform
-import warnings
+import re
+import shutil
+import string
 import subprocess
+import sys
+import typing
+import warnings
 
 import yaml
 
 from waves import _settings
 
-
 _exclude_from_namespace = set(globals().keys())
 
 
 class _AtSignTemplate(string.Template):
-    """Use the CMake '@' delimiter in a Python 'string.Template' to avoid clashing with bash variable syntax"""
+    """Use the CMake '@' delimiter in a Python 'string.Template' to avoid clashing with bash variable syntax."""
 
     delimiter = _settings._template_delimiter
 
 
 def set_name_substitution(
-    original: typing.Union[typing.Iterable[typing.Union[str, pathlib.Path]], str, pathlib.Path],
+    original: typing.Iterable[str | pathlib.Path] | str | pathlib.Path,
     replacement: str,
     identifier: str = "set_name",
     suffix: str = "/",
-) -> typing.Union[typing.List[typing.Union[str, pathlib.Path]], str, pathlib.Path]:
-    """Replace ``@identifier`` with replacement text in a list of strings and pathlib Path objects
+) -> list[str | pathlib.Path] | str | pathlib.Path:
+    """Replace ``@identifier`` with replacement text in a list of strings and pathlib Path objects.
 
     If the original is not a string, Path, or an iterable of strings and Paths, return without modification.
 
@@ -54,20 +53,20 @@ def set_name_substitution(
         return _AtSignTemplate(original).safe_substitute(mapping)
     elif isinstance(original, pathlib.Path):
         return pathlib.Path(_AtSignTemplate(str(original)).safe_substitute(mapping))
-    elif isinstance(original, (list, set, tuple)) and all(isinstance(item, (str, pathlib.Path)) for item in original):
-        modified = list()
+    elif isinstance(original, list | set | tuple) and all(isinstance(item, str | pathlib.Path) for item in original):
+        modified = []
         for node in original:
-            try:
-                modified.append(_AtSignTemplate(node).safe_substitute(mapping))
-            except TypeError:
+            if isinstance(node, pathlib.Path):
                 modified.append(pathlib.Path(_AtSignTemplate(str(node)).safe_substitute(mapping)))
+            else:
+                modified.append(_AtSignTemplate(node).safe_substitute(mapping))
         return modified
     else:
         return original
 
 
-def _quote_spaces_in_path(path: typing.Union[str, pathlib.Path]) -> pathlib.Path:
-    """Traverse parts of a path and place in double quotes if there are spaces in the part
+def _quote_spaces_in_path(path: str | pathlib.Path) -> pathlib.Path:
+    """Traverse parts of a path and place in double quotes if there are spaces in the part.
 
     >>> import pathlib
     >>> import waves
@@ -83,12 +82,14 @@ def _quote_spaces_in_path(path: typing.Union[str, pathlib.Path]) -> pathlib.Path
     new_path = pathlib.Path(path.root)
     for part in path.parts:
         if " " in part:
-            part = f'"{part}"'
-        new_path = new_path / part
+            new_part = f'"{part}"'
+        else:
+            new_part = part
+        new_path = new_path / new_part
     return new_path
 
 
-def search_commands(options: typing.Iterable[str]) -> typing.Optional[str]:
+def search_commands(options: typing.Iterable[str]) -> str | None:
     """Return the first found command in the list of options. Return None if none are found.
 
     :param list options: executable path(s) to test
@@ -116,7 +117,7 @@ def find_command(options: typing.Iterable[str]) -> str:
 
 
 def cubit_os_bin() -> str:
-    """Return the OS specific Cubit bin directory name
+    """Return the OS specific Cubit bin directory name.
 
     Making Cubit importable requires putting the Cubit bin directory on PYTHONPATH. On MacOS, the directory is "MacOS".
     On other systems it is "bin".
@@ -133,8 +134,8 @@ def cubit_os_bin() -> str:
     return bin_directory
 
 
-def find_cubit_bin(options: typing.Iterable[str], bin_directory: typing.Optional[str] = None) -> pathlib.Path:
-    """Provided a few options for the Cubit executable, search for the bin directory.
+def find_cubit_bin(options: typing.Iterable[str], bin_directory: str | None = None) -> pathlib.Path:
+    """Search for the Cubit bin directory given a few options for the Cubit executable.
 
     Recommend first checking to see if cubit will import.
 
@@ -163,14 +164,14 @@ def find_cubit_bin(options: typing.Iterable[str], bin_directory: typing.Optional
     else:
         search = cubit_bin.rglob(bin_directory)
         try:
-            cubit_bin = next((path for path in search if path.name == bin_directory))
-        except StopIteration:
-            raise FileNotFoundError(message)
+            cubit_bin = next(path for path in search if path.name == bin_directory)
+        except StopIteration as err:
+            raise FileNotFoundError(message) from err
     return cubit_bin
 
 
 def find_cubit_python(options: typing.Iterable[str], python_command: str = "python3*") -> pathlib.Path:
-    """Provided a few options for the Cubit executable, search for the Cubit Python interpreter.
+    """Search for the Cubit Python interpreter given a few options for the Cubit executable.
 
     Recommend first checking to see if cubit will import.
 
@@ -191,22 +192,22 @@ def find_cubit_python(options: typing.Iterable[str], python_command: str = "pyth
     cubit_parent = pathlib.Path(cubit_command).parent
     search = cubit_parent.rglob(python_command)
     try:
-        cubit_python = next((path for path in search if path.is_file() and os.access(path, os.X_OK)))
-    except StopIteration:
-        raise FileNotFoundError(message)
+        cubit_python = next(path for path in search if path.is_file() and os.access(path, os.X_OK))
+    except StopIteration as err:
+        raise FileNotFoundError(message) from err
     return cubit_python
 
 
-def tee_subprocess(command: typing.List[str], **kwargs) -> typing.Tuple[int, str]:
-    """Stream STDOUT to terminal while saving buffer to variable
+def tee_subprocess(command: list[str], **kwargs) -> tuple[int, str]:
+    """Stream STDOUT to terminal while saving buffer to variable.
 
     :param command: Command to execute provided a list of strings
     :param dict kwargs: Any additional keyword arguments are passed through to subprocess.Popen
 
     :returns: integer return code, string STDOUT
     """
-    from io import StringIO
     import subprocess
+    from io import StringIO
 
     with (
         subprocess.Popen(command, stdout=subprocess.PIPE, bufsize=1, text=True, **kwargs) as process,
@@ -226,7 +227,7 @@ def return_environment(
     separator: str = "&&",
     environment: str = "env -0",
 ) -> dict:
-    """Run a shell command and return the shell environment as a dictionary
+    """Run a shell command and return the shell environment as a dictionary.
 
     .. code-block::
 
@@ -261,7 +262,7 @@ def return_environment(
         first_key = first_key.rsplit("\n")[-1]
     variables[0] = f"{first_key}={first_value}"
 
-    environment = dict()
+    environment = {}
     for line in variables:
         if line != "":
             key, value = line.split("=", 1)
@@ -273,11 +274,11 @@ def return_environment(
 def cache_environment(
     command: str,
     shell: str = "bash",
-    cache: typing.Optional[typing.Union[str, pathlib.Path]] = None,
+    cache: str | pathlib.Path | None = None,
     overwrite_cache: bool = False,
     verbose: bool = False,
 ) -> dict:
-    """Retrieve cached environment dictionary or run a shell command to generate environment dictionary
+    """Retrieve cached environment dictionary or run a shell command to generate environment dictionary.
 
     .. warning::
 
@@ -315,7 +316,7 @@ def cache_environment(
     if cache and cache.exists() and not overwrite_cache:
         if verbose:
             print(f"Sourcing the shell environment from cached file '{cache}' ...")
-        with open(cache, "r") as cache_file:
+        with pathlib.Path(cache).open(mode="r") as cache_file:
             environment = yaml.safe_load(cache_file)
     else:
         if verbose:
@@ -327,14 +328,14 @@ def cache_environment(
             raise err
 
     if cache:
-        with open(cache, "w") as cache_file:
+        with pathlib.Path(cache).open(mode="w") as cache_file:
             yaml.safe_dump(environment, cache_file)
 
     return environment
 
 
 def create_valid_identifier(identifier: str) -> str:
-    """Create a valid Python identifier from an arbitray string by replacing invalid characters with underscores
+    """Create a valid Python identifier from an arbitray string by replacing invalid characters with underscores.
 
     :param identifier: String to convert to valid Python identifier
     """
@@ -342,7 +343,7 @@ def create_valid_identifier(identifier: str) -> str:
 
 
 def warn_only_once(function):
-    """Decorator to suppress warnings raised by successive function calls
+    """Suppress warnings raised by successive function calls.
 
     :param function: The function to wrap
 
@@ -351,7 +352,7 @@ def warn_only_once(function):
     function.already_warned = False
 
     def wrapper(*args, **kwargs):
-        """Wrapper logic for the function warning suppression
+        """Add wrapper logic for the function warning suppression.
 
         :param args: all positional arguments passed through to wrapped function
         :param kwargs: all keyword arguments passed through to wrapped function

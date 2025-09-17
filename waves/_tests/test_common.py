@@ -1,9 +1,8 @@
-from unittest.mock import patch, Mock
+from unittest.mock import Mock, patch
 
 import pytest
 
 from waves._tests import common
-
 
 test_platform_check_cases = {
     "linux": ("Linux", False, "/", False),
@@ -13,7 +12,7 @@ test_platform_check_cases = {
 
 
 @pytest.mark.parametrize(
-    "mock_system, expected_testing_windows, expected_root_fs, expected_testing_macos",
+    ("mock_system", "expected_testing_windows", "expected_root_fs", "expected_testing_macos"),
     test_platform_check_cases.values(),
     ids=test_platform_check_cases.keys(),
 )

@@ -1,6 +1,8 @@
 #! /usr/bin/env python
-import re
+"""Configure the documentation build(s)."""
+
 import pathlib
+import re
 
 import SCons.Scanner
 
@@ -10,7 +12,8 @@ Import(["env", "project_substitution_dictionary"])
 
 # VVV Sphinx prototypes
 # DO NOT 'bootstrap' by importing the current/repository version of WAVES. That's not bootstrapping, it's a bug factory
-def sphinx_scanner():
+def sphinx_scanner() -> SCons.Scanner.Scanner:
+    """Return an SCons Sphinx implicit scanner."""
     suffixes = [".rst", ".txt"]
     flags = re.MULTILINE
     expression = re.compile(r"^\s*\.\. (?:include|literalinclude|figure|bibliography)::\s*(.+)$", flags)
@@ -18,17 +21,17 @@ def sphinx_scanner():
     def suffix_only(node_list):
         return [node for node in node_list if node.path.endswith(tuple(suffixes))]
 
-    def regex_scan(node, env, path):
+    def regex_scan(node, env, path):  # noqa: ARG001
         contents = node.get_text_contents()
         includes = expression.findall(contents)
         includes = [file.strip() for file in includes]
         return includes
 
-    custom_scanner = SCons.Scanner.Scanner(function=regex_scan, skeys=suffixes, recursive=suffix_only)
-    return custom_scanner
+    return SCons.Scanner.Scanner(function=regex_scan, skeys=suffixes, recursive=suffix_only)
 
 
-def sphinx_build(program="sphinx-build", options="", builder="html", tags=""):
+def sphinx_build(program: str = "sphinx-build", options: str = "", builder: str = "html", tags: str = "") -> list:
+    """Return an SCons Sphinx builder targets."""
     sphinx_builder = Builder(
         action=["${program} ${options} -b ${builder} ${TARGET.dir.dir.abspath} ${TARGET.dir.abspath} ${tags}"],
         program=program,
@@ -39,7 +42,10 @@ def sphinx_build(program="sphinx-build", options="", builder="html", tags=""):
     return sphinx_builder
 
 
-def sphinx_latexpdf(program="sphinx-build", options="", builder="latexpdf", tags=""):
+def sphinx_latexpdf(
+    program: str = "sphinx-build", options: str = "", builder: str = "latexpdf", tags: str = ""
+) -> list:
+    """Return an SCons Sphinx LaTeX PDF builder targets."""
     sphinx_latex = SCons.Builder.Builder(
         action=["${program} -M ${builder} ${TARGET.dir.dir.abspath} ${TARGET.dir.dir.abspath} ${tags} ${options}"],
         program=program,
@@ -173,59 +179,58 @@ documentation_file_list = [
 # Copy tutorial files to the build/docs directory
 tutorial_files_list = [
     env["tutorials_dir"] / "tutorial_00_SConstruct",
-    env["tutorials_dir"] / "tutorial_01_geometry",
+    env["tutorials_dir"] / "tutorial_01_geometry.scons",
     env["tutorials_dir"] / "tutorial_01_geometry_SConstruct",
-    env["tutorials_dir"] / "tutorial_02_partition_mesh",
+    env["tutorials_dir"] / "tutorial_02_partition_mesh.scons",
     env["tutorials_dir"] / "tutorial_02_partition_mesh_SConstruct",
-    env["tutorials_dir"] / "tutorial_argparse_types",
+    env["tutorials_dir"] / "tutorial_argparse_types.scons",
     env["tutorials_dir"] / "tutorial_argparse_types_SConstruct",
-    env["tutorials_dir"] / "tutorial_03_solverprep",
+    env["tutorials_dir"] / "tutorial_03_solverprep.scons",
     env["tutorials_dir"] / "tutorial_03_solverprep_SConstruct",
-    env["tutorials_dir"] / "tutorial_04_simulation",
+    env["tutorials_dir"] / "tutorial_04_simulation.scons",
     env["tutorials_dir"] / "tutorial_04_simulation_SConstruct",
-    env["tutorials_dir"] / "tutorial_05_parameter_substitution",
+    env["tutorials_dir"] / "tutorial_05_parameter_substitution.scons",
     env["tutorials_dir"] / "tutorial_05_parameter_substitution_SConstruct",
-    env["tutorials_dir"] / "tutorial_06_include_files",
+    env["tutorials_dir"] / "tutorial_06_include_files.scons",
     env["tutorials_dir"] / "tutorial_06_include_files_SConstruct",
-    env["tutorials_dir"] / "tutorial_07_cartesian_product",
+    env["tutorials_dir"] / "tutorial_07_cartesian_product.scons",
     env["tutorials_dir"] / "tutorial_07_cartesian_product_SConstruct",
-    env["tutorials_dir"] / "tutorial_07_latin_hypercube",
+    env["tutorials_dir"] / "tutorial_07_latin_hypercube.scons",
     env["tutorials_dir"] / "tutorial_07_latin_hypercube_SConstruct",
-    env["tutorials_dir"] / "tutorial_07_sobol_sequence",
+    env["tutorials_dir"] / "tutorial_07_sobol_sequence.scons",
     env["tutorials_dir"] / "tutorial_07_sobol_sequence_SConstruct",
-    env["tutorials_dir"] / "tutorial_07_one_at_a_time",
+    env["tutorials_dir"] / "tutorial_07_one_at_a_time.scons",
     env["tutorials_dir"] / "tutorial_07_one_at_a_time_SConstruct",
-    env["tutorials_dir"] / "tutorial_08_data_extraction",
+    env["tutorials_dir"] / "tutorial_08_data_extraction.scons",
     env["tutorials_dir"] / "tutorial_08_data_extraction_SConstruct",
-    env["tutorials_dir"] / "tutorial_09_post_processing",
+    env["tutorials_dir"] / "tutorial_09_post_processing.scons",
     env["tutorials_dir"] / "tutorial_09_post_processing_SConstruct",
     env["tutorials_dir"] / "tutorial_10_unit_testing_SConstruct",
-    env["tutorials_dir"] / "tutorial_11_regression_testing",
+    env["tutorials_dir"] / "tutorial_11_regression_testing.scons",
     env["tutorials_dir"] / "tutorial_11_regression_testing_SConstruct",
-    env["tutorials_dir"] / "tutorial_12_archival",
+    env["tutorials_dir"] / "tutorial_12_archival.scons",
     env["tutorials_dir"] / "tutorial_12_archival_SConstruct",
-    env["tutorials_dir"] / "tutorial_sensitivity_study",
+    env["tutorials_dir"] / "tutorial_sensitivity_study.scons",
     env["tutorials_dir"] / "tutorial_sensitivity_study_SConstruct",
     env["tutorials_dir"] / "tutorial_setuptools_scm_SConstruct",
-    env["tutorials_dir"] / "tutorial_escape_sequences",
+    env["tutorials_dir"] / "tutorial_escape_sequences.scons",
     env["tutorials_dir"] / "tutorial_escape_sequences_SConstruct",
-    env["tutorials_dir"] / "tutorial_extend_study",
+    env["tutorials_dir"] / "tutorial_extend_study.scons",
     env["tutorials_dir"] / "tutorial_extend_study_SConstruct",
-    env["tutorials_dir"] / "tutorial_mesh_convergence",
+    env["tutorials_dir"] / "tutorial_mesh_convergence.scons",
     env["tutorials_dir"] / "tutorial_mesh_convergence_SConstruct",
-    env["tutorials_dir"] / "tutorial_remote_execution",
+    env["tutorials_dir"] / "tutorial_remote_execution.scons",
     env["tutorials_dir"] / "tutorial_remote_execution_SConstruct",
-    env["tutorials_dir"] / "tutorial_sbatch",
+    env["tutorials_dir"] / "tutorial_sbatch.scons",
     env["tutorials_dir"] / "tutorial_sbatch_SConstruct",
-    env["tutorials_dir"] / "tutorial_task_reuse",
+    env["tutorials_dir"] / "tutorial_task_reuse.scons",
     env["tutorials_dir"] / "tutorial_task_reuse_SConstruct",
-    env["tutorials_dir"] / "tutorial_part_image",
+    env["tutorials_dir"] / "tutorial_part_image.scons",
     env["tutorials_dir"] / "tutorial_part_image_SConstruct",
-    env["tutorials_dir"] / "unit_testing",
+    env["tutorials_dir"] / "unit_testing.scons",
     env["tutorials_dir"] / "rectangle_geometry_partition.scons",
     env["tutorials_dir"] / "rectangle_mesh_solverprep_solve_extract.scons",
     env["tutorials_dir"] / "gitignore",
-    env["tutorials_dir"] / "pyproject.toml",
     env["tutorials_dir"] / env["abaqus_dir"] / "rectangle_geometry.py",
     env["tutorials_dir"] / env["abaqus_dir"] / "rectangle_partition.py",
     env["tutorials_dir"] / env["abaqus_dir"] / "rectangle_mesh.py",
@@ -261,10 +266,10 @@ tutorial_files_list = [
     env["tutorials_dir"] / env["python_dir"] / "regression.py",
     env["tutorials_dir"] / env["python_dir"] / "sensitivity_study.py",
     env["tutorials_dir"] / env["tests_dir"] / "test_regression.py",
-    env["tutorials_dir"] / "tutorial_cubit/cubit",
-    env["tutorials_dir"] / "tutorial_cubit/abaqus",
-    env["tutorials_dir"] / "tutorial_cubit/sierra",
-    env["tutorials_dir"] / "tutorial_cubit/fierro",
+    env["tutorials_dir"] / "tutorial_cubit/cubit.scons",
+    env["tutorials_dir"] / "tutorial_cubit/abaqus.scons",
+    env["tutorials_dir"] / "tutorial_cubit/sierra.scons",
+    env["tutorials_dir"] / "tutorial_cubit/fierro.scons",
     env["tutorials_dir"] / "tutorial_cubit/SConstruct",
     env["tutorials_dir"] / "tutorial_gmsh/SConstruct",
     env["tutorials_dir"] / "tutorial_gmsh/SConscript",
@@ -284,7 +289,7 @@ tutorial_files_list = [
     env["tutorials_dir"] / "scons_quickstart/SConscript",
     env["tutorials_dir"] / "multi_action_task/SConscript",
     env["tutorials_dir"] / "tutorial_writing_builders/SConstruct",
-    env["tutorials_dir"] / "tutorial_writing_builders/implicit_workflow",
+    env["tutorials_dir"] / "tutorial_writing_builders/implicit_workflow.scons",
     env["tutorials_dir"] / "tutorial_writing_builders/scons_extensions.py",
     env["tutorials_dir"] / "tutorial_writing_builders/test_scons_extensions.py",
 ]
@@ -296,7 +301,7 @@ for file_path in tutorial_files_list:
         source=str(file_path),
         action=Copy("$TARGET", "$SOURCE"),
     )
-    copied_file_list.append(target),
+    copied_file_list.append(target)
 source_files = sphinx_configuration_source_list + documentation_file_list + copied_file_list
 
 html_targets = [
@@ -309,7 +314,7 @@ html = env.SphinxBuild(
     source=source_files,
     builder="html",
 )
-env.Clean(html, [Dir(html_directory)] + documentation_file_list)
+env.Clean(html, [Dir(html_directory), *documentation_file_list])
 env.Alias(html_directory, html)
 
 # TODO: Combine the two html build logic
@@ -321,7 +326,7 @@ internal = env.SphinxBuild(
     builder="html",
     tags="-t aea",
 )
-env.Clean(internal, [Dir(internal_directory)] + documentation_file_list)
+env.Clean(internal, [Dir(internal_directory), *documentation_file_list])
 env.Alias(internal_directory, internal)
 
 waves_pdf = pathlib.Path(f"latex/{project_substitution_dictionary['@documentation_pdf@']}")
@@ -331,7 +336,7 @@ latexpdf = env.SphinxPDF(
     target=latex_target,
     source=source_files,
 )
-env.Clean(latexpdf, [Dir(latex_directory)] + documentation_file_list)
+env.Clean(latexpdf, [Dir(latex_directory), *documentation_file_list])
 env.Alias("latexpdf", latexpdf)
 
 man_directory = "man"
@@ -346,7 +351,7 @@ man = env.SphinxBuild(
     builder="man",
     tags="-t man",
 )
-env.Clean(man, [Dir(man_directory)] + documentation_file_list)
+env.Clean(man, [Dir(man_directory), *documentation_file_list])
 env.Alias(man_directory, man)
 
 # TODO: Depends on ``imagemagick`` package, which isn't part of the CI environment yet
@@ -362,10 +367,10 @@ epub_directory = "epub"
 epub_target = [f"{epub_directory}/{waves_epub}"]
 epub = env.SphinxBuild(
     target=epub_target,
-    source=source_files + [f"epub/_static/{epub_cover}"],
+    source=[*source_files, f"epub/_static/{epub_cover}"],
     builder="epub",
 )
-env.Clean(epub, [Dir(epub_directory)] + documentation_file_list)
+env.Clean(epub, [Dir(epub_directory), *documentation_file_list])
 env.Alias(epub_directory, epub)
 
 # Collector alias to build all documentation and regression

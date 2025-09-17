@@ -1,17 +1,15 @@
-"""Test odb extract
-Test odb_extract.py
+"""Test :module:`waves._abaqus.odb_extract`.
 
 .. moduleauthor:: Prabhu S. Khalsa <pkhalsa@lanl.gov>
 """
 
 import os
 import pathlib
+from unittest.mock import mock_open, patch
 
 import pytest
-from unittest.mock import patch, mock_open
 
 from waves._abaqus import odb_extract
-
 
 fake_odb = {
     "rootAssembly": {
@@ -49,7 +47,7 @@ def test_odb_extract():
         patch("shutil.which", return_value="abaqus"),
         patch("select.select", return_value=[None, None, None]),
         patch("waves._abaqus.abaqus_file_parser.OdbReportFileParser"),
-        patch("builtins.open", mock_open(read_data="data")),
+        patch("pathlib.Path.open", mock_open(read_data="data")),
         pytest.raises(SystemExit) as err,
     ):  # Test first critical error
         odb_extract.odb_extract(["sample.odb"], None)
@@ -58,7 +56,7 @@ def test_odb_extract():
 
     with (
         patch("yaml.safe_dump"),
-        patch("builtins.open", mock_open(read_data="data")),
+        patch("pathlib.Path.open", mock_open(read_data="data")),
         patch("shutil.which", return_value="abaqus"),
         patch("select.select", return_value=[None, None, None]),
         patch("waves._abaqus.abaqus_file_parser.OdbReportFileParser"),
@@ -71,7 +69,7 @@ def test_odb_extract():
 
     with (
         patch("yaml.safe_dump"),
-        patch("builtins.open", mock_open(read_data="data")),
+        patch("pathlib.Path.open", mock_open(read_data="data")),
         patch("shutil.which", return_value="abaqus"),
         patch("select.select", return_value=[None, None, None]),
         patch("waves._abaqus.abaqus_file_parser.OdbReportFileParser", side_effect=IndexError("Test")),
@@ -86,7 +84,7 @@ def test_odb_extract():
 
     with (
         patch("pathlib.Path.exists", return_value=True),
-        patch("builtins.open", mock_open(read_data="data")),
+        patch("pathlib.Path.open", mock_open(read_data="data")),
         patch("yaml.safe_dump"),
         patch("shutil.which", return_value="abaqus"),
         patch("select.select", return_value=["y", None, None]),
@@ -100,7 +98,7 @@ def test_odb_extract():
 
     with (
         patch("pathlib.Path.exists", side_effect=[True, True, True, False]),
-        patch("builtins.open", mock_open(read_data="data")),
+        patch("pathlib.Path.open", mock_open(read_data="data")),
         patch("yaml.safe_dump"),
         patch("shutil.which", return_value="abaqus"),
         patch("select.select", return_value=["y", None, None]),
@@ -115,7 +113,7 @@ def test_odb_extract():
 
     with (
         patch("pathlib.Path.exists", return_value=True),
-        patch("builtins.open", mock_open(read_data="data")),
+        patch("pathlib.Path.open", mock_open(read_data="data")),
         patch("yaml.safe_dump"),
         patch("shutil.which", return_value="abaqus"),
         patch("select.select", return_value=["y", None, None]),
@@ -127,12 +125,12 @@ def test_odb_extract():
         odb_extract.odb_extract(["sample.odb"], None, odb_report_args="job=job_name odb=odb_file")
         mock_abaqus_file_parser.assert_called()
         mock_run_external.assert_called_with(
-            "abaqus odbreport job=job_name odb=odb_file -job sample -odb sample.odb -mode CSV -blocked"
+            "abaqus odbreport job=job_name odb=odb_file -job sample -odb sample.odb -mode CSV -blocked",
         )
 
     with (
         patch("pathlib.Path.exists", return_value=True),
-        patch("builtins.open", mock_open(read_data="data")),
+        patch("pathlib.Path.open", mock_open(read_data="data")),
         patch("yaml.safe_dump") as mock_safe_dump,
         patch("shutil.which", return_value="abaqus"),
         patch("select.select", return_value=["y", None, None]),
@@ -142,11 +140,13 @@ def test_odb_extract():
     ):
         # Test case where output name doesn't match odb name
         odb_extract.odb_extract(["sample.odb"], "new_name.h5", odb_report_args="odbreport -all")
-        mock_run_external.assert_called_with("abaqus odbreport -all -job new_name -odb sample.odb -mode CSV -blocked")
+        mock_run_external.assert_called_with(
+            "abaqus odbreport -all -job new_name -odb sample.odb -mode CSV -blocked",
+        )
 
     with (
         patch("pathlib.Path.exists", return_value=True),
-        patch("builtins.open", mock_open(read_data="data")),
+        patch("pathlib.Path.open", mock_open(read_data="data")),
         patch("yaml.safe_dump") as mock_safe_dump,
         patch("shutil.which", return_value="abaqus"),
         patch("select.select", return_value=["y", None, None]),
@@ -171,11 +171,12 @@ def test_odb_extract():
                 "-blocked",
             ],
             capture_output=True,
+            check=False,
         )
 
     with (
         patch("pathlib.Path.exists", return_value=True),
-        patch("builtins.open", mock_open(read_data="data")),
+        patch("pathlib.Path.open", mock_open(read_data="data")),
         patch("select.select", return_value=[None, None, None]),
         patch("shutil.which", return_value=""),
         patch("json.dump") as mock_safe_dump,
@@ -190,7 +191,7 @@ def test_odb_extract():
 
     with (
         patch("pathlib.Path.exists", return_value=True),
-        patch("builtins.open", mock_open(read_data="data")),
+        patch("pathlib.Path.open", mock_open(read_data="data")),
         patch("shutil.which", return_value="abaqus"),
         patch("select.select", return_value=[None, None, None]),
         patch("waves._abaqus.abaqus_file_parser.OdbReportFileParser") as h5_parser,
@@ -202,7 +203,7 @@ def test_odb_extract():
 
     with (
         patch("yaml.safe_dump"),
-        patch("builtins.open", mock_open(read_data="data")),
+        patch("pathlib.Path.open", mock_open(read_data="data")),
         patch("shutil.which", return_value="abaqus"),
         patch("select.select", return_value=[None, None, None]),
         patch("waves._abaqus.abaqus_file_parser.OdbReportFileParser", side_effect=IndexError("Test")),
@@ -215,68 +216,93 @@ def test_odb_extract():
     assert "could not be parsed." in str(err.value.args)
 
 
-# fmt: off
 odb_report_arguments = {
     "1 spaces": (
         "",
         f"{os.path.sep}some{os.path.sep}path with{os.path.sep}spaces.txt",
         f"{os.path.sep}no{os.path.sep}spaces.csv",
-        f"-all -job {os.path.sep}no{os.path.sep}spaces -odb {os.path.sep}some{os.path.sep}\"path with\"{os.path.sep}spaces.txt -mode CSV -blocked",  # noqa: E501
+        (
+            f'-all -job {os.path.sep}no{os.path.sep}spaces -odb {os.path.sep}some{os.path.sep}"path'
+            f' with"{os.path.sep}spaces.txt -mode CSV -blocked'
+        ),
     ),
     "2 spaces": (
         "",
         f"{os.path.sep}some{os.path.sep}path with{os.path.sep}spaces.txt",
         f"{os.path.sep}some more{os.path.sep}spaces.csv",
-        f"-all -job {os.path.sep}\"some more\"{os.path.sep}spaces -odb {os.path.sep}some{os.path.sep}\"path with\"{os.path.sep}spaces.txt -mode CSV -blocked",  # noqa: E501
+        (
+            f'-all -job {os.path.sep}"some more"{os.path.sep}spaces -odb {os.path.sep}some{os.path.sep}"path'
+            f' with"{os.path.sep}spaces.txt -mode CSV -blocked'
+        ),
     ),
     "no spaces": (
         "",
         f"{os.path.sep}some{os.path.sep}path{os.path.sep}without{os.path.sep}spaces.txt",
         f"{os.path.sep}no{os.path.sep}spaces.csv",
-        f"-all -job {os.path.sep}no{os.path.sep}spaces -odb {os.path.sep}some{os.path.sep}path{os.path.sep}without{os.path.sep}spaces.txt -mode CSV -blocked",  # noqa: E501
+        (
+            f"-all -job {os.path.sep}no{os.path.sep}spaces -odb"
+            f" {os.path.sep}some{os.path.sep}path{os.path.sep}without{os.path.sep}spaces.txt -mode CSV -blocked"
+        ),
     ),
     "provided arguments, 1 spaces": (
         "arg1=val1",
         f"{os.path.sep}some{os.path.sep}path with{os.path.sep}spaces.txt",
         f"{os.path.sep}no{os.path.sep}spaces.csv",
-        f"arg1=val1 -job {os.path.sep}no{os.path.sep}spaces -odb {os.path.sep}some{os.path.sep}\"path with\"{os.path.sep}spaces.txt -mode CSV -blocked",  # noqa: E501
+        (
+            f'arg1=val1 -job {os.path.sep}no{os.path.sep}spaces -odb {os.path.sep}some{os.path.sep}"path'
+            f' with"{os.path.sep}spaces.txt -mode CSV -blocked'
+        ),
     ),
     "provided arguments, 2 spaces": (
         "arg1=val1",
         f"{os.path.sep}some{os.path.sep}path with{os.path.sep}spaces.txt",
         f"{os.path.sep}some more{os.path.sep}spaces.csv",
-        f"arg1=val1 -job {os.path.sep}\"some more\"{os.path.sep}spaces -odb {os.path.sep}some{os.path.sep}\"path with\"{os.path.sep}spaces.txt -mode CSV -blocked",  # noqa: E501
+        (
+            f'arg1=val1 -job {os.path.sep}"some more"{os.path.sep}spaces -odb {os.path.sep}some{os.path.sep}"path'
+            f' with"{os.path.sep}spaces.txt -mode CSV -blocked'
+        ),
     ),
     "provided odb, no spaces": (
         "arg1=val1",
         f"{os.path.sep}some{os.path.sep}path{os.path.sep}without{os.path.sep}spaces.txt",
         f"{os.path.sep}no{os.path.sep}spaces.csv",
-        f"arg1=val1 -job {os.path.sep}no{os.path.sep}spaces -odb {os.path.sep}some{os.path.sep}path{os.path.sep}without{os.path.sep}spaces.txt -mode CSV -blocked",  # noqa: E501
+        (
+            f"arg1=val1 -job {os.path.sep}no{os.path.sep}spaces -odb"
+            f" {os.path.sep}some{os.path.sep}path{os.path.sep}without{os.path.sep}spaces.txt -mode CSV -blocked"
+        ),
     ),
     "provided odb, 1 spaces odb": (
         "odb=val1",
         f"{os.path.sep}some{os.path.sep}path with{os.path.sep}spaces.txt",
         f"{os.path.sep}no{os.path.sep}spaces.csv",
-        f"odb=val1 -job {os.path.sep}no{os.path.sep}spaces -odb {os.path.sep}some{os.path.sep}\"path with\"{os.path.sep}spaces.txt -mode CSV -blocked",  # noqa: E501
+        (
+            f'odb=val1 -job {os.path.sep}no{os.path.sep}spaces -odb {os.path.sep}some{os.path.sep}"path'
+            f' with"{os.path.sep}spaces.txt -mode CSV -blocked'
+        ),
     ),
     "provided odb, 2 spaces odb": (
         "odb=val1",
         f"{os.path.sep}some{os.path.sep}path with{os.path.sep}spaces.txt",
         f"{os.path.sep}some more{os.path.sep}spaces.csv",
-        f"odb=val1 -job {os.path.sep}\"some more\"{os.path.sep}spaces -odb {os.path.sep}some{os.path.sep}\"path with\"{os.path.sep}spaces.txt -mode CSV -blocked",  # noqa: E501
+        (
+            f'odb=val1 -job {os.path.sep}"some more"{os.path.sep}spaces -odb {os.path.sep}some{os.path.sep}"path'
+            f' with"{os.path.sep}spaces.txt -mode CSV -blocked'
+        ),
     ),
     "provided odb, no spaces odb": (
         "odb=val1",
         f"{os.path.sep}some{os.path.sep}path{os.path.sep}without{os.path.sep}spaces.txt",
         f"{os.path.sep}no{os.path.sep}spaces.csv",
-        f"odb=val1 -job {os.path.sep}no{os.path.sep}spaces -odb {os.path.sep}some{os.path.sep}path{os.path.sep}without{os.path.sep}spaces.txt -mode CSV -blocked",  # noqa: E501
+        (
+            f"odb=val1 -job {os.path.sep}no{os.path.sep}spaces -odb"
+            f" {os.path.sep}some{os.path.sep}path{os.path.sep}without{os.path.sep}spaces.txt -mode CSV -blocked"
+        ),
     ),
 }
-# fmt: on
 
 
 @pytest.mark.parametrize(
-    "odb_report_args, input_file, job_name, expected",
+    ("odb_report_args", "input_file", "job_name", "expected"),
     odb_report_arguments.values(),
     ids=odb_report_arguments.keys(),
 )
