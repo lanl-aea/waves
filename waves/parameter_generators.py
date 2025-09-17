@@ -1518,12 +1518,8 @@ def _coerce_values(values: typing.Iterable, name: typing.Optional[str] = None) -
 
 
 def _assess_parameter_spaces(studies: typing.List[xarray.Dataset]) -> list:
-    """From a list of parameter studies, generates a dictionary of the studies separated into unique parameter spaces.
-
-    The dictionary contents are split by parameter space, determined by the parameter study parameters. Each parameter
-    space has keys "studies" and "parameters". The key "studies" contains a list of the parameter studies in that space,
-    with the first study in the list corresponding to the "base" study for that parameter space. The key "parameters" is
-    a list of strings with all the parameters present in the parameter space.
+    """From a list of parameter studies, generates a list of lists, with each sub-list containing the studies separated
+    into unique parameter spaces.
 
     :param studies: list of parameter study xarray Datasets where the first study is considered the 'base' study
 
@@ -1536,6 +1532,7 @@ def _assess_parameter_spaces(studies: typing.List[xarray.Dataset]) -> list:
         parameters = list(study.data_vars)
         studies[index] = study.assign_attrs(parameter_space_hash=_calculate_set_hash(parameters, parameters))
 
+    # Group studies by parameter space hash
     parameter_spaces = []
     parameter_space_hashes_unique = list(set([study.attrs["parameter_space_hash"] for study in studies]))
     for parameter_space_hash in parameter_space_hashes_unique:
