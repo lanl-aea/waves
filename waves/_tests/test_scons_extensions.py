@@ -1481,6 +1481,22 @@ abaqus_pseudobuilder_input = {
         " -double constraint $(-cpus 2$) -oldjob oldjob -user user.f --extra-opt",
         {"job": "job", "kwarg_1": "value_1"},
     ),
+    "processes_1": (
+        {},
+        {"job": "job", "oldjob": "oldjob", "processes": 1, "write_restart": True},
+        ["job.inp"] + [f"oldjob{ext}" for ext in scons_extensions._get_abaqus_restart_extensions(solver="standard", processes=1)],
+        [f"job{ext}" for ext in (_abaqus_standard_extensions + scons_extensions._get_abaqus_restart_extensions(solver="standard", processes=1))],
+        " -double both $(-cpus 1$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
+        {"job": "job"},
+    ),
+    "processes_2": (
+        {},
+        {"job": "job", "oldjob": "oldjob", "cpus": 2, "processes": 2, "write_restart": True},
+        ["job.inp"] + [f"oldjob{ext}" for ext in scons_extensions._get_abaqus_restart_extensions(solver="standard", processes=2)],
+        [f"job{ext}" for ext in (_abaqus_standard_extensions + scons_extensions._get_abaqus_restart_extensions(solver="standard", processes=2))],
+        " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
+        {"job": "job"},
+    ),
 }
 
 
@@ -1495,6 +1511,23 @@ def test_abaqus_pseudo_builder(class_kwargs, call_kwargs, sources, targets, opti
     mock_env = unittest.mock.Mock()
     scons_extensions.AbaqusPseudoBuilder(builder=mock_builder, **class_kwargs)(env=mock_env, **call_kwargs)
     mock_builder.assert_called_once_with(target=targets, source=sources, program_options=options, **builder_kwargs)
+
+
+get_abaqus_restart_extensions_input = {
+    "standard_1": ("standard", 1, (".odb", ".prt", ".mdl", ".sim", ".stt", ".res")),
+    "standard_2": ("standard", 2, (".odb", ".prt", ".mdl.0", ".mdl.1", ".sim", ".stt.0", ".stt.1", ".res")),
+    "explicit_1": ("explicit", 1, (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel")),
+    "explicit_2": ("explicit", 2, (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel")),
+}
+
+
+@pytest.mark.parametrize(
+    ("solver", "processes", "expected"),
+    get_abaqus_restart_extensions_input.values(),
+    ids=get_abaqus_restart_extensions_input.keys(),
+)
+def test_get_abaqus_restart_extensions(solver, processes, expected):
+    assert set(scons_extensions._get_abaqus_restart_extensions(solver=solver, processes=processes)) == set(expected)
 
 
 def test_sbatch_abaqus_solver():

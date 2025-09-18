@@ -1985,6 +1985,7 @@ class AbaqusPseudoBuilder:
         inp: str | None = None,
         user: str | None = None,
         cpus: int = 1,
+        processes: int | None = None,
         oldjob: list[str] | str | None = None,
         write_restart: bool = False,
         double: str = "both",
@@ -2009,9 +2010,15 @@ class AbaqusPseudoBuilder:
         :param cpus: CPUs to use for simulation. Is superceded by ``override_cpus`` if provided during object
             instantiation.  The CPUs option is escaped in the action string, i.e. changing the number of CPUs will not
             trigger a rebuild.
+        :param processes: Number of MPI process.
+            if provided during object instantiation.  This option is escaped in the action string, i.e. changing the
+            number of MPI processes will not necessarily trigger a rebuild. For some Abaqus/Standard analyses
+            that write restart files, if the number of MPI processes changes then the
+            number of restart files will change and that *will* trigger a rebuild.
         :param oldjob: Name of job(s) to restart/import. If a single old job is specified, "-oldjob" will be added to
             the Abaqus command. If multiple old jobs are specified, "-oldjob" will not be added to the Abaqus command
-            (users should use the ``*IMPORT, LIBRARY=`` syntax in the Abaqus input file).
+            (users should use the ``*IMPORT, LIBRARY=`` syntax in the Abaqus input file). If ``processes`` is specified,
+            the old job(s) are assumed to use the same number of MPI processes as the current job.
         :param write_restart: If True, add restart files to target list. This is required if you want to use these
             restart files for a restart job.
         :param double: Passthrough option for Abaqus' ``-double ${double}``.
@@ -2117,6 +2124,21 @@ class AbaqusPseudoBuilder:
         # Always allow user to override CPUs with CLI option and exclude CPUs from build signature
         options += f" $(-cpus {self.override_cpus or cpus}$)"
 
+        if processes:
+            # Check that total number of CPUs is evenly divisible by number of threads per process
+            if cpus % processes != 0:
+                raise RuntimeError(
+                    f"The total number of CPUs ({cpus}) is not evenly divisible by the number of MPI processes ({threads_per_mpi_process})"
+                )
+            # Calculate number of threads per MPI process
+            threads_per_mpi_process = cpus // processes
+            # Add -threads_per_mpi_process to command string
+            # Number of processes will change number of restart files, which will be included in build signature
+            options += f" $(-threads_per_mpi_process {threads_per_mpi_process}$)"
+        else:
+            # Assume 1 process, but don't add -threads_per_mpi_process to command string
+            processes = 1
+
         # If restarting/importing a job, add old job restart files to sources
         if oldjob:
             # Ensure oldjob is a list of str
@@ -2126,17 +2148,14 @@ class AbaqusPseudoBuilder:
             if len(oldjob) == 1:
                 options += f" -oldjob {oldjob[0]}"
             # Add old job targets to source list
-            sources.extend(
-                [
-                    f"{job_name}{extension}"
-                    for job_name in oldjob
-                    for extension in _settings._abaqus_standard_restart_extensions
-                ]
-            )
+            oldjob_extensions = _get_abaqus_restart_extensions(solver="standard", processes=processes)
+            sources.extend([f"{job_name}{extension}" for job_name in oldjob for extension in oldjob_extensions])
 
         # If writing restart files, add restart files to targets
         if write_restart:
-            targets.extend([f"{job}{extension}" for extension in _settings._abaqus_standard_restart_extensions])
+            # See above TODO item for Explicit restart files
+            restart_extensions = _get_abaqus_restart_extensions(solver="standard", processes=processes)
+            targets.extend([f"{job}{extension}" for extension in restart_extensions])
 
         # If user subroutine is specified, add user subroutine to sources
         if user:
@@ -2152,6 +2171,25 @@ class AbaqusPseudoBuilder:
             options += f" {extra_options}"
 
         return self.builder(target=targets, source=sources, job=job_option, program_options=options, **kwargs)
+
+
+def _get_abaqus_restart_extensions(solver: str, processes: int = 1) -> list[str]: 
+    if solver.lower() == "explicit":
+        restart_files = set(_settings._abaqus_explicit_restart_extensions)
+    elif solver.lower() == "standard":
+        restart_files = set(_settings._abaqus_standard_restart_extensions)
+        if processes > 1:
+            # Drop .mdl and .stt
+            restart_files -= {".mdl", ".stt"}
+            # Add {.mdl,.stt}.[0..N-1]
+            restart_files |= {
+                f"{extension}.{process}"
+                for extension in [".mdl", ".stt"]
+                for process in range(0, processes)
+            }
+    else:
+        raise RuntimeError(f"Unknown solver type: {solver}")
+    return tuple(restart_files)
 
 
 @catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
