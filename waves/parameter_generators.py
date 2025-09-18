@@ -1524,7 +1524,7 @@ def _coerce_values(values: typing.Iterable, name: str | None = None) -> numpy.nd
     return values_coerced
 
 
-def _assess_parameter_spaces(studies: typing.List[xarray.Dataset]) -> list:
+def _assess_parameter_spaces(studies: typing.List[xarray.Dataset]) -> typing.List[xarray.Dataset]:
     """From a list of parameter studies, generates a list of lists, with each sub-list containing the studies separated
     into unique parameter spaces.
 
@@ -1625,10 +1625,7 @@ def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.D
     return propagated_study
 
 
-def _merge_parameter_space(
-    studies: list[xarray.Dataset],
-    template: string.Template | None = None,
-) -> xarray.Dataset:
+def _merge_parameter_space(studies: list[xarray.Dataset], template: string.Template | None = None) -> xarray.Dataset:
     """Merge a list of parameter studies with the same parameter space into one study.
 
     Studies should have set hash as the active dimension.
