@@ -1,5 +1,5 @@
+import contextlib
 import pathlib
-from contextlib import nullcontext as does_not_raise
 from unittest.mock import patch
 
 import matplotlib.pyplot
@@ -7,6 +7,8 @@ import networkx
 import pytest
 
 from waves import _visualize
+
+does_not_raise = contextlib.nullcontext()
 
 test_ancestor_subgraph_cases = {
     "node not found": (
@@ -18,73 +20,73 @@ test_ancestor_subgraph_cases = {
     "parent-child: request child": (
         networkx.DiGraph([("parent", "child")]),
         ["child"],
-        does_not_raise(),
+        does_not_raise,
         networkx.DiGraph([("parent", "child")]),
     ),
     "parent-child: request parent": (
         networkx.DiGraph([("parent", "child")]),
         ["parent"],
-        does_not_raise(),
+        does_not_raise,
         networkx.DiGraph([("parent", "child")]).subgraph("parent"),
     ),
     "parent1/2-child1/2: request child": (
         networkx.DiGraph([("parent", "child"), ("parent2", "child2")]),
         ["child"],
-        does_not_raise(),
+        does_not_raise,
         networkx.DiGraph([("parent", "child")]),
     ),
     "parent1/2-child1/2: request child2": (
         networkx.DiGraph([("parent", "child"), ("parent2", "child2")]),
         ["child2"],
-        does_not_raise(),
+        does_not_raise,
         networkx.DiGraph([("parent2", "child2")]),
     ),
     "parent1/2-child1/2: request child1/2": (
         networkx.DiGraph([("parent", "child"), ("parent2", "child2")]),
         ["child", "child2"],
-        does_not_raise(),
+        does_not_raise,
         networkx.DiGraph([("parent", "child"), ("parent2", "child2")]),
     ),
     "grandparent-parent-child: request child": (
         networkx.DiGraph([("grandparent", "parent"), ("parent", "child")]),
         ["child"],
-        does_not_raise(),
+        does_not_raise,
         networkx.DiGraph([("grandparent", "parent"), ("parent", "child")]),
     ),
     "grandparent-parent-child: request parent": (
         networkx.DiGraph([("grandparent", "parent"), ("parent", "child")]),
         ["parent"],
-        does_not_raise(),
+        does_not_raise,
         networkx.DiGraph([("grandparent", "parent")]),
     ),
     "grandparent-parent-child/child2: request child": (
         networkx.DiGraph([("grandparent", "parent"), ("parent", "child"), ("parent", "child2")]),
         ["child"],
-        does_not_raise(),
+        does_not_raise,
         networkx.DiGraph([("grandparent", "parent"), ("parent", "child")]),
     ),
     "grandparent-parent-child/child2: request child2": (
         networkx.DiGraph([("grandparent", "parent"), ("parent", "child"), ("parent", "child2")]),
         ["child2"],
-        does_not_raise(),
+        does_not_raise,
         networkx.DiGraph([("grandparent", "parent"), ("parent", "child2")]),
     ),
     "grandparent-parent-child/child2: request child/child2": (
         networkx.DiGraph([("grandparent", "parent"), ("parent", "child"), ("parent", "child2")]),
         ["child", "child2"],
-        does_not_raise(),
+        does_not_raise,
         networkx.DiGraph([("grandparent", "parent"), ("parent", "child"), ("parent", "child2")]),
     ),
     "grandparent-parent-child/child2: request parent": (
         networkx.DiGraph([("grandparent", "parent"), ("parent", "child"), ("parent", "child2")]),
         ["parent"],
-        does_not_raise(),
+        does_not_raise,
         networkx.DiGraph([("grandparent", "parent")]),
     ),
     "grandparent-parent-child/child2: request grandparent": (
         networkx.DiGraph([("grandparent", "parent"), ("parent", "child"), ("parent", "child2")]),
         ["grandparent"],
-        does_not_raise(),
+        does_not_raise,
         networkx.DiGraph([("grandparent", "parent")]).subgraph("grandparent"),
     ),
 }
@@ -95,7 +97,12 @@ test_ancestor_subgraph_cases = {
     test_ancestor_subgraph_cases.values(),
     ids=test_ancestor_subgraph_cases.keys(),
 )
-def test_ancestor_subgraph(graph, nodes, outcome, expected) -> None:
+def test_ancestor_subgraph(
+    graph: networkx.DiGraph,
+    nodes: list[str],
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+    expected: networkx.DiGraph | None,
+) -> None:
     # Check for a runtime error on empty subgraph/missing node
     with outcome:
         subgraph = _visualize.ancestor_subgraph(graph, nodes)
@@ -175,11 +182,11 @@ parse_output_input = {
     ids=parse_output_input.keys(),
 )
 def test_parse_output(
-    tree_output,
-    break_path_separator,
-    expected_nodes,
-    expected_edge_count,
-    no_labels,
+    tree_output: str,
+    break_path_separator: str | None,
+    expected_nodes: dict,
+    expected_edge_count: int,
+    no_labels: bool,
 ) -> None:
     """Test raises behavior and regression test a sample SCons tree output parsing."""
     # Check for a runtime error on empty parsing
