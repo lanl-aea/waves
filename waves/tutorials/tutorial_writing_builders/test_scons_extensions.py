@@ -1,5 +1,7 @@
 """Test the project SCons extensions module."""
 
+import collections
+
 import pytest
 import SCons.Environment
 import scons_extensions
@@ -74,7 +76,7 @@ def test_solver_builder_factory(
     builder_kwargs: dict,
     task_kwargs: dict,
     target: list,
-    emitter,
+    emitter: collections.abc.Callable[[list, list, SCons.Environment.Environment], tuple[list, list]],
     expected_node_count: int,
     expected_action_count: int,
 ) -> None:
