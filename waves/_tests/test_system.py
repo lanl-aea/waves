@@ -77,7 +77,7 @@ test_prepend_path_cases = {
     test_prepend_path_cases.values(),
     ids=test_prepend_path_cases.keys(),
 )
-def test_prepend_path(args, expected) -> None:
+def test_prepend_path(args: tuple[dict[str, str], str, str], expected: dict[str, str]) -> None:
     original_environment = copy.deepcopy(args[0])
     assert prepend_path(*args) == expected
     assert args[0] == original_environment
@@ -110,7 +110,7 @@ test_augment_system_test_environment_cases = {
     test_augment_system_test_environment_cases.values(),
     ids=test_augment_system_test_environment_cases.keys(),
 )
-def test_augment_system_test_environment(args, expected) -> None:
+def test_augment_system_test_environment(args: tuple[dict, bool], expected: dict[str, str]) -> None:
     original_environment = copy.deepcopy(args[0])
     assert augment_system_test_environment(*args) == expected
     assert args[0] == original_environment
@@ -871,7 +871,7 @@ test_create_test_prefix_cases = {
     test_create_test_prefix_cases.values(),
     ids=test_create_test_prefix_cases.keys(),
 )
-def test_create_test_prefix(kwargs, expected, request: pytest.FixtureRequest) -> None:
+def test_create_test_prefix(kwargs: dict[str, str], expected: str, request: pytest.FixtureRequest) -> None:
     assert create_test_prefix(request, **kwargs) == expected
 
 
@@ -917,7 +917,11 @@ test_return_temporary_directory_kwargs_cases = {
     ids=test_return_temporary_directory_kwargs_cases.keys(),
 )
 def test_return_temporary_directory_kwargs(
-    system_test_directory, keep_system_tests, available_args, available_kwargs, expected
+    system_test_directory: pathlib.Path,
+    keep_system_tests: bool,
+    available_args: list[str],
+    available_kwargs: list[str],
+    expected: dict[str, bool],
 ) -> None:
     mock_inspection = Mock()
     mock_inspection.args = available_args
