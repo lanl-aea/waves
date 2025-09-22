@@ -7,6 +7,7 @@ Functions that may be used in a CLI implementation should raise ``RuntimeError``
 message and non-zero exit codes.
 """
 
+import collections
 import os
 import pathlib
 import platform
@@ -342,7 +343,7 @@ def create_valid_identifier(identifier: str) -> str:
     return re.sub(r"\W|^(?=\d)", "_", identifier)
 
 
-def warn_only_once(function):
+def warn_only_once(function: collections.abc.Callable) -> collections.abc.Callable:
     """Suppress warnings raised by successive function calls.
 
     :param function: The function to wrap
@@ -351,7 +352,7 @@ def warn_only_once(function):
     """
     function.already_warned = False
 
-    def wrapper(*args, **kwargs):
+    def wrapper(*args, **kwargs) -> collections.abc.Callable:
         """Add wrapper logic for the function warning suppression.
 
         :param args: all positional arguments passed through to wrapped function
