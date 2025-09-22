@@ -118,7 +118,9 @@ class OdbReportFileParser(AbaqusFileParser):
             Dataset  # HDF5 Dataset that lists the location within the hdf5 file of all xarray datasets
     """
 
-    def parse(self, data_format="extract", h5_file=f"extract{_settings._default_h5_extension}", time_stamp=None) -> None:
+    def parse(
+        self, data_format="extract", h5_file=f"extract{_settings._default_h5_extension}", time_stamp=None
+    ) -> None:
         """Parse the file and store the results in the self.parsed dictionary.
 
          Can parse csv formatted output with the blocked option from the odbreport command.

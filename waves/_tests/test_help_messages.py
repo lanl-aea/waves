@@ -195,7 +195,9 @@ project_aliases = {
     project_aliases.values(),
     ids=project_aliases.keys(),
 )
-def test_project_alias(args, kwargs, expected_alias_args, expected_alias_kwargs, expected_description, expect_called) -> None:
+def test_project_alias(
+    args, kwargs, expected_alias_args, expected_alias_kwargs, expected_description, expect_called
+) -> None:
     with patch("SCons.Environment.Base.Alias", return_value=args[1:]) as mock_alias:
         target_descriptions = scons_extensions.project_alias(*args, **kwargs, target_descriptions={})
         assert target_descriptions == expected_description
