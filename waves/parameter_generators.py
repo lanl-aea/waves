@@ -1524,7 +1524,7 @@ def _coerce_values(values: typing.Iterable, name: str | None = None) -> numpy.nd
     return values_coerced
 
 
-def _assess_parameter_spaces(studies: typing.List[xarray.Dataset]) -> typing.List[xarray.Dataset]:
+def _assess_parameter_spaces(studies: list[xarray.Dataset]) -> list[xarray.Dataset]:
     """From a list of parameter studies, generates a list of lists, with each sub-list containing the studies separated
     into unique parameter spaces.
 
@@ -1541,7 +1541,7 @@ def _assess_parameter_spaces(studies: typing.List[xarray.Dataset]) -> typing.Lis
 
     # Group studies by parameter space hash
     parameter_spaces = []
-    parameter_space_hashes_unique = list(set([study.attrs["parameter_space_hash"] for study in studies]))
+    parameter_space_hashes_unique = list({study.attrs["parameter_space_hash"] for study in studies})
     for parameter_space_hash in parameter_space_hashes_unique:
         studies_in_space = [study for study in studies if study.attrs["parameter_space_hash"] == parameter_space_hash]
         studies_in_space = [study.drop_attrs() for study in studies_in_space]
