@@ -1,10 +1,11 @@
 """Test WAVES SCons builders and support functions."""
 
+import collections
+import contextlib
 import copy
 import os
 import pathlib
 import unittest
-from contextlib import nullcontext as does_not_raise
 from unittest.mock import Mock, call, patch
 
 import pytest
@@ -25,6 +26,8 @@ from waves._settings import (
     _stdout_extension,
 )
 from waves._tests.common import platform_check
+
+does_not_raise = contextlib.nullcontext()
 
 # Test setup and helper functions
 fs = SCons.Node.FS.FS()
@@ -49,15 +52,15 @@ test_print_action_signature_string_cases = {
     test_print_action_signature_string_cases.values(),
     ids=test_print_action_signature_string_cases.keys(),
 )
-def test_print_action_signature_string(mock_node, action_signature_string) -> None:
+def test_print_action_signature_string(mock_node: Mock, action_signature_string: str | bytes) -> None:
     s = "s"
-    source = []
+    source: list = []
     env = SCons.Environment.Environment()
     with patch("builtins.print") as mock_print:
         target = [mock_node]
         scons_extensions.print_action_signature_string(s, target, source, env)
         mock_print.assert_called_once_with(
-            f"Building {mock_node} with action signature string:\n  {action_signature_string}\n{s}",
+            f"Building {mock_node} with action signature string:\n  {action_signature_string!r}\n{s}",
         )
 
 
@@ -72,7 +75,7 @@ check_program = {
     check_program.values(),
     ids=check_program.keys(),
 )
-def test_check_program(prog_name, shutil_return_value, message) -> None:
+def test_check_program(prog_name: str, shutil_return_value: str | None, message: str) -> None:
     env = SCons.Environment.Environment()
 
     # Test function style interface
@@ -138,7 +141,9 @@ find_program_input = {
     find_program_input.values(),
     ids=find_program_input.keys(),
 )
-def test_find_program(names, checkprog_side_effect, first_found_path) -> None:
+def test_find_program(
+    names: str | list[str], checkprog_side_effect: list[str | None], first_found_path: str | None
+) -> None:
     env = SCons.Environment.Environment()
 
     # Test function style interface
@@ -162,7 +167,9 @@ def test_find_program(names, checkprog_side_effect, first_found_path) -> None:
     find_program_input.values(),
     ids=find_program_input.keys(),
 )
-def test_add_program(names, checkprog_side_effect, first_found_path) -> None:
+def test_add_program(
+    names: str | list[str], checkprog_side_effect: list[str | None], first_found_path: str | None
+) -> None:
     # Test function style interface
     env = SCons.Environment.Environment()
     original_path = env["ENV"]["PATH"]
@@ -204,7 +211,9 @@ def test_add_program(names, checkprog_side_effect, first_found_path) -> None:
     find_program_input.values(),
     ids=find_program_input.keys(),
 )
-def test_add_cubit(names, checkprog_side_effect, first_found_path) -> None:
+def test_add_cubit(
+    names: str | list[str], checkprog_side_effect: list[str | None], first_found_path: str | None
+) -> None:
     # Test function style interface
     env = SCons.Environment.Environment()
     original_path = env["ENV"]["PATH"]
@@ -306,11 +315,13 @@ def test_add_cubit_python() -> None:
     assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[0] == str(cubit_bin)
 
 
-def dummy_emitter_for_testing(target, source, env):  # noqa: ARG001
+def dummy_emitter_for_testing(target: list, source: list, env: SCons.Environment.Environment) -> tuple[list, list]:  # noqa: ARG001
     return target, source
 
 
-def check_action_string(nodes, expected_node_count, expected_action_count, expected_string) -> None:
+def check_action_string(
+    nodes: SCons.Node.NodeList, expected_node_count: int, expected_action_count: int, expected_string: str
+) -> None:
     """Verify the expected action string against a builder's target nodes.
 
     :param SCons.Node.NodeList nodes: Target node list returned by a builder
@@ -332,13 +343,13 @@ def check_action_string(nodes, expected_node_count, expected_action_count, expec
         assert str(node.executor.action_list[0]) == expected_string
 
 
-def check_abaqus_solver_targets(nodes, solver, stem, suffixes) -> None:
+def check_abaqus_solver_targets(nodes: SCons.Node.NodeList, solver: str, stem: str, suffixes: list[str]) -> None:
     """Verify the expected action string against a builder's target nodes.
 
-    :param SCons.Node.NodeList nodes: Target node list returned by a builder
-    :param str solver: emit file extensions based on the value of this variable (standard/explicit/datacheck).
-    :param str stem: stem name of file
-    :param list suffixes: list of override suffixes provided to the task
+    :param nodes: Target node list returned by a builder
+    :param solver: emit file extensions based on the value of this variable (standard/explicit/datacheck).
+    :param stem: stem name of file
+    :param suffixes: list of override suffixes provided to the task
     """
     expected_suffixes = [_stdout_extension, _abaqus_environment_extension]
     if suffixes:
@@ -358,8 +369,10 @@ def check_abaqus_solver_targets(nodes, solver, stem, suffixes) -> None:
 def first_target_builder_factory_test_cases(
     name: str,
     default_kwargs: dict,
-    default_emitter=scons_extensions.first_target_emitter,
-    expected_node_count=2,
+    default_emitter: collections.abc.Callable[
+        [list, list, SCons.Environment.Environment], tuple[list, list]
+    ] = scons_extensions.first_target_emitter,
+    expected_node_count: int = 2,
 ) -> dict:
     """Return template tests for builder factories based on :meth:`waves.scons_extensions.first_target_builder_factory`.
 
@@ -539,7 +552,7 @@ action_list_scons = {
     action_list_scons.values(),
     ids=action_list_scons.keys(),
 )
-def test_action_list_scons(actions, expected) -> None:
+def test_action_list_scons(actions: list[str], expected: SCons.Action.ListAction[SCons.Action.CommandAction]) -> None:
     list_action = scons_extensions.action_list_scons(actions)
     assert list_action == expected
 
@@ -555,7 +568,7 @@ action_list_strings = {
     action_list_strings.values(),
     ids=action_list_strings.keys(),
 )
-def test_action_list_strings(builder, expected) -> None:
+def test_action_list_strings(builder: SCons.Builder.Builder, expected: list[str]) -> None:
     action_list = scons_extensions.action_list_strings(builder)
     assert action_list == expected
 
@@ -572,7 +585,7 @@ catenate_builder_actions = {
     catenate_builder_actions.values(),
     ids=catenate_builder_actions.keys(),
 )
-def test_catenate_builder_actions(action_list, catenated_actions) -> None:
+def test_catenate_builder_actions(action_list: str | list[str], catenated_actions: str) -> None:
     builder = scons_extensions.catenate_builder_actions(
         SCons.Builder.Builder(action=action_list), program="bash", options="-c"
     )
@@ -580,14 +593,14 @@ def test_catenate_builder_actions(action_list, catenated_actions) -> None:
 
 
 def test_catenate_actions() -> None:
-    def cat(program="cat"):
+    def cat(program: str = "cat") -> SCons.Builder.Builder:
         return SCons.Builder.Builder(action=f"{program} $SOURCE > $TARGET")
 
     builder = cat()
     assert builder.action.cmd_list == "cat $SOURCE > $TARGET"
 
     @scons_extensions.catenate_actions(program="bash", options="-c")
-    def bash_cat(**kwargs):
+    def bash_cat(**kwargs) -> SCons.Builder.Builder:
         return cat(**kwargs)
 
     builder = bash_cat()
@@ -628,7 +641,7 @@ ssh_builder_actions = {
     ssh_builder_actions.values(),
     ids=ssh_builder_actions.keys(),
 )
-def test_ssh_builder_actions(target, builder_kwargs, task_kwargs) -> None:
+def test_ssh_builder_actions(target: list[str], builder_kwargs: dict, task_kwargs: dict) -> None:
     # Set default expectations to match default argument values
     expected_kwargs = {
         "remote_server": "",
@@ -641,7 +654,7 @@ def test_ssh_builder_actions(target, builder_kwargs, task_kwargs) -> None:
     expected_kwargs.update(builder_kwargs)
     expected_kwargs.update(task_kwargs)
 
-    def cat():
+    def cat() -> SCons.Builder.Builder:
         return SCons.Builder.Builder(
             action=[
                 "cat ${SOURCE.abspath} | tee ${TARGETS[0].abspath}",
@@ -712,7 +725,7 @@ def test_ssh_builder_actions(target, builder_kwargs, task_kwargs) -> None:
 
 
 prepend_env_input = {
-    "path exists": (f"{root_fs}program", True, does_not_raise()),
+    "path exists": (f"{root_fs}program", True, does_not_raise),
     "path does not exist": (f"{root_fs}notapath", False, pytest.raises(FileNotFoundError)),
 }
 
@@ -722,7 +735,7 @@ prepend_env_input = {
     prepend_env_input.values(),
     ids=prepend_env_input.keys(),
 )
-def test_append_env_path(program, mock_exists, outcome) -> None:
+def test_append_env_path(program: str, mock_exists: bool, outcome: contextlib.nullcontext | pytest.RaisesExc) -> None:
     # Test function interface
     env = SCons.Environment.Environment()
     with (
@@ -775,7 +788,7 @@ substitution_syntax_input = {
     substitution_syntax_input.values(),
     ids=substitution_syntax_input.keys(),
 )
-def test_substitution_syntax(substitution_dictionary, keyword_arguments, expected_dictionary) -> None:
+def test_substitution_syntax(substitution_dictionary: dict, keyword_arguments: dict, expected_dictionary: dict) -> None:
     env = SCons.Environment.Environment()
 
     # Test function style interface
@@ -818,7 +831,7 @@ shell_environment = {
     shell_environment.values(),
     ids=shell_environment.keys(),
 )
-def test_shell_environment(kwargs, expected_environment) -> None:
+def test_shell_environment(kwargs: dict, expected_environment: dict[str, str]) -> None:
     expected_kwargs = {
         "shell": "bash",
         "cache": None,
@@ -853,7 +866,7 @@ construct_action_list = {
     construct_action_list.values(),
     ids=construct_action_list.keys(),
 )
-def test_construct_action_list(actions, prefix, suffix, expected) -> None:
+def test_construct_action_list(actions: list[str], prefix: str, suffix: str, expected: list[str]) -> None:
     output = scons_extensions.construct_action_list(actions, prefix=prefix, suffix=suffix)
     assert output == expected
 
@@ -878,7 +891,7 @@ journal_emitter_input = {
     journal_emitter_input.values(),
     ids=journal_emitter_input.keys(),
 )
-def test_abaqus_journal_emitter(target, source, expected) -> None:
+def test_abaqus_journal_emitter(target: list[str], source: list[SCons.Node.FS.FS.File], expected: list[str]) -> None:
     target, source = scons_extensions._abaqus_journal_emitter(target, source, None)
     assert target == expected
 
@@ -922,7 +935,9 @@ abaqus_journal_input = {
     abaqus_journal_input.values(),
     ids=abaqus_journal_input.keys(),
 )
-def test_abaqus_journal(builder_kwargs, task_kwargs, node_count, action_count, target_list) -> None:
+def test_abaqus_journal(
+    builder_kwargs: dict, task_kwargs: dict, node_count: int, action_count: int, target_list: list[str]
+) -> None:
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "abaqus",
@@ -971,7 +986,7 @@ solver_emitter_input = {
         [],
         [source_file],
         ["job.odb", "job.dat", "job.msg", "job.com", "job.prt", "job.abaqus_v6.env", "job.stdout"],
-        does_not_raise(),
+        does_not_raise,
     ),
     "empty targets, suffixes override": (
         "job",
@@ -979,7 +994,7 @@ solver_emitter_input = {
         [],
         [source_file],
         ["job.odb", "job.abaqus_v6.env", "job.stdout"],
-        does_not_raise(),
+        does_not_raise,
     ),
     "empty targets, suffixes override empty list": (
         "job",
@@ -987,7 +1002,7 @@ solver_emitter_input = {
         [],
         [source_file],
         ["job.abaqus_v6.env", "job.stdout"],
-        does_not_raise(),
+        does_not_raise,
     ),
     "one targets": (
         "job",
@@ -995,7 +1010,7 @@ solver_emitter_input = {
         ["job.sta"],
         [source_file],
         ["job.sta", "job.odb", "job.dat", "job.msg", "job.com", "job.prt", "job.abaqus_v6.env", "job.stdout"],
-        does_not_raise(),
+        does_not_raise,
     ),
     "one targets, override suffixes": (
         "job",
@@ -1003,7 +1018,7 @@ solver_emitter_input = {
         ["job.sta"],
         [source_file],
         ["job.sta", "job.odb", "job.abaqus_v6.env", "job.stdout"],
-        does_not_raise(),
+        does_not_raise,
     ),
     "one targets, override suffixes string": (
         "job",
@@ -1011,7 +1026,7 @@ solver_emitter_input = {
         ["job.sta"],
         [source_file],
         ["job.sta", "job.odb", "job.abaqus_v6.env", "job.stdout"],
-        does_not_raise(),
+        does_not_raise,
     ),
     "subdirectory": (
         "job",
@@ -1028,7 +1043,7 @@ solver_emitter_input = {
             f"set1{os.sep}job.abaqus_v6.env",
             f"set1{os.sep}job.stdout",
         ],
-        does_not_raise(),
+        does_not_raise,
     ),
     "subdirectory, override suffixes": (
         "job",
@@ -1036,7 +1051,7 @@ solver_emitter_input = {
         ["set1/job.sta"],
         [source_file],
         ["set1/job.sta", f"set1{os.sep}job.odb", f"set1{os.sep}job.abaqus_v6.env", f"set1{os.sep}job.stdout"],
-        does_not_raise(),
+        does_not_raise,
     ),
     "missing job_name": (
         None,
@@ -1044,7 +1059,7 @@ solver_emitter_input = {
         [],
         [source_file],
         ["root.odb", "root.dat", "root.msg", "root.com", "root.prt", "root.abaqus_v6.env", "root.stdout"],
-        does_not_raise(),
+        does_not_raise,
     ),
     "missing job_name, override suffixes": (
         None,
@@ -1052,7 +1067,7 @@ solver_emitter_input = {
         [],
         [source_file],
         ["root.odb", "root.abaqus_v6.env", "root.stdout"],
-        does_not_raise(),
+        does_not_raise,
     ),
 }
 
@@ -1062,7 +1077,14 @@ solver_emitter_input = {
     solver_emitter_input.values(),
     ids=solver_emitter_input.keys(),
 )
-def test_abaqus_solver_emitter(job_name, suffixes, target, source, expected, outcome) -> None:
+def test_abaqus_solver_emitter(
+    job_name: str,
+    suffixes: list[str] | None,
+    target: list[str],
+    source: list[SCons.Node.FS.FS.File],
+    expected: list[str] | None,
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
     copy_of_suffixes = copy.deepcopy(suffixes)
     env = SCons.Environment.Environment()
     env["job_name"] = job_name
@@ -1127,7 +1149,14 @@ abaqus_solver_input = {
     abaqus_solver_input.values(),
     ids=abaqus_solver_input.keys(),
 )
-def test_abaqus_solver(builder_kwargs, task_kwargs, node_count, action_count, source_list, suffixes) -> None:
+def test_abaqus_solver(
+    builder_kwargs: dict,
+    task_kwargs: dict,
+    node_count: int,
+    action_count: int,
+    source_list: list[str],
+    suffixes: list[str],
+) -> None:
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "abaqus",
@@ -1166,28 +1195,28 @@ test_task_kwarg_emitter_cases = {
         {"required_task_kwarg": "task_kwarg"},
         ["target.out"],
         ["source.in"],
-        does_not_raise(),
+        does_not_raise,
     ),
     "subdirectory designed use behavior": (
         ([f"subdir{os.path.sep}target.out"], ["source.in"], SCons.Environment.Environment(task_kwarg="value")),
         {"required_task_kwarg": "task_kwarg"},
         [f"subdir{os.path.sep}target.out"],
         ["source.in"],
-        does_not_raise(),
+        does_not_raise,
     ),
     "specified suffixes": (
         (["target.out"], ["source.in"], SCons.Environment.Environment(task_kwarg="value")),
         {"required_task_kwarg": "task_kwarg", "suffixes": (".suffixes",)},
         ["target.out", pathlib.Path("value.suffixes")],
         ["source.in"],
-        does_not_raise(),
+        does_not_raise,
     ),
     "subdirectory specified suffixes": (
         ([f"subdir{os.path.sep}target.out"], ["source.in"], SCons.Environment.Environment(task_kwarg="value")),
         {"required_task_kwarg": "task_kwarg", "suffixes": (".suffixes",)},
         [f"subdir{os.path.sep}target.out", pathlib.Path("subdir") / "value.suffixes"],
         ["source.in"],
-        does_not_raise(),
+        does_not_raise,
     ),
     "required kwarg not specified": (
         (["target.out"], ["source.in"], SCons.Environment.Environment()),
@@ -1211,7 +1240,13 @@ test_task_kwarg_emitter_cases = {
     test_task_kwarg_emitter_cases.values(),
     ids=test_task_kwarg_emitter_cases.keys(),
 )
-def test_task_kwarg_emitter(positional, kwargs, expected_target, expected_source, outcome) -> None:
+def test_task_kwarg_emitter(
+    positional: tuple[list[str], list[str], SCons.Environment.Environment],
+    kwargs: dict,
+    expected_target: list[str],
+    expected_source: list[str],
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
     default_kwargs = {
         "suffixes": None,
         "appending_suffixes": None,
@@ -1251,7 +1286,7 @@ abaqus_solver_emitter_factory_cases = {
     abaqus_solver_emitter_factory_cases.values(),
     ids=abaqus_solver_emitter_factory_cases.keys(),
 )
-def test_abaqus_solver_emitter_factory(factory_kwargs) -> None:
+def test_abaqus_solver_emitter_factory(factory_kwargs: dict) -> None:
     target = ["job.extension"]
     source = ["source.extension"]
     env = SCons.Environment.Environment()
@@ -1316,7 +1351,9 @@ abaqus_solver_emitter_factory_emitters_cases = {
     abaqus_solver_emitter_factory_emitters_cases.values(),
     ids=abaqus_solver_emitter_factory_emitters_cases.keys(),
 )
-def test_abaqus_solver_emitter_factory_emitters(emitter_name, default_factory_kwargs, factory_kwargs) -> None:
+def test_abaqus_solver_emitter_factory_emitters(
+    emitter_name: str, default_factory_kwargs: dict, factory_kwargs: dict
+) -> None:
     target = ["job.extension"]
     source = ["source.extension"]
     env = SCons.Environment.Environment()
@@ -1489,7 +1526,9 @@ abaqus_pseudobuilder_input = {
     abaqus_pseudobuilder_input.values(),
     ids=abaqus_pseudobuilder_input.keys(),
 )
-def test_abaqus_pseudo_builder(class_kwargs, call_kwargs, sources, targets, options, builder_kwargs) -> None:
+def test_abaqus_pseudo_builder(
+    class_kwargs: dict, call_kwargs: dict, sources: list[str], targets: list[str], options: str, builder_kwargs: dict
+) -> None:
     # Mock AbaqusSolver builder and env
     mock_builder = unittest.mock.Mock()
     mock_env = unittest.mock.Mock()
@@ -1525,7 +1564,7 @@ copy_substfile_input = {
     copy_substfile_input.values(),
     ids=copy_substfile_input.keys(),
 )
-def test_copy_substfile(source_list, expected_list) -> None:
+def test_copy_substfile(source_list: list[str | pathlib.Path], expected_list: list[str]) -> None:
     env = SCons.Environment.Environment()
     target_list = scons_extensions.copy_substfile(env, source_list, {})
     target_files = [str(target) for target in target_list]
@@ -1550,7 +1589,7 @@ build_subdirectory_input = {
     build_subdirectory_input.values(),
     ids=build_subdirectory_input.keys(),
 )
-def test_build_subdirectory(target, expected) -> None:
+def test_build_subdirectory(target: list[str], expected: pathlib.Path) -> None:
     assert scons_extensions._build_subdirectory(target) == expected
 
 
@@ -1604,7 +1643,7 @@ first_target_emitter_input = {
     first_target_emitter_input.values(),
     ids=first_target_emitter_input.keys(),
 )
-def test_first_target_emitter(target, source, expected) -> None:
+def test_first_target_emitter(target: list[str], source: list[SCons.Node.FS.FS.File], expected: list[str]) -> None:
     target, source = scons_extensions.first_target_emitter(target, source, None)
     assert target == expected
 
@@ -1823,8 +1862,8 @@ def test_builder_factory(
     builder_kwargs: dict,
     task_kwargs: dict,
     target: list,
-    default_emitter,
-    emitter,
+    default_emitter: collections.abc.Callable[[list, list, SCons.Environment.Environment], tuple[list, list]] | None,
+    emitter: collections.abc.Callable[[list, list, SCons.Environment.Environment], tuple[list, list]] | bool,
     expected_node_count: int,
 ) -> None:
     """Template test for builder factories based on :meth:`waves.scons_extensions.builder_factory`.
@@ -1933,7 +1972,7 @@ matlab_emitter_input = {
     matlab_emitter_input.values(),
     ids=matlab_emitter_input.keys(),
 )
-def test_matlab_script_emitter(target, source, expected) -> None:
+def test_matlab_script_emitter(target: list[str], source: list[SCons.Node.FS.FS.File], expected: list[str]) -> None:
     target, source = scons_extensions._matlab_script_emitter(target, source, None)
     assert target == expected
 
@@ -1975,7 +2014,13 @@ matlab_script_input = {
     matlab_script_input.values(),
     ids=matlab_script_input.keys(),
 )
-def test_matlab_script(builder_kwargs, task_kwargs, node_count, action_count, target_list) -> None:
+def test_matlab_script(
+    builder_kwargs: dict,
+    task_kwargs: dict,
+    node_count: int,
+    action_count: int,
+    target_list: list[str]
+) -> None:
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "matlab",
@@ -2043,7 +2088,7 @@ conda_environment_input = {
     conda_environment_input.values(),
     ids=conda_environment_input.keys(),
 )
-def test_conda_environment(builder_kwargs, task_kwargs, target) -> None:
+def test_conda_environment(builder_kwargs: dict[str, str], task_kwargs: dict[str, str], target: str[list]) -> None:
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "conda",
@@ -2122,7 +2167,9 @@ abaqus_extract_emitter_input = {
     abaqus_extract_emitter_input.values(),
     ids=abaqus_extract_emitter_input.keys(),
 )
-def test_abaqus_extract_emitter(target, source, expected, env) -> None:
+def test_abaqus_extract_emitter(
+    target: list[str], source: list[SCons.Node.FS.FS.File], expected: list[str], env: dict
+) -> None:
     target, source = scons_extensions._abaqus_extract_emitter(target, source, env)
     assert target == expected
 
@@ -2176,7 +2223,12 @@ build_odb_extract_input = {
     build_odb_extract_input.values(),
     ids=build_odb_extract_input.keys(),
 )
-def test_build_odb_extract(target, source, env, calls) -> None:
+def test_build_odb_extract(
+    target: list[SCons.Node.FS.FS.File],
+    source: list[SCons.Node.FS.FS.File],
+    env: dict,
+    calls: list[unittest.mock._Call],
+) -> None:
     with (
         patch("waves._abaqus.odb_extract.odb_extract") as mock_odb_extract,
         patch("pathlib.Path.unlink") as mock_unlink,
@@ -2221,7 +2273,9 @@ sbatch_input = {
     sbatch_input.values(),
     ids=sbatch_input.keys(),
 )
-def test_sbatch(builder_kwargs, task_kwargs, node_count, action_count, target_list) -> None:
+def test_sbatch(
+    builder_kwargs: dict, task_kwargs: dict, node_count: int, action_count: int, target_list: list[str]
+) -> None:
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "sbatch",
@@ -2305,7 +2359,7 @@ scanner_input = {
     scanner_input.values(),
     ids=scanner_input.keys(),
 )
-def test_abaqus_input_scanner(content, expected_dependencies) -> None:
+def test_abaqus_input_scanner(content: str, expected_dependencies: list[str]) -> None:
     """Tests the expected dependencies based on the mocked content of the file.
 
     This function does NOT test for recursion.
@@ -2344,7 +2398,7 @@ sphinx_scanner_input = {
     sphinx_scanner_input.values(),
     ids=sphinx_scanner_input.keys(),
 )
-def test_sphinx_scanner(content, expected_dependencies) -> None:
+def test_sphinx_scanner(content: str, expected_dependencies: list[str]) -> None:
     mock_file = unittest.mock.Mock()
     mock_file.get_text_contents.return_value = content
     env = SCons.Environment.Environment()
@@ -2440,7 +2494,14 @@ python_script_input = {
     python_script_input.values(),
     ids=python_script_input.keys(),
 )
-def test_parameter_study(node_count, action_count, args, kwargs, study, expected_targets) -> None:
+def test_parameter_study(
+    node_count: int,
+    action_count: int,
+    args: tuple,
+    kwargs: dict,
+    study: dict | parameter_generators.ParameterGenerator,
+    expected_targets: list[str],
+) -> None:
     expected_string = (
         "${environment} ${action_prefix} ${program} ${program_required} ${program_options} "
         "${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
@@ -2469,55 +2530,55 @@ cartesian_product = parameter_generators.CartesianProduct(
 parameter_study_sconscript = {
     "exports not a dictionary": ([], {"exports": []}, {}, pytest.raises(TypeError)),
     "default kwargs": (
-        ["SConscript"],
+        ("SConscript",),
         {},
         {"variant_dir": None, "exports": {"set_name": "", "parameters": {}}},
-        does_not_raise(),
+        does_not_raise,
     ),
     "added kwarg": (
-        ["SConscript"],
+        ("SConscript",),
         {"extra kwarg": "value"},
         {"extra kwarg": "value", "variant_dir": None, "exports": {"set_name": "", "parameters": {}}},
-        does_not_raise(),
+        does_not_raise,
     ),
     "variant_dir": (
-        ["SConscript"],
+        ("SConscript",),
         {"variant_dir": "build"},
         {"variant_dir": pathlib.Path("build"), "exports": {"set_name": "", "parameters": {}}},
-        does_not_raise(),
+        does_not_raise,
     ),
     "variant_dir subdirectories": (
-        ["SConscript"],
+        ("SConscript",),
         {"variant_dir": "build", "subdirectories": True},
         {"variant_dir": pathlib.Path("build"), "exports": {"set_name": "", "parameters": {}}},
-        does_not_raise(),
+        does_not_raise,
     ),
     "dictionary study": (
-        ["SConscript"],
+        ("SConscript",),
         {"study": {"parameter_one": 1}},
         {"variant_dir": None, "exports": {"set_name": "", "parameters": {"parameter_one": 1}}},
-        does_not_raise(),
+        does_not_raise,
     ),
     "parameter generator study": (
-        ["SConscript"],
+        ("SConscript",),
         {"study": cartesian_product},
         {"variant_dir": None, "exports": {"set_name": "set0", "parameters": {"parameter_one": 1}}},
-        does_not_raise(),
+        does_not_raise,
     ),
     "parameter generator variant_dir subdirectories": (
-        ["SConscript"],
+        ("SConscript",),
         {"variant_dir": "build", "subdirectories": True, "study": cartesian_product},
         {
             "variant_dir": pathlib.Path("build/set0"),
             "exports": {"set_name": "set0", "parameters": {"parameter_one": 1}},
         },
-        does_not_raise(),
+        does_not_raise,
     ),
     "parameter generator no variant_dir subdirectories": (
-        ["SConscript"],
+        ("SConscript",),
         {"variant_dir": None, "subdirectories": True, "study": cartesian_product},
         {"variant_dir": pathlib.Path("set0"), "exports": {"set_name": "set0", "parameters": {"parameter_one": 1}}},
-        does_not_raise(),
+        does_not_raise,
     ),
 }
 
@@ -2527,7 +2588,12 @@ parameter_study_sconscript = {
     parameter_study_sconscript.values(),
     ids=parameter_study_sconscript.keys(),
 )
-def test_parameter_study_sconscript(args, kwargs, expected, outcome) -> None:
+def test_parameter_study_sconscript(
+    args: tuple,
+    kwargs: dict,
+    expected: dict,
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
     env = SCons.Environment.Environment()
 
     # Test function style call
@@ -2563,7 +2629,7 @@ parameter_study_write_cases = {
         parameter_generators.CartesianProduct({"one": [1, 2]}, output_file="test.h5"),
         {},
         ["test.h5"],
-        does_not_raise(),
+        does_not_raise,
     ),
     # TODO: Update expected output file extension when the write methods adds an output file override
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/634
@@ -2571,13 +2637,13 @@ parameter_study_write_cases = {
         parameter_generators.CartesianProduct({"one": [1, 2]}, output_file="actually_a_yaml_file.h5"),
         {"output_file_type": "yaml"},
         ["actually_a_yaml_file.h5"],
-        does_not_raise(),
+        does_not_raise,
     ),
     "output file template": (
         parameter_generators.CartesianProduct({"one": [1, 2]}, output_file_template="test@number.h5"),
         {},
         ["test0.h5", "test1.h5"],
-        does_not_raise(),
+        does_not_raise,
     ),
     # TODO: Update expected output file extension when the write methods adds an output file override
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/634
@@ -2585,7 +2651,7 @@ parameter_study_write_cases = {
         parameter_generators.CartesianProduct({"one": [1, 2]}, output_file_template="actually_a_yaml_file@number.h5"),
         {"output_file_type": "yaml"},
         ["actually_a_yaml_file0.h5", "actually_a_yaml_file1.h5"],
-        does_not_raise(),
+        does_not_raise,
     ),
 }
 
@@ -2595,7 +2661,12 @@ parameter_study_write_cases = {
     parameter_study_write_cases.values(),
     ids=parameter_study_write_cases.keys(),
 )
-def test_parameter_study_write(parameter_generator, kwargs, expected, outcome) -> None:
+def test_parameter_study_write(
+    parameter_generator: parameter_generators.ParameterGenerator,
+    kwargs: dict,
+    expected: list[str] | None,
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
     env = SCons.Environment.Environment()
 
     with outcome:
@@ -2623,7 +2694,12 @@ test_qoi_pseudo_builder_cases = {
     test_qoi_pseudo_builder_cases.values(),
     ids=test_qoi_pseudo_builder_cases.keys(),
 )
-def test_qoi_pseudo_builder(class_kwargs, call_kwargs, expected, outcome) -> None:
+def test_qoi_pseudo_builder(
+    class_kwargs: dict,
+    call_kwargs: dict,
+    expected: SCons.Node.NodeList | None,
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
     # Direct call
     with outcome:
         env = SCons.Environment.Environment()
@@ -2670,7 +2746,7 @@ waves_environment_attributes = {
     waves_environment_attributes.values(),
     ids=waves_environment_attributes.keys(),
 )
-def test_waves_environment_attributes(kwargs) -> None:
+def test_waves_environment_attributes(kwargs: dict[str, str]) -> None:
     expected_attributes = {
         "ABAQUS_PROGRAM": "abaqus",
         "PYTHON_PROGRAM": "python",
@@ -2711,7 +2787,7 @@ waves_environment_methods = {
     waves_environment_methods.values(),
     ids=waves_environment_methods.keys(),
 )
-def test_waves_environment_methods(method, function) -> None:
+def test_waves_environment_methods(method: str, function: str) -> None:
     args = ["arg1"]
     kwargs = {"kwarg1": "value1"}
     env = scons_extensions.WAVESEnvironment()
@@ -2782,7 +2858,7 @@ waves_environment_builders = {
     waves_environment_builders.values(),
     ids=waves_environment_builders.keys(),
 )
-def test_waves_environment_builders(builder, factory, factory_kwargs) -> None:
+def test_waves_environment_builders(builder: str, factory: str, factory_kwargs: dict[str, str]) -> None:
     env = scons_extensions.WAVESEnvironment()
 
     args = ["arg1"]
