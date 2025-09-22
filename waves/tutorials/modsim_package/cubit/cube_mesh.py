@@ -13,7 +13,7 @@ def main(
     output_file: pathlib.Path,
     global_seed: float,
     element_type: str = "QUAD",
-    solver: str = "abaqus"
+    solver: str = "abaqus",
 ) -> None:
     """Mesh the simple cube geometry partitioned by ``cube_partition.py``.
 
