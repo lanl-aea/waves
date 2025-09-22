@@ -37,7 +37,7 @@ def set_name_substitution(
     replacement: str,
     identifier: str = "set_name",
     suffix: str = "/",
-) -> list[str | pathlib.Path] | str | pathlib.Path:
+) -> list[str | pathlib.Path] | str | pathlib.Path | typing.Any:  # noqa: ANN401
     """Replace ``@identifier`` with replacement text in a list of strings and pathlib Path objects.
 
     If the original is not a string, Path, or an iterable of strings and Paths, return without modification.
