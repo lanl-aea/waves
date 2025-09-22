@@ -8,7 +8,7 @@
    the output plotting and reporting formatting is subject to change.
 """
 
-import collections.abc
+import collections
 import contextlib
 import itertools
 import pathlib
@@ -27,7 +27,7 @@ _exclude_from_namespace = set(globals().keys())
 _version_key = "version"
 
 
-def _propagate_identical_attrs(all_attrs, context):  # noqa: ARG001
+def _propagate_identical_attrs(all_attrs: collections.abc.Sequence[dict], context: xarray.Context) -> dict:  # noqa: ARG001
     first_attrs = all_attrs[0]
     identical_pairs = {
         key: value
