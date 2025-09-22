@@ -2088,7 +2088,7 @@ conda_environment_input = {
     conda_environment_input.values(),
     ids=conda_environment_input.keys(),
 )
-def test_conda_environment(builder_kwargs: dict[str, str], task_kwargs: dict[str, str], target: str[list]) -> None:
+def test_conda_environment(builder_kwargs: dict[str, str], task_kwargs: dict[str, str], target: list[str]) -> None:
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "conda",
