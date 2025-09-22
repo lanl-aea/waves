@@ -10,6 +10,7 @@
 
 import collections
 import contextlib
+import datetime
 import itertools
 import pathlib
 import typing
@@ -717,8 +718,8 @@ def _get_plotting_name(qoi: xarray.DataArray) -> str:
 def _plot_scalar_qoi_history(
     qoi: xarray.DataArray,
     axes: matplotlib.axes.Axes,
-    date_min,
-    date_max,
+    date_min: datetime.datetime | numpy.datetime64,
+    date_max: datetime.datetime | numpy.datetime64,
 ) -> None:
     """Plot Scalar QOI history.
 
