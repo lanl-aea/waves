@@ -95,14 +95,14 @@ test_ancestor_subgraph_cases = {
     test_ancestor_subgraph_cases.values(),
     ids=test_ancestor_subgraph_cases.keys(),
 )
-def test_ancestor_subgraph(graph, nodes, outcome, expected):
+def test_ancestor_subgraph(graph, nodes, outcome, expected) -> None:
     # Check for a runtime error on empty subgraph/missing node
     with outcome:
         subgraph = _visualize.ancestor_subgraph(graph, nodes)
         assert subgraph.nodes == expected.nodes
 
 
-def test_add_node_count():
+def test_add_node_count() -> None:
     graph = networkx.DiGraph()
     graph.add_node(1, label="one", layer=1)
     graph.add_node(2, label="two", layer=2)
@@ -111,7 +111,7 @@ def test_add_node_count():
     assert "Node count: 2" in new_graph.nodes
 
 
-def test_graph_to_graphml():
+def test_graph_to_graphml() -> None:
     """Sign-of-life test for a non-empty Python string return value.
 
     Testing the content of an XML file subject to change with data unrelated to the input is fragile. If something more
@@ -180,7 +180,7 @@ def test_parse_output(
     expected_nodes,
     expected_edge_count,
     no_labels,
-):
+) -> None:
     """Test raises behavior and regression test a sample SCons tree output parsing."""
     # Check for a runtime error on empty parsing
     with pytest.raises(RuntimeError):
@@ -198,7 +198,7 @@ def test_parse_output(
         assert expected_label in graph.nodes[expected_node]["label"]
 
 
-def test_check_regex_exclude():
+def test_check_regex_exclude() -> None:
     """Test the regular expression exclusion of the visualize subcommand."""
     exclude_regex = "dummy_name[0-7]+"
     # If node name matches the regular expression
@@ -209,7 +209,7 @@ def test_check_regex_exclude():
     assert _visualize.check_regex_exclude(exclude_regex, "dummy_name9", 4, 2, True) == (True, 2)
 
 
-def test_visualize():
+def test_visualize() -> None:
     """Sign-of-life test for the visualize figure."""
     graph = networkx.DiGraph()
     graph.add_node(1, label="one", layer=1)
@@ -218,7 +218,7 @@ def test_visualize():
     _visualize.visualize(graph)
 
 
-def test_plot():
+def test_plot() -> None:
     """Check that the expected plot output function is called."""
     figure, _axes = matplotlib.pyplot.subplots()
     with (

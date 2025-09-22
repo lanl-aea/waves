@@ -6,7 +6,7 @@ import pathlib
 import cubit
 
 
-def main(output_file, xlength, ylength, zlength):
+def main(output_file, xlength, ylength, zlength) -> None:
     """Write brick geometry with specified dimensions.
 
     :param str output_file: The output file for the Cubit model. Will be stripped of the extension and ``.cub`` and

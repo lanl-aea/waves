@@ -9,7 +9,7 @@ import pytest
 from waves import _main, _settings, exceptions
 
 
-def test_main():
+def test_main() -> None:
     # docs subcommand
     with (
         patch("sys.argv", ["waves.py", "docs"]),
@@ -131,7 +131,7 @@ parameter_study_args = {
     parameter_study_args.values(),
     ids=list(parameter_study_args.keys()),
 )
-def test_parameter_study(subcommand, class_name, argument, option, argument_value):
+def test_parameter_study(subcommand, class_name, argument, option, argument_value) -> None:
     # Help/usage. Should not raise
     with (
         patch("sys.argv", ["_main.py", subcommand, "-h"]),

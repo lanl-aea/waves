@@ -228,7 +228,7 @@ configure = {
     configure.values(),
     ids=configure.keys(),
 )
-def test_configure(args, read_input, expected, outcome):
+def test_configure(args, read_input, expected, outcome) -> None:
     """Test :func:`solver.configure`.
 
     :param args: the tested function's first positional argument
@@ -303,7 +303,7 @@ solve = {
     solve.values(),
     ids=solve.keys(),
 )
-def test_solve(configuration, exists, outcome):
+def test_solve(configuration, exists, outcome) -> None:
     """Test :func:`solver.solve`.
 
     :param configuration: the tested function's positional argument
@@ -321,7 +321,7 @@ def test_solve(configuration, exists, outcome):
             pass
 
 
-def test_implicit():
+def test_implicit() -> None:
     """Test :func:`solver.implicit`."""
     dummy_namespace = {"dummy": "namespace"}
     dummy_configuration = {"configuration": "value"}
@@ -334,7 +334,7 @@ def test_implicit():
         mock_solve.assert_called_once_with(dummy_configuration)
 
 
-def test_explicit():
+def test_explicit() -> None:
     """Test :func:`solver.explicit`."""
     dummy_namespace = {"dummy": "namespace"}
     dummy_configuration = {"configuration": "value"}

@@ -51,7 +51,7 @@ class TestCustomStudy:
         validate_input.values(),
         ids=validate_input.keys(),
     )
-    def test_validate(self, parameter_schema, outcome):
+    def test_validate(self, parameter_schema, outcome) -> None:
         with outcome:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
@@ -78,7 +78,7 @@ class TestCustomStudy:
         test_generate_cases.values(),
         ids=test_generate_cases.keys(),
     )
-    def test_generate(self, parameter_schema, expected_array, expected_types):
+    def test_generate(self, parameter_schema, expected_array, expected_types) -> None:
         test_generate = CustomStudy(parameter_schema)
         generate_array = test_generate._samples
         assert numpy.all(generate_array == expected_array)
@@ -149,7 +149,7 @@ class TestCustomStudy:
         merge_test.values(),
         ids=merge_test.keys(),
     )
-    def test_merge(self, first_schema, second_schema, expected_array, expected_types):
+    def test_merge(self, first_schema, second_schema, expected_array, expected_types) -> None:
         with patch("waves.parameter_generators._verify_parameter_study"):
             test_merge1, test_merge2 = merge_samplers(CustomStudy, first_schema, second_schema, {})
             generate_array = test_merge2._samples
@@ -209,7 +209,7 @@ class TestCustomStudy:
     )
     def test_write_yaml(
         self, parameter_schema, output_file_template, output_file, output_type, file_count, expected_calls
-    ):
+    ) -> None:
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta"),
             patch("pathlib.Path.open", mock_open()) as mock_file,

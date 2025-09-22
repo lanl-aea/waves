@@ -44,7 +44,7 @@ _cli_description = "Dummy solver with file handling behavior similar to numeric 
 _default_solve_cpus = 1
 
 
-def main():
+def main() -> None:
     """Run the solver command line interface and program flow."""
     parser = get_parser()
     subcommand_list = parser._subparsers._group_actions[0].choices.keys()

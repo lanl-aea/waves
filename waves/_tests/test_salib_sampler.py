@@ -49,7 +49,7 @@ class TestSALibSampler:
         sampler_overrides.values(),
         ids=sampler_overrides.keys(),
     )
-    def test_sampler_overrides(self, sampler_class, parameter_schema, kwargs, expected):
+    def test_sampler_overrides(self, sampler_class, parameter_schema, kwargs, expected) -> None:
         test_validate = SALibSampler(sampler_class, parameter_schema)
         override_kwargs = test_validate._sampler_overrides(**kwargs)
         assert override_kwargs == expected
@@ -143,7 +143,7 @@ class TestSALibSampler:
     @pytest.mark.parametrize(
         ("sampler_class", "parameter_schema", "outcome"), validate_input.values(), ids=validate_input.keys()
     )
-    def test_validate(self, sampler_class, parameter_schema, outcome):
+    def test_validate(self, sampler_class, parameter_schema, outcome) -> None:
         with outcome:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
@@ -225,7 +225,7 @@ class TestSALibSampler:
             number_of_simulations = int((num_vars + 1) * N)
         return [f"parameter_set{num}" for num in range(number_of_simulations)]
 
-    def _big_enough(self, sampler, N, num_vars):  # noqa: N803
+    def _big_enough(self, sampler, N, num_vars) -> bool:  # noqa: N803
         if (  # noqa: SIM103
             (sampler == "sobol" and num_vars < 2)
             or (sampler == "fast_sampler" and N < 64)
@@ -239,7 +239,7 @@ class TestSALibSampler:
         generate_input.values(),
         ids=generate_input.keys(),
     )
-    def test_generate(self, parameter_schema, kwargs):
+    def test_generate(self, parameter_schema, kwargs) -> None:
         for sampler in _supported_salib_samplers:
             # TODO: find a better way to separate the sampler types and their test parameterization
             if not self._big_enough(sampler, parameter_schema["N"], parameter_schema["problem"]["num_vars"]):
@@ -382,7 +382,7 @@ class TestSALibSampler:
         merge_test.values(),
         ids=merge_test.keys(),
     )
-    def test_merge(self, first_schema, second_schema, kwargs):
+    def test_merge(self, first_schema, second_schema, kwargs) -> None:
         with patch("waves.parameter_generators._verify_parameter_study"):
             for sampler in _supported_salib_samplers:
                 # TODO: find a better way to separate the sampler types and their test parameterization

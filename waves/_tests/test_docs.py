@@ -6,7 +6,7 @@ import pytest
 from waves import _docs, _settings
 
 
-def test_docs():
+def test_docs() -> None:
     # No print. Should call webbrowser.open successfully
     with (
         patch("builtins.print") as mock_print,

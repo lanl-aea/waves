@@ -5,7 +5,7 @@ import argparse
 from waves import qoi
 
 
-def main():
+def main() -> None:
     """Create fictitious simulation output quantities of interest (QOIs) for use in the WAVES QOI module tutorial."""
     parser = argparse.ArgumentParser()
     parser.add_argument("--load", type=float, default=30.0)

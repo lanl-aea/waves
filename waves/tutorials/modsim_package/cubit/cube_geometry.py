@@ -7,7 +7,7 @@ import sys
 import cubit
 
 
-def main(output_file, width, height, depth):
+def main(output_file, width, height, depth) -> None:
     """Create a simple cube geometry.
 
     This script creates a simple Cubit model with a single cube part.

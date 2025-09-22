@@ -52,7 +52,7 @@ class TestScipySampler:
         generate_input.values(),
         ids=generate_input.keys(),
     )
-    def test_generate(self, parameter_schema, kwargs):
+    def test_generate(self, parameter_schema, kwargs) -> None:
         parameter_names = [key for key in parameter_schema if key != "num_simulations"]
         for sampler in _supported_scipy_samplers:
             # NOTE: we cannot test the samples array while simulateously iterating over available samplers because each
@@ -100,7 +100,7 @@ class TestScipySampler:
     }
 
     @pytest.mark.parametrize(("first_schema", "second_schema", "kwargs"), merge_test.values(), ids=merge_test.keys())
-    def test_merge(self, first_schema, second_schema, kwargs):
+    def test_merge(self, first_schema, second_schema, kwargs) -> None:
         with patch("waves.parameter_generators._verify_parameter_study"):
             for sampler in _supported_scipy_samplers:
                 original_study, merged_study = merge_samplers(

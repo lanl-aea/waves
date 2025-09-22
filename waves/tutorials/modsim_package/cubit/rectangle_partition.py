@@ -8,7 +8,7 @@ import sys
 import cubit
 
 
-def main(input_file, output_file, width, height):
+def main(input_file, output_file, width, height) -> None:
     """Partition the simple rectangle geometry created by ``rectangle_geometry.py``.
 
     This script partitions a simple Cubit model with a single rectangle part.

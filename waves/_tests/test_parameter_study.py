@@ -9,7 +9,7 @@ import yaml
 from waves import _parameter_study
 
 
-def test_read_parameter_schema():
+def test_read_parameter_schema() -> None:
     # Test STDIN/TexIOWrapper read
     input_file = io.TextIOWrapper(io.BytesIO(b"{a: [1], b: [2]}"))
     expected = {"a": [1], "b": [2]}
@@ -48,7 +48,7 @@ def test_read_parameter_schema():
     mock_file.assert_not_called()
 
 
-def test_main():
+def test_main() -> None:
     # Check the YAML read error and clarification runtime error message
     with (
         patch("waves._parameter_study.read_parameter_schema", side_effect=yaml.parser.ParserError()),

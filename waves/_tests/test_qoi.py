@@ -195,7 +195,7 @@ test_create_qoi_cases = {
     test_create_qoi_cases.values(),
     ids=test_create_qoi_cases.keys(),
 )
-def test_create_qoi(kwargs, expected, outcome):
+def test_create_qoi(kwargs, expected, outcome) -> None:
     with outcome:
         try:
             output = qoi.create_qoi(**kwargs)
@@ -326,7 +326,7 @@ test_create_qoi_set_cases = {
     test_create_qoi_set_cases.values(),
     ids=test_create_qoi_set_cases.keys(),
 )
-def test_create_qoi_set(qoi_list, expected):
+def test_create_qoi_set(qoi_list, expected) -> None:
     output = qoi.create_qoi_set(qoi_list)
     assert expected.identical(output)
 
@@ -654,7 +654,7 @@ test__qoi_group_cases = {
     test__qoi_group_cases.values(),
     ids=test__qoi_group_cases.keys(),
 )
-def test__qoi_group(qoi_set, expected, outcome):
+def test__qoi_group(qoi_set, expected, outcome) -> None:
     with outcome:
         try:
             group = qoi._qoi_group(qoi_set)
@@ -676,7 +676,7 @@ test__node_path_cases = {
     test__node_path_cases.values(),
     ids=test__node_path_cases.keys(),
 )
-def test__node_path(qoi_set, expected):
+def test__node_path(qoi_set, expected) -> None:
     group = qoi._node_path(qoi_set)
     assert group == expected
 
@@ -721,12 +721,12 @@ test__propagate_identical_attrs_cases = {
     test__propagate_identical_attrs_cases.values(),
     ids=test__propagate_identical_attrs_cases.keys(),
 )
-def test__propagate_identical_attrs(input_attrs, common_attrs):
+def test__propagate_identical_attrs(input_attrs, common_attrs) -> None:
     output_attrs = qoi._propagate_identical_attrs(input_attrs, None)
     assert output_attrs == common_attrs
 
 
-def test__create_qoi_archive():
+def test__create_qoi_archive() -> None:
     archive = qoi._create_qoi_archive(
         (
             qoi.create_qoi(
@@ -810,7 +810,7 @@ def test__create_qoi_archive():
     xarray.testing.assert_identical(archive, expected)
 
 
-def test__merge_qoi_archives():
+def test__merge_qoi_archives() -> None:
     qoi_archives = [
         qoi._create_qoi_archive(
             (
@@ -1034,7 +1034,7 @@ test__read_qoi_set_cases = {
     test__read_qoi_set_cases.values(),
     ids=test__read_qoi_set_cases.keys(),
 )
-def test__read_qoi_set_csv(mock_csv_data, expected):
+def test__read_qoi_set_csv(mock_csv_data, expected) -> None:
     # Test CSV read with mock CSV data
     from_file = pathlib.Path("test.csv")
     mock_dataframe = pandas.read_csv(io.StringIO(mock_csv_data))
@@ -1048,7 +1048,7 @@ def test__read_qoi_set_csv(mock_csv_data, expected):
         assert expected.identical(qoi_set)
 
 
-def test__read_qoi_set_h5():
+def test__read_qoi_set_h5() -> None:
     from_file = pathlib.Path("test.h5")
     with (
         patch("pandas.read_csv") as mock_read_csv,
@@ -1059,7 +1059,7 @@ def test__read_qoi_set_h5():
         mock_open_dataset.assert_called_once_with(from_file, engine="h5netcdf")
 
 
-def test__read_qoi_set_unknown():
+def test__read_qoi_set_unknown() -> None:
     from_file = pathlib.Path("test.unknownsuffix")
     with (
         patch("pandas.read_csv") as mock_read_csv,
@@ -1340,7 +1340,7 @@ test__add_tolerance_attribute_cases = {
     test__add_tolerance_attribute_cases.values(),
     ids=test__add_tolerance_attribute_cases.keys(),
 )
-def test__add_tolerance_attribute(qoi_set, expected):
+def test__add_tolerance_attribute(qoi_set, expected) -> None:
     qoi._add_tolerance_attribute(qoi_set)
     assert expected.identical(qoi_set)
 
@@ -1353,22 +1353,22 @@ test_write_qoi_set_to_csv_cases = test__read_qoi_set_cases
     test_write_qoi_set_to_csv_cases.values(),
     ids=test_write_qoi_set_to_csv_cases.keys(),
 )
-def test_write_qoi_set_to_csv(qoi_set, expected):
+def test_write_qoi_set_to_csv(qoi_set, expected) -> None:
     buffer = io.StringIO()
     qoi.write_qoi_set_to_csv(qoi_set, buffer)
     csv_text = buffer.getvalue()
     assert csv_text == expected
 
 
-def test__plot_qoi_tolerance_check():
+def test__plot_qoi_tolerance_check() -> None:
     pass
 
 
-def test__plot_scalar_tolerance_check():
+def test__plot_scalar_tolerance_check() -> None:
     pass
 
 
-def test__write_qoi_report():
+def test__write_qoi_report() -> None:
     pass
 
 
@@ -1435,7 +1435,7 @@ test__get_plotting_name_cases = {
     test__get_plotting_name_cases.values(),
     ids=test__get_plotting_name_cases.keys(),
 )
-def test__get_plotting_name(qoi_array, expected):
+def test__get_plotting_name(qoi_array, expected) -> None:
     output = qoi._get_plotting_name(qoi_array)
     assert output == expected
 
@@ -1494,7 +1494,7 @@ test__can_plot_scalar_qoi_history_cases = {
     test__can_plot_scalar_qoi_history_cases.values(),
     ids=test__can_plot_scalar_qoi_history_cases.keys(),
 )
-def test__can_plot_scalar_qoi_history(qoi_array, expected):
+def test__can_plot_scalar_qoi_history(qoi_array, expected) -> None:
     output = qoi._can_plot_scalar_qoi_history(qoi_array)
     assert output == expected
 
@@ -1562,53 +1562,53 @@ test__can_plot_qoi_tolerance_check_cases = {
     test__can_plot_qoi_tolerance_check_cases.values(),
     ids=test__can_plot_qoi_tolerance_check_cases.keys(),
 )
-def test__can_plot_qoi_tolerance_check(qoi_array, expected):
+def test__can_plot_qoi_tolerance_check(qoi_array, expected) -> None:
     output = qoi._can_plot_qoi_tolerance_check(qoi_array)
     assert output == expected
 
 
-def test__plot_scalar_qoi_history():
+def test__plot_scalar_qoi_history() -> None:
     pass
 
 
-def test__qoi_history_report():
+def test__qoi_history_report() -> None:
     pass
 
 
-def test__pdf_report():
+def test__pdf_report() -> None:
     pass
 
 
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/919
-def test__accept():
+def test__accept() -> None:
     pass
 
 
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/920
-def test__check():
+def test__check() -> None:
     pass
 
 
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/921
-def test__diff():
+def test__diff() -> None:
     pass
 
 
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/922
-def test__aggregate():
+def test__aggregate() -> None:
     pass
 
 
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/923
-def test__report():
+def test__report() -> None:
     pass
 
 
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/924
-def test__plot_archive():
+def test__plot_archive() -> None:
     pass
 
 
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/925
-def test__archive():
+def test__archive() -> None:
     pass

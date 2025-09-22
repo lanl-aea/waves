@@ -5,7 +5,7 @@ import pathlib
 import pytest
 
 
-def pytest_addoption(parser):
+def pytest_addoption(parser) -> None:
     """Add the custom pytest options to the pytest command-line parser."""
     parser.addoption(
         "--system-test-dir",

@@ -55,7 +55,7 @@ def merge_parameter_study(parameter_study_file, combined_data):
     return combined_data
 
 
-def save_plot(combined_data, x_var, y_var, selection_dict, concat_coord, output_file):
+def save_plot(combined_data, x_var, y_var, selection_dict, concat_coord, output_file) -> None:
     """Save scatter plot with given x and y labels.
 
     :param xarray.DataArray combined_data: XArray Dataset that will be plotted.
@@ -72,7 +72,7 @@ def save_plot(combined_data, x_var, y_var, selection_dict, concat_coord, output_
     matplotlib.pyplot.savefig(output_file)
 
 
-def save_table(combined_data, selection_dict, output_file):
+def save_table(combined_data, selection_dict, output_file) -> None:
     """Save csv table.
 
     :param xarray.DataArray combined_data: XArray Dataset to be written as a CSV.
@@ -85,7 +85,7 @@ def save_table(combined_data, selection_dict, output_file):
 
 def main(
     input_files, output_file, group_path, x_var, x_units, y_var, y_units, selection_dict, parameter_study_file=None
-):
+) -> None:
     """Catenate ``input_files`` datasets along the ``set_name`` dimension and plot selected data.
 
     Optionally merges the parameter study results datasets with the parameter study definition dataset, where the

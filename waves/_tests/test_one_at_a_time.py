@@ -52,7 +52,7 @@ class TestOneAtATime:
         validate_input.values(),
         ids=validate_input.keys(),
     )
-    def test_validate(self, parameter_schema, outcome):
+    def test_validate(self, parameter_schema, outcome) -> None:
         with outcome:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
@@ -258,7 +258,7 @@ class TestOneAtATime:
         generate_io.values(),
         ids=generate_io.keys(),
     )
-    def test_generate(self, parameter_schema, kwargs, expected_dataset, expected_types):
+    def test_generate(self, parameter_schema, kwargs, expected_dataset, expected_types) -> None:
         test_generate = OneAtATime(parameter_schema, **kwargs)
         xarray.testing.assert_identical(test_generate.parameter_study, expected_dataset)
         for key in test_generate.parameter_study:
@@ -344,7 +344,7 @@ class TestOneAtATime:
         merge_test.values(),
         ids=merge_test.keys(),
     )
-    def test_merge(self, first_schema, second_schema, expected_array, expected_types):
+    def test_merge(self, first_schema, second_schema, expected_array, expected_types) -> None:
         with patch("waves.parameter_generators._verify_parameter_study"):
             original_study, merged_study = merge_samplers(OneAtATime, first_schema, second_schema, {})
             generate_array = merged_study._samples
@@ -444,7 +444,7 @@ class TestOneAtATime:
     )
     def test_write_yaml(
         self, parameter_schema, output_file_template, output_file, output_type, file_count, expected_calls
-    ):
+    ) -> None:
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta"),
             patch("pathlib.Path.open", mock_open()) as mock_file,

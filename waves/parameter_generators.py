@@ -1412,7 +1412,7 @@ def _parameter_study_to_numpy(parameter_study: xarray.Dataset) -> numpy.ndarray:
     return numpy.array(data, dtype=object)
 
 
-def _verify_parameter_study(parameter_study: xarray.Dataset):
+def _verify_parameter_study(parameter_study: xarray.Dataset) -> None:
     """Verify the contents of a parameter study.
 
     :param parameter_study: A :class:`ParameterGenerator` parameter study Xarray Dataset

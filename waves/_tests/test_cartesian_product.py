@@ -44,7 +44,7 @@ class TestCartesianProduct:
         validate_input.values(),
         ids=validate_input.keys(),
     )
-    def test_validate(self, parameter_schema, outcome):
+    def test_validate(self, parameter_schema, outcome) -> None:
         with outcome:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
@@ -118,7 +118,7 @@ class TestCartesianProduct:
         generate_io.values(),
         ids=generate_io.keys(),
     )
-    def test_generate(self, parameter_schema, expected_array, expected_types):
+    def test_generate(self, parameter_schema, expected_array, expected_types) -> None:
         test_generate = CartesianProduct(parameter_schema)
         generate_array = test_generate._samples
         assert numpy.all(generate_array == expected_array)
@@ -139,7 +139,7 @@ class TestCartesianProduct:
     # FIXME: trace original use of ``expected_array`` and ``expected_types``. Either use in test or remove from test
     # function arguments. Remove ``noqa: ARG002`` after fixing.
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/961
-    def test_verify_parameter_study(self, parameter_schema, expected_array, expected_types):  # noqa: ARG002
+    def test_verify_parameter_study(self, parameter_schema, expected_array, expected_types) -> None:  # noqa: ARG002
         test_generate = CartesianProduct(parameter_schema)
         parameter_generators._verify_parameter_study(test_generate.parameter_study)
 
@@ -221,7 +221,7 @@ class TestCartesianProduct:
         merge_test.values(),
         ids=merge_test.keys(),
     )
-    def test_merge(self, first_schema, second_schema, expected_array, expected_types):
+    def test_merge(self, first_schema, second_schema, expected_array, expected_types) -> None:
         with patch("waves.parameter_generators._verify_parameter_study"):
             original_study, merged_study = merge_samplers(CartesianProduct, first_schema, second_schema, {})
             generate_array = merged_study._samples
@@ -326,7 +326,7 @@ class TestCartesianProduct:
     )
     def test_write_yaml(
         self, parameter_schema, output_file_template, output_file, output_type, file_count, expected_calls
-    ):
+    ) -> None:
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta"),
             patch("pathlib.Path.open", mock_open()) as mock_file,

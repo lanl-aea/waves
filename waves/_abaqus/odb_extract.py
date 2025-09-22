@@ -132,7 +132,7 @@ def odb_extract(
     abaqus_command: str = _settings._default_abaqus_command,
     delete_report_file: bool = False,
     verbose: bool = False,
-):
+) -> None:
     """Run the odb_extract Abaqus data extraction tool.
 
     Users should use the associated command line interface, not this API.
@@ -280,7 +280,7 @@ def run_external(cmd):
     return process.returncode, process.stdout.decode(), process.stderr.decode()
 
 
-def main():
+def main() -> None:
     args = get_parser().parse_args()  # pragma: no cover
     sys.exit(
         odb_extract(

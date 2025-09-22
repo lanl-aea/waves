@@ -24,7 +24,7 @@ def platform_check():
     return testing_windows, root_fs, testing_macos
 
 
-def consistent_hash_parameter_check(original_study, merged_study):
+def consistent_hash_parameter_check(original_study, merged_study) -> None:
     """Assert that the merged parameter study data matches the original parameter study.
 
     :param Union[CartesianProduct, SobolSequence, ScipySampler, SALibSampler] original_study: Original sampler object
@@ -34,7 +34,7 @@ def consistent_hash_parameter_check(original_study, merged_study):
         assert parameters == merged_study.parameter_study.sel({_set_coordinate_key: set_name})
 
 
-def self_consistency_checks(merged_study):
+def self_consistency_checks(merged_study) -> None:
     """Assert that the merged parameter set data is consistent throughout the sampler object.
 
     :param Union[CartesianProduct, SobolSequence, ScipySampler, SALibSampler] merged_study: Sampler object

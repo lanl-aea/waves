@@ -8,7 +8,7 @@ import sys
 import cubit
 
 
-def main(input_file, output_file):
+def main(input_file, output_file) -> None:
     """Partition the simple cube geometry created by ``cube_geometry.py``.
 
     This script partitions a simple Cubit model with a single cube part.

@@ -5,7 +5,7 @@ import pytest
 from waves import _build
 
 
-def test_build():
+def test_build() -> None:
     with patch("waves._utilities.tee_subprocess", return_value=(0, "is up to date.")) as mock_tee_subprocess:
         _build.main(["dummy.target"])
         mock_tee_subprocess.assert_called_once()

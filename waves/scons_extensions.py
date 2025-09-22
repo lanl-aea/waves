@@ -4143,7 +4143,7 @@ class WAVESEnvironment(SConsEnvironment):
         SIERRA_PROGRAM: str = "sierra",  # noqa: N803
         SPHINX_BUILD_PROGRAM: str = "sphinx-build",  # noqa: N803
         **kwargs,
-    ):
+    ) -> None:
         super().__init__(
             *args,
             ABAQUS_PROGRAM=ABAQUS_PROGRAM,

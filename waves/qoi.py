@@ -860,7 +860,7 @@ def _check(diff: pathlib.Path) -> None:
         raise ValueError(f"Not all QOIs are within tolerance. See {diff}.")
 
 
-def _diff(calculated: pathlib.Path, expected: pathlib.Path, output: pathlib.Path):
+def _diff(calculated: pathlib.Path, expected: pathlib.Path, output: pathlib.Path) -> None:
     """Compare calculated QOIs to expected values.
 
     :param calculated: path to source file containing calculated QOI values
