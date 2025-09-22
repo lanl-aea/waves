@@ -60,7 +60,7 @@ def test_print_action_signature_string(mock_node: Mock, action_signature_string:
         target = [mock_node]
         scons_extensions.print_action_signature_string(s, target, source, env)
         mock_print.assert_called_once_with(
-            f"Building {mock_node} with action signature string:\n  {action_signature_string!r}\n{s}",
+            f"Building {mock_node} with action signature string:\n  {action_signature_string}\n{s}",
         )
 
 
