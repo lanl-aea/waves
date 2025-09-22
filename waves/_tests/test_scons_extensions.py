@@ -552,7 +552,7 @@ action_list_scons = {
     action_list_scons.values(),
     ids=action_list_scons.keys(),
 )
-def test_action_list_scons(actions: list[str], expected: SCons.Action.ListAction[SCons.Action.CommandAction]) -> None:
+def test_action_list_scons(actions: list[str], expected: SCons.Action.ListAction) -> None:
     list_action = scons_extensions.action_list_scons(actions)
     assert list_action == expected
 
