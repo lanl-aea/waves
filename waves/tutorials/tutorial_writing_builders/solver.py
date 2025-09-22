@@ -190,7 +190,7 @@ def explicit(args: argparse.Namespace) -> None:
     solve(configuration)
 
 
-def positive_nonzero_int(argument):
+def positive_nonzero_int(argument: str) -> int:
     """Type function for argparse - positive, non-zero integers.
 
     :param str argument: string argument from argparse

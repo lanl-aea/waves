@@ -1008,7 +1008,7 @@ def first_target_builder_factory(
     subcommand_required: str = "",
     subcommand_options: str = "",
     action_suffix: str = _settings._redirect_action_suffix,
-    emitter: collections.abs.Callable[
+    emitter: collections.abc.Callable[
         [list, list, SCons.Environment.Environment], tuple[list, list]
     ] = first_target_emitter,
     **kwargs,
@@ -1222,7 +1222,7 @@ def abaqus_journal_builder_factory(
     subcommand_required: str = "",
     subcommand_options: str = "",
     action_suffix: str = _settings._redirect_action_suffix,
-    emitter: collections.abs.Callable[
+    emitter: collections.abc.Callable[
         [list, list, SCons.Environment.Environment], tuple[list, list]
     ] = first_target_emitter,
     **kwargs,
@@ -1868,7 +1868,7 @@ def abaqus_solver_builder_factory(
     subcommand_required: str = "",
     subcommand_options: str = "",
     action_suffix: str = _settings._redirect_action_suffix,
-    emitter: collections.abs.Callable[
+    emitter: collections.abc.Callable[
         [list, list, SCons.Environment.Environment], tuple[list, list]
     ] = first_target_emitter,
     **kwargs,
@@ -2272,7 +2272,7 @@ def python_builder_factory(
     subcommand_required: str = "",
     subcommand_options: str = "",
     action_suffix: str = _settings._redirect_action_suffix,
-    emitter: collections.abs.Callable[
+    emitter: collections.abc.Callable[
         [list, list, SCons.Environment.Environment], tuple[list, list]
     ] = first_target_emitter,
     **kwargs,
@@ -2953,7 +2953,7 @@ def quinoa_builder_factory(
     subcommand_required: str = "--control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath}",
     subcommand_options: str = "",
     action_suffix: str = _settings._redirect_action_suffix,
-    emitter: collections.abs.Callable[
+    emitter: collections.abc.Callable[
         [list, list, SCons.Environment.Environment], tuple[list, list]
     ] = first_target_emitter,
     **kwargs,
@@ -3065,7 +3065,7 @@ def calculix_builder_factory(
     subcommand_required: str = "",
     subcommand_options: str = "",
     action_suffix: str = _settings._redirect_action_suffix,
-    emitter: collections.abs.Callable[
+    emitter: collections.abc.Callable[
         [list, list, SCons.Environment.Environment], tuple[list, list]
     ] = first_target_emitter,
     **kwargs,
@@ -3175,7 +3175,7 @@ def fierro_explicit_builder_factory(
     subcommand_required: str = "${SOURCE.abspath}",
     subcommand_options: str = "",
     action_suffix: str = _settings._redirect_action_suffix,
-    emitter: collections.abs.Callable[
+    emitter: collections.abc.Callable[
         [list, list, SCons.Environment.Environment], tuple[list, list]
     ] = first_target_emitter,
     **kwargs,
@@ -3279,7 +3279,7 @@ def fierro_implicit_builder_factory(
     subcommand_required: str = "${SOURCE.abspath}",
     subcommand_options: str = "",
     action_suffix: str = _settings._redirect_action_suffix,
-    emitter: collections.abs.Callable[
+    emitter: collections.abc.Callable[
         [list, list, SCons.Environment.Environment], tuple[list, list]
     ] = first_target_emitter,
     **kwargs,
@@ -3377,7 +3377,7 @@ def sierra_builder_factory(
     subcommand_required: str = "-i ${SOURCE.abspath}",
     subcommand_options: str = "",
     action_suffix: str = _settings._redirect_action_suffix,
-    emitter: collections.abs.Callable[
+    emitter: collections.abc.Callable[
         [list, list, SCons.Environment.Environment], tuple[list, list]
     ] = first_target_emitter,
     **kwargs,
@@ -3475,7 +3475,7 @@ def ansys_apdl_builder_factory(
     subcommand_required: str = "",
     subcommand_options: str = "",
     action_suffix: str = "",
-    emitter: collections.abs.Callable[
+    emitter: collections.abc.Callable[
         [list, list, SCons.Environment.Environment], tuple[list, list]
     ] = first_target_emitter,
     **kwargs,
@@ -3585,7 +3585,7 @@ def truchas_builder_factory(
     subcommand_required: str = "-f -o:${TARGET.dir.filebase} ${SOURCE.abspath}",
     subcommand_options: str = "",
     action_suffix: str = _settings._redirect_action_suffix,
-    emitter: collections.abs.Callable[
+    emitter: collections.abc.Callable[
         [list, list, SCons.Environment.Environment], tuple[list, list]
     ] = first_target_emitter,
     **kwargs,

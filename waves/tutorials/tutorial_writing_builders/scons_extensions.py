@@ -1,5 +1,8 @@
 """Provide project specific extensions to SCons."""
 
+import collections
+import typing
+
 import SCons.Builder
 import waves
 
@@ -15,8 +18,10 @@ def solver_builder_factory(
     subcommand_required: str = "--input-file ${SOURCES[0].abspath} --output-file=${TARGETS[0].abspath} --overwrite",
     subcommand_options: str = "",
     action_suffix: str = "> ${TARGETS[-1].abspath} 2>&1",
-    emitter=waves.scons_extensions.first_target_emitter,
-    **kwargs,
+    emitter: collections.abc.Callable[
+        [list, list, SCons.Environment.Environment], tuple[list, list]
+    ] = waves.scons_extensions.first_target_emitter,
+    **kwargs: dict[str, typing.Any],
 ) -> SCons.Builder.Builder:
     """Define the SCons builder for the solver module's command-line interface.
 
