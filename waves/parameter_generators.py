@@ -1,4 +1,4 @@
-"""External API module.
+"""Provide build system compatible parameter generators for use as an external API module.
 
 Will raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAVESError` to allow the CLI implementation
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
