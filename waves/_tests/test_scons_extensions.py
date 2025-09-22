@@ -17,7 +17,6 @@ from waves._settings import (
     _abaqus_environment_extension,
     _abaqus_explicit_extensions,
     _abaqus_standard_extensions,
-    _abaqus_standard_restart_extensions,
     _cd_action_prefix,
     _redirect_action_suffix,
     _redirect_environment_suffix,
@@ -1406,7 +1405,7 @@ abaqus_pseudobuilder_input = {
     "oldjob_str": (
         {},
         {"job": "job", "oldjob": "oldjob"},
-        ["job.inp"] + [f"oldjob{ext}" for ext in _abaqus_standard_restart_extensions],
+        ["job.inp"] + [f"oldjob{ext}" for ext in scons_extensions._get_abaqus_restart_extensions(solver="standard")],
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " -double both $(-cpus 1$) -oldjob oldjob",
         {"job": "job"},
@@ -1414,7 +1413,7 @@ abaqus_pseudobuilder_input = {
     "oldjob_list_of_1": (
         {},
         {"job": "job", "oldjob": ["oldjob"]},
-        ["job.inp"] + [f"oldjob{ext}" for ext in _abaqus_standard_restart_extensions],
+        ["job.inp"] + [f"oldjob{ext}" for ext in scons_extensions._get_abaqus_restart_extensions(solver="standard")],
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " -double both $(-cpus 1$) -oldjob oldjob",
         {"job": "job"},
@@ -1423,8 +1422,8 @@ abaqus_pseudobuilder_input = {
         {},
         {"job": "job", "oldjob": ["oldjob_1", "oldjob_2"]},
         ["job.inp"]
-        + [f"oldjob_1{ext}" for ext in _abaqus_standard_restart_extensions]
-        + [f"oldjob_2{ext}" for ext in _abaqus_standard_restart_extensions],
+        + [f"oldjob_1{ext}" for ext in scons_extensions._get_abaqus_restart_extensions(solver="standard")]
+        + [f"oldjob_2{ext}" for ext in scons_extensions._get_abaqus_restart_extensions(solver="standard")],
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " -double both $(-cpus 1$)",
         {"job": "job"},
@@ -1433,7 +1432,7 @@ abaqus_pseudobuilder_input = {
         {},
         {"job": "job", "write_restart": True},
         ["job.inp"],
-        [f"job{ext}" for ext in (_abaqus_standard_extensions + _abaqus_standard_restart_extensions)],
+        [f"job{ext}" for ext in (_abaqus_standard_extensions + scons_extensions._get_abaqus_restart_extensions(solver="standard"))],
         " -double both $(-cpus 1$)",
         {"job": "job"},
     ),
@@ -1476,8 +1475,8 @@ abaqus_pseudobuilder_input = {
             "extra_options": "--extra-opt",
             "kwarg_1": "value_1",
         },
-        ["input.inp"] + [f"oldjob{ext}" for ext in _abaqus_standard_restart_extensions] + ["user.f", "extra.inp"],
-        [f"job{ext}" for ext in (_abaqus_standard_extensions + _abaqus_standard_restart_extensions)] + ["extra.odb"],
+        ["input.inp"] + [f"oldjob{ext}" for ext in scons_extensions._get_abaqus_restart_extensions(solver="standard")] + ["user.f", "extra.inp"],
+        [f"job{ext}" for ext in (_abaqus_standard_extensions + scons_extensions._get_abaqus_restart_extensions(solver="standard"))] + ["extra.odb"],
         " -double constraint $(-cpus 2$) -oldjob oldjob -user user.f --extra-opt",
         {"job": "job", "kwarg_1": "value_1"},
     ),
@@ -1492,9 +1491,35 @@ abaqus_pseudobuilder_input = {
     "processes_2": (
         {},
         {"job": "job", "oldjob": "oldjob", "cpus": 2, "processes": 2, "write_restart": True},
+        ["job.inp"] + [f"oldjob{ext}" for ext in scons_extensions._get_abaqus_restart_extensions(solver="standard", processes=1)],
+        [f"job{ext}" for ext in (_abaqus_standard_extensions + scons_extensions._get_abaqus_restart_extensions(solver="standard", processes=2))],
+        " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
+        {"job": "job"},
+    ),
+    "num_oldjob_restart_files_1": (
+        {},
+        {"job": "job", "oldjob": "oldjob", "cpus": 2, "processes": 2, "write_restart": True, "num_oldjob_restart_files": 1},
+        ["job.inp"] + [f"oldjob{ext}" for ext in scons_extensions._get_abaqus_restart_extensions(solver="standard", processes=1)],
+        [f"job{ext}" for ext in (_abaqus_standard_extensions + scons_extensions._get_abaqus_restart_extensions(solver="standard", processes=2))],
+        " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
+        {"job": "job"},
+    ),
+    "num_oldjob_restart_files_2": (
+        {},
+        {"job": "job", "oldjob": "oldjob", "cpus": 2, "processes": 2, "write_restart": True, "num_oldjob_restart_files": 2},
         ["job.inp"] + [f"oldjob{ext}" for ext in scons_extensions._get_abaqus_restart_extensions(solver="standard", processes=2)],
         [f"job{ext}" for ext in (_abaqus_standard_extensions + scons_extensions._get_abaqus_restart_extensions(solver="standard", processes=2))],
         " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
+        {"job": "job"},
+    ),
+    "num_oldjob_restart_files_list": (
+        {},
+        {"job": "job", "oldjob": ["oldjob_1", "oldjob_2"], "num_oldjob_restart_files": [1, 2]},
+        ["job.inp"]
+        + [f"oldjob_1{ext}" for ext in scons_extensions._get_abaqus_restart_extensions(solver="standard", processes=1)]
+        + [f"oldjob_2{ext}" for ext in scons_extensions._get_abaqus_restart_extensions(solver="standard", processes=2)],
+        [f"job{ext}" for ext in _abaqus_standard_extensions],
+        " -double both $(-cpus 1$)",
         {"job": "job"},
     ),
 }
