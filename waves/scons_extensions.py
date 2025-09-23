@@ -2183,13 +2183,16 @@ class AbaqusPseudoBuilder:
                 raise ValueError("The length of ``num_oldjob_restart_files`` and ``oldjob`` do not match.")
             # Add old job targets to source list
             for job_name, num_restart_files in zip(oldjob, num_oldjob_restart_files, strict=True):
-                oldjob_extensions = _get_abaqus_restart_extensions(solver="standard", processes=num_restart_files)
+                oldjob_extensions = _utilities._get_abaqus_restart_extensions(
+                    solver="standard",
+                    processes=num_restart_files,
+                )
                 sources.extend([f"{job_name}{extension}" for extension in oldjob_extensions])
 
         # If writing restart files, add restart files to targets
         if write_restart:
             # See above TODO item for Explicit restart files
-            restart_extensions = _get_abaqus_restart_extensions(solver="standard", processes=processes)
+            restart_extensions = _utilities._get_abaqus_restart_extensions(solver="standard", processes=processes)
             targets.extend([f"{job}{extension}" for extension in restart_extensions])
 
         # If user subroutine is specified, add user subroutine to sources
@@ -2206,28 +2209,6 @@ class AbaqusPseudoBuilder:
             options += f" {extra_options}"
 
         return self.builder(target=targets, source=sources, job=job_option, program_options=options, **kwargs)
-
-
-def _get_abaqus_restart_extensions(solver: typing.Literal["standard", "explicit"], processes: int = 1) -> list[str]:
-    """Determine Abaqus restart files based on solver type and number of MPI processes.
-
-    :param solver: Abaqus solver.
-    :param processes: Number of MPI processes used to run the Abaqus job.
-    """
-    if solver.lower() == "explicit":
-        restart_files = set(_settings._abaqus_explicit_restart_extensions)
-    elif solver.lower() == "standard":
-        restart_files = set(_settings._abaqus_standard_restart_extensions)
-        if processes > 1:
-            # Drop .mdl and .stt
-            restart_files -= {".mdl", ".stt"}
-            # Add {.mdl,.stt}.[0..N-1]
-            restart_files |= {
-                f"{extension}.{process}" for extension in [".mdl", ".stt"] for process in range(0, processes)
-            }
-    else:
-        raise ValueError(f"Unknown solver type: {solver}")
-    return tuple(restart_files)
 
 
 @catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
