@@ -1,7 +1,6 @@
 """Test CartesianProduct Class."""
 
 import contextlib
-import typing
 import unittest
 from unittest.mock import call, mock_open, patch
 

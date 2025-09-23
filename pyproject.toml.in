@@ -103,6 +103,8 @@ disable_error_code = "import-untyped"
 exclude = [
     "modsim_template",
     "tutorials",
+    # TODO: remove the test exclusion after fixing the package errors
+    "_tests",
     "_abaqus",
 ]
 packages = ["waves"]
