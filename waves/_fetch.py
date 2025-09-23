@@ -256,7 +256,7 @@ def conditional_copy(copy_tuples: list[tuple[pathlib.Path, pathlib.Path]]) -> No
             shutil.copyfile(source_file, destination_file)
 
 
-def print_list(things_to_print: list, prefix: str = "\t", stream=sys.stdout) -> None:
+def print_list(things_to_print: list, prefix: str = "\t", stream: typing.IO = sys.stdout) -> None:
     """Print a list to the specified stream, one line per item.
 
     :param list things_to_print: List of items to print
