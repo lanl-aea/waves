@@ -211,7 +211,12 @@ test_check_regex_exclude_cases = {
     "node name matches the regular expression": ("dummy_name[0-7]+", "dummy_name5", 3, 0, False, (True, 3)),
     "node name does not match the regular expression": ("dummy_name[0-7]+", "dummy_name8", 2, 1, False, (False, 1)),
     "node name does not match the regular expression but the node was already excluded": (
-        "dummy_name[0-7]+", "dummy_name9", 4, 2, True, (True, 2)
+        "dummy_name[0-7]+",
+        "dummy_name9",
+        4,
+        2,
+        True,
+        (True, 2),
     ),
 }
 
@@ -230,9 +235,12 @@ def test_check_regex_exclude(
     expected: tuple[bool, int],
 ) -> None:
     """Test the regular expression exclusion of the visualize subcommand."""
-    assert _visualize.check_regex_exclude(
-        exclude_regex, node_name, current_indent, exclude_indent, exclude_node=exclude_node
-    ) == expected
+    assert (
+        _visualize.check_regex_exclude(
+            exclude_regex, node_name, current_indent, exclude_indent, exclude_node=exclude_node
+        )
+        == expected
+    )
 
 
 def test_visualize() -> None:
