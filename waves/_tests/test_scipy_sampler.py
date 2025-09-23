@@ -52,7 +52,7 @@ class TestScipySampler:
         generate_input.values(),
         ids=generate_input.keys(),
     )
-    def test_generate(self, parameter_schema, kwargs) -> None:
+    def test_generate(self, parameter_schema: dict, kwargs: dict) -> None:
         parameter_names = [key for key in parameter_schema if key != "num_simulations"]
         for sampler in _supported_scipy_samplers:
             # NOTE: we cannot test the samples array while simulateously iterating over available samplers because each
@@ -100,7 +100,7 @@ class TestScipySampler:
     }
 
     @pytest.mark.parametrize(("first_schema", "second_schema", "kwargs"), merge_test.values(), ids=merge_test.keys())
-    def test_merge(self, first_schema, second_schema, kwargs) -> None:
+    def test_merge(self, first_schema: dict, second_schema: dict, kwargs: dict) -> None:
         with patch("waves.parameter_generators._verify_parameter_study"):
             for sampler in _supported_scipy_samplers:
                 original_study, merged_study = merge_samplers(
@@ -132,15 +132,17 @@ class TestScipySampler:
         parameter_study_to_dict.values(),
         ids=parameter_study_to_dict.keys(),
     )
-    def test_parameter_study_to_dict(self, sampler, parameter_schema, kwargs, expected_dictionary) -> None:
+    def test_parameter_study_to_dict(
+        self, sampler: str, parameter_schema: dict, kwargs: dict, expected_dictionary: dict
+    ) -> None:
         """Test parameter study dictionary conversion."""
         test_parameter_study_dict = ScipySampler(sampler, parameter_schema, **kwargs)
         returned_dictionary = test_parameter_study_dict.parameter_study_to_dict()
         assert expected_dictionary.keys() == returned_dictionary.keys()
         assert all(isinstance(key, str) for key in returned_dictionary)
-        for set_name in expected_dictionary:
-            assert expected_dictionary[set_name] == returned_dictionary[set_name]
-            for parameter in expected_dictionary[set_name]:
-                assert type(expected_dictionary[set_name][parameter]) == type(  # noqa: E721
+        for set_name, set_contents in expected_dictionary.items():
+            assert set_contents == returned_dictionary[set_name]
+            for parameter in set_contents:
+                assert type(set_contents[parameter]) == type(  # noqa: E721
                     returned_dictionary[set_name][parameter]
                 )
