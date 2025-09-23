@@ -1,6 +1,6 @@
+import contextlib
 import pathlib
 import sys
-from contextlib import nullcontext as does_not_raise
 from unittest.mock import Mock, call, patch
 
 import pytest
@@ -8,6 +8,8 @@ import pytest
 from waves import _fetch, _settings
 from waves._tests.common import platform_check
 from waves.exceptions import ChoicesError
+
+does_not_raise = contextlib.nullcontext()
 
 testing_windows, root_fs, testing_macos = platform_check()
 
@@ -87,7 +89,12 @@ conditional_copy_input = {
     conditional_copy_input.values(),
     ids=conditional_copy_input.keys(),
 )
-def test_conditional_copy(copy_tuples, exists_side_effect, filecmp_side_effect, copyfile_call) -> None:
+def test_conditional_copy(
+    copy_tuples: tuple[tuple[pathlib.Path, pathlib.Path]],
+    exists_side_effect: list[bool],
+    filecmp_side_effect: list[bool],
+    copyfile_call: tuple[pathlib.Path, pathlib.Path],
+) -> None:
     with (
         patch("pathlib.Path.exists", side_effect=exists_side_effect),
         patch("filecmp.cmp", side_effect=filecmp_side_effect),
@@ -191,14 +198,14 @@ available_files_input = {
     ids=available_files_input.keys(),
 )
 def test_available_files(
-    root_directory,
-    relative_paths,
-    is_file_side_effect,
-    is_dir_side_effect,
-    rglob_side_effect,
-    expected_files,
-    expected_missing,
-    mock_rglob_argument,
+    root_directory: str,
+    relative_paths: list[str],
+    is_file_side_effect: list[bool],
+    is_dir_side_effect: list[bool],
+    rglob_side_effect: list[list[pathlib.Path]],
+    expected_files: list[pathlib.Path],
+    expected_missing: list[pathlib.Path],
+    mock_rglob_argument: str,
 ) -> None:
     with (
         patch("pathlib.Path.is_file", side_effect=is_file_side_effect),
@@ -245,7 +252,11 @@ build_source_files_input = {
     ids=build_source_files_input.keys(),
 )
 def test_build_source_files(
-    root_directory, relative_paths, exclude_patterns, available_files_side_effect, expected_source_files
+    root_directory: str,
+    relative_paths: list[str],
+    exclude_patterns: list[str],
+    available_files_side_effect: tuple[list[pathlib.Path], list],
+    expected_source_files: list[pathlib.Path],
 ) -> None:
     with patch("waves._fetch.available_files", return_value=available_files_side_effect):
         source_files, _not_found = _fetch.build_source_files(
@@ -273,7 +284,11 @@ longest_common_path_prefix_input = {
     longest_common_path_prefix_input.values(),
     ids=longest_common_path_prefix_input.keys(),
 )
-def test_longest_common_path_prefix(file_list, expected_path, outcome) -> None:
+def test_longest_common_path_prefix(
+    file_list: str | pathlib.Path | list[pathlib.Path],
+    expected_path: pathlib.Path,
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
     with outcome:
         path_prefix = _fetch.longest_common_path_prefix(file_list)
         assert path_prefix == expected_path
@@ -296,7 +311,11 @@ build_destination_files_input = {
     ids=build_destination_files_input.keys(),
 )
 def test_build_destination_files(
-    destination, requested_paths, exists_side_effect, expected_destination_files, expected_existing_files
+    destination: str,
+    requested_paths: list[pathlib.Path],
+    exists_side_effect: list[bool],
+    expected_destination_files: list[pathlib.Path],
+    expected_existing_files: list[pathlib.Path],
 ) -> None:
     with patch("pathlib.Path.exists", side_effect=exists_side_effect):
         destination_files, existing_files = _fetch.build_destination_files(destination, requested_paths)
@@ -334,7 +353,11 @@ build_copy_tuples_input = {
     ids=build_copy_tuples_input.keys(),
 )
 def test_build_copy_tuples(
-    destination, requested_paths_resolved, overwrite, build_destination_files_side_effect, expected_copy_tuples
+    destination: str,
+    requested_paths_resolved: list[pathlib.Path],
+    overwrite: bool,
+    build_destination_files_side_effect: tuple[list[pathlib.Path], list[pathlib.Path]],
+    expected_copy_tuples: list,
 ) -> None:
     with patch("waves._fetch.build_destination_files", return_value=build_destination_files_side_effect):
         copy_tuples = _fetch.build_copy_tuples(destination, requested_paths_resolved, overwrite=overwrite)
@@ -372,14 +395,20 @@ def test_print_list() -> None:
         (root_directory, source_files, two_file_source_tree, two_file_destination_tree, 6),
     ],
 )
-def test_recursive_copy(root_directory, source_files, source_tree, destination_tree, tutorial) -> None:
+def test_recursive_copy(
+    root_directory: pathlib.Path,
+    source_files: list[pathlib.Path],
+    source_tree: list[pathlib.Path],
+    destination_tree: list[pathlib.Path],
+    tutorial: int | None,
+) -> None:
     # Dummy modsim_template tree
     copy_tuples = list(zip(source_tree, destination_tree, strict=True))
-    not_found = []
+    not_found: list = []
     available_files_output = (source_tree, not_found)
     single_file_requested = ([source_tree[0]], not_found)
     bad_file_requests = [pathlib.Path("notfound")]
-    bad_file_requested = ([], bad_file_requests)
+    bad_file_requested: tuple[list, list[pathlib.Path]] = ([], bad_file_requests)
 
     # Files in destination tree do not exist. Copy the modsim_template file tree.
     with (
