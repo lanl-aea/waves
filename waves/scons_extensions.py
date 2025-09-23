@@ -2188,10 +2188,10 @@ class AbaqusPseudoBuilder:
             # If a single old job is specified, add "-oldjob" to the Abaqus command
             if len(oldjob) == 1:
                 options += f" -oldjob {oldjob[0]}"
-            # Ensure num_oldjob_restart files is list of int
+            # Ensure oldjob_restart_file_count is list of int
             if isinstance(oldjob_restart_file_count, int):
                 # If int, apply to all old jobs
-                oldjob_restart_file_count = [num_oldjob_restart_files] * len(oldjob)
+                oldjob_restart_file_count = [oldjob_restart_file_count] * len(oldjob)
             # Check oldjob_restart_file_count is same length as oldjob
             if len(oldjob) != len(oldjob_restart_file_count):
                 raise ValueError("The length of ``oldjob_restart_file_count`` and ``oldjob`` do not match.")
