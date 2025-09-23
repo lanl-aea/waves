@@ -202,11 +202,8 @@ def test_create_qoi(
     kwargs: dict, expected: xarray.DataArray | None, outcome: contextlib.nullcontext | pytest.RaisesExc
 ) -> None:
     with outcome:
-        try:
-            output = qoi.create_qoi(**kwargs)
-            assert expected.identical(output)
-        finally:
-            pass
+        output = qoi.create_qoi(**kwargs)
+        assert expected.identical(output)
 
 
 test_create_qoi_set_cases = {

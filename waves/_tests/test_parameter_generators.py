@@ -254,11 +254,8 @@ def test_return_dataset_types(
     outcome: contextlib.nullcontext | pytest.RaisesExc,
 ) -> None:
     with outcome:
-        try:
-            types = parameter_generators._return_dataset_types(dataset_1, dataset_2)
-            assert types == expected_types
-        finally:
-            pass
+        types = parameter_generators._return_dataset_types(dataset_1, dataset_2)
+        assert types == expected_types
 
 
 coerce_values_cases = {

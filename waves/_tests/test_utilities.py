@@ -181,11 +181,8 @@ def test_find_command(
 ) -> None:
     """Test :meth:`waves._utilities.find_command`."""
     with patch("waves._utilities.search_commands", return_value=found), outcome:
-        try:
-            command_abspath = _utilities.find_command(options)
-            assert command_abspath == found
-        finally:
-            pass
+        command_abspath = _utilities.find_command(options)
+        assert command_abspath == found
 
 
 def test_cubit_os_bin() -> None:

@@ -55,12 +55,9 @@ class TestCustomStudy:
     )
     def test_validate(self, parameter_schema: dict, outcome: contextlib.nullcontext | pytest.RaisesExc) -> None:
         with outcome:
-            try:
-                # Validate is called in __init__. Do not need to call explicitly.
-                test_validate = CustomStudy(parameter_schema)
-                assert isinstance(test_validate, CustomStudy)
-            finally:
-                pass
+            # Validate is called in __init__. Do not need to call explicitly.
+            test_validate = CustomStudy(parameter_schema)
+            assert isinstance(test_validate, CustomStudy)
 
     test_generate_cases = {
         "one_parameter": (

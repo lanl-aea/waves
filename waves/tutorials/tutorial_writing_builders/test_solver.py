@@ -151,11 +151,8 @@ def test_name_log_file(
         patch("pathlib.Path.exists", side_effect=exists_side_effect),
         outcome,
     ):
-        try:
-            returned_log_file = solver.name_log_file(log_file, max_iterations=max_iterations)
-            assert returned_log_file == expected
-        finally:
-            pass
+        returned_log_file = solver.name_log_file(log_file, max_iterations=max_iterations)
+        assert returned_log_file == expected
 
 
 read_input = {
@@ -190,11 +187,8 @@ def test_read_input(
         patch("pathlib.Path.open", mock_open(read_data=mock_data)),
         outcome,
     ):
-        try:
-            configuration = solver.read_input(input_file)
-            assert configuration == expected
-        finally:
-            pass
+        configuration = solver.read_input(input_file)
+        assert configuration == expected
 
 
 configure = {
@@ -269,11 +263,8 @@ def test_configure(
         patch("pathlib.Path.open", mock_open()),
         outcome,
     ):
-        try:
-            returned_configuration = solver.configure(args)
-            assert returned_configuration == expected
-        finally:
-            pass
+        returned_configuration = solver.configure(args)
+        assert returned_configuration == expected
 
 
 solve_output_files = {
@@ -334,10 +325,7 @@ def test_solve(configuration: dict, exists: bool, outcome: contextlib.nullcontex
         patch("pathlib.Path.open", mock_open()),
         outcome,
     ):
-        try:
-            solver.solve(configuration)
-        finally:
-            pass
+        solver.solve(configuration)
 
 
 def test_implicit() -> None:
@@ -390,11 +378,8 @@ def test_positive_nonzero_int(
     :param outcome: the tested function's expected side effect
     """
     with outcome:
-        try:
-            answer = solver.positive_nonzero_int(argument)
-            assert answer == expected
-        finally:
-            pass
+        answer = solver.positive_nonzero_int(argument)
+        assert answer == expected
 
 
 @pytest.mark.skip(reason="Not yet implemented")

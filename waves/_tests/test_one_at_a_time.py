@@ -58,12 +58,9 @@ class TestOneAtATime:
     )
     def test_validate(self, parameter_schema: dict, outcome: contextlib.nullcontext | pytest.RaisesExc) -> None:
         with outcome:
-            try:
-                # Validate is called in __init__. Do not need to call explicitly.
-                test_validate = OneAtATime(parameter_schema)
-                assert isinstance(test_validate, OneAtATime)
-            finally:
-                pass
+            # Validate is called in __init__. Do not need to call explicitly.
+            test_validate = OneAtATime(parameter_schema)
+            assert isinstance(test_validate, OneAtATime)
 
     generate_io = {
         "one_parameter: 1, 2": (

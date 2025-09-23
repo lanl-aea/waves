@@ -152,12 +152,9 @@ class TestSALibSampler:
         self, sampler_class: str, parameter_schema: dict, outcome: contextlib.nullcontext | pytest.RaisesExc
     ) -> None:
         with outcome:
-            try:
-                # Validate is called in __init__. Do not need to call explicitly.
-                test_validate = SALibSampler(sampler_class, parameter_schema)
-                assert isinstance(test_validate, SALibSampler)
-            finally:
-                pass
+            # Validate is called in __init__. Do not need to call explicitly.
+            test_validate = SALibSampler(sampler_class, parameter_schema)
+            assert isinstance(test_validate, SALibSampler)
 
     generate_input = {
         "good schema 5x2": (

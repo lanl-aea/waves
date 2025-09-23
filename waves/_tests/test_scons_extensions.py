@@ -742,13 +742,10 @@ def test_append_env_path(program: str, mock_exists: bool, outcome: contextlib.nu
         patch("pathlib.Path.exists", return_value=mock_exists),
         outcome,
     ):
-        try:
-            scons_extensions.append_env_path(env, program)
-            assert root_fs == env["ENV"]["PATH"].split(os.pathsep)[-1]
-            assert "PYTHONPATH" not in env["ENV"]
-            assert "LD_LIBRARY_PATH" not in env["ENV"]
-        finally:
-            pass
+        scons_extensions.append_env_path(env, program)
+        assert root_fs == env["ENV"]["PATH"].split(os.pathsep)[-1]
+        assert "PYTHONPATH" not in env["ENV"]
+        assert "LD_LIBRARY_PATH" not in env["ENV"]
 
     # Test AddMethod interface
     env.AddMethod(scons_extensions.append_env_path, "AppendEnvPath")
@@ -756,13 +753,10 @@ def test_append_env_path(program: str, mock_exists: bool, outcome: contextlib.nu
         patch("pathlib.Path.exists", return_value=mock_exists),
         outcome,
     ):
-        try:
-            env.AppendEnvPath(program)
-            assert root_fs == env["ENV"]["PATH"].split(os.pathsep)[-1]
-            assert "PYTHONPATH" not in env["ENV"]
-            assert "LD_LIBRARY_PATH" not in env["ENV"]
-        finally:
-            pass
+        env.AppendEnvPath(program)
+        assert root_fs == env["ENV"]["PATH"].split(os.pathsep)[-1]
+        assert "PYTHONPATH" not in env["ENV"]
+        assert "LD_LIBRARY_PATH" not in env["ENV"]
 
 
 substitution_dictionary = {"thing1": 1, "thing_two": "two"}
@@ -1263,16 +1257,13 @@ def test_task_kwarg_emitter(
         patch("waves.scons_extensions.first_target_emitter") as mock_emitter,
         outcome,
     ):
-        try:
-            scons_extensions._task_kwarg_emitter(*positional, **kwargs)
-            mock_emitter.assert_called_once_with(
-                expected_target,
-                expected_source,
-                expected_env,
-                **expected_kwargs,
-            )
-        finally:
-            pass
+        scons_extensions._task_kwarg_emitter(*positional, **kwargs)
+        mock_emitter.assert_called_once_with(
+            expected_target,
+            expected_source,
+            expected_env,
+            **expected_kwargs,
+        )
 
 
 abaqus_solver_emitter_factory_cases = {
@@ -2599,11 +2590,8 @@ def test_parameter_study_sconscript(
         patch("waves.scons_extensions.SConsEnvironment.SConscript") as mock_sconscript,
         outcome,
     ):
-        try:
-            scons_extensions.parameter_study_sconscript(env, *args, **kwargs)
-            mock_sconscript.assert_called_once_with(*args, **expected)
-        finally:
-            pass
+        scons_extensions.parameter_study_sconscript(env, *args, **kwargs)
+        mock_sconscript.assert_called_once_with(*args, **expected)
 
     # Test AddMethod style call
     env.AddMethod(scons_extensions.parameter_study_sconscript, "ParameterStudySConscript")
@@ -2613,11 +2601,8 @@ def test_parameter_study_sconscript(
         patch("waves.scons_extensions.SConsEnvironment.SConscript") as mock_sconscript,
         outcome,
     ):
-        try:
-            env.ParameterStudySConscript(*args, **kwargs)
-            mock_sconscript.assert_called_once_with(*args, **expected)
-        finally:
-            pass
+        env.ParameterStudySConscript(*args, **kwargs)
+        mock_sconscript.assert_called_once_with(*args, **expected)
 
 
 parameter_study_write_cases = {
