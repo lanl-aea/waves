@@ -281,22 +281,16 @@ def run_external(cmd: str) -> tuple:
 
 
 def main() -> None:
-    args = get_parser().parse_args()  # pragma: no cover
-    sys.exit(
-        odb_extract(
-            args.input_file,
-            args.output_file,
-            args.output_type,
-            args.odb_report_args,
-            args.abaqus_command,
-            args.delete_report_file,
-            args.verbose,
-        )
-    )  # pragma: no cover
-
-
-if __name__ == "__main__":
-    sys.exit(main())  # pragma: no cover
+    args = get_parser().parse_args()
+    odb_extract(
+        args.input_file,
+        args.output_file,
+        args.output_type,
+        args.odb_report_args,
+        args.abaqus_command,
+        args.delete_report_file,
+        args.verbose,
+    )
 
 
 # Limit help() and 'from module import *' behavior to the module's public API
