@@ -1,7 +1,7 @@
 """Test CartesianProduct Class."""
 
+import contextlib
 import unittest
-from contextlib import nullcontext as does_not_raise
 from unittest.mock import call, mock_open, patch
 
 import numpy
@@ -13,6 +13,8 @@ from waves._tests.common import consistent_hash_parameter_check, merge_samplers,
 from waves.exceptions import SchemaValidationError
 from waves.parameter_generators import CartesianProduct
 
+does_not_raise = contextlib.nullcontext()
+
 
 class TestCartesianProduct:
     """Class for testing CartesianProduct parameter study generator class."""
@@ -20,7 +22,7 @@ class TestCartesianProduct:
     validate_input = {
         "good schema": (
             {"parameter_1": [1], "parameter_2": (2,), "parameter_3": {3, 4}},
-            does_not_raise(),
+            does_not_raise,
         ),
         "not a dict": (
             "not a dict",
@@ -45,7 +47,7 @@ class TestCartesianProduct:
         validate_input.values(),
         ids=validate_input.keys(),
     )
-    def test_validate(self, parameter_schema, outcome) -> None:
+    def test_validate(self, parameter_schema: dict, outcome: contextlib.nullcontext | pytest.RaisesExc) -> None:
         with outcome:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
@@ -119,7 +121,9 @@ class TestCartesianProduct:
         generate_io.values(),
         ids=generate_io.keys(),
     )
-    def test_generate(self, parameter_schema, expected_array, expected_types) -> None:
+    def test_generate(
+        self, parameter_schema: dict, expected_array: numpy.ndarray, expected_types: dict[str, type]
+    ) -> None:
         test_generate = CartesianProduct(parameter_schema)
         generate_array = test_generate._samples
         assert numpy.all(generate_array == expected_array)
@@ -137,10 +141,15 @@ class TestCartesianProduct:
         generate_io.values(),
         ids=generate_io.keys(),
     )
-    # FIXME: trace original use of ``expected_array`` and ``expected_types``. Either use in test or remove from test
-    # function arguments. Remove ``noqa: ARG002`` after fixing.
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/961
-    def test_verify_parameter_study(self, parameter_schema, expected_array, expected_types) -> None:  # noqa: ARG002
+    def test_verify_parameter_study(
+        self,
+        parameter_schema: dict,
+        # FIXME: trace original use of ``expected_array`` and ``expected_types``. Either use in test or remove from test
+        # function arguments. Remove ``noqa: ARG002`` after fixing.
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/961
+        expected_array: numpy.ndarray,  # noqa: ARG002
+        expected_types: dict[str, type],  # noqa: ARG002
+    ) -> None:
         test_generate = CartesianProduct(parameter_schema)
         parameter_generators._verify_parameter_study(test_generate.parameter_study)
 
