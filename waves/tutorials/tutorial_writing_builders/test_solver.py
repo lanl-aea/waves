@@ -101,21 +101,21 @@ name_log_file = {
         10,
         [False],
         pathlib.Path("solver.log"),
-        does_not_raise(),
+        does_not_raise,
     ),
     "last iteration file": (
         pathlib.Path("solver.log"),
         2,
         [True, True, False],
         pathlib.Path("solver.log2"),
-        does_not_raise(),
+        does_not_raise,
     ),
     "default log file exists": (
         pathlib.Path("solver.log"),
         10,
         [True, False],
         pathlib.Path("solver.log1"),
-        does_not_raise(),
+        does_not_raise,
     ),
     "too many iterations": (
         pathlib.Path("solver.log"),
@@ -159,7 +159,7 @@ def test_name_log_file(
 
 
 read_input = {
-    "good yaml": (pathlib.Path("dummy.yaml"), True, "routine: implicit", {"routine": "implicit"}, does_not_raise()),
+    "good yaml": (pathlib.Path("dummy.yaml"), True, "routine: implicit", {"routine": "implicit"}, does_not_raise),
     "bad yaml": (pathlib.Path("dummy.yaml"), True, "\tnotvalidyaml", None, pytest.raises(RuntimeError)),
     "file does not exist": (pathlib.Path("dummy.yaml"), False, None, None, pytest.raises(RuntimeError)),
 }
@@ -204,7 +204,7 @@ configure = {
         ),
         {"key1": "value1"},
         {"key1": "value1", "routine": "implicit", "output_file": "implicit.out", "solve_cpus": 1, "overwrite": False},
-        does_not_raise(),
+        does_not_raise,
     ),
     "explicit input": (
         argparse.Namespace(
@@ -212,7 +212,7 @@ configure = {
         ),
         {"key1": "value1"},
         {"key1": "value1", "routine": "explicit", "output_file": "explicit.out", "solve_cpus": 1, "overwrite": False},
-        does_not_raise(),
+        does_not_raise,
     ),
     "mismatch routine": (
         argparse.Namespace(
@@ -232,7 +232,7 @@ configure = {
         ),
         {"key1": "value1"},
         {"key1": "value1", "routine": "implicit", "output_file": "different.out", "solve_cpus": 2, "overwrite": True},
-        does_not_raise(),
+        does_not_raise,
     ),
 }
 
@@ -302,12 +302,12 @@ solve = {
     "no output files exist": (
         {"log_file": "solver.log", "output_file": "output.out", "solve_cpus": 1, "overwrite": False},
         False,
-        does_not_raise(),
+        does_not_raise,
     ),
     "output files exist: overwrite": (
         {"log_file": "solver.log", "output_file": "output.out", "solve_cpus": 1, "overwrite": True},
         True,
-        does_not_raise(),
+        does_not_raise,
     ),
     "output files exist: no overwrite": (
         {"log_file": "solver.log", "output_file": "output.out", "solve_cpus": 1, "overwrite": False},
@@ -367,8 +367,8 @@ def test_explicit() -> None:
 
 
 positive_nonzero_int = {
-    "positive int": ("1", 1, does_not_raise()),
-    "larger positive int": ("100", 100, does_not_raise()),
+    "positive int": ("1", 1, does_not_raise),
+    "larger positive int": ("100", 100, does_not_raise),
     "zero": ("0", None, pytest.raises(argparse.ArgumentTypeError)),
     "negative int": ("-1", None, pytest.raises(argparse.ArgumentTypeError)),
     "string": ("not an int", None, pytest.raises(argparse.ArgumentTypeError)),
