@@ -3888,7 +3888,7 @@ def parameter_study_task(
 def parameter_study_sconscript(
     env: SCons.Environment.Environment,
     *args,
-    variant_dir: str | None = None,
+    variant_dir: str | pathlib.Path | None = None,
     exports: dict | None = None,
     study: dict | parameter_generators.ParameterGenerator | None = None,
     set_name: str = "",
