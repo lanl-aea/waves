@@ -564,4 +564,5 @@ def test_extend_requested_paths() -> None:
 
     # testing key that does not exist
     with pytest.raises(ChoicesError):
-        _fetch.extend_requested_paths([], "shouldRaiseError")
+        # Intentional arg-type error for testing
+        _fetch.extend_requested_paths([], "shouldRaiseError")  # type: ignore[arg-type]
