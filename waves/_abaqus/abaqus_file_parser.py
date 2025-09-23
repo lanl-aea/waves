@@ -6,6 +6,7 @@
 import contextlib
 import re
 import sys
+import typing
 from abc import ABC, abstractmethod
 from datetime import datetime
 from itertools import compress
@@ -33,10 +34,10 @@ class AbaqusFileParser(ABC):
         - **parsed**: *dict* Dictionary for holding parsed data
     """
 
-    def __init__(self, input_file, verbose=False, *args, **kwargs) -> None:
+    def __init__(self, input_file: str, verbose: bool = False, *args, **kwargs) -> None:
         self.input_file = input_file
         super().__init__()
-        self.parsed = {}
+        self.parsed: dict = {}
         if input_file:
             self.output_file = f"{input_file}{_settings._default_parsed_extension}"
         if verbose:
@@ -47,16 +48,16 @@ class AbaqusFileParser(ABC):
         return
 
     @abstractmethod
-    def parse(self):
+    def parse(self) -> None:
         pass  # pragma: no cover
 
     # Anybody who wishes to create a class that inherits from this class,
     # must create a method called parse
 
-    def write_yaml(self, output_file=None) -> None:
+    def write_yaml(self, output_file: str | None = None) -> None:
         """Write the data in yaml format to the output file.
 
-        :param str output_file: Name of output file to write yaml (default: <input file>.parsed)
+        :param output_file: Name of output file to write yaml (default: <input file>.parsed)
         """
         if output_file:
             self.output_file = output_file
@@ -69,7 +70,7 @@ class AbaqusFileParser(ABC):
         except OSError as e:
             sys.exit(f"Couldn't write file {self.output_file}: {e}")
 
-    def print_warning(self, message) -> None:
+    def print_warning(self, message: str) -> None:
         """Print a warning message.
 
         :param str message: string with a message to print
@@ -77,10 +78,10 @@ class AbaqusFileParser(ABC):
         if self.verbose:
             print(message)
 
-    def print_error(self, message) -> None:
+    def print_error(self, message: str) -> None:
         """Print an error message.
 
-        :param str message: string with a message to print
+        :param message: string with a message to print
         """
         if self.verbose:
             print(message)
@@ -119,16 +120,18 @@ class OdbReportFileParser(AbaqusFileParser):
     """
 
     def parse(
-        self, data_format="extract", h5_file=f"extract{_settings._default_h5_extension}", time_stamp=None
+        self,
+        data_format: str = "extract",
+        h5_file: str = f"extract{_settings._default_h5_extension}",
+        time_stamp: str | None = None,
     ) -> None:
         """Parse the file and store the results in the self.parsed dictionary.
 
          Can parse csv formatted output with the blocked option from the odbreport command.
 
-        :param str data_format: Format in which to store data can be 'odb' or 'extract'
-        :param str h5_file: Name of hdf5 file to store data into when using the extract format
-        :param str time_stamp: Time stamp for possibly appending to hdf5 file names
-        :return: None
+        :param data_format: Format in which to store data can be 'odb' or 'extract'
+        :param h5_file: Name of hdf5 file to store data into when using the extract format
+        :param time_stamp: Time stamp for possibly appending to hdf5 file names
         """
         # To interrogate the odb structure to know what to parse, follow the links and subsequent links at:
         # simulia:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEKERRefMap/simaker-c-odbpyc.htm
@@ -136,8 +139,8 @@ class OdbReportFileParser(AbaqusFileParser):
         # At the bottom of this page will list all the members of the odb and each member with a link will have links
         # to their members
         self.format = data_format
-        self.history_extract_format = {}
-        self.field_extract_format = {}
+        self.history_extract_format: dict = {}
+        self.field_extract_format: dict = {}
         input_file = self.input_file
         # TODO: Refactor to use a context manager
         try:
@@ -231,13 +234,12 @@ class OdbReportFileParser(AbaqusFileParser):
         if self.format == "extract":
             self.parsed = self.create_extract_format(self.parsed, h5_file, time_stamp)
 
-    def parse_section_categories(self, f, categories, number_of_categories) -> None:
+    def parse_section_categories(self, f: typing.TextIO, categories: dict, number_of_categories: int) -> None:
         """Parse the section that contains section categories.
 
-        :param file object f: open file
-        :param dict categories: dictionary for storing the section categories
-        :param int number_of_categories: number of section categories to parse
-        :return: None
+        :param f: open file
+        :param categories: dictionary for storing the section categories
+        :param number_of_categories: number of section categories to parse
         """
         line = f.readline()
         while (
@@ -259,13 +261,12 @@ class OdbReportFileParser(AbaqusFileParser):
             if line == "":
                 break
 
-    def parse_instances(self, f, instances, number_of_instances) -> None:
+    def parse_instances(self, f: typing.TextIO, instances: dict, number_of_instances: int) -> None:
         """Parse the section that contains instances.
 
-        :param file object f: open file
-        :param dict instances: dictionary for storing the instances
-        :param int number_of_instances: number of instances to parse
-        :return: None
+        :param f: open file
+        :param instances: dictionary for storing the instances
+        :param number_of_instances: number of instances to parse
         """
         while len(instances.keys()) < number_of_instances + 1:  # Get the part instances plus the assembly instance
             instance = {}
@@ -322,14 +323,13 @@ class OdbReportFileParser(AbaqusFileParser):
             if line == "":
                 break
 
-    def parse_nodes(self, f, instance, number_of_nodes, embedded_space) -> None:
+    def parse_nodes(self, f: typing.TextIO, instance: dict, number_of_nodes: int, embedded_space: str) -> None:
         """Parse the section that contains nodes.
 
-        :param file object f: open file
-        :param dict instance: dictionary for storing the nodes
-        :param int number_of_nodes: number of nodes to parse
-        :param str embedded_space: type of embedded space
-        :return: None
+        :param f: open file
+        :param instance: dictionary for storing the nodes
+        :param number_of_nodes: number of nodes to parse
+        :param embedded_space: type of embedded space
         """
         line = f.readline()  # read line with words 'Label' and 'Coordinates'
         if "Label" not in line:  # Case where nodes are not listed
@@ -365,13 +365,12 @@ class OdbReportFileParser(AbaqusFileParser):
                 if line == "":
                     break
 
-    def parse_element_classes(self, f, instance, number_of_element_classes) -> None:
+    def parse_element_classes(self, f: typing.TextIO, instance: dict, number_of_element_classes: int) -> None:
         """Parse the section that contains element classes.
 
-        :param file object f: open file
-        :param dict instance: dictionary for storing the elements
-        :param int number_of_element_classes: number of element classes to parse
-        :return: None
+        :param f: open file
+        :param instance: dictionary for storing the elements
+        :param number_of_element_classes: number of element classes to parse
         """
         instance["element_classes"] = {}
         line = f.readline()
@@ -409,13 +408,12 @@ class OdbReportFileParser(AbaqusFileParser):
                         instance["element_classes"][class_name]["section_category_name"] = line.split("=")[1].strip()
                     line = f.readline()
 
-    def parse_elements(self, f, instance, number_of_elements) -> None:
+    def parse_elements(self, f: typing.TextIO, instance: dict, number_of_elements: int) -> None:
         """Parse the section that contains elements.
 
-        :param file object f: open file
-        :param dict instance: dictionary for storing the elements
-        :param int number_of_elements: number of elements to parse
-        :return: None
+        :param f: open file
+        :param instance: dictionary for storing the elements
+        :param number_of_elements: number of elements to parse
         """
         line = f.readline()  # read header line
         if "Label" not in line:  # Case where elements are not listed
@@ -474,13 +472,12 @@ class OdbReportFileParser(AbaqusFileParser):
                 if line == "":
                     break
 
-    def parse_node_set(self, f, instance, number_of_node_sets) -> None:
+    def parse_node_set(self, f: typing.TextIO, instance: dict, number_of_node_sets: int) -> None:
         """Parse the section that contains node sets.
 
-        :param file object f: open file
-        :param dict instance: dictionary for storing the node sets
-        :param int number_of_node_sets: number of node sets to parse
-        :return: None
+        :param f: open file
+        :param instance: dictionary for storing the node sets
+        :param number_of_node_sets: number of node sets to parse
         """
         instance["nodeSets"] = {}
         summary_node_set = False
@@ -527,13 +524,12 @@ class OdbReportFileParser(AbaqusFileParser):
             if line == "":
                 break
 
-    def parse_element_set(self, f, instance, number_of_element_sets) -> None:
+    def parse_element_set(self, f: typing.TextIO, instance: dict, number_of_element_sets: int) -> None:
         """Parse the section that contains element sets.
 
-        :param file object f: open file
-        :param dict instance: dictionary for storing the element sets
-        :param int number_of_element_sets: number of element sets to parse
-        :return: None
+        :param f: open file
+        :param instance: dictionary for storing the element sets
+        :param number_of_element_sets: number of element sets to parse
         """
         instance["elementSets"] = {}
         summary_element_set = True
@@ -603,13 +599,12 @@ class OdbReportFileParser(AbaqusFileParser):
             if line == "":
                 break
 
-    def parse_surfaces(self, f, instance, number_of_surfaces) -> None:
+    def parse_surfaces(self, f: typing.TextIO, instance: dict, number_of_surfaces: int) -> None:
         """Parse the section that contains surfaces.
 
-        :param file object f: open file
-        :param dict instance: dictionary for storing the surfaces
-        :param int number_of_surfaces: number of surfaces to parse
-        :return: None
+        :param f: open file
+        :param instance: dictionary for storing the surfaces
+        :param number_of_surfaces: number of surfaces to parse
         """
         instance["surfaces"] = {}
         summary_surface_set = False
@@ -710,13 +705,12 @@ class OdbReportFileParser(AbaqusFileParser):
             if line == "":
                 break
 
-    def parse_analytic_surface(self, f, instance, line) -> None:
+    def parse_analytic_surface(self, f: typing.TextIO, instance: dict, line: str) -> None:
         """Parse the section that contains analytic surface.
 
-        :param file object f: open file
-        :param dict instance: dictionary for storing the analytic surface
-        :param str line: current line of file
-        :return: None
+        :param f: open file
+        :param instance: dictionary for storing the analytic surface
+        :param line: current line of file
         """
         # TODO: get odb with localCoordData under Analytic surface
         instance["analyticSurface"] = {}
@@ -745,13 +739,12 @@ class OdbReportFileParser(AbaqusFileParser):
                 # TODO: get odb with parabola segments and parse that data here
                 instance["analyticSurface"]["segments"][segment["name"]] = segment
 
-    def parse_rigid_bodies(self, f, instance, number_of_rigid_bodies) -> None:
+    def parse_rigid_bodies(self, f: typing.TextIO, instance: dict, number_of_rigid_bodies: int) -> None:
         """Parse the section that contains rigid_bodies.
 
-        :param file object f: open file
-        :param dict instance: dictionary for storing the rigid bodies
-        :param int number_of_rigid_bodies: number of rigid bodies to parse
-        :return: None
+        :param f: open file
+        :param instance: dictionary for storing the rigid bodies
+        :param number_of_rigid_bodies: number of rigid bodies to parse
         """
         instance["rigidBodies"] = []
         line = f.readline()
@@ -802,13 +795,12 @@ class OdbReportFileParser(AbaqusFileParser):
             if line == "":
                 break
 
-    def parse_steps(self, f, steps, number_of_steps) -> None:
+    def parse_steps(self, f: typing.TextIO, steps: dict, number_of_steps: int) -> None:
         """Parse the section that contains the data for steps.
 
-        :param file object f: open file
-        :param dict steps: dictionary for storing the steps
-        :param int number_of_steps: number of steps to parse
-        :return: None
+        :param object f: open file
+        :param steps: dictionary for storing the steps
+        :param number_of_steps: number of steps to parse
         """
         line = f.readline()
         self.number_of_steps = number_of_steps
@@ -848,14 +840,14 @@ class OdbReportFileParser(AbaqusFileParser):
             if line == "":
                 break
 
-    def parse_frames(self, f, frames, number_of_frames):
+    def parse_frames(self, f: typing.TextIO, frames: list, number_of_frames: int) -> str:
         """Parse the section that contains the data for frames.
 
-        :param file object f: open file
-        :param list frames: list for storing the frames
-        :param int number_of_frames: number of frames to parse
+        :param f: open file
+        :param frames: list for storing the frames
+        :param number_of_frames: number of frames to parse
+
         :return: current line of file
-        :rtype: str
         """
         line = f.readline()
         if line.strip().startswith("Number of field outputs"):  # Summary instead of full details
@@ -894,14 +886,14 @@ class OdbReportFileParser(AbaqusFileParser):
                 break
         return line
 
-    def parse_fields(self, f, fields, line):
+    def parse_fields(self, f: typing.TextIO, fields: dict, line: str) -> str:
         """Parse the section that contains the data for field outputs.
 
-        :param file object f: open file
-        :param dict fields: dictionary for storing the field outputs
-        :param str line: current line of file
+        :param f: open file
+        :param fields: dictionary for storing the field outputs
+        :param line: current line of file
+
         :return: current line of file
-        :rtype: str
         """
         self.current_field_number = 0
         field = {}
@@ -948,14 +940,14 @@ class OdbReportFileParser(AbaqusFileParser):
             line = f.readline()
         return line
 
-    def parse_components_of_field(self, f, line, field):
+    def parse_components_of_field(self, f: typing.TextIO, line: str, field: dict) -> str:
         """Parse the section that contains the data for field outputs found after the 'Components of field' heading.
 
-        :param file object f: open file
-        :param str line: current line of file
-        :param dict field: dictionary for storing field output
+        :param f: open file
+        :param line: current line of file
+        :param field: dictionary for storing field output
+
         :return: current line of file
-        :rtype: str
         """
         if line.strip()[-1] == "/":  # Line has continuation
             continuation_line = f.readline()
@@ -976,13 +968,13 @@ class OdbReportFileParser(AbaqusFileParser):
             line = self.parse_field_values(f, line, field["values"])
         return line
 
-    def setup_extract_field_format(self, field, line):
+    def setup_extract_field_format(self, field: dict, line: str) -> dict:
         """Do setup of field output formatting for extract format.
 
-        :param dict field: dictionary with field data
-        :param str line: current line of file
+        :param field: dictionary with field data
+        :param line: current line of file
+
         :return: dictionary for which to store field values
-        :rtype: dict
         """
         element_match = re.match(r".*element type '.*?(\d+)\D*'", line, re.IGNORECASE)
         try:
@@ -1016,14 +1008,14 @@ class OdbReportFileParser(AbaqusFileParser):
             current_output = self.field_extract_format[region_name][field_name]
         return current_output
 
-    def parse_field_values(self, f, line, values):
+    def parse_field_values(self, f: typing.TextIO, line: str, values: list) -> str:
         """Parse the section that contains the data for field values.
 
-        :param file object f: open file
-        :param str line: current line
-        :param list values: list for storing the field values
+        :param f: open file
+        :param line: current line
+        :param values: list for storing the field values
+
         :return: current line of file
-        :rtype: str
         """
         instance_match = re.match(r".*for part instance '(.*?)'", line, re.IGNORECASE)
         if instance_match:
@@ -1331,14 +1323,14 @@ class OdbReportFileParser(AbaqusFileParser):
                             )
         return line
 
-    def get_position_index(self, position, position_type, values):
-        """Get the index of the position (node or element) currently used.
+    def get_position_index(self, position: int, position_type: str, values: dict) -> tuple[int, bool]:
+        """Return the index of the position (node or element) currently used.
 
-        :param int position: integer representing a node or element
-        :param str position_type: string of either 'nodes' or 'elements'
-        :param dict values: dictionary where values are stored
+        :param position: integer representing a node or element
+        :param position_type: string of either 'nodes' or 'elements'
+        :param values: dictionary where values are stored
+
         :return: index, just_added
-        :rtype: int, bool
         """
         try:
             index_key = values["keys"][position]
@@ -1356,7 +1348,15 @@ class OdbReportFileParser(AbaqusFileParser):
             index_key = values["keys"][position]
         return index_key, just_added
 
-    def pad_none_values(self, step_number, frame_number, position_length, data_length, element_size, values) -> None:
+    def pad_none_values(
+        self,
+        step_number: int,
+        frame_number: int,
+        position_length: int,
+        data_length: int,
+        element_size: int,
+        values: list,
+    ) -> None:
         """Pad the values list with None or lists of None values in the locations indicated by the parameters.
 
         :param int step_number: index of current step
@@ -1382,18 +1382,24 @@ class OdbReportFileParser(AbaqusFileParser):
                 values[step_number][frame_number] = [[None for _ in range(data_length)] for _ in range(position_length)]
         return
 
-    # FIXME: trace the purpose and use of ``number_of_history_regions`` and either use or remove from function
-    # arguments. Remove ``noqa: ARG002`` after fixing.
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/962
-    def parse_history_regions(self, f, line, regions, number_of_history_regions):  # noqa: ARG002
+    def parse_history_regions(
+        self,
+        f: typing.TextIO,
+        line: str,
+        regions: dict,
+        # FIXME: trace the purpose and use of ``number_of_history_regions`` and either use or remove from function
+        # arguments. Remove ``noqa: ARG002`` after fixing.
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/962
+        number_of_history_regions: int,  # noqa: ARG002
+    ) -> str:
         """Parse the section that contains history regions.
 
-        :param file object f: open file
-        :param str line: current line of file
-        :param dict regions: dict for storing the history region data
-        :param int number_of_history_regions: number of history regions to parse
+        :param f: open file
+        :param line: current line of file
+        :param regions: dict for storing the history region data
+        :param number_of_history_regions: number of history regions to parse
+
         :return: current line of file
-        :rtype: str
         """
         if not line.strip().startswith("History Region"):
             line = f.readline()
@@ -1449,11 +1455,11 @@ class OdbReportFileParser(AbaqusFileParser):
                 break
         return line
 
-    def setup_extract_history_format(self, output, current_history_output) -> None:
+    def setup_extract_history_format(self, output: dict, current_history_output: int) -> None:
         """Do setup of history output formatting for extract format.
 
-        :param dict output: dictionary with history output data
-        :param int current_history_output: current history output count
+        :param output: dictionary with history output data
+        :param current_history_output: current history output count
         """
         try:
             instance_name = self.current_region["point"]["instance"].upper()
@@ -1530,14 +1536,14 @@ class OdbReportFileParser(AbaqusFileParser):
         del output["data"]
         current_output["previous_step"] = self.current_step_name
 
-    def parse_history_outputs(self, f, outputs, line):
+    def parse_history_outputs(self, f: typing.TextIO, outputs: dict, line: str) -> str:
         """Parse the section that contains history outputs.
 
         :param file object f: open file
-        :param dict outputs: dict for storing the history output data
-        :param str line: current line of file
+        :param outputs: dict for storing the history output data
+        :param line: current line of file
+
         :return: current line of file
-        :rtype: str
         """
         if not line.strip().startswith("History Output"):
             line = f.readline()
@@ -1577,13 +1583,12 @@ class OdbReportFileParser(AbaqusFileParser):
                 line = f.readline()
         return line
 
-    def create_extract_format(self, odb_dict, h5_file, time_stamp) -> None:
+    def create_extract_format(self, odb_dict: dict, h5_file: str, time_stamp: str) -> None:
         """Format the dictionary with the odb data into something that resembles previous abaqus extract method.
 
-        :param dict odb_dict: Dictionary with odb data
-        :param str h5_file: Name of h5_file to use for storing data
-        :param str time_stamp: Time stamp for possibly appending to hdf5 file names
-        :return: None
+        :param odb_dict: Dictionary with odb data
+        :param h5_file: Name of h5_file to use for storing data
+        :param time_stamp: Time stamp for possibly appending to hdf5 file names
         """
         if self.format != "extract":
             self.print_error("Must specify extract format to utilize this routine.")
@@ -1889,16 +1894,16 @@ class OdbReportFileParser(AbaqusFileParser):
         extract_h5.close()
         return None
 
-    def save_dict_to_group(self, h5file, path, data_member, output_file) -> None:
+    def save_dict_to_group(self, h5file: h5py.File, path: str, data_member: dict, output_file: str) -> None:
         """Recursively save data from python dictionary to hdf5 file.
 
         This method can handle data types of int, float, str, and xarray Datasets, as well as lists or dictionaries of
         the aforementioned types. Tuples are assumed to have ints or floats.
 
-        :param stream h5file: file stream to write data into
-        :param str path: name of hdf5 group to write into
-        :param dict data_member: member of dictionary
-        :param str output_file: name of h5 output file
+        :param h5file: file stream to write data into
+        :param path: name of hdf5 group to write into
+        :param data_member: member of dictionary
+        :param output_file: name of h5 output file
         """
         if not data_member:
             return
