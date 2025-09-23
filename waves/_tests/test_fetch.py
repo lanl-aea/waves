@@ -400,7 +400,7 @@ def test_recursive_copy(
     source_files: list[pathlib.Path],
     source_tree: list[pathlib.Path],
     destination_tree: list[pathlib.Path],
-    tutorial: int | None,
+    tutorial: _settings._allowable_tutorial_numbers_typing | None,
 ) -> None:
     # Dummy modsim_template tree
     copy_tuples = list(zip(source_tree, destination_tree, strict=True))
