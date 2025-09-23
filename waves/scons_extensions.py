@@ -2936,7 +2936,11 @@ def _custom_scanner(
         """
         return [node for node in node_list if node.path.endswith(tuple(suffixes))]
 
-    def regex_scan(node: SCons.Node.FS, env: SCons.Environment.Environment, path: str) -> list:  # noqa: ARG001
+    def regex_scan(
+        node: SCons.Node.FS,
+        env: SCons.Environment.Environment,  # noqa: ARG001, interface  dictated by SCons API
+        path: str,  # noqa: ARG001, interface  dictated by SCons API
+    ) -> list:
         """Scan function for extracting dependencies from the content of a file based on the given regular expression.
 
         The interface of the scan function is fixed by SCons. It must include ``node``, ``env`` and ``path``. It may

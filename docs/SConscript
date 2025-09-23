@@ -18,10 +18,14 @@ def sphinx_scanner() -> SCons.Scanner.Scanner:
     flags = re.MULTILINE
     expression = re.compile(r"^\s*\.\. (?:include|literalinclude|figure|bibliography)::\s*(.+)$", flags)
 
-    def suffix_only(node_list):
+    def suffix_only(node_list: list) -> list:
         return [node for node in node_list if node.path.endswith(tuple(suffixes))]
 
-    def regex_scan(node, env, path):  # noqa: ARG001
+    def regex_scan(
+        node: SCons.Node.FS,
+        env: SCons.Environment.Environment,  # noqa: ARG001, interface  dictated by SCons API
+        path: str,  # noqa: ARG001, interface  dictated by SCons API
+    ) -> list:
         contents = node.get_text_contents()
         includes = expression.findall(contents)
         includes = [file.strip() for file in includes]
