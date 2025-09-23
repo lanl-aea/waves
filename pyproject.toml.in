@@ -103,6 +103,6 @@ disable_error_code = "import-untyped"
 exclude = [
     "modsim_template",
     "tutorials",
-    "tests"
+    "_abaqus",
 ]
 packages = ["waves"]
