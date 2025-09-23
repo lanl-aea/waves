@@ -1373,6 +1373,7 @@ abaqus_pseudobuilder_input = {
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " -double both $(-cpus 1$)",
         {"job": "job"},
+        does_not_raise,
     ),
     "job with periods": (
         {},
@@ -1381,6 +1382,7 @@ abaqus_pseudobuilder_input = {
         [f"job.with.periods{ext}" for ext in _abaqus_standard_extensions],
         " -double both $(-cpus 1$)",
         {"job": "job.with.periods"},
+        does_not_raise,
     ),
     "job, subdirectory": (
         {},
@@ -1389,6 +1391,7 @@ abaqus_pseudobuilder_input = {
         [f"subdir{os.path.sep}job{ext}" for ext in _abaqus_standard_extensions],
         " -double both $(-cpus 1$)",
         {"job": "job"},
+        does_not_raise,
     ),
     "job with periods, subdirectory": (
         {},
@@ -1397,6 +1400,7 @@ abaqus_pseudobuilder_input = {
         [f"subdir{os.path.sep}job.with.periods{ext}" for ext in _abaqus_standard_extensions],
         " -double both $(-cpus 1$)",
         {"job": "job.with.periods"},
+        does_not_raise,
     ),
     "override cpus": (
         {"override_cpus": 2},
@@ -1405,6 +1409,7 @@ abaqus_pseudobuilder_input = {
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " -double both $(-cpus 2$)",
         {"job": "job"},
+        does_not_raise,
     ),
     "custom inp": (
         {},
@@ -1413,6 +1418,7 @@ abaqus_pseudobuilder_input = {
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " -double both $(-cpus 1$)",
         {"job": "job"},
+        does_not_raise,
     ),
     "custom inp, subdirectory": (
         {},
@@ -1421,6 +1427,7 @@ abaqus_pseudobuilder_input = {
         [f"subdir{os.path.sep}job{ext}" for ext in _abaqus_standard_extensions],
         " -double both $(-cpus 1$)",
         {"job": "job"},
+        does_not_raise,
     ),
     "user": (
         {},
@@ -1429,6 +1436,7 @@ abaqus_pseudobuilder_input = {
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " -double both $(-cpus 1$) -user user.f",
         {"job": "job"},
+        does_not_raise,
     ),
     "oldjob_str": (
         {},
@@ -1437,6 +1445,7 @@ abaqus_pseudobuilder_input = {
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " -double both $(-cpus 1$) -oldjob oldjob",
         {"job": "job"},
+        does_not_raise,
     ),
     "oldjob_list_of_1": (
         {},
@@ -1445,6 +1454,7 @@ abaqus_pseudobuilder_input = {
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " -double both $(-cpus 1$) -oldjob oldjob",
         {"job": "job"},
+        does_not_raise,
     ),
     "oldjob_list": (
         {},
@@ -1455,6 +1465,7 @@ abaqus_pseudobuilder_input = {
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " -double both $(-cpus 1$)",
         {"job": "job"},
+        does_not_raise,
     ),
     "write restart": (
         {},
@@ -1468,6 +1479,7 @@ abaqus_pseudobuilder_input = {
         ],
         " -double both $(-cpus 1$)",
         {"job": "job"},
+        does_not_raise,
     ),
     "double": (
         {},
@@ -1476,6 +1488,7 @@ abaqus_pseudobuilder_input = {
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " -double constraint $(-cpus 1$)",
         {"job": "job"},
+        does_not_raise,
     ),
     "extras": (
         {},
@@ -1484,6 +1497,7 @@ abaqus_pseudobuilder_input = {
         [f"job{ext}" for ext in _abaqus_standard_extensions] + ["extra.odb"],
         " -double both $(-cpus 1$) --extra-opt",
         {"job": "job"},
+        does_not_raise,
     ),
     "kwargs passthrough": (
         {},
@@ -1492,6 +1506,7 @@ abaqus_pseudobuilder_input = {
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " -double both $(-cpus 1$)",
         {"job": "job", "kwarg_1": "value_1"},
+        does_not_raise,
     ),
     "all with override": (
         {"override_cpus": 2},
@@ -1520,6 +1535,7 @@ abaqus_pseudobuilder_input = {
         + ["extra.odb"],
         " -double constraint $(-cpus 2$) -oldjob oldjob -user user.f --extra-opt",
         {"job": "job", "kwarg_1": "value_1"},
+        does_not_raise,
     ),
     "processes_1": (
         {},
@@ -1535,6 +1551,7 @@ abaqus_pseudobuilder_input = {
         ],
         " -double both $(-cpus 1$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
         {"job": "job"},
+        does_not_raise,
     ),
     "processes_2": (
         {},
@@ -1550,6 +1567,7 @@ abaqus_pseudobuilder_input = {
         ],
         " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
         {"job": "job"},
+        does_not_raise,
     ),
     "num_oldjob_restart_files_1": (
         {},
@@ -1572,6 +1590,7 @@ abaqus_pseudobuilder_input = {
         ],
         " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
         {"job": "job"},
+        does_not_raise,
     ),
     "num_oldjob_restart_files_2": (
         {},
@@ -1594,6 +1613,7 @@ abaqus_pseudobuilder_input = {
         ],
         " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
         {"job": "job"},
+        does_not_raise,
     ),
     "num_oldjob_restart_files_list": (
         {},
@@ -1604,40 +1624,95 @@ abaqus_pseudobuilder_input = {
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " -double both $(-cpus 1$)",
         {"job": "job"},
+        does_not_raise,
+    ),
+    "indivisible_cpus": (
+        {},
+        {"job": "job", "cpus": 3, "processes": 2},
+        ["job.inp"],
+        [f"job{ext}" for ext in _abaqus_standard_extensions],
+        "",
+        {"job": "job"},
+        pytest.raises(RuntimeError),
+    ),
+    "mismatched_oldjob_lengths": (
+        {},
+        {"job": "job", "oldjob": ["oldjob_1", "oldjob_2"], "num_oldjob_restart_files": [1]},
+        ["job.inp"]
+        + [f"oldjob_1{ext}" for ext in scons_extensions._get_abaqus_restart_extensions(solver="standard", processes=1)]
+        + [f"oldjob_2{ext}" for ext in scons_extensions._get_abaqus_restart_extensions(solver="standard", processes=2)],
+        [f"job{ext}" for ext in _abaqus_standard_extensions],
+        " -double both $(-cpus 1$)",
+        {"job": "job"},
+        pytest.raises(RuntimeError),
     ),
 }
 
 
 @pytest.mark.parametrize(
-    ("class_kwargs", "call_kwargs", "sources", "targets", "options", "builder_kwargs"),
+    ("class_kwargs", "call_kwargs", "sources", "targets", "options", "builder_kwargs", "outcome"),
     abaqus_pseudobuilder_input.values(),
     ids=abaqus_pseudobuilder_input.keys(),
 )
 def test_abaqus_pseudo_builder(
-    class_kwargs: dict, call_kwargs: dict, sources: list[str], targets: list[str], options: str, builder_kwargs: dict
+    class_kwargs: dict,
+    call_kwargs: dict,
+    sources: list[str],
+    targets: list[str],
+    options: str,
+    builder_kwargs: dict,
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
 ) -> None:
     # Mock AbaqusSolver builder and env
     mock_builder = unittest.mock.Mock()
     mock_env = unittest.mock.Mock()
-    scons_extensions.AbaqusPseudoBuilder(builder=mock_builder, **class_kwargs)(env=mock_env, **call_kwargs)
-    mock_builder.assert_called_once_with(target=targets, source=sources, program_options=options, **builder_kwargs)
+    with outcome:
+        scons_extensions.AbaqusPseudoBuilder(builder=mock_builder, **class_kwargs)(env=mock_env, **call_kwargs)
+        mock_builder.assert_called_once_with(target=targets, source=sources, program_options=options, **builder_kwargs)
 
 
 get_abaqus_restart_extensions_input = {
-    "standard_1": ("standard", 1, (".odb", ".prt", ".mdl", ".sim", ".stt", ".res")),
-    "standard_2": ("standard", 2, (".odb", ".prt", ".mdl.0", ".mdl.1", ".sim", ".stt.0", ".stt.1", ".res")),
-    "explicit_1": ("explicit", 1, (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel")),
-    "explicit_2": ("explicit", 2, (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel")),
+    "standard_1": (
+        "standard",
+        1,
+        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res"),
+        does_not_raise,
+    ),
+    "standard_2": (
+        "standard",
+        2,
+        (".odb", ".prt", ".mdl.0", ".mdl.1", ".sim", ".stt.0", ".stt.1", ".res"),
+        does_not_raise,
+    ),
+    "explicit_1": (
+        "explicit",
+        1,
+        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"),
+        does_not_raise,
+    ),
+    "explicit_2": (
+        "explicit",
+        2,
+        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"),
+        does_not_raise,
+    ),
+    "stahnduurd": (
+        "stahnduurd",
+        2,
+        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"),
+        pytest.raises(RuntimeError),
+    ),
 }
 
 
 @pytest.mark.parametrize(
-    ("solver", "processes", "expected"),
+    ("solver", "processes", "expected", "outcome"),
     get_abaqus_restart_extensions_input.values(),
     ids=get_abaqus_restart_extensions_input.keys(),
 )
-def test_get_abaqus_restart_extensions(solver, processes, expected):
-    assert set(scons_extensions._get_abaqus_restart_extensions(solver=solver, processes=processes)) == set(expected)
+def test_get_abaqus_restart_extensions(solver, processes, expected, outcome):
+    with outcome:
+        assert set(scons_extensions._get_abaqus_restart_extensions(solver=solver, processes=processes)) == set(expected)
 
 
 def test_sbatch_abaqus_solver() -> None:
