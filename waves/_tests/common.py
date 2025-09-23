@@ -53,7 +53,7 @@ def merge_samplers(
     second_schema: dict,
     kwargs: dict,
     sampler: str | None = None,
-) -> tuple[parameter_generators.ParameterGenerator, parameter_generators.ParameteGenerator]:
+) -> tuple[parameter_generators.ParameterGenerator, parameter_generators.ParameterGenerator]:
     """Return sampler objects based on the provided schemas and sampler class.
 
     Second sampler contains the merged first sampler.
