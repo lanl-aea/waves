@@ -4,13 +4,13 @@
 """
 
 import contextlib
+import pathlib
 import re
 import sys
 import typing
 from abc import ABC, abstractmethod
 from datetime import datetime
 from itertools import compress
-from pathlib import Path
 
 import h5py
 import numpy
@@ -34,7 +34,7 @@ class AbaqusFileParser(ABC):
         - **parsed**: *dict* Dictionary for holding parsed data
     """
 
-    def __init__(self, input_file: str, verbose: bool = False, *args, **kwargs) -> None:
+    def __init__(self, input_file: str | pathlib.Path, verbose: bool = False, *args, **kwargs) -> None:
         self.input_file = input_file
         super().__init__()
         self.parsed: dict = {}
@@ -61,11 +61,11 @@ class AbaqusFileParser(ABC):
         """
         if output_file:
             self.output_file = output_file
-        if Path(self.output_file).suffix != _settings._default_yaml_extension:
-            self.output_file = str(Path(self.output_file).with_suffix(_settings._default_yaml_extension))
+        if pathlib.Path(self.output_file).suffix != _settings._default_yaml_extension:
+            self.output_file = str(pathlib.Path(self.output_file).with_suffix(_settings._default_yaml_extension))
             self.print_warning(f"Changing suffix of output file to {_settings._default_yaml_extension}")
         try:
-            with Path(self.output_file).open(mode="w") as f:
+            with pathlib.Path(self.output_file).open(mode="w") as f:
                 yaml.safe_dump(self.parsed, f)
         except OSError as e:
             sys.exit(f"Couldn't write file {self.output_file}: {e}")
@@ -144,7 +144,7 @@ class OdbReportFileParser(AbaqusFileParser):
         input_file = self.input_file
         # TODO: Refactor to use a context manager
         try:
-            f = Path(input_file).open(mode="r")  # noqa: SIM115
+            f = pathlib.Path(input_file).open(mode="r")  # noqa: SIM115
         except OSError as e:
             sys.exit(f"Couldn't read file {input_file}: {e}")
 
@@ -1859,7 +1859,7 @@ class OdbReportFileParser(AbaqusFileParser):
         del self.field_extract_format
 
         non_empty_datasets = []  # Store the names of the datasets that aren't empty
-        datasets_file = Path(h5_file)
+        datasets_file = pathlib.Path(h5_file)
         datasets_file = datasets_file.parent / f"{datasets_file.stem}_datasets{_settings._default_h5_extension}"
         if datasets_file.exists():
             datasets_file = (
