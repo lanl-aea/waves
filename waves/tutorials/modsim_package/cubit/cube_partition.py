@@ -8,7 +8,7 @@ import sys
 import cubit
 
 
-def main(input_file, output_file):
+def main(input_file: pathlib.Path, output_file: pathlib.Path) -> None:
     """Partition the simple cube geometry created by ``cube_geometry.py``.
 
     This script partitions a simple Cubit model with a single cube part.
@@ -29,8 +29,8 @@ def main(input_file, output_file):
 
     :returns: writes ``output_file``.cub
     """
-    input_file = pathlib.Path(input_file).with_suffix(".cub")
-    output_file = pathlib.Path(output_file).with_suffix(".cub")
+    input_file = input_file.with_suffix(".cub")
+    output_file = output_file.with_suffix(".cub")
 
     # Avoid modifying the contents or timestamp on the input file.
     # Required to get conditional re-builds with a build system such as GNU Make, CMake, or SCons
@@ -76,7 +76,7 @@ def main(input_file, output_file):
     cubit.cmd(f"save as '{output_file}' overwrite")
 
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
     """Return the command-line interface parser."""
     script_name = pathlib.Path(__file__)
     # Set default parameter values
@@ -91,7 +91,7 @@ def get_parser():
     parser = argparse.ArgumentParser(description=cli_description, prog=prog)
     parser.add_argument(
         "--input-file",
-        type=str,
+        type=pathlib.Path,
         default=default_input_file,
         help=(
             "The Cubit model file created by ``cube_geometry.py``. "
@@ -101,7 +101,7 @@ def get_parser():
     )
     parser.add_argument(
         "--output-file",
-        type=str,
+        type=pathlib.Path,
         default=default_output_file,
         help=(
             "The output file for the Cubit model. "

@@ -6,7 +6,7 @@ import pathlib
 import cubit
 
 
-def main(output_file, xlength, ylength, zlength):
+def main(output_file: pathlib.Path, xlength: float, ylength: float, zlength: float) -> None:
     """Write brick geometry with specified dimensions.
 
     :param str output_file: The output file for the Cubit model. Will be stripped of the extension and ``.cub`` and
@@ -21,7 +21,7 @@ def main(output_file, xlength, ylength, zlength):
     cubit.cmd("new")
     cubit.cmd("reset")
 
-    cubit_file = pathlib.Path(output_file).with_suffix(".cub")
+    cubit_file = output_file.with_suffix(".cub")
     exodus_file = cubit_file.with_suffix(".exo")
 
     # Geometry
@@ -65,7 +65,7 @@ def main(output_file, xlength, ylength, zlength):
     cubit.cmd(f"save as '{cubit_file}' overwrite")
 
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
     """Return the command line parser."""
     script_name = pathlib.Path(__file__)
     prog = f"python {script_name.name} "
@@ -73,7 +73,7 @@ def get_parser():
     parser = argparse.ArgumentParser(description=cli_description, prog=prog)
     parser.add_argument(
         "--output-file",
-        type=str,
+        type=pathlib.Path,
         required=True,
         help=(
             "The output file for the Cubit model. Will be stripped of the extension and ``.cub`` and ``.exo`` will "

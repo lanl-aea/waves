@@ -9,7 +9,7 @@ import xarray
 from waves import _print_study, _settings
 
 
-def test_print_study():
+def test_print_study() -> None:
     read_data = "ints: [1, 2, 3]\nfloats: [10., 20., 30]\n"
     safe_load = {"ints": [1, 2, 3], "floats": [10.0, 20.0, 30.0]}
     table = pandas.DataFrame(safe_load)

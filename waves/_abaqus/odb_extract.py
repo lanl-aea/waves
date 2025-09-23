@@ -36,6 +36,7 @@ path. The '/xarray/Dataset' group path contains a list of group paths that conta
    /xarray/          # Group with a dataset that lists the location of all data written from xarray datasets
 """
 
+import argparse
 import datetime
 import json
 import os
@@ -45,7 +46,6 @@ import shlex
 import shutil
 import subprocess
 import sys
-from argparse import ArgumentParser, RawDescriptionHelpFormatter
 
 import yaml
 
@@ -55,7 +55,7 @@ from waves._utilities import _quote_spaces_in_path
 _exclude_from_namespace = set(globals().keys())
 
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
     """Get parser object for command line options.
 
     :return: argument parser
@@ -63,8 +63,8 @@ def get_parser():
     """
     _program_name = pathlib.Path(__file__).stem
     example = f""" Example: >> {_program_name} sample.odb\n """
-    parser = ArgumentParser(
-        description=__doc__, formatter_class=RawDescriptionHelpFormatter, epilog=example, prog=_program_name
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter, epilog=example, prog=_program_name
     )
     parser.add_argument(
         nargs=1, dest="input_file", type=str, help="odb or odbreport file for extracting data", metavar="sample.odb"
@@ -132,7 +132,7 @@ def odb_extract(
     abaqus_command: str = _settings._default_abaqus_command,
     delete_report_file: bool = False,
     verbose: bool = False,
-):
+) -> None:
     """Run the odb_extract Abaqus data extraction tool.
 
     Users should use the associated command line interface, not this API.
@@ -239,7 +239,7 @@ def odb_extract(
         pathlib.Path(job_name).unlink(missing_ok=True)
 
 
-def get_odb_report_args(odb_report_args: str, input_file: pathlib.Path, job_name: pathlib.Path):
+def get_odb_report_args(odb_report_args: str, input_file: pathlib.Path, job_name: pathlib.Path) -> str:
     """Generate odb_report arguments.
 
     :param odb_report_args: String of command line options to pass to ``abaqus odbreport``.
@@ -269,10 +269,10 @@ def get_odb_report_args(odb_report_args: str, input_file: pathlib.Path, job_name
     return odb_report_args
 
 
-def run_external(cmd):
+def run_external(cmd: str) -> tuple:
     """Execute an external command and get its exitcode, stdout and stderr.
 
-    :param str cmd: command line command to run
+    :param cmd: command line command to run
     :returns: output, return_code, error_code
     """
     args = shlex.split(cmd, posix=(os.name == "posix"))
@@ -280,23 +280,17 @@ def run_external(cmd):
     return process.returncode, process.stdout.decode(), process.stderr.decode()
 
 
-def main():
-    args = get_parser().parse_args()  # pragma: no cover
-    sys.exit(
-        odb_extract(
-            args.input_file,
-            args.output_file,
-            args.output_type,
-            args.odb_report_args,
-            args.abaqus_command,
-            args.delete_report_file,
-            args.verbose,
-        )
-    )  # pragma: no cover
-
-
-if __name__ == "__main__":
-    sys.exit(main())  # pragma: no cover
+def main() -> None:
+    args = get_parser().parse_args()
+    odb_extract(
+        args.input_file,
+        args.output_file,
+        args.output_type,
+        args.odb_report_args,
+        args.abaqus_command,
+        args.delete_report_file,
+        args.verbose,
+    )
 
 
 # Limit help() and 'from module import *' behavior to the module's public API
