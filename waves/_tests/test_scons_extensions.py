@@ -1663,50 +1663,6 @@ def test_abaqus_pseudo_builder(
         mock_builder.assert_called_once_with(target=targets, source=sources, program_options=options, **builder_kwargs)
 
 
-get_abaqus_restart_extensions_input = {
-    "standard_1": (
-        "standard",
-        1,
-        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res"),
-        does_not_raise,
-    ),
-    "standard_2": (
-        "standard",
-        2,
-        (".odb", ".prt", ".mdl.0", ".mdl.1", ".sim", ".stt.0", ".stt.1", ".res"),
-        does_not_raise,
-    ),
-    "explicit_1": (
-        "explicit",
-        1,
-        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"),
-        does_not_raise,
-    ),
-    "explicit_2": (
-        "explicit",
-        2,
-        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"),
-        does_not_raise,
-    ),
-    "stahnduurd": (
-        "stahnduurd",
-        2,
-        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"),
-        pytest.raises(ValueError),
-    ),
-}
-
-
-@pytest.mark.parametrize(
-    ("solver", "processes", "expected", "outcome"),
-    get_abaqus_restart_extensions_input.values(),
-    ids=get_abaqus_restart_extensions_input.keys(),
-)
-def test_get_abaqus_restart_extensions(solver, processes, expected, outcome):
-    with outcome:
-        assert set(_utilities._get_abaqus_restart_extensions(solver=solver, processes=processes)) == set(expected)
-
-
 def test_sbatch_abaqus_solver() -> None:
     expected = (
         'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "'
