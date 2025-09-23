@@ -1,8 +1,8 @@
 """Test command line utility and associated functions."""
 
+import contextlib
 import pathlib
 import typing
-import contextlib
 from unittest.mock import Mock, mock_open, patch
 
 import pytest
