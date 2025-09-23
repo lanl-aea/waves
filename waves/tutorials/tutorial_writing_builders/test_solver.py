@@ -1,12 +1,14 @@
 """Test the project solver module."""
 
 import argparse
+import contextlib
 import pathlib
-from contextlib import nullcontext as does_not_raise
 from unittest.mock import mock_open, patch
 
 import pytest
 import solver
+
+does_not_raise = contextlib.nullcontext()
 
 
 def test_main() -> None:
@@ -82,7 +84,7 @@ name_output_file = {
     name_output_file.values(),
     ids=name_output_file.keys(),
 )
-def test_name_output_file(input_file, output_file, expected) -> None:
+def test_name_output_file(input_file: pathlib.Path, output_file: pathlib.Path | None, expected: pathlib.Path) -> None:
     """Test :func:`solver.name_output_file`.
 
     :param input_file: the tested function's first positional argument
@@ -99,21 +101,21 @@ name_log_file = {
         10,
         [False],
         pathlib.Path("solver.log"),
-        does_not_raise(),
+        does_not_raise,
     ),
     "last iteration file": (
         pathlib.Path("solver.log"),
         2,
         [True, True, False],
         pathlib.Path("solver.log2"),
-        does_not_raise(),
+        does_not_raise,
     ),
     "default log file exists": (
         pathlib.Path("solver.log"),
         10,
         [True, False],
         pathlib.Path("solver.log1"),
-        does_not_raise(),
+        does_not_raise,
     ),
     "too many iterations": (
         pathlib.Path("solver.log"),
@@ -130,7 +132,13 @@ name_log_file = {
     name_log_file.values(),
     ids=name_log_file.keys(),
 )
-def test_name_log_file(log_file, max_iterations, exists_side_effect, expected, outcome) -> None:
+def test_name_log_file(
+    log_file: pathlib.Path,
+    max_iterations: int,
+    exists_side_effect: list[bool],
+    expected: pathlib.Path | None,
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
     """Test :func:`solver.name_log_file`.
 
     :param log_file: the tested function's first positional argument
@@ -143,15 +151,12 @@ def test_name_log_file(log_file, max_iterations, exists_side_effect, expected, o
         patch("pathlib.Path.exists", side_effect=exists_side_effect),
         outcome,
     ):
-        try:
-            returned_log_file = solver.name_log_file(log_file, max_iterations=max_iterations)
-            assert returned_log_file == expected
-        finally:
-            pass
+        returned_log_file = solver.name_log_file(log_file, max_iterations=max_iterations)
+        assert returned_log_file == expected
 
 
 read_input = {
-    "good yaml": (pathlib.Path("dummy.yaml"), True, "routine: implicit", {"routine": "implicit"}, does_not_raise()),
+    "good yaml": (pathlib.Path("dummy.yaml"), True, "routine: implicit", {"routine": "implicit"}, does_not_raise),
     "bad yaml": (pathlib.Path("dummy.yaml"), True, "\tnotvalidyaml", None, pytest.raises(RuntimeError)),
     "file does not exist": (pathlib.Path("dummy.yaml"), False, None, None, pytest.raises(RuntimeError)),
 }
@@ -162,7 +167,13 @@ read_input = {
     read_input.values(),
     ids=read_input.keys(),
 )
-def test_read_input(input_file, is_file_result, mock_data, expected, outcome) -> None:
+def test_read_input(
+    input_file: pathlib.Path,
+    is_file_result: bool,
+    mock_data: str | None,
+    expected: dict | None,
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
     """Test :func:`solver.read_input`.
 
     :param input_file: the tested function's first positional argument
@@ -176,11 +187,8 @@ def test_read_input(input_file, is_file_result, mock_data, expected, outcome) ->
         patch("pathlib.Path.open", mock_open(read_data=mock_data)),
         outcome,
     ):
-        try:
-            configuration = solver.read_input(input_file)
-            assert configuration == expected
-        finally:
-            pass
+        configuration = solver.read_input(input_file)
+        assert configuration == expected
 
 
 configure = {
@@ -190,7 +198,7 @@ configure = {
         ),
         {"key1": "value1"},
         {"key1": "value1", "routine": "implicit", "output_file": "implicit.out", "solve_cpus": 1, "overwrite": False},
-        does_not_raise(),
+        does_not_raise,
     ),
     "explicit input": (
         argparse.Namespace(
@@ -198,7 +206,7 @@ configure = {
         ),
         {"key1": "value1"},
         {"key1": "value1", "routine": "explicit", "output_file": "explicit.out", "solve_cpus": 1, "overwrite": False},
-        does_not_raise(),
+        does_not_raise,
     ),
     "mismatch routine": (
         argparse.Namespace(
@@ -218,7 +226,7 @@ configure = {
         ),
         {"key1": "value1"},
         {"key1": "value1", "routine": "implicit", "output_file": "different.out", "solve_cpus": 2, "overwrite": True},
-        does_not_raise(),
+        does_not_raise,
     ),
 }
 
@@ -228,7 +236,12 @@ configure = {
     configure.values(),
     ids=configure.keys(),
 )
-def test_configure(args, read_input, expected, outcome):
+def test_configure(
+    args: argparse.Namespace,
+    read_input: dict,
+    expected: dict | None,
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
     """Test :func:`solver.configure`.
 
     :param args: the tested function's first positional argument
@@ -250,11 +263,8 @@ def test_configure(args, read_input, expected, outcome):
         patch("pathlib.Path.open", mock_open()),
         outcome,
     ):
-        try:
-            returned_configuration = solver.configure(args)
-            assert returned_configuration == expected
-        finally:
-            pass
+        returned_configuration = solver.configure(args)
+        assert returned_configuration == expected
 
 
 solve_output_files = {
@@ -268,7 +278,7 @@ solve_output_files = {
     solve_output_files.values(),
     ids=solve_output_files.keys(),
 )
-def test_solve_output_files(output_file, solve_cpus, expected) -> None:
+def test_solve_output_files(output_file: pathlib.Path, solve_cpus: int, expected: list[pathlib.Path]) -> None:
     """Test :func:`solver.solve_output_files`.
 
     :param output_file: the tested function's first positional argument
@@ -283,12 +293,12 @@ solve = {
     "no output files exist": (
         {"log_file": "solver.log", "output_file": "output.out", "solve_cpus": 1, "overwrite": False},
         False,
-        does_not_raise(),
+        does_not_raise,
     ),
     "output files exist: overwrite": (
         {"log_file": "solver.log", "output_file": "output.out", "solve_cpus": 1, "overwrite": True},
         True,
-        does_not_raise(),
+        does_not_raise,
     ),
     "output files exist: no overwrite": (
         {"log_file": "solver.log", "output_file": "output.out", "solve_cpus": 1, "overwrite": False},
@@ -303,7 +313,7 @@ solve = {
     solve.values(),
     ids=solve.keys(),
 )
-def test_solve(configuration, exists, outcome):
+def test_solve(configuration: dict, exists: bool, outcome: contextlib.nullcontext | pytest.RaisesExc) -> None:
     """Test :func:`solver.solve`.
 
     :param configuration: the tested function's positional argument
@@ -315,13 +325,10 @@ def test_solve(configuration, exists, outcome):
         patch("pathlib.Path.open", mock_open()),
         outcome,
     ):
-        try:
-            solver.solve(configuration)
-        finally:
-            pass
+        solver.solve(configuration)
 
 
-def test_implicit():
+def test_implicit() -> None:
     """Test :func:`solver.implicit`."""
     dummy_namespace = {"dummy": "namespace"}
     dummy_configuration = {"configuration": "value"}
@@ -334,7 +341,7 @@ def test_implicit():
         mock_solve.assert_called_once_with(dummy_configuration)
 
 
-def test_explicit():
+def test_explicit() -> None:
     """Test :func:`solver.explicit`."""
     dummy_namespace = {"dummy": "namespace"}
     dummy_configuration = {"configuration": "value"}
@@ -348,8 +355,8 @@ def test_explicit():
 
 
 positive_nonzero_int = {
-    "positive int": ("1", 1, does_not_raise()),
-    "larger positive int": ("100", 100, does_not_raise()),
+    "positive int": ("1", 1, does_not_raise),
+    "larger positive int": ("100", 100, does_not_raise),
     "zero": ("0", None, pytest.raises(argparse.ArgumentTypeError)),
     "negative int": ("-1", None, pytest.raises(argparse.ArgumentTypeError)),
     "string": ("not an int", None, pytest.raises(argparse.ArgumentTypeError)),
@@ -361,7 +368,9 @@ positive_nonzero_int = {
     positive_nonzero_int.values(),
     ids=positive_nonzero_int.keys(),
 )
-def test_positive_nonzero_int(argument, expected, outcome) -> None:
+def test_positive_nonzero_int(
+    argument: str, expected: int | None, outcome: contextlib.nullcontext | pytest.RaisesExc
+) -> None:
     """Test :func:`solver.positive_nonzero_int`.
 
     :param argument: the tested function's positional argument
@@ -369,11 +378,8 @@ def test_positive_nonzero_int(argument, expected, outcome) -> None:
     :param outcome: the tested function's expected side effect
     """
     with outcome:
-        try:
-            answer = solver.positive_nonzero_int(argument)
-            assert answer == expected
-        finally:
-            pass
+        answer = solver.positive_nonzero_int(argument)
+        assert answer == expected
 
 
 @pytest.mark.skip(reason="Not yet implemented")

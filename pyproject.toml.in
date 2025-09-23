@@ -86,10 +86,11 @@ extend-include = ["*SConstruct", "*SConscript", "*.scons"]
 [tool.ruff.lint]
 extend-select = [
     "A", "B", "D", "E", "F", "I", "N", "Q", "W",
-    "ARG", "C4", "FURB", "ERA", "ISC", "NPY", "PD", "PERF", "PGH", "PIE", "PLC", "PLE", "PLW", "PT", "PTH", "PYI",
+    "ANN", "ARG", "C4", "FURB", "ERA", "ISC", "NPY", "PD", "PERF", "PGH", "PIE", "PLC", "PLE", "PLW", "PT", "PTH", "PYI",
     "RSE", "RUF", "SIM", "T10", "UP"
 ]
-extend-ignore = ["B028", "D203", "D213", "PIE808", "PIE790", "SIM108", "PLC0415"]
+# TODO: decide how to handle *args/**kwargs type annotations and remove ignores for ANN00[23]
+extend-ignore = ["B028", "D203", "D213", "PIE808", "PIE790", "SIM108", "PLC0415", "ANN002", "ANN003"]
 
 [tool.ruff.lint.extend-per-file-ignores]
 "*SConstruct" = ["F821"]

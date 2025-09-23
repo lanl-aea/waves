@@ -8,7 +8,7 @@ import SCons.Environment
 from waves import scons_extensions
 
 
-def test_project_help_default_targets():
+def test_project_help_default_targets() -> None:
     # Raise TypeError mocking SCons >=4.6.0,<4.9.0
     # Git commit 7a95cef7: Normally you expect something like ``patch("SCons.Script.SConscript.SConsEnvironment...")``
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
@@ -65,7 +65,7 @@ def test_project_help_default_targets():
     mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n    dummy.target\n", append=True, local_only=True)
 
 
-def test_project_help_aliases():
+def test_project_help_aliases() -> None:
     # Raise TypeError mocking SCons >=4.6.0,<4.9.0
     # Git commit 7a95cef7: Normally you expect something like ``patch("SCons.Script.SConscript.SConsEnvironment...")``
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
@@ -121,7 +121,7 @@ def test_project_help_aliases():
     mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n    dummy_alias\n", append=True, local_only=True)
 
 
-def test_project_help():
+def test_project_help() -> None:
     env = SCons.Environment.Environment()
     env.AddMethod(scons_extensions.project_help, "ProjectHelp")
     default_kwargs = {"env": ANY, "append": True, "local_only": True, "target_descriptions": None}
@@ -173,7 +173,7 @@ project_aliases = {
     "First Alias": (
         [SCons.Environment.Environment(), "dummy_alias"],
         {"description": "dummy_hint", "expected": "kwarg"},
-        ["dummy_alias"],
+        ("dummy_alias",),
         {"expected": "kwarg"},
         {"dummy_alias": "dummy_hint"},
         True,
@@ -181,12 +181,12 @@ project_aliases = {
     "Second Alias": (
         [SCons.Environment.Environment(), "dummy_alias2"],
         {"description": "dummy_hint2", "expected2": "kwarg"},
-        ["dummy_alias2"],
+        ("dummy_alias2",),
         {"expected2": "kwarg"},
         {"dummy_alias2": "dummy_hint2"},
         True,
     ),
-    "None": ([None, None], {}, None, {}, {}, False),
+    "None": ([None, None], {}, (), {}, {}, False),
 }
 
 
@@ -195,7 +195,14 @@ project_aliases = {
     project_aliases.values(),
     ids=project_aliases.keys(),
 )
-def test_project_alias(args, kwargs, expected_alias_args, expected_alias_kwargs, expected_description, expect_called):
+def test_project_alias(
+    args: tuple[SCons.Environment.Environment | None, str | None],
+    kwargs: dict,
+    expected_alias_args: tuple,
+    expected_alias_kwargs: dict,
+    expected_description: dict[str, str],
+    expect_called: bool,
+) -> None:
     with patch("SCons.Environment.Base.Alias", return_value=args[1:]) as mock_alias:
         target_descriptions = scons_extensions.project_alias(*args, **kwargs, target_descriptions={})
         assert target_descriptions == expected_description
@@ -205,7 +212,7 @@ def test_project_alias(args, kwargs, expected_alias_args, expected_alias_kwargs,
         mock_alias.assert_not_called()
 
 
-def test_project_alias_accumulated_target_descriptions():
+def test_project_alias_accumulated_target_descriptions() -> None:
     dependent_aliases = [
         (
             [SCons.Environment.Environment(), "dummy_alias"],
@@ -272,7 +279,13 @@ project_help_descriptions = {
     project_help_descriptions.values(),
     ids=project_help_descriptions.keys(),
 )
-def test_project_help_descriptions(nodes, existing_descriptions, target_descriptions, message, expected):
+def test_project_help_descriptions(
+    nodes: list[str],
+    existing_descriptions: dict[str, str],
+    target_descriptions: dict[str, str],
+    message: str,
+    expected: str,
+) -> None:
     with patch("waves.scons_extensions.project_alias", return_value=existing_descriptions) as mock_project_alias:
         appended_message = scons_extensions._project_help_descriptions(
             nodes, target_descriptions=target_descriptions, message=message

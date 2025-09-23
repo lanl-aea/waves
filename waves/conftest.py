@@ -5,7 +5,7 @@ import pathlib
 import pytest
 
 
-def pytest_addoption(parser):
+def pytest_addoption(parser: pytest.Parser) -> None:
     """Add the custom pytest options to the pytest command-line parser."""
     parser.addoption(
         "--system-test-dir",
@@ -43,30 +43,30 @@ def pytest_addoption(parser):
 
 
 @pytest.fixture
-def system_test_directory(request):
+def system_test_directory(request: pytest.FixtureRequest) -> pathlib.Path:
     """Return the argument of custom pytest ``--system-test-dir`` command-line option."""
     return request.config.getoption("--system-test-dir")
 
 
 @pytest.fixture
-def keep_system_tests(request):
+def keep_system_tests(request: pytest.FixtureRequest) -> bool:
     """Return the argument of custom pytest ``--keep-system-tests`` command-line option."""
     return request.config.getoption("--keep-system-tests")
 
 
 @pytest.fixture
-def unconditional_build(request):
+def unconditional_build(request: pytest.FixtureRequest) -> bool:
     """Return the argument of custom pytest ``--unconditional-build`` command-line option."""
     return request.config.getoption("--unconditional-build")
 
 
 @pytest.fixture
-def abaqus_command(request):
+def abaqus_command(request: pytest.FixtureRequest) -> pathlib.Path:
     """Return the argument of custom pytest ``--abaqus-command`` command-line option."""
     return request.config.getoption("--abaqus-command")
 
 
 @pytest.fixture
-def cubit_command(request):
+def cubit_command(request: pytest.FixtureRequest) -> pathlib.Path:
     """Return the argument of custom pytest ``--cubit-command`` command-line option."""
     return request.config.getoption("--cubit-command")

@@ -7,7 +7,7 @@ import sys
 import cubit
 
 
-def main(output_file, width, height, depth):
+def main(output_file: pathlib.Path, width: float, height: float, depth: float) -> None:
     """Create a simple cube geometry.
 
     This script creates a simple Cubit model with a single cube part.
@@ -20,7 +20,7 @@ def main(output_file, width, height, depth):
 
     :returns: writes ``output_file``.cub
     """
-    output_file = pathlib.Path(output_file).with_suffix(".cub")
+    output_file = output_file.with_suffix(".cub")
 
     cubit.init(["cubit", "-noecho", "-nojournal", "-nographics", "-batch"])
     cubit.cmd("new")
@@ -32,7 +32,7 @@ def main(output_file, width, height, depth):
     cubit.cmd(f"save as '{output_file}' overwrite")
 
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
     """Return the command-line interface parser."""
     script_name = pathlib.Path(__file__)
     # Set default parameter values
@@ -46,7 +46,7 @@ def get_parser():
     parser = argparse.ArgumentParser(description=cli_description, prog=prog)
     parser.add_argument(
         "--output-file",
-        type=str,
+        type=pathlib.Path,
         default=default_output_file,
         help=(
             "The output file for the Cubit model. "

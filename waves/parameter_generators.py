@@ -1,9 +1,10 @@
-"""External API module.
+"""Provide build system compatible parameter generators for use as an external API module.
 
 Will raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAVESError` to allow the CLI implementation
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
 
+import collections
 import copy
 import hashlib
 import itertools
@@ -17,6 +18,7 @@ from abc import ABC, abstractmethod
 import numpy
 import SALib
 import scipy.stats
+import SCons.Environment
 import xarray
 import yaml
 
@@ -247,7 +249,7 @@ class ParameterGenerator(ABC):
             dry_run=dry_run,
         )
 
-    def _scons_write(self, target: list, source: list, env) -> None:  # noqa: ARG002
+    def _scons_write(self, target: list, source: list, env: SCons.Environment.Environment) -> None:  # noqa: ARG002
         """`SCons Python build function`_ wrapper for the parameter generator's write() function.
 
         Reference: https://scons.org/doc/production/HTML/scons-user/ch17s04.html
@@ -267,9 +269,14 @@ class ParameterGenerator(ABC):
 
     def _write(
         self,
-        parameter_study_object,
-        parameter_study_iterator,
-        conditional_write_function,
+        parameter_study_object: dict | xarray.Dataset,
+        parameter_study_iterator: dict | xarray.core.groupby.DatasetGroupBy,
+        conditional_write_function: collections.abc.Callable[
+            [
+                pathlib.Path,
+            ],
+            None,
+        ],
         dry_run: bool = _settings._default_dry_run,
     ) -> None:
         """Write parameter study formatted output to STDOUT, separate set files, or a single file.
@@ -587,7 +594,15 @@ class _ScipyGenerator(ParameterGenerator, ABC):
             parameter_distributions[parameter] = getattr(scipy.stats, distribution_name)(**attributes)
         return parameter_distributions
 
-    def _generate_distribution_samples(self, sampler, set_count, parameter_count) -> None:
+    def _generate_distribution_samples(
+        self,
+        sampler: scipy.stats.qmc.Halton
+        | scipy.stats.qmc.LatinHypercube
+        | scipy.stats.qmc.PoissonDisk
+        | scipy.stats.qmc.Sobol,
+        set_count: int,
+        parameter_count: int,
+    ) -> None:
         """Create parameter distribution samples.
 
         Requires attibrutes:
@@ -1100,10 +1115,10 @@ class ScipySampler(_ScipyGenerator):
     Samplers must use the ``d`` parameter space dimension keyword argument. The following samplers are tested for
     parameter study shape and merge behavior:
 
-    * Sobol
     * Halton
     * LatinHypercube
     * PoissonDisk
+    * Sobol
 
     .. warning::
 
@@ -1181,7 +1196,7 @@ class ScipySampler(_ScipyGenerator):
 
     """
 
-    def __init__(self, sampler_class, *args, **kwargs) -> None:
+    def __init__(self, sampler_class: str, *args, **kwargs) -> None:
         self.sampler_class = sampler_class
         super().__init__(*args, **kwargs)
 
@@ -1286,7 +1301,7 @@ class SALibSampler(ParameterGenerator, ABC):
            parameter_3   (set_name) float64 0.4287 ... -2.871
     """
 
-    def __init__(self, sampler_class, *args, **kwargs) -> None:
+    def __init__(self, sampler_class: str, *args, **kwargs) -> None:
         self.sampler_class = sampler_class
         super().__init__(*args, **kwargs)
 
@@ -1412,7 +1427,7 @@ def _parameter_study_to_numpy(parameter_study: xarray.Dataset) -> numpy.ndarray:
     return numpy.array(data, dtype=object)
 
 
-def _verify_parameter_study(parameter_study: xarray.Dataset):
+def _verify_parameter_study(parameter_study: xarray.Dataset) -> None:
     """Verify the contents of a parameter study.
 
     :param parameter_study: A :class:`ParameterGenerator` parameter study Xarray Dataset

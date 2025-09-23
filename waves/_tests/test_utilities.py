@@ -1,14 +1,17 @@
+import contextlib
 import copy
 import pathlib
 import subprocess
 import sys
+import typing
 import warnings
-from contextlib import nullcontext as does_not_raise
 from unittest.mock import patch
 
 import pytest
 
 from waves import _utilities
+
+does_not_raise = contextlib.nullcontext()
 
 set_name_substitution = {
     "default behavior": (
@@ -91,7 +94,12 @@ set_name_substitution = {
     set_name_substitution.values(),
     ids=set_name_substitution.keys(),
 )
-def test_set_name_substitution(original, replacement, kwargs, expected):
+def test_set_name_substitution(
+    original: list[str | pathlib.Path] | str | pathlib.Path | typing.Any,  # noqa: ANN401
+    replacement: str,
+    kwargs: dict,
+    expected: list[str | pathlib.Path] | str | pathlib.Path | typing.Any,  # noqa: ANN401
+) -> None:
     default_kwargs = {"identifier": "set_name", "suffix": "/"}
     call_kwargs = copy.deepcopy(default_kwargs)
     call_kwargs.update(kwargs)
@@ -141,11 +149,11 @@ quote_spaces_in_path_input = {
     quote_spaces_in_path_input.values(),
     ids=quote_spaces_in_path_input.keys(),
 )
-def test_quote_spaces_in_path(path, expected):
+def test_quote_spaces_in_path(path: str | pathlib.Path, expected: pathlib.Path) -> None:
     assert _utilities._quote_spaces_in_path(path) == expected
 
 
-def test_search_commands():
+def test_search_commands() -> None:
     """Test :meth:`waves._utilities.search_command`."""
     with patch("shutil.which", return_value=None):
         command_abspath = _utilities.search_commands(["notfound"])
@@ -157,8 +165,8 @@ def test_search_commands():
 
 
 find_command = {
-    "first": (["first", "second"], "first", does_not_raise()),
-    "second": (["first", "second"], "second", does_not_raise()),
+    "first": (["first", "second"], "first", does_not_raise),
+    "second": (["first", "second"], "second", does_not_raise),
     "none": (["first", "second"], None, pytest.raises(FileNotFoundError)),
 }
 
@@ -168,17 +176,16 @@ find_command = {
     find_command.values(),
     ids=find_command.keys(),
 )
-def test_find_command(options, found, outcome):
+def test_find_command(
+    options: list[str], found: str | None, outcome: contextlib.nullcontext | pytest.RaisesExc
+) -> None:
     """Test :meth:`waves._utilities.find_command`."""
     with patch("waves._utilities.search_commands", return_value=found), outcome:
-        try:
-            command_abspath = _utilities.find_command(options)
-            assert command_abspath == found
-        finally:
-            pass
+        command_abspath = _utilities.find_command(options)
+        assert command_abspath == found
 
 
-def test_cubit_os_bin():
+def test_cubit_os_bin() -> None:
     with patch("platform.system", return_value="Darwin"):
         bin_directory = _utilities.cubit_os_bin()
         assert bin_directory == "MacOS"
@@ -193,7 +200,7 @@ def test_cubit_os_bin():
         assert bin_directory == "bin"
 
 
-def test_find_cubit_bin():
+def test_find_cubit_bin() -> None:
     mock_abspath = pathlib.Path("/mock/path/parent/cubit")
     mock_macos_bin = mock_abspath.parent / "intermediate/MacOS"
     with (
@@ -206,7 +213,7 @@ def test_find_cubit_bin():
     assert cubit_bin == mock_macos_bin
 
 
-def test_find_cubit_python():
+def test_find_cubit_python() -> None:
     mock_abspath = pathlib.Path("/mock/path/parent/cubit")
     mock_python = mock_abspath.parent / "bin/python3"
     with (
@@ -230,7 +237,7 @@ def test_find_cubit_python():
         cubit_python = _utilities.find_cubit_python(mock_abspath)
 
 
-def test_tee_subprocess():
+def test_tee_subprocess() -> None:
     with patch("subprocess.Popen") as mock_popen:
         _utilities.tee_subprocess(["dummy"])
     mock_popen.assert_called_once()
@@ -280,7 +287,7 @@ return_environment = {
     return_environment.values(),
     ids=return_environment.keys(),
 )
-def test_return_environment(command, kwargs, stdout, expected):
+def test_return_environment(command: str, kwargs: dict, stdout: bytes, expected: dict[str, str]) -> None:
     """Test :func:`waves._utilities.return_environment`.
 
     :param bytes stdout: byte string with null delimited shell environment variables
@@ -324,7 +331,9 @@ cache_environment = {
     cache_environment.values(),
     ids=cache_environment.keys(),
 )
-def test_cache_environment(kwargs, cache, overwrite_cache, verbose, expected, file_exists):
+def test_cache_environment(
+    kwargs: dict, cache: str | None, overwrite_cache: bool, verbose: bool, expected: dict[str, str], file_exists: bool
+) -> None:
     return_environment_kwargs = {
         "shell": "bash",
     }
@@ -362,7 +371,7 @@ def test_cache_environment(kwargs, cache, overwrite_cache, verbose, expected, fi
     assert environment_dictionary == expected
 
 
-def test_cache_environment_exception_handling():
+def test_cache_environment_exception_handling() -> None:
     with (
         patch(
             "waves._utilities.return_environment",
@@ -388,13 +397,13 @@ create_valid_identifier = {
     create_valid_identifier.values(),
     ids=create_valid_identifier.keys(),
 )
-def test_create_valid_identifier(identifier, expected) -> None:
+def test_create_valid_identifier(identifier: str, expected: str) -> None:
     returned = _utilities.create_valid_identifier(identifier)
     assert returned == expected
 
 
-def test_warn_only_once():
-    def test_warning():
+def test_warn_only_once() -> None:
+    def test_warning() -> None:
         warnings.warn("test warning")
 
     with warnings.catch_warnings(record=True) as warning_output:

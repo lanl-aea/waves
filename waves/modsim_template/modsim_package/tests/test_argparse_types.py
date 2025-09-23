@@ -27,8 +27,5 @@ def test_positive_float(argument, expected, outcome):
     :param outcome: the tested function's expected side effect
     """
     with outcome:
-        try:
-            answer = argparse_types.positive_float(argument)
-            assert answer == expected
-        finally:
-            pass
+        answer = argparse_types.positive_float(argument)
+        assert answer == expected

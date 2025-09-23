@@ -35,13 +35,13 @@ class FakeProcess:
     stderr = b"valid command."
 
 
-def test_get_parser():
+def test_get_parser() -> None:
     with patch("sys.argv", ["odb_extract.py", "sample.odb"]):
         cmd_args = odb_extract.get_parser().parse_args()
         assert cmd_args.abaqus_command == "abq2024"
 
 
-def test_odb_extract():
+def test_odb_extract() -> None:
     with (
         patch("yaml.safe_dump"),
         patch("shutil.which", return_value="abaqus"),
@@ -306,7 +306,7 @@ odb_report_arguments = {
     odb_report_arguments.values(),
     ids=odb_report_arguments.keys(),
 )
-def test_get_odb_report_args(odb_report_args, input_file, job_name, expected):
+def test_get_odb_report_args(odb_report_args: str, input_file: str, job_name: str, expected: str) -> None:
     new_odb_report_args = odb_extract.get_odb_report_args(
         odb_report_args,
         pathlib.Path(input_file),

@@ -55,7 +55,7 @@ class TestSobolSequence:
         generate_input.values(),
         ids=generate_input.keys(),
     )
-    def test_generate(self, parameter_schema, kwargs, expected_samples):
+    def test_generate(self, parameter_schema: dict, kwargs: dict, expected_samples: numpy.array) -> None:
         parameter_names = [key for key in parameter_schema if key != "num_simulations"]
         generator_classes = (
             SobolSequence(parameter_schema, **kwargs),
@@ -135,7 +135,7 @@ class TestSobolSequence:
         merge_test.values(),
         ids=merge_test.keys(),
     )
-    def test_merge(self, first_schema, second_schema, kwargs, expected_samples):
+    def test_merge(self, first_schema: dict, second_schema: dict, kwargs: dict, expected_samples: numpy.array) -> None:
         with patch("waves.parameter_generators._verify_parameter_study"):
             # Sobol
             original_study, merged_study = merge_samplers(SobolSequence, first_schema, second_schema, kwargs)

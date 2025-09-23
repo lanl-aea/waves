@@ -8,7 +8,13 @@ import sys
 import cubit
 
 
-def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaqus") -> None:
+def main(
+    input_file: pathlib.Path,
+    output_file: pathlib.Path,
+    global_seed: float,
+    element_type: str = "QUAD",
+    solver: str = "abaqus",
+) -> None:
     """Mesh the simple rectangle geometry partitioned by ``rectangle_partition.py``.
 
     This script meshes a simple Cubit model with a single rectangle part.
@@ -86,7 +92,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=cli_description, prog=prog)
     parser.add_argument(
         "--input-file",
-        type=str,
+        type=pathlib.Path,
         default=default_input_file,
         help=(
             "The Cubit model file created by ``rectangle_partition.py``. "
@@ -96,7 +102,7 @@ def get_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--output-file",
-        type=str,
+        type=pathlib.Path,
         default=default_output_file,
         help=(
             "The output file for the Cubit model. "
