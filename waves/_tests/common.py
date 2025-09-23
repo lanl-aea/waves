@@ -2,7 +2,8 @@ import pathlib
 import platform
 from unittest.mock import patch
 
-from waves._settings import _hash_coordinate_key, _set_coordinate_key, parameter_generators
+from waves import parameter_generators
+from waves._settings import _hash_coordinate_key, _set_coordinate_key
 
 
 def platform_check() -> tuple[bool, str, bool]:
