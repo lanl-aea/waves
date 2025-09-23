@@ -1633,7 +1633,7 @@ abaqus_pseudobuilder_input = {
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         "",
         {"job": "job"},
-        pytest.raises(RuntimeError),
+        pytest.raises(ValueError),
     ),
     "mismatched_oldjob_lengths": (
         {},
@@ -1644,7 +1644,7 @@ abaqus_pseudobuilder_input = {
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " -double both $(-cpus 1$)",
         {"job": "job"},
-        pytest.raises(RuntimeError),
+        pytest.raises(ValueError),
     ),
 }
 
@@ -1700,7 +1700,7 @@ get_abaqus_restart_extensions_input = {
         "stahnduurd",
         2,
         (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"),
-        pytest.raises(RuntimeError),
+        pytest.raises(ValueError),
     ),
 }
 
