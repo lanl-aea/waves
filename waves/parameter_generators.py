@@ -271,7 +271,12 @@ class ParameterGenerator(ABC):
         self,
         parameter_study_object: dict | xarray.Dataset,
         parameter_study_iterator: dict | xarray.core.groupby.DatasetGroupBy,
-        conditional_write_function: collections.abc.Callable[[pathlib.Path, ], None],
+        conditional_write_function: collections.abc.Callable[
+            [
+                pathlib.Path,
+            ],
+            None,
+        ],
         dry_run: bool = _settings._default_dry_run,
     ) -> None:
         """Write parameter study formatted output to STDOUT, separate set files, or a single file.

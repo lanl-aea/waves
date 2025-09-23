@@ -879,12 +879,12 @@ merge_parameter_studies_cases.update(
     ids=merge_parameter_studies_cases.keys(),
 )
 def test_merge_parameter_studies(
-        studies: list[xarray.Dataset],
-        expected_study: xarray.Dataset,
-        expected_types: dict[str, type],
-        propagate_space: bool | None,
-        outcome: contextlib.nullcontext | pytest.RaisesExc,
-    ) -> None:
+    studies: list[xarray.Dataset],
+    expected_study: xarray.Dataset,
+    expected_types: dict[str, type],
+    propagate_space: bool | None,
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
     """Check the merged parameter study contents and verify unchanged base study set_name-to-set_hash relationships.
 
     :param studies: list of N number of parameter study Xarray datasets to merge, where the first study in the list is
@@ -941,8 +941,8 @@ test_create_set_names_cases = {
     ids=test_create_set_names_cases.keys(),
 )
 def test_create_set_names(
-        test_set_hashes: list[str], template: string.Template | None, expected_set_names: dict[str, str]
-    ) -> None:
+    test_set_hashes: list[str], template: string.Template | None, expected_set_names: dict[str, str]
+) -> None:
     """Test the parameter set name generation. Test that the same hashes get the same parameter set names.
 
     :param test_set_hashes: list of arbitrary hash strings for test purposes

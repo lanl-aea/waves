@@ -871,9 +871,7 @@ def builder_factory(
     subcommand_required: str = "",
     subcommand_options: str = "",
     action_suffix: str = "",
-    emitter: collections.abc.Callable[
-        [list, list, SCons.Environment.Environment], tuple[list, list]
-    ] | None = None,
+    emitter: collections.abc.Callable[[list, list, SCons.Environment.Environment], tuple[list, list]] | None = None,
     **kwargs,
 ) -> SCons.Builder.Builder:
     """Template builder factory returning a builder with no emitter.

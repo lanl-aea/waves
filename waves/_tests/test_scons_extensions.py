@@ -2015,11 +2015,7 @@ matlab_script_input = {
     ids=matlab_script_input.keys(),
 )
 def test_matlab_script(
-    builder_kwargs: dict,
-    task_kwargs: dict,
-    node_count: int,
-    action_count: int,
-    target_list: list[str]
+    builder_kwargs: dict, task_kwargs: dict, node_count: int, action_count: int, target_list: list[str]
 ) -> None:
     # Set default expectations to match default argument values
     expected_kwargs = {

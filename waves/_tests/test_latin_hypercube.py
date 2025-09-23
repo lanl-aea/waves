@@ -120,9 +120,7 @@ class TestLatinHypercube:
         merge_test.values(),
         ids=merge_test.keys(),
     )
-    def test_merge(
-        self, first_schema: dict, second_schema: dict, seed: int, expected_samples: numpy.ndarray
-    ) -> None:
+    def test_merge(self, first_schema: dict, second_schema: dict, seed: int, expected_samples: numpy.ndarray) -> None:
         with patch("waves.parameter_generators._verify_parameter_study"):
             # LatinHypercube
             kwargs = {"seed": seed}
