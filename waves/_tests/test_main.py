@@ -1,12 +1,15 @@
 """Test command line utility and associated functions."""
 
 import pathlib
-from contextlib import nullcontext as does_not_raise
+import typing
+import contextlib
 from unittest.mock import Mock, mock_open, patch
 
 import pytest
 
 from waves import _main, _settings, exceptions
+
+does_not_raise = contextlib.nullcontext()
 
 
 def test_main() -> None:
@@ -131,7 +134,13 @@ parameter_study_args = {
     parameter_study_args.values(),
     ids=list(parameter_study_args.keys()),
 )
-def test_parameter_study(subcommand, class_name, argument, option, argument_value) -> None:
+def test_parameter_study(
+    subcommand: str,
+    class_name: str,
+    argument: str,
+    option: str,
+    argument_value: typing.Any,  # noqa: ANN401, the argument type really might be an arbitrary type
+) -> None:
     # Help/usage. Should not raise
     with (
         patch("sys.argv", ["_main.py", subcommand, "-h"]),
@@ -154,7 +163,7 @@ def test_parameter_study(subcommand, class_name, argument, option, argument_valu
         patch("yaml.safe_load"),
         patch(f"waves.parameter_generators.{class_name}", return_value=mock_instantiation) as mock_generator,
         patch("pathlib.Path.is_file", return_value=True),
-        does_not_raise(),
+        does_not_raise,
     ):
         _main.main()
         mock_generator.assert_called_once()
