@@ -1542,8 +1542,8 @@ def _coerce_values(values: typing.Iterable, name: str | None = None) -> numpy.nd
 def _assess_parameter_spaces(studies: list[xarray.Dataset]) -> list[xarray.Dataset]:
     """From a list of parameter studies, separate studies into unique parameter spaces.
 
-    This function generates a list of lists, with each sub-list containing the studies separated into unique parameter
-    spaces.
+    This function generates a list of lists, with each sub-list containing studies belonging to a shared unique
+    parameter space.
 
     :param studies: list of parameter study xarray Datasets where the first study is considered the 'base' study
 
