@@ -37,7 +37,7 @@ class AbaqusFileParser(ABC):
         - **parsed**: *dict* Dictionary for holding parsed data
     """
 
-    def __init__(self, input_file: str | pathlib.Path, verbose: bool = False, *args, **kwargs) -> None:
+    def __init__(self, input_file: str | pathlib.Path, *args, verbose: bool = False, **kwargs) -> None:
         self.input_file = input_file
         super().__init__()
         self.parsed: dict = {}
