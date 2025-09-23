@@ -30,6 +30,7 @@ Internal Changes
 - Hierarchical ruff configuration for improved linting of tutorial files, which should lint as if they are external to
   the project (:merge:`1252`). By `Kyle Brindley`_.
 - Enable the ruff pydocstyle documentation checks 'D' (:issue:`970`, :merge:`1251`). By `Kyle Brindley`_.
+- Enable ruff type annotation checks 'ANN' (:issue:`969`, :merge:`1256`). By `Kyle Brindley`_.
 
 ********************
 0.13.15 (2025-08-27)
