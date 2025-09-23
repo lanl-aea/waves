@@ -306,7 +306,7 @@ odb_report_arguments = {
     odb_report_arguments.values(),
     ids=odb_report_arguments.keys(),
 )
-def test_get_odb_report_args(odb_report_args, input_file, job_name, expected) -> None:
+def test_get_odb_report_args(odb_report_args: str, input_file: str, job_name: str, expected: str) -> None:
     new_odb_report_args = odb_extract.get_odb_report_args(
         odb_report_args,
         pathlib.Path(input_file),
