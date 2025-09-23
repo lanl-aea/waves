@@ -2147,7 +2147,6 @@ class AbaqusPseudoBuilder:
             # Assume 1 process, but don't add -threads_per_mpi_process to command string
             processes = 1
 
-
         # If restarting/importing a job, add old job restart files to sources
         if oldjob:
             # Ensure oldjob is a list of str
@@ -2190,7 +2189,7 @@ class AbaqusPseudoBuilder:
         return self.builder(target=targets, source=sources, job=job_option, program_options=options, **kwargs)
 
 
-def _get_abaqus_restart_extensions(solver: str, processes: int = 1) -> list[str]: 
+def _get_abaqus_restart_extensions(solver: str, processes: int = 1) -> list[str]:
     if solver.lower() == "explicit":
         restart_files = set(_settings._abaqus_explicit_restart_extensions)
     elif solver.lower() == "standard":
@@ -2200,9 +2199,7 @@ def _get_abaqus_restart_extensions(solver: str, processes: int = 1) -> list[str]
             restart_files -= {".mdl", ".stt"}
             # Add {.mdl,.stt}.[0..N-1]
             restart_files |= {
-                f"{extension}.{process}"
-                for extension in [".mdl", ".stt"]
-                for process in range(0, processes)
+                f"{extension}.{process}" for extension in [".mdl", ".stt"] for process in range(0, processes)
             }
     else:
         raise RuntimeError(f"Unknown solver type: {solver}")
