@@ -2,6 +2,8 @@
 
 import contextlib
 import pathlib
+import string
+import typing
 from unittest.mock import mock_open, patch
 
 import numpy
@@ -73,7 +75,7 @@ set_hashes = {
     set_hashes.values(),
     ids=set_hashes.keys(),
 )
-def test_calculate_set_hash(parameter_names, samples, expected_hashes) -> None:
+def test_calculate_set_hash(parameter_names: list[str], samples: numpy.ndarray, expected_hashes: list[str]) -> None:
     for row, expected_hash in zip(samples, expected_hashes, strict=True):
         set_hash = parameter_generators._calculate_set_hash(parameter_names, row)
         assert set_hash == expected_hash
@@ -86,7 +88,7 @@ def test_calculate_set_hash(parameter_names, samples, expected_hashes) -> None:
     set_hashes.values(),
     ids=set_hashes.keys(),
 )
-def test_calculate_set_hashes(parameter_names, samples, expected_hashes) -> None:
+def test_calculate_set_hashes(parameter_names: list[str], samples: numpy.ndarray, expected_hashes: list[str]) -> None:
     set_hashes = parameter_generators._calculate_set_hashes(
         parameter_names,
         samples,
@@ -99,7 +101,7 @@ def test_calculate_set_hashes(parameter_names, samples, expected_hashes) -> None
     set_hashes.values(),
     ids=set_hashes.keys(),
 )
-def test_verify_parameter_study(parameter_names, samples, expected_hashes) -> None:
+def test_verify_parameter_study(parameter_names: list[str], samples: numpy.ndarray, expected_hashes: list[str]) -> None:
     # Borrow setup from class test. See :meth:`test_create_set_hashes`
     hashes_parameter_generator = DummyGenerator({})
     hashes_parameter_generator._parameter_names = parameter_names
@@ -245,7 +247,12 @@ return_dataset_types_cases = {
     return_dataset_types_cases.values(),
     ids=return_dataset_types_cases.keys(),
 )
-def test_return_dataset_types(dataset_1, dataset_2, expected_types, outcome) -> None:
+def test_return_dataset_types(
+    dataset_1: xarray.Dataset,
+    dataset_2: xarray.Dataset,
+    expected_types: dict[str, type],
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
     with outcome:
         try:
             types = parameter_generators._return_dataset_types(dataset_1, dataset_2)
@@ -305,7 +312,9 @@ coerce_values_cases = {
     coerce_values_cases.values(),
     ids=coerce_values_cases.keys(),
 )
-def test_coerce_values(values, name, expected_output_type, should_warn) -> None:
+def test_coerce_values(
+    values: list[typing.Any], name: str | None, expected_output_type: type, should_warn: bool
+) -> None:
     with patch("warnings.warn") as mock_warn:
         values_coerced = parameter_generators._coerce_values(values, name)
         assert [type(item) for item in values_coerced] == [expected_output_type] * len(values_coerced)
@@ -532,7 +541,13 @@ propagate_parameter_space_cases = {
     propagate_parameter_space_cases.values(),
     ids=propagate_parameter_space_cases.keys(),
 )
-def test_propagate_parameter_space(studies, expected_study, expected_types, propagate_space, outcome) -> None:  # noqa: ARG001
+def test_propagate_parameter_space(
+    studies: list[xarray.Dataset],
+    expected_study: xarray.Dataset,
+    expected_types: dict[str, type],
+    propagate_space: bool,  # noqa: ARG001, placeholder argument for test case compatibility with downstream functions
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
     """Check the propagation of parameter space between two studies.
 
     :param studies: list of N number of parameter study Xarray datasets to merge, where the first study in the list is
@@ -546,8 +561,8 @@ def test_propagate_parameter_space(studies, expected_study, expected_types, prop
     with outcome:
         try:
             propagated_study = parameter_generators._propagate_parameter_space(study_base, study_other)
-            for key in expected_types:
-                assert propagated_study[key].dtype == expected_types[key]
+            for key, parameter_type in expected_types.items():
+                assert propagated_study[key].dtype == parameter_type
             xarray.testing.assert_identical(propagated_study, expected_study)
             parameter_generators._verify_parameter_study(propagated_study)
         finally:
@@ -796,7 +811,13 @@ merge_parameter_space_cases = {
     merge_parameter_space_cases.values(),
     ids=merge_parameter_space_cases.keys(),
 )
-def test_merge_parameter_space(studies, expected_study, expected_types, propagate_space, outcome) -> None:
+def test_merge_parameter_space(
+    studies: list[xarray.Dataset],
+    expected_study: xarray.Dataset,
+    expected_types: dict[str, type],
+    propagate_space: bool,
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
     """Check the propagation of parameter space between two studies.
 
     :param studies: list of N number of parameter study Xarray datasets to merge, where the first study in the list is
@@ -813,8 +834,8 @@ def test_merge_parameter_space(studies, expected_study, expected_types, propagat
             studies = [study.swap_dims(swap_to_hash_index) for study in studies]
             merged_study = parameter_generators._merge_parameter_space(studies)
             merged_study = merged_study.swap_dims(swap_to_set_index)
-            for key in expected_types:
-                assert merged_study[key].dtype == expected_types[key]
+            for key, parameter_type in expected_types.items():
+                assert merged_study[key].dtype == parameter_type
             xarray.testing.assert_identical(merged_study, expected_study)
             parameter_generators._verify_parameter_study(merged_study)
             if not propagate_space:
@@ -857,7 +878,13 @@ merge_parameter_studies_cases.update(
     merge_parameter_studies_cases.values(),
     ids=merge_parameter_studies_cases.keys(),
 )
-def test_merge_parameter_studies(studies, expected_study, expected_types, propagate_space, outcome) -> None:
+def test_merge_parameter_studies(
+        studies: list[xarray.Dataset],
+        expected_study: xarray.Dataset,
+        expected_types: dict[str, type],
+        propagate_space: bool | None,
+        outcome: contextlib.nullcontext | pytest.RaisesExc,
+    ) -> None:
     """Check the merged parameter study contents and verify unchanged base study set_name-to-set_hash relationships.
 
     :param studies: list of N number of parameter study Xarray datasets to merge, where the first study in the list is
@@ -870,8 +897,8 @@ def test_merge_parameter_studies(studies, expected_study, expected_types, propag
     with outcome:
         try:
             merged_study = parameter_generators._merge_parameter_studies(studies)
-            for key in expected_types:
-                assert merged_study[key].dtype == expected_types[key]
+            for key, parameter_type in expected_types.items():
+                assert merged_study[key].dtype == parameter_type
             xarray.testing.assert_identical(merged_study, expected_study)
             parameter_generators._verify_parameter_study(merged_study)
             if not propagate_space:
@@ -913,7 +940,9 @@ test_create_set_names_cases = {
     test_create_set_names_cases.values(),
     ids=test_create_set_names_cases.keys(),
 )
-def test_create_set_names(test_set_hashes, template, expected_set_names) -> None:
+def test_create_set_names(
+        test_set_hashes: list[str], template: string.Template | None, expected_set_names: dict[str, str]
+    ) -> None:
     """Test the parameter set name generation. Test that the same hashes get the same parameter set names.
 
     :param test_set_hashes: list of arbitrary hash strings for test purposes
@@ -1598,7 +1627,7 @@ class TestParameterGenerator:
         scons_write_cases.values(),
         ids=scons_write_cases.keys(),
     )
-    def test_scons_write(self, env, expected_kwargs) -> None:
+    def test_scons_write(self, env: dict, expected_kwargs: dict) -> None:
         scons_write = DummyGenerator({})
         with patch("waves.parameter_generators.ParameterGenerator.write") as mock_write:
             # Fake an SCons environment with a dictionary. SCons environment object not required for unit testing
@@ -1620,7 +1649,7 @@ class TestParameterGenerator:
             dummy_generator._merge_parameter_studies()
 
     @pytest.mark.parametrize("length", range(1, 20, 5))
-    def test_parameter_study_to_dict(self, length) -> None:
+    def test_parameter_study_to_dict(self, length: int) -> None:
         expected_by_hash = {
             parameter_generators._calculate_set_hash(["parameter_1"], [float(index)]): {"parameter_1": float(index)}
             for index in range(length)
@@ -1644,7 +1673,9 @@ class TestParameterGenerator:
         templates.values(),
         ids=templates.keys(),
     )
-    def test_set_names(self, schema, file_template, set_template, expected) -> None:
+    def test_set_names(
+        self, schema: dict, file_template: str | None, set_template: str | None, expected: list[str]
+    ) -> None:
         """Check the generated parameter set names against template arguments.
 
         :param str schema: placeholder string standing in for the schema read from an input file
@@ -1667,7 +1698,9 @@ class TestParameterGenerator:
         templates.values(),
         ids=templates.keys(),
     )
-    def test_merge_parameter_studies(self, schema, file_template, set_template, expected) -> None:
+    def test_merge_parameter_studies(
+        self, schema: dict, file_template: str | None, set_template: str | None, expected: list[str]
+    ) -> None:
         """Check the generated parameter set names against template arguments after a merge operation.
 
         :param str schema: placeholder string standing in for the schema read from an input file
@@ -1716,7 +1749,16 @@ class TestParameterGenerator:
         init_write_stdout.values(),
         ids=init_write_stdout.keys(),
     )
-    def test_write_to_stdout(self, schema, template, overwrite, dry_run, is_file, sets, stdout_calls) -> None:
+    def test_write_to_stdout(
+        self,
+        schema: dict,
+        template: str | None,
+        overwrite: bool,
+        dry_run: bool,
+        is_file: bool,
+        sets: int,
+        stdout_calls: int,
+    ) -> None:
         """Check for conditions that should result in calls to stdout.
 
         :param str schema: placeholder string standing in for the schema read from an input file
@@ -1765,7 +1807,9 @@ class TestParameterGenerator:
         init_write_files.values(),
         ids=init_write_files.keys(),
     )
-    def test_write_yaml(self, schema, template, overwrite, is_file, sets, files) -> None:
+    def test_write_yaml(
+        self, schema: dict, template: str, overwrite: bool, is_file: list[bool], sets: int, files: int
+    ) -> None:
         """Check for conditions that should result in calls to builtins.open.
 
         :param str schema: placeholder string standing in for the schema read from an input file
@@ -1819,7 +1863,9 @@ class TestParameterGenerator:
         init_write_files.values(),
         ids=init_write_files.keys(),
     )
-    def test_write_dataset(self, schema, template, overwrite, is_file, sets, files) -> None:
+    def test_write_dataset(
+        self, schema: dict, template: str, overwrite: bool, is_file: list[bool], sets: int, files: int
+    ) -> None:
         """Check for conditions that should result in calls to ParameterGenerator._write_netcdf.
 
         :param str schema: placeholder string standing in for the schema read from an input file
@@ -1884,7 +1930,9 @@ class TestParameterGenerator:
         init_write_dataset_files.values(),
         ids=init_write_dataset_files.keys(),
     )
-    def test_conditionally_write_dataset(self, equals, is_file, overwrite, expected_call_count) -> None:
+    def test_conditionally_write_dataset(
+        self, equals: bool, is_file: list[bool], overwrite: bool, expected_call_count: int
+    ) -> None:
         """Check for conditions that should result in calls to xarray.Dataset.to_netcdf.
 
         :param bool equals: parameter that identifies when the xarray.Dataset objects should be equal
@@ -1908,7 +1956,9 @@ class TestParameterGenerator:
         init_write_dataset_files.values(),
         ids=init_write_dataset_files.keys(),
     )
-    def test_conditionally_write_yaml(self, equals, is_file, overwrite, expected_call_count) -> None:
+    def test_conditionally_write_yaml(
+        self, equals: bool, is_file: list[bool], overwrite: bool, expected_call_count: int
+    ) -> None:
         """Check for conditions that should result in writing out to file.
 
         :param bool equals: parameter that identifies when the dictionaries should be equal
@@ -2022,7 +2072,9 @@ class TestParameterGenerator:
         set_hashes.values(),
         ids=set_hashes.keys(),
     )
-    def test_create_set_hashes(self, parameter_names, samples, expected_hashes) -> None:
+    def test_create_set_hashes(
+        self, parameter_names: list[str], samples: numpy.ndarray, expected_hashes: list[str]
+    ) -> None:
         hashes_parameter_generator = DummyGenerator({})
         hashes_parameter_generator._parameter_names = parameter_names
         hashes_parameter_generator._samples = samples
@@ -2099,7 +2151,7 @@ class TestParameterDistributions:
         validate_input.values(),
         ids=validate_input.keys(),
     )
-    def test_validate(self, parameter_schema, outcome) -> None:
+    def test_validate(self, parameter_schema: dict, outcome: contextlib.nullcontext | pytest.RaisesExc) -> None:
         with (
             patch("waves.parameter_generators._ScipyGenerator._generate_parameter_distributions") as mock_distros,
             outcome,
@@ -2143,7 +2195,9 @@ class TestParameterDistributions:
         generate_input.values(),
         ids=generate_input.keys(),
     )
-    def test_generate_parameter_distributions(self, parameter_schema, expected_scipy_kwds) -> None:
+    def test_generate_parameter_distributions(
+        self, parameter_schema: dict, expected_scipy_kwds: list[dict[str, typing.Any]]
+    ) -> None:
         test_distributions = ParameterDistributions(parameter_schema)
         assert test_distributions._parameter_names == list(test_distributions.parameter_distributions.keys())
         for parameter_name, expected_kwds in zip(test_distributions._parameter_names, expected_scipy_kwds, strict=True):
@@ -2154,7 +2208,7 @@ class DummyGenerator(parameter_generators.ParameterGenerator):
     def _validate(self) -> None:
         self._parameter_names = ["parameter_1"]
 
-    def _generate(self, sets=1) -> None:
+    def _generate(self, sets: int = 1) -> None:
         """Generate float samples for all parameters. Value matches parameter set index."""
         parameter_count = len(self._parameter_names)
         self._samples = numpy.ones((sets, parameter_count))
