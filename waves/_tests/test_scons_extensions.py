@@ -1569,7 +1569,7 @@ abaqus_pseudobuilder_input = {
         {"job": "job"},
         does_not_raise,
     ),
-    "num_oldjob_restart_files_1": (
+    "oldjob_restart_file_count_1": (
         {},
         {
             "job": "job",
@@ -1577,7 +1577,7 @@ abaqus_pseudobuilder_input = {
             "cpus": 2,
             "processes": 2,
             "write_restart": True,
-            "num_oldjob_restart_files": 1,
+            "oldjob_restart_file_count": 1,
         },
         ["job.inp"]
         + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(solver="standard", processes=1)],
@@ -1592,7 +1592,7 @@ abaqus_pseudobuilder_input = {
         {"job": "job"},
         does_not_raise,
     ),
-    "num_oldjob_restart_files_2": (
+    "oldjob_restart_file_count_2": (
         {},
         {
             "job": "job",
@@ -1600,7 +1600,7 @@ abaqus_pseudobuilder_input = {
             "cpus": 2,
             "processes": 2,
             "write_restart": True,
-            "num_oldjob_restart_files": 2,
+            "oldjob_restart_file_count": 2,
         },
         ["job.inp"]
         + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(solver="standard", processes=2)],
@@ -1615,9 +1615,9 @@ abaqus_pseudobuilder_input = {
         {"job": "job"},
         does_not_raise,
     ),
-    "num_oldjob_restart_files_list": (
+    "oldjob_restart_file_count_list": (
         {},
-        {"job": "job", "oldjob": ["oldjob_1", "oldjob_2"], "num_oldjob_restart_files": [1, 2]},
+        {"job": "job", "oldjob": ["oldjob_1", "oldjob_2"], "oldjob_restart_file_count": [1, 2]},
         ["job.inp"]
         + [f"oldjob_1{ext}" for ext in _utilities._get_abaqus_restart_extensions(solver="standard", processes=1)]
         + [f"oldjob_2{ext}" for ext in _utilities._get_abaqus_restart_extensions(solver="standard", processes=2)],
@@ -1637,7 +1637,7 @@ abaqus_pseudobuilder_input = {
     ),
     "mismatched_oldjob_lengths": (
         {},
-        {"job": "job", "oldjob": ["oldjob_1", "oldjob_2"], "num_oldjob_restart_files": [1]},
+        {"job": "job", "oldjob": ["oldjob_1", "oldjob_2"], "oldjob_restart_file_count": [1]},
         ["job.inp"]
         + [f"oldjob_1{ext}" for ext in _utilities._get_abaqus_restart_extensions(solver="standard", processes=1)]
         + [f"oldjob_2{ext}" for ext in _utilities._get_abaqus_restart_extensions(solver="standard", processes=2)],
