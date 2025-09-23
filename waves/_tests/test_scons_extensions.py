@@ -11,7 +11,7 @@ from unittest.mock import Mock, call, patch
 import pytest
 import SCons.Node.FS
 
-from waves import parameter_generators, scons_extensions, _utilities
+from waves import _utilities, parameter_generators, scons_extensions
 from waves._settings import (
     _abaqus_common_extensions,
     _abaqus_datacheck_extensions,
@@ -1473,9 +1473,7 @@ abaqus_pseudobuilder_input = {
         ["job.inp"],
         [
             f"job{ext}"
-            for ext in (
-                _abaqus_standard_extensions + _utilities._get_abaqus_restart_extensions(solver="standard")
-            )
+            for ext in (_abaqus_standard_extensions + _utilities._get_abaqus_restart_extensions(solver="standard"))
         ],
         " -double both $(-cpus 1$)",
         {"job": "job"},
@@ -1528,9 +1526,7 @@ abaqus_pseudobuilder_input = {
         + ["user.f", "extra.inp"],
         [
             f"job{ext}"
-            for ext in (
-                _abaqus_standard_extensions + _utilities._get_abaqus_restart_extensions(solver="standard")
-            )
+            for ext in (_abaqus_standard_extensions + _utilities._get_abaqus_restart_extensions(solver="standard"))
         ]
         + ["extra.odb"],
         " -double constraint $(-cpus 2$) -oldjob oldjob -user user.f --extra-opt",
@@ -1545,8 +1541,7 @@ abaqus_pseudobuilder_input = {
         [
             f"job{ext}"
             for ext in (
-                _abaqus_standard_extensions
-                + _utilities._get_abaqus_restart_extensions(solver="standard", processes=1)
+                _abaqus_standard_extensions + _utilities._get_abaqus_restart_extensions(solver="standard", processes=1)
             )
         ],
         " -double both $(-cpus 1$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
@@ -1561,8 +1556,7 @@ abaqus_pseudobuilder_input = {
         [
             f"job{ext}"
             for ext in (
-                _abaqus_standard_extensions
-                + _utilities._get_abaqus_restart_extensions(solver="standard", processes=2)
+                _abaqus_standard_extensions + _utilities._get_abaqus_restart_extensions(solver="standard", processes=2)
             )
         ],
         " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
@@ -1584,8 +1578,7 @@ abaqus_pseudobuilder_input = {
         [
             f"job{ext}"
             for ext in (
-                _abaqus_standard_extensions
-                + _utilities._get_abaqus_restart_extensions(solver="standard", processes=2)
+                _abaqus_standard_extensions + _utilities._get_abaqus_restart_extensions(solver="standard", processes=2)
             )
         ],
         " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
@@ -1607,8 +1600,7 @@ abaqus_pseudobuilder_input = {
         [
             f"job{ext}"
             for ext in (
-                _abaqus_standard_extensions
-                + _utilities._get_abaqus_restart_extensions(solver="standard", processes=2)
+                _abaqus_standard_extensions + _utilities._get_abaqus_restart_extensions(solver="standard", processes=2)
             )
         ],
         " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
