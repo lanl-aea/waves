@@ -2136,7 +2136,7 @@ class AbaqusPseudoBuilder:
             # Check that total number of CPUs is evenly divisible by number of threads per process
             if cpus % processes != 0:
                 raise RuntimeError(
-                    f"The total number of CPUs ({cpus}) is not evenly divisible by the number of MPI processes ({threads_per_mpi_process})"
+                    f"The total number of CPUs ({cpus}) is not evenly divisible by the number of MPI processes ({processes})"
                 )
             # Calculate number of threads per MPI process
             threads_per_mpi_process = cpus // processes
@@ -2164,7 +2164,7 @@ class AbaqusPseudoBuilder:
             if len(oldjob) != len(num_oldjob_restart_files):
                 raise RuntimeError("The length of num_oldjob_restart_files and oldjob do not match.")
             # Add old job targets to source list
-            for job_name, num_restart_files in zip(oldjob, num_oldjob_restart_files):
+            for job_name, num_restart_files in zip(oldjob, num_oldjob_restart_files, strict=True):
                 oldjob_extensions = _get_abaqus_restart_extensions(solver="standard", processes=num_restart_files)
                 sources.extend([f"{job_name}{extension}" for extension in oldjob_extensions])
 
