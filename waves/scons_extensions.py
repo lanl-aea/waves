@@ -2208,7 +2208,12 @@ class AbaqusPseudoBuilder:
         return self.builder(target=targets, source=sources, job=job_option, program_options=options, **kwargs)
 
 
-def _get_abaqus_restart_extensions(solver: str, processes: int = 1) -> list[str]:
+def _get_abaqus_restart_extensions(solver: typing.Literal["standard", "explicit"], processes: int = 1) -> list[str]:
+    """Determine Abaqus restart files based on solver type and number of MPI processes.
+
+    :param solver: Abaqus solver.
+    :param processes: Number of MPI processes used to run the Abaqus job.
+    """
     if solver.lower() == "explicit":
         restart_files = set(_settings._abaqus_explicit_restart_extensions)
     elif solver.lower() == "standard":
