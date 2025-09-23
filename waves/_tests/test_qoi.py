@@ -1,10 +1,11 @@
 """Test QOI module."""
 
+import contextlib
 import datetime
 import io
 import os
 import pathlib
-from contextlib import nullcontext as does_not_raise
+import typing
 from unittest.mock import patch
 
 import numpy
@@ -13,6 +14,8 @@ import pytest
 import xarray
 
 from waves import parameter_generators, qoi
+
+does_not_raise = contextlib.nullcontext()
 
 test_create_qoi_cases = {
     "minimum input": (
@@ -23,7 +26,7 @@ test_create_qoi_cases = {
             name="qoi1",
             attrs={},
         ),
-        does_not_raise(),
+        does_not_raise,
     ),
     "calculated": (
         {"name": "qoi1", "calculated": 5.0},
@@ -33,7 +36,7 @@ test_create_qoi_cases = {
             name="qoi1",
             attrs={},
         ),
-        does_not_raise(),
+        does_not_raise,
     ),
     "expected": (
         {"name": "qoi1", "expected": 5.0},
@@ -43,7 +46,7 @@ test_create_qoi_cases = {
             name="qoi1",
             attrs={},
         ),
-        does_not_raise(),
+        does_not_raise,
     ),
     "full": (
         {"name": "qoi1", "calculated": 5.1, "expected": 5.0, "lower_limit": 4.0, "upper_limit": 6.0},
@@ -53,7 +56,7 @@ test_create_qoi_cases = {
             name="qoi1",
             attrs={},
         ),
-        does_not_raise(),
+        does_not_raise,
     ),
     "recommended attrs": (
         {
@@ -80,7 +83,7 @@ test_create_qoi_cases = {
                 "version": "version1",
             },
         ),
-        does_not_raise(),
+        does_not_raise,
     ),
     "custom attrs": (
         {"name": "qoi1", "someotherattr": "someotherattrvalue"},
@@ -90,7 +93,7 @@ test_create_qoi_cases = {
             name="qoi1",
             attrs={"someotherattr": "someotherattrvalue"},
         ),
-        does_not_raise(),
+        does_not_raise,
     ),
     "date attrs": (
         {"name": "qoi1", "date": "2025-05-23"},
@@ -100,7 +103,7 @@ test_create_qoi_cases = {
             name="qoi1",
             attrs={"date": "2025-05-23"},
         ),
-        does_not_raise(),
+        does_not_raise,
     ),
     "relative tolerance determines lower limit": (
         {"name": "qoi1", "expected": 1.0, "lower_rtol": 0.1, "lower_atol": 0.2, "lower_limit": 0.5},
@@ -110,7 +113,7 @@ test_create_qoi_cases = {
             name="qoi1",
             attrs={},
         ),
-        does_not_raise(),
+        does_not_raise,
     ),
     "absolute tolerance determines lower limit": (
         {"name": "qoi1", "expected": 1.0, "lower_rtol": 0.3, "lower_atol": 0.2, "lower_limit": 0.5},
@@ -120,7 +123,7 @@ test_create_qoi_cases = {
             name="qoi1",
             attrs={},
         ),
-        does_not_raise(),
+        does_not_raise,
     ),
     "direct limit determines lower limit": (
         {"name": "qoi1", "expected": 1.0, "lower_rtol": 0.1, "lower_atol": 0.2, "lower_limit": 0.95},
@@ -130,7 +133,7 @@ test_create_qoi_cases = {
             name="qoi1",
             attrs={},
         ),
-        does_not_raise(),
+        does_not_raise,
     ),
     "relative tolerance determines upper limit": (
         {"name": "qoi1", "expected": 1.0, "upper_rtol": 0.1, "upper_atol": 0.2, "upper_limit": 1.5},
@@ -140,7 +143,7 @@ test_create_qoi_cases = {
             name="qoi1",
             attrs={},
         ),
-        does_not_raise(),
+        does_not_raise,
     ),
     "absolute tolerance determines upper limit": (
         {"name": "qoi1", "expected": 1.0, "upper_rtol": 0.3, "upper_atol": 0.2, "upper_limit": 1.5},
@@ -150,7 +153,7 @@ test_create_qoi_cases = {
             name="qoi1",
             attrs={},
         ),
-        does_not_raise(),
+        does_not_raise,
     ),
     "direct limit determines upper limit": (
         {"name": "qoi1", "expected": 1.0, "upper_rtol": 0.1, "upper_atol": 0.2, "upper_limit": 1.05},
@@ -160,7 +163,7 @@ test_create_qoi_cases = {
             name="qoi1",
             attrs={},
         ),
-        does_not_raise(),
+        does_not_raise,
     ),
     "lower_rtol, missing expected: should raise ValueError": (
         {"name": "qoi1", "lower_rtol": 1.0e-2},
@@ -195,7 +198,9 @@ test_create_qoi_cases = {
     test_create_qoi_cases.values(),
     ids=test_create_qoi_cases.keys(),
 )
-def test_create_qoi(kwargs, expected, outcome) -> None:
+def test_create_qoi(
+    kwargs: dict, expected: xarray.DataArray | None, outcome: contextlib.nullcontext | pytest.RaisesExc
+) -> None:
     with outcome:
         try:
             output = qoi.create_qoi(**kwargs)
@@ -326,7 +331,7 @@ test_create_qoi_set_cases = {
     test_create_qoi_set_cases.values(),
     ids=test_create_qoi_set_cases.keys(),
 )
-def test_create_qoi_set(qoi_list, expected) -> None:
+def test_create_qoi_set(qoi_list: list[xarray.DataArray], expected: xarray.Dataset) -> None:
     output = qoi.create_qoi_set(qoi_list)
     assert expected.identical(output)
 
@@ -358,7 +363,7 @@ test__create_qoi_study_cases = {
             },
             attrs={},
         ),
-        does_not_raise(),
+        does_not_raise,
     ),
     "one qoi: using ``create_qoi``": (
         [qoi.create_qoi(name="qoi1", attr1="value1", set_name="set_0")],
@@ -379,7 +384,7 @@ test__create_qoi_study_cases = {
             },
             attrs={},
         ),
-        does_not_raise(),
+        does_not_raise,
     ),
     "one qoi and a parameter study": (
         [qoi.create_qoi(name="qoi1", attr1="value1", set_name="set_0")],
@@ -407,7 +412,7 @@ test__create_qoi_study_cases = {
             },
             attrs={},
         ).set_coords(["set_hash", "parameter_1", "parameter_2"]),
-        does_not_raise(),
+        does_not_raise,
     ),
     "two qoi: different names, same set": (
         [
@@ -449,7 +454,7 @@ test__create_qoi_study_cases = {
             },
             attrs={},
         ),
-        does_not_raise(),
+        does_not_raise,
     ),
     "two qoi: different names, same set: using ``create_qoi``": (
         [
@@ -481,7 +486,7 @@ test__create_qoi_study_cases = {
             },
             attrs={},
         ),
-        does_not_raise(),
+        does_not_raise,
     ),
     "two qoi: same names, different sets": (
         [
@@ -518,7 +523,7 @@ test__create_qoi_study_cases = {
             },
             attrs={},
         ),
-        does_not_raise(),
+        does_not_raise,
     ),
     "two qoi: same names, different sets: and a parameter study": (
         [
@@ -564,7 +569,7 @@ test__create_qoi_study_cases = {
             },
             attrs={},
         ).set_coords(["set_hash", "parameter_1", "parameter_2"]),
-        does_not_raise(),
+        does_not_raise,
     ),
     "one qoi: missing ``set_name`` attribute should raise RuntimeError": (
         [
@@ -606,7 +611,12 @@ test__create_qoi_study_cases = {
     test__create_qoi_study_cases.values(),
     ids=test__create_qoi_study_cases.keys(),
 )
-def test__create_qoi_study(qoi_list, parameter_study, expected, outcome) -> None:
+def test__create_qoi_study(
+    qoi_list: list[xarray.DataArray],
+    parameter_study: xarray.Dataset,
+    expected: xarray.Dataset | None,
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
     with outcome:
         try:
             qoi_study = qoi._create_qoi_study(qoi_list, parameter_study)
@@ -629,7 +639,7 @@ test__qoi_group_cases = {
             attrs={"group": "group1"},
         ),
         "group1",
-        does_not_raise(),
+        does_not_raise,
     ),
     "missing dataset 'group' attr: should raise KeyError": (
         xarray.Dataset(
@@ -654,7 +664,9 @@ test__qoi_group_cases = {
     test__qoi_group_cases.values(),
     ids=test__qoi_group_cases.keys(),
 )
-def test__qoi_group(qoi_set, expected, outcome) -> None:
+def test__qoi_group(
+    qoi_set: xarray.Dataset, expected: str | None, outcome: contextlib.nullcontext | pytest.RaisesExc
+) -> None:
     with outcome:
         try:
             group = qoi._qoi_group(qoi_set)
@@ -676,7 +688,7 @@ test__node_path_cases = {
     test__node_path_cases.values(),
     ids=test__node_path_cases.keys(),
 )
-def test__node_path(qoi_set, expected) -> None:
+def test__node_path(qoi_set: xarray.DataTree, expected: str) -> None:
     group = qoi._node_path(qoi_set)
     assert group == expected
 
@@ -721,7 +733,7 @@ test__propagate_identical_attrs_cases = {
     test__propagate_identical_attrs_cases.values(),
     ids=test__propagate_identical_attrs_cases.keys(),
 )
-def test__propagate_identical_attrs(input_attrs, common_attrs) -> None:
+def test__propagate_identical_attrs(input_attrs: list[dict[str, typing.Any]], common_attrs: dict) -> None:
     output_attrs = qoi._propagate_identical_attrs(input_attrs, None)
     assert output_attrs == common_attrs
 
@@ -1034,7 +1046,7 @@ test__read_qoi_set_cases = {
     test__read_qoi_set_cases.values(),
     ids=test__read_qoi_set_cases.keys(),
 )
-def test__read_qoi_set_csv(mock_csv_data, expected) -> None:
+def test__read_qoi_set_csv(mock_csv_data: xarray.Dataset, expected: str) -> None:
     # Test CSV read with mock CSV data
     from_file = pathlib.Path("test.csv")
     mock_dataframe = pandas.read_csv(io.StringIO(mock_csv_data))
@@ -1340,7 +1352,7 @@ test__add_tolerance_attribute_cases = {
     test__add_tolerance_attribute_cases.values(),
     ids=test__add_tolerance_attribute_cases.keys(),
 )
-def test__add_tolerance_attribute(qoi_set, expected) -> None:
+def test__add_tolerance_attribute(qoi_set: xarray.Dataset, expected: xarray.Dataset) -> None:
     qoi._add_tolerance_attribute(qoi_set)
     assert expected.identical(qoi_set)
 
@@ -1353,7 +1365,7 @@ test_write_qoi_set_to_csv_cases = test__read_qoi_set_cases
     test_write_qoi_set_to_csv_cases.values(),
     ids=test_write_qoi_set_to_csv_cases.keys(),
 )
-def test_write_qoi_set_to_csv(qoi_set, expected) -> None:
+def test_write_qoi_set_to_csv(qoi_set: xarray.Dataset, expected: str) -> None:
     buffer = io.StringIO()
     qoi.write_qoi_set_to_csv(qoi_set, buffer)
     csv_text = buffer.getvalue()
@@ -1435,7 +1447,7 @@ test__get_plotting_name_cases = {
     test__get_plotting_name_cases.values(),
     ids=test__get_plotting_name_cases.keys(),
 )
-def test__get_plotting_name(qoi_array, expected) -> None:
+def test__get_plotting_name(qoi_array: xarray.DataArray, expected: str) -> None:
     output = qoi._get_plotting_name(qoi_array)
     assert output == expected
 
@@ -1494,7 +1506,7 @@ test__can_plot_scalar_qoi_history_cases = {
     test__can_plot_scalar_qoi_history_cases.values(),
     ids=test__can_plot_scalar_qoi_history_cases.keys(),
 )
-def test__can_plot_scalar_qoi_history(qoi_array, expected) -> None:
+def test__can_plot_scalar_qoi_history(qoi_array: xarray.DataArray, expected: bool) -> None:
     output = qoi._can_plot_scalar_qoi_history(qoi_array)
     assert output == expected
 
@@ -1562,7 +1574,7 @@ test__can_plot_qoi_tolerance_check_cases = {
     test__can_plot_qoi_tolerance_check_cases.values(),
     ids=test__can_plot_qoi_tolerance_check_cases.keys(),
 )
-def test__can_plot_qoi_tolerance_check(qoi_array, expected) -> None:
+def test__can_plot_qoi_tolerance_check(qoi_array: xarray.DataArray, expected: bool) -> None:
     output = qoi._can_plot_qoi_tolerance_check(qoi_array)
     assert output == expected
 
