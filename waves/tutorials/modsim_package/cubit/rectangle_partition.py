@@ -8,7 +8,7 @@ import sys
 import cubit
 
 
-def main(input_file, output_file, width, height):
+def main(input_file: pathlib.Path, output_file: pathlib.Path, width: float, height: float) -> None:
     """Partition the simple rectangle geometry created by ``rectangle_geometry.py``.
 
     This script partitions a simple Cubit model with a single rectangle part.
@@ -37,8 +37,8 @@ def main(input_file, output_file, width, height):
 
     :returns: writes ``output_file``.cub
     """
-    input_file = pathlib.Path(input_file).with_suffix(".cub")
-    output_file = pathlib.Path(output_file).with_suffix(".cub")
+    input_file = input_file.with_suffix(".cub")
+    output_file = output_file.with_suffix(".cub")
 
     # Avoid modifying the contents or timestamp on the input file.
     # Required to get conditional re-builds with a build system such as GNU Make, CMake, or SCons
@@ -98,7 +98,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=cli_description, prog=prog)
     parser.add_argument(
         "--input-file",
-        type=str,
+        type=pathlib.Path,
         default=default_input_file,
         help=(
             "The Cubit model file created by ``rectangle_geometry.py``. "
@@ -108,7 +108,7 @@ def get_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--output-file",
-        type=str,
+        type=pathlib.Path,
         default=default_output_file,
         help=(
             "The output file for the Cubit model. "

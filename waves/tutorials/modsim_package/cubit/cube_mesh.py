@@ -8,7 +8,13 @@ import sys
 import cubit
 
 
-def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaqus"):
+def main(
+    input_file: pathlib.Path,
+    output_file: pathlib.Path,
+    global_seed: float,
+    element_type: str = "QUAD",
+    solver: str = "abaqus",
+) -> None:
     """Mesh the simple cube geometry partitioned by ``cube_partition.py``.
 
     This script meshes a simple Cubit model with a single cube part.
@@ -68,7 +74,7 @@ def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaq
         raise RuntimeError(f"Uknown solver '{solver}'")
 
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
     """Return the command-line interface parser."""
     script_name = pathlib.Path(__file__)
     # Set default parameter values
@@ -86,7 +92,7 @@ def get_parser():
     parser = argparse.ArgumentParser(description=cli_description, prog=prog)
     parser.add_argument(
         "--input-file",
-        type=str,
+        type=pathlib.Path,
         default=default_input_file,
         help=(
             "The Cubit model file created by ``cube_partition.py``. "
@@ -96,7 +102,7 @@ def get_parser():
     )
     parser.add_argument(
         "--output-file",
-        type=str,
+        type=pathlib.Path,
         default=default_output_file,
         help=(
             "The output file for the Cubit model. "

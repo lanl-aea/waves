@@ -16,7 +16,9 @@ test_platform_check_cases = {
     test_platform_check_cases.values(),
     ids=test_platform_check_cases.keys(),
 )
-def test_platform_check(mock_system, expected_testing_windows, expected_root_fs, expected_testing_macos):
+def test_platform_check(
+    mock_system: str, expected_testing_windows: bool, expected_root_fs: str, expected_testing_macos: bool
+) -> None:
     windows_path_mock = Mock()
     windows_path_mock.drive = "C:"
     with (

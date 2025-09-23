@@ -17,16 +17,14 @@ default_selection_dict = {
 }
 
 
-def combine_data(input_files, group_path, concat_coord):
+def combine_data(input_files: list[pathlib.Path], group_path: str, concat_coord: str) -> xarray.Dataset:
     """Combine input data files into one dataset.
 
-    :param list input_files: list of path-like or file-like objects pointing to h5netcdf files
-        containing Xarray Datasets
-    :param str group_path: The h5netcdf group path locating the Xarray Dataset in the input files.
-    :param str concat_coord: Name of dimension
+    :param input_files: list of paths pointing to h5netcdf files containing Xarray Datasets
+    :param group_path: The h5netcdf group path locating the Xarray Dataset in the input files.
+    :param concat_coord: Name of dimension
 
     :returns: Combined data
-    :rtype: xarray.DataArray
     """
     paths = [pathlib.Path(input_file).resolve() for input_file in input_files]
     data_generator = (
@@ -39,7 +37,7 @@ def combine_data(input_files, group_path, concat_coord):
     return combined_data
 
 
-def merge_parameter_study(parameter_study_file, combined_data):
+def merge_parameter_study(parameter_study_file: pathlib.Path, combined_data: xarray.Dataset) -> xarray.Dataset:
     """Merge parameter study to existing dataset.
 
     :param str parameter_study_file: path-like or file-like object containing the parameter study dataset. Assumes the
@@ -55,16 +53,23 @@ def merge_parameter_study(parameter_study_file, combined_data):
     return combined_data
 
 
-def save_plot(combined_data, x_var, y_var, selection_dict, concat_coord, output_file):
+def save_plot(
+    combined_data: xarray.Dataset,
+    x_var: str,
+    y_var: str,
+    selection_dict: dict,
+    concat_coord: str,
+    output_file: pathlib.Path,
+) -> None:
     """Save scatter plot with given x and y labels.
 
-    :param xarray.DataArray combined_data: XArray Dataset that will be plotted.
-    :param str x_var: The independent (x-axis) variable key name for the Xarray Dataset "data variable"
-    :param str y_var: The dependent (y-axis) variable key name for the Xarray Dataset "data variable"
-    :param dict selection_dict: Dictionary to define the down selection of data to be plotted. Dictionary ``key: value``
+    :param combined_data: XArray Dataset that will be plotted.
+    :param x_var: The independent (x-axis) variable key name for the Xarray Dataset "data variable"
+    :param y_var: The dependent (y-axis) variable key name for the Xarray Dataset "data variable"
+    :param selection_dict: Dictionary to define the down selection of data to be plotted. Dictionary ``key: value``
         pairs must match the data variables and coordinates of the expected Xarray Dataset object.
-    :param str concat_coord: Name of dimension for which you want multiple lines plotted.
-    :param str output_file: The plot file name. Relative or absolute path.
+    :param concat_coord: Name of dimension for which you want multiple lines plotted.
+    :param output_file: The plot file name. Relative or absolute path.
     """
     # Plot
     combined_data.sel(selection_dict).plot.scatter(x=x_var, y=y_var, hue=concat_coord)
@@ -72,20 +77,28 @@ def save_plot(combined_data, x_var, y_var, selection_dict, concat_coord, output_
     matplotlib.pyplot.savefig(output_file)
 
 
-def save_table(combined_data, selection_dict, output_file):
+def save_table(combined_data: xarray.Dataset, selection_dict: dict, output_file: pathlib.Path) -> None:
     """Save csv table.
 
-    :param xarray.DataArray combined_data: XArray Dataset to be written as a CSV.
-    :param dict selection_dict: Dictionary to define the down selection of data to be plotted. Dictionary ``key: value``
+    :param combined_data: XArray Dataset to be written as a CSV.
+    :param selection_dict: Dictionary to define the down selection of data to be plotted. Dictionary ``key: value``
         pairs must match the data variables and coordinates of the expected Xarray Dataset object.
-    :param str output_file: The CSV file name. Relative or absolute path.
+    :param output_file: The CSV file name. Relative or absolute path.
     """
     combined_data.sel(selection_dict).to_dataframe().to_csv(output_file)
 
 
 def main(
-    input_files, output_file, group_path, x_var, x_units, y_var, y_units, selection_dict, parameter_study_file=None
-):
+    input_files: list[pathlib.Path],
+    output_file: pathlib.Path,
+    group_path: str,
+    x_var: str,
+    x_units: str,
+    y_var: str,
+    y_units: str,
+    selection_dict: dict,
+    parameter_study_file: pathlib.Path | None = None,
+) -> None:
     """Catenate ``input_files`` datasets along the ``set_name`` dimension and plot selected data.
 
     Optionally merges the parameter study results datasets with the parameter study definition dataset, where the
@@ -104,7 +117,6 @@ def main(
     :param str parameter_study_file: path-like or file-like object containing the parameter study dataset. Assumes the
         h5netcdf file contains only a single dataset at the root group path, .e.g. ``/``.
     """
-    output_file = pathlib.Path(output_file)
     output_csv = output_file.with_suffix(".csv")
     concat_coord = SET_COORDINATE_KEY
 
@@ -130,7 +142,7 @@ def main(
     combined_data.close()
 
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
     """Return the command-line interface parser."""
     script_name = pathlib.Path(__file__)
     default_output_file = f"{script_name.stem}.pdf"
@@ -149,6 +161,7 @@ def get_parser():
     required_named.add_argument(
         "-i",
         "--input-file",
+        type=pathlib.Path,
         nargs="+",
         required=True,
         help="The Xarray Dataset file(s)",
@@ -169,7 +182,7 @@ def get_parser():
     parser.add_argument(
         "-o",
         "--output-file",
-        type=str,
+        type=pathlib.Path,
         default=default_output_file,
         help=(
             "The output file for the stress-strain comparison plot with extension, "
@@ -213,7 +226,7 @@ def get_parser():
     parser.add_argument(
         "-p",
         "--parameter-study-file",
-        type=str,
+        type=pathlib.Path,
         default=default_parameter_study_file,
         help="An optional h5 file with a WAVES parameter study Xarray Dataset (default: %(default)s)",
     )

@@ -1,5 +1,6 @@
 """Test LatinHypercube Class."""
 
+import typing
 from unittest.mock import patch
 
 import numpy
@@ -58,10 +59,16 @@ class TestLatinHypercube:
         generate_input.values(),
         ids=generate_input.keys(),
     )
-    # FIXME: trace the original use of the ``expected_scipy_kwds`` variable and either use in tests or remove. Remove
-    # ``noqa: ARG002`` after fixing.
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/960
-    def test_generate(self, parameter_schema, seed, expected_samples, expected_scipy_kwds):  # noqa: ARG002
+    def test_generate(
+        self,
+        parameter_schema: dict,
+        seed: int,
+        expected_samples: numpy.ndarray,
+        # FIXME: trace the original use of the ``expected_scipy_kwds`` variable and either use in tests or remove.
+        # Remove ``noqa: ARG002`` after fixing.
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/960
+        expected_scipy_kwds: list[dict[str, typing.Any]],  # noqa: ARG002
+    ) -> None:
         parameter_names = [key for key in parameter_schema if key != "num_simulations"]
         kwargs = {"seed": seed}
         generator_classes = (
@@ -113,7 +120,7 @@ class TestLatinHypercube:
         merge_test.values(),
         ids=merge_test.keys(),
     )
-    def test_merge(self, first_schema, second_schema, seed, expected_samples):
+    def test_merge(self, first_schema: dict, second_schema: dict, seed: int, expected_samples: numpy.ndarray) -> None:
         with patch("waves.parameter_generators._verify_parameter_study"):
             # LatinHypercube
             kwargs = {"seed": seed}

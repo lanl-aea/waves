@@ -44,7 +44,7 @@ _cli_description = "Dummy solver with file handling behavior similar to numeric 
 _default_solve_cpus = 1
 
 
-def main():
+def main() -> None:
     """Run the solver command line interface and program flow."""
     parser = get_parser()
     subcommand_list = parser._subparsers._group_actions[0].choices.keys()
@@ -190,7 +190,7 @@ def explicit(args: argparse.Namespace) -> None:
     solve(configuration)
 
 
-def positive_nonzero_int(argument):
+def positive_nonzero_int(argument: str) -> int:
     """Type function for argparse - positive, non-zero integers.
 
     :param str argument: string argument from argparse
