@@ -1,6 +1,6 @@
 """Test CustomStudy Class."""
 
-from contextlib import nullcontext as does_not_raise
+import contextlib
 from unittest.mock import call, mock_open, patch
 
 import numpy
@@ -11,6 +11,8 @@ from waves._tests.common import merge_samplers
 from waves.exceptions import SchemaValidationError
 from waves.parameter_generators import CustomStudy
 
+does_not_raise = contextlib.nullcontext()
+
 
 class TestCustomStudy:
     """Class for testing CustomStudy parameter study generator class."""
@@ -18,11 +20,11 @@ class TestCustomStudy:
     validate_input = {
         "good schema list of lists": (
             {"parameter_names": ["a", "b"], "parameter_samples": [[1, 2.0], [3, 4.5]]},
-            does_not_raise(),
+            does_not_raise,
         ),
         "good schema numpy array": (
             {"parameter_names": ["a", "b"], "parameter_samples": numpy.array([[1, 2.0], [3, 4.5]])},
-            does_not_raise(),
+            does_not_raise,
         ),
         "not a dict": (
             "not a dict",
@@ -51,7 +53,7 @@ class TestCustomStudy:
         validate_input.values(),
         ids=validate_input.keys(),
     )
-    def test_validate(self, parameter_schema, outcome) -> None:
+    def test_validate(self, parameter_schema: dict, outcome: contextlib.nullcontext | pytest.RaisesExc) -> None:
         with outcome:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
@@ -78,7 +80,9 @@ class TestCustomStudy:
         test_generate_cases.values(),
         ids=test_generate_cases.keys(),
     )
-    def test_generate(self, parameter_schema, expected_array, expected_types) -> None:
+    def test_generate(
+        self, parameter_schema: dict, expected_array: numpy.ndarray, expected_types: dict[str, type]
+    ) -> None:
         test_generate = CustomStudy(parameter_schema)
         generate_array = test_generate._samples
         assert numpy.all(generate_array == expected_array)
@@ -149,7 +153,9 @@ class TestCustomStudy:
         merge_test.values(),
         ids=merge_test.keys(),
     )
-    def test_merge(self, first_schema, second_schema, expected_array, expected_types) -> None:
+    def test_merge(
+        self, first_schema: dict, second_schema: dict, expected_array: numpy.ndarray, expected_types: dict[str, type]
+    ) -> None:
         with patch("waves.parameter_generators._verify_parameter_study"):
             test_merge1, test_merge2 = merge_samplers(CustomStudy, first_schema, second_schema, {})
             generate_array = test_merge2._samples
@@ -208,7 +214,13 @@ class TestCustomStudy:
         ids=test_write_yaml_cases.keys(),
     )
     def test_write_yaml(
-        self, parameter_schema, output_file_template, output_file, output_type, file_count, expected_calls
+        self,
+        parameter_schema: dict,
+        output_file_template: str | None,
+        output_file: str | None,
+        output_type: str,
+        file_count: int,
+        expected_calls: int,
     ) -> None:
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta"),
