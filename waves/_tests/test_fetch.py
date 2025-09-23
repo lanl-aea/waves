@@ -377,9 +377,8 @@ def test_print_list() -> None:
             ]
         )
 
-    nondefault_args = {"prefix": " ", "stream": sys.stderr}
     with patch("builtins.print") as mock_print:
-        _fetch.print_list(test_list, **nondefault_args)
+        _fetch.print_list(test_list, prefix=" ", stream=sys.stderr)
         mock_print.assert_has_calls(
             [
                 call(" one", file=sys.stderr),
