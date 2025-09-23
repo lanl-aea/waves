@@ -51,7 +51,7 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main(args, parser) -> None:
+def main(args: argparse.Namespace, parser: argparse.ArgumentParser) -> None:
     if args.qoi_subcommand == "accept":
         qoi._accept(args.calculated, args.expected)
     elif args.qoi_subcommand == "diff":
