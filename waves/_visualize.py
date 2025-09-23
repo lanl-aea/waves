@@ -337,7 +337,7 @@ def parse_output(
                     exclude_node = True
                     exclude_indent = current_indent
             exclude_node, exclude_indent = check_regex_exclude(
-                exclude_regex, node_name, current_indent, exclude_indent, exclude_node
+                exclude_regex, node_name, current_indent, exclude_indent, exclude_node=exclude_node
             )
             if exclude_node:
                 continue
@@ -373,19 +373,19 @@ def parse_output(
 
 
 def check_regex_exclude(
-    exclude_regex: str,
+    exclude_regex: str | None,
     node_name: str,
     current_indent: int,
     exclude_indent: int,
     exclude_node: bool = False,
 ) -> tuple[bool, int]:
-    """Excludes node names that match the regular expression.
+    """Return boolean flag and updated exclusion indent level to exclude node names that match the regular expression.
 
-    :param str exclude_regex: Regular expression
-    :param str node_name: Name of the node
-    :param int current_indent: Current indent of the parsed output
-    :param int exclude_indent: Set to current_indent if node is to be excluded
-    :param bool exclude_node: Indicated whether a node should be excluded
+    :param exclude_regex: Regular expression
+    :param node_name: Name of the node
+    :param current_indent: Current indent of the parsed output
+    :param exclude_indent: Set to current_indent if node is to be excluded
+    :param exclude_node: Indicated whether a node should be excluded
 
     :returns: Tuple containing exclude_node and exclude_indent
     """

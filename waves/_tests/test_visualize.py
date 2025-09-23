@@ -205,15 +205,34 @@ def test_parse_output(
         assert expected_label in graph.nodes[expected_node]["label"]
 
 
-def test_check_regex_exclude() -> None:
+test_check_regex_exclude_cases = {
+    "regular expression not provided (None)": (None, "dummy_name5", 3, 0, False, (False, 0)),
+    "regular expression is empty": ("", "dummy_name5", 3, 0, False, (False, 0)),
+    "node name matches the regular expression": ("dummy_name[0-7]+", "dummy_name5", 3, 0, False, (True, 3)),
+    "node name does not match the regular expression": ("dummy_name[0-7]+", "dummy_name8", 2, 1, False, (False, 1)),
+    "node name does not match the regular expression but the node was already excluded": (
+        "dummy_name[0-7]+", "dummy_name9", 4, 2, True, (True, 2)
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("exclude_regex", "node_name", "current_indent", "exclude_indent", "exclude_node", "expected"),
+    test_check_regex_exclude_cases.values(),
+    ids=test_check_regex_exclude_cases.keys(),
+)
+def test_check_regex_exclude(
+    exclude_regex: str | None,
+    node_name: str,
+    current_indent: int,
+    exclude_indent: int,
+    exclude_node: bool,
+    expected: tuple[bool, int],
+) -> None:
     """Test the regular expression exclusion of the visualize subcommand."""
-    exclude_regex = "dummy_name[0-7]+"
-    # If node name matches the regular expression
-    assert _visualize.check_regex_exclude(exclude_regex, "dummy_name5", 3, 0, False) == (True, 3)
-    # if node name does not match the regular expression
-    assert _visualize.check_regex_exclude(exclude_regex, "dummy_name8", 2, 1, False) == (False, 1)
-    # If node name does not match the regular expression but the node was already excluded
-    assert _visualize.check_regex_exclude(exclude_regex, "dummy_name9", 4, 2, True) == (True, 2)
+    assert _visualize.check_regex_exclude(
+        exclude_regex, node_name, current_indent, exclude_indent, exclude_node=exclude_node
+    ) == expected
 
 
 def test_visualize() -> None:
