@@ -84,7 +84,7 @@ _allowable_tutorial_numbers_typing = typing.Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9
 _allowable_tutorial_numbers = typing.get_args(_allowable_tutorial_numbers_typing)
 _fetch_exclude_patterns = ["__pycache__", ".pyc", ".sconf_temp", ".sconsign.dblite", "config.log"]
 _fetch_subdirectories = ["modsim_template", "modsim_template_2", "tutorials"]
-_tutorial_paths = {
+_tutorial_paths: dict[_allowable_tutorial_numbers_typing, list[pathlib.Path]] = {
     0: [pathlib.Path("tutorials/tutorial_00_SConstruct")],
     1: [
         pathlib.Path("tutorials/modsim_package/__init__.py"),
