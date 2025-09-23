@@ -1,6 +1,8 @@
 """Test OneAtATime Class."""
 
-from contextlib import nullcontext as does_not_raise
+import contextlib
+import typing
+import unittest
 from unittest.mock import call, mock_open, patch
 
 import numpy
@@ -12,6 +14,8 @@ from waves._tests.common import consistent_hash_parameter_check, merge_samplers,
 from waves.exceptions import SchemaValidationError
 from waves.parameter_generators import OneAtATime
 
+does_not_raise = contextlib.nullcontext()
+
 
 class TestOneAtATime:
     """Class for testing OneAtATime parameter study generator class."""
@@ -19,7 +23,7 @@ class TestOneAtATime:
     validate_input = {
         "good schema": (
             {"parameter_1": [1], "parameter_2": (2,), "parameter_3": [3, 4]},
-            does_not_raise(),
+            does_not_raise,
         ),
         "not a dict": (
             "not a dict",
@@ -52,7 +56,7 @@ class TestOneAtATime:
         validate_input.values(),
         ids=validate_input.keys(),
     )
-    def test_validate(self, parameter_schema, outcome) -> None:
+    def test_validate(self, parameter_schema: dict, outcome: contextlib.nullcontext | pytest.RaisesExc) -> None:
         with outcome:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
@@ -258,7 +262,13 @@ class TestOneAtATime:
         generate_io.values(),
         ids=generate_io.keys(),
     )
-    def test_generate(self, parameter_schema, kwargs, expected_dataset, expected_types) -> None:
+    def test_generate(
+        self,
+        parameter_schema: dict,
+        kwargs: dict[str, typing.Any],
+        expected_dataset: xarray.Dataset,
+        expected_types: dict[str, type],
+    ) -> None:
         test_generate = OneAtATime(parameter_schema, **kwargs)
         xarray.testing.assert_identical(test_generate.parameter_study, expected_dataset)
         for key in test_generate.parameter_study:
@@ -344,7 +354,9 @@ class TestOneAtATime:
         merge_test.values(),
         ids=merge_test.keys(),
     )
-    def test_merge(self, first_schema, second_schema, expected_array, expected_types) -> None:
+    def test_merge(
+        self, first_schema: dict, second_schema: dict, expected_array: numpy.ndarray, expected_types: dict[str, type]
+    ) -> None:
         with patch("waves.parameter_generators._verify_parameter_study"):
             original_study, merged_study = merge_samplers(OneAtATime, first_schema, second_schema, {})
             generate_array = merged_study._samples
@@ -443,7 +455,13 @@ class TestOneAtATime:
         ids=write_yaml.keys(),
     )
     def test_write_yaml(
-        self, parameter_schema, output_file_template, output_file, output_type, file_count, expected_calls
+        self,
+        parameter_schema: dict,
+        output_file_template: str | None,
+        output_file: str | None,
+        output_type: str,
+        file_count: int,
+        expected_calls: list[unittest.mock._Call],
     ) -> None:
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta"),
@@ -492,13 +510,13 @@ class TestOneAtATime:
         parameter_study_to_dict.values(),
         ids=parameter_study_to_dict.keys(),
     )
-    def test_parameter_study_to_dict(self, parameter_schema, expected_dictionary) -> None:
+    def test_parameter_study_to_dict(self, parameter_schema: dict, expected_dictionary: dict) -> None:
         """Test parameter study dictionary conversion."""
         test_parameter_study_dict = OneAtATime(parameter_schema)
         returned_dictionary = test_parameter_study_dict.parameter_study_to_dict()
         assert expected_dictionary.keys() == returned_dictionary.keys()
         assert all(isinstance(key, str) for key in returned_dictionary)
-        for set_name in expected_dictionary:
-            assert expected_dictionary[set_name] == returned_dictionary[set_name]
-            for parameter in expected_dictionary[set_name]:
-                assert type(expected_dictionary[set_name][parameter]) is type(returned_dictionary[set_name][parameter])
+        for set_name, set_contents in expected_dictionary.items():
+            assert set_contents == returned_dictionary[set_name]
+            for parameter in set_contents:
+                assert type(set_contents[parameter]) is type(returned_dictionary[set_name][parameter])
