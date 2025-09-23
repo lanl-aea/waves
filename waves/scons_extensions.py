@@ -2102,8 +2102,15 @@ class AbaqusPseudoBuilder:
 
             env.Abaqus(job='simulation_1', write_restart=True)
 
-        This is important when you expect to use the restart files, as SCons will know to check that the required
-        restart files exist and are up-to-date:
+        When running Abaqus Standard jobs using MPI parallelization, explicitly control the number of MPI processes
+        as this affects the number of restart files:
+
+        .. code-block:: python
+
+            env.Abaqus(job='simulation_1', write_restart=True, processes=4)
+
+        Accurately capturing the number of restart files is important when restarting/importing an analysis, as SCons
+        will know to check that the required restart files exist and are up-to-date:
 
         .. code-block:: python
 
@@ -2114,6 +2121,13 @@ class AbaqusPseudoBuilder:
         .. code-block:: python
 
             env.Abaqus(job='simulation_2', oldjob=['simulation_1', 'simulation_1a'])
+
+        The number of MPI process-specific restart files for old jobs can be specified for one or multiple old jobs:
+
+        .. code-block:: python
+
+            env.Abaqus(job='simulation_2', oldjob='simulation_1', oldjob_restart_file_count = 2)
+            env.Abaqus(job='simulation_2', oldjob=['simulation_1', 'simulation_1a'], oldjob_restart_file_count = [2, 4])
 
         If your Abaqus job depends on files which aren't detected by an implicit dependency scanner, you can add them to
         the source list directly:
