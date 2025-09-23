@@ -1558,7 +1558,7 @@ def _assess_parameter_spaces(studies: list[xarray.Dataset]) -> list[xarray.Datas
 
     # Group studies by parameter space hash
     parameter_spaces = []
-    parameter_space_hashes_unique = list({study.attrs["parameter_space_hash"] for study in studies})
+    parameter_space_hashes_unique = list(dict.fromkeys([study.attrs["parameter_space_hash"] for study in studies]))
     for parameter_space_hash in parameter_space_hashes_unique:
         studies_in_space = [study for study in studies if study.attrs["parameter_space_hash"] == parameter_space_hash]
         studies_in_space = [study.drop_attrs() for study in studies_in_space]
