@@ -9,7 +9,7 @@ import numpy
 import pytest
 import xarray
 
-from waves._settings import _set_coordinate_key
+from waves._settings import _allowable_output_file_typing, _set_coordinate_key
 from waves._tests.common import consistent_hash_parameter_check, merge_samplers, self_consistency_checks
 from waves.exceptions import SchemaValidationError
 from waves.parameter_generators import OneAtATime
@@ -456,7 +456,7 @@ class TestOneAtATime:
         parameter_schema: dict,
         output_file_template: str | None,
         output_file: str | None,
-        output_type: str,
+        output_type: _allowable_output_file_typing,
         file_count: int,
         expected_calls: list[unittest.mock._Call],
     ) -> None:
