@@ -1,5 +1,6 @@
 """Test CartesianProduct Class."""
 
+import unittest
 from contextlib import nullcontext as does_not_raise
 from unittest.mock import call, mock_open, patch
 
@@ -221,7 +222,9 @@ class TestCartesianProduct:
         merge_test.values(),
         ids=merge_test.keys(),
     )
-    def test_merge(self, first_schema, second_schema, expected_array, expected_types) -> None:
+    def test_merge(
+        self, first_schema: dict, second_schema: dict, expected_array: numpy.ndarray, expected_types: dict[str, type]
+    ) -> None:
         with patch("waves.parameter_generators._verify_parameter_study"):
             original_study, merged_study = merge_samplers(CartesianProduct, first_schema, second_schema, {})
             generate_array = merged_study._samples
@@ -325,7 +328,13 @@ class TestCartesianProduct:
         ids=write_yaml.keys(),
     )
     def test_write_yaml(
-        self, parameter_schema, output_file_template, output_file, output_type, file_count, expected_calls
+        self,
+        parameter_schema: dict,
+        output_file_template: str | None,
+        output_file: str | None,
+        output_type: str,
+        file_count: int,
+        expected_calls: list[unittest.mock._Call],
     ) -> None:
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta"),
@@ -374,13 +383,13 @@ class TestCartesianProduct:
         parameter_study_to_dict.values(),
         ids=parameter_study_to_dict.keys(),
     )
-    def test_parameter_study_to_dict(self, parameter_schema, expected_dictionary) -> None:
+    def test_parameter_study_to_dict(self, parameter_schema: dict, expected_dictionary: dict) -> None:
         """Test parameter study dictionary conversion."""
         test_parameter_study_dict = CartesianProduct(parameter_schema)
         returned_dictionary = test_parameter_study_dict.parameter_study_to_dict()
         assert expected_dictionary.keys() == returned_dictionary.keys()
         assert all(isinstance(key, str) for key in returned_dictionary)
-        for set_name in expected_dictionary:
-            assert expected_dictionary[set_name] == returned_dictionary[set_name]
-            for parameter in expected_dictionary[set_name]:
-                assert type(expected_dictionary[set_name][parameter]) is type(returned_dictionary[set_name][parameter])
+        for set_name, set_contents in expected_dictionary.items():
+            assert set_contents == returned_dictionary[set_name]
+            for parameter in set_contents:
+                assert type(set_contents[parameter]) is type(returned_dictionary[set_name][parameter])
