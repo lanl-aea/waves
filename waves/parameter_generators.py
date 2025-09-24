@@ -1565,10 +1565,10 @@ def _assess_parameter_spaces(studies: list[xarray.Dataset]) -> list(list[xarray.
         parameter_spaces.append(studies_in_space)
 
     # Verify no partial overlapping studies
-    for space_studies in parameter_spaces:
-        parameters = list(space_studies[0].data_vars)
-        for space_studies_other in parameter_spaces:
-            parameters_other = list(space_studies_other[0].data_vars)
+    for index, space in enumerate(parameter_spaces):
+        parameters = list(space[0].data_vars)
+        for space_other in parameter_spaces[index + 1:]:
+            parameters_other = list(space_other[0].data_vars)
             shared_parameters = set(parameters) & set(parameters_other)
             unshared_parameters = set(parameters) ^ set(parameters_other)
             if any(shared_parameters) and any(unshared_parameters):
