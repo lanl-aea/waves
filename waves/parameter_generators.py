@@ -87,7 +87,9 @@ class ParameterGenerator(ABC):
         **kwargs,
     ) -> None:
         self.parameter_schema = parameter_schema
-        self.output_file_template = output_file_template
+        self.output_file_template = (
+            _utilities._AtSignTemplate(output_file_template) if output_file_template is not None else None
+        )
         self.output_file = pathlib.Path(output_file) if output_file is not None else None
         self.output_file_type = output_file_type
         self.set_name_template = _utilities._AtSignTemplate(set_name_template)
@@ -119,16 +121,18 @@ class ParameterGenerator(ABC):
 
         # Override set name template if output name template is provided.
         self.provided_output_file_template = False
-        if self.output_file_template:
+        if self.output_file_template is not None:
             self.provided_output_file_template = True
             # Append the set number placeholder if missing
-            if f"{_settings._template_placeholder}" not in self.output_file_template:
-                self.output_file_template = f"{self.output_file_template}{_settings._template_placeholder}"
-            self.output_file_template = _utilities._AtSignTemplate(self.output_file_template)
+            output_file_template_string = self.output_file_template.safe_substitute()
+            if _settings._template_placeholder not in output_file_template_string:
+                self.output_file_template = _utilities._AtSignTemplate(
+                    f"{output_file_template_string}{_settings._template_placeholder}"
+                )
             self.set_name_template = self.output_file_template
 
         # Infer output directory from output file template if provided. Set to PWD otherwise.
-        if self.output_file_template:
+        if self.output_file_template is not None:
             self.output_directory = pathlib.Path(self.output_file_template.safe_substitute()).parent
         else:
             self.output_directory = pathlib.Path.cwd()
