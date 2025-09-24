@@ -524,15 +524,15 @@ class ParameterGenerator(ABC):
 
 
 class _ScipyGenerator(ParameterGenerator, ABC):
-    sampler_class: str | None = None
+    sampler_class: str = ""
 
     def __init__(self, *args, **kwargs) -> None:
         """Require concrete child classes to set the ``self.sampler_class`` attribute to a string.
 
         :raises TypeError: if the ``self.sampler_class`` attribute is not overridden
         """
-        if self.sampler_class is None:
-            raise TypeError("_ScipyGenerator subclasses must set ``sampler_class`` to a string")
+        if not self.sampler_class:
+            raise ValueError("_ScipyGenerator subclasses must set ``sampler_class`` to a non-empty string")
         super().__init__(*args, **kwargs)
 
     def _validate(self) -> None:

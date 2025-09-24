@@ -2313,7 +2313,9 @@ class TestParameterDistributions:
             def _generate(self, **kwargs) -> None:
                 pass
 
-        with pytest.raises(TypeError, match="_ScipyGenerator subclasses must set ``sampler_class`` to a string"):
+        with pytest.raises(
+            ValueError, match="_ScipyGenerator subclasses must set ``sampler_class`` to a non-empty string"
+        ):
             MissingRequiredAttribute({})
 
         with does_not_raise:
