@@ -1539,6 +1539,44 @@ def _coerce_values(values: typing.Iterable, name: str | None = None) -> numpy.nd
     return values_coerced
 
 
+def _assess_parameter_spaces(studies: list[xarray.Dataset]) -> dict[str, list[xarray.Dataset]]:
+    """From a list of parameter studies, separate studies into unique parameter spaces.
+
+    This function generates a dictionary split by parameter space, with each space containing studies belonging to a
+    shared unique parameter space.
+
+    :param studies: list of parameter study xarray Datasets where the first study is considered the 'base' study
+
+    :return: dictionary, with keys corresponding to the unique hash of the parameter space names and the values are
+        a list of parameter study datasets with shared parameter space
+
+    :raises RuntimeError: if input studies contain partially overlapping parameter spaces
+    """
+    # Group studies by parameter space hash
+    parameter_spaces = collections.defaultdict(list)
+    for study in studies:
+        parameters = list(study.data_vars)
+        parameter_space_hash = _calculate_set_hash(parameters, parameters)
+        parameter_spaces[parameter_space_hash].append(study)
+
+    # Verify no partial overlapping studies
+    spaces = list(parameter_spaces.keys())
+    for index, space in enumerate(spaces):
+        parameters = list(parameter_spaces[space][0].data_vars)
+        for space_other in spaces[index + 1 :]:
+            parameters_other = list(parameter_spaces[space_other][0].data_vars)
+            shared_parameters = set(parameters) & set(parameters_other)
+            unshared_parameters = set(parameters) ^ set(parameters_other)
+            if any(shared_parameters) and any(unshared_parameters):
+                raise RuntimeError(
+                    f"Found study containing partially overlapping parameter space during attempted merge operation.\n"
+                    f"Unshared parameter(s): '{unshared_parameters}'\n"
+                    f"Shared parameters :'{shared_parameters}'"
+                )
+
+    return parameter_spaces
+
+
 def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.Dataset) -> xarray.Dataset:
     """Propagate unique parameters from a new study into the base study, creating a new study using CustomStudy.
 
@@ -1600,10 +1638,7 @@ def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.D
     return propagated_study
 
 
-def _merge_parameter_space(
-    studies: list[xarray.Dataset],
-    template: string.Template | None = None,
-) -> xarray.Dataset:
+def _merge_parameter_space(studies: list[xarray.Dataset], template: string.Template | None = None) -> xarray.Dataset:
     """Merge a list of parameter studies with the same parameter space into one study.
 
     Studies should have set hash as the active dimension.
@@ -1663,36 +1698,19 @@ def _merge_parameter_studies(studies: list[xarray.Dataset], template: string.Tem
 
     # Swap dimensions from the set name to the set hash to merge identical sets
     swap_to_hash_index = {_set_coordinate_key: _hash_coordinate_key}
-    swap_to_set_index = {_hash_coordinate_key: _set_coordinate_key}
     studies = [study.swap_dims(swap_to_hash_index) for study in studies]
 
-    # Split the list of studies into one 'base' study and the remainder
-    study_base = studies.pop(0)
+    parameter_spaces = _assess_parameter_spaces(studies)
 
-    studies_iterator = studies  # Copy list to avoid index shifting from item removal
-    for study_other in studies_iterator:
-        # Find and propagate any nonuniform parameter spaces
-        study_base_parameters = list(study_base.data_vars)
-        study_other_parameters = list(study_other.data_vars)
-        extra_parameters = set(study_base_parameters) ^ set(study_other_parameters)
-        shared_parameters = set(study_base_parameters) & set(study_other_parameters)
-        if any(shared_parameters) and any(extra_parameters):
-            raise RuntimeError(
-                f"Found study containing partially overlapping parameter space during attempted merge operation.\n"
-                f"Unshared parameter(s): '{extra_parameters}'\n"
-                f"Shared parameters :'{shared_parameters}'"
-            )
-        if any(extra_parameters):
-            # Parameter space propagation will fail if the individual spaces are not unique across all studies
-            # TODO: Sort the parameter space prior to merge/propagate operations
-            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/952
-            study_base = _propagate_parameter_space(
-                study_base.swap_dims(swap_to_set_index), study_other.swap_dims(swap_to_set_index)
-            ).swap_dims(swap_to_hash_index)
-            studies.remove(study_other)
+    # Merge studies in each parameter space. Preserves the set names of the first study in each space
+    merged_parameter_spaces = [_merge_parameter_space(studies, template) for studies in parameter_spaces.values()]
 
-    study_combined = _merge_parameter_space([study_base, *studies], template)
-    study_combined = study_combined.swap_dims(swap_to_set_index)
+    # If multiple parameter spaces, propagate into one combined study. Breaks all set name associations
+    swap_to_set_index = {_hash_coordinate_key: _set_coordinate_key}
+    studies = [study.swap_dims(swap_to_set_index) for study in merged_parameter_spaces]
+    study_combined = studies.pop(0)
+    for study_other in studies:
+        study_combined = _propagate_parameter_space(study_combined, study_other)
 
     return study_combined
 

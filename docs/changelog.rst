@@ -20,6 +20,8 @@ Documentation
 
 Internal Changes
 ================
+- Sort the parameter spaces of incoming studies when merging studies. (:issue:`952`, :merge:`1236`). By
+  `Chris Johnson`_.
 - Implement a more complete set of linting and formatting rules with Ruff (:issue:`958`, :merge:`1244`). By `Kyle
   Brindley`_.
 - Miscellaneous linting, formatting, and logical fixes (:issue:`958`, :merge:`1244`). By `Kyle Brindley`_.
