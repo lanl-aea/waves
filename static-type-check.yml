@@ -1,0 +1,10 @@
+channels:
+  - conda-forge
+  - nodefaults
+
+dependencies:
+  - python
+  - mypy
+  - scons >=4.6
+  - setuptools >=77
+  - setuptools_scm >=8

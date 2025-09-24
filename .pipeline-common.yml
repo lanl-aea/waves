@@ -61,6 +61,10 @@
   script:
     - scons style
 
+.static-type-check: &static-type-check
+  script:
+    - scons mypy
+
 .pip-build: &pip-build
   variables:
     distribution_name: "waves"
