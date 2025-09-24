@@ -735,7 +735,8 @@ def _plot_scalar_qoi_history(
     axes.scatter(qoi.date, qoi.sel(value_type="calculated"))
     axes.plot(qoi.date, qoi.sel(value_type="lower_limit"), "--")
     axes.plot(qoi.date, qoi.sel(value_type="upper_limit"), "--")
-    axes.set_xlim((date_min, date_max))
+    # Package matplotlib type annotations do not support datetime, but documentation does.
+    axes.set_xlim((date_min, date_max))  # type: ignore[arg-type]
     axes.set_title(name)
 
 
