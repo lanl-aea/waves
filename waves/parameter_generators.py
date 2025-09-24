@@ -1709,9 +1709,8 @@ def _merge_parameter_studies(studies: list[xarray.Dataset], template: string.Tem
     swap_to_set_index = {_hash_coordinate_key: _set_coordinate_key}
     studies = [study.swap_dims(swap_to_set_index) for study in merged_parameter_spaces]
     study_combined = studies.pop(0)
-    if any(studies):
-        for study_other in studies:
-            study_combined = _propagate_parameter_space(study_combined, study_other)
+    for study_other in studies:
+        study_combined = _propagate_parameter_space(study_combined, study_other)
 
     return study_combined
 
