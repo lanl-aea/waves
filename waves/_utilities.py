@@ -227,7 +227,7 @@ def return_environment(
     string_option: str = "-c",
     separator: str = "&&",
     environment: str = "env -0",
-) -> dict:
+) -> dict[str, str]:
     """Run a shell command and return the shell environment as a dictionary.
 
     .. code-block::
@@ -263,13 +263,13 @@ def return_environment(
         first_key = first_key.rsplit("\n")[-1]
     variables[0] = f"{first_key}={first_value}"
 
-    environment = {}
+    return_environment: dict[str, str] = {}
     for line in variables:
         if line != "":
             key, value = line.split("=", 1)
-            environment[key] = value
+            return_environment[key] = value
 
-    return environment
+    return return_environment
 
 
 def cache_environment(
