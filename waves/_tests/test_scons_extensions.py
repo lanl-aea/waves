@@ -5,9 +5,9 @@ import contextlib
 import copy
 import os
 import pathlib
+import typing
 import unittest
 from unittest.mock import Mock, call, patch
-import typing
 
 import pytest
 import SCons.Node.FS
@@ -1626,7 +1626,9 @@ abaqus_pseudobuilder_input = {
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         "",
         {"job": "job"},
-        pytest.raises(ValueError, match=r"CPUs .* not evenly divisible"),
+        pytest.raises(
+            ValueError, match="Number of CPUs '3' is not evenly divisible by the number of MPI processes '2'"
+        ),
     ),
     "mismatched_oldjob_lengths": (
         {},
@@ -1637,7 +1639,7 @@ abaqus_pseudobuilder_input = {
         [f"job{ext}" for ext in _abaqus_standard_extensions],
         " -double both $(-cpus 1$)",
         {"job": "job"},
-        pytest.raises(ValueError, match=r"The length of ``oldjob_restart_file_count`` and ``oldjob`` do not match"),
+        pytest.raises(ValueError, match="The length of ``oldjob_restart_file_count`` and ``oldjob`` do not match"),
     ),
 }
 

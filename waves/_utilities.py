@@ -383,7 +383,7 @@ def _get_abaqus_restart_extensions(solver: typing.Literal["standard", "explicit"
                 f"{extension}.{process}" for extension in [".mdl", ".stt"] for process in range(0, processes)
             }
     else:
-        raise ValueError(f"Unknown solver type: {solver}")
+        raise ValueError(f"Unknown solver type: '{solver}'")
     return tuple(restart_files)
 
 

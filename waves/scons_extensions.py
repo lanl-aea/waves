@@ -2169,7 +2169,7 @@ class AbaqusPseudoBuilder:
             # Check that total number of CPUs is evenly divisible by number of threads per process
             if cpus % processes != 0:
                 raise ValueError(
-                    f"Number of CPUs ({cpus}) is not evenly divisible by the number of MPI processes ({processes})"
+                    f"Number of CPUs '{cpus}' is not evenly divisible by the number of MPI processes '{processes}'"
                 )
             # Calculate number of threads per MPI process
             threads_per_mpi_process = cpus // processes

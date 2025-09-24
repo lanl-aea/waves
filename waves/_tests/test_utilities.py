@@ -441,7 +441,7 @@ get_abaqus_restart_extensions_input = {
         "stahnduurd",
         2,
         (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"),
-        pytest.raises(ValueError, match="Unknown solver type"),
+        pytest.raises(ValueError, match="Unknown solver type: 'stahnduurd'"),
     ),
 }
 
