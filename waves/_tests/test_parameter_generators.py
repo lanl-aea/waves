@@ -449,7 +449,7 @@ assess_parameter_spaces_cases = {
 )
 def test_assess_parameter_spaces(
     studies: list[xarray.Dataset],
-    expected_dict: dict | None,
+    expected_dict: dict[str, list[xarray.Dataset]] | None,
     outcome: contextlib.nullcontext | pytest.RaisesExc,
 ) -> None:
     """Check the sorting of parameter spaces.
