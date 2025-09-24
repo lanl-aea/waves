@@ -1647,12 +1647,12 @@ abaqus_pseudobuilder_input = {
     ids=abaqus_pseudobuilder_input.keys(),
 )
 def test_abaqus_pseudo_builder(
-    class_kwargs: dict,
-    call_kwargs: dict,
+    class_kwargs: dict[str, typing.Any],
+    call_kwargs: dict[str, typing.Any],
     sources: list[str],
     targets: list[str],
     options: str,
-    builder_kwargs: dict,
+    builder_kwargs: dict[str, typing.Any],
     outcome: contextlib.nullcontext | pytest.RaisesExc,
 ) -> None:
     # Mock AbaqusSolver builder and env
