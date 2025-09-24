@@ -4262,7 +4262,7 @@ class WAVESEnvironment(SConsEnvironment):
         """
         return print_build_failures(self, *args, **kwargs)
 
-    def CheckProgram(self, *args, **kwargs) -> str:  # noqa: N802
+    def CheckProgram(self, *args, **kwargs) -> str | None:  # noqa: N802
         """Call :meth:`waves.scons_extensions.check_program` as a construction environment method.
 
         When using this environment method, do not provide the first ``env`` argument
