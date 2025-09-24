@@ -534,9 +534,9 @@ def test_print_failed_nodes_stdout() -> None:
         mock_print.assert_called_once()
 
 
-def test_print_build_failures() -> None:
+@pytest.mark.parametrize("env", [None, SCons.Environment.Environment()])
+def test_print_build_failures(env: SCons.Environment.Environment | None) -> None:
     # Test the function call interface
-    env = SCons.Environment.Environment()
     with patch("atexit.register") as mock_atexit:
         scons_extensions.print_build_failures(env=env, print_stdout=True)
         mock_atexit.assert_called_once_with(scons_extensions._print_failed_nodes_stdout)
@@ -545,13 +545,14 @@ def test_print_build_failures() -> None:
         mock_atexit.assert_not_called()
 
     # Test the SCons AddMethod interface
-    env.AddMethod(scons_extensions.print_build_failures, "PrintBuildFailures")
-    with patch("atexit.register") as mock_atexit:
-        env.PrintBuildFailures(True)
-        mock_atexit.assert_called_once_with(scons_extensions._print_failed_nodes_stdout)
-    with patch("atexit.register") as mock_atexit:
-        env.PrintBuildFailures(False)
-        mock_atexit.assert_not_called()
+    if env is not None:
+        env.AddMethod(scons_extensions.print_build_failures, "PrintBuildFailures")
+        with patch("atexit.register") as mock_atexit:
+            env.PrintBuildFailures(True)
+            mock_atexit.assert_called_once_with(scons_extensions._print_failed_nodes_stdout)
+        with patch("atexit.register") as mock_atexit:
+            env.PrintBuildFailures(False)
+            mock_atexit.assert_not_called()
 
 
 action_list_scons = {
