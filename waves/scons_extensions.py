@@ -2642,8 +2642,8 @@ def _abaqus_extract_emitter(
 
     :return: target, source
     """
-    odb_file = pathlib.Path(source[0].path).name
-    odb_file = pathlib.Path(odb_file)
+    odb_file_name = pathlib.Path(source[0].path).name
+    odb_file = pathlib.Path(odb_file_name)
     build_subdirectory = _build_subdirectory(target)
     if not target or pathlib.Path(str(target[0])).suffix != ".h5":
         target.insert(0, str(build_subdirectory / odb_file.with_suffix(".h5")))
