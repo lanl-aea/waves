@@ -441,7 +441,7 @@ get_abaqus_restart_extensions_input = {
         "stahnduurd",
         2,
         (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"),
-        pytest.raises(ValueError),
+        pytest.raises(ValueError, match="Unknown solver type"),
     ),
 }
 
@@ -451,6 +451,11 @@ get_abaqus_restart_extensions_input = {
     get_abaqus_restart_extensions_input.values(),
     ids=get_abaqus_restart_extensions_input.keys(),
 )
-def test_get_abaqus_restart_extensions(solver, processes, expected, outcome):
+def test_get_abaqus_restart_extensions(
+    solver: str,
+    processes: int,
+    expected: tuple[str],
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
     with outcome:
         assert set(_utilities._get_abaqus_restart_extensions(solver=solver, processes=processes)) == set(expected)
