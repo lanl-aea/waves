@@ -1551,24 +1551,19 @@ def _assess_parameter_spaces(studies: list[xarray.Dataset]) -> list(list[xarray.
 
     :raises RuntimeError: if input studies contain partially overlapping parameter spaces
     """
-    # Assign parameter space hash attribute to all studies
-    for index, study in enumerate(studies):
-        parameters = list(study.data_vars)
-        studies[index] = study.assign_attrs(parameter_space_hash=_calculate_set_hash(parameters, parameters))
-
     # Group studies by parameter space hash
-    parameter_spaces = []
-    parameter_space_hashes_unique = list(dict.fromkeys([study.attrs["parameter_space_hash"] for study in studies]))
-    for parameter_space_hash in parameter_space_hashes_unique:
-        studies_in_space = [study for study in studies if study.attrs["parameter_space_hash"] == parameter_space_hash]
-        studies_in_space = [study.drop_attrs() for study in studies_in_space]
-        parameter_spaces.append(studies_in_space)
+    parameter_spaces = collections.defaultdict(list)
+    for study in studies:
+        parameters = list(study.data_vars)
+        parameter_space_hash = _calculate_set_hash(parameters, parameters)
+        parameter_spaces[parameter_space_hash].append(study)
 
     # Verify no partial overlapping studies
-    for index, space in enumerate(parameter_spaces):
-        parameters = list(space[0].data_vars)
-        for space_other in parameter_spaces[index + 1:]:
-            parameters_other = list(space_other[0].data_vars)
+    spaces = list(parameter_spaces.keys())
+    for index, space in enumerate(spaces):
+        parameters = list(parameter_spaces[space][0].data_vars)
+        for space_other in spaces[index + 1:]:
+            parameters_other = list(parameter_spaces[space_other][0].data_vars)
             shared_parameters = set(parameters) & set(parameters_other)
             unshared_parameters = set(parameters) ^ set(parameters_other)
             if any(shared_parameters) and any(unshared_parameters):
@@ -1578,7 +1573,10 @@ def _assess_parameter_spaces(studies: list[xarray.Dataset]) -> list(list[xarray.
                     f"Shared parameters :'{shared_parameters}'"
                 )
 
-    return parameter_spaces
+    # Stack parameter spaces into list of lists
+    spaces_list = [parameter_spaces[space] for space in spaces]
+
+    return spaces_list
 
 
 def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.Dataset) -> xarray.Dataset:
