@@ -214,9 +214,10 @@ def tee_subprocess(command: list[str], **kwargs) -> tuple[int, str]:
         subprocess.Popen(command, stdout=subprocess.PIPE, bufsize=1, text=True, **kwargs) as process,
         StringIO() as stdout_buffer,
     ):
-        for line in process.stdout:
-            print(line, end="")
-            stdout_buffer.write(line)
+        if process.stdout is not None:
+            for line in process.stdout:
+                print(line, end="")
+                stdout_buffer.write(line)
         output = stdout_buffer.getvalue()
     return process.returncode, output
 
