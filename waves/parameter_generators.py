@@ -1562,7 +1562,7 @@ def _assess_parameter_spaces(studies: list[xarray.Dataset]) -> list(list[xarray.
     spaces = list(parameter_spaces.keys())
     for index, space in enumerate(spaces):
         parameters = list(parameter_spaces[space][0].data_vars)
-        for space_other in spaces[index + 1:]:
+        for space_other in spaces[index + 1 :]:
             parameters_other = list(parameter_spaces[space_other][0].data_vars)
             shared_parameters = set(parameters) & set(parameters_other)
             unshared_parameters = set(parameters) ^ set(parameters_other)
