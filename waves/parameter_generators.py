@@ -138,7 +138,18 @@ class ParameterGenerator(ABC):
             self.output_directory = pathlib.Path.cwd()
         self.parameter_study_meta_file = self.output_directory / _settings._parameter_study_meta_file
 
+        # Help mypy determine types of attributes set in semi-private function calls
+        # TODO: make these return values from _validate and assign directly in __init__?
+        self._parameter_names: list[str]
         self._validate()
+
+        # Help mypy determine types of attributes set in semi-private function calls
+        # TODO: make ``parameter_study`` a return values from _generate and assign directly in __init__, dropping
+        # intermediate working variables?
+        self._samples: numpy.ndarray
+        self._set_hashes: list[str]
+        self._set_names: dict[str, str]
+        self.parameter_study: xarray.Dataset
         self._generate(**kwargs)
 
     @abstractmethod
