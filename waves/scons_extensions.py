@@ -572,7 +572,7 @@ def substitution_syntax(
 def check_program(
     env: SCons.Environment.Environment,
     prog_name: str,
-) -> str:
+) -> str | None:
     """Return the absolute path of the requested program or ``None``.
 
     Replacement for `SCons CheckProg`_ like behavior without an SCons configure object.
