@@ -410,3 +410,52 @@ def test_warn_only_once() -> None:
         test_warning()
         test_warning()
         assert len(warning_output) == 1
+
+
+get_abaqus_restart_extensions_input = {
+    "standard_1": (
+        "standard",
+        1,
+        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res"),
+        does_not_raise,
+    ),
+    "standard_2": (
+        "standard",
+        2,
+        (".odb", ".prt", ".mdl.0", ".mdl.1", ".sim", ".stt.0", ".stt.1", ".res"),
+        does_not_raise,
+    ),
+    "explicit_1": (
+        "explicit",
+        1,
+        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"),
+        does_not_raise,
+    ),
+    "explicit_2": (
+        "explicit",
+        2,
+        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"),
+        does_not_raise,
+    ),
+    "stahnduurd": (
+        "stahnduurd",
+        2,
+        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"),
+        pytest.raises(ValueError, match="Unknown solver type: 'stahnduurd'"),
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("solver", "processes", "expected", "outcome"),
+    get_abaqus_restart_extensions_input.values(),
+    ids=get_abaqus_restart_extensions_input.keys(),
+)
+def test_get_abaqus_restart_extensions(
+    solver: str,
+    processes: int,
+    expected: tuple[str],
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
+    with outcome:
+        assert set(_utilities._get_abaqus_restart_extensions(solver=solver, processes=processes)) == set(expected)

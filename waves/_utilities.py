@@ -365,6 +365,28 @@ def warn_only_once(function: collections.abc.Callable) -> collections.abc.Callab
     return wrapper
 
 
+def _get_abaqus_restart_extensions(solver: typing.Literal["standard", "explicit"], processes: int = 1) -> list[str]:
+    """Determine Abaqus restart files based on solver type and number of MPI processes.
+
+    :param solver: Abaqus solver.
+    :param processes: Number of MPI processes used to run the Abaqus job.
+    """
+    if solver.lower() == "explicit":
+        restart_files = set(_settings._abaqus_explicit_restart_extensions)
+    elif solver.lower() == "standard":
+        restart_files = set(_settings._abaqus_standard_restart_extensions)
+        if processes > 1:
+            # Drop .mdl and .stt
+            restart_files -= {".mdl", ".stt"}
+            # Add {.mdl,.stt}.[0..N-1]
+            restart_files |= {
+                f"{extension}.{process}" for extension in [".mdl", ".stt"] for process in range(0, processes)
+            }
+    else:
+        raise ValueError(f"Unknown solver type: '{solver}'")
+    return tuple(restart_files)
+
+
 # Limit help() and 'from module import *' behavior to the module's public API
 _module_objects = set(globals().keys()) - _exclude_from_namespace
 __all__ = [name for name in _module_objects if not name.startswith("_")]
