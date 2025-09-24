@@ -2143,8 +2143,8 @@ class AbaqusPseudoBuilder:
             env.Abaqus(job='simulation_1', cpus=4)
         """
         # Initialize with empty arguments for AbaqusSolver builder
-        sources = []
-        targets = []
+        sources: list[str] = []
+        targets: list[str] = []
         options = ""
 
         # Specify job name
