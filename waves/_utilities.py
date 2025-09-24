@@ -350,7 +350,10 @@ def warn_only_once(function: collections.abc.Callable) -> collections.abc.Callab
 
     :returns: function wrapped in the warning suppression logic
     """
-    function.already_warned = False
+    # TODO: static type checking compatible function attributes when available in mypy without complex handling
+    # https://github.com/python/mypy/issues/2087
+    # https://mypy-play.net/?mypy=latest&python=3.11&gist=f4cd279b0ac82b9b2a0b1bd227915025
+    function.already_warned = False  # type: ignore[attr-defined]
 
     def wrapper(*args, **kwargs) -> collections.abc.Callable:
         """Add wrapper logic for the function warning suppression.
@@ -358,8 +361,8 @@ def warn_only_once(function: collections.abc.Callable) -> collections.abc.Callab
         :param args: all positional arguments passed through to wrapped function
         :param kwargs: all keyword arguments passed through to wrapped function
         """
-        with warnings.catch_warnings(record=function.already_warned):
-            function.already_warned = True
+        with warnings.catch_warnings(record=function.already_warned):  # type: ignore[attr-defined]
+            function.already_warned = True  # type: ignore[attr-defined]
             return function(*args, **kwargs)
 
     return wrapper
