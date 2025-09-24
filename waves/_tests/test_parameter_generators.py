@@ -2301,6 +2301,24 @@ class TestParameterGenerator:
 class TestParameterDistributions:
     """Class for testing _ScipyGenerator ABC class common methods."""
 
+    def test_sampler_class_handling(self) -> None:
+        class MissingRequiredAttribute(parameter_generators._ScipyGenerator):
+            def __init__(self, *args, **kwargs) -> None:
+                super().__init__(*args, **kwargs)
+
+        class HasRequiredAttribute(parameter_generators._ScipyGenerator):
+            sampler_class = "dummy"
+            def _validate(self) -> None:
+                pass
+            def _generate(self, **kwargs) -> None:
+                pass
+
+        with pytest.raises(TypeError, match="_ScipyGenerator subclasses must set ``sampler_class`` to a string"):
+            MissingRequiredAttribute({})
+
+        with does_not_raise:
+            HasRequiredAttribute({})
+
     validate_input = {
         "good schema": (
             {"num_simulations": 1, "parameter_1": {"distribution": "norm", "kwarg1": 1}},
