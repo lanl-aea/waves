@@ -1703,7 +1703,7 @@ def _merge_parameter_studies(studies: list[xarray.Dataset], template: string.Tem
     parameter_spaces = _assess_parameter_spaces(studies)
 
     # Merge studies in each parameter space. Preserves the set names of the first study in each space
-    merged_parameter_spaces = [_merge_parameter_space(studies, template) for _hash, studies in parameter_spaces.items()]
+    merged_parameter_spaces = [_merge_parameter_space(studies, template) for studies in parameter_spaces.values()]
 
     # If multiple parameter spaces, propagate into one combined study. Breaks all set name associations
     swap_to_set_index = {_hash_coordinate_key: _set_coordinate_key}
