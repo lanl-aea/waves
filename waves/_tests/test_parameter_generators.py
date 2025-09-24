@@ -404,6 +404,19 @@ assess_parameter_spaces_cases = {
         ],
         does_not_raise,
     ),
+    "three parameter spaces, reversed parameter names": (
+        [
+            parameter_generators.CartesianProduct({"parameter_3": [1, 2]}).parameter_study,
+            parameter_generators.CartesianProduct({"parameter_2": [3.0, 4.0]}).parameter_study,
+            parameter_generators.CartesianProduct({"parameter_1": ["a", "b"]}).parameter_study,
+        ],
+        [
+            [parameter_generators.CartesianProduct({"parameter_3": [1, 2]}).parameter_study],
+            [parameter_generators.CartesianProduct({"parameter_2": [3.0, 4.0]}).parameter_study],
+            [parameter_generators.CartesianProduct({"parameter_1": ["a", "b"]}).parameter_study],
+        ],
+        does_not_raise,
+    ),
     "partially overlapping spaces": (
         [
             parameter_generators.OneAtATime({"parameter_1": [1.0]}).parameter_study,
