@@ -369,7 +369,7 @@ def warn_only_once(function: collections.abc.Callable) -> collections.abc.Callab
     return wrapper
 
 
-def _get_abaqus_restart_extensions(solver: typing.Literal["standard", "explicit"], processes: int = 1) -> tuple[str]:
+def _get_abaqus_restart_extensions(solver: typing.Literal["standard", "explicit"], processes: int = 1) -> tuple[str, ...]:
     """Determine Abaqus restart files based on solver type and number of MPI processes.
 
     :param solver: Abaqus solver.
