@@ -77,10 +77,10 @@ class ParameterGenerator(ABC):
         self,
         parameter_schema: dict,
         output_file_template: str | None = _settings._default_output_file_template,
-        output_file: str | None = _settings._default_output_file,
+        output_file: str | pathlib.Path | None = _settings._default_output_file,
         output_file_type: _settings._allowable_output_file_typing = _settings._default_output_file_type_api,
         set_name_template: str = _settings._default_set_name_template,
-        previous_parameter_study: str | None = _settings._default_previous_parameter_study,
+        previous_parameter_study: str | pathlib.Path | None = _settings._default_previous_parameter_study,
         require_previous_parameter_study: bool = _settings._default_require_previous_parameter_study,
         overwrite: bool = _settings._default_overwrite,
         write_meta: bool = _settings._default_write_meta,
@@ -88,10 +88,12 @@ class ParameterGenerator(ABC):
     ) -> None:
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
-        self.output_file = output_file
+        self.output_file = pathlib.Path(output_file) if output_file is not None else None
         self.output_file_type = output_file_type
         self.set_name_template = _utilities._AtSignTemplate(set_name_template)
-        self.previous_parameter_study = previous_parameter_study
+        self.previous_parameter_study = (
+            pathlib.Path(previous_parameter_study) if previous_parameter_study is not None else None
+        )
         self.require_previous_parameter_study = require_previous_parameter_study
         self.overwrite = overwrite
         self.write_meta = write_meta
@@ -108,17 +110,12 @@ class ParameterGenerator(ABC):
                 f"The 'output_file_type' must be one of {_settings._allowable_output_file_types}"
             )
 
-        if self.output_file:
-            self.output_file = pathlib.Path(self.output_file)
-
-        if self.previous_parameter_study:
-            self.previous_parameter_study = pathlib.Path(self.previous_parameter_study)
-            if not self.previous_parameter_study.is_file():
-                message = f"Previous parameter study file '{self.previous_parameter_study}' does not exist."
-                if self.require_previous_parameter_study:
-                    raise RuntimeError(message)
-                else:
-                    warnings.warn(message)
+        if self.previous_parameter_study is not None and not self.previous_parameter_study.is_file():
+            message = f"Previous parameter study file '{self.previous_parameter_study}' does not exist."
+            if self.require_previous_parameter_study:
+                raise RuntimeError(message)
+            else:
+                warnings.warn(message)
 
         # Override set name template if output name template is provided.
         self.provided_output_file_template = False
