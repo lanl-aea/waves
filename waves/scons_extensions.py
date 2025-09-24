@@ -1507,13 +1507,12 @@ def abaqus_solver(
         "${action_prefix} ${program} -information environment ${environment_suffix}",
         "${action_prefix} ${program} ${required} ${abaqus_options} ${action_suffix}",
     ]
-    if emitter:
-        emitter = emitter.lower()
-    if emitter == "standard":
+    emitter_normalized = emitter.lower() if emitter is not None else None
+    if emitter_normalized == "standard":
         abaqus_emitter = _abaqus_standard_solver_emitter
-    elif emitter == "explicit":
+    elif emitter_normalized == "explicit":
         abaqus_emitter = _abaqus_explicit_solver_emitter
-    elif emitter == "datacheck":
+    elif emitter_normalized == "datacheck":
         abaqus_emitter = _abaqus_datacheck_solver_emitter
     else:
         abaqus_emitter = _abaqus_solver_emitter
