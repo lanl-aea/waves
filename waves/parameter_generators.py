@@ -209,7 +209,7 @@ class ParameterGenerator(ABC):
     def write(
         self,
         output_file_type: _settings._allowable_output_file_typing | None = None,
-        dry_run: bool | None = _settings._default_dry_run,
+        dry_run: bool = _settings._default_dry_run,
     ) -> None:
         """Write the parameter study to STDOUT or an output file.
 
