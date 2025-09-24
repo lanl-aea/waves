@@ -428,7 +428,7 @@ def test_assess_parameter_spaces(
     """Check the sorting of parameter spaces.
 
     :param studies: list of N number of parameter study Xarray datasets, where the first study in the list is the base
-    study
+        study
     :param expected_list: list of lists containing Xarray datasets
     :param outcome: pytest expected error for the test case
     """
