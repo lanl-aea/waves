@@ -2265,7 +2265,7 @@ def copy_substfile(
     env: SCons.Environment.Environment,
     source_list: list,
     substitution_dictionary: dict | None = None,
-    build_subdirectory: str = ".",
+    build_subdirectory: str | pathlib.Path = ".",
     symlink: bool = False,
 ) -> SCons.Node.NodeList:
     """Pseudo-builder to copy source list to build directory and perform template substitutions on ``*.in`` filenames.
