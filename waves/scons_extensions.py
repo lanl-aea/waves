@@ -597,7 +597,7 @@ def check_program(
 
 def append_env_path(
     env: SCons.Environment.Environment,
-    program: str,
+    program: str | pathlib.Path,
 ) -> None:
     """Append SCons contruction environment ``PATH`` with the program's parent directory.
 
