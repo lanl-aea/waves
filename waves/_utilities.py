@@ -171,7 +171,7 @@ def find_cubit_bin(options: typing.Iterable[str], bin_directory: str | None = No
     return cubit_bin
 
 
-def find_cubit_python(options: typing.Iterable[str], python_command: str = "python3*") -> pathlib.Path:
+def find_cubit_python(options: typing.Sequence[str], python_command: str = "python3*") -> pathlib.Path:
     """Search for the Cubit Python interpreter given a few options for the Cubit executable.
 
     Recommend first checking to see if cubit will import.

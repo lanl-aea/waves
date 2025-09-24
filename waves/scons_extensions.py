@@ -627,7 +627,7 @@ def append_env_path(
 
 def find_program(
     env: SCons.Environment.Environment,
-    names: typing.Iterable[str],
+    names: typing.Sequence[str],
 ) -> str | None:
     """Search for a program from a list of possible program names.
 
@@ -653,7 +653,7 @@ def find_program(
     program_paths = [check_program(env, name) for name in names]
     # Return first non-None path. Default to None if no program path was found.
     first_found_path = next((path for path in program_paths if path is not None), None)
-    if first_found_path:
+    if first_found_path is not None:
         first_found_path = str(_utilities._quote_spaces_in_path(first_found_path))
 
     return first_found_path
@@ -661,8 +661,8 @@ def find_program(
 
 def add_program(
     env: SCons.Environment.Environment,
-    names: typing.Iterable[str],
-) -> str:
+    names: typing.Sequence[str],
+) -> str | None:
     """Search for a program from a list of possible program names. Add first found to system ``PATH``.
 
     Returns the absolute path of the first program name found. Appends ``PATH`` with first program's parent directory
@@ -725,8 +725,8 @@ def add_cubit(
 
 def add_cubit_python(
     env: SCons.Environment.Environment,
-    names: typing.Iterable[str],
-) -> str:
+    names: typing.Sequence[str],
+) -> str | None:
     """Modify environment variables with the paths required to ``import cubit`` with the Cubit Python interpreter.
 
     Returns the absolute path of the first Cubit Python intepreter found. Appends ``PATH`` with Cubit Python parent
@@ -749,11 +749,22 @@ def add_cubit_python(
 
     :return: Absolute path of the Cubit Python intepreter. None if none of the names are found.
     """
-    first_found_path = find_program(env, names)
-    cubit_python = _utilities.find_cubit_python([first_found_path])
+    # Search for Cubit executable
+    cubit_executable = find_program(env, names)
+    if cubit_executable is None:
+        return None
+
+    # Search for Cubit Python interpretter
+    cubit_python: str | None = None
+    try:
+        cubit_python = str(_utilities.find_cubit_python([cubit_executable]))
+    except FileNotFoundError:
+        return None
+
+    # Search for Cubit Python bin
     cubit_python = add_program(env, [cubit_python])
-    if cubit_python:
-        cubit_bin = _utilities.find_cubit_bin([first_found_path])
+    if cubit_python is not None:
+        cubit_bin = _utilities.find_cubit_bin([cubit_executable])
         env.PrependENVPath("PYTHONPATH", str(cubit_bin))
     return cubit_python
 

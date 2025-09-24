@@ -269,6 +269,24 @@ def test_add_cubit_python() -> None:
     env = SCons.Environment.Environment()
     cubit_bin = "/path/to/cubit/bin/"
     cubit_python = "/path/to/cubit/bin/python"
+    # Cubit executable not found mocked by find_program
+    with (
+        patch("waves._utilities.find_cubit_python"),
+        patch("waves.scons_extensions.find_program", return_value=None),
+        patch("waves.scons_extensions.add_program"),
+    ):
+        program = scons_extensions.add_cubit_python(env, "dummy_cubit_executable")
+    assert program is None
+    assert "PYTHONPATH" not in env["ENV"]
+    # Cubit Python not found mocked find_cubit_python
+    with (
+        patch("waves._utilities.find_cubit_python", side_effect=FileNotFoundError),
+        patch("waves.scons_extensions.find_program"),
+        patch("waves.scons_extensions.add_program"),
+    ):
+        program = scons_extensions.add_cubit_python(env, "dummy_cubit_executable")
+    assert program is None
+    assert "PYTHONPATH" not in env["ENV"]
     # Cubit Python not found mocked by add_program
     with (
         patch("waves._utilities.find_cubit_python"),
