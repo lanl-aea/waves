@@ -286,6 +286,7 @@ class ParameterGenerator(ABC):
         conditional_write_function: collections.abc.Callable[
             [
                 pathlib.Path,
+                dict | xarray.Dataset,
             ],
             None,
         ],
