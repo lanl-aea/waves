@@ -812,7 +812,7 @@ def shell_environment(
 
 
 def construct_action_list(
-    actions: typing.Iterable[str],
+    actions: typing.Sequence[str],
     prefix: str = "${action_prefix}",
     suffix: str = "",
 ) -> typing.Iterable[str]:
@@ -838,7 +838,8 @@ def construct_action_list(
     try:
         iterator = iter(actions)
     except TypeError:
-        iterator = iter([actions])
+        # Explicit conversion to expected argument type. Do not enforce static type checking on type conversion.
+        iterator = iter([actions])  # type: ignore[list-item]
     if prefix:
         prefix = prefix + " "
     if suffix:
