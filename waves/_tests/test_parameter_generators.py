@@ -2398,15 +2398,17 @@ class DummyGenerator(parameter_generators.ParameterGenerator):
     def _validate(self) -> None:
         self._parameter_names = ["parameter_1"]
 
-    def _generate(self, sets: int = 1) -> None:
+    def _generate(self, sets: int = 1, **kwargs) -> None:
         """Generate float samples for all parameters. Value matches parameter set index."""
         parameter_count = len(self._parameter_names)
         self._samples = numpy.ones((sets, parameter_count))
         for row in range(sets):
             self._samples[row, :] = self._samples[row, :] * row
-        super()._generate()
+        super()._generate(**kwargs)
 
 
 class ParameterDistributions(parameter_generators._ScipyGenerator):
-    def _generate(self) -> None:
+    sampler_class = "dummy"
+
+    def _generate(self, **kwargs) -> None:
         pass
