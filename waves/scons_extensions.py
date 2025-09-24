@@ -690,8 +690,8 @@ def add_program(
 
 def add_cubit(
     env: SCons.Environment.Environment,
-    names: typing.Iterable[str],
-) -> str:
+    names: typing.Sequence[str],
+) -> str | None:
     """Modify environment variables with the paths required to ``import cubit`` in a Python3 environment.
 
     Returns the absolute path of the first program name found. Appends ``PATH`` with first program's parent directory if
@@ -4276,21 +4276,21 @@ class WAVESEnvironment(SConsEnvironment):
         """
         return find_program(self, *args, **kwargs)
 
-    def AddProgram(self, *args, **kwargs) -> str:  # noqa: N802
+    def AddProgram(self, *args, **kwargs) -> str | None:  # noqa: N802
         """Call :meth:`waves.scons_extensions.add_program` as a construction environment method.
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return add_program(self, *args, **kwargs)
 
-    def AddCubit(self, *args, **kwargs) -> str:  # noqa: N802
+    def AddCubit(self, *args, **kwargs) -> str | None:  # noqa: N802
         """Call :meth:`waves.scons_extensions.add_cubit` as a construction environment method.
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return add_cubit(self, *args, **kwargs)
 
-    def AddCubitPython(self, *args, **kwargs) -> str:  # noqa: N802
+    def AddCubitPython(self, *args, **kwargs) -> str | None:  # noqa: N802
         """Call :meth:`waves.scons_extensions.add_cubit_python` as a construction environment method.
 
         When using this environment method, do not provide the first ``env`` argument
