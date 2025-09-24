@@ -1539,15 +1539,16 @@ def _coerce_values(values: typing.Iterable, name: str | None = None) -> numpy.nd
     return values_coerced
 
 
-def _assess_parameter_spaces(studies: list[xarray.Dataset]) -> list[list[xarray.Dataset]]:
+def _assess_parameter_spaces(studies: list[xarray.Dataset]) -> dict:
     """From a list of parameter studies, separate studies into unique parameter spaces.
 
-    This function generates a list of lists, with each sub-list containing studies belonging to a shared unique
-    parameter space.
+    This function generates a dictionary split by parameter space, with each space containing studies belonging to a
+    shared unique parameter space.
 
     :param studies: list of parameter study xarray Datasets where the first study is considered the 'base' study
 
-    :return: list of lists, where each sub-list is a list of parameter study datasets with shared parameter space
+    :return: dictionary, with keys corresponding to the unique hash of the parameter space names and the values of each
+        key are parameter study datasets with shared parameter space
 
     :raises RuntimeError: if input studies contain partially overlapping parameter spaces
     """
@@ -1573,10 +1574,7 @@ def _assess_parameter_spaces(studies: list[xarray.Dataset]) -> list[list[xarray.
                     f"Shared parameters :'{shared_parameters}'"
                 )
 
-    # Stack parameter spaces into list of lists
-    spaces_list = [parameter_spaces[space] for space in spaces]
-
-    return spaces_list
+    return parameter_spaces
 
 
 def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.Dataset) -> xarray.Dataset:
@@ -1705,11 +1703,11 @@ def _merge_parameter_studies(studies: list[xarray.Dataset], template: string.Tem
     parameter_spaces = _assess_parameter_spaces(studies)
 
     # Merge studies in each parameter space. Preserves the set names of the first study in each space
-    parameter_spaces = [_merge_parameter_space(studies, template) for studies in parameter_spaces]
+    merged_parameter_spaces = [_merge_parameter_space(studies, template) for _hash, studies in parameter_spaces.items()]
 
     # If multiple parameter spaces, propagate into one combined study. Breaks all set name associations
     swap_to_set_index = {_hash_coordinate_key: _set_coordinate_key}
-    studies = [study.swap_dims(swap_to_set_index) for study in parameter_spaces]
+    studies = [study.swap_dims(swap_to_set_index) for study in merged_parameter_spaces]
     study_combined = studies.pop(0)
     if any(studies):
         for study_other in studies:

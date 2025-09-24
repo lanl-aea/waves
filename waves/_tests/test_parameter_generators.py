@@ -446,7 +446,8 @@ def test_assess_parameter_spaces(
     :param outcome: pytest expected error for the test case
     """
     with outcome:
-        sorted_studies_list = parameter_generators._assess_parameter_spaces(studies)
+        sorted_studies = parameter_generators._assess_parameter_spaces(studies)
+        sorted_studies_list = [studies for _hash, studies in sorted_studies.items()]
         assert sorted_studies_list == expected_list
 
 
