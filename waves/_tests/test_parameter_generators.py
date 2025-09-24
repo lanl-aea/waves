@@ -327,12 +327,12 @@ assess_parameter_spaces_cases = {
             parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
         ],
-        [
-            [
+        {
+            "23c6b7bca2141bd8eee20b7f4960521b": [
                 parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
                 parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
-            ]
-        ],
+            ],
+        },
         does_not_raise,
     ),
     "single parameter space": (
@@ -340,12 +340,12 @@ assess_parameter_spaces_cases = {
             parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_1": [2]}).parameter_study,
         ],
-        [
-            [
+        {
+            "23c6b7bca2141bd8eee20b7f4960521b": [
                 parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
                 parameter_generators.OneAtATime({"parameter_1": [2]}).parameter_study,
-            ]
-        ],
+            ],
+        },
         does_not_raise,
     ),
     "single parameter space reversed": (
@@ -353,12 +353,12 @@ assess_parameter_spaces_cases = {
             parameter_generators.OneAtATime({"parameter_1": [2]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
         ],
-        [
-            [
+        {
+            "23c6b7bca2141bd8eee20b7f4960521b": [
                 parameter_generators.OneAtATime({"parameter_1": [2]}).parameter_study,
                 parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
-            ]
-        ],
+            ],
+        },
         does_not_raise,
     ),
     "single parameter space, mixed data types": (
@@ -367,13 +367,13 @@ assess_parameter_spaces_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [2.0]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_1": [True]}).parameter_study,
         ],
-        [
-            [
+        {
+            "23c6b7bca2141bd8eee20b7f4960521b": [
                 parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
                 parameter_generators.CartesianProduct({"parameter_1": [2.0]}).parameter_study,
                 parameter_generators.CartesianProduct({"parameter_1": [True]}).parameter_study,
-            ]
-        ],
+            ],
+        },
         does_not_raise,  # RuntimeError will occur in `_merge_parameter_space()`
     ),
     "two parameter spaces": (
@@ -382,13 +382,15 @@ assess_parameter_spaces_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [3, 4]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_2": [False]}).parameter_study,
         ],
-        [
-            [
+        {
+            "23c6b7bca2141bd8eee20b7f4960521b": [
                 parameter_generators.CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
                 parameter_generators.CartesianProduct({"parameter_1": [3, 4]}).parameter_study,
             ],
-            [parameter_generators.CartesianProduct({"parameter_2": [False]}).parameter_study],
-        ],
+            "8c3195f1068825253cd1714daa00ade7": [
+                parameter_generators.CartesianProduct({"parameter_2": [False]}).parameter_study
+            ],
+        },
         does_not_raise,
     ),
     "three parameter spaces": (
@@ -397,11 +399,17 @@ assess_parameter_spaces_cases = {
             parameter_generators.CartesianProduct({"parameter_2": [3.0, 4.0]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_3": ["a", "b"]}).parameter_study,
         ],
-        [
-            [parameter_generators.CartesianProduct({"parameter_1": [1, 2]}).parameter_study],
-            [parameter_generators.CartesianProduct({"parameter_2": [3.0, 4.0]}).parameter_study],
-            [parameter_generators.CartesianProduct({"parameter_3": ["a", "b"]}).parameter_study],
-        ],
+        {
+            "23c6b7bca2141bd8eee20b7f4960521b": [
+                parameter_generators.CartesianProduct({"parameter_1": [1, 2]}).parameter_study
+            ],
+            "8c3195f1068825253cd1714daa00ade7": [
+                parameter_generators.CartesianProduct({"parameter_2": [3.0, 4.0]}).parameter_study
+            ],
+            "98fd033a1b70ea447495bec245e16669": [
+                parameter_generators.CartesianProduct({"parameter_3": ["a", "b"]}).parameter_study
+            ],
+        },
         does_not_raise,
     ),
     "three parameter spaces, reversed parameter names": (
@@ -410,11 +418,17 @@ assess_parameter_spaces_cases = {
             parameter_generators.CartesianProduct({"parameter_2": [3.0, 4.0]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_1": ["a", "b"]}).parameter_study,
         ],
-        [
-            [parameter_generators.CartesianProduct({"parameter_3": [1, 2]}).parameter_study],
-            [parameter_generators.CartesianProduct({"parameter_2": [3.0, 4.0]}).parameter_study],
-            [parameter_generators.CartesianProduct({"parameter_1": ["a", "b"]}).parameter_study],
-        ],
+        {
+            "98fd033a1b70ea447495bec245e16669": [
+                parameter_generators.CartesianProduct({"parameter_3": [1, 2]}).parameter_study
+            ],
+            "8c3195f1068825253cd1714daa00ade7": [
+                parameter_generators.CartesianProduct({"parameter_2": [3.0, 4.0]}).parameter_study
+            ],
+            "23c6b7bca2141bd8eee20b7f4960521b": [
+                parameter_generators.CartesianProduct({"parameter_1": ["a", "b"]}).parameter_study
+            ],
+        },
         does_not_raise,
     ),
     "partially overlapping spaces": (
@@ -429,26 +443,26 @@ assess_parameter_spaces_cases = {
 
 
 @pytest.mark.parametrize(
-    ("studies", "expected_list", "outcome"),
+    ("studies", "expected_dict", "outcome"),
     assess_parameter_spaces_cases.values(),
     ids=assess_parameter_spaces_cases.keys(),
 )
 def test_assess_parameter_spaces(
     studies: list[xarray.Dataset],
-    expected_list: list[list[xarray.Dataset]] | None,
+    expected_dict: dict | None,
     outcome: contextlib.nullcontext | pytest.RaisesExc,
 ) -> None:
     """Check the sorting of parameter spaces.
 
     :param studies: list of N number of parameter study Xarray datasets, where the first study in the list is the base
         study
-    :param expected_list: list of lists containing Xarray datasets
+    :param expected_dict: dictionary of parameter name hashes with corresponding Xarray datasets with identical
+        parameter space
     :param outcome: pytest expected error for the test case
     """
     with outcome:
         sorted_studies = parameter_generators._assess_parameter_spaces(studies)
-        sorted_studies_list = [studies for _hash, studies in sorted_studies.items()]
-        assert sorted_studies_list == expected_list
+        assert sorted_studies == expected_dict
 
 
 propagate_parameter_space_cases = {
