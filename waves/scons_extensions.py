@@ -2205,7 +2205,8 @@ class AbaqusPseudoBuilder:
 
         # If writing restart files, add restart files to targets
         if write_restart:
-            # See above TODO item for Explicit restart files
+            # TODO: address Explicit-specific restart files: ['abq', 'pac', 'sel']
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/821
             restart_extensions = _utilities._get_abaqus_restart_extensions(solver="standard", processes=processes)
             targets.extend([f"{job}{extension}" for extension in restart_extensions])
 
