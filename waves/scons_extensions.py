@@ -2165,7 +2165,7 @@ class AbaqusPseudoBuilder:
         # Always allow user to override CPUs with CLI option and exclude CPUs from build signature
         options += f" $(-cpus {self.override_cpus or cpus}$)"
 
-        if processes:
+        if processes is not None:
             # Check that total number of CPUs is evenly divisible by number of threads per process
             if cpus % processes != 0:
                 raise ValueError(
