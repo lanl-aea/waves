@@ -3992,7 +3992,7 @@ def parameter_study_sconscript(
     def _variant_subdirectory(
         variant_directory: pathlib.Path | None,
         subdirectory: str,
-        subdirectories: bool = subdirectories,
+        subdirectories: bool,
     ) -> pathlib.Path | None:
         """Determine the variant subdirectory.
 
@@ -4002,19 +4002,17 @@ def parameter_study_sconscript(
 
         :returns: variant directory
         """
-        if subdirectories:
-            if variant_directory is not None:
-                build_directory = variant_directory / subdirectory
-            else:
-                build_directory = pathlib.Path(subdirectory)
+        if subdirectories and variant_directory is not None:
+            return variant_directory / subdirectory
+        elif subdirectories:
+            return pathlib.Path(subdirectory)
         else:
-            build_directory = variant_directory
-        return build_directory
+            return variant_directory
 
     if isinstance(study, parameter_generators.ParameterGenerator):
         for set_name, parameters in study.parameter_study_to_dict().items():
             exports.update({"set_name": set_name, "parameters": parameters})
-            build_directory = _variant_subdirectory(variant_dir, set_name)
+            build_directory = _variant_subdirectory(variant_dir, set_name, subdirectories)
             sconscript_output.append(env.SConscript(*args, variant_dir=build_directory, exports=exports, **kwargs))
     elif isinstance(study, dict):
         exports.update({"parameters": study})
