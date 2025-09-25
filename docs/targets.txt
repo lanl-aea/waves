@@ -50,6 +50,7 @@
 .. _`Material Models`: https://re-git.lanl.gov/aea/material-models
 .. _`meshio`: https://github.com/nschloe/meshio
 .. _`MPI`: https://www.mpi-forum.org/
+.. _`mypy`: https://www.mypy-lang.org/
 .. _`pandas`: https://pandas.pydata.org/
 .. _`PEP-257`: https://peps.python.org/pep-0257/
 .. _`PEP-287`: https://peps.python.org/pep-0287/
