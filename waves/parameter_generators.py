@@ -1418,7 +1418,7 @@ class SALibSampler(ParameterGenerator, ABC):
         super()._generate()
 
 
-def _calculate_set_hash(parameter_names: typing.Sequence[str], set_samples: typing.Sequence) -> str:
+def _calculate_set_hash(parameter_names: collections.abc.Sequence[str], set_samples: collections.abc.Sequence) -> str:
     """Calculate the unique, repeatable parameter set content hash for a single parameter set.
 
     :param parameter_names: list of parameter names in matching order with parameter samples
