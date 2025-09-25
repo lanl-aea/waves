@@ -389,7 +389,7 @@ def first_target_builder_factory_test_cases(
     default_kwargs: dict,
     default_emitter: collections.abc.Callable[
         [list, list, SCons.Environment.Environment], tuple[list, list]
-    ] = scons_extensions.first_target_emitter,
+    ] | None = scons_extensions.first_target_emitter,
     expected_node_count: int = 2,
 ) -> dict:
     """Return template tests for builder factories based on :meth:`waves.scons_extensions.first_target_builder_factory`.
