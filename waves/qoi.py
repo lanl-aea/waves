@@ -45,7 +45,9 @@ class _MergeConstants(typing.TypedDict):
 
 
 _merge_constants: _MergeConstants = {
-    "join": "outer", "compat": "no_conflicts", "combine_attrs": _propagate_identical_attrs
+    "join": "outer",
+    "compat": "no_conflicts",
+    "combine_attrs": _propagate_identical_attrs,
 }
 
 
@@ -685,9 +687,12 @@ def _write_qoi_report(qoi_archive: xarray.DataTree, output: pathlib.Path, plots_
     :param plots_per_page: the number of plots on each page of the output
     """
     qois = [
+        qoi
+        for leaf in qoi_archive.leaves
         # Xarray public API for ``xarray.DataTree.ds`` is an attribute containing ``xarray.core.datatree.DatasetView``.
         # Xarray public API for ``xarray.core.datatree.DatasetView`` does have the ``data_vars`` attribute.
-        qoi for leaf in qoi_archive.leaves for qoi in leaf.ds.data_vars.values() if _can_plot_qoi_tolerance_check(qoi)  # type: ignore[attr-defined]
+        for qoi in leaf.ds.data_vars.values()  # type: ignore[attr-defined]
+        if _can_plot_qoi_tolerance_check(qoi)
     ]
     page_margins = {
         "left": 0.6,  # plot on right half of page because text will go on left side

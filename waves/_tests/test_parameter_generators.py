@@ -2308,8 +2308,10 @@ class TestParameterDistributions:
 
         class HasRequiredAttribute(parameter_generators._ScipyGenerator):
             sampler_class = "dummy"
+
             def _validate(self) -> None:
                 pass
+
             def _generate(self, **kwargs) -> None:
                 pass
 
