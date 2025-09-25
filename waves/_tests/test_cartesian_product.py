@@ -125,7 +125,7 @@ class TestCartesianProduct:
         generate_array = test_generate._samples
         assert numpy.all(generate_array == expected_array)
         for key in test_generate.parameter_study:
-            assert test_generate.parameter_study[key].dtype == expected_types[key]
+            assert test_generate.parameter_study[key].dtype == expected_types[str(key)]
         # Verify that the parameter set name creation method was called
         assert list(test_generate._set_names.values()) == [f"parameter_set{num}" for num in range(len(expected_array))]
         # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
@@ -236,7 +236,7 @@ class TestCartesianProduct:
             generate_array = merged_study._samples
             assert numpy.all(generate_array == expected_array)
             for key in merged_study.parameter_study:
-                assert merged_study.parameter_study[key].dtype == expected_types[key]
+                assert merged_study.parameter_study[key].dtype == expected_types[str(key)]
             consistent_hash_parameter_check(original_study, merged_study)
             self_consistency_checks(merged_study)
 

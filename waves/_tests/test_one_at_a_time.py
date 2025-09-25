@@ -269,7 +269,7 @@ class TestOneAtATime:
         test_generate = OneAtATime(parameter_schema, **kwargs)
         xarray.testing.assert_identical(test_generate.parameter_study, expected_dataset)
         for key in test_generate.parameter_study:
-            assert test_generate.parameter_study[key].dtype == expected_types[key]
+            assert test_generate.parameter_study[key].dtype == expected_types[str(key)]
         # Verify that the parameter set name creation method was called
         # TODO: _set_names is an ordered object (dictionary). Fix test to compare dictionary-to-dictionary instead of
         # implied consistency according to value order.
@@ -359,7 +359,7 @@ class TestOneAtATime:
             generate_array = merged_study._samples
             assert numpy.all(generate_array == expected_array)
             for key in merged_study.parameter_study:
-                assert merged_study.parameter_study[key].dtype == expected_types[key]
+                assert merged_study.parameter_study[key].dtype == expected_types[str(key)]
             consistent_hash_parameter_check(original_study, merged_study)
             self_consistency_checks(merged_study)
 
