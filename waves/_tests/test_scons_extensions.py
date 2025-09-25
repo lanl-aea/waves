@@ -436,7 +436,7 @@ def first_target_builder_factory_test_cases(
         builder factory under test is a good choice.
     :param default_kwargs: Set the default keyword argument values. Expected to be constant as a function of builder
         factory under test.
-    :param default_emitter: The emitter to expect when ``False`` is provided for ``emitter`` keyword argument.
+    :param default_emitter: The emitter to expect when ``None`` is provided for ``emitter`` keyword argument.
     :param expected_node_count: The expected number of target nodes with the default emitter.
 
     :returns: test cases for builder factories based on :meth:`waves.scons_extensions.first_target_builder_factory`
@@ -450,7 +450,7 @@ def first_target_builder_factory_test_cases(
             {},
             [target_file_names[0]],
             default_emitter,
-            False,
+            None,
             expected_node_count,
         ),
         f"{name} different emitter": (
@@ -480,7 +480,7 @@ def first_target_builder_factory_test_cases(
             {},
             [target_file_names[2]],
             default_emitter,
-            False,
+            None,
             expected_node_count,
         ),
         f"{name} task kwargs overrides": (
@@ -500,7 +500,7 @@ def first_target_builder_factory_test_cases(
             },
             [target_file_names[3]],
             default_emitter,
-            False,
+            None,
             expected_node_count,
         ),
     }
@@ -2012,7 +2012,7 @@ def test_builder_factory(
     task_kwargs: dict,
     target: list,
     default_emitter: collections.abc.Callable[[list, list, SCons.Environment.Environment], tuple[list, list]] | None,
-    emitter: collections.abc.Callable[[list, list, SCons.Environment.Environment], tuple[list, list]] | bool,
+    emitter: collections.abc.Callable[[list, list, SCons.Environment.Environment], tuple[list, list]] | None,
     expected_node_count: int,
 ) -> None:
     """Template test for builder factories based on :meth:`waves.scons_extensions.builder_factory`.
@@ -2023,8 +2023,8 @@ def test_builder_factory(
     :param builder_kwargs: Keyword arguments unpacked at the builder instantiation
     :param task_kwargs: Keyword arguments unpacked at the task instantiation
     :param target: Explicit list of targets provided at the task instantiation
-    :param default_emitter: The emitter to expect when ``False`` is provided for ``emitter`` keyword argument.
-    :param emitter: A custom factory emitter. Mostly intended as a pass-through check. Set to ``False`` to avoid
+    :param default_emitter: The emitter to expect when ``None`` is provided for ``emitter`` keyword argument.
+    :param emitter: A custom factory emitter. Mostly intended as a pass-through check. Set to ``None`` to avoid
         providing an emitter argument to the builder factory.
     :param expected_node_count: The expected number of target nodes.
     """
@@ -2040,11 +2040,8 @@ def test_builder_factory(
     )
 
     # Handle additional builder kwargs without changing default behavior
-    expected_emitter = default_emitter
-    emitter_handling = {}
-    if emitter is not False:
-        expected_emitter = emitter
-        emitter_handling.update({"emitter": emitter})
+    expected_emitter = default_emitter if emitter is None else emitter
+    emitter_handling = {} if emitter is None else {"emitter": emitter}
 
     # Test builder object attributes
     factory = getattr(scons_extensions, factory_name)
