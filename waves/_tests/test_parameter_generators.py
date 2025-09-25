@@ -1824,7 +1824,7 @@ class TestParameterGenerator:
             scons_write._scons_write([], [], env)
         mock_write.assert_called_once_with(**expected_kwargs)
 
-    templates = {
+    templates: dict[str, tuple] = {
         "no template": ({}, None, None, ["parameter_set0"]),
         "file template": ({}, "out", None, ["out0"]),
         "set template": ({}, None, "out@number", ["out0"]),
@@ -1920,7 +1920,7 @@ class TestParameterGenerator:
             assert list(template_generator._set_names.values()) == expected
             assert list(template_generator.parameter_study[_settings._set_coordinate_key].values) == expected
 
-    init_write_stdout = {
+    init_write_stdout: dict[str, tuple] = {
         "no-template-1": ({}, None, False, False, [False], 1, 1),
         "no-template-2": ({}, None, True, False, [False], 1, 1),
         "no-template-3": ({}, None, False, True, [False, False], 2, 1),
@@ -1978,7 +1978,7 @@ class TestParameterGenerator:
                 xarray_to_netcdf.assert_not_called()
                 assert stdout_write.call_count == stdout_calls
 
-    init_write_files = {
+    init_write_files: dict[str, tuple] = {
         "template-1": ({}, "out", False, [False], 1, 1),
         "template-2": ({}, "out", False, [False, False], 2, 2),
         "template-3": ({}, "out", False, [True, True], 2, 0),
