@@ -11,10 +11,10 @@ from waves import _parameter_study
 
 def test_read_parameter_schema() -> None:
     # Test STDIN/TexIOWrapper read
-    input_file = io.TextIOWrapper(io.BytesIO(b"{a: [1], b: [2]}"))
+    standard_input = io.TextIOWrapper(io.BytesIO(b"{a: [1], b: [2]}"))
     expected = {"a": [1], "b": [2]}
     with patch("pathlib.Path.open", mock_open()) as mock_file:
-        parameter_schema = _parameter_study.read_parameter_schema(input_file)
+        parameter_schema = _parameter_study.read_parameter_schema(standard_input)
     mock_file.assert_not_called()
     assert parameter_schema == expected
 
