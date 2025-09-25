@@ -241,6 +241,12 @@ class ParameterGenerator(ABC):
         if self.write_meta and self.provided_output_file_template:
             self._write_meta()
 
+        parameter_study_object: dict | xarray.Dataset
+        parameter_study_iterator: collections.abc.ItemsView | xarray.core.groupby.DatasetGroupBy
+        conditional_write_function: (
+            collections.abc.Callable[[pathlib.Path, dict], None]
+            | collections.abc.Callable[[pathlib.Path, xarray.Dataset], None]
+        )
         if output_file_type == "h5":
             parameter_study_object = self.parameter_study
             parameter_study_iterator = parameter_study_object.groupby(_set_coordinate_key)
@@ -282,14 +288,11 @@ class ParameterGenerator(ABC):
     def _write(
         self,
         parameter_study_object: dict | xarray.Dataset,
-        parameter_study_iterator: dict | xarray.core.groupby.DatasetGroupBy,
-        conditional_write_function: collections.abc.Callable[
-            [
-                pathlib.Path,
-                dict | xarray.Dataset,
-            ],
-            None,
-        ],
+        parameter_study_iterator: collections.abc.ItemsView | xarray.core.groupby.DatasetGroupBy,
+        conditional_write_function: (
+            collections.abc.Callable[[pathlib.Path, dict], None]
+            | collections.abc.Callable[[pathlib.Path, xarray.Dataset], None]
+        ),
         dry_run: bool = _settings._default_dry_run,
     ) -> None:
         """Write parameter study formatted output to STDOUT, separate set files, or a single file.
@@ -620,10 +623,12 @@ class _ScipyGenerator(ParameterGenerator, ABC):
 
     def _generate_distribution_samples(
         self,
-        sampler: scipy.stats.qmc.Halton
-        | scipy.stats.qmc.LatinHypercube
-        | scipy.stats.qmc.PoissonDisk
-        | scipy.stats.qmc.Sobol,
+        sampler: (
+            scipy.stats.qmc.Halton
+            | scipy.stats.qmc.LatinHypercube
+            | scipy.stats.qmc.PoissonDisk
+            | scipy.stats.qmc.Sobol
+        ),
         set_count: int,
         parameter_count: int,
     ) -> None:
