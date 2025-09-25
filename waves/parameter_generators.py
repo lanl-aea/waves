@@ -241,6 +241,8 @@ class ParameterGenerator(ABC):
         if self.write_meta and self.provided_output_file_template:
             self._write_meta()
 
+        # Remove (or refactor away) from these complex types
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/812
         parameter_study_object: dict | xarray.Dataset
         parameter_study_iterator: collections.abc.ItemsView | xarray.core.groupby.DatasetGroupBy
         conditional_write_function: (
@@ -285,6 +287,8 @@ class ParameterGenerator(ABC):
             kwargs.update({"output_file_type": env["output_file_type"]})
         self.write(**kwargs)
 
+    # Consolidate (or refactor away) the complex write/_write logic
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/812
     def _write(
         self,
         parameter_study_object: dict | xarray.Dataset,
@@ -308,7 +312,9 @@ class ParameterGenerator(ABC):
                 else f"{parameter_study_object}\n"
             )
             if self.output_file and not dry_run:
-                conditional_write_function(self.output_file, parameter_study_object)
+                # Remove (or refactor away) from this static type checking skip
+                # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/812
+                conditional_write_function(self.output_file, parameter_study_object)  # type: ignore[arg-type]
             elif self.output_file and dry_run:
                 sys.stdout.write(f"{self.output_file.resolve()}\n{output_text}")
             else:
@@ -323,7 +329,9 @@ class ParameterGenerator(ABC):
                     if dry_run:
                         sys.stdout.write(f"{set_path.resolve()}\n{text}")
                     else:
-                        conditional_write_function(set_path, parameters)
+                        # Remove (or refactor away) from this static type checking skip
+                        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/812
+                        conditional_write_function(set_path, parameters)  # type: ignore[arg-type]
 
     def _conditionally_write_dataset(
         self,
