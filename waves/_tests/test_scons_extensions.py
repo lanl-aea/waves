@@ -41,7 +41,7 @@ mock_decodable.get_executor.return_value.get_contents.return_value = b"action si
 mock_not_decodable = Mock()
 mock_not_decodable.__str__ = lambda _self: "mock_node"
 mock_not_decodable.get_executor.return_value.get_contents.return_value = b"\x81action signature string"
-test_print_action_signature_string_cases = {
+test_print_action_signature_string_cases: dict[str, tuple] = {
     "decode-able": (mock_decodable, "action signature string"),
     "not decode-able": (mock_not_decodable, b"\x81action signature string"),
 }
@@ -1202,7 +1202,7 @@ def test_abaqus_solver(
             assert node.env[key] == expected_value
 
 
-test_task_kwarg_emitter_cases = {
+test_task_kwarg_emitter_cases: dict[str, tuple]= {
     "designed use behavior": (
         (["target.out"], ["source.in"], SCons.Environment.Environment(task_kwarg="value")),
         {"required_task_kwarg": "task_kwarg"},
@@ -1285,7 +1285,7 @@ def test_task_kwarg_emitter(
         )
 
 
-abaqus_solver_emitter_factory_cases = {
+abaqus_solver_emitter_factory_cases: dict[str, tuple] = {
     "defaults": {},
     "no defaults": {"suffixes": (".suffix",), "appending_suffixes": (".appending",), "stdout_extension": ".out"},
 }
@@ -1322,7 +1322,7 @@ def test_abaqus_solver_emitter_factory(factory_kwargs: dict) -> None:
         )
 
 
-abaqus_solver_emitter_factory_emitters_cases = {
+abaqus_solver_emitter_factory_emitters_cases: dict[str, tuple] = {
     "datacheck defaults": (
         "abaqus_datacheck_emitter",
         {"suffixes": _abaqus_datacheck_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
@@ -2763,7 +2763,7 @@ def test_parameter_study_sconscript(
         mock_sconscript.assert_called_once_with(*args, **expected)
 
 
-parameter_study_write_cases = {
+parameter_study_write_cases: dict[str, tuple] = {
     "output file": (
         parameter_generators.CartesianProduct({"one": [1, 2]}, output_file="test.h5"),
         {},
@@ -2818,7 +2818,7 @@ def test_parameter_study_write(
         assert [str(target) for target in targets] == expected
 
 
-test_qoi_pseudo_builder_cases = {
+test_qoi_pseudo_builder_cases: dict[str, tuple] = {
     "default call": (
         {},
         {},
