@@ -361,7 +361,7 @@ def check_action_string(
         assert str(node.executor.action_list[0]) == expected_string
 
 
-def check_abaqus_solver_targets(nodes: SCons.Node.NodeList, solver: str, stem: str, suffixes: list[str]) -> None:
+def check_abaqus_solver_targets(nodes: SCons.Node.NodeList, solver: str | None, stem: str, suffixes: list[str]) -> None:
     """Verify the expected action string against a builder's target nodes.
 
     :param nodes: Target node list returned by a builder
