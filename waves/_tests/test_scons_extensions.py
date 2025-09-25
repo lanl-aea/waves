@@ -1285,7 +1285,7 @@ def test_task_kwarg_emitter(
         )
 
 
-abaqus_solver_emitter_factory_cases: dict[str, tuple] = {
+abaqus_solver_emitter_factory_cases: dict[str, dict] = {
     "defaults": {},
     "no defaults": {"suffixes": (".suffix",), "appending_suffixes": (".appending",), "stdout_extension": ".out"},
 }
