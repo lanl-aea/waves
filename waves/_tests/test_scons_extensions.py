@@ -389,9 +389,9 @@ def check_abaqus_solver_targets(nodes: SCons.Node.NodeList, solver: str | None, 
 def first_target_builder_factory_test_cases(
     name: str,
     default_kwargs: dict,
-    default_emitter: collections.abc.Callable[
-        [list, list, SCons.Environment.Environment], tuple[list, list]
-    ] | None = scons_extensions.first_target_emitter,
+    default_emitter: (
+        collections.abc.Callable[[list, list, SCons.Environment.Environment], tuple[list, list]] | None
+    ) = scons_extensions.first_target_emitter,
     expected_node_count: int = 2,
 ) -> dict:
     """Return template tests for builder factories based on :meth:`waves.scons_extensions.first_target_builder_factory`.
@@ -1204,7 +1204,7 @@ def test_abaqus_solver(
             assert node.env[key] == expected_value
 
 
-test_task_kwarg_emitter_cases: dict[str, tuple]= {
+test_task_kwarg_emitter_cases: dict[str, tuple] = {
     "designed use behavior": (
         (["target.out"], ["source.in"], SCons.Environment.Environment(task_kwarg="value")),
         {"required_task_kwarg": "task_kwarg"},
