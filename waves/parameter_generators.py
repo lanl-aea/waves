@@ -1418,7 +1418,7 @@ class SALibSampler(ParameterGenerator, ABC):
         super()._generate()
 
 
-def _calculate_set_hash(parameter_names: list[str], set_samples: numpy.ndarray) -> str:
+def _calculate_set_hash(parameter_names: typing.Sequence[str], set_samples: typing.Sequence) -> str:
     """Calculate the unique, repeatable parameter set content hash for a single parameter set.
 
     :param parameter_names: list of parameter names in matching order with parameter samples
@@ -1430,8 +1430,8 @@ def _calculate_set_hash(parameter_names: list[str], set_samples: numpy.ndarray) 
     """
     if len(parameter_names) != len(set_samples):
         raise RuntimeError("Expected length of parameter names to match number of sample values")
-    set_samples = numpy.array(set_samples, dtype=object)
-    sorted_contents = sorted(zip(parameter_names, set_samples, strict=True))
+    set_samples_array = numpy.array(set_samples, dtype=object)
+    sorted_contents = sorted(zip(parameter_names, set_samples_array, strict=True))
     set_catenation = "\n".join(f"{name}:{sample!r}" for name, sample in sorted_contents)
     set_hash = hashlib.md5(set_catenation.encode("utf-8"), usedforsecurity=False).hexdigest()
     return set_hash
