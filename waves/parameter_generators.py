@@ -494,7 +494,7 @@ class ParameterGenerator(ABC):
         """
         parameter_study_dictionary = {}
         for set_name, parameters in self.parameter_study.groupby(_set_coordinate_key):
-            parameter_dict = {key: array.values.item() for key, array in parameters.items()}
+            parameter_dict = {str(key): array.values.item() for key, array in parameters.items()}
             parameter_study_dictionary[str(set_name)] = parameter_dict
         return parameter_study_dictionary
 
@@ -1494,7 +1494,7 @@ def _verify_parameter_study(parameter_study: xarray.Dataset) -> None:
             raise RuntimeError(f"Parameter study key '{key}' missing dimension '{_set_coordinate_key}'")
 
     # Check for parameter set hash values against parameter set name/content
-    parameter_names = list(parameter_study.keys())
+    parameter_names = [str(key) for key in parameter_study]
     file_hashes = [str(set_hash) for set_hash in parameter_study[_hash_coordinate_key].values]
     samples = _parameter_study_to_numpy(parameter_study)
     calculated_hashes = _calculate_set_hashes(parameter_names, samples)
