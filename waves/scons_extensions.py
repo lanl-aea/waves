@@ -627,7 +627,7 @@ def append_env_path(
 
 def find_program(
     env: SCons.Environment.Environment,
-    names: typing.Sequence[str],
+    names: collections.abc.Sequence[str],
 ) -> str | None:
     """Search for a program from a list of possible program names.
 
@@ -661,7 +661,7 @@ def find_program(
 
 def add_program(
     env: SCons.Environment.Environment,
-    names: typing.Sequence[str],
+    names: collections.abc.Sequence[str],
 ) -> str | None:
     """Search for a program from a list of possible program names. Add first found to system ``PATH``.
 
@@ -690,7 +690,7 @@ def add_program(
 
 def add_cubit(
     env: SCons.Environment.Environment,
-    names: typing.Sequence[str],
+    names: collections.abc.Sequence[str],
 ) -> str | None:
     """Modify environment variables with the paths required to ``import cubit`` in a Python3 environment.
 
@@ -725,7 +725,7 @@ def add_cubit(
 
 def add_cubit_python(
     env: SCons.Environment.Environment,
-    names: typing.Sequence[str],
+    names: collections.abc.Sequence[str],
 ) -> str | None:
     """Modify environment variables with the paths required to ``import cubit`` with the Cubit Python interpreter.
 
@@ -823,7 +823,7 @@ def shell_environment(
 
 
 def construct_action_list(
-    actions: typing.Sequence[str],
+    actions: collections.abc.Sequence[str],
     prefix: str = "${action_prefix}",
     suffix: str = "",
 ) -> typing.Iterable[str]:

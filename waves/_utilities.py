@@ -171,7 +171,7 @@ def find_cubit_bin(options: typing.Iterable[str], bin_directory: str | None = No
     return cubit_bin
 
 
-def find_cubit_python(options: typing.Sequence[str], python_command: str = "python3*") -> pathlib.Path:
+def find_cubit_python(options: collections.abc.Sequence[str], python_command: str = "python3*") -> pathlib.Path:
     """Search for the Cubit Python interpreter given a few options for the Cubit executable.
 
     Recommend first checking to see if cubit will import.
@@ -369,7 +369,9 @@ def warn_only_once(function: collections.abc.Callable) -> collections.abc.Callab
     return wrapper
 
 
-def _get_abaqus_restart_extensions(solver: typing.Literal["standard", "explicit"], processes: int = 1) -> tuple[str, ...]:
+def _get_abaqus_restart_extensions(
+    solver: typing.Literal["standard", "explicit"], processes: int = 1
+) -> tuple[str, ...]:
     """Determine Abaqus restart files based on solver type and number of MPI processes.
 
     :param solver: Abaqus solver.
