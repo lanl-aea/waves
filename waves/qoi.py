@@ -38,7 +38,15 @@ def _propagate_identical_attrs(all_attrs: collections.abc.Sequence[dict], contex
     return identical_pairs
 
 
-_merge_constants = {"join": "outer", "compat": "no_conflicts", "combine_attrs": _propagate_identical_attrs}
+class _MergeConstants(typing.TypedDict):
+    join: typing.Literal["outer"]
+    compat: typing.Literal["no_conflicts"]
+    combine_attrs: typing.Callable
+
+
+_merge_constants: _MergeConstants = {
+    "join": "outer", "compat": "no_conflicts", "combine_attrs": _propagate_identical_attrs
+}
 
 
 def create_qoi(
