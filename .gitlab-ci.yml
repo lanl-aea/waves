@@ -42,6 +42,14 @@ aea-style-guide:
   variables:
     environment_file: "style.yml"
 
+aea-static-type-check:
+  extends:
+    - .nix-job-environment
+    - .static-type-check
+  stage: test
+  variables:
+    environment_file: "static-type-check.yml"
+
 aea-conda-build-internal:
   extends:
     - .nix-job-environment

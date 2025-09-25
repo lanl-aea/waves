@@ -77,21 +77,25 @@ class ParameterGenerator(ABC):
         self,
         parameter_schema: dict,
         output_file_template: str | None = _settings._default_output_file_template,
-        output_file: str | None = _settings._default_output_file,
+        output_file: str | pathlib.Path | None = _settings._default_output_file,
         output_file_type: _settings._allowable_output_file_typing = _settings._default_output_file_type_api,
         set_name_template: str = _settings._default_set_name_template,
-        previous_parameter_study: str | None = _settings._default_previous_parameter_study,
+        previous_parameter_study: str | pathlib.Path | None = _settings._default_previous_parameter_study,
         require_previous_parameter_study: bool = _settings._default_require_previous_parameter_study,
         overwrite: bool = _settings._default_overwrite,
         write_meta: bool = _settings._default_write_meta,
         **kwargs,
     ) -> None:
         self.parameter_schema = parameter_schema
-        self.output_file_template = output_file_template
-        self.output_file = output_file
+        self.output_file_template = (
+            _utilities._AtSignTemplate(output_file_template) if output_file_template is not None else None
+        )
+        self.output_file = pathlib.Path(output_file) if output_file is not None else None
         self.output_file_type = output_file_type
         self.set_name_template = _utilities._AtSignTemplate(set_name_template)
-        self.previous_parameter_study = previous_parameter_study
+        self.previous_parameter_study = (
+            pathlib.Path(previous_parameter_study) if previous_parameter_study is not None else None
+        )
         self.require_previous_parameter_study = require_previous_parameter_study
         self.overwrite = overwrite
         self.write_meta = write_meta
@@ -108,36 +112,44 @@ class ParameterGenerator(ABC):
                 f"The 'output_file_type' must be one of {_settings._allowable_output_file_types}"
             )
 
-        if self.output_file:
-            self.output_file = pathlib.Path(self.output_file)
-
-        if self.previous_parameter_study:
-            self.previous_parameter_study = pathlib.Path(self.previous_parameter_study)
-            if not self.previous_parameter_study.is_file():
-                message = f"Previous parameter study file '{self.previous_parameter_study}' does not exist."
-                if self.require_previous_parameter_study:
-                    raise RuntimeError(message)
-                else:
-                    warnings.warn(message)
+        if self.previous_parameter_study is not None and not self.previous_parameter_study.is_file():
+            message = f"Previous parameter study file '{self.previous_parameter_study}' does not exist."
+            if self.require_previous_parameter_study:
+                raise RuntimeError(message)
+            else:
+                warnings.warn(message)
 
         # Override set name template if output name template is provided.
         self.provided_output_file_template = False
-        if self.output_file_template:
+        if self.output_file_template is not None:
             self.provided_output_file_template = True
             # Append the set number placeholder if missing
-            if f"{_settings._template_placeholder}" not in self.output_file_template:
-                self.output_file_template = f"{self.output_file_template}{_settings._template_placeholder}"
-            self.output_file_template = _utilities._AtSignTemplate(self.output_file_template)
+            output_file_template_string = self.output_file_template.safe_substitute()
+            if _settings._template_placeholder not in output_file_template_string:
+                self.output_file_template = _utilities._AtSignTemplate(
+                    f"{output_file_template_string}{_settings._template_placeholder}"
+                )
             self.set_name_template = self.output_file_template
 
         # Infer output directory from output file template if provided. Set to PWD otherwise.
-        if self.output_file_template:
+        if self.output_file_template is not None:
             self.output_directory = pathlib.Path(self.output_file_template.safe_substitute()).parent
         else:
             self.output_directory = pathlib.Path.cwd()
         self.parameter_study_meta_file = self.output_directory / _settings._parameter_study_meta_file
 
+        # Help mypy determine types of attributes set in semi-private function calls
+        # TODO: make these return values from _validate and assign directly in __init__?
+        self._parameter_names: list[str]
         self._validate()
+
+        # Help mypy determine types of attributes set in semi-private function calls
+        # TODO: make ``parameter_study`` a return values from _generate and assign directly in __init__, dropping
+        # intermediate working variables?
+        self._samples: numpy.ndarray
+        self._set_hashes: list[str]
+        self._set_names: dict[str, str]
+        self.parameter_study: xarray.Dataset
         self._generate(**kwargs)
 
     @abstractmethod
@@ -155,7 +167,6 @@ class ParameterGenerator(ABC):
            # Work unique to the parameter generator schema. Example matches CartesianProduct schema.
            self._parameter_names = list(self.parameter_schema.keys())
         """
-        pass
 
     @abstractmethod
     def _generate(self, **kwargs) -> None:
@@ -197,7 +208,7 @@ class ParameterGenerator(ABC):
     def write(
         self,
         output_file_type: _settings._allowable_output_file_typing | None = None,
-        dry_run: bool | None = _settings._default_dry_run,
+        dry_run: bool = _settings._default_dry_run,
     ) -> None:
         """Write the parameter study to STDOUT or an output file.
 
@@ -229,6 +240,14 @@ class ParameterGenerator(ABC):
         if self.write_meta and self.provided_output_file_template:
             self._write_meta()
 
+        # Remove (or refactor away) from these complex types
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/812
+        parameter_study_object: dict | xarray.Dataset
+        parameter_study_iterator: collections.abc.ItemsView | xarray.core.groupby.DatasetGroupBy
+        conditional_write_function: (
+            collections.abc.Callable[[pathlib.Path, dict], None]
+            | collections.abc.Callable[[pathlib.Path, xarray.Dataset], None]
+        )
         if output_file_type == "h5":
             parameter_study_object = self.parameter_study
             parameter_study_iterator = parameter_study_object.groupby(_set_coordinate_key)
@@ -267,16 +286,16 @@ class ParameterGenerator(ABC):
             kwargs.update({"output_file_type": env["output_file_type"]})
         self.write(**kwargs)
 
+    # Consolidate (or refactor away) the complex write/_write logic
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/812
     def _write(
         self,
         parameter_study_object: dict | xarray.Dataset,
-        parameter_study_iterator: dict | xarray.core.groupby.DatasetGroupBy,
-        conditional_write_function: collections.abc.Callable[
-            [
-                pathlib.Path,
-            ],
-            None,
-        ],
+        parameter_study_iterator: collections.abc.ItemsView | xarray.core.groupby.DatasetGroupBy,
+        conditional_write_function: (
+            collections.abc.Callable[[pathlib.Path, dict], None]
+            | collections.abc.Callable[[pathlib.Path, xarray.Dataset], None]
+        ),
         dry_run: bool = _settings._default_dry_run,
     ) -> None:
         """Write parameter study formatted output to STDOUT, separate set files, or a single file.
@@ -292,7 +311,9 @@ class ParameterGenerator(ABC):
                 else f"{parameter_study_object}\n"
             )
             if self.output_file and not dry_run:
-                conditional_write_function(self.output_file, parameter_study_object)
+                # Remove (or refactor away) from this static type checking skip
+                # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/812
+                conditional_write_function(self.output_file, parameter_study_object)  # type: ignore[arg-type]
             elif self.output_file and dry_run:
                 sys.stdout.write(f"{self.output_file.resolve()}\n{output_text}")
             else:
@@ -307,7 +328,9 @@ class ParameterGenerator(ABC):
                     if dry_run:
                         sys.stdout.write(f"{set_path.resolve()}\n{text}")
                     else:
-                        conditional_write_function(set_path, parameters)
+                        # Remove (or refactor away) from this static type checking skip
+                        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/812
+                        conditional_write_function(set_path, parameters)  # type: ignore[arg-type]
 
     def _conditionally_write_dataset(
         self,
@@ -470,7 +493,7 @@ class ParameterGenerator(ABC):
         """
         parameter_study_dictionary = {}
         for set_name, parameters in self.parameter_study.groupby(_set_coordinate_key):
-            parameter_dict = {key: array.values.item() for key, array in parameters.items()}
+            parameter_dict = {str(key): array.values.item() for key, array in parameters.items()}
             parameter_study_dictionary[str(set_name)] = parameter_dict
         return parameter_study_dictionary
 
@@ -511,6 +534,17 @@ class ParameterGenerator(ABC):
 
 
 class _ScipyGenerator(ParameterGenerator, ABC):
+    sampler_class: str = ""
+
+    def __init__(self, *args, **kwargs) -> None:
+        """Require concrete child classes to set the ``self.sampler_class`` attribute to a string.
+
+        :raises TypeError: if the ``self.sampler_class`` attribute is not overridden
+        """
+        if not self.sampler_class:
+            raise ValueError("_ScipyGenerator subclasses must set ``sampler_class`` to a non-empty string")
+        super().__init__(*args, **kwargs)
+
     def _validate(self) -> None:
         """Validate the parameter distribution schema. Executed by class initiation.
 
@@ -596,10 +630,12 @@ class _ScipyGenerator(ParameterGenerator, ABC):
 
     def _generate_distribution_samples(
         self,
-        sampler: scipy.stats.qmc.Halton
-        | scipy.stats.qmc.LatinHypercube
-        | scipy.stats.qmc.PoissonDisk
-        | scipy.stats.qmc.Sobol,
+        sampler: (
+            scipy.stats.qmc.Halton
+            | scipy.stats.qmc.LatinHypercube
+            | scipy.stats.qmc.PoissonDisk
+            | scipy.stats.qmc.Sobol
+        ),
         set_count: int,
         parameter_count: int,
     ) -> None:
@@ -1381,7 +1417,7 @@ class SALibSampler(ParameterGenerator, ABC):
         super()._generate()
 
 
-def _calculate_set_hash(parameter_names: list[str], set_samples: numpy.ndarray) -> str:
+def _calculate_set_hash(parameter_names: collections.abc.Sequence[str], set_samples: collections.abc.Sequence) -> str:
     """Calculate the unique, repeatable parameter set content hash for a single parameter set.
 
     :param parameter_names: list of parameter names in matching order with parameter samples
@@ -1393,8 +1429,8 @@ def _calculate_set_hash(parameter_names: list[str], set_samples: numpy.ndarray) 
     """
     if len(parameter_names) != len(set_samples):
         raise RuntimeError("Expected length of parameter names to match number of sample values")
-    set_samples = numpy.array(set_samples, dtype=object)
-    sorted_contents = sorted(zip(parameter_names, set_samples, strict=True))
+    set_samples_array = numpy.array(set_samples, dtype=object)
+    sorted_contents = sorted(zip(parameter_names, set_samples_array, strict=True))
     set_catenation = "\n".join(f"{name}:{sample!r}" for name, sample in sorted_contents)
     set_hash = hashlib.md5(set_catenation.encode("utf-8"), usedforsecurity=False).hexdigest()
     return set_hash
@@ -1457,7 +1493,7 @@ def _verify_parameter_study(parameter_study: xarray.Dataset) -> None:
             raise RuntimeError(f"Parameter study key '{key}' missing dimension '{_set_coordinate_key}'")
 
     # Check for parameter set hash values against parameter set name/content
-    parameter_names = list(parameter_study.keys())
+    parameter_names = [str(key) for key in parameter_study]
     file_hashes = [str(set_hash) for set_hash in parameter_study[_hash_coordinate_key].values]
     samples = _parameter_study_to_numpy(parameter_study)
     calculated_hashes = _calculate_set_hashes(parameter_names, samples)

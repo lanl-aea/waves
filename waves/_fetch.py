@@ -288,7 +288,9 @@ def extend_requested_paths(
         )
     else:
         for x in range(0, tutorial + 1):
-            requested_paths.extend(_settings._tutorial_paths[x])
+            # Type is constrained by the ChoicesError. Unsure how to convince mypy that int will always be constrained
+            # by the Literal[int, ...] checks.
+            requested_paths.extend(_settings._tutorial_paths[x])  # type: ignore[index]
     return requested_paths
 
 

@@ -90,7 +90,7 @@ conditional_copy_input = {
     ids=conditional_copy_input.keys(),
 )
 def test_conditional_copy(
-    copy_tuples: tuple[tuple[pathlib.Path, pathlib.Path]],
+    copy_tuples: list[tuple[pathlib.Path, pathlib.Path]],
     exists_side_effect: list[bool],
     filecmp_side_effect: list[bool],
     copyfile_call: tuple[pathlib.Path, pathlib.Path],
@@ -221,7 +221,7 @@ def test_available_files(
             mock_rglob.assert_not_called()
 
 
-build_source_files_input = {
+build_source_files_input: dict[str, tuple] = {
     "one file not matched": (
         "/path/to/source",
         ["dummy.file1"],
@@ -290,7 +290,8 @@ def test_longest_common_path_prefix(
     outcome: contextlib.nullcontext | pytest.RaisesExc,
 ) -> None:
     with outcome:
-        path_prefix = _fetch.longest_common_path_prefix(file_list)
+        # Ignore intentional type errors in test cases
+        path_prefix = _fetch.longest_common_path_prefix(file_list)  # type: ignore[arg-type]
         assert path_prefix == expected_path
 
 
@@ -377,9 +378,8 @@ def test_print_list() -> None:
             ]
         )
 
-    nondefault_args = {"prefix": " ", "stream": sys.stderr}
     with patch("builtins.print") as mock_print:
-        _fetch.print_list(test_list, **nondefault_args)
+        _fetch.print_list(test_list, prefix=" ", stream=sys.stderr)
         mock_print.assert_has_calls(
             [
                 call(" one", file=sys.stderr),
@@ -400,7 +400,7 @@ def test_recursive_copy(
     source_files: list[pathlib.Path],
     source_tree: list[pathlib.Path],
     destination_tree: list[pathlib.Path],
-    tutorial: int | None,
+    tutorial: _settings._allowable_tutorial_numbers_typing | None,
 ) -> None:
     # Dummy modsim_template tree
     copy_tuples = list(zip(source_tree, destination_tree, strict=True))
@@ -564,4 +564,5 @@ def test_extend_requested_paths() -> None:
 
     # testing key that does not exist
     with pytest.raises(ChoicesError):
-        _fetch.extend_requested_paths([], "shouldRaiseError")
+        # Intentional arg-type error for testing
+        _fetch.extend_requested_paths([], "shouldRaiseError")  # type: ignore[arg-type]

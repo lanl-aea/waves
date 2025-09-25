@@ -38,7 +38,17 @@ def _propagate_identical_attrs(all_attrs: collections.abc.Sequence[dict], contex
     return identical_pairs
 
 
-_merge_constants = {"join": "outer", "compat": "no_conflicts", "combine_attrs": _propagate_identical_attrs}
+class _MergeConstants(typing.TypedDict):
+    join: typing.Literal["outer"]
+    compat: typing.Literal["no_conflicts"]
+    combine_attrs: typing.Callable
+
+
+_merge_constants: _MergeConstants = {
+    "join": "outer",
+    "compat": "no_conflicts",
+    "combine_attrs": _propagate_identical_attrs,
+}
 
 
 def create_qoi(
@@ -330,8 +340,8 @@ def _node_path(node: xarray.DataTree) -> str:
     return node.path
 
 
-def _qoi_group(qoi: xarray.Dataset) -> str:
-    """Return ``"group"`` attribute of a QOI (xarray.Dataset)."""
+def _qoi_group(qoi: xarray.DataArray) -> str:
+    """Return ``"group"`` attribute of a :meth:`.create_qoi` QOI."""
     return qoi.attrs["group"]
 
 
@@ -448,7 +458,8 @@ def _merge_qoi_archives(qoi_archives: typing.Iterable[xarray.DataTree]) -> xarra
     # Group by datatree node path, i.e. the QOI group
     for group, qois in itertools.groupby(sorted(leaves, key=_node_path), key=_node_path):
         # Merge dataset as a node in the DataTree
-        merged_archive[group] = xarray.merge((node.ds for node in qois), **_merge_constants)
+        # Xarray public API for ``xarray.DataTree.ds`` is an attribute containing ``xarray.core.datatree.DatasetView``.
+        merged_archive[group] = xarray.merge((node.ds for node in qois), **_merge_constants)  # type: ignore[misc]
     return merged_archive
 
 
@@ -676,7 +687,12 @@ def _write_qoi_report(qoi_archive: xarray.DataTree, output: pathlib.Path, plots_
     :param plots_per_page: the number of plots on each page of the output
     """
     qois = [
-        qoi for leaf in qoi_archive.leaves for qoi in leaf.ds.data_vars.values() if _can_plot_qoi_tolerance_check(qoi)
+        qoi
+        for leaf in qoi_archive.leaves
+        # Xarray public API for ``xarray.DataTree.ds`` is an attribute containing ``xarray.core.datatree.DatasetView``.
+        # Xarray public API for ``xarray.core.datatree.DatasetView`` does have the ``data_vars`` attribute.
+        for qoi in leaf.ds.data_vars.values()  # type: ignore[attr-defined]
+        if _can_plot_qoi_tolerance_check(qoi)
     ]
     page_margins = {
         "left": 0.6,  # plot on right half of page because text will go on left side
@@ -735,7 +751,8 @@ def _plot_scalar_qoi_history(
     axes.scatter(qoi.date, qoi.sel(value_type="calculated"))
     axes.plot(qoi.date, qoi.sel(value_type="lower_limit"), "--")
     axes.plot(qoi.date, qoi.sel(value_type="upper_limit"), "--")
-    axes.set_xlim((date_min, date_max))
+    # Package matplotlib type annotations do not support datetime, but documentation does.
+    axes.set_xlim((date_min, date_max))  # type: ignore[arg-type]
     axes.set_title(name)
 
 
@@ -753,7 +770,9 @@ def _qoi_history_report(
     qois = [
         qoi.sortby("date")
         for leaf in qoi_archive.leaves
-        for qoi in leaf.ds.data_vars.values()
+        # Xarray public API for ``xarray.DataTree.ds`` is an attribute containing ``xarray.core.datatree.DatasetView``.
+        # Xarray public API for ``xarray.core.datatree.DatasetView`` does have the ``data_vars`` attribute.
+        for qoi in leaf.ds.data_vars.values()  # type: ignore[attr-defined]
         if _can_plot_scalar_qoi_history(qoi)
     ]
     plotting_kwargs = {"date_min": min(qoi.date.min() for qoi in qois), "date_max": max(qoi.date.max() for qoi in qois)}

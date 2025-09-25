@@ -15,7 +15,6 @@ dependencies:
   - pyyaml
   - salib >=1.4.6
   - scipy >=1.7
-  - scons >=4
   - scons >=4.6
   - setuptools >=77
   - setuptools_scm >=8

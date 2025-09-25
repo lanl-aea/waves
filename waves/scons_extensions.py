@@ -572,7 +572,7 @@ def substitution_syntax(
 def check_program(
     env: SCons.Environment.Environment,
     prog_name: str,
-) -> str:
+) -> str | None:
     """Return the absolute path of the requested program or ``None``.
 
     Replacement for `SCons CheckProg`_ like behavior without an SCons configure object.
@@ -597,7 +597,7 @@ def check_program(
 
 def append_env_path(
     env: SCons.Environment.Environment,
-    program: str,
+    program: str | pathlib.Path,
 ) -> None:
     """Append SCons contruction environment ``PATH`` with the program's parent directory.
 
@@ -627,7 +627,7 @@ def append_env_path(
 
 def find_program(
     env: SCons.Environment.Environment,
-    names: typing.Iterable[str],
+    names: collections.abc.Sequence[str],
 ) -> str | None:
     """Search for a program from a list of possible program names.
 
@@ -653,7 +653,7 @@ def find_program(
     program_paths = [check_program(env, name) for name in names]
     # Return first non-None path. Default to None if no program path was found.
     first_found_path = next((path for path in program_paths if path is not None), None)
-    if first_found_path:
+    if first_found_path is not None:
         first_found_path = str(_utilities._quote_spaces_in_path(first_found_path))
 
     return first_found_path
@@ -661,8 +661,8 @@ def find_program(
 
 def add_program(
     env: SCons.Environment.Environment,
-    names: typing.Iterable[str],
-) -> str:
+    names: collections.abc.Sequence[str],
+) -> str | None:
     """Search for a program from a list of possible program names. Add first found to system ``PATH``.
 
     Returns the absolute path of the first program name found. Appends ``PATH`` with first program's parent directory
@@ -690,8 +690,8 @@ def add_program(
 
 def add_cubit(
     env: SCons.Environment.Environment,
-    names: typing.Iterable[str],
-) -> str:
+    names: collections.abc.Sequence[str],
+) -> str | None:
     """Modify environment variables with the paths required to ``import cubit`` in a Python3 environment.
 
     Returns the absolute path of the first program name found. Appends ``PATH`` with first program's parent directory if
@@ -725,8 +725,8 @@ def add_cubit(
 
 def add_cubit_python(
     env: SCons.Environment.Environment,
-    names: typing.Iterable[str],
-) -> str:
+    names: collections.abc.Sequence[str],
+) -> str | None:
     """Modify environment variables with the paths required to ``import cubit`` with the Cubit Python interpreter.
 
     Returns the absolute path of the first Cubit Python intepreter found. Appends ``PATH`` with Cubit Python parent
@@ -749,11 +749,22 @@ def add_cubit_python(
 
     :return: Absolute path of the Cubit Python intepreter. None if none of the names are found.
     """
-    first_found_path = find_program(env, names)
-    cubit_python = _utilities.find_cubit_python([first_found_path])
+    # Search for Cubit executable
+    cubit_executable = find_program(env, names)
+    if cubit_executable is None:
+        return None
+
+    # Search for Cubit Python interpretter
+    cubit_python: str | None = None
+    try:
+        cubit_python = str(_utilities.find_cubit_python([cubit_executable]))
+    except FileNotFoundError:
+        return None
+
+    # Search for Cubit Python bin
     cubit_python = add_program(env, [cubit_python])
-    if cubit_python:
-        cubit_bin = _utilities.find_cubit_bin([first_found_path])
+    if cubit_python is not None:
+        cubit_bin = _utilities.find_cubit_bin([cubit_executable])
         env.PrependENVPath("PYTHONPATH", str(cubit_bin))
     return cubit_python
 
@@ -812,7 +823,7 @@ def shell_environment(
 
 
 def construct_action_list(
-    actions: typing.Iterable[str],
+    actions: collections.abc.Sequence[str],
     prefix: str = "${action_prefix}",
     suffix: str = "",
 ) -> typing.Iterable[str]:
@@ -838,7 +849,8 @@ def construct_action_list(
     try:
         iterator = iter(actions)
     except TypeError:
-        iterator = iter([actions])
+        # Explicit conversion to expected argument type. Do not enforce static type checking on type conversion.
+        iterator = iter([actions])  # type: ignore[list-item]
     if prefix:
         prefix = prefix + " "
     if suffix:
@@ -1507,13 +1519,12 @@ def abaqus_solver(
         "${action_prefix} ${program} -information environment ${environment_suffix}",
         "${action_prefix} ${program} ${required} ${abaqus_options} ${action_suffix}",
     ]
-    if emitter:
-        emitter = emitter.lower()
-    if emitter == "standard":
+    emitter_normalized = emitter.lower() if emitter is not None else None
+    if emitter_normalized == "standard":
         abaqus_emitter = _abaqus_standard_solver_emitter
-    elif emitter == "explicit":
+    elif emitter_normalized == "explicit":
         abaqus_emitter = _abaqus_explicit_solver_emitter
-    elif emitter == "datacheck":
+    elif emitter_normalized == "datacheck":
         abaqus_emitter = _abaqus_datacheck_solver_emitter
     else:
         abaqus_emitter = _abaqus_solver_emitter
@@ -2143,8 +2154,8 @@ class AbaqusPseudoBuilder:
             env.Abaqus(job='simulation_1', cpus=4)
         """
         # Initialize with empty arguments for AbaqusSolver builder
-        sources = []
-        targets = []
+        sources: list[str] = []
+        targets: list[str] = []
         options = ""
 
         # Specify job name
@@ -2265,7 +2276,7 @@ def copy_substfile(
     env: SCons.Environment.Environment,
     source_list: list,
     substitution_dictionary: dict | None = None,
-    build_subdirectory: str = ".",
+    build_subdirectory: str | pathlib.Path = ".",
     symlink: bool = False,
 ) -> SCons.Node.NodeList:
     """Pseudo-builder to copy source list to build directory and perform template substitutions on ``*.in`` filenames.
@@ -2642,8 +2653,8 @@ def _abaqus_extract_emitter(
 
     :return: target, source
     """
-    odb_file = pathlib.Path(source[0].path).name
-    odb_file = pathlib.Path(odb_file)
+    odb_file_name = pathlib.Path(source[0].path).name
+    odb_file = pathlib.Path(odb_file_name)
     build_subdirectory = _build_subdirectory(target)
     if not target or pathlib.Path(str(target[0])).suffix != ".h5":
         target.insert(0, str(build_subdirectory / odb_file.with_suffix(".h5")))
@@ -3888,7 +3899,7 @@ def parameter_study_task(
 def parameter_study_sconscript(
     env: SCons.Environment.Environment,
     *args,
-    variant_dir: str | None = None,
+    variant_dir: str | pathlib.Path | None = None,
     exports: dict | None = None,
     study: dict | parameter_generators.ParameterGenerator | None = None,
     set_name: str = "",
@@ -3992,7 +4003,7 @@ def parameter_study_sconscript(
     def _variant_subdirectory(
         variant_directory: pathlib.Path | None,
         subdirectory: str,
-        subdirectories: bool = subdirectories,
+        subdirectories: bool,
     ) -> pathlib.Path | None:
         """Determine the variant subdirectory.
 
@@ -4002,19 +4013,17 @@ def parameter_study_sconscript(
 
         :returns: variant directory
         """
-        if subdirectories:
-            if variant_directory is not None:
-                build_directory = variant_directory / subdirectory
-            else:
-                build_directory = pathlib.Path(subdirectory)
+        if subdirectories and variant_directory is not None:
+            return variant_directory / subdirectory
+        elif subdirectories:
+            return pathlib.Path(subdirectory)
         else:
-            build_directory = variant_directory
-        return build_directory
+            return variant_directory
 
     if isinstance(study, parameter_generators.ParameterGenerator):
         for set_name, parameters in study.parameter_study_to_dict().items():
             exports.update({"set_name": set_name, "parameters": parameters})
-            build_directory = _variant_subdirectory(variant_dir, set_name)
+            build_directory = _variant_subdirectory(variant_dir, set_name, subdirectories)
             sconscript_output.append(env.SConscript(*args, variant_dir=build_directory, exports=exports, **kwargs))
     elif isinstance(study, dict):
         exports.update({"parameters": study})
@@ -4253,7 +4262,7 @@ class WAVESEnvironment(SConsEnvironment):
         """
         return print_build_failures(self, *args, **kwargs)
 
-    def CheckProgram(self, *args, **kwargs) -> str:  # noqa: N802
+    def CheckProgram(self, *args, **kwargs) -> str | None:  # noqa: N802
         """Call :meth:`waves.scons_extensions.check_program` as a construction environment method.
 
         When using this environment method, do not provide the first ``env`` argument
@@ -4267,21 +4276,21 @@ class WAVESEnvironment(SConsEnvironment):
         """
         return find_program(self, *args, **kwargs)
 
-    def AddProgram(self, *args, **kwargs) -> str:  # noqa: N802
+    def AddProgram(self, *args, **kwargs) -> str | None:  # noqa: N802
         """Call :meth:`waves.scons_extensions.add_program` as a construction environment method.
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return add_program(self, *args, **kwargs)
 
-    def AddCubit(self, *args, **kwargs) -> str:  # noqa: N802
+    def AddCubit(self, *args, **kwargs) -> str | None:  # noqa: N802
         """Call :meth:`waves.scons_extensions.add_cubit` as a construction environment method.
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return add_cubit(self, *args, **kwargs)
 
-    def AddCubitPython(self, *args, **kwargs) -> str:  # noqa: N802
+    def AddCubitPython(self, *args, **kwargs) -> str | None:  # noqa: N802
         """Call :meth:`waves.scons_extensions.add_cubit_python` as a construction environment method.
 
         When using this environment method, do not provide the first ``env`` argument

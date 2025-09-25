@@ -1,0 +1,20 @@
+channels:
+  - conda-forge
+  - nodefaults
+
+dependencies:
+  - python
+  - h5netcdf
+  - h5py
+  - matplotlib-base
+  - mypy
+  - networkx
+  - numpy
+  - pytest >=6
+  - pyyaml
+  - salib >=1.4.6
+  - scipy >=1.7
+  - scons >=4.6
+  - setuptools >=77
+  - setuptools_scm >=8
+  - xarray >=2024.10.0

@@ -55,7 +55,7 @@ def set_name_substitution(
     elif isinstance(original, pathlib.Path):
         return pathlib.Path(_AtSignTemplate(str(original)).safe_substitute(mapping))
     elif isinstance(original, list | set | tuple) and all(isinstance(item, str | pathlib.Path) for item in original):
-        modified = []
+        modified: list[str | pathlib.Path] = []
         for node in original:
             if isinstance(node, pathlib.Path):
                 modified.append(pathlib.Path(_AtSignTemplate(str(node)).safe_substitute(mapping)))
@@ -171,7 +171,7 @@ def find_cubit_bin(options: typing.Iterable[str], bin_directory: str | None = No
     return cubit_bin
 
 
-def find_cubit_python(options: typing.Iterable[str], python_command: str = "python3*") -> pathlib.Path:
+def find_cubit_python(options: collections.abc.Sequence[str], python_command: str = "python3*") -> pathlib.Path:
     """Search for the Cubit Python interpreter given a few options for the Cubit executable.
 
     Recommend first checking to see if cubit will import.
@@ -214,9 +214,10 @@ def tee_subprocess(command: list[str], **kwargs) -> tuple[int, str]:
         subprocess.Popen(command, stdout=subprocess.PIPE, bufsize=1, text=True, **kwargs) as process,
         StringIO() as stdout_buffer,
     ):
-        for line in process.stdout:
-            print(line, end="")
-            stdout_buffer.write(line)
+        if process.stdout is not None:
+            for line in process.stdout:
+                print(line, end="")
+                stdout_buffer.write(line)
         output = stdout_buffer.getvalue()
     return process.returncode, output
 
@@ -227,7 +228,7 @@ def return_environment(
     string_option: str = "-c",
     separator: str = "&&",
     environment: str = "env -0",
-) -> dict:
+) -> dict[str, str]:
     """Run a shell command and return the shell environment as a dictionary.
 
     .. code-block::
@@ -263,13 +264,13 @@ def return_environment(
         first_key = first_key.rsplit("\n")[-1]
     variables[0] = f"{first_key}={first_value}"
 
-    environment = {}
+    return_environment: dict[str, str] = {}
     for line in variables:
         if line != "":
             key, value = line.split("=", 1)
-            environment[key] = value
+            return_environment[key] = value
 
-    return environment
+    return return_environment
 
 
 def cache_environment(
@@ -350,7 +351,10 @@ def warn_only_once(function: collections.abc.Callable) -> collections.abc.Callab
 
     :returns: function wrapped in the warning suppression logic
     """
-    function.already_warned = False
+    # TODO: static type checking compatible function attributes when available in mypy without complex handling
+    # https://github.com/python/mypy/issues/2087
+    # https://mypy-play.net/?mypy=latest&python=3.11&gist=f4cd279b0ac82b9b2a0b1bd227915025
+    function.already_warned = False  # type: ignore[attr-defined]
 
     def wrapper(*args, **kwargs) -> collections.abc.Callable:
         """Add wrapper logic for the function warning suppression.
@@ -358,14 +362,16 @@ def warn_only_once(function: collections.abc.Callable) -> collections.abc.Callab
         :param args: all positional arguments passed through to wrapped function
         :param kwargs: all keyword arguments passed through to wrapped function
         """
-        with warnings.catch_warnings(record=function.already_warned):
-            function.already_warned = True
+        with warnings.catch_warnings(record=function.already_warned):  # type: ignore[attr-defined]
+            function.already_warned = True  # type: ignore[attr-defined]
             return function(*args, **kwargs)
 
     return wrapper
 
 
-def _get_abaqus_restart_extensions(solver: typing.Literal["standard", "explicit"], processes: int = 1) -> list[str]:
+def _get_abaqus_restart_extensions(
+    solver: typing.Literal["standard", "explicit"], processes: int = 1
+) -> tuple[str, ...]:
     """Determine Abaqus restart files based on solver type and number of MPI processes.
 
     :param solver: Abaqus solver.

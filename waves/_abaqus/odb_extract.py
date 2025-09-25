@@ -1,5 +1,6 @@
-#! /usr/bin/env python
-
+# TODO: fix type annotations and static type checking in _abaqus module
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/974
+# mypy: ignore-errors
 """Extracts data from an Abaqus odb file. Writes two files 'output_file.h5' and 'output_file_datasets.h5'.
 
 Calls odbreport feature of Abaqus, parses resultant file, and creates output file. Most simulation data lives in a

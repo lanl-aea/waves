@@ -269,6 +269,24 @@ def test_add_cubit_python() -> None:
     env = SCons.Environment.Environment()
     cubit_bin = "/path/to/cubit/bin/"
     cubit_python = "/path/to/cubit/bin/python"
+    # Cubit executable not found mocked by find_program
+    with (
+        patch("waves._utilities.find_cubit_python"),
+        patch("waves.scons_extensions.find_program", return_value=None),
+        patch("waves.scons_extensions.add_program"),
+    ):
+        program = scons_extensions.add_cubit_python(env, "dummy_cubit_executable")
+    assert program is None
+    assert "PYTHONPATH" not in env["ENV"]
+    # Cubit Python not found mocked find_cubit_python
+    with (
+        patch("waves._utilities.find_cubit_python", side_effect=FileNotFoundError),
+        patch("waves.scons_extensions.find_program"),
+        patch("waves.scons_extensions.add_program"),
+    ):
+        program = scons_extensions.add_cubit_python(env, "dummy_cubit_executable")
+    assert program is None
+    assert "PYTHONPATH" not in env["ENV"]
     # Cubit Python not found mocked by add_program
     with (
         patch("waves._utilities.find_cubit_python"),
@@ -516,9 +534,9 @@ def test_print_failed_nodes_stdout() -> None:
         mock_print.assert_called_once()
 
 
-def test_print_build_failures() -> None:
+@pytest.mark.parametrize("env", [None, SCons.Environment.Environment()])
+def test_print_build_failures(env: SCons.Environment.Environment | None) -> None:
     # Test the function call interface
-    env = SCons.Environment.Environment()
     with patch("atexit.register") as mock_atexit:
         scons_extensions.print_build_failures(env=env, print_stdout=True)
         mock_atexit.assert_called_once_with(scons_extensions._print_failed_nodes_stdout)
@@ -527,13 +545,14 @@ def test_print_build_failures() -> None:
         mock_atexit.assert_not_called()
 
     # Test the SCons AddMethod interface
-    env.AddMethod(scons_extensions.print_build_failures, "PrintBuildFailures")
-    with patch("atexit.register") as mock_atexit:
-        env.PrintBuildFailures(True)
-        mock_atexit.assert_called_once_with(scons_extensions._print_failed_nodes_stdout)
-    with patch("atexit.register") as mock_atexit:
-        env.PrintBuildFailures(False)
-        mock_atexit.assert_not_called()
+    if env is not None:
+        env.AddMethod(scons_extensions.print_build_failures, "PrintBuildFailures")
+        with patch("atexit.register") as mock_atexit:
+            env.PrintBuildFailures(True)
+            mock_atexit.assert_called_once_with(scons_extensions._print_failed_nodes_stdout)
+        with patch("atexit.register") as mock_atexit:
+            env.PrintBuildFailures(False)
+            mock_atexit.assert_not_called()
 
 
 action_list_scons = {

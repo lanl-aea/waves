@@ -7,9 +7,9 @@ Import("env")
 pyproject = env.FindFile("pyproject.toml", "#")
 
 target = env.Command(
-    target=["mypy.txt", "any-exprs.txt", "types-of-anys.txt"],
+    target=["any-exprs.txt", "types-of-anys.txt"],
     source=[pyproject],
-    action=["set -o pipefail; mypy --any-exprs-report ${TARGET.dir} | tee ${TARGET.abspath}"],
+    action=["mypy --any-exprs-report ${TARGET.dir}"],
 )
 env.AlwaysBuild(target)
 env.Alias("mypy", target)

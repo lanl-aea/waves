@@ -48,7 +48,7 @@ def self_consistency_checks(merged_study: parameter_generators.ParameterGenerato
 
 
 def merge_samplers(
-    sampler_class: parameter_generators.ParameterGenerator,
+    sampler_class: type[parameter_generators.ParameterGenerator],
     first_schema: dict,
     second_schema: dict,
     kwargs: dict,

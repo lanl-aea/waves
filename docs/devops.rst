@@ -280,6 +280,13 @@ software, so the CI tests on this server require the full build as
 
    $ scons regression --unconditional-build
 
+The continuous integration server also performs a separate static type check using `mypy`_ with associated aliases or
+the collector alias ``mypy``.
+
+.. code-block::
+
+   $ scons mypy
+
 The continuous integration server also performs a separate style guide check using `Ruff`_ with associated aliases or
 the collector alias ``style``.
 

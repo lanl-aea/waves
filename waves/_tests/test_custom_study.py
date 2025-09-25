@@ -6,7 +6,7 @@ from unittest.mock import call, mock_open, patch
 import numpy
 import pytest
 
-from waves._settings import _hash_coordinate_key, _set_coordinate_key
+from waves._settings import _allowable_output_file_typing, _hash_coordinate_key, _set_coordinate_key
 from waves._tests.common import merge_samplers
 from waves.exceptions import SchemaValidationError
 from waves.parameter_generators import CustomStudy
@@ -215,7 +215,7 @@ class TestCustomStudy:
         parameter_schema: dict,
         output_file_template: str | None,
         output_file: str | None,
-        output_type: str,
+        output_type: _allowable_output_file_typing,
         file_count: int,
         expected_calls: int,
     ) -> None:
