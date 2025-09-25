@@ -338,8 +338,8 @@ def _node_path(node: xarray.DataTree) -> str:
     return node.path
 
 
-def _qoi_group(qoi: xarray.Dataset) -> str:
-    """Return ``"group"`` attribute of a QOI (xarray.Dataset)."""
+def _qoi_group(qoi: xarray.DataArray) -> str:
+    """Return ``"group"`` attribute of a :meth:`.create_qoi` QOI."""
     return qoi.attrs["group"]
 
 
@@ -456,7 +456,8 @@ def _merge_qoi_archives(qoi_archives: typing.Iterable[xarray.DataTree]) -> xarra
     # Group by datatree node path, i.e. the QOI group
     for group, qois in itertools.groupby(sorted(leaves, key=_node_path), key=_node_path):
         # Merge dataset as a node in the DataTree
-        merged_archive[group] = xarray.merge((node.ds for node in qois), **_merge_constants)
+        # Xarray public API for ``xarray.DataTree.ds`` is an attribute containing ``xarray.core.datatree.DatasetView``.
+        merged_archive[group] = xarray.merge((node.ds for node in qois), **_merge_constants)  # type: ignore[misc]
     return merged_archive
 
 
