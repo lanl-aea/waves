@@ -684,6 +684,7 @@ def _write_qoi_report(qoi_archive: xarray.DataTree, output: pathlib.Path, plots_
     :param plots_per_page: the number of plots on each page of the output
     """
     qois = [
+        # Xarray public API for ``xarray.DataTree.ds`` is an attribute containing ``xarray.core.datatree.DatasetView``.
         # Xarray public API for ``xarray.core.datatree.DatasetView`` does have the ``data_vars`` attribute.
         qoi for leaf in qoi_archive.leaves for qoi in leaf.ds.data_vars.values() if _can_plot_qoi_tolerance_check(qoi)  # type: ignore[attr-defined]
     ]
@@ -763,7 +764,9 @@ def _qoi_history_report(
     qois = [
         qoi.sortby("date")
         for leaf in qoi_archive.leaves
-        for qoi in leaf.ds.data_vars.values()
+        # Xarray public API for ``xarray.DataTree.ds`` is an attribute containing ``xarray.core.datatree.DatasetView``.
+        # Xarray public API for ``xarray.core.datatree.DatasetView`` does have the ``data_vars`` attribute.
+        for qoi in leaf.ds.data_vars.values()  # type: ignore[attr-defined]
         if _can_plot_scalar_qoi_history(qoi)
     ]
     plotting_kwargs = {"date_min": min(qoi.date.min() for qoi in qois), "date_max": max(qoi.date.max() for qoi in qois)}
