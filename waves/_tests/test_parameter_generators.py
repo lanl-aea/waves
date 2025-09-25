@@ -1848,8 +1848,7 @@ class TestParameterGenerator:
             f"parameter_set{index}": expected_by_hash[item]
             for index, item in enumerate(sorted(expected_by_hash.keys()))
         }
-        kwargs = {"sets": length}
-        scons_iterator = DummyGenerator({}, **kwargs)
+        scons_iterator = DummyGenerator({}, sets=length)
         set_samples = scons_iterator.parameter_study_to_dict()
         assert set_samples == expected
         assert all(isinstance(key, str) for key in set_samples)
@@ -1873,12 +1872,11 @@ class TestParameterGenerator:
         :param str set_template: user supplied string to be used as a template for parameter names
         :param list expected: list of expected parameter name strings
         """
-        kwargs = {"sets": 1}
         if not set_template:
-            template_generator = DummyGenerator(schema, output_file_template=file_template, **kwargs)
+            template_generator = DummyGenerator(schema, output_file_template=file_template, sets=1)
         else:
             template_generator = DummyGenerator(
-                schema, output_file_template=file_template, set_name_template=set_template, **kwargs
+                schema, output_file_template=file_template, set_name_template=set_template, sets=1
             )
         assert list(template_generator._set_names.values()) == expected
         assert list(template_generator.parameter_study[_settings._set_coordinate_key].values) == expected
@@ -1898,23 +1896,22 @@ class TestParameterGenerator:
         :param str set_template: user supplied string to be used as a template for parameter names
         :param list expected: list of expected parameter name strings
         """
-        kwargs = {"sets": 1}
         mock_previous_study_name = "dummy_study.h5"
         if not set_template:
-            mock_previous_study = DummyGenerator(schema, output_file_template=file_template, **kwargs).parameter_study
+            mock_previous_study = DummyGenerator(schema, output_file_template=file_template, sets=1).parameter_study
             template_generator = DummyGenerator(
-                schema, output_file_template=file_template, previous_parameter_study=mock_previous_study_name, **kwargs
+                schema, output_file_template=file_template, previous_parameter_study=mock_previous_study_name, sets=1
             )
         else:
             mock_previous_study = DummyGenerator(
-                schema, output_file_template=file_template, set_name_template=set_template, **kwargs
+                schema, output_file_template=file_template, set_name_template=set_template, sets=1
             ).parameter_study
             template_generator = DummyGenerator(
                 schema,
                 output_file_template=file_template,
                 set_name_template=set_template,
                 previous_parameter_study=mock_previous_study_name,
-                **kwargs,
+                sets=1,
             )
         with patch("waves.parameter_generators._open_parameter_study", return_value=mock_previous_study):
             assert list(template_generator._set_names.values()) == expected
@@ -1960,14 +1957,13 @@ class TestParameterGenerator:
         :param int stdout_calls: number of calls to stdout. Should only differ from set count when no template is
             provides. Should always be 1 when no template is provided.
         """
-        kwargs = {"sets": sets}
         for output_file_type in _settings._allowable_output_file_types:
             write_parameter_generator = DummyGenerator(
                 schema,
                 output_file_template=template,
                 output_file_type=output_file_type,
                 overwrite=overwrite,
-                **kwargs,
+                sets=sets,
             )
             with (
                 patch("waves.parameter_generators.ParameterGenerator._write_meta"),
@@ -2009,13 +2005,12 @@ class TestParameterGenerator:
         :param int sets: test specific argument for the number of sets to build for the test
         :param int files: integer number of files that should be written
         """
-        kwargs = {"sets": sets}
         write_parameter_generator = DummyGenerator(
             schema,
             output_file_template=template,
             output_file_type="yaml",
             overwrite=overwrite,
-            **kwargs,
+            sets=sets,
         )
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta"),
@@ -2034,7 +2029,7 @@ class TestParameterGenerator:
             output_file_template=template,
             output_file_type="h5",
             overwrite=overwrite,
-            **kwargs,
+            sets=sets,
         )
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta"),
@@ -2065,13 +2060,12 @@ class TestParameterGenerator:
         :param int sets: test specific argument for the number of sets to build for the test
         :param int files: integer number of files that should be written
         """
-        kwargs = {"sets": sets}
         write_parameter_generator = DummyGenerator(
             schema,
             output_file_template=template,
             output_file_type="h5",
             overwrite=overwrite,
-            **kwargs,
+            sets=sets,
         )
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta"),
@@ -2086,13 +2080,12 @@ class TestParameterGenerator:
             mock_write_yaml.assert_not_called()
             assert mock_write_dataset.call_count == files
 
-        kwargs = {"sets": sets}
         mismatched_output_type = DummyGenerator(
             schema,
             output_file_template=template,
             output_file_type="yaml",
             overwrite=overwrite,
-            **kwargs,
+            sets=sets,
         )
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta"),
