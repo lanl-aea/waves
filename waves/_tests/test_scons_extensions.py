@@ -60,7 +60,9 @@ def test_print_action_signature_string(mock_node: Mock, action_signature_string:
         target = [mock_node]
         scons_extensions.print_action_signature_string(s, target, source, env)
         mock_print.assert_called_once_with(
-            f"Building {mock_node} with action signature string:\n  {action_signature_string}\n{s}",
+            # The byte ``b"abc"`` to string ``"b'abc'"`` conversion is desired, but test cases include actual strings.
+            # Instead of duplicating the test case logic, ``f"{x!r}" and ``f"{x}"``, ignore the type check.
+            f"Building {mock_node} with action signature string:\n  {action_signature_string}\n{s}",  # type: ignore[str-bytes-safe]
         )
 
 
