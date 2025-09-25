@@ -52,7 +52,7 @@ class AbaqusFileParser(ABC):
 
     @abstractmethod
     def parse(self) -> None:
-        pass  # pragma: no cover
+        """Parse the target Abaqus file."""
 
     # Anybody who wishes to create a class that inherits from this class,
     # must create a method called parse
