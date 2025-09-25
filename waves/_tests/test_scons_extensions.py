@@ -3019,5 +3019,6 @@ def test_waves_environment_abaqus_pseudo_builder() -> None:
     args = ["arg1"]
     kwargs = {"kwarg1": "value1"}
     with patch("waves.scons_extensions.AbaqusPseudoBuilder.__call__") as mock_call:
-        env.AbaqusPseudoBuilder("job", *args, **kwargs)
+        # Ignore type checks on a mock argument pass-through test
+        env.AbaqusPseudoBuilder("job", *args, **kwargs)  # type: ignore[arg-type]
         mock_call.assert_called_once_with(env, "job", *args, **kwargs)
