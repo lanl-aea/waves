@@ -167,7 +167,6 @@ class ParameterGenerator(ABC):
            # Work unique to the parameter generator schema. Example matches CartesianProduct schema.
            self._parameter_names = list(self.parameter_schema.keys())
         """
-        pass
 
     @abstractmethod
     def _generate(self, **kwargs) -> None:
