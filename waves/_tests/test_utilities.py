@@ -464,6 +464,6 @@ def test_get_abaqus_restart_extensions(
         # Test cases include intentional bad argument types. Do not perform static type checks.
         extensions = _utilities._get_abaqus_restart_extensions(
             solver=solver,  # type: ignore[arg-type]
-            processes=processes
+            processes=processes,
         )
         assert set(extensions) == set(expected)
