@@ -47,12 +47,10 @@ class AbaqusFileParser(ABC):
         self.parse(*args, **kwargs)
         return
 
+    # Anybody who wishes to create a class that inherits from this class, must create a method called parse
     @abstractmethod
     def parse(self) -> None:
         """Parse the target Abaqus file."""
-
-    # Anybody who wishes to create a class that inherits from this class,
-    # must create a method called parse
 
     def write_yaml(self, output_file: str | None = None) -> None:
         """Write the data in yaml format to the output file.
