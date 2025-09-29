@@ -43,10 +43,7 @@ class AbaqusFileParser(ABC):
         self.parsed: dict = {}
         if input_file:
             self.output_file = f"{input_file}{_settings._default_parsed_extension}"
-        if verbose:
-            self.verbose = True
-        else:
-            self.verbose = False
+        self.verbose = verbose
         self.parse(*args, **kwargs)
         return
 
