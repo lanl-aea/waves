@@ -127,7 +127,7 @@ def get_parser() -> argparse.ArgumentParser:
 
 def odb_extract(
     input_file: list,
-    output_file: str,
+    output_file: str | None = None,
     output_type: str = "h5",
     odb_report_args: str | None = None,
     abaqus_command: str = _settings._default_abaqus_command,

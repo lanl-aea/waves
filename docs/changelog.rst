@@ -4,6 +4,14 @@
 Changelog
 #########
 
+******************
+1.1.0 (unreleased)
+******************
+
+Internal Changes
+================
+- Implement static type checking of test suite (:issue:`973`, :merge:`1260`). By `Kyle Brindley`_.
+
 .. _1.0.0:
 
 ******************

@@ -36,12 +36,12 @@ testing_windows, root_fs, testing_macos = platform_check()
 
 
 mock_decodable = Mock()
-mock_decodable.__str__ = lambda _self: "mock_node"
+mock_decodable.__str__ = lambda _self: "mock_node"  # type: ignore[assignment,misc]
 mock_decodable.get_executor.return_value.get_contents.return_value = b"action signature string"
 mock_not_decodable = Mock()
-mock_not_decodable.__str__ = lambda _self: "mock_node"
+mock_not_decodable.__str__ = lambda _self: "b'mock_node'"  # type: ignore[assignment,misc]
 mock_not_decodable.get_executor.return_value.get_contents.return_value = b"\x81action signature string"
-test_print_action_signature_string_cases = {
+test_print_action_signature_string_cases: dict[str, tuple] = {
     "decode-able": (mock_decodable, "action signature string"),
     "not decode-able": (mock_not_decodable, b"\x81action signature string"),
 }
@@ -60,7 +60,9 @@ def test_print_action_signature_string(mock_node: Mock, action_signature_string:
         target = [mock_node]
         scons_extensions.print_action_signature_string(s, target, source, env)
         mock_print.assert_called_once_with(
-            f"Building {mock_node} with action signature string:\n  {action_signature_string}\n{s}",
+            # The byte ``b"abc"`` to string ``"b'abc'"`` conversion is desired, but test cases include actual strings.
+            # Instead of duplicating the test case logic, ``f"{x!r}" and ``f"{x}"``, ignore the type check.
+            f"Building {mock_node} with action signature string:\n  {action_signature_string}\n{s}",  # type: ignore[str-bytes-safe]
         )
 
 
@@ -361,7 +363,7 @@ def check_action_string(
         assert str(node.executor.action_list[0]) == expected_string
 
 
-def check_abaqus_solver_targets(nodes: SCons.Node.NodeList, solver: str, stem: str, suffixes: list[str]) -> None:
+def check_abaqus_solver_targets(nodes: SCons.Node.NodeList, solver: str | None, stem: str, suffixes: list[str]) -> None:
     """Verify the expected action string against a builder's target nodes.
 
     :param nodes: Target node list returned by a builder
@@ -387,9 +389,9 @@ def check_abaqus_solver_targets(nodes: SCons.Node.NodeList, solver: str, stem: s
 def first_target_builder_factory_test_cases(
     name: str,
     default_kwargs: dict,
-    default_emitter: collections.abc.Callable[
-        [list, list, SCons.Environment.Environment], tuple[list, list]
-    ] = scons_extensions.first_target_emitter,
+    default_emitter: (
+        collections.abc.Callable[[list, list, SCons.Environment.Environment], tuple[list, list]] | None
+    ) = scons_extensions.first_target_emitter,
     expected_node_count: int = 2,
 ) -> dict:
     """Return template tests for builder factories based on :meth:`waves.scons_extensions.first_target_builder_factory`.
@@ -436,7 +438,7 @@ def first_target_builder_factory_test_cases(
         builder factory under test is a good choice.
     :param default_kwargs: Set the default keyword argument values. Expected to be constant as a function of builder
         factory under test.
-    :param default_emitter: The emitter to expect when ``False`` is provided for ``emitter`` keyword argument.
+    :param default_emitter: The emitter to expect when ``None`` is provided for ``emitter`` keyword argument.
     :param expected_node_count: The expected number of target nodes with the default emitter.
 
     :returns: test cases for builder factories based on :meth:`waves.scons_extensions.first_target_builder_factory`
@@ -450,7 +452,7 @@ def first_target_builder_factory_test_cases(
             {},
             [target_file_names[0]],
             default_emitter,
-            False,
+            None,
             expected_node_count,
         ),
         f"{name} different emitter": (
@@ -480,7 +482,7 @@ def first_target_builder_factory_test_cases(
             {},
             [target_file_names[2]],
             default_emitter,
-            False,
+            None,
             expected_node_count,
         ),
         f"{name} task kwargs overrides": (
@@ -500,7 +502,7 @@ def first_target_builder_factory_test_cases(
             },
             [target_file_names[3]],
             default_emitter,
-            False,
+            None,
             expected_node_count,
         ),
     }
@@ -1202,7 +1204,7 @@ def test_abaqus_solver(
             assert node.env[key] == expected_value
 
 
-test_task_kwarg_emitter_cases = {
+test_task_kwarg_emitter_cases: dict[str, tuple] = {
     "designed use behavior": (
         (["target.out"], ["source.in"], SCons.Environment.Environment(task_kwarg="value")),
         {"required_task_kwarg": "task_kwarg"},
@@ -1285,7 +1287,7 @@ def test_task_kwarg_emitter(
         )
 
 
-abaqus_solver_emitter_factory_cases = {
+abaqus_solver_emitter_factory_cases: dict[str, dict] = {
     "defaults": {},
     "no defaults": {"suffixes": (".suffix",), "appending_suffixes": (".appending",), "stdout_extension": ".out"},
 }
@@ -1322,7 +1324,7 @@ def test_abaqus_solver_emitter_factory(factory_kwargs: dict) -> None:
         )
 
 
-abaqus_solver_emitter_factory_emitters_cases = {
+abaqus_solver_emitter_factory_emitters_cases: dict[str, tuple] = {
     "datacheck defaults": (
         "abaqus_datacheck_emitter",
         {"suffixes": _abaqus_datacheck_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
@@ -2012,7 +2014,7 @@ def test_builder_factory(
     task_kwargs: dict,
     target: list,
     default_emitter: collections.abc.Callable[[list, list, SCons.Environment.Environment], tuple[list, list]] | None,
-    emitter: collections.abc.Callable[[list, list, SCons.Environment.Environment], tuple[list, list]] | bool,
+    emitter: collections.abc.Callable[[list, list, SCons.Environment.Environment], tuple[list, list]] | None,
     expected_node_count: int,
 ) -> None:
     """Template test for builder factories based on :meth:`waves.scons_extensions.builder_factory`.
@@ -2023,8 +2025,8 @@ def test_builder_factory(
     :param builder_kwargs: Keyword arguments unpacked at the builder instantiation
     :param task_kwargs: Keyword arguments unpacked at the task instantiation
     :param target: Explicit list of targets provided at the task instantiation
-    :param default_emitter: The emitter to expect when ``False`` is provided for ``emitter`` keyword argument.
-    :param emitter: A custom factory emitter. Mostly intended as a pass-through check. Set to ``False`` to avoid
+    :param default_emitter: The emitter to expect when ``None`` is provided for ``emitter`` keyword argument.
+    :param emitter: A custom factory emitter. Mostly intended as a pass-through check. Set to ``None`` to avoid
         providing an emitter argument to the builder factory.
     :param expected_node_count: The expected number of target nodes.
     """
@@ -2040,11 +2042,8 @@ def test_builder_factory(
     )
 
     # Handle additional builder kwargs without changing default behavior
-    expected_emitter = default_emitter
-    emitter_handling = {}
-    if emitter is not False:
-        expected_emitter = emitter
-        emitter_handling.update({"emitter": emitter})
+    expected_emitter = default_emitter if emitter is None else emitter
+    emitter_handling = {} if emitter is None else {"emitter": emitter}
 
     # Test builder object attributes
     factory = getattr(scons_extensions, factory_name)
@@ -2763,7 +2762,7 @@ def test_parameter_study_sconscript(
         mock_sconscript.assert_called_once_with(*args, **expected)
 
 
-parameter_study_write_cases = {
+parameter_study_write_cases: dict[str, tuple] = {
     "output file": (
         parameter_generators.CartesianProduct({"one": [1, 2]}, output_file="test.h5"),
         {},
@@ -2818,7 +2817,7 @@ def test_parameter_study_write(
         assert [str(target) for target in targets] == expected
 
 
-test_qoi_pseudo_builder_cases = {
+test_qoi_pseudo_builder_cases: dict[str, tuple] = {
     "default call": (
         {},
         {},
@@ -3019,5 +3018,6 @@ def test_waves_environment_abaqus_pseudo_builder() -> None:
     args = ["arg1"]
     kwargs = {"kwarg1": "value1"}
     with patch("waves.scons_extensions.AbaqusPseudoBuilder.__call__") as mock_call:
-        env.AbaqusPseudoBuilder("job", *args, **kwargs)
+        # Ignore type checks on a mock argument pass-through test
+        env.AbaqusPseudoBuilder("job", *args, **kwargs)  # type: ignore[arg-type]
         mock_call.assert_called_once_with(env, "job", *args, **kwargs)

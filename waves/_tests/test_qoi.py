@@ -203,7 +203,8 @@ def test_create_qoi(
 ) -> None:
     with outcome:
         output = qoi.create_qoi(**kwargs)
-        assert expected.identical(output)
+        if expected is not None:
+            assert expected.identical(output)
 
 
 test_create_qoi_set_cases = {
@@ -615,40 +616,26 @@ def test__create_qoi_study(
     outcome: contextlib.nullcontext | pytest.RaisesExc,
 ) -> None:
     with outcome:
-        try:
-            qoi_study = qoi._create_qoi_study(qoi_list, parameter_study)
+        qoi_study = qoi._create_qoi_study(qoi_list, parameter_study)
+        if expected is not None:
             assert expected.identical(qoi_study)
-        finally:
-            pass
 
 
 test__qoi_group_cases = {
     "expected use": (
-        xarray.Dataset(
-            {
-                "qoi1": xarray.DataArray(
-                    [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
-                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
-                    attrs={"attr1": "value1"},
-                ),
-            },
+        xarray.DataArray(
+            [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
-            attrs={"group": "group1"},
+            attrs={"attr1": "value1", "group": "group1"},
         ),
         "group1",
         does_not_raise,
     ),
     "missing dataset 'group' attr: should raise KeyError": (
-        xarray.Dataset(
-            {
-                "qoi1": xarray.DataArray(
-                    [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
-                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
-                    attrs={"attr1": "value1", "group": "group1"},
-                ),
-            },
+        xarray.DataArray(
+            [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
-            attrs={},
+            attrs={"attr1": "value1"},
         ),
         None,
         pytest.raises(KeyError),
@@ -662,7 +649,7 @@ test__qoi_group_cases = {
     ids=test__qoi_group_cases.keys(),
 )
 def test__qoi_group(
-    qoi_set: xarray.Dataset, expected: str | None, outcome: contextlib.nullcontext | pytest.RaisesExc
+    qoi_set: xarray.DataArray, expected: str | None, outcome: contextlib.nullcontext | pytest.RaisesExc
 ) -> None:
     with outcome:
         try:
@@ -731,7 +718,8 @@ test__propagate_identical_attrs_cases = {
     ids=test__propagate_identical_attrs_cases.keys(),
 )
 def test__propagate_identical_attrs(input_attrs: list[dict[str, typing.Any]], common_attrs: dict) -> None:
-    output_attrs = qoi._propagate_identical_attrs(input_attrs, None)
+    # The second positional argument is unused. Avoid constructing unnecessary mock xarray.Context object.
+    output_attrs = qoi._propagate_identical_attrs(input_attrs, None)  # type: ignore[arg-type]
     assert output_attrs == common_attrs
 
 
@@ -945,6 +933,7 @@ def test__merge_qoi_archives() -> None:
 
 test__read_qoi_set_cases = {
     "one qoi: minimum api use": (
+        f"name,calculated,expected,lower_limit,upper_limit{os.linesep}qoi1,,,,{os.linesep}",
         xarray.Dataset(
             {
                 "qoi1": xarray.DataArray(
@@ -956,9 +945,12 @@ test__read_qoi_set_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        f"name,calculated,expected,lower_limit,upper_limit{os.linesep}qoi1,,,,{os.linesep}",
     ),
     "one qoi: recommended attributes": (
+        (
+            f"name,calculated,expected,lower_limit,upper_limit,group,units,description,long_name,version{os.linesep}"
+            f"qoi1,5.1,5.0,4.0,6.0,group1,units1,description1,long_name1,version1{os.linesep}"
+        ),
         xarray.Dataset(
             {
                 "qoi1": xarray.DataArray(
@@ -976,12 +968,9 @@ test__read_qoi_set_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        (
-            f"name,calculated,expected,lower_limit,upper_limit,group,units,description,long_name,version{os.linesep}"
-            f"qoi1,5.1,5.0,4.0,6.0,group1,units1,description1,long_name1,version1{os.linesep}"
-        ),
     ),
     "two qoi: minimum api use": (
+        f"name,calculated,expected,lower_limit,upper_limit{os.linesep}qoi1,,,,{os.linesep}qoi2,,,,{os.linesep}",
         xarray.Dataset(
             {
                 "qoi1": xarray.DataArray(
@@ -998,9 +987,13 @@ test__read_qoi_set_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        f"name,calculated,expected,lower_limit,upper_limit{os.linesep}qoi1,,,,{os.linesep}qoi2,,,,{os.linesep}",
     ),
     "two qoi: recommended attributes": (
+        (
+            f"name,calculated,expected,lower_limit,upper_limit,group,units,description,long_name,version{os.linesep}"
+            f"qoi1,5.1,5.0,4.0,6.0,group1,units1,description1,long_name1,version1{os.linesep}"
+            f"qoi2,0.8,1.0,0.9,1.1,group2,units2,description2,long_name2,version2{os.linesep}"
+        ),
         xarray.Dataset(
             {
                 "qoi1": xarray.DataArray(
@@ -1029,21 +1022,16 @@ test__read_qoi_set_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        (
-            f"name,calculated,expected,lower_limit,upper_limit,group,units,description,long_name,version{os.linesep}"
-            f"qoi1,5.1,5.0,4.0,6.0,group1,units1,description1,long_name1,version1{os.linesep}"
-            f"qoi2,0.8,1.0,0.9,1.1,group2,units2,description2,long_name2,version2{os.linesep}"
-        ),
     ),
 }
 
 
 @pytest.mark.parametrize(
-    ("expected", "mock_csv_data"),
+    ("mock_csv_data", "expected"),
     test__read_qoi_set_cases.values(),
     ids=test__read_qoi_set_cases.keys(),
 )
-def test__read_qoi_set_csv(mock_csv_data: xarray.Dataset, expected: str) -> None:
+def test__read_qoi_set_csv(mock_csv_data: str, expected: xarray.Dataset) -> None:
     # Test CSV read with mock CSV data
     from_file = pathlib.Path("test.csv")
     mock_dataframe = pandas.read_csv(io.StringIO(mock_csv_data))
@@ -1358,13 +1346,14 @@ test_write_qoi_set_to_csv_cases = test__read_qoi_set_cases
 
 
 @pytest.mark.parametrize(
-    ("qoi_set", "expected"),
+    ("expected", "qoi_set"),
     test_write_qoi_set_to_csv_cases.values(),
     ids=test_write_qoi_set_to_csv_cases.keys(),
 )
-def test_write_qoi_set_to_csv(qoi_set: xarray.Dataset, expected: str) -> None:
+def test_write_qoi_set_to_csv(expected: str, qoi_set: xarray.Dataset) -> None:
     buffer = io.StringIO()
-    qoi.write_qoi_set_to_csv(qoi_set, buffer)
+    # Passing unexpected type to avoid file I/O in unit tests. Ignore static type check.
+    qoi.write_qoi_set_to_csv(qoi_set, buffer)  # type: ignore[arg-type]
     csv_text = buffer.getvalue()
     assert csv_text == expected
 

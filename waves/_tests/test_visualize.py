@@ -106,7 +106,8 @@ def test_ancestor_subgraph(
     # Check for a runtime error on empty subgraph/missing node
     with outcome:
         subgraph = _visualize.ancestor_subgraph(graph, nodes)
-        assert subgraph.nodes == expected.nodes
+        if expected is not None:
+            assert subgraph.nodes == expected.nodes
 
 
 def test_add_node_count() -> None:

@@ -213,6 +213,7 @@ def test_project_alias(
 
 
 def test_project_alias_accumulated_target_descriptions() -> None:
+    # Test cases must accumulate in a specific order. Do not parameterize test cases.
     dependent_aliases = [
         (
             [SCons.Environment.Environment(), "dummy_alias"],
@@ -237,7 +238,7 @@ def test_project_alias_accumulated_target_descriptions() -> None:
     ]
     for args, kwargs, expected_description in dependent_aliases:
         with patch("SCons.Environment.Base.Alias", return_value=args[1:]):
-            target_descriptions = scons_extensions.project_alias(*args, **kwargs)
+            target_descriptions = scons_extensions.project_alias(*args, **kwargs)  # type: ignore[arg-type]
             assert target_descriptions == expected_description
 
 

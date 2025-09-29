@@ -95,9 +95,11 @@ set_name_substitution = {
     ids=set_name_substitution.keys(),
 )
 def test_set_name_substitution(
+    # Function returns unhandled objects unchanged. Test must accept typing.Any.
     original: list[str | pathlib.Path] | str | pathlib.Path | typing.Any,  # noqa: ANN401
     replacement: str,
     kwargs: dict,
+    # Function returns unhandled objects unchanged. Test must accept typing.Any.
     expected: list[str | pathlib.Path] | str | pathlib.Path | typing.Any,  # noqa: ANN401
 ) -> None:
     default_kwargs = {"identifier": "set_name", "suffix": "/"}
@@ -107,7 +109,8 @@ def test_set_name_substitution(
     if isinstance(expected, str | pathlib.Path):
         assert modified == expected
     elif all(isinstance(item, str) for item in expected) or all(isinstance(item, pathlib.Path) for item in expected):
-        assert sorted(modified) == sorted(expected)
+        # Assertion logic designed for expected types. Ignore type of actual return value, ``modified``.
+        assert sorted(modified) == sorted(expected)  # type: ignore[arg-type]
     else:
         assert modified == expected
 
@@ -208,7 +211,7 @@ def test_find_cubit_bin() -> None:
         patch("os.path.realpath", return_value=str(mock_abspath)),
         patch("pathlib.Path.rglob", return_value=[mock_macos_bin]) as mock_rglob,
     ):
-        cubit_bin = _utilities.find_cubit_bin(mock_abspath, bin_directory="MacOS")
+        cubit_bin = _utilities.find_cubit_bin([str(mock_abspath)], bin_directory="MacOS")
         mock_rglob.assert_called_once()
     assert cubit_bin == mock_macos_bin
 
@@ -223,7 +226,7 @@ def test_find_cubit_python() -> None:
         patch("pathlib.Path.is_file", return_value=True),
         patch("os.access", return_value=True),
     ):
-        cubit_python = _utilities.find_cubit_python(mock_abspath)
+        cubit_python = _utilities.find_cubit_python([str(mock_abspath)])
         assert cubit_python == mock_python
 
     with (
@@ -234,7 +237,7 @@ def test_find_cubit_python() -> None:
         patch("os.access", return_value=True),
         pytest.raises(FileNotFoundError),
     ):
-        cubit_python = _utilities.find_cubit_python(mock_abspath)
+        cubit_python = _utilities.find_cubit_python([str(mock_abspath)])
 
 
 def test_tee_subprocess() -> None:
@@ -458,4 +461,9 @@ def test_get_abaqus_restart_extensions(
     outcome: contextlib.nullcontext | pytest.RaisesExc,
 ) -> None:
     with outcome:
-        assert set(_utilities._get_abaqus_restart_extensions(solver=solver, processes=processes)) == set(expected)
+        # Test cases include intentional bad argument types. Do not perform static type checks.
+        extensions = _utilities._get_abaqus_restart_extensions(
+            solver=solver,  # type: ignore[arg-type]
+            processes=processes,
+        )
+        assert set(extensions) == set(expected)
