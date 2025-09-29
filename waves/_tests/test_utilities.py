@@ -95,9 +95,11 @@ set_name_substitution = {
     ids=set_name_substitution.keys(),
 )
 def test_set_name_substitution(
+    # Function returns unhandled objects unchanged. Test must accept typing.Any.
     original: list[str | pathlib.Path] | str | pathlib.Path | typing.Any,  # noqa: ANN401
     replacement: str,
     kwargs: dict,
+    # Function returns unhandled objects unchanged. Test must accept typing.Any.
     expected: list[str | pathlib.Path] | str | pathlib.Path | typing.Any,  # noqa: ANN401
 ) -> None:
     default_kwargs = {"identifier": "set_name", "suffix": "/"}
@@ -107,7 +109,8 @@ def test_set_name_substitution(
     if isinstance(expected, str | pathlib.Path):
         assert modified == expected
     elif all(isinstance(item, str) for item in expected) or all(isinstance(item, pathlib.Path) for item in expected):
-        assert sorted(modified) == sorted(expected)
+        # Assertion logic designed for expected types. Ignore type of actual return value, ``modified``.
+        assert sorted(modified) == sorted(expected)  # type: ignore[arg-type]
     else:
         assert modified == expected
 
