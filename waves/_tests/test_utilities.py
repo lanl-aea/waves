@@ -223,7 +223,7 @@ def test_find_cubit_python() -> None:
         patch("pathlib.Path.is_file", return_value=True),
         patch("os.access", return_value=True),
     ):
-        cubit_python = _utilities.find_cubit_python(mock_abspath)
+        cubit_python = _utilities.find_cubit_python([str(mock_abspath)])
         assert cubit_python == mock_python
 
     with (
@@ -234,7 +234,7 @@ def test_find_cubit_python() -> None:
         patch("os.access", return_value=True),
         pytest.raises(FileNotFoundError),
     ):
-        cubit_python = _utilities.find_cubit_python(mock_abspath)
+        cubit_python = _utilities.find_cubit_python([str(mock_abspath)])
 
 
 def test_tee_subprocess() -> None:

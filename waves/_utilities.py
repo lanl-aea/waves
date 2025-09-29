@@ -90,7 +90,7 @@ def _quote_spaces_in_path(path: str | pathlib.Path) -> pathlib.Path:
     return new_path
 
 
-def search_commands(options: typing.Iterable[str]) -> str | None:
+def search_commands(options: collections.abc.Sequence[str]) -> str | None:
     """Return the first found command in the list of options. Return None if none are found.
 
     :param list options: executable path(s) to test
@@ -102,7 +102,7 @@ def search_commands(options: typing.Iterable[str]) -> str | None:
     return command_abspath
 
 
-def find_command(options: typing.Iterable[str]) -> str:
+def find_command(options: collections.abc.Sequence[str]) -> str:
     """Return first found command in list of options.
 
     :param options: alternate command options
