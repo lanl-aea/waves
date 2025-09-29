@@ -1346,11 +1346,11 @@ test_write_qoi_set_to_csv_cases = test__read_qoi_set_cases
 
 
 @pytest.mark.parametrize(
-    ("qoi_set", "expected"),
+    ("expected", "qoi_set"),
     test_write_qoi_set_to_csv_cases.values(),
     ids=test_write_qoi_set_to_csv_cases.keys(),
 )
-def test_write_qoi_set_to_csv(qoi_set: xarray.Dataset, expected: str) -> None:
+def test_write_qoi_set_to_csv(expected: str, qoi_set: xarray.Dataset) -> None:
     buffer = io.StringIO()
     # Passing unexpected type to avoid file I/O in unit tests. Ignore static type check.
     qoi.write_qoi_set_to_csv(qoi_set, buffer)  # type: ignore[arg-type]
