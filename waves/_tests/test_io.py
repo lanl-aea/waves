@@ -142,7 +142,7 @@ def test_qoi_example(
                 " tempfile.TemporaryDirectory. System test directories will be deleted on cleanup.",
                 file=sys.stderr,
             )
-    temp_directory = tempfile.TemporaryDirectory(dir=system_test_directory, prefix=test_prefix, **kwargs)
+    temp_directory = tempfile.TemporaryDirectory(dir=system_test_directory, prefix=test_prefix, **kwargs)  # type: ignore[call-overload]
     temp_path = pathlib.Path(temp_directory.name)
     temp_path.mkdir(parents=True, exist_ok=True)
     # Move to common test utility ^^^
