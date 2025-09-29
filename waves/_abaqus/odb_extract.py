@@ -47,6 +47,7 @@ import shlex
 import shutil
 import subprocess
 import sys
+import typing
 
 import yaml
 
@@ -128,7 +129,7 @@ def get_parser() -> argparse.ArgumentParser:
 def odb_extract(
     input_file: list[pathlib.Path],
     output_file: str | None = None,
-    output_type: str = "h5",
+    output_type: typing.Literal["h5", "yaml", "json"] = "h5",
     odb_report_args: str | None = None,
     abaqus_command: str = _settings._default_abaqus_command,
     delete_report_file: bool = False,
