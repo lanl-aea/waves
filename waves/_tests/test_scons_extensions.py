@@ -36,10 +36,10 @@ testing_windows, root_fs, testing_macos = platform_check()
 
 
 mock_decodable = Mock()
-mock_decodable.__str__ = lambda _self: "mock_node"
+mock_decodable.__str__ = lambda _self: "mock_node"  # type: ignore[assignment,misc]
 mock_decodable.get_executor.return_value.get_contents.return_value = b"action signature string"
 mock_not_decodable = Mock()
-mock_not_decodable.__str__ = lambda _self: "mock_node"
+mock_not_decodable.__str__ = lambda _self: b"mock_node"  # type: ignore[assignment,misc]
 mock_not_decodable.get_executor.return_value.get_contents.return_value = b"\x81action signature string"
 test_print_action_signature_string_cases: dict[str, tuple] = {
     "decode-able": (mock_decodable, "action signature string"),
