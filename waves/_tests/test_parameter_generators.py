@@ -2161,8 +2161,11 @@ class TestParameterGenerator:
             assert write_yaml_file.return_value.write.call_count == expected_call_count
 
     def test_write_type_override(self) -> None:
-        for instantiated_type, override_type in (("yaml", "h5"), ("h5", "yaml")):
-            write_parameter_generator = DummyGenerator({}, output_file_type=instantiated_type)  # type: ignore[arg-type]
+        output_file_type_combinations: tuple[
+            tuple[_settings._allowable_output_file_typing, _settings._allowable_output_file_typing], ...
+        ] = (("yaml", "h5"), ("h5", "yaml"))
+        for instantiated_type, override_type in output_file_type_combinations:
+            write_parameter_generator = DummyGenerator({}, output_file_type=instantiated_type)
             private_write_arguments = {
                 "yaml": (
                     write_parameter_generator.parameter_study_to_dict(),
@@ -2199,7 +2202,7 @@ class TestParameterGenerator:
                 patch("waves.parameter_generators.ParameterGenerator._write_meta"),
                 patch("waves.parameter_generators.ParameterGenerator._write") as mock_private_write,
             ):
-                write_parameter_generator.write(output_file_type=override_type)  # type: ignore[arg-type]
+                write_parameter_generator.write(output_file_type=override_type)
                 mock_private_write.assert_called_once()
                 assert mock_private_write.call_args[0][0] == override_arguments[0]
                 # FIXME: Can't do boolean comparisons on xarray.Dataset.GroupBy objects.
