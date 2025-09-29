@@ -2162,7 +2162,7 @@ class TestParameterGenerator:
 
     def test_write_type_override(self) -> None:
         for instantiated_type, override_type in (("yaml", "h5"), ("h5", "yaml")):
-            write_parameter_generator = DummyGenerator({}, output_file_type=instantiated_type)
+            write_parameter_generator = DummyGenerator({}, output_file_type=instantiated_type)  # type: ignore[arg-type]
             private_write_arguments = {
                 "yaml": (
                     write_parameter_generator.parameter_study_to_dict(),
@@ -2199,7 +2199,7 @@ class TestParameterGenerator:
                 patch("waves.parameter_generators.ParameterGenerator._write_meta"),
                 patch("waves.parameter_generators.ParameterGenerator._write") as mock_private_write,
             ):
-                write_parameter_generator.write(output_file_type=override_type)
+                write_parameter_generator.write(output_file_type=override_type)  # type: ignore[arg-type]
                 mock_private_write.assert_called_once()
                 assert mock_private_write.call_args[0][0] == override_arguments[0]
                 # FIXME: Can't do boolean comparisons on xarray.Dataset.GroupBy objects.
@@ -2216,7 +2216,8 @@ class TestParameterGenerator:
             patch("waves.parameter_generators.ParameterGenerator._write") as mock_private_write,
             pytest.raises(ChoicesError),
         ):
-            write_parameter_generator.write(output_file_type="unsupported")
+            # Specifically testing bad argument type handling. Ignore static type check.
+            write_parameter_generator.write(output_file_type="unsupported")  # type: ignore[arg-type]
         mock_private_write.assert_not_called()
 
     def test_write_call_to_write_meta(self) -> None:
