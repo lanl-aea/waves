@@ -203,7 +203,8 @@ def test_create_qoi(
 ) -> None:
     with outcome:
         output = qoi.create_qoi(**kwargs)
-        assert expected.identical(output)
+        if expected is not None:
+            assert expected.identical(output)
 
 
 test_create_qoi_set_cases = {
@@ -615,11 +616,9 @@ def test__create_qoi_study(
     outcome: contextlib.nullcontext | pytest.RaisesExc,
 ) -> None:
     with outcome:
-        try:
-            qoi_study = qoi._create_qoi_study(qoi_list, parameter_study)
+        qoi_study = qoi._create_qoi_study(qoi_list, parameter_study)
+        if expected is not None:
             assert expected.identical(qoi_study)
-        finally:
-            pass
 
 
 test__qoi_group_cases = {
