@@ -135,7 +135,9 @@ class TestSobolSequence:
         merge_test.values(),
         ids=merge_test.keys(),
     )
-    def test_merge(self, first_schema: dict, second_schema: dict, kwargs: dict, expected_samples: numpy.ndarray) -> None:
+    def test_merge(
+        self, first_schema: dict, second_schema: dict, kwargs: dict, expected_samples: numpy.ndarray
+    ) -> None:
         with patch("waves.parameter_generators._verify_parameter_study"):
             # Sobol
             original_study, merged_study = merge_samplers(SobolSequence, first_schema, second_schema, kwargs)
