@@ -731,7 +731,8 @@ test__propagate_identical_attrs_cases = {
     ids=test__propagate_identical_attrs_cases.keys(),
 )
 def test__propagate_identical_attrs(input_attrs: list[dict[str, typing.Any]], common_attrs: dict) -> None:
-    output_attrs = qoi._propagate_identical_attrs(input_attrs, None)
+    # The second positional argument is unused. Avoid constructing unnecessary mock xarray.Context object.
+    output_attrs = qoi._propagate_identical_attrs(input_attrs, None)  # type: ignore[arg-type]
     assert output_attrs == common_attrs
 
 
