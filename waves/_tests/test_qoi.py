@@ -945,6 +945,7 @@ def test__merge_qoi_archives() -> None:
 
 test__read_qoi_set_cases = {
     "one qoi: minimum api use": (
+        f"name,calculated,expected,lower_limit,upper_limit{os.linesep}qoi1,,,,{os.linesep}",
         xarray.Dataset(
             {
                 "qoi1": xarray.DataArray(
@@ -956,9 +957,12 @@ test__read_qoi_set_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        f"name,calculated,expected,lower_limit,upper_limit{os.linesep}qoi1,,,,{os.linesep}",
     ),
     "one qoi: recommended attributes": (
+        (
+            f"name,calculated,expected,lower_limit,upper_limit,group,units,description,long_name,version{os.linesep}"
+            f"qoi1,5.1,5.0,4.0,6.0,group1,units1,description1,long_name1,version1{os.linesep}"
+        ),
         xarray.Dataset(
             {
                 "qoi1": xarray.DataArray(
@@ -976,12 +980,9 @@ test__read_qoi_set_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        (
-            f"name,calculated,expected,lower_limit,upper_limit,group,units,description,long_name,version{os.linesep}"
-            f"qoi1,5.1,5.0,4.0,6.0,group1,units1,description1,long_name1,version1{os.linesep}"
-        ),
     ),
     "two qoi: minimum api use": (
+        f"name,calculated,expected,lower_limit,upper_limit{os.linesep}qoi1,,,,{os.linesep}qoi2,,,,{os.linesep}",
         xarray.Dataset(
             {
                 "qoi1": xarray.DataArray(
@@ -998,9 +999,13 @@ test__read_qoi_set_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        f"name,calculated,expected,lower_limit,upper_limit{os.linesep}qoi1,,,,{os.linesep}qoi2,,,,{os.linesep}",
     ),
     "two qoi: recommended attributes": (
+        (
+            f"name,calculated,expected,lower_limit,upper_limit,group,units,description,long_name,version{os.linesep}"
+            f"qoi1,5.1,5.0,4.0,6.0,group1,units1,description1,long_name1,version1{os.linesep}"
+            f"qoi2,0.8,1.0,0.9,1.1,group2,units2,description2,long_name2,version2{os.linesep}"
+        ),
         xarray.Dataset(
             {
                 "qoi1": xarray.DataArray(
@@ -1029,21 +1034,16 @@ test__read_qoi_set_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        (
-            f"name,calculated,expected,lower_limit,upper_limit,group,units,description,long_name,version{os.linesep}"
-            f"qoi1,5.1,5.0,4.0,6.0,group1,units1,description1,long_name1,version1{os.linesep}"
-            f"qoi2,0.8,1.0,0.9,1.1,group2,units2,description2,long_name2,version2{os.linesep}"
-        ),
     ),
 }
 
 
 @pytest.mark.parametrize(
-    ("expected", "mock_csv_data"),
+    ("mock_csv_data", "expected"),
     test__read_qoi_set_cases.values(),
     ids=test__read_qoi_set_cases.keys(),
 )
-def test__read_qoi_set_csv(mock_csv_data: xarray.Dataset, expected: str) -> None:
+def test__read_qoi_set_csv(mock_csv_data: str, expected: xarray.Dataset) -> None:
     # Test CSV read with mock CSV data
     from_file = pathlib.Path("test.csv")
     mock_dataframe = pandas.read_csv(io.StringIO(mock_csv_data))
