@@ -624,31 +624,19 @@ def test__create_qoi_study(
 
 test__qoi_group_cases = {
     "expected use": (
-        xarray.Dataset(
-            {
-                "qoi1": xarray.DataArray(
-                    [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
-                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
-                    attrs={"attr1": "value1"},
-                ),
-            },
+        xarray.DataArray(
+            [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
-            attrs={"group": "group1"},
+            attrs={"attr1": "value1", "group": "group1"},
         ),
         "group1",
         does_not_raise,
     ),
     "missing dataset 'group' attr: should raise KeyError": (
-        xarray.Dataset(
-            {
-                "qoi1": xarray.DataArray(
-                    [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
-                    coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
-                    attrs={"attr1": "value1", "group": "group1"},
-                ),
-            },
+        xarray.DataArray(
+            [numpy.nan, numpy.nan, numpy.nan, numpy.nan],
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
-            attrs={},
+            attrs={"attr1": "value1"},
         ),
         None,
         pytest.raises(KeyError),
@@ -662,7 +650,7 @@ test__qoi_group_cases = {
     ids=test__qoi_group_cases.keys(),
 )
 def test__qoi_group(
-    qoi_set: xarray.Dataset, expected: str | None, outcome: contextlib.nullcontext | pytest.RaisesExc
+    qoi_set: xarray.DataArray, expected: str | None, outcome: contextlib.nullcontext | pytest.RaisesExc
 ) -> None:
     with outcome:
         try:
