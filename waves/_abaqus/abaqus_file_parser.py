@@ -124,7 +124,7 @@ class OdbReportFileParser(AbaqusFileParser):
 
     def parse(
         self,
-        data_format: str = "extract",
+        data_format: typing.Literal["odb", "extract"] = "extract",
         h5_file: str = f"extract{_settings._default_h5_extension}",
         time_stamp: str | None = None,
     ) -> None:
