@@ -458,4 +458,9 @@ def test_get_abaqus_restart_extensions(
     outcome: contextlib.nullcontext | pytest.RaisesExc,
 ) -> None:
     with outcome:
-        assert set(_utilities._get_abaqus_restart_extensions(solver=solver, processes=processes)) == set(expected)
+        # Test cases include intentional bad argument types. Do not perform static type checks.
+        extensions = _utilities._get_abaqus_restart_extensions(
+            solver=solver,  # type: ignore[arg-type]
+            processes=processes
+        )
+        assert set(extensions) == set(expected)
