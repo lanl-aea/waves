@@ -1364,7 +1364,8 @@ test_write_qoi_set_to_csv_cases = test__read_qoi_set_cases
 )
 def test_write_qoi_set_to_csv(qoi_set: xarray.Dataset, expected: str) -> None:
     buffer = io.StringIO()
-    qoi.write_qoi_set_to_csv(qoi_set, buffer)
+    # Passing unexpected type to avoid file I/O in unit tests. Ignore static type check.
+    qoi.write_qoi_set_to_csv(qoi_set, buffer)  # type: ignore[arg-type]
     csv_text = buffer.getvalue()
     assert csv_text == expected
 
