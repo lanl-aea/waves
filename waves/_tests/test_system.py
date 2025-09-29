@@ -122,7 +122,7 @@ waves_command = "waves" if installed else "python -m waves._main"
 odb_extract_command = "odb_extract" if installed else "python -m waves._abaqus.odb_extract"
 
 fetch_template = string.Template("${waves_command} fetch ${fetch_options} --destination ${temporary_directory}")
-system_tests = [
+system_tests: list = [
     # CLI sign-of-life and help/usage
     pytest.param([string.Template("${waves_command} --help")], None, marks=[pytest.mark.cli]),
     pytest.param([string.Template("${waves_command} docs --help")], None, marks=[pytest.mark.cli]),
@@ -221,7 +221,7 @@ system_tests = [
     ),
 ]
 
-require_third_party_system_tests = [
+require_third_party_system_tests: list = [
     # Tutorials
     pytest.param(
         [fetch_template, string.Template("scons rectangle ${unconditional_build} ${abaqus_command}")],
