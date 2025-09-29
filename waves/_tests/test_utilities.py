@@ -208,7 +208,7 @@ def test_find_cubit_bin() -> None:
         patch("os.path.realpath", return_value=str(mock_abspath)),
         patch("pathlib.Path.rglob", return_value=[mock_macos_bin]) as mock_rglob,
     ):
-        cubit_bin = _utilities.find_cubit_bin(mock_abspath, bin_directory="MacOS")
+        cubit_bin = _utilities.find_cubit_bin([str(mock_abspath)], bin_directory="MacOS")
         mock_rglob.assert_called_once()
     assert cubit_bin == mock_macos_bin
 
