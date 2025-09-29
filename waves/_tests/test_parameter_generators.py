@@ -1139,7 +1139,7 @@ def test_create_set_names(
     :param template: ``_AtSignTemplate`` typed string with substitution character
     :param expected_set_names: dictionary of set hash keys with corresponding expected set name as value
     """
-    test_set_hashes_reversed = reversed(test_set_hashes)
+    test_set_hashes_reversed = list(reversed(test_set_hashes))
     test_set_names = parameter_generators._create_set_names(test_set_hashes, template)
     test_set_names_reversed = parameter_generators._create_set_names(test_set_hashes_reversed, template)
     assert test_set_names == expected_set_names
@@ -1777,7 +1777,8 @@ class TestParameterGenerator:
 
     def test_output_file_type(self) -> None:
         with pytest.raises(ChoicesError):
-            DummyGenerator({}, output_file_type="notsupported")
+            # Specifically testing bad argument type handling. Ignore static type check.
+            DummyGenerator({}, output_file_type="notsupported")  # type: ignore[arg-type]
 
     def test_missing_previous_parameter_study_file(self) -> None:
         with (
