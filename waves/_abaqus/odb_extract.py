@@ -47,6 +47,7 @@ import shlex
 import shutil
 import subprocess
 import sys
+import typing
 
 import yaml
 
@@ -126,9 +127,9 @@ def get_parser() -> argparse.ArgumentParser:
 
 
 def odb_extract(
-    input_file: list,
+    input_file: list[pathlib.Path],
     output_file: str | None = None,
-    output_type: str = "h5",
+    output_type: typing.Literal["h5", "yaml", "json"] = "h5",
     odb_report_args: str | None = None,
     abaqus_command: str = _settings._default_abaqus_command,
     delete_report_file: bool = False,
@@ -149,13 +150,13 @@ def odb_extract(
     :param verbose: Boolean to print more verbose messages
     """
     # Handle arguments
-    input_file = input_file[0]
-    path_input_file = pathlib.Path(input_file)
+    first_input_file = input_file[0]
+    path_input_file = pathlib.Path(first_input_file)
     odbreport_file = False
     if not path_input_file.exists():
-        sys.exit(f"{input_file} does not exist.")
+        sys.exit(f"{first_input_file} does not exist.")
     if path_input_file.suffix != ".odb":
-        print(f"{input_file} is not an odb file. File will be assumed to be an odbreport file.", file=sys.stderr)
+        print(f"{first_input_file} is not an odb file. File will be assumed to be an odbreport file.", file=sys.stderr)
         odbreport_file = True
     file_base_name = str(path_input_file.with_suffix(""))
     if not output_file:  # If no output file given, use the name and path of odb file, but change the extension
@@ -180,7 +181,7 @@ def odb_extract(
 
     if odb_report_args is None:
         odb_report_args = ""
-    odb_report_args = get_odb_report_args(odb_report_args, input_file, job_name)
+    odb_report_args = get_odb_report_args(odb_report_args, first_input_file, job_name)
 
     abaqus_base_command = shutil.which(abaqus_command)
     if not abaqus_base_command:
@@ -212,9 +213,7 @@ def odb_extract(
 
     if output_type == "h5":  # If the dataset isn't empty
         try:
-            abaqus_file_parser.OdbReportFileParser(job_name, "extract", output_file, time_stamp).parse(
-                h5_file=output_file
-            )
+            abaqus_file_parser.OdbReportFileParser(job_name, "extract", output_file, time_stamp)
         # Index error is reached if a line is split and the line is empty (i.e. file is empty), ValueError is reached if
         # a string is found where an integer is expected
         except (IndexError, ValueError) as err:

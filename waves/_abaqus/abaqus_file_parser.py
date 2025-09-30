@@ -37,25 +37,20 @@ class AbaqusFileParser(ABC):
         - **parsed**: *dict* Dictionary for holding parsed data
     """
 
-    def __init__(self, input_file: str | pathlib.Path, verbose: bool = False, *args, **kwargs) -> None:
+    def __init__(self, input_file: str | pathlib.Path, *args, verbose: bool = False, **kwargs) -> None:
         self.input_file = input_file
         super().__init__()
         self.parsed: dict = {}
         if input_file:
             self.output_file = f"{input_file}{_settings._default_parsed_extension}"
-        if verbose:
-            self.verbose = True
-        else:
-            self.verbose = False
+        self.verbose = verbose
         self.parse(*args, **kwargs)
         return
 
+    # Anybody who wishes to create a class that inherits from this class, must create a method called parse
     @abstractmethod
     def parse(self) -> None:
         """Parse the target Abaqus file."""
-
-    # Anybody who wishes to create a class that inherits from this class,
-    # must create a method called parse
 
     def write_yaml(self, output_file: str | None = None) -> None:
         """Write the data in yaml format to the output file.
@@ -124,7 +119,7 @@ class OdbReportFileParser(AbaqusFileParser):
 
     def parse(
         self,
-        data_format: str = "extract",
+        data_format: typing.Literal["odb", "extract"] = "extract",
         h5_file: str = f"extract{_settings._default_h5_extension}",
         time_stamp: str | None = None,
     ) -> None:
@@ -235,7 +230,7 @@ class OdbReportFileParser(AbaqusFileParser):
 
         f.close()
         if self.format == "extract":
-            self.parsed = self.create_extract_format(self.parsed, h5_file, time_stamp)
+            self.create_extract_format(self.parsed, h5_file, time_stamp)
 
     def parse_section_categories(self, f: typing.TextIO, categories: dict, number_of_categories: int) -> None:
         """Parse the section that contains section categories.
@@ -1587,7 +1582,7 @@ class OdbReportFileParser(AbaqusFileParser):
         return line
 
     def create_extract_format(self, odb_dict: dict, h5_file: str, time_stamp: str) -> None:
-        """Format the dictionary with the odb data into something that resembles previous abaqus extract method.
+        """Format ``self.parsed`` dictionary odb data into something that resembles previous abaqus extract method.
 
         :param odb_dict: Dictionary with odb data
         :param h5_file: Name of h5_file to use for storing data
@@ -1596,7 +1591,7 @@ class OdbReportFileParser(AbaqusFileParser):
         if self.format != "extract":
             self.print_error("Must specify extract format to utilize this routine.")
             return None  # If extract format wasn't given when parsing the data, this method won't work
-        extract = {}
+        extract: dict = {}
         datasets = []
         try:
             extract_h5 = h5py.File(h5_file, "a")

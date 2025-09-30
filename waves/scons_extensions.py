@@ -2749,7 +2749,7 @@ def _build_odb_extract(
     from waves._abaqus import odb_extract
 
     # Default odb_extract arguments
-    output_type = "h5"
+    output_type: typing.Literal["h5", "yaml", "json"] = "h5"
     odb_report_args = None
     delete_report_file = False
 

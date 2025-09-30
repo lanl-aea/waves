@@ -50,7 +50,7 @@ def test_odb_extract() -> None:
         patch("pathlib.Path.open", mock_open(read_data="data")),
         pytest.raises(SystemExit) as err,
     ):  # Test first critical error
-        odb_extract.odb_extract(["sample.odb"], None)
+        odb_extract.odb_extract([pathlib.Path("sample.odb")], None)
     assert err.value.code != 0
     assert "sample.odb does not exist" in str(err.value.args)
 
@@ -63,7 +63,7 @@ def test_odb_extract() -> None:
         patch("builtins.print"),
         patch("pathlib.Path.exists", return_value=True),
     ):  # Test warning after second critical error
-        odb_extract.odb_extract(["sample"], None)
+        odb_extract.odb_extract([pathlib.Path("sample")], None)
     assert err.value.code != 0
     assert "sample.odb does not exist." in str(err.value.args)
 
@@ -77,7 +77,11 @@ def test_odb_extract() -> None:
         pytest.raises(SystemExit) as err,
     ):  # Test second critical error
         odb_extract.odb_extract(
-            ["sample.odb"], None, odb_report_args="odbreport all invariants", output_type="yaml", verbose=True
+            [pathlib.Path("sample.odb")],
+            None,
+            odb_report_args="odbreport all invariants",
+            output_type="yaml",
+            verbose=True,
         )
     assert err.value.code != 0
     assert "could not be parsed." in str(err.value.args)
@@ -92,7 +96,7 @@ def test_odb_extract() -> None:
         patch("waves._abaqus.odb_extract.run_external", return_value=[-1, b"", b"invalid command."]),
         pytest.raises(SystemExit) as err,
     ):
-        odb_extract.odb_extract(["sample.odb"], None, odb_report_args="job=job_name odb=odb_filea ll")
+        odb_extract.odb_extract([pathlib.Path("sample.odb")], None, odb_report_args="job=job_name odb=odb_filea ll")
     assert err.value.code != 0
     assert "Abaqus odbreport command failed to execute" in str(err.value.args)
 
@@ -107,7 +111,7 @@ def test_odb_extract() -> None:
         patch("waves._abaqus.odb_extract.run_external", return_value=[0, b"", b"valid command."]),
         pytest.raises(SystemExit) as err,
     ):
-        odb_extract.odb_extract(["sample.odb"], None, odb_report_args="odbreport all", output_type="yaml")
+        odb_extract.odb_extract([pathlib.Path("sample.odb")], None, odb_report_args="odbreport all", output_type="yaml")
     assert err.value.code != 0
     assert "does not exist" in str(err.value.args)
 
@@ -122,7 +126,7 @@ def test_odb_extract() -> None:
         patch("waves._abaqus.odb_extract.run_external", return_value=[0, b"", b"valid command."]) as mock_run_external,
     ):
         # Test case where report args overridden by appended arguments
-        odb_extract.odb_extract(["sample.odb"], None, odb_report_args="job=job_name odb=odb_file")
+        odb_extract.odb_extract([pathlib.Path("sample.odb")], None, odb_report_args="job=job_name odb=odb_file")
         mock_abaqus_file_parser.assert_called()
         mock_run_external.assert_called_with(
             "abaqus odbreport job=job_name odb=odb_file -job sample -odb sample.odb -mode CSV -blocked",
@@ -139,7 +143,7 @@ def test_odb_extract() -> None:
         patch("waves._abaqus.odb_extract.run_external", return_value=[0, b"", b"valid command."]) as mock_run_external,
     ):
         # Test case where output name doesn't match odb name
-        odb_extract.odb_extract(["sample.odb"], "new_name.h5", odb_report_args="odbreport -all")
+        odb_extract.odb_extract([pathlib.Path("sample.odb")], "new_name.h5", odb_report_args="odbreport -all")
         mock_run_external.assert_called_with(
             "abaqus odbreport -all -job new_name -odb sample.odb -mode CSV -blocked",
         )
@@ -155,7 +159,7 @@ def test_odb_extract() -> None:
         patch("subprocess.run", return_value=FakeProcess) as mock_run,
     ):
         # Test case where yaml dump is called
-        odb_extract.odb_extract(["sample.odb"], "", odb_report_args="odbreport -all", output_type="yaml")
+        odb_extract.odb_extract([pathlib.Path("sample.odb")], "", odb_report_args="odbreport -all", output_type="yaml")
         mock_safe_dump.assert_called()
         mock_run.assert_called_with(
             [
@@ -185,7 +189,9 @@ def test_odb_extract() -> None:
         patch("waves._abaqus.odb_extract.run_external", return_value=[0, b"", b"valid command."]),
     ):
         # Test case where yaml dump is called
-        odb_extract.odb_extract(["sample.odb"], output_file="sample.j", output_type="json", delete_report_file=True)
+        odb_extract.odb_extract(
+            [pathlib.Path("sample.odb")], output_file="sample.j", output_type="json", delete_report_file=True
+        )
         mock_safe_dump.assert_called()
         mock_unlink.assert_called()
 
@@ -198,7 +204,7 @@ def test_odb_extract() -> None:
         patch("waves._abaqus.odb_extract.run_external", return_value=[0, b"", b"valid command."]),
     ):
         # Test case where h5 file is created
-        odb_extract.odb_extract(["sample.odb"], None, output_type="h5")
+        odb_extract.odb_extract([pathlib.Path("sample.odb")], None, output_type="h5")
         h5_parser.assert_called()
 
     with (
@@ -211,7 +217,7 @@ def test_odb_extract() -> None:
         pytest.raises(SystemExit) as err,
     ):  # Test second critical error
         # Test case where h5 file is requested, but error is raised
-        odb_extract.odb_extract(["sample.odb"], None, output_type="h5")
+        odb_extract.odb_extract([pathlib.Path("sample.odb")], None, output_type="h5")
     assert err.value.code != 0
     assert "could not be parsed." in str(err.value.args)
 

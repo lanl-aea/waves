@@ -11,6 +11,9 @@ Changelog
 Internal Changes
 ================
 - Implement static type checking of test suite (:issue:`973`, :merge:`1260`). By `Kyle Brindley`_.
+- Fix the internal API of the ODB extract parsing class. While this was an internal API bugfix, the public behavior
+  was correct prior to the bugfix and should be unchanged after the bugfix (:issue:`974` :merge:`1258`). By `Kyle
+  Brindley`_.
 
 .. _1.0.0:
 
