@@ -1402,7 +1402,7 @@ class OdbReportFileParser(AbaqusFileParser):
         history_region_summary = False
         while not line.startswith("-----------------------------------------------------------") and line != "":
             if line.strip().startswith("History Region"):
-                region = {}
+                region: dict = {}
                 if line.strip()[-1] == "/":  # Line has continuation
                     continuation_line = f.readline()
                     line += continuation_line
