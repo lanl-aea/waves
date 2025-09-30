@@ -351,7 +351,7 @@ class OdbReportFileParser(AbaqusFileParser):
         else:
             instance["nodes"] = []
             while len(instance["nodes"]) < number_of_nodes:
-                node = {}
+                node: dict = {}
                 line = f.readline()
                 line_values = line.split(",")
                 node["label"] = int(line_values[0].strip())
