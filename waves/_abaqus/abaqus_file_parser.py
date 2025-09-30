@@ -449,7 +449,7 @@ class OdbReportFileParser(AbaqusFileParser):
         else:
             instance["elements"] = []
             while len(instance["elements"]) < number_of_elements:
-                element = {}
+                element: dict = {}
                 line = f.readline()
                 line_values = line.split(",")
                 element["label"] = int(line_values[0].strip())
