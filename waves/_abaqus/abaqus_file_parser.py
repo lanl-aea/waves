@@ -891,7 +891,7 @@ class OdbReportFileParser(AbaqusFileParser):
         :return: current line of file
         """
         self.current_field_number = 0
-        field = {}
+        field: dict = {}
         while (
             "history" not in line.lower()
             and not line.startswith("-----------------------------------------------------------")
@@ -1349,7 +1349,7 @@ class OdbReportFileParser(AbaqusFileParser):
         frame_number: int,
         position_length: int,
         data_length: int,
-        element_size: int,
+        element_size: int | None,
         values: list,
     ) -> None:
         """Pad the values list with None or lists of None values in the locations indicated by the parameters.
