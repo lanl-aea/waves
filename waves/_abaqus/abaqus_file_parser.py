@@ -57,7 +57,7 @@ class AbaqusFileParser(ABC):
 
         :param output_file: Name of output file to write yaml (default: <input file>.parsed)
         """
-        if output_file:
+        if output_file is not None:
             self.output_file = output_file
         if pathlib.Path(self.output_file).suffix != _settings._default_yaml_extension:
             self.output_file = str(pathlib.Path(self.output_file).with_suffix(_settings._default_yaml_extension))

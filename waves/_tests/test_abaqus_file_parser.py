@@ -104,6 +104,50 @@ def test_abaqus_file_parser_init(
         mock_parse.assert_called_once_with(*expected_parse_args, **expected_parse_kwargs)
 
 
+test_write_yaml_cases: dict[str, tuple] = {
+    "default kwargs": ({}, {"parsed": "mock content"}, True),
+    "nondefault output file": ({"output_file": "nondefault_file.yaml"}, {"parsed": "mock content"}, False),
+    "nondefault output file extension": ({"output_file": "nondefault_file.output"}, {"parsed": "mock content"}, True),
+}
+
+
+@pytest.mark.parametrize(
+    ("write_yaml_kwargs", "parsed", "warning"),
+    test_write_yaml_cases.values(),
+    ids=test_write_yaml_cases.keys(),
+)
+def test_write_yaml(write_yaml_kwargs: dict, parsed: dict, warning: bool) -> None:
+    test_instance = ConcreteAbaqusFileParser("dummy_file.input")
+    test_instance.parsed = parsed
+    with (
+        unittest.mock.patch("pathlib.Path.open", unittest.mock.mock_open()) as mock_open,
+        unittest.mock.patch("yaml.safe_dump") as mock_dump,
+        unittest.mock.patch("waves._abaqus.abaqus_file_parser.AbaqusFileParser.print_warning") as mock_warning,
+    ):
+        test_instance.write_yaml(**write_yaml_kwargs)
+        mock_dump.assert_called_once_with(parsed, mock_open())
+        if warning:
+            mock_warning.assert_called_once_with("Changing suffix of output file to .yaml")
+        else:
+            mock_warning.assert_not_called()
+
+    # Method modifies the ``self.output_file`` attribute. Must re-instance for clean test expectations.
+    test_instance = ConcreteAbaqusFileParser("dummy_file.input")
+    test_instance.parsed = parsed
+    with (
+        pytest.raises(SystemExit),
+        unittest.mock.patch("pathlib.Path.open", side_effect=OSError),
+        unittest.mock.patch("yaml.safe_dump") as mock_dump,
+        unittest.mock.patch("waves._abaqus.abaqus_file_parser.AbaqusFileParser.print_warning") as mock_warning,
+    ):
+        test_instance.write_yaml(**write_yaml_kwargs)
+    mock_dump.assert_not_called()
+    if warning:
+        mock_warning.assert_called_once_with("Changing suffix of output file to .yaml")
+    else:
+        mock_warning.assert_not_called()
+
+
 test_print_warning_error_cases = {
     "only required init arguments": (("dummy_file.input",), {}, "message contents", False),
     "parse passthrough arguments, only required init arguments": (
