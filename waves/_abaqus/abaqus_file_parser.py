@@ -536,7 +536,7 @@ class OdbReportFileParser(AbaqusFileParser):
             if summary_element_set:
                 line_values = line.strip().split()
                 if len(line_values) == 2:
-                    element_set = {}
+                    element_set: dict = {}
                     element_name, element_size = line_values
                     element_set["name"] = element_name.strip()[1:-1]  # Removing single quotes
                     element_set["size"] = element_size
