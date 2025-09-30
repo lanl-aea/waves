@@ -484,7 +484,7 @@ class OdbReportFileParser(AbaqusFileParser):
             if summary_node_set:
                 line_values = line.strip().split()
                 if len(line_values) == 2:
-                    node_set = {}
+                    node_set: dict = {}
                     node_name, node_size = line_values
                     node_set["name"] = node_name.strip()[1:-1]  # Removing single quotes
                     node_set["size"] = node_size
@@ -509,7 +509,7 @@ class OdbReportFileParser(AbaqusFileParser):
                             if self.format == "extract":
                                 node_set["nodes"].append(int(value))
                             else:
-                                node = {}
+                                node: dict = {}
                                 node["label"] = int(value)
                                 node_set["nodes"].append(node)
                     if line == "":
