@@ -853,7 +853,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 line = f.readline()
                 frame["fields"].append(line.replace("Field name", "").strip()[1:-1])
             frames.append(frame)
-            return ""
+            return line
         # Code below handles full list of frames
         current_frame_number = 0
         while "history" not in line.lower() and line != "":
