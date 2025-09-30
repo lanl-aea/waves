@@ -1192,6 +1192,7 @@ class OdbReportFileParser(AbaqusFileParser):
                             )
 
                 # get the values after the first 5 values of: Instance, Element, Node, SP, IP
+                data_value: float | list[float | None]
                 if number_of_data_values == 1:
                     data_value = float(line_values[-1])
                 else:
