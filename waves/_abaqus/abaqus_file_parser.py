@@ -688,7 +688,7 @@ class OdbReportFileParser(AbaqusFileParser):
                                 for value in line.split(","):
                                     element_label, face = value.split(":")
                                     faces.add(face.strip())
-                                    element = {}
+                                    element: dict = {}
                                     element["label"] = int(element_label.strip())
                                     element["instanceName"] = instance_name
                                     surface["elements"].append(element)
@@ -723,7 +723,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 profile = True
                 continue
             if "segments" in instance["analyticSurface"] and profile and line != "\n":
-                segment = {}
+                segment: dict = {}
                 line_values = line.strip().split(",")
                 if line_values[0] == "START":
                     segment["name"] = line_values[0]
@@ -745,7 +745,7 @@ class OdbReportFileParser(AbaqusFileParser):
         line = f.readline()
         while len(instance["rigidBodies"]) < number_of_rigid_bodies:
             if line.strip().startswith("Rigid Body #"):
-                rigid_body = {}
+                rigid_body: dict = {}
                 line = f.readline()
                 while line != "\n" and not line.strip().startswith("Rigid Body #") and line != "":
                     if line.strip().startswith("position:"):
@@ -803,7 +803,7 @@ class OdbReportFileParser(AbaqusFileParser):
         while line.strip() != "End of ODB Report." and line != "":
             # TODO: Find odbreport with loadCases in the steps
             if line.strip().startswith("Step name"):
-                step = {}
+                step: dict = {}
                 step["name"] = line.replace("Step name", "").strip()[1:-1]
                 if self.format == "extract":
                     self.current_step_name = step["name"]
@@ -846,7 +846,7 @@ class OdbReportFileParser(AbaqusFileParser):
         """
         line = f.readline()
         if line.strip().startswith("Number of field outputs"):  # Summary instead of full details
-            frame = {}
+            frame: dict = {}
             frame["total_number"] = number_of_frames
             frame["fields"] = []
             while line != "\n" and line != "":
