@@ -583,7 +583,7 @@ class OdbReportFileParser(AbaqusFileParser):
                         elif line != "\n":
                             line_values = line.split(",")
                             for value in line_values:
-                                element = {}
+                                element: dict = {}
                                 element["label"] = int(value)
                                 element["instanceName"] = instance_name
                                 element_set["elements"].append(element)
@@ -611,7 +611,7 @@ class OdbReportFileParser(AbaqusFileParser):
             if summary_surface_set:
                 line_values = line.strip().split()
                 if len(line_values) == 2:
-                    surface = {}
+                    surface: dict = {}
                     surface_name, surface_size = line_values
                     surface["name"] = surface_name.strip()[1:-1]  # Removing single quotes
                     surface["size"] = surface_size
