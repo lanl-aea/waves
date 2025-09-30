@@ -102,3 +102,45 @@ def test_abaqus_file_parser_init(
         assert test_instance.output_file == output_file
         assert test_instance.verbose is verbose
         mock_parse.assert_called_once_with(*expected_parse_args, **expected_parse_kwargs)
+
+
+test_print_warning_error_cases = {
+    "only required init arguments": (("dummy_file.input",), {}, "message contents", False),
+    "parse passthrough arguments, only required init arguments": (
+        ("dummy_file.input", "parse_positional"),
+        {"parse_kwarg1_key": "parse_kwarg1_value"},
+        "message contents",
+        False,
+    ),
+    "non default verbose argument": (("dummy_file.input",), {"verbose": True}, "message contents", True),
+    "parse passthrough arguments, verbose": (
+        ("dummy_file.input", "parse_positional"),
+        {"verbose": True, "parse_kwarg1_key": "parse_kwarg1_value"},
+        "message contents",
+        True,
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("init_args", "init_kwargs", "message", "expect_print"),
+    test_print_warning_error_cases.values(),
+    ids=test_print_warning_error_cases.keys(),
+)
+def test_print_warning_error(
+    init_args: tuple, init_kwargs: dict[str, typing.Any], message: str, expect_print: bool
+) -> None:
+    test_instance = ConcreteAbaqusFileParser(*init_args, **init_kwargs)
+    with unittest.mock.patch("builtins.print") as mock_print:
+        test_instance.print_error(message)
+        if expect_print:
+            mock_print.assert_called_once_with(message)
+        else:
+            mock_print.assert_not_called()
+
+    with unittest.mock.patch("builtins.print") as mock_print:
+        test_instance.print_warning(message)
+        if expect_print:
+            mock_print.assert_called_once_with(message)
+        else:
+            mock_print.assert_not_called()
