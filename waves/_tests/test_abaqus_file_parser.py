@@ -13,6 +13,9 @@ class ConcreteAbaqusFileParser(abaqus_file_parser.AbaqusFileParser):
 
 test_abaqus_file_parser_init_cases: dict[str, tuple] = {
     "only init arguments": (("dummy_file.input",), {}, "dummy_file.input", "dummy_file.input.parsed", False),
+    "non-default kwargs": (
+        ("dummy_file.input",), {"verbose": True}, "dummy_file.input", "dummy_file.input.parsed", True
+    ),
     "init and parse arguments": (
         ("dummy_file.input", "thing1"), {"keyword1": "value1"}, "dummy_file.input", "dummy_file.input.parsed", False
     ),
