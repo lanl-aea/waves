@@ -1,6 +1,3 @@
-# TODO: fix type annotations and static type checking in _abaqus module
-# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/974
-# mypy: ignore-errors
 """Parse various file types created via Abaqus.
 
 .. moduleauthor:: Prabhu S. Khalsa <pkhalsa@lanl.gov>

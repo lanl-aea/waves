@@ -103,8 +103,5 @@ disable_error_code = "import-untyped"
 exclude = [
     "modsim_template",
     "tutorials",
-    # TODO: fix type annotations and static type checking in _abaqus module
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/974
-    "_abaqus",
 ]
 packages = ["waves"]
