@@ -1549,7 +1549,7 @@ class OdbReportFileParser(AbaqusFileParser):
             and not line.startswith("-----------------------------------------------------------")
         ):
             if line.strip().startswith("History Output"):
-                output = {}
+                output: dict = {}
                 if line.strip()[-1] == "/":  # Line has continuation
                     continuation_line = f.readline()
                     line += continuation_line
