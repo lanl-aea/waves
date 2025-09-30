@@ -1614,7 +1614,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 node_labels = instance["nodes"]["labels"]
             except KeyError:  # If the key 'nodes' is not present it is an assembly instance not a part instance
                 continue
-            coords = [node_labels, ["x", "y", "z"]]
+            node_location_coords = [node_labels, ["x", "y", "z"]]
             if instance["embeddedSpace"].upper() == "AXISYMMETRIC":
                 try:
                     mesh["node_location"] = xarray.DataArray(
@@ -1622,11 +1622,11 @@ class OdbReportFileParser(AbaqusFileParser):
                     )
                 except ValueError:  # If somehow the data are not 2 dimensional, use the 3 dimensional coordinates
                     mesh["node_location"] = xarray.DataArray(
-                        data=instance["nodes"]["coordinates"], coords=coords, dims=["node", "vector"]
+                        data=instance["nodes"]["coordinates"], coords=node_location_coords, dims=["node", "vector"]
                     )
             else:
                 mesh["node_location"] = xarray.DataArray(
-                    data=instance["nodes"]["coordinates"], coords=coords, dims=["node", "vector"]
+                    data=instance["nodes"]["coordinates"], coords=node_location_coords, dims=["node", "vector"]
                 )
             del instance["nodes"]  # Clear up memory now that it's stored elsewhere
             if "elements" in instance:
@@ -1646,7 +1646,7 @@ class OdbReportFileParser(AbaqusFileParser):
                     )
                 del instance["elements"]
 
-        history_length = {}
+        history_length: dict = {}
         step_field_names = []
         step_field_mask = []
         step_history_names = []
@@ -1763,7 +1763,7 @@ class OdbReportFileParser(AbaqusFileParser):
         del history_length
 
         # Format field outputs
-        dataset_length = {}
+        dataset_length: dict = {}
         for region_name in self.field_extract_format:
             for field_name in self.field_extract_format[region_name]:
                 for instance_name in self.field_extract_format[region_name][field_name]:
