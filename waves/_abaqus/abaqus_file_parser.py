@@ -1,6 +1,3 @@
-# TODO: fix type annotations and static type checking in _abaqus module
-# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/974
-# mypy: ignore-errors
 """Parse various file types created via Abaqus.
 
 .. moduleauthor:: Prabhu S. Khalsa <pkhalsa@lanl.gov>
@@ -354,7 +351,7 @@ class OdbReportFileParser(AbaqusFileParser):
         else:
             instance["nodes"] = []
             while len(instance["nodes"]) < number_of_nodes:
-                node = {}
+                node: dict = {}
                 line = f.readline()
                 line_values = line.split(",")
                 node["label"] = int(line_values[0].strip())
@@ -452,7 +449,7 @@ class OdbReportFileParser(AbaqusFileParser):
         else:
             instance["elements"] = []
             while len(instance["elements"]) < number_of_elements:
-                element = {}
+                element: dict = {}
                 line = f.readline()
                 line_values = line.split(",")
                 element["label"] = int(line_values[0].strip())
@@ -487,7 +484,7 @@ class OdbReportFileParser(AbaqusFileParser):
             if summary_node_set:
                 line_values = line.strip().split()
                 if len(line_values) == 2:
-                    node_set = {}
+                    node_set: dict = {}
                     node_name, node_size = line_values
                     node_set["name"] = node_name.strip()[1:-1]  # Removing single quotes
                     node_set["size"] = node_size
@@ -512,7 +509,7 @@ class OdbReportFileParser(AbaqusFileParser):
                             if self.format == "extract":
                                 node_set["nodes"].append(int(value))
                             else:
-                                node = {}
+                                node: dict = {}
                                 node["label"] = int(value)
                                 node_set["nodes"].append(node)
                     if line == "":
@@ -539,7 +536,7 @@ class OdbReportFileParser(AbaqusFileParser):
             if summary_element_set:
                 line_values = line.strip().split()
                 if len(line_values) == 2:
-                    element_set = {}
+                    element_set: dict = {}
                     element_name, element_size = line_values
                     element_set["name"] = element_name.strip()[1:-1]  # Removing single quotes
                     element_set["size"] = element_size
@@ -586,7 +583,7 @@ class OdbReportFileParser(AbaqusFileParser):
                         elif line != "\n":
                             line_values = line.split(",")
                             for value in line_values:
-                                element = {}
+                                element: dict = {}
                                 element["label"] = int(value)
                                 element["instanceName"] = instance_name
                                 element_set["elements"].append(element)
@@ -614,7 +611,7 @@ class OdbReportFileParser(AbaqusFileParser):
             if summary_surface_set:
                 line_values = line.strip().split()
                 if len(line_values) == 2:
-                    surface = {}
+                    surface: dict = {}
                     surface_name, surface_size = line_values
                     surface["name"] = surface_name.strip()[1:-1]  # Removing single quotes
                     surface["size"] = surface_size
@@ -691,7 +688,7 @@ class OdbReportFileParser(AbaqusFileParser):
                                 for value in line.split(","):
                                     element_label, face = value.split(":")
                                     faces.add(face.strip())
-                                    element = {}
+                                    element: dict = {}
                                     element["label"] = int(element_label.strip())
                                     element["instanceName"] = instance_name
                                     surface["elements"].append(element)
@@ -726,7 +723,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 profile = True
                 continue
             if "segments" in instance["analyticSurface"] and profile and line != "\n":
-                segment = {}
+                segment: dict = {}
                 line_values = line.strip().split(",")
                 if line_values[0] == "START":
                     segment["name"] = line_values[0]
@@ -748,7 +745,7 @@ class OdbReportFileParser(AbaqusFileParser):
         line = f.readline()
         while len(instance["rigidBodies"]) < number_of_rigid_bodies:
             if line.strip().startswith("Rigid Body #"):
-                rigid_body = {}
+                rigid_body: dict = {}
                 line = f.readline()
                 while line != "\n" and not line.strip().startswith("Rigid Body #") and line != "":
                     if line.strip().startswith("position:"):
@@ -806,7 +803,7 @@ class OdbReportFileParser(AbaqusFileParser):
         while line.strip() != "End of ODB Report." and line != "":
             # TODO: Find odbreport with loadCases in the steps
             if line.strip().startswith("Step name"):
-                step = {}
+                step: dict = {}
                 step["name"] = line.replace("Step name", "").strip()[1:-1]
                 if self.format == "extract":
                     self.current_step_name = step["name"]
@@ -849,14 +846,14 @@ class OdbReportFileParser(AbaqusFileParser):
         """
         line = f.readline()
         if line.strip().startswith("Number of field outputs"):  # Summary instead of full details
-            frame = {}
+            frame: dict = {}
             frame["total_number"] = number_of_frames
             frame["fields"] = []
             while line != "\n" and line != "":
                 line = f.readline()
                 frame["fields"].append(line.replace("Field name", "").strip()[1:-1])
             frames.append(frame)
-            return
+            return line
         # Code below handles full list of frames
         current_frame_number = 0
         while "history" not in line.lower() and line != "":
@@ -894,7 +891,7 @@ class OdbReportFileParser(AbaqusFileParser):
         :return: current line of file
         """
         self.current_field_number = 0
-        field = {}
+        field: dict = {}
         while (
             "history" not in line.lower()
             and not line.startswith("-----------------------------------------------------------")
@@ -1006,7 +1003,7 @@ class OdbReportFileParser(AbaqusFileParser):
             current_output = self.field_extract_format[region_name][field_name]
         return current_output
 
-    def parse_field_values(self, f: typing.TextIO, line: str, values: list) -> str:
+    def parse_field_values(self, f: typing.TextIO, line: str, values: list | dict) -> str:
         """Parse the section that contains the data for field values.
 
         :param f: open file
@@ -1068,7 +1065,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 break
             line_values = line.split(",")
             line_value_number = 0
-            if self.format != "extract":
+            if self.format == "odb" and isinstance(values, list):
                 value["instance"] = value_instance
                 if element_given:
                     value["elementLabel"] = int(line_values[line_value_number])
@@ -1092,7 +1089,7 @@ class OdbReportFileParser(AbaqusFileParser):
                     except ValueError:  # The float command will fail on None
                         value[value_headers[i]] = None
                 values.append(value)
-            else:
+            elif self.format == "extract" and isinstance(values, dict):
                 time_value = float(self.current_frame["frame value"])
                 try:
                     values[value_instance]["value_names"] = value_headers
@@ -1195,6 +1192,7 @@ class OdbReportFileParser(AbaqusFileParser):
                             )
 
                 # get the values after the first 5 values of: Instance, Element, Node, SP, IP
+                data_value: float | list[float | None]
                 if number_of_data_values == 1:
                     data_value = float(line_values[-1])
                 else:
@@ -1319,6 +1317,11 @@ class OdbReportFileParser(AbaqusFileParser):
                             values[value_instance]["values"][self.current_step_count][time_index][index_key] = (
                                 data_value
                             )
+            else:
+                raise TypeError(
+                    f"Requested format '{self.format}' and provided ``values`` type '{type(values)}' does not match"
+                    " expectations 'extract/dict' or 'odb/list'."
+                )
         return line
 
     def get_position_index(self, position: int, position_type: str, values: dict) -> tuple[int, bool]:
@@ -1352,7 +1355,7 @@ class OdbReportFileParser(AbaqusFileParser):
         frame_number: int,
         position_length: int,
         data_length: int,
-        element_size: int,
+        element_size: int | None,
         values: list,
     ) -> None:
         """Pad the values list with None or lists of None values in the locations indicated by the parameters.
@@ -1404,7 +1407,7 @@ class OdbReportFileParser(AbaqusFileParser):
         history_region_summary = False
         while not line.startswith("-----------------------------------------------------------") and line != "":
             if line.strip().startswith("History Region"):
-                region = {}
+                region: dict = {}
                 if line.strip()[-1] == "/":  # Line has continuation
                     continuation_line = f.readline()
                     line += continuation_line
@@ -1551,7 +1554,7 @@ class OdbReportFileParser(AbaqusFileParser):
             and not line.startswith("-----------------------------------------------------------")
         ):
             if line.strip().startswith("History Output"):
-                output = {}
+                output: dict = {}
                 if line.strip()[-1] == "/":  # Line has continuation
                     continuation_line = f.readline()
                     line += continuation_line
@@ -1616,7 +1619,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 node_labels = instance["nodes"]["labels"]
             except KeyError:  # If the key 'nodes' is not present it is an assembly instance not a part instance
                 continue
-            coords = [node_labels, ["x", "y", "z"]]
+            node_location_coords = [node_labels, ["x", "y", "z"]]
             if instance["embeddedSpace"].upper() == "AXISYMMETRIC":
                 try:
                     mesh["node_location"] = xarray.DataArray(
@@ -1624,11 +1627,11 @@ class OdbReportFileParser(AbaqusFileParser):
                     )
                 except ValueError:  # If somehow the data are not 2 dimensional, use the 3 dimensional coordinates
                     mesh["node_location"] = xarray.DataArray(
-                        data=instance["nodes"]["coordinates"], coords=coords, dims=["node", "vector"]
+                        data=instance["nodes"]["coordinates"], coords=node_location_coords, dims=["node", "vector"]
                     )
             else:
                 mesh["node_location"] = xarray.DataArray(
-                    data=instance["nodes"]["coordinates"], coords=coords, dims=["node", "vector"]
+                    data=instance["nodes"]["coordinates"], coords=node_location_coords, dims=["node", "vector"]
                 )
             del instance["nodes"]  # Clear up memory now that it's stored elsewhere
             if "elements" in instance:
@@ -1648,7 +1651,7 @@ class OdbReportFileParser(AbaqusFileParser):
                     )
                 del instance["elements"]
 
-        history_length = {}
+        history_length: dict = {}
         step_field_names = []
         step_field_mask = []
         step_history_names = []
@@ -1765,7 +1768,7 @@ class OdbReportFileParser(AbaqusFileParser):
         del history_length
 
         # Format field outputs
-        dataset_length = {}
+        dataset_length: dict = {}
         for region_name in self.field_extract_format:
             for field_name in self.field_extract_format[region_name]:
                 for instance_name in self.field_extract_format[region_name][field_name]:

@@ -14,6 +14,8 @@ Internal Changes
 - Fix the internal API of the ODB extract parsing class. While this was an internal API bugfix, the public behavior
   was correct prior to the bugfix and should be unchanged after the bugfix (:issue:`974` :merge:`1258`). By `Kyle
   Brindley`_.
+- Implement static type checking of the internal ``_abaqus`` module implementing ``odb_extract`` (:issue:`974`,
+  :merge:`1261`). By `Kyle Brindley`_.
 
 .. _1.0.0:
 
