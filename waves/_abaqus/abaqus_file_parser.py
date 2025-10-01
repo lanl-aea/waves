@@ -1003,7 +1003,7 @@ class OdbReportFileParser(AbaqusFileParser):
             current_output = self.field_extract_format[region_name][field_name]
         return current_output
 
-    def parse_field_values(self, f: typing.TextIO, line: str, values: list) -> str:
+    def parse_field_values(self, f: typing.TextIO, line: str, values: list | dict) -> str:
         """Parse the section that contains the data for field values.
 
         :param f: open file
@@ -1065,7 +1065,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 break
             line_values = line.split(",")
             line_value_number = 0
-            if self.format != "extract":
+            if self.format == "odb" and isinstance(values, list):
                 value["instance"] = value_instance
                 if element_given:
                     value["elementLabel"] = int(line_values[line_value_number])
@@ -1089,7 +1089,7 @@ class OdbReportFileParser(AbaqusFileParser):
                     except ValueError:  # The float command will fail on None
                         value[value_headers[i]] = None
                 values.append(value)
-            else:
+            elif self.format == "extract" and isinstance(values, dict):
                 time_value = float(self.current_frame["frame value"])
                 try:
                     values[value_instance]["value_names"] = value_headers
@@ -1317,6 +1317,11 @@ class OdbReportFileParser(AbaqusFileParser):
                             values[value_instance]["values"][self.current_step_count][time_index][index_key] = (
                                 data_value
                             )
+            else:
+                raise TypeError(
+                    f"Requested format '{self.format}' and provided ``values`` type '{type(values)}' does not match"
+                    " expectations 'extract/dict' or 'odb/list'."
+                )
         return line
 
     def get_position_index(self, position: int, position_type: str, values: dict) -> tuple[int, bool]:
