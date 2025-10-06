@@ -27,7 +27,7 @@ Import("env")
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
-workflow_configuration = [env["project_configuration"], workflow_name]
+workflow_configuration = [env["project_configuration"], f"{workflow_name}.scons"]
 parameter_study_file = build_directory / "parameter_study.h5"
 
 # Collect the target nodes to build a concise alias for all targets
