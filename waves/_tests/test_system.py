@@ -623,7 +623,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_12_archival --sconstruct=tutorial_12_archival_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_12_archival tutorial_12_archival_archive --sconstruct=tutorial_12_archival_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 12",
