@@ -206,10 +206,15 @@ env.Alias(workflow_name, workflow)
 env.Alias(f"{workflow_name}_datacheck", datacheck)
 env.Alias(env["datacheck_alias"], datacheck)
 env.Alias(env["regression_alias"], datacheck)
-env.Alias(f"{workflow_name}_archive", archive_target)
+archive_alias = f"{workflow_name}_archive"
+env.Alias(archive_alias, archive_target)
 
 if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
-    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+    print(
+        "Program 'abaqus' was not found in construction environment."
+        f" Ignoring '{workflow_name}' and '{archive_alias}' target(s)"
+    )
     Ignore([".", workflow_name], workflow)
+    Ignore([".", archive_alias], archive_target)
     Ignore([".", f"{workflow_name}_datacheck"], datacheck)
     Ignore([".", env["datacheck_alias"], env["regression_alias"]], datacheck)

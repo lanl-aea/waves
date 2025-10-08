@@ -8,6 +8,10 @@ Changelog
 1.1.0 (unreleased)
 ******************
 
+Documentation
+=============
+- Update SCons URLs for SCons v4.10.0 documentation updates (:issue:`975`, :merge:`1264`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Implement static type checking of test suite (:issue:`973`, :merge:`1260`). By `Kyle Brindley`_.
