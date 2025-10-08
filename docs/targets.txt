@@ -106,8 +106,8 @@
 .. _`SCons sharing environments`: https://scons.org/doc/production/HTML/scons-user/ch14s05.html
 .. _`SCons Node Package`: https://scons.org/doc/production/HTML/scons-api/SCons.Node/
 .. _`SCons Appendix D`: https://scons.org/doc/production/HTML/scons-user/apd.html
-.. _`SCons FindFile`: https://scons.org/doc/production/HTML/scons-user/ch26s05.html 
-.. _`SCons Python function builder`: https://scons.org/doc/production/HTML/scons-user.html#sect-builders-function 
+.. _`SCons FindFile`: https://scons.org/doc/production/HTML/scons-user/ch26s05.html
+.. _`SCons Python function builder`: https://scons.org/doc/production/HTML/scons-user.html#sect-builders-function
 .. _`SCons SConscript`: https://scons.org/doc/production/HTML/scons-user/ch14.html
 .. _`SCons Special Variables`: https://scons.org/doc/production/HTML/scons-man.html#special_variables
 .. _`SCons Variable Substitution`: https://scons.org/doc/production/HTML/scons-man.html#variable_substitution
