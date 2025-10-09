@@ -1488,22 +1488,56 @@ class CatenationStudy(ParameterGenerator):
            index         (set_hash) object 5 6
 
     """
+
     def _validate(self) -> None:
         """Validate the Custom Study parameter samples and names. Executed by class initiation."""
         if not isinstance(self.parameter_schema, dict):
             raise SchemaValidationError("Input must be a dictionary")
         # Parse keys of dictionary and ensure that they correspond to existing parameter generators
-        accepted_generators = ["CartesianProduct", "OneAtATime", "LatinHypercube", "SobolSequence", "ScipySampler", "CustomStudy"]
-        for key in parameter_schema.keys():
+        accepted_generators = [
+            "CartesianProduct",
+            "OneAtATime",
+            "LatinHypercube",
+            "SobolSequence",
+            "ScipySampler",
+            "CustomStudy",
+        ]
+        for key in self.parameter_schema:
             if key not in accepted_generators:
-                raise SchemaValidationError(f"The input dictionary key {key} did not correspond to an accepted parameter generator")
+                raise SchemaValidationError(
+                    f"The input dictionary key {key} did not correspond to an accepted parameter generator"
+                )
         return
 
-    def _generate(self, **kwargs) -> None:  # noqa: ARG002
-        """Generate the parameter study dataset from the user provided parameter array."""
-        # Converted to numpy array by _validate. Simply assign to correct attribute
-        #self._samples = self.parameter_schema["parameter_samples"]
-        #super()._generate()
+    def _generate(self, **kwargs) -> None:
+        """Generate the parameter studies and combine them."""
+        studies = []
+        # Build list of studies from generators
+        for key in self.parameter_schema:
+            if key == "CartesianProduct":
+                study = CartesianProduct(self.parameter_schema[key], **kwargs)
+            elif key == "OneAtATime":
+                study = OneAtATime(self.parameter_schema[key], **kwargs)
+            elif key == "LatinHypercube":
+                study = LatinHypercube(self.parameter_schema[key], **kwargs)
+            elif key == "SobolSequence":
+                study = SobolSequence(self.parameter_schema[key], **kwargs)
+            elif key == "ScipySampler":
+                study = ScipySampler(self.parameter_schema[key], **kwargs)
+            elif key == "CustomStudy":
+                study = CustomStudy(self.parameter_schema[key], **kwargs)
+            studies.append(study.parameter_study)
+
+        self.parameter_study = _merge_parameter_studies(studies, self.set_name_template)
+        self.parameter_study = self.parameter_study.sortby(_set_coordinate_key)
+        # Do work normally performed by super()._generate(). Must re-calculate semi-private variables
+        self.parameter_study = self.parameter_study.swap_dims({_set_coordinate_key: _hash_coordinate_key})
+        self._samples = self._parameter_study_to_numpy()
+        self._set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
+        self._set_names = self.parameter_study[_set_coordinate_key].to_series().to_dict()
+        self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
+        if self.previous_parameter_study is not None and self.previous_parameter_study.is_file():
+            self._merge_parameter_studies()
 
 
 def _calculate_set_hash(parameter_names: collections.abc.Sequence[str], set_samples: collections.abc.Sequence) -> str:
