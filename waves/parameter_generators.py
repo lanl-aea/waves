@@ -1491,32 +1491,19 @@ class CatenationStudy(ParameterGenerator):
     def _validate(self) -> None:
         """Validate the Custom Study parameter samples and names. Executed by class initiation."""
         if not isinstance(self.parameter_schema, dict):
-            raise SchemaValidationError("input must be a dictionary")
-        try:
-            self._parameter_names = self.parameter_schema["parameter_names"]
-        except KeyError as err:
-            raise SchemaValidationError("parameter_schema must contain the key: parameter_names") from err
-        if "parameter_samples" not in self.parameter_schema:
-            raise SchemaValidationError("parameter_schema must contain the key: parameter_samples")
-        # Always convert to numpy array for shape check and _generate()
-        else:
-            self.parameter_schema["parameter_samples"] = numpy.array(
-                self.parameter_schema["parameter_samples"], dtype=object
-            )
-        if (
-            self.parameter_schema["parameter_samples"].ndim != 2
-            or len(self._parameter_names) != self.parameter_schema["parameter_samples"].shape[1]
-        ):
-            raise SchemaValidationError(
-                "The parameter samples must be an array of shape MxN, where N is the number of parameters."
-            )
+            raise SchemaValidationError("Input must be a dictionary")
+        # Parse keys of dictionary and ensure that they correspond to existing parameter generators
+        accepted_generators = ["CartesianProduct", "OneAtATime", "LatinHypercube", "SobolSequence", "ScipySampler", "CustomStudy"]
+        for key in parameter_schema.keys():
+            if key not in accepted_generators:
+                raise SchemaValidationError(f"The input dictionary key {key} did not correspond to an accepted parameter generator")
         return
 
     def _generate(self, **kwargs) -> None:  # noqa: ARG002
         """Generate the parameter study dataset from the user provided parameter array."""
         # Converted to numpy array by _validate. Simply assign to correct attribute
-        self._samples = self.parameter_schema["parameter_samples"]
-        super()._generate()
+        #self._samples = self.parameter_schema["parameter_samples"]
+        #super()._generate()
 
 
 def _calculate_set_hash(parameter_names: collections.abc.Sequence[str], set_samples: collections.abc.Sequence) -> str:
