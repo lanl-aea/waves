@@ -1417,6 +1417,108 @@ class SALibSampler(ParameterGenerator, ABC):
         super()._generate()
 
 
+class CatenationStudy(ParameterGenerator):
+    """Builds a custom parameter study from user-specified values.
+
+    Parameters must be scalar valued integers, floats, strings, or booleans
+
+    :param parameter_schema: Dictionary with keys corresponding to the name of parameter generator class types
+        ("CartesianProduct", "LatinHypercube", etc.). Each key's value is a dictionary of the parameter schema for that
+        parameter generator class. Each dictionary of each parameter generator class follows standard schema formatting
+        for that class.
+    :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
+        parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
+        relative path template. May contain the ``@number`` set number placeholder in the file basename but not in the
+        path. If the placeholder is not found it will be appended to the template string. Output files are overwritten
+        if the content of the file has changed or if ``overwrite`` is True. ``output_file_template`` and ``output_file``
+        are mutually exclusive.
+    :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
+        be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
+        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
+        and ``output_file_template`` are mutually exclusive.
+    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
+    :param previous_parameter_study: A relative or absolute file path to a previously created parameter
+        study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
+        Set name to content associations of the previous study are preserved when the parameter spaces between the
+        previous and current study are identical. If the parameter spaces are unique, the current study will propagate
+        the parameter spaces to resolve them. This will break set name to content associations of the previous study.
+    :param require_previous_parameter_study: Raise a ``RuntimeError`` if the previous parameter study file is missing.
+    :param overwrite: Overwrite existing output files
+    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
+        Useful for command line execution with build systems that require an explicit file list for target creation.
+
+    :var self.parameter_study: The final parameter study XArray Dataset object
+
+    :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
+        options are both specified
+    :raises waves.exceptions.APIError: If an unknown output file type is requested
+    :raises RuntimeError: If a previous parameter study file is specified and missing, and
+        ``require_previous_parameter_study`` is ``True``
+    :raises waves.exceptions.SchemaValidationError:
+
+        * Parameter schema is not a dictionary
+        * Parameter schema does not contain the ``parameter_names`` key
+        * Parameter schema does not contain the ``parameter_samples`` key
+        * The ``parameter_samples`` value is an improperly shaped array
+
+    Example:
+
+    .. code-block::
+
+       >>> import waves
+       >>> import numpy
+       >>> parameter_schema = {
+       ...     "CartesianProduct": {'parameter_1': [1, 2], 'parameter_2': ['a', 'b']},
+       ...     "LatinHypercube": {'num_simulations': 4,
+       ...         'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1},
+       ...         'parameter_2': {'distribution': 'skewnorm','a': 4, 'loc': 30, 'scale': 2}
+       ...         },
+       ...     }
+       >>> parameter_generator = waves.parameter_generators.CatenationStudy(parameter_schema)
+       >>> print(parameter_generator.parameter_study)
+       <xarray.Dataset>
+       Dimensions:       (set_hash: 2)
+       Coordinates:
+           set_hash      (set_hash) <U32 '50ba1a2716e42f8c4fcc34a90a...
+         * set_name      (set_hash) <U14 'parameter_set0' 'parameter...
+       Data variables:
+           height        (set_hash) object 1.0 2.0
+           prefix        (set_hash) object 'a' 'b'
+           index         (set_hash) object 5 6
+
+    """
+    def _validate(self) -> None:
+        """Validate the Custom Study parameter samples and names. Executed by class initiation."""
+        if not isinstance(self.parameter_schema, dict):
+            raise SchemaValidationError("input must be a dictionary")
+        try:
+            self._parameter_names = self.parameter_schema["parameter_names"]
+        except KeyError as err:
+            raise SchemaValidationError("parameter_schema must contain the key: parameter_names") from err
+        if "parameter_samples" not in self.parameter_schema:
+            raise SchemaValidationError("parameter_schema must contain the key: parameter_samples")
+        # Always convert to numpy array for shape check and _generate()
+        else:
+            self.parameter_schema["parameter_samples"] = numpy.array(
+                self.parameter_schema["parameter_samples"], dtype=object
+            )
+        if (
+            self.parameter_schema["parameter_samples"].ndim != 2
+            or len(self._parameter_names) != self.parameter_schema["parameter_samples"].shape[1]
+        ):
+            raise SchemaValidationError(
+                "The parameter samples must be an array of shape MxN, where N is the number of parameters."
+            )
+        return
+
+    def _generate(self, **kwargs) -> None:  # noqa: ARG002
+        """Generate the parameter study dataset from the user provided parameter array."""
+        # Converted to numpy array by _validate. Simply assign to correct attribute
+        self._samples = self.parameter_schema["parameter_samples"]
+        super()._generate()
+
+
 def _calculate_set_hash(parameter_names: collections.abc.Sequence[str], set_samples: collections.abc.Sequence) -> str:
     """Calculate the unique, repeatable parameter set content hash for a single parameter set.
 
