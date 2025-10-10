@@ -8,6 +8,15 @@ Changelog
 1.1.0 (unreleased)
 ******************
 
+******************
+1.0.1 (2025-10-10)
+******************
+
+Bug fixes
+=========
+- Enforce consistently ordered Abaqus restart extensions in the Abaqus pseudo-builder (:issue:`976`, :merge:`1265`). By
+  `Kyle Brindley`_.
+
 Documentation
 =============
 - Update SCons URLs for SCons v4.10.0 documentation updates (:issue:`975`, :merge:`1264`). By `Kyle Brindley`_.
