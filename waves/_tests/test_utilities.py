@@ -466,4 +466,4 @@ def test_get_abaqus_restart_extensions(
             solver=solver,  # type: ignore[arg-type]
             processes=processes,
         )
-        assert set(extensions) == set(expected)
+        assert extensions == expected
