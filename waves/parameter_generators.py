@@ -1505,7 +1505,7 @@ class CatenationStudy(ParameterGenerator):
         for key in self.parameter_schema:
             if key not in accepted_generators:
                 raise SchemaValidationError(
-                    f"The input dictionary key {key} did not correspond to an accepted parameter generator"
+                    f"The input dictionary key '{key}' did not correspond to an accepted parameter generator"
                 )
         return
 
@@ -1514,19 +1514,14 @@ class CatenationStudy(ParameterGenerator):
         studies = []
         # Build list of studies from generators
         for key in self.parameter_schema:
-            if key == "CartesianProduct":
-                study = CartesianProduct(self.parameter_schema[key], **kwargs)
-            elif key == "OneAtATime":
-                study = OneAtATime(self.parameter_schema[key], **kwargs)
-            elif key == "LatinHypercube":
-                study = LatinHypercube(self.parameter_schema[key], **kwargs)
-            elif key == "SobolSequence":
-                study = SobolSequence(self.parameter_schema[key], **kwargs)
-            elif key == "ScipySampler":
-                study = ScipySampler(self.parameter_schema[key], **kwargs)
-            elif key == "CustomStudy":
-                study = CustomStudy(self.parameter_schema[key], **kwargs)
-            studies.append(study.parameter_study)
+            try:
+                generator_class = getattr(sys.modules[__name__], key)
+            except AttributeError as err:
+                raise RuntimeError(
+                    f"The input dictionary key '{key}' did not correspond to an existing WAVES parameter generator"
+                ) from err
+            study = generator_class(self.parameter_schema[key], **kwargs).parameter_study
+            studies.append(study)
 
         self.parameter_study = _merge_parameter_studies(studies, self.set_name_template)
         self.parameter_study = self.parameter_study.sortby(_set_coordinate_key)
