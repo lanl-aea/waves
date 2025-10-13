@@ -1418,10 +1418,19 @@ class SALibSampler(ParameterGenerator, ABC):
 
 
 class CatenationStudy(ParameterGenerator):
-    """Builds a custom parameter study from user-specified values.
+    """Builds a parameter study by concatenating multiple studies.
 
-    Parameters must be scalar valued integers, floats, strings, or booleans
+    Input parameter studies may be any of the currently supported WAVES parameter generators. This includes 
+    statistical parameter generators such as Latin Hypercube as well as Custom Study.
 
+    .. warning::
+
+    The merged parameter study feature does *not* check for consistent final parameter distributions. Specifying 
+    a statistical parameter distribution and subsequently merging with another parameter study will result in a 
+    parameter distribution that differs from the initial statistical definition.
+    
+    Parameters in each study must be scalar valued integers, floats, strings, or booleans.
+    
     :param parameter_schema: Dictionary with keys corresponding to the name of parameter generator class types
         ("CartesianProduct", "LatinHypercube", etc.). Each key's value is a dictionary of the parameter schema for that
         parameter generator class. Each dictionary of each parameter generator class follows standard schema formatting
@@ -1448,7 +1457,7 @@ class CatenationStudy(ParameterGenerator):
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
 
-    :var self.parameter_study: The final parameter study XArray Dataset object
+    :var self.parameter_study: The final merged parameter study XArray Dataset object
 
     :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
         options are both specified
@@ -1458,34 +1467,27 @@ class CatenationStudy(ParameterGenerator):
     :raises waves.exceptions.SchemaValidationError:
 
         * Parameter schema is not a dictionary
-        * Parameter schema does not contain the ``parameter_names`` key
-        * Parameter schema does not contain the ``parameter_samples`` key
-        * The ``parameter_samples`` value is an improperly shaped array
+        * Parameter schema contains an invalid parameter generator type
 
     Example:
 
     .. code-block::
 
        >>> import waves
-       >>> import numpy
        >>> parameter_schema = {
        ...     "CartesianProduct": {'parameter_1': [1, 2], 'parameter_2': ['a', 'b']},
-       ...     "LatinHypercube": {'num_simulations': 4,
-       ...         'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1},
-       ...         'parameter_2': {'distribution': 'skewnorm','a': 4, 'loc': 30, 'scale': 2}
-       ...         },
+       ...     "OneAtATime": {'parameter_1': [5, 7], 'parameter_2': ['x', 'y']},
        ...     }
        >>> parameter_generator = waves.parameter_generators.CatenationStudy(parameter_schema)
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:       (set_hash: 2)
+       Dimensions:       (set_name: 7)
        Coordinates:
-           set_hash      (set_hash) <U32 '50ba1a2716e42f8c4fcc34a90a...
-         * set_name      (set_hash) <U14 'parameter_set0' 'parameter...
+           set_hash      (set_name) <U32  '3b86be0b68c8a5a2a7dca07213846681' ...
+         * set_name      (set_name) object 'parameter_set0' 'parameter...
        Data variables:
-           height        (set_hash) object 1.0 2.0
-           prefix        (set_hash) object 'a' 'b'
-           index         (set_hash) object 5 6
+           parameter_1   (set_name) int64 1 1 2 2 5 7 5
+           parameter_2   (set_name) <U1 'a' 'b' 'b' 'a' 'y' 'x' 'x'
 
     """
 
