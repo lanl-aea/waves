@@ -1420,17 +1420,17 @@ class SALibSampler(ParameterGenerator, ABC):
 class CatenationStudy(ParameterGenerator):
     """Builds a parameter study by concatenating multiple studies.
 
-    Input parameter studies may be any of the currently supported WAVES parameter generators. This includes 
+    Input parameter studies may be any of the currently supported WAVES parameter generators. This includes
     statistical parameter generators such as Latin Hypercube as well as Custom Study.
 
     .. warning::
 
-    The merged parameter study feature does *not* check for consistent final parameter distributions. Specifying 
-    a statistical parameter distribution and subsequently merging with another parameter study will result in a 
+    The merged parameter study feature does *not* check for consistent final parameter distributions. Specifying
+    a statistical parameter distribution and subsequently merging with another parameter study will result in a
     parameter distribution that differs from the initial statistical definition.
-    
+
     Parameters in each study must be scalar valued integers, floats, strings, or booleans.
-    
+
     :param parameter_schema: Dictionary with keys corresponding to the name of parameter generator class types
         ("CartesianProduct", "LatinHypercube", etc.). Each key's value is a dictionary of the parameter schema for that
         parameter generator class. Each dictionary of each parameter generator class follows standard schema formatting
