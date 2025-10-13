@@ -1425,9 +1425,9 @@ class CatenationStudy(ParameterGenerator):
 
     .. warning::
 
-    The merged parameter study feature does *not* check for consistent final parameter distributions. Specifying
-    a statistical parameter distribution and subsequently merging with another parameter study will result in a
-    parameter distribution that differs from the initial statistical definition.
+       The merged parameter study feature does *not* check for consistent final parameter distributions. Specifying
+       a statistical parameter distribution and subsequently merging with another parameter study will result in a
+       parameter distribution that differs from the initial statistical definition.
 
     Parameters in each study must be scalar valued integers, floats, strings, or booleans.
 
