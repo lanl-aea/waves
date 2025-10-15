@@ -166,10 +166,10 @@ def get_report_histogram_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "QOI_ARCHIVE_H5",
-        nargs="+",
         type=pathlib.Path,
     )
     return parser
+
 
 def get_plot_archive_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(add_help=False)
