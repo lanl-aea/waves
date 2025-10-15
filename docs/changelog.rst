@@ -20,6 +20,10 @@ Internal Changes
   results in a Abaqus/Cubit path override to PWD in the tutorial system tests (:issue:`981`, :merge:`1269`). By `Kyle
   Brindley`_.
 
+Enhancements
+============
+- Add QOI histogram report. (:merge:`1263`). By `Matthew Fister`_.
+
 ******************
 1.0.1 (2025-10-10)
 ******************
@@ -41,10 +45,6 @@ Internal Changes
   Brindley`_.
 - Implement static type checking of the internal ``_abaqus`` module implementing ``odb_extract`` (:issue:`974`,
   :merge:`1261`). By `Kyle Brindley`_.
-
-Enhancements
-============
-- Add QOI histogram report. (:merge:`1263`). By `Matthew Fister`_.
 
 .. _1.0.0:
 
