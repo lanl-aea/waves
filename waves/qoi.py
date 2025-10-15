@@ -620,13 +620,10 @@ def _plot_scalar_tolerance_check(
     within_tolerance = _within_tolerance(qoi)
     # TODO: draw arrow if bar is clipped by xmin, xmax
 
-    # Shift plot to right half of original axes so we can annotate left half
-    pos = axes.get_position()
-    pos.x0 = 0.6
-    axes.set_position(pos)
-
-    # Bar color is always green if within tolerance, red otherwise
+    # Color red if not in tolerance
     bar_color = "green" if within_tolerance else "red"
+    title_color = "black" if within_tolerance else "red"
+
     # If tolerance on both sides, within_tolerance is good, out of tolerance is bad
     lower_line = lower_limit
     upper_line = upper_limit
@@ -657,31 +654,13 @@ def _plot_scalar_tolerance_check(
     # Add calculated value as annotation above bar
     axes.annotate(
         f"{calculated:.3e}",
-        xy=(calculated, 0.555),
-        xytext=(numpy.clip(calculated, xmin, xmax), 0.55),
+        xy=(calculated, 0.5),
+        xytext=(numpy.clip(calculated, xmin, xmax), 0.4),
         annotation_clip=False,
         ha="center",
         fontsize=8,
     )
-
-    # Add QOI name and values to left of plot
-    if not within_tolerance:
-        color = "red"
-        fontweight = "bold"
-    else:
-        color = "black"
-        fontweight = "normal"
-    axes.annotate(
-        text=f"{name}\n min: {lower_limit:.2e}, max: {upper_limit:.2e}, exp: {expected:.2e}, calc: {calculated:.2e}",
-        xy=(-0.05, 0.5),
-        textcoords="axes fraction",
-        annotation_clip=False,
-        ha="right",
-        va="center",
-        fontweight=fontweight,
-        color=color,
-        fontsize=8,
-    )
+    axes.set_title(name, color=title_color)
 
 
 def _plot_1d_tolerance_check(
@@ -694,14 +673,19 @@ def _plot_1d_tolerance_check(
     :param axes: Matplotlib axes for plotting
     """
     name = _get_plotting_name(qoi)
-    calculated = qoi.sel(value_type="calculated")
-    expected = qoi.sel(value_type="expected")
-    lower_limit = qoi.sel(value_type="lower_limit")
-    upper_limit = qoi.sel(value_type="upper_limit")
-    within_tolerance = _within_tolerance(qoi)
+    title_color = "black" if _within_tolerance(qoi) else "red"
+
+    # Determine dimension to plot on x-axis
+    x_dim = next(dim for dim in qoi.dims if dim != "value_type")
+    name = _get_plotting_name(qoi)
+    axes.plot(qoi[x_dim], qoi.sel(value_type="lower_limit"), "--^")
+    axes.plot(qoi[x_dim], qoi.sel(value_type="upper_limit"), "--v")
+    axes.plot(qoi[x_dim], qoi.sel(value_type="calculated"), "-o", color="black")
+    axes.set_title(name, color=title_color)
 
 
-def _write_qoi_report(qoi_archive: xarray.DataTree, output: pathlib.Path, plots_per_page: int = 16) -> None:
+
+def _write_qoi_report(qoi_archive: xarray.DataTree, output: pathlib.Path, plots_per_page: int = 12) -> None:
     """Write a QOI report to a PDF.
 
     QOI archive must contain QOIs with only the "value_type" dimension. Multi-dimensional QOIs and QOI values across
@@ -726,7 +710,7 @@ def _write_qoi_report(qoi_archive: xarray.DataTree, output: pathlib.Path, plots_
         "bottom": (0.5 / plots_per_page),  # bottom margin equal to half of single plot height
         "hspace": 1.0,
     }
-    _pdf_report(qois, output, page_margins, plots_per_page, _plot_qoi_tolerance_check, {})
+    _pdf_report(qois, output, page_margins, plots_per_page, _plot_qoi_tolerance_check)
 
 
 def _get_plotting_name(qoi: xarray.DataArray) -> str:
