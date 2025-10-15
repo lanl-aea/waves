@@ -682,10 +682,11 @@ def _plot_1d_tolerance_check(
     axes.plot(qoi[x_dim], qoi.sel(value_type="upper_limit"), "--v")
     axes.plot(qoi[x_dim], qoi.sel(value_type="calculated"), "-o", color="black")
     axes.set_title(name, color=title_color)
+    axes.tick_params(labelsize=8)
 
 
 
-def _write_qoi_report(qoi_archive: xarray.DataTree, output: pathlib.Path, plots_per_page: int = 12) -> None:
+def _write_qoi_report(qoi_archive: xarray.DataTree, output: pathlib.Path, plots_per_page: int = 8) -> None:
     """Write a QOI report to a PDF.
 
     QOI archive must contain QOIs with only the "value_type" dimension. Multi-dimensional QOIs and QOI values across
