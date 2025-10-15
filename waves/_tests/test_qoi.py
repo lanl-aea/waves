@@ -1396,6 +1396,10 @@ def test__plot_scalar_qoi_history() -> None:
     pass
 
 
+def test__plot_1d_qoi_history() -> None:
+    pass
+
+
 def test__qoi_history_report() -> None:
     pass
 
