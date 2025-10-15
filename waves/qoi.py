@@ -570,10 +570,10 @@ def _plot_qoi_tolerance_check(qoi: xarray.DataArray, axes: matplotlib.axes.Axes)
     :param qoi: Quantity of interest data array as built by :meth:`create_qoi`
     :param axes: Matplotlib axes for plotting
     """
-    qoi_dim = len(qoi.squeeze().dims)  # Count includes the "value_type" dim
-    if qoi_dim == 1:  # Scalar QOI
+    qoi_dim = len(qoi.squeeze().dims) - 1 # Count does not include the "value_type" dim
+    if qoi_dim == 0:  # Scalar QOI
         _plot_scalar_tolerance_check(qoi, axes)
-    if qoi_dim == 2:  # Scalar QOI
+    if qoi_dim == 1:  # Scalar QOI
         _plot_1d_tolerance_check(qoi, axes)
 
 
@@ -619,6 +619,11 @@ def _plot_scalar_tolerance_check(
     upper_limit = qoi.sel(value_type="upper_limit").item()
     within_tolerance = _within_tolerance(qoi)
     # TODO: draw arrow if bar is clipped by xmin, xmax
+
+    # Shift plot to right half of original axes so we can annotate left half
+    pos = axes.get_position()
+    pos.x0 = 0.6
+    axes.set_position(pos)
 
     # Bar color is always green if within tolerance, red otherwise
     bar_color = "green" if within_tolerance else "red"
@@ -715,7 +720,7 @@ def _write_qoi_report(qoi_archive: xarray.DataTree, output: pathlib.Path, plots_
         if _can_plot_qoi_tolerance_check(qoi)
     ]
     page_margins = {
-        "left": 0.6,  # plot on right half of page because text will go on left side
+        "left": 0.1,  # leave margin on left edge
         "right": 0.9,  # leave margin on right edge
         "top": (1.0 - 1.0 / plots_per_page),  # top margin equal to single plot height
         "bottom": (0.5 / plots_per_page),  # bottom margin equal to half of single plot height
