@@ -871,7 +871,6 @@ def _qoi_histogram_report(
         for qoi in leaf.ds.data_vars.values()  # type: ignore[attr-defined]
         if _can_plot_scalar_qoi_histogram(qoi)
     ]
-    plotting_kwargs = dict()
     page_margins = {
         "left": 0.1,  # leave margin on left edge
         "right": 0.9,  # leave margin on right edge
@@ -879,7 +878,7 @@ def _qoi_histogram_report(
         "bottom": (0.5 / plots_per_page),  # bottom margin equal to half of single plot height
         "hspace": 1.0,
     }
-    _pdf_report(qois, output, page_margins, plots_per_page, _plot_scalar_qoi_histogram, plotting_kwargs)
+    _pdf_report(qois, output, page_margins, plots_per_page, _plot_scalar_qoi_histogram)
 
 
 def _pdf_report(
@@ -888,7 +887,7 @@ def _pdf_report(
     page_margins: dict[str, float],
     plots_per_page: int,
     plotting_method: collections.abc.Callable,
-    plotting_kwargs: dict,
+    plotting_kwargs: dict[typing.Any, typing.Any] | None = None,
     groupby: collections.abc.Callable = _qoi_group,
 ) -> None:
     """Generate a multi-page PDF report of QOI plots.
@@ -902,6 +901,8 @@ def _pdf_report(
     :param groupby: Function which takes a QOI as the only positional argument and returns a string.
         The returned string will be used to group the QOIs and as a PDF page header.
     """
+    if plotting_kwargs is None:
+        plotting_kwargs = dict()
     open_figure = False
     with PdfPages(output_pdf) as pdf:
         for group, group_qois in itertools.groupby(sorted(qois, key=groupby), key=groupby):
