@@ -1579,7 +1579,43 @@ def test__pdf_report() -> None:
 test__can_plot_scalar_qoi_histogram_cases = {
     "all_floats": (
         xarray.DataArray(
+            [[1.0, 2.0, 3.0, 4.0], [1.1, 2.1, 3.0, 4.0]],
+            coords={
+                "set_name": ["set0", "set1"],
+                "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+            },
+            name="qoi1",
+            attrs={},
+        ),
+        True,
+    ),
+    "inconsistent_limits": (
+        xarray.DataArray(
             [[1.0, 2.0, 3.0, 4.0], [1.1, 2.1, 3.1, 4.1]],
+            coords={
+                "set_name": ["set0", "set1"],
+                "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+            },
+            name="qoi1",
+            attrs={},
+        ),
+        False,
+    ),
+    "all_nan": (
+        xarray.DataArray(
+            [[numpy.nan, numpy.nan, numpy.nan, numpy.nan], [numpy.nan, numpy.nan, numpy.nan, numpy.nan]],
+            coords={
+                "set_name": ["set0", "set1"],
+                "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+            },
+            name="qoi1",
+            attrs={},
+        ),
+        False,
+    ),
+    "no_set_name": (
+        xarray.DataArray(
+            [[numpy.nan, numpy.nan, numpy.nan, numpy.nan], [numpy.nan, numpy.nan, numpy.nan, numpy.nan]],
             coords={
                 "version": ["abcdef", "ghijkl"],
                 "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
@@ -1587,7 +1623,7 @@ test__can_plot_scalar_qoi_histogram_cases = {
             name="qoi1",
             attrs={},
         ),
-        True,
+        False,
     ),
 }
 

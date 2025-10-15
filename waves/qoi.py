@@ -805,11 +805,12 @@ def _can_plot_scalar_qoi_history(qoi: xarray.DataArray) -> bool:
 
 
 def _can_plot_scalar_qoi_histogram(qoi: xarray.DataArray) -> bool:
-    """Check if a QOI meets requirements to be plotted by :meth:`_plot_scalar_qoi_history`.
+    """Check if a QOI meets requirements to be plotted by :meth:`_plot_scalar_qoi_histogram`.
 
     Requires the following:
         1. The QOI contains at least 1 finite value
         2. The QOI contains a dimension named "set_name"
+        3. If the QOI contains limits, they must be constant.
 
     :param qoi: Quantity of interest data array as built by :meth:`create_qoi`
     """
