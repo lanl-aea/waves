@@ -8,6 +8,10 @@ Changelog
 1.1.0 (unreleased)
 ******************
 
+Enhancements
+============
+- Add QOI histogram report. (:merge:`1263`). By `Matthew Fister`_.
+
 ******************
 1.0.2 (2025-11-13)
 ******************
