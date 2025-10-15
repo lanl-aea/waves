@@ -999,6 +999,16 @@ def _report(output: pathlib.Path, qoi_archive_h5: pathlib.Path) -> None:
     _write_qoi_report(qoi_archive, output)
 
 
+def _report_histogram(output: pathlib.Path, qoi_archive_h5: pathlib.Path) -> None:
+    """Generate a QOI histogram report.
+
+    :param output: report output file path
+    :param qoi_archive_h5: QOI archive file
+    """
+    qoi_archive = xarray.open_datatree(qoi_archive_h5, engine="h5netcdf")
+    _qoi_histogram_report(qoi_archive, output)
+
+
 def _plot_archive(output: pathlib.Path, qoi_archive_h5: typing.Iterable[pathlib.Path]) -> None:
     """Plot QOI values over the Mod/Sim history.
 

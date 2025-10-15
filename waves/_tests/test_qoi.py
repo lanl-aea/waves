@@ -1576,6 +1576,39 @@ def test__qoi_history_report() -> None:
 def test__pdf_report() -> None:
     pass
 
+test__can_plot_scalar_qoi_histogram_cases = {
+    "all_floats": (
+        xarray.DataArray(
+            [[1.0, 2.0, 3.0, 4.0], [1.1, 2.1, 3.1, 4.1]],
+            coords={
+                "version": ["abcdef", "ghijkl"],
+                "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+            },
+            name="qoi1",
+            attrs={},
+        ),
+        True,
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("qoi_array", "expected"),
+    test__can_plot_scalar_qoi_histogram_cases.values(),
+    ids=test__can_plot_scalar_qoi_histogram_cases.keys(),
+)
+def test__can_plot_scalar_qoi_histogram(qoi_array: xarray.DataArray, expected: bool) -> None:
+    output = qoi._can_plot_scalar_qoi_histogram(qoi_array)
+    assert output == expected
+
+
+def test__plot_scalar_qoi_histogram() -> None:
+    pass
+
+
+def test__qoi_histogram_report() -> None:
+    pass
+
 
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/919
 def test__accept() -> None:
