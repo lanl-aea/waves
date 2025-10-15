@@ -42,6 +42,10 @@ Internal Changes
 - Implement static type checking of the internal ``_abaqus`` module implementing ``odb_extract`` (:issue:`974`,
   :merge:`1261`). By `Kyle Brindley`_.
 
+Enhancements
+============
+- Add QOI histogram report. (:merge:`1263`). By `Matthew Fister`_.
+
 .. _1.0.0:
 
 ******************
