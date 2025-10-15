@@ -574,6 +574,8 @@ def _plot_qoi_tolerance_check(qoi: xarray.DataArray, axes: matplotlib.axes.Axes)
     qoi_dim = len(qoi.squeeze().dims)  # Count includes the "value_type" dim
     if qoi_dim == 1:  # Scalar QOI
         _plot_scalar_tolerance_check(qoi, axes)
+    if qoi_dim == 2:  # Scalar QOI
+        _plot_1d_tolerance_check(qoi, axes)
 
 
 def _can_plot_qoi_tolerance_check(qoi: xarray.DataArray) -> bool:
@@ -582,7 +584,7 @@ def _can_plot_qoi_tolerance_check(qoi: xarray.DataArray) -> bool:
     Requires the following:
         1. "value_type" is a dimension
         2. "within_tolerance" is an attribute
-        3. The QOI is scalar
+        3. The QOI is scalar or 1D
         4. No values (e.g. calculated, expected, lower_limit, upper_limit) are null
 
     :param qoi: Quantity of interest data array as built by :meth:`create_qoi`
@@ -591,8 +593,12 @@ def _can_plot_qoi_tolerance_check(qoi: xarray.DataArray) -> bool:
         return False
     if "within_tolerance" not in qoi.attrs:
         return False
-    qoi_dim = len(qoi.squeeze().dims)  # Count includes the "value_type" dim
-    if qoi_dim == 1:  # Scalar QOI
+    qoi_dim = len(qoi.squeeze().dims) - 1 # Count does not include the "value_type" dim
+    if qoi_dim == 0:  # Scalar QOI
+        # Not a pandas object in the unit tests, so the linter suggestion is wrong.
+        if qoi.isnull().any():  # noqa: PD003
+            return False
+    if qoi_dim == 1:  # 1D QOI
         # Not a pandas object in the unit tests, so the linter suggestion is wrong.
         if qoi.isnull().any():  # noqa: PD003
             return False
@@ -675,6 +681,23 @@ def _plot_scalar_tolerance_check(
         color=color,
         fontsize=8,
     )
+
+
+def _plot_1d_tolerance_check(
+    qoi: xarray.DataArray,
+    axes: matplotlib.axes.Axes,
+) -> None:
+    """Plot a tolerance check for a scalar QOI DataArray.
+
+    :param qoi: Quantity of interest data array as built by :meth:`create_qoi`
+    :param axes: Matplotlib axes for plotting
+    """
+    name = _get_plotting_name(qoi)
+    calculated = qoi.sel(value_type="calculated")
+    expected = qoi.sel(value_type="expected")
+    lower_limit = qoi.sel(value_type="lower_limit")
+    upper_limit = qoi.sel(value_type="upper_limit")
+    within_tolerance = qoi.attrs["within_tolerance"]
 
 
 def _write_qoi_report(qoi_archive: xarray.DataTree, output: pathlib.Path, plots_per_page: int = 16) -> None:

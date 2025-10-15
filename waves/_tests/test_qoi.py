@@ -1261,6 +1261,150 @@ test__add_tolerance_attribute_cases = {
             attrs={},
         ),
     ),
+    "one qoi: 1D, completely in tolerance": (
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [[2.0, 2.0, 1.0, 3.0], [3.0, 3.0, 2.0, 4.0]],
+                    coords={
+                        "version": ["abcdef", "ghijkl"],
+                        "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                    },
+                    attrs={},
+                ),
+            },
+            coords={
+                        "version": ["abcdef", "ghijkl"],
+                        "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                    },
+            attrs={},
+        ),
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [[2.0, 2.0, 1.0, 3.0], [3.0, 3.0, 2.0, 4.0]],
+                    coords={
+                        "version": ["abcdef", "ghijkl"],
+                        "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                    },
+                    attrs={"within_tolerance": int(True)},
+                ),
+            },
+            coords={
+                        "version": ["abcdef", "ghijkl"],
+                        "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                    },
+            attrs={},
+        ),
+    ),
+    "one qoi: 1D, partially out of tolerance": (
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [[2.0, 2.0, 1.0, 3.0], [5.0, 3.0, 2.0, 4.0]],
+                    coords={
+                        "version": ["abcdef", "ghijkl"],
+                        "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                    },
+                    attrs={},
+                ),
+            },
+            coords={
+                        "version": ["abcdef", "ghijkl"],
+                        "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                    },
+            attrs={},
+        ),
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [[2.0, 2.0, 1.0, 3.0], [5.0, 3.0, 2.0, 4.0]],
+                    coords={
+                        "version": ["abcdef", "ghijkl"],
+                        "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                    },
+                    attrs={"within_tolerance": int(False)},
+                ),
+            },
+            coords={
+                        "version": ["abcdef", "ghijkl"],
+                        "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                    },
+            attrs={},
+        ),
+    ),
+    "one qoi: 1D, partially out of tolerance": (
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [[2.0, 2.0, 1.0, 3.0], [5.0, 3.0, 2.0, 4.0]],
+                    coords={
+                        "version": ["abcdef", "ghijkl"],
+                        "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                    },
+                    attrs={},
+                ),
+            },
+            coords={
+                        "version": ["abcdef", "ghijkl"],
+                        "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                    },
+            attrs={},
+        ),
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [[2.0, 2.0, 1.0, 3.0], [5.0, 3.0, 2.0, 4.0]],
+                    coords={
+                        "version": ["abcdef", "ghijkl"],
+                        "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                    },
+                    attrs={"within_tolerance": int(False)},
+                ),
+            },
+            coords={
+                        "version": ["abcdef", "ghijkl"],
+                        "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                    },
+            attrs={},
+        ),
+    ),
+    "one qoi: 1D, partially nan, in tolerance": (
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [[2.0, numpy.nan, numpy.nan, 3.0], [2.0, numpy.nan, numpy.nan, 4.0]],
+                    coords={
+                        "version": ["abcdef", "ghijkl"],
+                        "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                    },
+                    attrs={},
+                ),
+            },
+            coords={
+                        "version": ["abcdef", "ghijkl"],
+                        "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                    },
+            attrs={},
+        ),
+        xarray.Dataset(
+            {
+                "qoi1": xarray.DataArray(
+                    [[2.0, numpy.nan, numpy.nan, 3.0], [2.0, numpy.nan, numpy.nan, 4.0]],
+                    coords={
+                        "version": ["abcdef", "ghijkl"],
+                        "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                    },
+                    attrs={"within_tolerance": int(True)},
+                ),
+            },
+            coords={
+                        "version": ["abcdef", "ghijkl"],
+                        "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                    },
+            attrs={},
+        ),
+    ),
     "two qoi: in tolerance": (
         xarray.Dataset(
             {
