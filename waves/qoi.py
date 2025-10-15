@@ -674,13 +674,15 @@ def _plot_1d_tolerance_check(
     """
     name = _get_plotting_name(qoi)
     title_color = "black" if _within_tolerance(qoi) else "red"
+    line_color = "green" if _within_tolerance(qoi) else "red"
 
     # Determine dimension to plot on x-axis
     x_dim = next(dim for dim in qoi.dims if dim != "value_type")
     name = _get_plotting_name(qoi)
-    axes.plot(qoi[x_dim], qoi.sel(value_type="lower_limit"), "--^")
-    axes.plot(qoi[x_dim], qoi.sel(value_type="upper_limit"), "--v")
-    axes.plot(qoi[x_dim], qoi.sel(value_type="calculated"), "-o", color="black")
+    axes.plot(qoi[x_dim], qoi.sel(value_type="lower_limit"), "--^", color="black")
+    axes.plot(qoi[x_dim], qoi.sel(value_type="upper_limit"), "--v", color="black")
+    axes.plot(qoi[x_dim], qoi.sel(value_type="expected"), ":", color="grey")
+    axes.plot(qoi[x_dim], qoi.sel(value_type="calculated"), "-o", color=line_color)
     axes.set_title(name, color=title_color)
     axes.tick_params(labelsize=8)
 
