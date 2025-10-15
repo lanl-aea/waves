@@ -514,17 +514,16 @@ def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
         raise RuntimeError(f"Unknown file suffix '{suffix}'")
 
 
-def _add_tolerance_attribute(qoi_set: xarray.Dataset) -> None:
-    """Add a ``"within_tolerance"`` attribute to each QOI in a QOI Dataset in place.
+def _within_tolerance(qoi: xarray.DataArray) -> bool:
+    """Check if QOI is within tolerance.
 
-    :param qoi_set: QOI set.
+    :param qoi: QOI.
     """
-    for qoi in qoi_set.data_vars.values():
-        lower_limit = qoi.sel(value_type="lower_limit").fillna(-numpy.inf)
-        upper_limit = qoi.sel(value_type="upper_limit").fillna(numpy.inf)
-        calculated = qoi.sel(value_type="calculated")
-        # netcdf4 doesn't support bool, so make it an int
-        qoi.attrs["within_tolerance"] = int(((calculated >= lower_limit) & (calculated <= upper_limit)).all().item())
+    lower_limit = qoi.sel(value_type="lower_limit").fillna(-numpy.inf)
+    upper_limit = qoi.sel(value_type="upper_limit").fillna(numpy.inf)
+    calculated = qoi.sel(value_type="calculated")
+    # netcdf4 doesn't support bool, so make it an int
+    return ((calculated >= lower_limit) & (calculated <= upper_limit)).all().item()
 
 
 def write_qoi_set_to_csv(qoi_set: xarray.Dataset, output: pathlib.Path) -> None:
@@ -583,22 +582,19 @@ def _can_plot_qoi_tolerance_check(qoi: xarray.DataArray) -> bool:
 
     Requires the following:
         1. "value_type" is a dimension
-        2. "within_tolerance" is an attribute
-        3. The QOI is scalar or 1D
-        4. No values (e.g. calculated, expected, lower_limit, upper_limit) are null
+        2. The QOI is scalar or 1D
+        3. No values (e.g. calculated, expected, lower_limit, upper_limit) are null
 
     :param qoi: Quantity of interest data array as built by :meth:`create_qoi`
     """
     if "value_type" not in qoi.dims:
-        return False
-    if "within_tolerance" not in qoi.attrs:
         return False
     qoi_dim = len(qoi.squeeze().dims) - 1 # Count does not include the "value_type" dim
     if qoi_dim == 0:  # Scalar QOI
         # Not a pandas object in the unit tests, so the linter suggestion is wrong.
         if qoi.isnull().any():  # noqa: PD003
             return False
-    if qoi_dim == 1:  # 1D QOI
+    elif qoi_dim == 1:  # 1D QOI
         # Not a pandas object in the unit tests, so the linter suggestion is wrong.
         if qoi.isnull().any():  # noqa: PD003
             return False
@@ -621,7 +617,7 @@ def _plot_scalar_tolerance_check(
     expected = qoi.sel(value_type="expected").item()
     lower_limit = qoi.sel(value_type="lower_limit").item()
     upper_limit = qoi.sel(value_type="upper_limit").item()
-    within_tolerance = qoi.attrs["within_tolerance"]
+    within_tolerance = _within_tolerance(qoi)
     # TODO: draw arrow if bar is clipped by xmin, xmax
 
     # Bar color is always green if within tolerance, red otherwise
@@ -697,7 +693,7 @@ def _plot_1d_tolerance_check(
     expected = qoi.sel(value_type="expected")
     lower_limit = qoi.sel(value_type="lower_limit")
     upper_limit = qoi.sel(value_type="upper_limit")
-    within_tolerance = qoi.attrs["within_tolerance"]
+    within_tolerance = _within_tolerance(qoi)
 
 
 def _write_qoi_report(qoi_archive: xarray.DataTree, output: pathlib.Path, plots_per_page: int = 16) -> None:
@@ -991,7 +987,10 @@ def _diff(calculated: pathlib.Path, expected: pathlib.Path, output: pathlib.Path
     :param output: output path for differences between calculated and expected QOI values
     """
     qoi_set = xarray.merge((_read_qoi_set(calculated), _read_qoi_set(expected)), join="outer", compat="no_conflicts")
-    _add_tolerance_attribute(qoi_set)
+    # Add within_tolerance as attribute so it shows up in the CSV
+    for qoi in qoi_set.data_vars.values():
+        # netcdf4 doesn't support bool, so make it an int
+        qoi.attrs["within_tolerance"] = int(_within_tolerance(qoi))
     write_qoi_set_to_csv(qoi_set, output)
 
 
