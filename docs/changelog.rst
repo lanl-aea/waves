@@ -11,6 +11,7 @@ Changelog
 Enhancements
 ============
 - Add QOI histogram report. (:merge:`1263`). By `Matthew Fister`_.
+- Add support for 1D QOIs in tolerance report. (:merge:`1266`). By `Matthew Fister`_.
 
 ******************
 1.0.2 (2025-11-13)
