@@ -1,4 +1,4 @@
-"""Provide common extension SCons with utility functions, builders, and construction environment methods."""
+"""Provide common SCons extensions with utility functions, builders, and construction environment methods."""
 
 import atexit
 import collections

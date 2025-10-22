@@ -422,14 +422,59 @@ get_abaqus_restart_extensions_input = {
         (".odb", ".prt", ".mdl", ".sim", ".stt", ".res"),
         does_not_raise,
     ),
+    "STANDARD_1": (
+        "STANDARD",
+        1,
+        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res"),
+        does_not_raise,
+    ),
     "standard_2": (
         "standard",
         2,
         (".odb", ".prt", ".mdl.0", ".mdl.1", ".sim", ".stt.0", ".stt.1", ".res"),
         does_not_raise,
     ),
+    "standard_11": (
+        "standard",
+        11,
+        (
+            ".odb",
+            ".prt",
+            ".mdl.0",
+            ".mdl.1",
+            ".mdl.2",
+            ".mdl.3",
+            ".mdl.4",
+            ".mdl.5",
+            ".mdl.6",
+            ".mdl.7",
+            ".mdl.8",
+            ".mdl.9",
+            ".mdl.10",
+            ".sim",
+            ".stt.0",
+            ".stt.1",
+            ".stt.2",
+            ".stt.3",
+            ".stt.4",
+            ".stt.5",
+            ".stt.6",
+            ".stt.7",
+            ".stt.8",
+            ".stt.9",
+            ".stt.10",
+            ".res",
+        ),
+        does_not_raise,
+    ),
     "explicit_1": (
         "explicit",
+        1,
+        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"),
+        does_not_raise,
+    ),
+    "EXPLICIT_1": (
+        "EXPLICIT",
         1,
         (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"),
         does_not_raise,
@@ -440,10 +485,16 @@ get_abaqus_restart_extensions_input = {
         (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"),
         does_not_raise,
     ),
+    "explicit_11": (
+        "explicit",
+        11,
+        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"),
+        does_not_raise,
+    ),
     "stahnduurd": (
         "stahnduurd",
         2,
-        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"),
+        None,
         pytest.raises(ValueError, match="Unknown solver type: 'stahnduurd'"),
     ),
 }
@@ -457,7 +508,7 @@ get_abaqus_restart_extensions_input = {
 def test_get_abaqus_restart_extensions(
     solver: str,
     processes: int,
-    expected: tuple[str],
+    expected: tuple[str] | None,
     outcome: contextlib.nullcontext | pytest.RaisesExc,
 ) -> None:
     with outcome:
@@ -466,4 +517,4 @@ def test_get_abaqus_restart_extensions(
             solver=solver,  # type: ignore[arg-type]
             processes=processes,
         )
-        assert set(extensions) == set(expected)
+        assert extensions == expected

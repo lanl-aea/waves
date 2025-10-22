@@ -378,18 +378,21 @@ def _get_abaqus_restart_extensions(
     :param processes: Number of MPI processes used to run the Abaqus job.
     """
     if solver.lower() == "explicit":
-        restart_files = set(_settings._abaqus_explicit_restart_extensions)
+        restart_files = list(_settings._abaqus_explicit_restart_extensions)
     elif solver.lower() == "standard":
-        restart_files = set(_settings._abaqus_standard_restart_extensions)
+        # Cast to list to allow modification
+        restart_files = list(_settings._abaqus_standard_restart_extensions)
         if processes > 1:
-            # Drop .mdl and .stt
-            restart_files -= {".mdl", ".stt"}
-            # Add {.mdl,.stt}.[0..N-1]
-            restart_files |= {
-                f"{extension}.{process}" for extension in [".mdl", ".stt"] for process in range(0, processes)
-            }
+            # Drop .mdl and .stt. Add {.mdl,.stt}.[0..N-1] starting from the original extension index.
+            for extension in (".mdl", ".stt"):
+                extension_index = restart_files.index(extension)
+                restart_files.pop(extension_index)
+                restart_files[extension_index:extension_index] = [
+                    f"{extension}.{process}" for process in range(0, processes)
+                ]
     else:
         raise ValueError(f"Unknown solver type: '{solver}'")
+    # Cast to tuple for consistency with settings constants
     return tuple(restart_files)
 
 
