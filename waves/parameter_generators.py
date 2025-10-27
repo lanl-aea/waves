@@ -1474,10 +1474,10 @@ class CatenationStudy(ParameterGenerator):
     .. code-block::
 
        >>> import waves
-       >>> parameter_schema = {
-       ...     "CartesianProduct": {'parameter_1': [1, 2], 'parameter_2': ['a', 'b']},
-       ...     "OneAtATime": {'parameter_1': [5, 7], 'parameter_2': ['x', 'y']},
-       ...     }
+       >>> parameter_schema = [
+       ...     waves.scons_extensions.CartesianProduct({'parameter_1': [1, 2], 'parameter_2': ['a', 'b']}),
+       ...     waves.scons_extensions.OneAtATime({'parameter_1': [5, 7], 'parameter_2': ['x', 'y']}),
+       ...     ]
        >>> parameter_generator = waves.parameter_generators.CatenationStudy(parameter_schema)
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
@@ -1493,36 +1493,18 @@ class CatenationStudy(ParameterGenerator):
 
     def _validate(self) -> None:
         """Validate the Custom Study parameter samples and names. Executed by class initiation."""
-        if not isinstance(self.parameter_schema, dict):
-            raise SchemaValidationError("Input must be a dictionary")
-        # Parse keys of dictionary and ensure that they correspond to existing parameter generators
-        accepted_generators = [
-            "CartesianProduct",
-            "OneAtATime",
-            "LatinHypercube",
-            "SobolSequence",
-            "ScipySampler",
-            "CustomStudy",
-        ]
-        for key in self.parameter_schema:
-            if key not in accepted_generators:
-                raise SchemaValidationError(
-                    f"The input dictionary key '{key}' did not correspond to an accepted parameter generator"
-                )
+        if not isinstance(self.parameter_schema, list):
+            raise SchemaValidationError("Input must be a list of parameter generators")
+        if len(self.parameter_schema) < 2:
+            raise SchemaValidationError("Input must have at least two parameter generators")
         return
 
-    def _generate(self, **kwargs) -> None:
+    def _generate(self) -> None:
         """Generate the parameter studies and combine them."""
         studies = []
-        # Build list of studies from generators
-        for key in self.parameter_schema:
-            try:
-                generator_class = getattr(sys.modules[__name__], key)
-            except AttributeError as err:
-                raise RuntimeError(
-                    f"The input dictionary key '{key}' did not correspond to an existing WAVES parameter generator"
-                ) from err
-            study = generator_class(self.parameter_schema[key], **kwargs).parameter_study
+        # Strip study from generator list
+        for generator in self.parameter_schema:
+            study = generator.parameter_study
             studies.append(study)
 
         self.parameter_study = _merge_parameter_studies(studies, self.set_name_template)
