@@ -1651,6 +1651,32 @@ abaqus_pseudobuilder_input = {
             ValueError, match="Number of CPUs '3' is not evenly divisible by the number of MPI processes '2'"
         ),
     ),
+    "indivisible_override_cpus": (
+        {"override_cpus": 3},
+        {"job": "job", "cpus": 2, "processes": 2},
+        ["job.inp"],
+        [f"job{ext}" for ext in _abaqus_standard_extensions],
+        "",
+        {"job": "job"},
+        pytest.raises(
+            ValueError, match="Number of CPUs '3' is not evenly divisible by the number of MPI processes '2'"
+        ),
+    ),
+    "indivisible_default_cpus_good_override_cpus": (
+        {"override_cpus": 2},
+        {"job": "job", "oldjob": "oldjob", "cpus": 3, "processes": 2, "write_restart": True},
+        ["job.inp"]
+        + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(solver="standard", processes=1)],
+        [
+            f"job{ext}"
+            for ext in (
+                _abaqus_standard_extensions + _utilities._get_abaqus_restart_extensions(solver="standard", processes=2)
+            )
+        ],
+        " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
+        {"job": "job"},
+        does_not_raise,
+    ),
     "mismatched_oldjob_lengths": (
         {},
         {"job": "job", "oldjob": ["oldjob_1", "oldjob_2"], "oldjob_restart_file_count": [1]},
