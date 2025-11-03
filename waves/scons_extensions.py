@@ -2174,16 +2174,17 @@ class AbaqusPseudoBuilder:
         targets.extend([f"{job}{extension}" for extension in _settings._abaqus_standard_extensions])
 
         # Always allow user to override CPUs with CLI option and exclude CPUs from build signature
-        options += f" $(-cpus {self.override_cpus or cpus}$)"
+        current_cpus = self.override_cpus or cpus
+        options += f" $(-cpus {current_cpus}$)"
 
         if processes is not None:
             # Check that total number of CPUs is evenly divisible by number of threads per process
-            if cpus % processes != 0:
+            if current_cpus % processes != 0:
                 raise ValueError(
-                    f"Number of CPUs '{cpus}' is not evenly divisible by the number of MPI processes '{processes}'"
+                    f"Number of CPUs '{current_cpus}' is not evenly divisible by the number of MPI processes '{processes}'"
                 )
             # Calculate number of threads per MPI process
-            threads_per_mpi_process = cpus // processes
+            threads_per_mpi_process = current_cpus // processes
             # Add -threads_per_mpi_process to command string
             # Number of processes will change number of restart files, which will be included in build signature
             options += f" $(-threads_per_mpi_process {threads_per_mpi_process}$)"
