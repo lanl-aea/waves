@@ -1648,7 +1648,7 @@ abaqus_pseudobuilder_input = {
         "",
         {"job": "job"},
         pytest.raises(
-            ValueError, match="Number of CPUs '3' is not evenly divisible by the number of MPI processes '2'"
+            ValueError, match="Number of CPUs '3' is indivisible by the number of MPI processes '2'"
         ),
     ),
     "indivisible_override_cpus": (
@@ -1659,7 +1659,7 @@ abaqus_pseudobuilder_input = {
         "",
         {"job": "job"},
         pytest.raises(
-            ValueError, match="Number of CPUs '3' is not evenly divisible by the number of MPI processes '2'"
+            ValueError, match="Number of CPUs '3' is indivisible by the number of MPI processes '2'"
         ),
     ),
     "indivisible_default_cpus_good_override_cpus": (
