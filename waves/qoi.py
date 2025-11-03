@@ -570,7 +570,7 @@ def _plot_qoi_tolerance_check(qoi: xarray.DataArray, axes: matplotlib.axes.Axes)
     :param qoi: Quantity of interest data array as built by :meth:`create_qoi`
     :param axes: Matplotlib axes for plotting
     """
-    qoi_dim = len(qoi.squeeze().dims) - 1 # Count does not include the "value_type" dim
+    qoi_dim = len(qoi.squeeze().dims) - 1  # Count does not include the "value_type" dim
     if qoi_dim == 0:  # Scalar QOI
         _plot_scalar_tolerance_check(qoi, axes)
     if qoi_dim == 1:  # Scalar QOI
@@ -589,12 +589,8 @@ def _can_plot_qoi_tolerance_check(qoi: xarray.DataArray) -> bool:
     """
     if "value_type" not in qoi.dims:
         return False
-    qoi_dim = len(qoi.squeeze().dims) - 1 # Count does not include the "value_type" dim
-    if qoi_dim == 0:  # Scalar QOI
-        # Not a pandas object in the unit tests, so the linter suggestion is wrong.
-        if qoi.isnull().any():  # noqa: PD003
-            return False
-    elif qoi_dim == 1:  # 1D QOI
+    qoi_dim = len(qoi.squeeze().dims) - 1  # Count does not include the "value_type" dim
+    if qoi_dim == 0 or qoi_dim == 1:  # Scalar QOI
         # Not a pandas object in the unit tests, so the linter suggestion is wrong.
         if qoi.isnull().any():  # noqa: PD003
             return False
@@ -685,7 +681,6 @@ def _plot_1d_tolerance_check(
     axes.plot(qoi[x_dim], qoi.sel(value_type="calculated"), "-o", color=line_color)
     axes.set_title(name, color=title_color)
     axes.tick_params(labelsize=8)
-
 
 
 def _write_qoi_report(qoi_archive: xarray.DataTree, output: pathlib.Path, plots_per_page: int = 8) -> None:
