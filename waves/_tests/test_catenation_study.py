@@ -68,7 +68,7 @@ class TestCatenationStudy:
             assert isinstance(test_validate, CatenationStudy)
 
     generate_io = {
-        "one_parameter: 1, 2": (
+        "one_parameter": (
             [CartesianProduct({"parameter_1": [1]}), CartesianProduct({"parameter_1": [2]})],
             {},
             xarray.Dataset(
@@ -89,7 +89,7 @@ class TestCatenationStudy:
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64},
         ),
-        "one_parameter: 1, 2, custom template": (
+        "one_parameter custom template": (
             [CartesianProduct({"parameter_1": [1]}), CartesianProduct({"parameter_1": [2]})],
             {"set_name_template": "set@number"},
             xarray.Dataset(
@@ -337,59 +337,62 @@ class TestCatenationStudy:
 
     write_yaml = {
         "one parameter yaml": (
-            {"parameter_1": [1, 2]},
+            [CartesianProduct({"parameter_1": [1]}), CartesianProduct({"parameter_1": [2]})],
             "out",
             None,
             "yaml",
             2,
             [call("parameter_1: 1\n"), call("parameter_1: 2\n")],
         ),
-        "two parameter yaml": (
-            {"parameter_1": [1, 2], "parameter_2": ["a", "b"]},
+        "two parameter propagate yaml": (
+            [CartesianProduct({"parameter_1": [1, 2]}), CartesianProduct({"parameter_2": ["a", "b"]})],
             "out",
             None,
             "yaml",
-            3,
+            4,
             [
                 call("parameter_1: 1\nparameter_2: a\n"),
                 call("parameter_1: 1\nparameter_2: b\n"),
                 call("parameter_1: 2\nparameter_2: a\n"),
+                call("parameter_1: 2\nparameter_2: b\n"),
             ],
         ),
-        "two parameter yaml: floats and ints": (
-            {"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]},
+        "mixed generators ints and floats yaml": (
+            [CartesianProduct({"parameter_1": [1, 2]}), OneAtATime({"parameter_2": [3.0, 4.0]})],
             "out",
             None,
             "yaml",
-            3,
+            4,
             [
-                call("parameter_1: 1\nparameter_2: 3.0\n"),
                 call("parameter_1: 1\nparameter_2: 4.0\n"),
+                call("parameter_1: 1\nparameter_2: 3.0\n"),
+                call("parameter_1: 2\nparameter_2: 4.0\n"),
                 call("parameter_1: 2\nparameter_2: 3.0\n"),
             ],
         ),
-        "two parameter yaml: bools and ints": (
-            {"parameter_1": [1, 2], "parameter_2": [True, False]},
+        "two parameter propagate yaml: bools and ints": (
+            [CartesianProduct({"parameter_1": [1, 2]}), CartesianProduct({"parameter_2": [True, False]})],
             "out",
             None,
             "yaml",
-            3,
+            4,
             [
                 call("parameter_1: 1\nparameter_2: true\n"),
                 call("parameter_1: 2\nparameter_2: true\n"),
                 call("parameter_1: 1\nparameter_2: false\n"),
+                call("parameter_1: 2\nparameter_2: false\n"),
             ],
         ),
         "one parameter one file yaml": (
-            {"parameter_1": [1, 2]},
+            [CartesianProduct({"parameter_1": [1]}), CartesianProduct({"parameter_1": [2]})],
             None,
             "parameter_study.yaml",
             "yaml",
             1,
             [call("parameter_set0:\n  parameter_1: 1\nparameter_set1:\n  parameter_1: 2\n")],
         ),
-        "two parameter one file yaml": (
-            {"parameter_1": [1, 2], "parameter_2": ["a", "b"]},
+        "two parameter propagate one file yaml": (
+            [CartesianProduct({"parameter_1": [1, 2]}), CartesianProduct({"parameter_2": ["a", "b"]})],
             None,
             "parameter_study.yaml",
             "yaml",
@@ -399,11 +402,12 @@ class TestCatenationStudy:
                     "parameter_set0:\n  parameter_1: 1\n  parameter_2: a\n"
                     "parameter_set1:\n  parameter_1: 1\n  parameter_2: b\n"
                     "parameter_set2:\n  parameter_1: 2\n  parameter_2: a\n"
+                    "parameter_set3:\n  parameter_1: 2\n  parameter_2: b\n"
                 )
             ],
         ),
-        "two parameter one file yaml: bools": (
-            {"parameter_1": [1, 2], "parameter_2": [True, False]},
+        "two parameter one file yaml: bools and ints": (
+            [CartesianProduct({"parameter_1": [1, 2]}), CartesianProduct({"parameter_2": [True, False]})],
             None,
             "parameter_study.yaml",
             "yaml",
@@ -413,6 +417,7 @@ class TestCatenationStudy:
                     "parameter_set0:\n  parameter_1: 1\n  parameter_2: true\n"
                     "parameter_set1:\n  parameter_1: 2\n  parameter_2: true\n"
                     "parameter_set2:\n  parameter_1: 1\n  parameter_2: false\n"
+                    "parameter_set3:\n  parameter_1: 2\n  parameter_2: false\n"
                 )
             ],
         ),
@@ -439,7 +444,7 @@ class TestCatenationStudy:
             patch("sys.stdout.write") as stdout_write,
             patch("pathlib.Path.is_file", return_value=False),
         ):
-            test_write_yaml = OneAtATime(
+            test_write_yaml = CatenationStudy(
                 parameter_schema,
                 output_file_template=output_file_template,
                 output_file=output_file,
