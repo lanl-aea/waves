@@ -10,9 +10,8 @@ import pytest
 import xarray
 
 from waves._settings import _allowable_output_file_typing, _set_coordinate_key
-from waves._tests.common import consistent_hash_parameter_check, merge_samplers, self_consistency_checks
 from waves.exceptions import SchemaValidationError
-from waves.parameter_generators import CartesianProduct, CatenationStudy, OneAtATime, CustomStudy
+from waves.parameter_generators import CartesianProduct, CatenationStudy, CustomStudy, OneAtATime
 
 does_not_raise = contextlib.nullcontext()
 
@@ -107,7 +106,10 @@ class TestCatenationStudy:
             {"parameter_1": numpy.int64},
         ),
         "two_parameter merge": (
-            [OneAtATime({"parameter_1": [1], "parameter_2": ["a"]}), OneAtATime({"parameter_1": [2], "parameter_2": ["b"]})],
+            [
+                OneAtATime({"parameter_1": [1], "parameter_2": ["a"]}),
+                OneAtATime({"parameter_1": [2], "parameter_2": ["b"]}),
+            ],
             {},
             xarray.Dataset(
                 {
@@ -147,7 +149,8 @@ class TestCatenationStudy:
                         [1, 1, 2, 2],
                         coords={
                             _set_coordinate_key: xarray.DataArray(
-                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"], dims=_set_coordinate_key
+                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
+                                dims=_set_coordinate_key,
                             )
                         },
                     ),
@@ -155,7 +158,8 @@ class TestCatenationStudy:
                         ["a", "b", "a", "b"],
                         coords={
                             _set_coordinate_key: xarray.DataArray(
-                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"], dims=_set_coordinate_key
+                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
+                                dims=_set_coordinate_key,
                             )
                         },
                     ),
@@ -181,7 +185,8 @@ class TestCatenationStudy:
                         [1, 1, 2, 2],
                         coords={
                             _set_coordinate_key: xarray.DataArray(
-                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"], dims=_set_coordinate_key
+                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
+                                dims=_set_coordinate_key,
                             )
                         },
                     ),
@@ -189,7 +194,8 @@ class TestCatenationStudy:
                         [4.0, 3.0, 4.0, 3.0],
                         coords={
                             _set_coordinate_key: xarray.DataArray(
-                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"], dims=_set_coordinate_key
+                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
+                                dims=_set_coordinate_key,
                             )
                         },
                     ),
@@ -207,7 +213,10 @@ class TestCatenationStudy:
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
         ),
         "mixed generators mixed parameters": (
-            [OneAtATime({"parameter_1": [1], "parameter_2": [3.0, 5.0]}), CartesianProduct({"parameter_1": [2], "parameter_2": [4.0]})],
+            [
+                OneAtATime({"parameter_1": [1], "parameter_2": [3.0, 5.0]}),
+                CartesianProduct({"parameter_1": [2], "parameter_2": [4.0]}),
+            ],
             {},
             xarray.Dataset(
                 {
@@ -215,8 +224,7 @@ class TestCatenationStudy:
                         [1, 1, 2],
                         coords={
                             _set_coordinate_key: xarray.DataArray(
-                                ["parameter_set0", "parameter_set1", "parameter_set2"],
-                                dims=_set_coordinate_key
+                                ["parameter_set0", "parameter_set1", "parameter_set2"], dims=_set_coordinate_key
                             )
                         },
                     ),
@@ -224,8 +232,7 @@ class TestCatenationStudy:
                         [3.0, 5.0, 4.0],
                         coords={
                             _set_coordinate_key: xarray.DataArray(
-                                ["parameter_set0", "parameter_set1", "parameter_set2"],
-                                dims=_set_coordinate_key
+                                ["parameter_set0", "parameter_set1", "parameter_set2"], dims=_set_coordinate_key
                             )
                         },
                     ),
@@ -242,7 +249,11 @@ class TestCatenationStudy:
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
         ),
         "mixed generators three generators": (
-            [OneAtATime({"parameter_1": [1], "parameter_2": [3.0, 5.0]}), CartesianProduct({"parameter_1": [2], "parameter_2": [4.0]}), OneAtATime({"parameter_3": ["a"]})],
+            [
+                OneAtATime({"parameter_1": [1], "parameter_2": [3.0, 5.0]}),
+                CartesianProduct({"parameter_1": [2], "parameter_2": [4.0]}),
+                OneAtATime({"parameter_3": ["a"]}),
+            ],
             {},
             xarray.Dataset(
                 {
@@ -250,8 +261,7 @@ class TestCatenationStudy:
                         [1, 1, 2],
                         coords={
                             _set_coordinate_key: xarray.DataArray(
-                                ["parameter_set0", "parameter_set1", "parameter_set2"],
-                                dims=_set_coordinate_key
+                                ["parameter_set0", "parameter_set1", "parameter_set2"], dims=_set_coordinate_key
                             )
                         },
                     ),
@@ -259,8 +269,7 @@ class TestCatenationStudy:
                         [3.0, 5.0, 4.0],
                         coords={
                             _set_coordinate_key: xarray.DataArray(
-                                ["parameter_set0", "parameter_set1", "parameter_set2"],
-                                dims=_set_coordinate_key
+                                ["parameter_set0", "parameter_set1", "parameter_set2"], dims=_set_coordinate_key
                             )
                         },
                     ),
@@ -277,7 +286,20 @@ class TestCatenationStudy:
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.dtype("U1")},
         ),
         "custom studies": (
-            [CustomStudy(dict(parameter_samples = numpy.array([[5, 1.0], [6, 2.0]], dtype=object), parameter_names = numpy.array(["parameter_1", "parameter_2"]))), CustomStudy(dict(parameter_samples = numpy.array([[5, 1.0], [6, 2.0]], dtype=object), parameter_names = numpy.array(["parameter_1", "parameter_2"])))],
+            [
+                CustomStudy(
+                    {
+                        "parameter_samples": numpy.array([[5, 1.0], [6, 2.0]], dtype=object),
+                        "parameter_names": numpy.array(["parameter_1", "parameter_2"]),
+                    }
+                ),
+                CustomStudy(
+                    {
+                        "parameter_samples": numpy.array([[5, 1.0], [6, 2.0]], dtype=object),
+                        "parameter_names": numpy.array(["parameter_1", "parameter_2"]),
+                    }
+                ),
+            ],
             {},
             xarray.Dataset(
                 {
@@ -286,7 +308,7 @@ class TestCatenationStudy:
                         coords={
                             _set_coordinate_key: xarray.DataArray(
                                 ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
-                                dims=_set_coordinate_key
+                                dims=_set_coordinate_key,
                             )
                         },
                     ),
@@ -295,7 +317,7 @@ class TestCatenationStudy:
                         coords={
                             _set_coordinate_key: xarray.DataArray(
                                 ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
-                                dims=_set_coordinate_key
+                                dims=_set_coordinate_key,
                             )
                         },
                     ),
