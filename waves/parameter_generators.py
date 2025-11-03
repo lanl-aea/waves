@@ -1475,8 +1475,8 @@ class CatenationStudy(ParameterGenerator):
 
        >>> import waves
        >>> parameter_schema = [
-       ...     waves.scons_extensions.CartesianProduct({'parameter_1': [1, 2], 'parameter_2': ['a', 'b']}),
-       ...     waves.scons_extensions.OneAtATime({'parameter_1': [5, 7], 'parameter_2': ['x', 'y']}),
+       ...     {"generator": waves.scons_extensions.CartesianProduct, "schema": {'parameter_1': [1, 2], 'parameter_2': ['a', 'b']}},
+       ...     {"generator": waves.scons_extensions.OneAtATime, "schema": {'parameter_1': [5, 7], 'parameter_2': ['x', 'y']}},
        ...     ]
        >>> parameter_generator = waves.parameter_generators.CatenationStudy(parameter_schema)
        >>> print(parameter_generator.parameter_study)
@@ -1492,19 +1492,31 @@ class CatenationStudy(ParameterGenerator):
     """
 
     def _validate(self) -> None:
-        """Validate the Custom Study parameter samples and names. Executed by class initiation."""
+        """Validate the Catenation Study parameter schema and sub-schemas. Executed by class initiation."""
         if not isinstance(self.parameter_schema, list):
-            raise SchemaValidationError("Input must be a list of parameter generators")
+            raise SchemaValidationError("Input must be a list of dictionaries")
         if len(self.parameter_schema) < 2:
-            raise SchemaValidationError("Input must have at least two parameter generators")
+            raise SchemaValidationError("Input list must have at least two dictionaries")
+        for entry in self.parameter_schema:
+            if not isinstance(entry, dict):
+                raise SchemaValidationError("Each list entry must be a dictionary")
+            if "generator" not in entry:
+                raise SchemaValidationError("Each dictionary must contain the key: generator")
+            if "schema" not in entry:
+                raise SchemaValidationError("Each dictionary must contain the key: schema")
+            elif not isinstance(entry["schema"], dict):
+                raise SchemaValidationError("Each schema must be a dictionary")
         return
 
-    def _generate(self) -> None:
+    def _generate(self, **kwargs) -> None:
         """Generate the parameter studies and combine them."""
         studies = []
-        # Strip study from generator list
-        for generator in self.parameter_schema:
-            study = generator.parameter_study
+        # Generate studies and strip study from generator object
+        for entry in self.parameter_schema:
+            generator = entry["generator"]
+            schema = entry["schema"]
+            gen_study = generator(schema, **kwargs)
+            study = gen_study.parameter_study
             studies.append(study)
 
         self.parameter_study = _merge_parameter_studies(studies, self.set_name_template)
