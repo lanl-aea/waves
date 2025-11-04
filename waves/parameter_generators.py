@@ -1504,28 +1504,33 @@ class CatenationStudy(ParameterGenerator):
             if not isinstance(entry, tuple):
                 raise SchemaValidationError("Each list entry must be a tuple")
             if len(entry) != 2:
-                raise SchemaValidationError("Each tuple must contain the generator and the schema as the first and second items, respectively")
+                raise SchemaValidationError(
+                    "Each tuple must contain the generator and the schema as the first and second items, respectively"
+                )
             if not isinstance(entry[1], dict):
                 raise SchemaValidationError("The second entry of each tuple must contain the schema as a dictionary")
         return
 
     def _generate(self, **kwargs) -> None:
         """Generate the parameter studies and combine them."""
-        try:
-            output_file_template_string = self.output_file_template.template
-        except:
-            output_file_template_string = None
+        if self.output_file_template is not None:
+            self.output_file_template = self.output_file_template.template  # Retrieve the string template
 
-        studies = [generator(schema,
-                             output_file_template=output_file_template_string,
-                             output_file=self.output_file,
-                             output_file_type=self.output_file_type,
-                             set_name_template=self.set_name_template.template,
-                             previous_parameter_study=self.previous_parameter_study,
-                             require_previous_parameter_study=self.require_previous_parameter_study,
-                             overwrite=self.overwrite,
-                             write_meta=self.write_meta,
-                             **kwargs).parameter_study for generator, schema in self.parameter_schema]
+        studies = [
+            generator(
+                schema,
+                output_file_template=self.output_file_template,
+                output_file=self.output_file,
+                output_file_type=self.output_file_type,
+                set_name_template=self.set_name_template.template,
+                previous_parameter_study=self.previous_parameter_study,
+                require_previous_parameter_study=self.require_previous_parameter_study,
+                overwrite=self.overwrite,
+                write_meta=self.write_meta,
+                **kwargs,
+            ).parameter_study
+            for generator, schema in self.parameter_schema
+        ]
 
         self.parameter_study = _merge_parameter_studies(studies, self.set_name_template)
         self.parameter_study = self.parameter_study.sortby(_set_coordinate_key)
