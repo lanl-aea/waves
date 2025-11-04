@@ -289,17 +289,19 @@ class TestCatenationStudy:
         ),
         "custom studies": (
             [
-                (CustomStudy,
+                (
+                    CustomStudy,
                     {
                         "parameter_samples": numpy.array([[5, 1.0], [6, 2.0]], dtype=object),
                         "parameter_names": numpy.array(["parameter_1", "parameter_2"]),
-                    }
+                    },
                 ),
-                (CustomStudy,
+                (
+                    CustomStudy,
                     {
                         "parameter_samples": numpy.array([[1, 3.0], [2, 4.0]], dtype=object),
                         "parameter_names": numpy.array(["parameter_1", "parameter_2"]),
-                    }
+                    },
                 ),
             ],
             {},
@@ -480,41 +482,41 @@ class TestCatenationStudy:
             assert mock_file.call_count == file_count
             mock_file().write.assert_has_calls(expected_calls, any_order=False)
 
-    # parameter_study_to_dict = {
-    #     "ints": (
-    #         {"ints": [1, 2]},
-    #         {"parameter_set0": {"ints": 1}, "parameter_set1": {"ints": 2}},
-    #     ),
-    #     "floats": (
-    #         {"floats": [10.0, 20.0]},
-    #         {"parameter_set0": {"floats": 10.0}, "parameter_set1": {"floats": 20.0}},
-    #     ),
-    #     "strings": (
-    #         {"strings": ["a", "b"]},
-    #         {"parameter_set0": {"strings": "a"}, "parameter_set1": {"strings": "b"}},
-    #     ),
-    #     "bools": (
-    #         {"bools": [False, True]},
-    #         {"parameter_set0": {"bools": False}, "parameter_set1": {"bools": True}},
-    #     ),
-    #     "mixed ints, float": (
-    #         {"ints": [1], "floats": [10.0]},
-    #         {"parameter_set0": {"ints": 1, "floats": 10.0}},
-    #     ),
-    # }
-    #
-    # @pytest.mark.parametrize(
-    #     ("parameter_schema", "expected_dictionary"),
-    #     parameter_study_to_dict.values(),
-    #     ids=parameter_study_to_dict.keys(),
-    # )
-    # def test_parameter_study_to_dict(self, parameter_schema: dict, expected_dictionary: dict) -> None:
-    #     """Test parameter study dictionary conversion."""
-    #     test_parameter_study_dict = CatenationStudy(parameter_schema)
-    #     returned_dictionary = test_parameter_study_dict.parameter_study_to_dict()
-    #     assert expected_dictionary.keys() == returned_dictionary.keys()
-    #     assert all(isinstance(key, str) for key in returned_dictionary)
-    #     for set_name, set_contents in expected_dictionary.items():
-    #         assert set_contents == returned_dictionary[set_name]
-    #         for parameter in set_contents:
-    #             assert type(set_contents[parameter]) is type(returned_dictionary[set_name][parameter])
+    parameter_study_to_dict = {
+        "ints": (
+            [(CartesianProduct, {"ints": [1]}), (CartesianProduct, {"ints": [2]})],
+            {"parameter_set0": {"ints": 1}, "parameter_set1": {"ints": 2}},
+        ),
+        "floats": (
+            [(OneAtATime, {"floats": [10.0]}), (OneAtATime, {"floats": [20.0]})],
+            {"parameter_set0": {"floats": 10.0}, "parameter_set1": {"floats": 20.0}},
+        ),
+        "strings": (
+            [(CartesianProduct, {"strings": ["a"]}), (CartesianProduct, {"strings": ["b"]})],
+            {"parameter_set0": {"strings": "a"}, "parameter_set1": {"strings": "b"}},
+        ),
+        "bools": (
+            [(CartesianProduct, {"bools": [False]}), (CartesianProduct, {"bools": [True]})],
+            {"parameter_set0": {"bools": False}, "parameter_set1": {"bools": True}},
+        ),
+        "mixed ints, float": (
+            [(OneAtATime, {"ints": [1]}), (CartesianProduct, {"floats": [10.0]})],
+            {"parameter_set0": {"ints": 1, "floats": 10.0}},
+        ),
+    }
+
+    @pytest.mark.parametrize(
+        ("parameter_schema", "expected_dictionary"),
+        parameter_study_to_dict.values(),
+        ids=parameter_study_to_dict.keys(),
+    )
+    def test_parameter_study_to_dict(self, parameter_schema: dict, expected_dictionary: dict) -> None:
+        """Test parameter study dictionary conversion."""
+        test_parameter_study_dict = CatenationStudy(parameter_schema)
+        returned_dictionary = test_parameter_study_dict.parameter_study_to_dict()
+        assert expected_dictionary.keys() == returned_dictionary.keys()
+        assert all(isinstance(key, str) for key in returned_dictionary)
+        for set_name, set_contents in expected_dictionary.items():
+            assert set_contents == returned_dictionary[set_name]
+            for parameter in set_contents:
+                assert type(set_contents[parameter]) is type(returned_dictionary[set_name][parameter])
