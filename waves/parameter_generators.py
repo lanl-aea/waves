@@ -1514,12 +1514,14 @@ class CatenationStudy(ParameterGenerator):
     def _generate(self, **kwargs) -> None:
         """Generate the parameter studies and combine them."""
         if self.output_file_template is not None:
-            self.output_file_template = self.output_file_template.template  # Retrieve the string template
+            output_file_template_string = self.output_file_template.template
+        else:
+            output_file_template_string = None
 
         studies = [
             generator(
                 schema,
-                output_file_template=self.output_file_template,
+                output_file_template=output_file_template_string,
                 output_file=self.output_file,
                 output_file_type=self.output_file_type,
                 set_name_template=self.set_name_template.template,

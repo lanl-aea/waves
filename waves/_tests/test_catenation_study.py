@@ -54,7 +54,7 @@ class TestCatenationStudy:
         validate_input.values(),
         ids=validate_input.keys(),
     )
-    def test_validate(self, parameter_schema: list, outcome: contextlib.nullcontext | pytest.RaisesExc) -> None:
+    def test_validate(self, parameter_schema: list[tuple], outcome: contextlib.nullcontext | pytest.RaisesExc) -> None:
         with outcome:
             # Validate is called in __init__. Do not need to call explicitly.
             test_validate = CatenationStudy(parameter_schema)
@@ -347,7 +347,7 @@ class TestCatenationStudy:
     )
     def test_generate(
         self,
-        parameter_schema: list,
+        parameter_schema: list[tuple],
         kwargs: dict[str, typing.Any],
         expected_dataset: xarray.Dataset,
         expected_types: dict[str, type],
@@ -456,7 +456,7 @@ class TestCatenationStudy:
     )
     def test_write_yaml(
         self,
-        parameter_schema: list,
+        parameter_schema: list[tuple],
         output_file_template: str | None,
         output_file: str | None,
         output_type: _allowable_output_file_typing,
@@ -510,7 +510,7 @@ class TestCatenationStudy:
         parameter_study_to_dict.values(),
         ids=parameter_study_to_dict.keys(),
     )
-    def test_parameter_study_to_dict(self, parameter_schema: dict, expected_dictionary: dict) -> None:
+    def test_parameter_study_to_dict(self, parameter_schema: list[tuple], expected_dictionary: dict) -> None:
         """Test parameter study dictionary conversion."""
         test_parameter_study_dict = CatenationStudy(parameter_schema)
         returned_dictionary = test_parameter_study_dict.parameter_study_to_dict()
