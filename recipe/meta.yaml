@@ -67,7 +67,6 @@ test:
     - sphinx-argparse
     - sphinx-book-theme
     - sphinxcontrib-bibtex
-    - tk # [win]
   imports:
     - waves
 

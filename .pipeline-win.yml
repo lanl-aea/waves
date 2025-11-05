@@ -45,6 +45,9 @@ win-developer-test:
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
 
 win-conda-build:
+  tags:
+    - powershell
+    - aea
   extends:
     - .win-job-environment
   stage: test
