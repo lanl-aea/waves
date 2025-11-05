@@ -1510,7 +1510,7 @@ class CatenationStudy(ParameterGenerator):
                     "Each tuple must contain the generator and the schema as the first and second items, respectively"
                 )
             if not issubclass(entry[0], waves.parameter_generators.ParameterGenerator):
-                raise SchemaValidationError("The first entry of each tuple must be the parameter generator object")
+                raise SchemaValidationError("The first entry of each tuple must be a parameter generator object")
             if not isinstance(entry[1], dict):
                 raise SchemaValidationError("The second entry of each tuple must contain the schema as a dictionary")
         return
