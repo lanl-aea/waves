@@ -5,8 +5,8 @@ stages:
 
 default:
   tags:
-    - powershell
-    - aea
+    - windows
+    - pn2606796
 
 .win-job-environment: &win-job-environment
   variables:
