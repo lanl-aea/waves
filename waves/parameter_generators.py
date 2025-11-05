@@ -22,7 +22,6 @@ import SCons.Environment
 import xarray
 import yaml
 
-import waves.parameter_generators
 from waves import _settings, _utilities
 from waves._settings import _hash_coordinate_key, _set_coordinate_key
 from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
@@ -1509,7 +1508,7 @@ class CatenationStudy(ParameterGenerator):
                 raise SchemaValidationError(
                     "Each tuple must contain the generator and the schema as the first and second items, respectively"
                 )
-            if not issubclass(entry[0], waves.parameter_generators.ParameterGenerator):
+            if not issubclass(entry[0], ParameterGenerator):
                 raise SchemaValidationError("The first entry of each tuple must be a parameter generator object")
             if not isinstance(entry[1], dict):
                 raise SchemaValidationError("The second entry of each tuple must contain the schema as a dictionary")
