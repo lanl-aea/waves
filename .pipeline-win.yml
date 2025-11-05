@@ -16,7 +16,7 @@ default:
     - $PSVersionTable
     - if ([string]::IsNullOrEmpty($environment_file)) { exit 1 }
     # Common job variables
-    - $conda_installation="C:\ProgramData\anaconda3"
+    - $conda_installation="C:\ProgramData\miniconda3"
     - $prefix="$pwd\conda-environment"
     - $conda_pkgs_dirs="$pwd\conda-pkgs"
     - Write-Output $conda_installation
