@@ -1509,7 +1509,7 @@ class CatenationStudy(ParameterGenerator):
                 raise SchemaValidationError(
                     "Each tuple must contain the generator and the schema as the first and second items, respectively"
                 )
-            if not issubclass(entry[0], ParameterGenerator):
+            if not (isinstance(entry[0], type) and issubclass(entry[0], ParameterGenerator)):
                 raise SchemaValidationError("The first item of each tuple must be a parameter generator object")
             if not isinstance(entry[1], dict):
                 raise SchemaValidationError("The second item of each tuple must contain the schema as a dictionary")

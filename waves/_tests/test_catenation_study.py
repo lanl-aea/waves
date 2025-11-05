@@ -67,7 +67,7 @@ class TestCatenationStudy:
             assert isinstance(test_validate, CatenationStudy)
 
     generate_io = {
-        "one_parameter": (
+        "one parameter": (
             {"1": (CartesianProduct, {"parameter_1": [1]}), "2": (CartesianProduct, {"parameter_1": [2]})},
             {},
             xarray.Dataset(
@@ -88,7 +88,31 @@ class TestCatenationStudy:
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64},
         ),
-        "one_parameter custom template": (
+        "one parameter random keys": (
+            {
+                "study 1": (CartesianProduct, {"parameter_1": [1]}),
+                "another study": (CartesianProduct, {"parameter_1": [2]}),
+            },
+            {},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1, 2],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"], dims=_set_coordinate_key
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["1661dcd0bf4761d25471c1cf5514ceae", "0b588b6a82c1d3d3d19fda304f940342"],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {"parameter_1": numpy.int64},
+        ),
+        "one parameter custom template": (
             {"1": (CartesianProduct, {"parameter_1": [1]}), "2": (CartesianProduct, {"parameter_1": [2]})},
             {"set_name_template": "set@number"},
             xarray.Dataset(
@@ -105,7 +129,7 @@ class TestCatenationStudy:
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64},
         ),
-        "two_parameter merge": (
+        "two parameter merge": (
             {
                 "1": (OneAtATime, {"parameter_1": [1], "parameter_2": ["a"]}),
                 "2": (OneAtATime, {"parameter_1": [2], "parameter_2": ["b"]}),
@@ -140,7 +164,7 @@ class TestCatenationStudy:
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64, "parameter_2": numpy.dtype("U1")},
         ),
-        "two_parameter propagate": (
+        "two parameter propagate": (
             {"1": (CartesianProduct, {"parameter_1": [1, 2]}), "2": (CartesianProduct, {"parameter_2": ["a", "b"]})},
             {},
             xarray.Dataset(
