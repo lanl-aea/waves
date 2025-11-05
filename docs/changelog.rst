@@ -8,6 +8,10 @@ Changelog
 1.1.0 (unreleased)
 ******************
 
+New Features
+============
+- Add CatenationStudy parameter generator. (:issue:`845`, :merge:`1262`). By  `Chris Johnson`_.
+
 Bug fixes
 =========
 - Appropriately handle CPU override when checking the CPU count is divisible by the number of MPI processes (:issue:`977`, :merge:`1267`). By
