@@ -1431,10 +1431,11 @@ class CatenationStudy(ParameterGenerator):
 
     Parameters in each study must be scalar valued integers, floats, strings, or booleans.
 
-    :param parameter_schema: list of tuples, where each tuple is of length two. The first item in each tuple is the
-        generator method (`waves.scons_extensions.CartesianProduct`, `waves.scons_extensions.LatinHypercube`, etc). The
-        second item of each tuple is a dictionary of the parameter schema for that parameter generator method. Each
-        dictionary of each parameter generator method follows standard schema formatting for that method.
+    :param parameter_schema: dictionary of key:value pairs. The keys are not used. Each value should be a tuple of
+        length two. The first item in each tuple is the generator method (`waves.scons_extensions.CartesianProduct`,
+        `waves.scons_extensions.LatinHypercube`, etc.). The second item of each tuple is a dictionary of the parameter
+        schema for that parameter generator method. Each dictionary of each parameter generator method follows standard
+        schema formatting for that method.
     :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
         parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
         relative path template. May contain the ``@number`` set number placeholder in the file basename but not in the
@@ -1466,22 +1467,22 @@ class CatenationStudy(ParameterGenerator):
         ``require_previous_parameter_study`` is ``True``
     :raises waves.exceptions.SchemaValidationError:
 
-        * Parameter schema is not a list
-        * Parameter schema does not contain multiple entries
-        * Parameter schema entries are not tuples
-        * Parameter schema entries are not a length of two
-        * Parameter schema entries' first item is not a parameter generator object
-        * Parameter schema entries' second item is not a dictionary
+        * Parameter schema is not a dictionary
+        * Parameter schema does not contain multiple key:value entries
+        * Parameter schema values of key:value entries are not tuples
+        * Parameter schema tuple values are not a length of two
+        * Parameter schema tuple values' first item is not a parameter generator object
+        * Parameter schema tuple values' second item is not a dictionary
 
     Example:
 
     .. code-block::
 
        >>> import waves
-       >>> parameter_schema = [
-       ...     (waves.scons_extensions.CartesianProduct, {'parameter_1': [1, 2], 'parameter_2': ['a', 'b']}),
-       ...     (waves.scons_extensions.OneAtATime, {'parameter_1': [5, 7], 'parameter_2': ['x', 'y']}),
-       ...     ]
+       >>> parameter_schema = {
+       ...     "1": (waves.parameter_generators.CartesianProduct, {'parameter_1': [1, 2], 'parameter_2': ['a', 'b']}),
+       ...     "2": (waves.parameter_generators.OneAtATime, {'parameter_1': [5, 7], 'parameter_2': ['x', 'y']}),
+       ...     }
        >>> parameter_generator = waves.parameter_generators.CatenationStudy(parameter_schema)
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
@@ -1497,21 +1498,21 @@ class CatenationStudy(ParameterGenerator):
 
     def _validate(self) -> None:
         """Validate the Catenation Study parameter schema and sub-schemas. Executed by class initiation."""
-        if not isinstance(self.parameter_schema, list):
-            raise SchemaValidationError("Input must be a list of tuples")
+        if not isinstance(self.parameter_schema, dict):
+            raise SchemaValidationError("Input must be a dictionary with tuple values")
         if len(self.parameter_schema) < 2:
-            raise SchemaValidationError("Input list must have at least two tuples")
-        for entry in self.parameter_schema:
+            raise SchemaValidationError("Input dictionary must have at least two key:value entries")
+        for entry in self.parameter_schema.values():
             if not isinstance(entry, tuple):
-                raise SchemaValidationError("Each list entry must be a tuple")
+                raise SchemaValidationError("Each value of a key:value entry must be a tuple")
             if len(entry) != 2:
                 raise SchemaValidationError(
                     "Each tuple must contain the generator and the schema as the first and second items, respectively"
                 )
             if not issubclass(entry[0], ParameterGenerator):
-                raise SchemaValidationError("The first entry of each tuple must be a parameter generator object")
+                raise SchemaValidationError("The first item of each tuple must be a parameter generator object")
             if not isinstance(entry[1], dict):
-                raise SchemaValidationError("The second entry of each tuple must contain the schema as a dictionary")
+                raise SchemaValidationError("The second item of each tuple must contain the schema as a dictionary")
         return
 
     def _generate(self, **kwargs) -> None:
@@ -1534,7 +1535,7 @@ class CatenationStudy(ParameterGenerator):
                 write_meta=self.write_meta,
                 **kwargs,
             ).parameter_study
-            for generator, schema in self.parameter_schema
+            for generator, schema in self.parameter_schema.values()
         ]
 
         self.parameter_study = _merge_parameter_studies(studies, self.set_name_template)
