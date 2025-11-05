@@ -8,6 +8,11 @@ Changelog
 1.1.0 (unreleased)
 ******************
 
+Bug fixes
+=========
+- Appropriately handle CPU override when checking the CPU count is divisible by the number of MPI processes (:issue:`977`, :merge:`1267`). By
+  `Matthew Fister`_.
+
 ******************
 1.0.1 (2025-10-10)
 ******************
