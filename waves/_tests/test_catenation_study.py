@@ -39,8 +39,12 @@ class TestCatenationStudy:
             [(CartesianProduct, {"parameter_1": [1]})],
             pytest.raises(SchemaValidationError),
         ),
-        "bad sub-schema: too few entries": (
+        "bad entry: too few items": (
             [({"parameter_1": [1]}), (CartesianProduct, {"parameter_1": [2]})],
+            pytest.raises(SchemaValidationError),
+        ),
+        "bad generator: not a parameter generator": (
+            [("not a generator", {"parameter_1": [2]}), (CartesianProduct, {"parameter_1": [2]})],
             pytest.raises(SchemaValidationError),
         ),
         "bad sub-schema: not a dictionary": (
