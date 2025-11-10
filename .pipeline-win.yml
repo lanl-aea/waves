@@ -11,7 +11,7 @@ default:
 .win-job-environment: &win-job-environment
   variables:
     GIT_STRATEGY: clone
-    conda_installation: "C:\ProgramData\miniconda3"
+    conda_installation: "C:/ProgramData/miniconda3"
     environment_file: "environment-win.yml"
   before_script:
     - $PSVersionTable
@@ -61,7 +61,7 @@ win-conda-build:
     environment_file: "conda-build.yml"
     recipe_directory: "recipe"
     # VVV TODO: Remove when conda-build CI jobs run on the new Windows CI server
-    conda_installation: "C:\ProgramData\anaconda3"
+    conda_installation: "C:/ProgramData/anaconda3"
     # ^^^ TODO: Remove when conda-build CI jobs run on the new Windows CI server
   script:
     # Job variables
