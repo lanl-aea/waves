@@ -1498,6 +1498,7 @@ class CatenationStudy(ParameterGenerator):
        Data variables:
            parameter_1   (set_name) int64 1 1 2 2 5 7 5
            parameter_2   (set_name) <U1 'a' 'b' 'b' 'a' 'y' 'x' 'x'
+
     """
 
     def _validate(self) -> None:
@@ -1511,7 +1512,8 @@ class CatenationStudy(ParameterGenerator):
                 raise SchemaValidationError("Each value of a key:value entry must be a tuple")
             if len(entry) != 2:
                 raise SchemaValidationError(
-                    "Each tuple must contain exactly two elements, the generator and the schema as the first and second items, respectively"
+                    "Each tuple must contain exactly two elements, the generator and the schema as the first and second"
+                    " items, respectively"
                 )
             if not (isinstance(entry[0], type) and issubclass(entry[0], ParameterGenerator)):
                 raise SchemaValidationError("The first item of each tuple must be a parameter generator object")
