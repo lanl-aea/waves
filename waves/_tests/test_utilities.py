@@ -118,31 +118,31 @@ def test_set_name_substitution(
 quote_spaces_in_path_input = {
     "string, no spaces": (
         "/path/without_space/executable",
-        pathlib.Path("/path/without_space/executable"),
+        str(pathlib.Path("/path/without_space/executable")),
     ),
     "string, spaces": (
         "/path/with space/executable",
-        pathlib.Path('/path/"with space"/executable'),
+        str(pathlib.Path('/path/"with space"/executable')),
     ),
     "pathlib, no spaces": (
         pathlib.Path("/path/without_space/executable"),
-        pathlib.Path("/path/without_space/executable"),
+        str(pathlib.Path("/path/without_space/executable")),
     ),
     "pathlib, spaces": (
         pathlib.Path("/path/with space/executable"),
-        pathlib.Path('/path/"with space"/executable'),
+        str(pathlib.Path('/path/"with space"/executable')),
     ),
     "space in root": (
         pathlib.Path("/path space/with space/executable"),
-        pathlib.Path('/"path space"/"with space"/executable'),
+        str(pathlib.Path('/"path space"/"with space"/executable')),
     ),
     "relative path": (
         pathlib.Path("path space/without_space/executable"),
-        pathlib.Path('"path space"/without_space/executable'),
+        str(pathlib.Path('"path space"/without_space/executable')),
     ),
     "space in executable": (
         pathlib.Path("path/without_space/executable space"),
-        pathlib.Path('path/without_space/"executable space"'),
+        str(pathlib.Path('path/without_space/"executable space"')),
     ),
 }
 

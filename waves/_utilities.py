@@ -66,14 +66,17 @@ def set_name_substitution(
         return original
 
 
-def _quote_spaces_in_path(path: str | pathlib.Path) -> pathlib.Path:
+def _quote_spaces_in_path(path: str | pathlib.Path) -> str:
     """Traverse parts of a path and place in double quotes if there are spaces in the part.
+
+    Returns as a string because pathlib already handles spaces correctly and will treat any double quotes as literal
+    characters in the path. This function should not be used if a ``pathlib.Path`` object is required.
 
     >>> import pathlib
     >>> import waves
     >>> path = pathlib.Path("path/directory with space/filename.ext")
     >>> waves.scons_extensions._quote_spaces_in_path(path)
-    PosixPath('path/"directory with space"/filename.ext')
+    'path/"directory with space"/filename.ext'
 
     :param path: path to modify as necessary
 
@@ -87,7 +90,7 @@ def _quote_spaces_in_path(path: str | pathlib.Path) -> pathlib.Path:
         else:
             new_part = part
         new_path = new_path / new_part
-    return new_path
+    return str(new_path)
 
 
 def search_commands(options: collections.abc.Sequence[str]) -> str | None:
