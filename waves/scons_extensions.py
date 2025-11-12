@@ -622,17 +622,17 @@ def append_env_path(
     program = pathlib.Path(program).resolve()
     if not program.exists():
         raise FileNotFoundError(f"The program '{program}' does not exist.")
-    env.AppendENVPath("PATH", str(program.parent), delete_existing=False)
+    env.AppendENVPath("PATH", _utilities._quote_spaces_in_path(program.parent), delete_existing=False)
 
 
 def find_program(
     env: SCons.Environment.Environment,
     names: collections.abc.Sequence[str],
+    quote_spaces_in_path: bool = True,
 ) -> str | None:
     """Search for a program from a list of possible program names.
 
-    Returns the absolute path of the first program name found. If path parts contain spaces, the part will be wrapped in
-    double quotes.
+    Returns the absolute path of the first program name found.
 
     .. code-block::
        :caption: Example search for an executable named "program"
@@ -645,6 +645,7 @@ def find_program(
 
     :param env: The SCons construction environment object to modify
     :param names: list of string program names. May include an absolute path.
+    :param quote_spaces_in_path: surround path parts that contain spaces with double quotes
 
     :return: Absolute path of the found program. None if none of the names are found.
     """
@@ -653,8 +654,8 @@ def find_program(
     program_paths = [check_program(env, name) for name in names]
     # Return first non-None path. Default to None if no program path was found.
     first_found_path = next((path for path in program_paths if path is not None), None)
-    if first_found_path is not None:
-        first_found_path = str(_utilities._quote_spaces_in_path(first_found_path))
+    if first_found_path is not None and quote_spaces_in_path:
+        first_found_path = _utilities._quote_spaces_in_path(first_found_path)
 
     return first_found_path
 
@@ -662,6 +663,7 @@ def find_program(
 def add_program(
     env: SCons.Environment.Environment,
     names: collections.abc.Sequence[str],
+    quote_spaces_in_path: bool = True,
 ) -> str | None:
     """Search for a program from a list of possible program names. Add first found to system ``PATH``.
 
@@ -679,18 +681,22 @@ def add_program(
 
     :param env: The SCons construction environment object to modify
     :param names: list of string program names. May include an absolute path.
+    :param quote_spaces_in_path: surround path parts that contain spaces with double quotes
 
     :return: Absolute path of the found program. None if none of the names are found.
     """
-    first_found_path = find_program(env, names)
+    first_found_path = find_program(env, names, quote_spaces_in_path=False)
     if first_found_path:
         append_env_path(env, first_found_path)
+    if first_found_path is not None and quote_spaces_in_path:
+        first_found_path = _utilities._quote_spaces_in_path(first_found_path)
     return first_found_path
 
 
 def add_cubit(
     env: SCons.Environment.Environment,
     names: collections.abc.Sequence[str],
+    quote_spaces_in_path: bool = True,
 ) -> str | None:
     """Modify environment variables with the paths required to ``import cubit`` in a Python3 environment.
 
@@ -711,15 +717,18 @@ def add_cubit(
 
     :param env: The SCons construction environment object to modify
     :param names: list of string program names for the main Cubit executable. May include an absolute path.
+    :param quote_spaces_in_path: surround path parts that contain spaces with double quotes
 
     :return: Absolute path of the Cubit executable. None if none of the names are found.
     """
-    first_found_path = add_program(env, names)
+    first_found_path = add_program(env, names, quote_spaces_in_path=False)
     if first_found_path:
         cubit_bin = _utilities.find_cubit_bin([first_found_path])
         cubit_python_library_dir = cubit_bin / "python3"
         env.PrependENVPath("PYTHONPATH", str(cubit_bin.resolve()))
         env.PrependENVPath("LD_LIBRARY_PATH", str(cubit_python_library_dir.resolve()))
+    if first_found_path is not None and quote_spaces_in_path:
+        first_found_path = _utilities._quote_spaces_in_path(first_found_path)
     return first_found_path
 
 
