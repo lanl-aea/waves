@@ -364,7 +364,7 @@ require_third_party_system_tests: list = [
             pytest.mark.fierro,
             pytest.mark.skipif(
                 testing_macos,
-                reason="Cubit does not support import within external Python interpretter on Apple Silicon"
+                reason="Cubit does not support import within external Python interpretter on Apple Silicon",
             ),
             pytest.mark.skipif(testing_windows, reason="Fierro does not support Windows"),
         ],
