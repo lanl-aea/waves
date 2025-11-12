@@ -28,14 +28,14 @@ def pytest_addoption(parser: pytest.Parser) -> None:
     )
     parser.addoption(
         "--abaqus-command",
-        action="store",
+        action="append",
         type=pathlib.Path,
         default=None,
         help="Abaqus command for system test CLI pass through",
     )
     parser.addoption(
         "--cubit-command",
-        action="store",
+        action="append",
         type=pathlib.Path,
         default=None,
         help="Cubit command for system test CLI pass through",
@@ -62,11 +62,23 @@ def unconditional_build(request: pytest.FixtureRequest) -> bool:
 
 @pytest.fixture
 def abaqus_command(request: pytest.FixtureRequest) -> pathlib.Path:
-    """Return the argument of custom pytest ``--abaqus-command`` command-line option."""
-    return request.config.getoption("--abaqus-command")
+    """Return the argument of custom pytest ``--abaqus-command`` command-line option.
+
+    Returns an empty list if the getopts default ``None`` is provided (no command line argument specified)
+    """
+    command_list = request.config.getoption("--abaqus-command")
+    if command_list is None:
+        command_list = []
+    return command_list
 
 
 @pytest.fixture
 def cubit_command(request: pytest.FixtureRequest) -> pathlib.Path:
-    """Return the argument of custom pytest ``--cubit-command`` command-line option."""
-    return request.config.getoption("--cubit-command")
+    """Return the argument of custom pytest ``--cubit-command`` command-line option.
+
+    Returns an empty list if the getopts default ``None`` is provided (no command line argument specified)
+    """
+    command_list = request.config.getoption("--cubit-command")
+    if command_list is None:
+        command_list = []
+    return command_list

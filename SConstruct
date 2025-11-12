@@ -72,11 +72,6 @@ AddOption(
         "and it would normally be ignored. (default: '%default')"
     ),
 )
-# Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
-default_abaqus_commands = [
-    "/apps/abaqus/Commands/abq2024",
-    "/usr/projects/ea/abaqus/Commands/abq2024",
-]
 AddOption(
     "--abaqus-command",
     dest="abaqus_command",
@@ -84,13 +79,8 @@ AddOption(
     type="string",
     action="append",
     metavar="COMMAND",
-    help=f"Override for the Abaqus command. Repeat to specify more than one (default: {default_abaqus_commands})",
+    help=f"Override for the Abaqus command. Repeat to specify more than one (default: '%default')",
 )
-# Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
-default_cubit_commands = [
-    "/apps/Cubit-16.16/cubit",
-    "/usr/projects/ea/Cubit/Cubit-16.12/cubit",
-]
 AddOption(
     "--cubit-command",
     dest="cubit_command",
@@ -98,7 +88,7 @@ AddOption(
     type="string",
     action="append",
     metavar="COMMAND",
-    help=f"Override for the Cubit command. Repeat to specify more than one (default: {default_cubit_commands})",
+    help=f"Override for the Cubit command. Repeat to specify more than one (default: '%default')",
 )
 
 # ========================================================================================= CONSTRUCTION ENVIRONMENT ===
@@ -109,8 +99,8 @@ env = Environment(
     prefix=pathlib.Path(GetOption("prefix")),
     distribution_name=GetOption("distribution_name"),
     unconditional_build=GetOption("unconditional_build"),
-    abaqus_commands=GetOption("abaqus_command"),
-    cubit_commands=GetOption("cubit_command"),
+    abaqus_command=GetOption("abaqus_command"),
+    cubit_command=GetOption("cubit_command"),
 )
 build_directory = pathlib.Path(env["build_dir"])
 print(f"Using build directory...{build_directory}")
@@ -120,9 +110,9 @@ distribution_name = env["distribution_name"]
 distribution_filename = distribution_name.replace("-", "_")
 package_specification = f"{distribution_filename}-{version}"
 print(f"Using distribution name...{distribution_name}")
-# Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
-env["abaqus_commands"] = env["abaqus_commands"] if env["abaqus_commands"] is not None else default_abaqus_commands
-env["cubit_commands"] = env["cubit_commands"] if env["cubit_commands"] is not None else default_cubit_commands
+# Set unspecified default to an empty list. Cannot default to an empty list, because lists are mutable objects.
+if env["abaqus_command"] is None: env["abaqus_command"] = []
+if env["cubit_command"] is None: env["cubit_command"] = []
 env["ENV"]["PYTHONDONTWRITEBYTECODE"] = 1
 
 # Empty defaults list to avoid building all simulation targets by default
@@ -133,17 +123,6 @@ required_programs = ["pytest", "sphinx-build", "latexmk", "ruff", "mypy"]
 for program in required_programs:
     absolute_path = env[program.replace("-", "_")] = shutil.which(program, path=env["ENV"]["PATH"])
     print(f"Checking whether '{program}' program exists...{absolute_path}")
-
-# Find tutorial/system test third-party software
-# TODO: separate Abaqus/Cubit construction environments for system testing
-env["abaqus"] = next(
-    (shutil.which(command, path=env["ENV"]["PATH"]) for command in env["abaqus_commands"] if command is not None),
-    "abaqus",
-)
-env["cubit"] = next(
-    (shutil.which(command, path=env["ENV"]["PATH"]) for command in env["cubit_commands"] if command is not None),
-    "cubit",
-)
 
 # Build variable substitution dictionary
 project_substitution_dictionary = {}
