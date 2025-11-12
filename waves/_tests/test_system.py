@@ -460,7 +460,14 @@ require_third_party_system_tests: list = [
             string.Template("scons quinoa-local ${unconditional_build} --print-build-failures ${cubit_command}"),
         ],
         "tutorials/tutorial_quinoa",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.cubit, pytest.mark.quinoa],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.cubit,
+            pytest.mark.quinoa,
+            pytest.mark.skipif(testing_macos, reason="Quinoa does not support macOS"),
+            pytest.mark.skipif(testing_windows, reason="Quinoa does not support Windows"),
+        ],
     ),
     pytest.param(
         [
