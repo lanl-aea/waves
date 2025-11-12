@@ -29,14 +29,12 @@ def pytest_addoption(parser: pytest.Parser) -> None:
     parser.addoption(
         "--abaqus-command",
         action="append",
-        type=pathlib.Path,
         default=None,
         help="Abaqus command for system test CLI pass through",
     )
     parser.addoption(
         "--cubit-command",
         action="append",
-        type=pathlib.Path,
         default=None,
         help="Cubit command for system test CLI pass through",
     )
