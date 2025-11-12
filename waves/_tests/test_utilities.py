@@ -197,7 +197,6 @@ def test_cubit_os_bin() -> None:
         bin_directory = _utilities.cubit_os_bin()
         assert bin_directory == "bin"
 
-    # TODO: Find the Windows bin directory name, update the function and the test.
     with patch("platform.system", return_value="Windows"):
         bin_directory = _utilities.cubit_os_bin()
         assert bin_directory == "bin"
