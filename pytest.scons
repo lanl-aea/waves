@@ -51,8 +51,8 @@ systemtest_node = env.Command(
     ],
     pytest_command=pytest_command,
     system_test_directory=build_directory,
-    abaqus_command=' '.join(f"--abaqus-command={command}" for command in env["abaqus_command"]),
-    cubit_command=' '.join(f"--cubit-command={command}" for command in env["cubit_command"])
+    abaqus_command=" ".join(f"--abaqus-command={command}" for command in env["abaqus_command"]),
+    cubit_command=" ".join(f"--cubit-command={command}" for command in env["cubit_command"]),
 )
 env.Alias("systemtest", systemtest_node)
 env.AlwaysBuild(systemtest_node)

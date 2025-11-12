@@ -79,7 +79,7 @@ AddOption(
     type="string",
     action="append",
     metavar="COMMAND",
-    help=f"Override for the Abaqus command. Repeat to specify more than one (default: '%default')",
+    help="Override for the Abaqus command. Repeat to specify more than one (default: '%default')",
 )
 AddOption(
     "--cubit-command",
@@ -88,7 +88,7 @@ AddOption(
     type="string",
     action="append",
     metavar="COMMAND",
-    help=f"Override for the Cubit command. Repeat to specify more than one (default: '%default')",
+    help="Override for the Cubit command. Repeat to specify more than one (default: '%default')",
 )
 
 # ========================================================================================= CONSTRUCTION ENVIRONMENT ===
@@ -111,8 +111,10 @@ distribution_filename = distribution_name.replace("-", "_")
 package_specification = f"{distribution_filename}-{version}"
 print(f"Using distribution name...{distribution_name}")
 # Set unspecified default to an empty list. Cannot default to an empty list, because lists are mutable objects.
-if env["abaqus_command"] is None: env["abaqus_command"] = []
-if env["cubit_command"] is None: env["cubit_command"] = []
+if env["abaqus_command"] is None:
+    env["abaqus_command"] = []
+if env["cubit_command"] is None:
+    env["cubit_command"] = []
 env["ENV"]["PYTHONDONTWRITEBYTECODE"] = 1
 
 # Empty defaults list to avoid building all simulation targets by default
