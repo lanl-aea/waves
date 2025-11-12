@@ -174,7 +174,6 @@ system_tests: list = [
         marks=[
             pytest.mark.scons,
             pytest.mark.sphinx,
-            pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
             pytest.mark.skip(reason="Fragile system test is a regular cause of false negatives"),
         ],
         id="modsim_template_scons_html",
@@ -188,7 +187,6 @@ system_tests: list = [
         marks=[
             pytest.mark.scons,
             pytest.mark.sphinx,
-            pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
             pytest.mark.skip(reason="Fragile system test is a regular cause of false negatives"),
         ],
         id="modsim_template_2_scons_html",
@@ -235,7 +233,6 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
         ],
     ),
     pytest.param(
@@ -349,9 +346,7 @@ require_third_party_system_tests: list = [
             pytest.mark.scons,
             pytest.mark.abaqus,
             pytest.mark.cubit,
-            pytest.mark.skipif(
-                testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
-            ),
+            pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
         ],
     ),
     pytest.param(
@@ -368,8 +363,10 @@ require_third_party_system_tests: list = [
             pytest.mark.cubit,
             pytest.mark.fierro,
             pytest.mark.skipif(
-                testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
+                testing_macos,
+                reason="Cubit does not support import within external Python interpretter on Apple Silicon"
             ),
+            pytest.mark.skipif(testing_windows, reason="Fierro does not support Windows"),
         ],
     ),
     pytest.param(
@@ -388,11 +385,10 @@ require_third_party_system_tests: list = [
             # Remove sierra python version skip when ci server has a sierra vesrion compatible with python 3.13
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/844
             pytest.mark.skipif(
-                python_313_or_above, reason="Sierra verison on CI server is incompatible with Python 3.13"
+                python_313_or_above, reason="Sierra version on CI server is incompatible with Python 3.13"
             ),
-            pytest.mark.skipif(
-                testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
-            ),
+            pytest.mark.skipif(testing_macos, reason="Sierra does not support macOS"),
+            pytest.mark.skipif(testing_windows, reason="Sierra does not support Windows"),
         ],
     ),
     pytest.param(
@@ -408,9 +404,7 @@ require_third_party_system_tests: list = [
             pytest.mark.scons,
             pytest.mark.abaqus,
             pytest.mark.cubit,
-            pytest.mark.skipif(
-                testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
-            ),
+            pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
             # TODO: Remove this skip when Cubit python interpretter search is fixed
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/917
             pytest.mark.skipif(testing_hpc, reason="Cubit Python interpretter search fails on HPC"),
@@ -429,9 +423,7 @@ require_third_party_system_tests: list = [
             pytest.mark.scons,
             pytest.mark.cubit,
             pytest.mark.fierro,
-            pytest.mark.skipif(
-                testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
-            ),
+            pytest.mark.skipif(testing_windows, reason="Fierro does not support Windows"),
             # TODO: Remove this skip when Cubit python interpretter search is fixed
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/917
             pytest.mark.skipif(testing_hpc, reason="Cubit Python interpretter search fails on HPC"),
@@ -450,13 +442,12 @@ require_third_party_system_tests: list = [
             pytest.mark.scons,
             pytest.mark.cubit,
             pytest.mark.sierra,
+            pytest.mark.skipif(testing_macos, reason="Sierra does not support macOS"),
+            pytest.mark.skipif(testing_windows, reason="Sierra does not support Windows"),
             # Remove sierra python version skip when ci server has a sierra vesrion compatible with python 3.13
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/844
             pytest.mark.skipif(
-                python_313_or_above, reason="Sierra verison on CI server is incompatible with Python 3.13"
-            ),
-            pytest.mark.skipif(
-                testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
+                python_313_or_above, reason="Sierra version on CI server is incompatible with Python 3.13"
             ),
             # TODO: Remove this skip when Cubit python interpretter search is fixed
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/917
@@ -710,10 +701,7 @@ require_third_party_system_tests: list = [
             pytest.mark.scons,
             pytest.mark.sphinx,
             pytest.mark.abaqus,
-            pytest.mark.skipif(
-                testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus"
-            ),
-            pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
+            pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
             # TODO: Fix HPC CI system tests that run TeXLive
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
             pytest.mark.skipif(testing_hpc, reason="HPC CI server fails TeXLive PDF builds"),
@@ -750,10 +738,7 @@ require_third_party_system_tests: list = [
             pytest.mark.scons,
             pytest.mark.sphinx,
             pytest.mark.abaqus,
-            pytest.mark.skipif(
-                testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus"
-            ),
-            pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
+            pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
             # TODO: Fix HPC CI system tests that run TeXLive
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
             pytest.mark.skipif(testing_hpc, reason="HPC CI server fails TeXLive PDF builds"),
