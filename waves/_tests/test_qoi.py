@@ -1676,6 +1676,11 @@ def test__plot_archive() -> None:
     pass
 
 
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/982
+def test__report_histogram() -> None:
+    pass
+
+
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/925
 def test__archive() -> None:
     pass
