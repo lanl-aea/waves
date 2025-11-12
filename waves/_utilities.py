@@ -124,7 +124,6 @@ def cubit_os_bin() -> str:
     On other systems it is "bin".
 
     :returns: bin directory name, e.g. "bin" or "MacOS"
-    :rtype:
     """
     system = platform.system().lower()
     if system == "darwin":
@@ -132,6 +131,21 @@ def cubit_os_bin() -> str:
     else:
         bin_directory = "bin"
     return bin_directory
+
+
+def cubit_os_python() -> str:
+    """Return the OS specific Cubit Python interpreter rglob search term.
+
+    Intended for use in :func:`waves._utilities.find_cubit_python`
+
+    :returns: Cubit Python Interpreter search term specific to OS
+    """
+    system = platform.system().lower()
+    if system == "windows":
+        python_command = "python3*/python.exe"
+    else:
+        python_command = "python3*"
+    return python_command
 
 
 def find_cubit_bin(options: collections.abc.Sequence[str], bin_directory: str | None = None) -> pathlib.Path:
@@ -170,18 +184,22 @@ def find_cubit_bin(options: collections.abc.Sequence[str], bin_directory: str | 
     return cubit_bin
 
 
-def find_cubit_python(options: collections.abc.Sequence[str], python_command: str = "python3*") -> pathlib.Path:
+def find_cubit_python(options: collections.abc.Sequence[str], python_command: str  | None =  None) -> pathlib.Path:
     """Search for the Cubit Python interpreter given a few options for the Cubit executable.
 
     Recommend first checking to see if cubit will import.
 
     :param options: Cubit command options
-    :param python_command: Cubit's Python executable file basename or ``pathlib.Path.rglob`` pattern
+    :param python_command: Cubit's Python executable file basename or ``pathlib.Path.rglob`` pattern. Override the
+        python command returned by :meth:`waves._utilities.cubit_os_python`
 
     :returns: Cubit Python intepreter executable absolute path
 
     :raise FileNotFoundError: If the Cubit command or Cubit Python interpreter is not found
     """
+    if python_command is None:
+        python_command = cubit_os_python()
+
     message = (
         "Could not find a Cubit Python interpreter. Please ensure the Cubit executable is on PATH or provide "
         "an absolute path to the Cubit executable."
