@@ -769,8 +769,8 @@ def test_system(
     system_test_directory: pathlib.Path | None,
     keep_system_tests: bool,
     unconditional_build: bool,
-    abaqus_command: pathlib.Path | None,
-    cubit_command: pathlib.Path | None,
+    abaqus_command: list[str],
+    cubit_command: list[str],
     request: pytest.FixtureRequest,
     commands: typing.Iterable[str],
     fetch_options: str | None,
@@ -830,8 +830,8 @@ def test_system(
         "fetch_options": fetch_options,
         "temporary_directory": temporary_path,
         "unconditional_build": "--unconditional-build" if unconditional_build else "",
-        "abaqus_command": f"--abaqus-command={abaqus_command}" if abaqus_command is not None else "",
-        "cubit_command": f"--cubit-command={cubit_command}" if cubit_command is not None else "",
+        "abaqus_command": " ".join(f"--abaqus-command={command}" for command in abaqus_command),
+        "cubit_command": " ".join(f"--cubit-command={command}" for command in cubit_command),
     }
     try:
         for command in commands:

@@ -13,6 +13,13 @@ Bug fixes
 - Appropriately handle CPU override when checking the CPU count is divisible by the number of MPI processes (:issue:`977`, :merge:`1267`). By
   `Matthew Fister`_.
 
+Internal Changes
+================
+- Match the system testing option ``--abaqus-command`` and ``--cubit-command`` behavior when passing through from SCons
+  to pytest to the system tests, e.g. tutorial execution. Fixes a CI test behavior where an unspecified command list
+  results in a Abaqus/Cubit path override to PWD in the tutorial system tests (:issue:`981`, :merge:`1269`). By `Kyle
+  Brindley`_.
+
 ******************
 1.0.1 (2025-10-10)
 ******************
