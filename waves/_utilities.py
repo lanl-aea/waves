@@ -129,7 +129,6 @@ def cubit_os_bin() -> str:
     system = platform.system().lower()
     if system == "darwin":
         bin_directory = "MacOS"
-    # TODO: Find the Windows bin directory name, update the function and the test.
     else:
         bin_directory = "bin"
     return bin_directory
