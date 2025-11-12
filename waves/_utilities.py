@@ -184,7 +184,7 @@ def find_cubit_bin(options: collections.abc.Sequence[str], bin_directory: str | 
     return cubit_bin
 
 
-def find_cubit_python(options: collections.abc.Sequence[str], python_command: str  | None =  None) -> pathlib.Path:
+def find_cubit_python(options: collections.abc.Sequence[str], python_command: str | None = None) -> pathlib.Path:
     """Search for the Cubit Python interpreter given a few options for the Cubit executable.
 
     Recommend first checking to see if cubit will import.
