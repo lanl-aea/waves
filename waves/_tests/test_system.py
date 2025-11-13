@@ -758,7 +758,7 @@ require_third_party_system_tests: list = [
                 reason=(
                     "Windows specific test variation. "
                     "On other operating systems, this test is covered by 'modsim_template_full'"
-                )
+                ),
             ),
             # TODO: Fix HPC CI system tests that run TeXLive
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
@@ -840,7 +840,7 @@ require_third_party_system_tests: list = [
                 reason=(
                     "Windows specific test variation. "
                     "On other operating systems, this test is covered by 'modsim_template_full'"
-                )
+                ),
             ),
             # TODO: Fix HPC CI system tests that run TeXLive
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
