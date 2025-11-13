@@ -718,8 +718,8 @@ def add_cubit(
     if first_found_path:
         cubit_bin = _utilities.find_cubit_bin([first_found_path])
         cubit_python_library_dir = cubit_bin / "python3"
-        env.PrependENVPath("PYTHONPATH", str(cubit_bin))
-        env.PrependENVPath("LD_LIBRARY_PATH", str(cubit_python_library_dir))
+        env.PrependENVPath("PYTHONPATH", str(cubit_bin.resolve()))
+        env.PrependENVPath("LD_LIBRARY_PATH", str(cubit_python_library_dir.resolve()))
     return first_found_path
 
 

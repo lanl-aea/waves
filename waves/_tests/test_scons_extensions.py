@@ -219,7 +219,7 @@ def test_add_cubit(
         program = scons_extensions.add_cubit(env, names)
     assert program == first_found_path
     if first_found_path is not None:
-        parent_path = pathlib.Path(first_found_path).parent
+        parent_path = pathlib.Path(first_found_path).parent.resolve()
         cubit_bin = parent_path / "bin"
         cubit_library_path = cubit_bin / "python3"
         assert str(parent_path) == env["ENV"]["PATH"].split(os.pathsep)[-1]
@@ -244,7 +244,7 @@ def test_add_cubit(
         program = env.AddCubit(names)
     assert program == first_found_path
     if first_found_path is not None:
-        parent_path = pathlib.Path(first_found_path).parent
+        parent_path = pathlib.Path(first_found_path).parent.resolve()
         cubit_bin = parent_path / "bin"
         cubit_library_path = cubit_bin / "python3"
         assert str(parent_path) == env["ENV"]["PATH"].split(os.pathsep)[-1]
