@@ -45,14 +45,14 @@ systemtest_node = env.Command(
             "${pytest_command} -v --no-showlocals -m systemtest --tb=short --cache-clear "
             "--junitxml=${TARGETS[0].abspath} "
             "--system-test-dir=${system_test_directory} "
-            "--abaqus-command=${abaqus} "
-            "--cubit-command=${cubit} "
+            "${abaqus_command} "
+            "${cubit_command} "
         ),
     ],
     pytest_command=pytest_command,
     system_test_directory=build_directory,
-    abaqus=env.get("abaqus", None),
-    cubit=env.get("cubit", None),
+    abaqus_command=" ".join(f"--abaqus-command={command}" for command in env["abaqus_command"]),
+    cubit_command=" ".join(f"--cubit-command={command}" for command in env["cubit_command"]),
 )
 env.Alias("systemtest", systemtest_node)
 env.AlwaysBuild(systemtest_node)

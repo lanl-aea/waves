@@ -104,22 +104,22 @@ find_program_input = {
     "string": (
         "dummy",
         ["/installed/executable/dummy"],
-        "/installed/executable/dummy",
+        str(pathlib.Path("/installed/executable/dummy")),
     ),
     "one path": (
         ["dummy"],
         ["/installed/executable/dummy"],
-        "/installed/executable/dummy",
+        str(pathlib.Path("/installed/executable/dummy")),
     ),
     "first missing": (
         ["notfound", "dummy"],
         [None, "/installed/executable/dummy"],
-        "/installed/executable/dummy",
+        str(pathlib.Path("/installed/executable/dummy")),
     ),
     "two found": (
         ["dummy", "dummy1"],
         ["/installed/executable/dummy", "/installed/executable/dummy1"],
-        "/installed/executable/dummy",
+        str(pathlib.Path("/installed/executable/dummy")),
     ),
     "none found": (
         ["notfound", "dummy"],
@@ -129,15 +129,11 @@ find_program_input = {
     "path with spaces": (
         ["dummy"],
         ["/installed/executable with space/dummy"],
-        '/installed/"executable with space"/dummy',
+        str(pathlib.Path('/installed/"executable with space"/dummy')),
     ),
 }
 
 
-@pytest.mark.skipif(
-    testing_windows,
-    reason="Tests trigger 'SCons user error' on Windows. Believed to be a test construction error, not a test failure.",
-)
 @pytest.mark.parametrize(
     ("names", "checkprog_side_effect", "first_found_path"),
     find_program_input.values(),
@@ -160,10 +156,6 @@ def test_find_program(
     assert program == first_found_path
 
 
-@pytest.mark.skipif(
-    testing_windows,
-    reason="Tests trigger 'SCons user error' on Windows. Believed to be a test construction error, not a test failure.",
-)
 @pytest.mark.parametrize(
     ("names", "checkprog_side_effect", "first_found_path"),
     find_program_input.values(),
@@ -182,7 +174,7 @@ def test_add_program(
         program = scons_extensions.add_program(env, names)
     assert program == first_found_path
     if first_found_path is not None:
-        parent_path = str(pathlib.Path(first_found_path).parent)
+        parent_path = str(pathlib.Path(first_found_path).parent.resolve())
         assert parent_path == env["ENV"]["PATH"].split(os.pathsep)[-1]
     else:
         assert original_path == env["ENV"]["PATH"]
@@ -198,16 +190,12 @@ def test_add_program(
         program = env.AddProgram(names)
     assert program == first_found_path
     if first_found_path is not None:
-        parent_path = str(pathlib.Path(first_found_path).parent)
+        parent_path = str(pathlib.Path(first_found_path).parent.resolve())
         assert parent_path == env["ENV"]["PATH"].split(os.pathsep)[-1]
     else:
         assert original_path == env["ENV"]["PATH"]
 
 
-@pytest.mark.skipif(
-    testing_windows,
-    reason="Tests trigger 'SCons user error' on Windows. Believed to be a test construction error, not a test failure.",
-)
 @pytest.mark.parametrize(
     ("names", "checkprog_side_effect", "first_found_path"),
     find_program_input.values(),
@@ -231,7 +219,7 @@ def test_add_cubit(
         program = scons_extensions.add_cubit(env, names)
     assert program == first_found_path
     if first_found_path is not None:
-        parent_path = pathlib.Path(first_found_path).parent
+        parent_path = pathlib.Path(first_found_path).parent.resolve()
         cubit_bin = parent_path / "bin"
         cubit_library_path = cubit_bin / "python3"
         assert str(parent_path) == env["ENV"]["PATH"].split(os.pathsep)[-1]
@@ -256,7 +244,7 @@ def test_add_cubit(
         program = env.AddCubit(names)
     assert program == first_found_path
     if first_found_path is not None:
-        parent_path = pathlib.Path(first_found_path).parent
+        parent_path = pathlib.Path(first_found_path).parent.resolve()
         cubit_bin = parent_path / "bin"
         cubit_library_path = cubit_bin / "python3"
         assert str(parent_path) == env["ENV"]["PATH"].split(os.pathsep)[-1]
