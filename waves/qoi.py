@@ -573,7 +573,7 @@ def _plot_qoi_tolerance_check(qoi: xarray.DataArray, axes: matplotlib.axes.Axes)
     qoi_dim = len(qoi.squeeze().dims) - 1  # Count does not include the "value_type" dim
     if qoi_dim == 0:  # Scalar QOI
         _plot_scalar_tolerance_check(qoi, axes)
-    if qoi_dim == 1:  # Scalar QOI
+    elif qoi_dim == 1:  # 1D QOI
         _plot_1d_tolerance_check(qoi, axes)
 
 
@@ -590,7 +590,7 @@ def _can_plot_qoi_tolerance_check(qoi: xarray.DataArray) -> bool:
     if "value_type" not in qoi.dims:
         return False
     qoi_dim = len(qoi.squeeze().dims) - 1  # Count does not include the "value_type" dim
-    if qoi_dim == 0 or qoi_dim == 1:  # Scalar QOI
+    if qoi_dim == 0 or qoi_dim == 1:  # Scalar or 1D QOI
         # Not a pandas object in the unit tests, so the linter suggestion is wrong.
         if qoi.isnull().any():  # noqa: PD003
             return False
