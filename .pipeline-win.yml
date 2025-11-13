@@ -14,6 +14,7 @@ default:
     conda_installation: "C:/ProgramData/miniconda3"
     environment_file: "environment-win.yml"
   before_script:
+    - git config --list --show-origin | Select-String -Pattern "symlinks="
     - $PSVersionTable
     - if ([string]::IsNullOrEmpty($environment_file)) { exit 1 }
     - if ([string]::IsNullOrEmpty($conda_installation)) { exit 1 }
