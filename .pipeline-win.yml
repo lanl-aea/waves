@@ -16,6 +16,7 @@ default:
   before_script:
     - git config --list --show-origin | Select-String -Pattern "symlinks="
     - Get-ChildItem -Recurse | Where-Object { $_.LinkType -eq 'SymbolicLink' }
+    - Get-WindowsDeveloperLicense
     - $PSVersionTable
     - if ([string]::IsNullOrEmpty($environment_file)) { exit 1 }
     - if ([string]::IsNullOrEmpty($conda_installation)) { exit 1 }
