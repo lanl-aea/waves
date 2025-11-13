@@ -347,6 +347,9 @@ require_third_party_system_tests: list = [
             pytest.mark.abaqus,
             pytest.mark.cubit,
             pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
+            # TODO: Fix Cubit PATH search behavior on Windows
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/983
+            pytest.mark.skipif(testing_windows, reason="Cubit PATH search behavior broken on Windows"),
         ],
     ),
     pytest.param(
@@ -405,6 +408,9 @@ require_third_party_system_tests: list = [
             pytest.mark.abaqus,
             pytest.mark.cubit,
             pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
+            # TODO: Fix Cubit PATH search behavior on Windows
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/983
+            pytest.mark.skipif(testing_windows, reason="Cubit PATH search behavior broken on Windows"),
             # TODO: Remove this skip when Cubit python interpretter search is fixed
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/917
             pytest.mark.skipif(testing_hpc, reason="Cubit Python interpretter search fails on HPC"),
