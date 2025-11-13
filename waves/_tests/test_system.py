@@ -47,11 +47,12 @@ python_313_or_above = sys.version_info >= (3, 13)
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
 def check_ci_user() -> bool:
     user = getpass.getuser().lower()
-    return user == "pn2606796" or user == "gitlab-runner"
+    return "pn2606796" in user or user == "gitlab-runner"
 
 
 test_check_ci_user_cases = {
-    "windows ci user": ("PN2606796", True),
+    "windows ci user": ("PN2606796$", True),
+    "windows ci user without trailing service account character": ("PN2606796", True),
     "macos ci user": ("gitlab-runner", True),
     "player character": ("roppenheimer", False),
 }
