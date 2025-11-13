@@ -13,6 +13,7 @@ available substitutions.
 """
 
 import copy
+import getpass
 import importlib
 import inspect
 import os
@@ -40,6 +41,32 @@ testing_windows, root_fs, testing_macos = platform_check()
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
 testing_hpc = shutil.which("sbatch") is not None
 python_313_or_above = sys.version_info >= (3, 13)
+
+
+# TODO: Remove user check when Windows CI server Gitlab-Runner account has access to the Abaqus licesnse server
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+def check_ci_user() -> bool:
+    user = getpass.getuser().lower()
+    return "pn2606796" in user or user == "gitlab-runner"
+
+
+test_check_ci_user_cases = {
+    "windows ci user": ("PN2606796$", True),
+    "windows ci user without trailing service account character": ("PN2606796", True),
+    "macos ci user": ("gitlab-runner", True),
+    "player character": ("roppenheimer", False),
+}
+
+
+@pytest.mark.parametrize(
+    ("mock_user", "expected"),
+    test_check_ci_user_cases.values(),
+    ids=test_check_ci_user_cases.keys(),
+)
+def test_check_ci_user(mock_user: str, expected: bool) -> None:
+    with patch("getpass.getuser", return_value=mock_user):
+        testing_ci_user = check_ci_user()
+    assert testing_ci_user is expected
 
 
 def check_installed(package_name: str = "waves") -> bool:
@@ -116,6 +143,9 @@ def test_augment_system_test_environment(args: tuple[dict, bool], expected: dict
     assert args[0] == original_environment
 
 
+# TODO: Remove user check when Windows CI server Gitlab-Runner account has access to the Abaqus licesnse server
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+testing_ci_user = check_ci_user()
 installed = check_installed()
 system_test_environment = augment_system_test_environment(os.environ.copy(), installed)
 waves_command = "waves" if installed else "python -m waves._main"
@@ -174,7 +204,6 @@ system_tests: list = [
         marks=[
             pytest.mark.scons,
             pytest.mark.sphinx,
-            pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
             pytest.mark.skip(reason="Fragile system test is a regular cause of false negatives"),
         ],
         id="modsim_template_scons_html",
@@ -188,7 +217,6 @@ system_tests: list = [
         marks=[
             pytest.mark.scons,
             pytest.mark.sphinx,
-            pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
             pytest.mark.skip(reason="Fragile system test is a regular cause of false negatives"),
         ],
         id="modsim_template_2_scons_html",
@@ -226,7 +254,17 @@ require_third_party_system_tests: list = [
     pytest.param(
         [fetch_template, string.Template("scons rectangle ${unconditional_build} ${abaqus_command}")],
         "tutorials/scons_quickstart",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     pytest.param(
         [fetch_template, string.Template("scons rectangle ${unconditional_build} ${abaqus_command}")],
@@ -235,7 +273,12 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
         ],
     ),
     pytest.param(
@@ -245,7 +288,17 @@ require_third_party_system_tests: list = [
             string.Template("${waves_command} print_study build/parameter_studies/mesh_convergence.h5"),
         ],
         "tutorials/waves_quickstart",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     pytest.param(
         [
@@ -264,7 +317,17 @@ require_third_party_system_tests: list = [
             string.Template("scons submit_beam_cae ${unconditional_build} ${abaqus_command}"),
         ],
         "tutorials/tutorial_abaqus_cae",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     pytest.param(
         [
@@ -284,7 +347,17 @@ require_third_party_system_tests: list = [
             ),
         ],
         "--tutorial 1",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     pytest.param(
         [fetch_template, "scons tutorial_matlab --sconstruct=tutorial_matlab_SConstruct"],
@@ -304,7 +377,17 @@ require_third_party_system_tests: list = [
             ),
         ],
         "--tutorial 2",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     pytest.param(
         [
@@ -314,7 +397,17 @@ require_third_party_system_tests: list = [
             ),
         ],
         "tutorials",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     pytest.param(
         [
@@ -324,7 +417,17 @@ require_third_party_system_tests: list = [
             ),
         ],
         "--tutorial 3",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     pytest.param(
         [
@@ -334,7 +437,17 @@ require_third_party_system_tests: list = [
             ),
         ],
         "--tutorial 4",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     pytest.param(
         [
@@ -348,10 +461,17 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            pytest.mark.cubit,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
-                testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
+            pytest.mark.cubit,
+            pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
+            # TODO: Fix Cubit PATH search behavior on Windows
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/983
+            pytest.mark.skipif(testing_windows, reason="Cubit PATH search behavior broken on Windows"),
         ],
     ),
     pytest.param(
@@ -368,8 +488,10 @@ require_third_party_system_tests: list = [
             pytest.mark.cubit,
             pytest.mark.fierro,
             pytest.mark.skipif(
-                testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
+                testing_macos,
+                reason="Cubit does not support import within external Python interpretter on Apple Silicon",
             ),
+            pytest.mark.skipif(testing_windows, reason="Fierro does not support Windows"),
         ],
     ),
     pytest.param(
@@ -388,11 +510,10 @@ require_third_party_system_tests: list = [
             # Remove sierra python version skip when ci server has a sierra vesrion compatible with python 3.13
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/844
             pytest.mark.skipif(
-                python_313_or_above, reason="Sierra verison on CI server is incompatible with Python 3.13"
+                python_313_or_above, reason="Sierra version on CI server is incompatible with Python 3.13"
             ),
-            pytest.mark.skipif(
-                testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
-            ),
+            pytest.mark.skipif(testing_macos, reason="Sierra does not support macOS"),
+            pytest.mark.skipif(testing_windows, reason="Sierra does not support Windows"),
         ],
     ),
     pytest.param(
@@ -407,10 +528,17 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            pytest.mark.cubit,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
-                testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
+            pytest.mark.cubit,
+            pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
+            # TODO: Fix Cubit PATH search behavior on Windows
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/983
+            pytest.mark.skipif(testing_windows, reason="Cubit PATH search behavior broken on Windows"),
             # TODO: Remove this skip when Cubit python interpretter search is fixed
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/917
             pytest.mark.skipif(testing_hpc, reason="Cubit Python interpretter search fails on HPC"),
@@ -429,9 +557,7 @@ require_third_party_system_tests: list = [
             pytest.mark.scons,
             pytest.mark.cubit,
             pytest.mark.fierro,
-            pytest.mark.skipif(
-                testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
-            ),
+            pytest.mark.skipif(testing_windows, reason="Fierro does not support Windows"),
             # TODO: Remove this skip when Cubit python interpretter search is fixed
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/917
             pytest.mark.skipif(testing_hpc, reason="Cubit Python interpretter search fails on HPC"),
@@ -450,13 +576,12 @@ require_third_party_system_tests: list = [
             pytest.mark.scons,
             pytest.mark.cubit,
             pytest.mark.sierra,
+            pytest.mark.skipif(testing_macos, reason="Sierra does not support macOS"),
+            pytest.mark.skipif(testing_windows, reason="Sierra does not support Windows"),
             # Remove sierra python version skip when ci server has a sierra vesrion compatible with python 3.13
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/844
             pytest.mark.skipif(
-                python_313_or_above, reason="Sierra verison on CI server is incompatible with Python 3.13"
-            ),
-            pytest.mark.skipif(
-                testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit"
+                python_313_or_above, reason="Sierra version on CI server is incompatible with Python 3.13"
             ),
             # TODO: Remove this skip when Cubit python interpretter search is fixed
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/917
@@ -469,7 +594,14 @@ require_third_party_system_tests: list = [
             string.Template("scons quinoa-local ${unconditional_build} --print-build-failures ${cubit_command}"),
         ],
         "tutorials/tutorial_quinoa",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.cubit, pytest.mark.quinoa],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.cubit,
+            pytest.mark.quinoa,
+            pytest.mark.skipif(testing_macos, reason="Quinoa does not support macOS"),
+            pytest.mark.skipif(testing_windows, reason="Quinoa does not support Windows"),
+        ],
     ),
     pytest.param(
         [
@@ -479,7 +611,17 @@ require_third_party_system_tests: list = [
             ),
         ],
         "tutorials",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     # TODO: Figure out how to authenticate the institutional account without expanding the user credential exposure to
     # AEA Gitlab group members. Until then, the SSH remote execution can't be integration/regression tested.
@@ -506,7 +648,17 @@ require_third_party_system_tests: list = [
             ),
         ],
         "tutorials",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     pytest.param(
         [
@@ -516,7 +668,17 @@ require_third_party_system_tests: list = [
             ),
         ],
         "--tutorial 5",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     pytest.param(
         [
@@ -526,7 +688,17 @@ require_third_party_system_tests: list = [
             ),
         ],
         "--tutorial 6",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     pytest.param(
         [
@@ -536,7 +708,17 @@ require_third_party_system_tests: list = [
             ),
         ],
         "--tutorial 7",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
         id="tutorial_07_cartesian_product",
     ),
     pytest.param(
@@ -547,7 +729,17 @@ require_third_party_system_tests: list = [
             ),
         ],
         "tutorials",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     pytest.param(
         [
@@ -557,7 +749,17 @@ require_third_party_system_tests: list = [
             ),
         ],
         "tutorials",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     pytest.param(
         [
@@ -567,7 +769,17 @@ require_third_party_system_tests: list = [
             ),
         ],
         "tutorials one at a time",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     pytest.param(
         [
@@ -577,7 +789,17 @@ require_third_party_system_tests: list = [
             ),
         ],
         "--tutorial 8",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     pytest.param(
         [
@@ -587,7 +809,17 @@ require_third_party_system_tests: list = [
             ),
         ],
         "--tutorial 9",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     pytest.param(
         [
@@ -597,7 +829,17 @@ require_third_party_system_tests: list = [
             ),
         ],
         "--tutorial 10",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     pytest.param(
         [
@@ -607,7 +849,17 @@ require_third_party_system_tests: list = [
             ),
         ],
         "tutorials",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     pytest.param(
         [
@@ -617,7 +869,17 @@ require_third_party_system_tests: list = [
             ),
         ],
         "--tutorial 11",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     pytest.param(
         [
@@ -627,7 +889,17 @@ require_third_party_system_tests: list = [
             ),
         ],
         "--tutorial 12",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     pytest.param(
         [
@@ -637,7 +909,17 @@ require_third_party_system_tests: list = [
             ),
         ],
         "tutorials",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     pytest.param(
         [
@@ -647,7 +929,17 @@ require_third_party_system_tests: list = [
             ),
         ],
         "tutorials",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     pytest.param(
         [
@@ -657,7 +949,17 @@ require_third_party_system_tests: list = [
             ),
         ],
         "tutorials",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     pytest.param(
         [
@@ -667,7 +969,17 @@ require_third_party_system_tests: list = [
             ),
         ],
         "tutorials",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     pytest.param(
         [
@@ -677,7 +989,17 @@ require_third_party_system_tests: list = [
             ),
         ],
         "tutorials",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+        ],
     ),
     # ModSim templates
     pytest.param(
@@ -710,15 +1032,63 @@ require_third_party_system_tests: list = [
             pytest.mark.scons,
             pytest.mark.sphinx,
             pytest.mark.abaqus,
+            pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
             pytest.mark.skipif(
-                testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus"
+                testing_windows, reason="The archive tasks' command line is too long for Windows Powershell"
             ),
-            pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
             # TODO: Fix HPC CI system tests that run TeXLive
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
             pytest.mark.skipif(testing_hpc, reason="HPC CI server fails TeXLive PDF builds"),
         ],
         id="modsim_template_full",
+    ),
+    pytest.param(
+        [
+            fetch_template,
+            # TODO: return to testing ``.`` all targets if/when system tests are less fragile
+            string.Template(
+                "scons --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"
+                " datacheck"
+                " rectangle_compression-nominal-datacheck"
+                " rectangle_compression-nominal-images"
+                " rectangle_compression-nominal"
+                " rectangle_compression-mesh_convergence-datacheck"
+                " rectangle_compression-mesh_convergence-images"
+                " rectangle_compression-mesh_convergence"
+                " unit_testing"
+            ),
+            string.Template(
+                "${waves_command} visualize rectangle_compression-nominal --output-file nominal.png ${abaqus_command}"
+            ),
+            string.Template(
+                "${waves_command} print_study build/rectangle_compression-mesh_convergence/mesh_convergence.h5"
+            ),
+        ],
+        "modsim_template",
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.sphinx,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+            pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
+            pytest.mark.skipif(
+                not testing_windows,
+                reason=(
+                    "Windows specific test variation. "
+                    "On other operating systems, this test is covered by 'modsim_template_full'"
+                ),
+            ),
+            # TODO: Fix HPC CI system tests that run TeXLive
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
+            pytest.mark.skipif(testing_hpc, reason="HPC CI server fails TeXLive PDF builds"),
+        ],
+        id="modsim_template_without_archive",
     ),
     pytest.param(
         [
@@ -750,15 +1120,63 @@ require_third_party_system_tests: list = [
             pytest.mark.scons,
             pytest.mark.sphinx,
             pytest.mark.abaqus,
+            pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
             pytest.mark.skipif(
-                testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus"
+                testing_windows, reason="The archive tasks' command line is too long for Windows Powershell"
             ),
-            pytest.mark.skipif(testing_windows, reason="Windows handles symlinks in repository poorly"),
             # TODO: Fix HPC CI system tests that run TeXLive
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
             pytest.mark.skipif(testing_hpc, reason="HPC CI server fails TeXLive PDF builds"),
         ],
         id="modsim_template_2_full",
+    ),
+    pytest.param(
+        [
+            fetch_template,
+            # TODO: return to testing ``.`` all targets if/when system tests are less fragile
+            string.Template(
+                "scons --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"
+                " datacheck"
+                " rectangle_compression-nominal-datacheck"
+                " rectangle_compression-nominal-images"
+                " rectangle_compression-nominal"
+                " rectangle_compression-mesh_convergence-datacheck"
+                " rectangle_compression-mesh_convergence-images"
+                " rectangle_compression-mesh_convergence"
+                " unit_testing"
+            ),
+            string.Template(
+                "${waves_command} visualize rectangle_compression-nominal --output-file nominal.png ${abaqus_command}"
+            ),
+            string.Template(
+                "${waves_command} print_study build/parameter_studies/rectangle_compression-mesh_convergence.h5"
+            ),
+        ],
+        "modsim_template_2",
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.sphinx,
+            pytest.mark.abaqus,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
+            pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
+            pytest.mark.skipif(
+                not testing_windows,
+                reason=(
+                    "Windows specific test variation. "
+                    "On other operating systems, this test is covered by 'modsim_template_full'"
+                ),
+            ),
+            # TODO: Fix HPC CI system tests that run TeXLive
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
+            pytest.mark.skipif(testing_hpc, reason="HPC CI server fails TeXLive PDF builds"),
+        ],
+        id="modsim_template_2_without_archive",
     ),
 ]
 
