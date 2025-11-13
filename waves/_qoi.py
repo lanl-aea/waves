@@ -48,6 +48,11 @@ def get_parser() -> argparse.ArgumentParser:
         help="Generate QOI history report",
         parents=[get_plot_archive_parser()],
     )
+    qoi_subparsers.add_parser(
+        "report-histogram",
+        help="Generate QOI histogram report",
+        parents=[get_report_histogram_parser()],
+    )
     return parser
 
 
@@ -66,6 +71,8 @@ def main(args: argparse.Namespace, parser: argparse.ArgumentParser) -> None:
         qoi._archive(args.output, args.version, args.date, args.QOI_SET_FILE)
     elif args.qoi_subcommand == "plot-archive":
         qoi._plot_archive(args.output, args.QOI_ARCHIVE_H5)
+    elif args.qoi_subcommand == "report-histogram":
+        qoi._report_histogram(args.output, args.QOI_ARCHIVE_H5)
     else:
         parser.print_help()
 
@@ -140,6 +147,21 @@ def get_report_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--output",
         help="Report file",
+        type=pathlib.Path,
+    )
+    parser.add_argument(
+        "QOI_ARCHIVE_H5",
+        type=pathlib.Path,
+    )
+    return parser
+
+
+def get_report_histogram_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument(
+        "--output",
+        help="output file",
+        default="QOI_history.pdf",
         type=pathlib.Path,
     )
     parser.add_argument(

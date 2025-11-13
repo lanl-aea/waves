@@ -21,6 +21,10 @@ Internal Changes
   Brindley`_.
 - More complete Windows CI server unit and system tests (:issue:`980`, :merge:`1270`). By `Kyle Brindley`_.
 
+Enhancements
+============
+- Add QOI histogram report. (:merge:`1263`). By `Matthew Fister`_.
+
 ******************
 1.0.1 (2025-10-10)
 ******************
