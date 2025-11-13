@@ -74,7 +74,7 @@ post_processing_source = [
     for set_name in parameter_generator.parameter_study_to_dict()
 ]
 script_options = "--input-file ${post_processing_source}"
-script_options += " --output-file ${TARGET.file} --x-units 'mm/mm' --y-units 'MPa'"
+script_options += " --output-file ${TARGET.file} --x-units mm/mm --y-units MPa"
 script_options += f" --parameter-study-file {parameter_study_file.name}"
 workflow.extend(
     env.PythonScript(
@@ -88,7 +88,7 @@ workflow.extend(
 plot_name = "mesh_convergence_stress"
 selection_dict = modsim_package_abspath / f"{plot_name}.yaml"
 script_options = "--input-file ${post_processing_source}"
-script_options += " --output-file ${TARGET.file} --x-units 'mm' --y-units 'MPa' --x-var 'global_seed' --y-var 'S'"
+script_options += " --output-file ${TARGET.file} --x-units mm --y-units MPa --x-var global_seed --y-var S"
 script_options += f" --parameter-study-file {parameter_study_file.name}"
 script_options += f" --selection-dict {selection_dict}"
 workflow.extend(
