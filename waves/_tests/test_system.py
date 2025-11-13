@@ -62,7 +62,7 @@ test_check_ci_user_cases = {
     test_check_ci_user_cases.values(),
     ids=test_check_ci_user_cases.keys(),
 )
-def test_check_ci_user(mock_user, expected) -> None:
+def test_check_ci_user(mock_user: str, expected: bool) -> None:
     with patch("getpass.getuser", return_value=mock_user):
         testing_ci_user = check_ci_user()
     assert testing_ci_user is expected
@@ -261,7 +261,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -276,7 +276,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -295,7 +295,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -324,7 +324,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -354,7 +354,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -384,7 +384,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -404,7 +404,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -424,7 +424,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -444,7 +444,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -464,7 +464,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
             pytest.mark.cubit,
             pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
@@ -531,7 +531,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
             pytest.mark.cubit,
             pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
@@ -618,7 +618,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -655,7 +655,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -675,7 +675,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -695,7 +695,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -715,7 +715,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
         id="tutorial_07_cartesian_product",
@@ -736,7 +736,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -756,7 +756,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -776,7 +776,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -796,7 +796,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -816,7 +816,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -836,7 +836,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -856,7 +856,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -876,7 +876,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -896,7 +896,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -916,7 +916,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -936,7 +936,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -956,7 +956,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -976,7 +976,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -996,7 +996,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
         ],
     ),
@@ -1073,7 +1073,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
             pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
             pytest.mark.skipif(
@@ -1161,7 +1161,7 @@ require_third_party_system_tests: list = [
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server"
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
             pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
             pytest.mark.skipif(
