@@ -16,10 +16,8 @@ default:
   before_script:
     - git config --list --show-origin | Select-String -Pattern "symlinks="
     - git ls-tree -r HEAD | Select-String -Pattern "^120" | Measure-Object -Line
-    - git ls-tree -r HEAD | Select-String -Pattern "^120"
     - Get-ChildItem -Recurse | Where-Object { $_.LinkType -eq 'SymbolicLink' } | Measure-Object -Line
     - $PSVersionTable
-    - Get-WindowsDeveloperLicense
     - if ([string]::IsNullOrEmpty($environment_file)) { exit 1 }
     - if ([string]::IsNullOrEmpty($conda_installation)) { exit 1 }
     # Common job variables
