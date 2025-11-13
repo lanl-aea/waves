@@ -14,10 +14,11 @@ default:
     conda_installation: "C:/ProgramData/miniconda3"
     environment_file: "environment-win.yml"
   before_script:
+    - $PSVersionTable
+    - $env:username
     - git config --list --show-origin | Select-String -Pattern "symlinks="
     - git ls-tree -r HEAD | Select-String -Pattern "^120" | Measure-Object -Line
     - Get-ChildItem -Recurse | Where-Object { $_.LinkType -eq 'SymbolicLink' } | Measure-Object -Line
-    - $PSVersionTable
     - if ([string]::IsNullOrEmpty($environment_file)) { exit 1 }
     - if ([string]::IsNullOrEmpty($conda_installation)) { exit 1 }
     # Common job variables
@@ -35,6 +36,7 @@ default:
     - conda info
     - conda env create --prefix $prefix --file $environment_file --yes
     - conda activate $prefix
+    - python -c "import getpass; print(getpass.getuser())"
   after_script:
     - Remove-Item -Force -Recurse $pwd\conda-environment -ErrorAction Continue
     - Remove-Item -Force -Recurse $pwd\conda-pkgs -ErrorAction Continue

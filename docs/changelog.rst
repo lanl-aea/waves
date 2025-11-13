@@ -19,6 +19,7 @@ Internal Changes
   to pytest to the system tests, e.g. tutorial execution. Fixes a CI test behavior where an unspecified command list
   results in a Abaqus/Cubit path override to PWD in the tutorial system tests (:issue:`981`, :merge:`1269`). By `Kyle
   Brindley`_.
+- More complete Windows CI server unit and system tests (:issue:`980`, :merge:`1270`). By `Kyle Brindley`_.
 
 ******************
 1.0.1 (2025-10-10)
