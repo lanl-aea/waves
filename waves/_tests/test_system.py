@@ -13,6 +13,7 @@ available substitutions.
 """
 
 import copy
+import getpass
 import importlib
 import inspect
 import os
@@ -40,6 +41,31 @@ testing_windows, root_fs, testing_macos = platform_check()
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
 testing_hpc = shutil.which("sbatch") is not None
 python_313_or_above = sys.version_info >= (3, 13)
+
+
+# TODO: Remove user check when Windows CI server Gitlab-Runner account has access to the Abaqus licesnse server
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+def check_ci_user() -> bool:
+    user = getpass.getuser().lower()
+    return user == "pn2606796" or user == "gitlab-runner"
+
+
+test_check_ci_user_cases = {
+    "windows ci user": ("PN2606796", True),
+    "macos ci user": ("gitlab-runner", True),
+    "player character": ("roppenheimer", False),
+}
+
+
+@pytest.mark.parametrize(
+    ("mock_user", "expected"),
+    test_check_ci_user_cases.values(),
+    ids=test_check_ci_user_cases.keys(),
+)
+def test_check_ci_user(mock_user, expected) -> None:
+    with patch("getpass.getuser", return_value=mock_user):
+        testing_ci_user = check_ci_user()
+    assert testing_ci_user is expected
 
 
 def check_installed(package_name: str = "waves") -> bool:
@@ -116,6 +142,7 @@ def test_augment_system_test_environment(args: tuple[dict, bool], expected: dict
     assert args[0] == original_environment
 
 
+testing_ci_user = check_ci_user()
 installed = check_installed()
 system_test_environment = augment_system_test_environment(os.environ.copy(), installed)
 waves_command = "waves" if installed else "python -m waves._main"
@@ -224,7 +251,11 @@ require_third_party_system_tests: list = [
     pytest.param(
         [fetch_template, string.Template("scons rectangle ${unconditional_build} ${abaqus_command}")],
         "tutorials/scons_quickstart",
-        marks=[pytest.mark.require_third_party, pytest.mark.scons, pytest.mark.abaqus],
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
+            pytest.mark.abaqus,
+        ],
     ),
     pytest.param(
         [fetch_template, string.Template("scons rectangle ${unconditional_build} ${abaqus_command}")],
