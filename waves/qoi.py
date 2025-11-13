@@ -902,7 +902,7 @@ def _pdf_report(
         The returned string will be used to group the QOIs and as a PDF page header.
     """
     if plotting_kwargs is None:
-        plotting_kwargs = dict()
+        plotting_kwargs = {}
     open_figure = False
     with PdfPages(output_pdf) as pdf:
         for group, group_qois in itertools.groupby(sorted(qois, key=groupby), key=groupby):

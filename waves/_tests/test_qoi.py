@@ -1576,6 +1576,7 @@ def test__qoi_history_report() -> None:
 def test__pdf_report() -> None:
     pass
 
+
 test__can_plot_scalar_qoi_histogram_cases = {
     "all_floats": (
         xarray.DataArray(
