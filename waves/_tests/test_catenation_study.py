@@ -9,7 +9,7 @@ import numpy
 import pytest
 import xarray
 
-from waves._settings import _allowable_output_file_typing, _set_coordinate_key
+from waves._settings import _allowable_output_file_typing, _set_coordinate_key, _hash_coordinate_key
 from waves.exceptions import SchemaValidationError
 from waves.parameter_generators import CartesianProduct, CatenationStudy, CustomStudy, OneAtATime
 
@@ -567,7 +567,12 @@ class TestCatenationStudy:
                         dims=_set_coordinate_key,
                     ),
                 }
-            ).set_coords("set_hash").sortby("set_hash")
+            ).set_coords(_hash_coordinate_key).sortby(_hash_coordinate_key)
+        ),
+        "two different parameters cartesian product": (
+            CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
+            {"1": (CartesianProduct, {"parameter_2": [3.0]}), "2": (CartesianProduct, {"parameter_2": [4.0]})},
+            CartesianProduct({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}).parameter_study,
         ),
     }
 
