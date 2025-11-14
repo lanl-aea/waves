@@ -563,29 +563,28 @@ class TestCatenationStudy:
             xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
-                        [1, 5],
+                        [5, 1],
                         coords={
                             _set_coordinate_key: xarray.DataArray(
-                                ["parameter_set0", "parameter_set1"], dims=_set_coordinate_key
+                                ["parameter_set1", "parameter_set0"], dims=_set_coordinate_key
                             )
                         },
                     ),
                     "parameter_2": xarray.DataArray(
-                        [3.0, 7.0],
+                        [7.0, 3.0],
                         coords={
                             _set_coordinate_key: xarray.DataArray(
-                                ["parameter_set0", "parameter_set1"], dims=_set_coordinate_key
+                                ["parameter_set1", "parameter_set0"], dims=_set_coordinate_key
                             )
                         },
                     ),
                     "set_hash": xarray.DataArray(
-                        ["ad4d9f0b45ec964db8f313a2b64636de", "50055f40b5328726c8261ad0dbc1e644"],
+                        ["50055f40b5328726c8261ad0dbc1e644", "ad4d9f0b45ec964db8f313a2b64636de"],
                         dims=_set_coordinate_key,
                     ),
                 }
             )
             .set_coords(_hash_coordinate_key)
-            .sortby(_hash_coordinate_key),
         ),
         "two different parameters cartesian product": (
             CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
