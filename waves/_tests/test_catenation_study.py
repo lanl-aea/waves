@@ -535,6 +535,22 @@ class TestCatenationStudy:
         ),
     }
 
+    @pytest.mark.parametrize(
+        ("parameter_schema", "expected_dictionary"),
+        parameter_study_to_dict.values(),
+        ids=parameter_study_to_dict.keys(),
+    )
+    def test_parameter_study_to_dict(self, parameter_schema: dict[str, tuple], expected_dictionary: dict) -> None:
+        """Test parameter study dictionary conversion."""
+        test_parameter_study_dict = CatenationStudy(parameter_schema)
+        returned_dictionary = test_parameter_study_dict.parameter_study_to_dict()
+        assert expected_dictionary.keys() == returned_dictionary.keys()
+        assert all(isinstance(key, str) for key in returned_dictionary)
+        for set_name, set_contents in expected_dictionary.items():
+            assert set_contents == returned_dictionary[set_name]
+            for parameter in set_contents:
+                assert type(set_contents[parameter]) is type(returned_dictionary[set_name][parameter])
+
     previous_parameter_study_inputs = {
         "one parameter cartesian product": (
             CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
@@ -599,19 +615,3 @@ class TestCatenationStudy:
         ):
             returned_dataset = CatenationStudy(new_parameter_schema, previous_parameter_study="mock").parameter_study
             xarray.testing.assert_identical(expected_dataset, returned_dataset)
-
-    @pytest.mark.parametrize(
-        ("parameter_schema", "expected_dictionary"),
-        parameter_study_to_dict.values(),
-        ids=parameter_study_to_dict.keys(),
-    )
-    def test_parameter_study_to_dict(self, parameter_schema: dict[str, tuple], expected_dictionary: dict) -> None:
-        """Test parameter study dictionary conversion."""
-        test_parameter_study_dict = CatenationStudy(parameter_schema)
-        returned_dictionary = test_parameter_study_dict.parameter_study_to_dict()
-        assert expected_dictionary.keys() == returned_dictionary.keys()
-        assert all(isinstance(key, str) for key in returned_dictionary)
-        for set_name, set_contents in expected_dictionary.items():
-            assert set_contents == returned_dictionary[set_name]
-            for parameter in set_contents:
-                assert type(set_contents[parameter]) is type(returned_dictionary[set_name][parameter])
