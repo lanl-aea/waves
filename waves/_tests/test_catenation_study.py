@@ -592,6 +592,61 @@ class TestCatenationStudy:
             {"1": (CartesianProduct, {"parameter_2": [3.0]}), "2": (CartesianProduct, {"parameter_2": [4.0]})},
             CartesianProduct({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}).parameter_study,
         ),
+        "two shared parameters mixed generators": (
+            OneAtATime({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}).parameter_study,
+            {"1": (CartesianProduct, {"parameter_1": [5, 6]}), "2": (CartesianProduct, {"parameter_2": [7.0, 8.0]})},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [5, 1, 5, 1, 6, 2, 6],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set3",
+                                    "parameter_set1",
+                                    "parameter_set4",
+                                    "parameter_set0",
+                                    "parameter_set5",
+                                    "parameter_set2",
+                                    "parameter_set6",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [7.0, 4.0, 8.0, 3.0, 8.0, 3.0, 7.0],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set3",
+                                    "parameter_set1",
+                                    "parameter_set4",
+                                    "parameter_set0",
+                                    "parameter_set5",
+                                    "parameter_set2",
+                                    "parameter_set6",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "50055f40b5328726c8261ad0dbc1e644",
+                            "6a184a4ff7991572e4c8f2d096656b6b",
+                            "9be5dee02ed815238c31a9d84147f273",
+                            "ad4d9f0b45ec964db8f313a2b64636de",
+                            "cd7f0a7a7ff78e98d025c44b88c73a65",
+                            "e12bff8429a0bc549e4f029ffcb14e6b",
+                            "f8e917de5f9ccdb1d282739406d84c79",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            )
+            .set_coords(_hash_coordinate_key)
+        ),
     }
 
     @pytest.mark.parametrize(
