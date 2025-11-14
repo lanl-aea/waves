@@ -583,8 +583,7 @@ class TestCatenationStudy:
                         dims=_set_coordinate_key,
                     ),
                 }
-            )
-            .set_coords(_hash_coordinate_key)
+            ).set_coords(_hash_coordinate_key),
         ),
         "two different parameters cartesian product": (
             CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
@@ -643,8 +642,7 @@ class TestCatenationStudy:
                         dims=_set_coordinate_key,
                     ),
                 }
-            )
-            .set_coords(_hash_coordinate_key)
+            ).set_coords(_hash_coordinate_key),
         ),
     }
 
