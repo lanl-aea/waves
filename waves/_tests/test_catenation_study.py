@@ -537,7 +537,7 @@ class TestCatenationStudy:
 
     previous_parameter_study_inputs = {
         "one parameter one file yaml": (
-            {"parameter_1": [1, 2]},
+            CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
             {"1": (CartesianProduct, {"parameter_1": [3]}), "2": (CartesianProduct, {"parameter_1": [4]})},
             CartesianProduct({"parameter_1": [1, 2, 3, 4]}).parameter_study,
         ),
@@ -554,15 +554,12 @@ class TestCatenationStudy:
     )
     def test_previous_parameter_study(
         self,
-        mock_previous_study: dict,
+        mock_previous_study: xarray.Dataset,
         new_parameter_schema: dict[str, tuple],
         expected_dataset: xarray.Dataset,
     ) -> None:
         with (
-            patch(
-                "waves.parameter_generators._open_parameter_study",
-                return_value=CartesianProduct(mock_previous_study).parameter_study,
-            ),
+            patch("waves.parameter_generators._open_parameter_study", return_value=mock_previous_study),
             patch("pathlib.Path.is_file", return_value=True),
         ):
             returned_dataset = CatenationStudy(new_parameter_schema, previous_parameter_study="mock").parameter_study
