@@ -1535,8 +1535,6 @@ class CatenationStudy(ParameterGenerator):
                 output_file=self.output_file,
                 output_file_type=self.output_file_type,
                 set_name_template=self.set_name_template.template,
-                previous_parameter_study=self.previous_parameter_study,
-                require_previous_parameter_study=self.require_previous_parameter_study,
                 overwrite=self.overwrite,
                 write_meta=self.write_meta,
                 **kwargs,
