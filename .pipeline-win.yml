@@ -36,6 +36,7 @@ default:
     - conda info
     - conda env create --prefix $prefix --file $environment_file --yes
     - conda activate $prefix
+    - conda info
     - python -c "import getpass; print(getpass.getuser())"
   after_script:
     - Remove-Item -Force -Recurse $pwd\conda-environment -ErrorAction Continue
