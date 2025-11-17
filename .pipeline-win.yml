@@ -51,11 +51,6 @@ win-developer-test:
     - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
 
 win-conda-build:
-  # VVV TODO: Remove when conda-build CI jobs run on the new Windows CI server
-  tags:
-    - powershell
-    - aea
-  # ^^^ TODO: Remove when conda-build CI jobs run on the new Windows CI server
   extends:
     - .win-job-environment
   stage: test
@@ -65,9 +60,6 @@ win-conda-build:
   variables:
     environment_file: "conda-build.yml"
     recipe_directory: "recipe"
-    # VVV TODO: Remove when conda-build CI jobs run on the new Windows CI server
-    conda_installation: "C:/ProgramData/anaconda3"
-    # ^^^ TODO: Remove when conda-build CI jobs run on the new Windows CI server
   script:
     # Job variables
     - Write-Output $recipe_directory
