@@ -1417,6 +1417,143 @@ class SALibSampler(ParameterGenerator, ABC):
         super()._generate()
 
 
+class CatenationStudy(ParameterGenerator):
+    """Builds a parameter study by concatenating multiple studies.
+
+    Input parameter studies may be any of the currently supported WAVES parameter generators. This includes
+    statistical parameter generators such as Latin Hypercube as well as Custom Study.
+
+    .. warning::
+
+       The current API implementation is experimental and subject to change pending user feedback. If you have any
+       suggestions for improvements to the API, please reach out to the WAVES team.
+
+    .. warning::
+
+       The merged parameter study feature does *not* check for consistent final parameter distributions. Specifying
+       a statistical parameter distribution and subsequently merging with another parameter study will result in a
+       parameter distribution that differs from the initial statistical definition.
+
+    Parameters in each study must be scalar valued integers, floats, strings, or booleans.
+
+    :param parameter_schema: dictionary of key:value pairs. The keys are not used. Each value should be a tuple of
+        length two. The first item in each tuple is the generator method (`waves.scons_extensions.CartesianProduct`,
+        `waves.scons_extensions.LatinHypercube`, etc.). The second item of each tuple is a dictionary of the parameter
+        schema for that parameter generator method. Each dictionary of each parameter generator method follows standard
+        schema formatting for that method.
+    :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
+        parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
+        relative path template. May contain the ``@number`` set number placeholder in the file basename but not in the
+        path. If the placeholder is not found it will be appended to the template string. Output files are overwritten
+        if the content of the file has changed or if ``overwrite`` is True. ``output_file_template`` and ``output_file``
+        are mutually exclusive.
+    :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
+        be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
+        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
+        and ``output_file_template`` are mutually exclusive.
+    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
+    :param previous_parameter_study: A relative or absolute file path to a previously created parameter
+        study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
+        Set name to content associations of the previous study are preserved when the parameter spaces between the
+        previous and current study are identical. If the parameter spaces are unique, the current study will propagate
+        the parameter spaces to resolve them. This will break set name to content associations of the previous study.
+    :param require_previous_parameter_study: Raise a ``RuntimeError`` if the previous parameter study file is missing.
+    :param overwrite: Overwrite existing output files
+    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
+        Useful for command line execution with build systems that require an explicit file list for target creation.
+
+    :var self.parameter_study: The final merged parameter study XArray Dataset object
+
+    :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
+        options are both specified
+    :raises waves.exceptions.APIError: If an unknown output file type is requested
+    :raises RuntimeError: If a previous parameter study file is specified and missing, and
+        ``require_previous_parameter_study`` is ``True``
+    :raises waves.exceptions.SchemaValidationError:
+
+        * Parameter schema is not a dictionary
+        * Parameter schema does not contain multiple key:value entries
+        * Parameter schema values of key:value entries are not tuples
+        * Parameter schema tuple values are not a length of two
+        * Parameter schema tuple values' first item is not a parameter generator object
+        * Parameter schema tuple values' second item is not a dictionary
+
+    Example:
+
+    .. code-block::
+
+       >>> import waves
+       >>> parameter_schema = {
+       ...     "1": (waves.parameter_generators.CartesianProduct, {'parameter_1': [1, 2], 'parameter_2': ['a', 'b']}),
+       ...     "2": (waves.parameter_generators.OneAtATime, {'parameter_1': [5, 7], 'parameter_2': ['x', 'y']}),
+       ...     }
+       >>> parameter_generator = waves.parameter_generators.CatenationStudy(parameter_schema)
+       >>> print(parameter_generator.parameter_study)
+       <xarray.Dataset>
+       Dimensions:       (set_name: 7)
+       Coordinates:
+           set_hash      (set_name) <U32  '3b86be0b68c8a5a2a7dca07213846681' ...
+         * set_name      (set_name) object 'parameter_set0' 'parameter...
+       Data variables:
+           parameter_1   (set_name) int64 1 1 2 2 5 7 5
+           parameter_2   (set_name) <U1 'a' 'b' 'b' 'a' 'y' 'x' 'x'
+
+    """
+
+    def _validate(self) -> None:
+        """Validate the Catenation Study parameter schema and sub-schemas. Executed by class initiation."""
+        if not isinstance(self.parameter_schema, dict):
+            raise SchemaValidationError("Input must be a dictionary")
+        if len(self.parameter_schema) < 2:
+            raise SchemaValidationError("Input dictionary must have at least two key:value entries")
+        for entry in self.parameter_schema.values():
+            if not isinstance(entry, tuple):
+                raise SchemaValidationError("Each value of a key:value entry must be a tuple")
+            if len(entry) != 2:
+                raise SchemaValidationError(
+                    "Each tuple must contain exactly two elements, the generator and the schema as the first and second"
+                    " items, respectively"
+                )
+            if not (isinstance(entry[0], type) and issubclass(entry[0], ParameterGenerator)):
+                raise SchemaValidationError("The first item of each tuple must be a parameter generator object")
+            if not isinstance(entry[1], dict):
+                raise SchemaValidationError("The second item of each tuple must contain the schema as a dictionary")
+        return
+
+    def _generate(self, **kwargs) -> None:
+        """Generate the parameter studies and combine them."""
+        if self.output_file_template is not None:
+            output_file_template_string = self.output_file_template.template
+        else:
+            output_file_template_string = None
+
+        studies = [
+            generator(
+                schema,
+                output_file_template=output_file_template_string,
+                output_file=self.output_file,
+                output_file_type=self.output_file_type,
+                set_name_template=self.set_name_template.template,
+                overwrite=self.overwrite,
+                write_meta=self.write_meta,
+                **kwargs,
+            ).parameter_study
+            for generator, schema in self.parameter_schema.values()
+        ]
+
+        self.parameter_study = _merge_parameter_studies(studies, self.set_name_template)
+        self.parameter_study = self.parameter_study.sortby(_set_coordinate_key)
+        # Do work normally performed by super()._generate(). Must re-calculate semi-private variables
+        self.parameter_study = self.parameter_study.swap_dims({_set_coordinate_key: _hash_coordinate_key})
+        self._samples = self._parameter_study_to_numpy()
+        self._set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
+        self._set_names = self.parameter_study[_set_coordinate_key].to_series().to_dict()
+        self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
+        if self.previous_parameter_study is not None and self.previous_parameter_study.is_file():
+            self._merge_parameter_studies()
+
+
 def _calculate_set_hash(parameter_names: collections.abc.Sequence[str], set_samples: collections.abc.Sequence) -> str:
     """Calculate the unique, repeatable parameter set content hash for a single parameter set.
 

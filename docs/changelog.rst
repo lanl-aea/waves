@@ -8,6 +8,10 @@ Changelog
 1.1.0 (unreleased)
 ******************
 
+New Features
+============
+- Add CatenationStudy parameter generator. (:issue:`845`, :merge:`1262`). By  `Chris Johnson`_.
+
 ******************
 1.0.2 (2025-11-13)
 ******************
