@@ -398,6 +398,102 @@ class TestCatenationStudy:
             CartesianProduct({"parameter_1": [1, 2, 3, 4]}).parameter_study,
             {"parameter_1": numpy.int64},
         ),
+        "previous study two shared parameters cartesian product": (
+            {"1": (CartesianProduct, {"parameter_1": [5]}), "2": (CartesianProduct, {"parameter_2": [7.0]})},
+            {},
+            CartesianProduct({"parameter_1": [1], "parameter_2": [3.0]}).parameter_study,
+            "previous_study",
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [5, 1],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set1", "parameter_set0"], dims=_set_coordinate_key
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [7.0, 3.0],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set1", "parameter_set0"], dims=_set_coordinate_key
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["50055f40b5328726c8261ad0dbc1e644", "ad4d9f0b45ec964db8f313a2b64636de"],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords(_hash_coordinate_key),
+            {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
+        ),
+        "previous study two different parameters cartesian product": (
+            {"1": (CartesianProduct, {"parameter_2": [3.0]}), "2": (CartesianProduct, {"parameter_2": [4.0]})},
+            {},
+            CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
+            "previous_study",
+            CartesianProduct({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}).parameter_study,
+            {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
+        ),
+        "previous study two shared parameters mixed generators": (
+            {"1": (CartesianProduct, {"parameter_1": [5, 6]}), "2": (CartesianProduct, {"parameter_2": [7.0, 8.0]})},
+            {},
+            OneAtATime({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}).parameter_study,
+            "previous_study",
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [5, 1, 5, 1, 6, 2, 6],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set3",
+                                    "parameter_set1",
+                                    "parameter_set4",
+                                    "parameter_set0",
+                                    "parameter_set5",
+                                    "parameter_set2",
+                                    "parameter_set6",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [7.0, 4.0, 8.0, 3.0, 8.0, 3.0, 7.0],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set3",
+                                    "parameter_set1",
+                                    "parameter_set4",
+                                    "parameter_set0",
+                                    "parameter_set5",
+                                    "parameter_set2",
+                                    "parameter_set6",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "50055f40b5328726c8261ad0dbc1e644",
+                            "6a184a4ff7991572e4c8f2d096656b6b",
+                            "9be5dee02ed815238c31a9d84147f273",
+                            "ad4d9f0b45ec964db8f313a2b64636de",
+                            "cd7f0a7a7ff78e98d025c44b88c73a65",
+                            "e12bff8429a0bc549e4f029ffcb14e6b",
+                            "f8e917de5f9ccdb1d282739406d84c79",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords(_hash_coordinate_key),
+            {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
+        ),
     }
 
     @pytest.mark.parametrize(
@@ -586,120 +682,3 @@ class TestCatenationStudy:
             assert set_contents == returned_dictionary[set_name]
             for parameter in set_contents:
                 assert type(set_contents[parameter]) is type(returned_dictionary[set_name][parameter])
-
-    previous_parameter_study_inputs = {
-        "one parameter cartesian product": (
-            CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
-            {"1": (CartesianProduct, {"parameter_1": [3]}), "2": (CartesianProduct, {"parameter_1": [4]})},
-            CartesianProduct({"parameter_1": [1, 2, 3, 4]}).parameter_study,
-        ),
-        "two shared parameters cartesian product": (
-            CartesianProduct({"parameter_1": [1], "parameter_2": [3.0]}).parameter_study,
-            {"1": (CartesianProduct, {"parameter_1": [5]}), "2": (CartesianProduct, {"parameter_2": [7.0]})},
-            xarray.Dataset(
-                {
-                    "parameter_1": xarray.DataArray(
-                        [5, 1],
-                        coords={
-                            _set_coordinate_key: xarray.DataArray(
-                                ["parameter_set1", "parameter_set0"], dims=_set_coordinate_key
-                            )
-                        },
-                    ),
-                    "parameter_2": xarray.DataArray(
-                        [7.0, 3.0],
-                        coords={
-                            _set_coordinate_key: xarray.DataArray(
-                                ["parameter_set1", "parameter_set0"], dims=_set_coordinate_key
-                            )
-                        },
-                    ),
-                    "set_hash": xarray.DataArray(
-                        ["50055f40b5328726c8261ad0dbc1e644", "ad4d9f0b45ec964db8f313a2b64636de"],
-                        dims=_set_coordinate_key,
-                    ),
-                }
-            ).set_coords(_hash_coordinate_key),
-        ),
-        "two different parameters cartesian product": (
-            CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
-            {"1": (CartesianProduct, {"parameter_2": [3.0]}), "2": (CartesianProduct, {"parameter_2": [4.0]})},
-            CartesianProduct({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}).parameter_study,
-        ),
-        "two shared parameters mixed generators": (
-            OneAtATime({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}).parameter_study,
-            {"1": (CartesianProduct, {"parameter_1": [5, 6]}), "2": (CartesianProduct, {"parameter_2": [7.0, 8.0]})},
-            xarray.Dataset(
-                {
-                    "parameter_1": xarray.DataArray(
-                        [5, 1, 5, 1, 6, 2, 6],
-                        coords={
-                            _set_coordinate_key: xarray.DataArray(
-                                [
-                                    "parameter_set3",
-                                    "parameter_set1",
-                                    "parameter_set4",
-                                    "parameter_set0",
-                                    "parameter_set5",
-                                    "parameter_set2",
-                                    "parameter_set6",
-                                ],
-                                dims=_set_coordinate_key,
-                            )
-                        },
-                    ),
-                    "parameter_2": xarray.DataArray(
-                        [7.0, 4.0, 8.0, 3.0, 8.0, 3.0, 7.0],
-                        coords={
-                            _set_coordinate_key: xarray.DataArray(
-                                [
-                                    "parameter_set3",
-                                    "parameter_set1",
-                                    "parameter_set4",
-                                    "parameter_set0",
-                                    "parameter_set5",
-                                    "parameter_set2",
-                                    "parameter_set6",
-                                ],
-                                dims=_set_coordinate_key,
-                            )
-                        },
-                    ),
-                    "set_hash": xarray.DataArray(
-                        [
-                            "50055f40b5328726c8261ad0dbc1e644",
-                            "6a184a4ff7991572e4c8f2d096656b6b",
-                            "9be5dee02ed815238c31a9d84147f273",
-                            "ad4d9f0b45ec964db8f313a2b64636de",
-                            "cd7f0a7a7ff78e98d025c44b88c73a65",
-                            "e12bff8429a0bc549e4f029ffcb14e6b",
-                            "f8e917de5f9ccdb1d282739406d84c79",
-                        ],
-                        dims=_set_coordinate_key,
-                    ),
-                }
-            ).set_coords(_hash_coordinate_key),
-        ),
-    }
-
-    @pytest.mark.parametrize(
-        (
-            "mock_previous_study",
-            "new_parameter_schema",
-            "expected_dataset",
-        ),
-        previous_parameter_study_inputs.values(),
-        ids=previous_parameter_study_inputs.keys(),
-    )
-    def test_previous_parameter_study(
-        self,
-        mock_previous_study: xarray.Dataset,
-        new_parameter_schema: dict[str, tuple],
-        expected_dataset: xarray.Dataset,
-    ) -> None:
-        with (
-            patch("waves.parameter_generators._open_parameter_study", return_value=mock_previous_study),
-            patch("pathlib.Path.is_file", return_value=True),
-        ):
-            returned_dataset = CatenationStudy(new_parameter_schema, previous_parameter_study="mock").parameter_study
-            xarray.testing.assert_identical(expected_dataset, returned_dataset)
