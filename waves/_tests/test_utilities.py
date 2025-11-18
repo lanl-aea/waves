@@ -206,6 +206,24 @@ def test_cubit_os_bin(mock_system, expected) -> None:
         assert bin_directory == expected
 
 
+test_cubit_os_python_cases = {
+    "macOS": ("Darwin", "python3*"),
+    "Windows": ("Windows", "python3*/python.exe"),
+    "Linux": ("Linux", "python3*"),
+}
+
+
+@pytest.mark.parametrize(
+    ("mock_system", "expected"),
+    test_cubit_os_python_cases.values(),
+    ids=test_cubit_os_python_cases.keys(),
+)
+def test_cubit_os_python(mock_system, expected) -> None:
+    with patch("platform.system", return_value=mock_system):
+        python_command = _utilities.cubit_os_python()
+        assert python_command == expected
+
+
 def test_find_cubit_bin() -> None:
     mock_abspath = pathlib.Path("/mock/path/parent/cubit")
     mock_macos_bin = mock_abspath.parent / "intermediate/MacOS"
