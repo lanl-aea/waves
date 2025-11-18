@@ -39,8 +39,12 @@ class TestCatenationStudy:
             {"1": (CartesianProduct, {"parameter_1": [1]})},
             pytest.raises(SchemaValidationError),
         ),
-        "bad value entry: too few items": (
+        "bad tuple entry: too few items": (
             {"1": ({"parameter_1": [1]}), "2": (CartesianProduct, {"parameter_1": [2]})},
+            pytest.raises(SchemaValidationError),
+        ),
+        "bad tuple entry: too many items": (
+            {"1": (CartesianProduct, {"parameter_1": [1]}, "extra"), "2": (CartesianProduct, {"parameter_1": [2]})},
             pytest.raises(SchemaValidationError),
         ),
         "bad generator: not a parameter generator": (
