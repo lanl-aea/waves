@@ -461,6 +461,10 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.cubit,
+            pytest.mark.skipif(
+                testing_macos,
+                reason="Cubit does not support import within external Python interpreter on Apple Silicon",
+            ),
         ],
         id="tutorial_cubit-cubit_only",
     ),
