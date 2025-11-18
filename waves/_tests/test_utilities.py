@@ -188,18 +188,22 @@ def test_find_command(
         assert command_abspath == found
 
 
-def test_cubit_os_bin() -> None:
-    with patch("platform.system", return_value="Darwin"):
-        bin_directory = _utilities.cubit_os_bin()
-        assert bin_directory == "MacOS"
+test_cubit_os_bin_cases = {
+    "macOS": ("Darwin", "MacOS"),
+    "Windows": ("Windows", "bin"),
+    "Linux": ("Linux", "bin"),
+}
 
-    with patch("platform.system", return_value="Linux"):
-        bin_directory = _utilities.cubit_os_bin()
-        assert bin_directory == "bin"
 
-    with patch("platform.system", return_value="Windows"):
+@pytest.mark.parametrize(
+    ("mock_system", "expected"),
+    test_cubit_os_bin_cases.values(),
+    ids=test_cubit_os_bin_cases.keys(),
+)
+def test_cubit_os_bin(mock_system, expected) -> None:
+    with patch("platform.system", return_value=mock_system):
         bin_directory = _utilities.cubit_os_bin()
-        assert bin_directory == "bin"
+        assert bin_directory == expected
 
 
 def test_find_cubit_bin() -> None:
