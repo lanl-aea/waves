@@ -656,7 +656,9 @@ def find_program(
     first_found_path = next((path for path in program_paths if path is not None), None)
     if first_found_path is not None and quote_spaces_in_path:
         first_found_path = _utilities._quote_spaces_in_path(first_found_path)
-
+    # Regularize the pathseps for the current OS to match ``_utilities._quote_spaces_in_path`` behavior.
+    elif first_found_path is not None and not quote_spaces_in_path:
+        first_found_path = str(pathlib.Path(first_found_path))
     return first_found_path
 
 
@@ -690,6 +692,9 @@ def add_program(
         append_env_path(env, first_found_path)
     if first_found_path is not None and quote_spaces_in_path:
         first_found_path = _utilities._quote_spaces_in_path(first_found_path)
+    # Regularize the pathseps for the current OS to match ``_utilities._quote_spaces_in_path`` behavior.
+    elif first_found_path is not None and not quote_spaces_in_path:
+        first_found_path = str(pathlib.Path(first_found_path))
     return first_found_path
 
 
@@ -729,6 +734,9 @@ def add_cubit(
         env.PrependENVPath("LD_LIBRARY_PATH", str(cubit_python_library_dir.resolve()))
     if first_found_path is not None and quote_spaces_in_path:
         first_found_path = _utilities._quote_spaces_in_path(first_found_path)
+    # Regularize the pathseps for the current OS to match ``_utilities._quote_spaces_in_path`` behavior.
+    elif first_found_path is not None and not quote_spaces_in_path:
+        first_found_path = str(pathlib.Path(first_found_path))
     return first_found_path
 
 

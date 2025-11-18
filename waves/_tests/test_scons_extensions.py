@@ -103,66 +103,114 @@ def test_check_program(prog_name: str, shutil_return_value: str | None, message:
 find_program_input = {
     "string": (
         "dummy",
+        {},
         ["/installed/executable/dummy"],
         str(pathlib.Path("/installed/executable/dummy")),
     ),
     "one path": (
         ["dummy"],
+        {},
         ["/installed/executable/dummy"],
         str(pathlib.Path("/installed/executable/dummy")),
     ),
     "first missing": (
         ["notfound", "dummy"],
+        {},
         [None, "/installed/executable/dummy"],
         str(pathlib.Path("/installed/executable/dummy")),
     ),
     "two found": (
         ["dummy", "dummy1"],
+        {},
         ["/installed/executable/dummy", "/installed/executable/dummy1"],
         str(pathlib.Path("/installed/executable/dummy")),
     ),
     "none found": (
         ["notfound", "dummy"],
+        {},
         [None, None],
         None,
     ),
     "path with spaces": (
         ["dummy"],
+        {},
         ["/installed/executable with space/dummy"],
         str(pathlib.Path('/installed/"executable with space"/dummy')),
+    ),
+    "string, no quotes": (
+        "dummy",
+        {"quote_spaces_in_path": False},
+        ["/installed/executable/dummy"],
+        str(pathlib.Path("/installed/executable/dummy")),
+    ),
+    "one path, no quotes": (
+        ["dummy"],
+        {"quote_spaces_in_path": False},
+        ["/installed/executable/dummy"],
+        str(pathlib.Path("/installed/executable/dummy")),
+    ),
+    "first missing, no quotes": (
+        ["notfound", "dummy"],
+        {"quote_spaces_in_path": False},
+        [None, "/installed/executable/dummy"],
+        str(pathlib.Path("/installed/executable/dummy")),
+    ),
+    "two found, no quotes": (
+        ["dummy", "dummy1"],
+        {"quote_spaces_in_path": False},
+        ["/installed/executable/dummy", "/installed/executable/dummy1"],
+        str(pathlib.Path("/installed/executable/dummy")),
+    ),
+    "none found, no quotes": (
+        ["notfound", "dummy"],
+        {"quote_spaces_in_path": False},
+        [None, None],
+        None,
+    ),
+    "path with spaces, no quotes": (
+        ["dummy"],
+        {"quote_spaces_in_path": False},
+        ["/installed/executable with space/dummy"],
+        str(pathlib.Path("/installed/executable with space/dummy")),
     ),
 }
 
 
 @pytest.mark.parametrize(
-    ("names", "checkprog_side_effect", "first_found_path"),
+    ("names", "kwargs", "checkprog_side_effect", "first_found_path"),
     find_program_input.values(),
     ids=find_program_input.keys(),
 )
 def test_find_program(
-    names: str | list[str], checkprog_side_effect: list[str | None], first_found_path: str | None
+    names: str | list[str],
+    kwargs: dict[str, typing.Any],
+    checkprog_side_effect: list[str | None],
+    first_found_path: str | None,
 ) -> None:
     env = SCons.Environment.Environment()
 
     # Test function style interface
     with patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect):
-        program = scons_extensions.find_program(env, names)
+        program = scons_extensions.find_program(env, names, **kwargs)
     assert program == first_found_path
 
     # Test SCons AddMethod style interface
     env.AddMethod(scons_extensions.find_program, "FindProgram")
     with patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect):
-        program = env.FindProgram(names)
+        program = env.FindProgram(names, **kwargs)
     assert program == first_found_path
 
 
 @pytest.mark.parametrize(
-    ("names", "checkprog_side_effect", "first_found_path"),
+    ("names", "kwargs", "checkprog_side_effect", "first_found_path"),
     find_program_input.values(),
     ids=find_program_input.keys(),
 )
 def test_add_program(
-    names: str | list[str], checkprog_side_effect: list[str | None], first_found_path: str | None
+    names: str | list[str],
+    kwargs: dict[str, typing.Any],
+    checkprog_side_effect: list[str | None],
+    first_found_path: str | None,
 ) -> None:
     # Test function style interface
     env = SCons.Environment.Environment()
@@ -171,7 +219,7 @@ def test_add_program(
         patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
         patch("pathlib.Path.exists", return_value=True),
     ):
-        program = scons_extensions.add_program(env, names)
+        program = scons_extensions.add_program(env, names, **kwargs)
     assert program == first_found_path
     if first_found_path is not None:
         parent_path = str(pathlib.Path(first_found_path).parent.resolve())
@@ -187,7 +235,7 @@ def test_add_program(
         patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
         patch("pathlib.Path.exists", return_value=True),
     ):
-        program = env.AddProgram(names)
+        program = env.AddProgram(names, **kwargs)
     assert program == first_found_path
     if first_found_path is not None:
         parent_path = str(pathlib.Path(first_found_path).parent.resolve())
@@ -197,12 +245,15 @@ def test_add_program(
 
 
 @pytest.mark.parametrize(
-    ("names", "checkprog_side_effect", "first_found_path"),
+    ("names", "kwargs", "checkprog_side_effect", "first_found_path"),
     find_program_input.values(),
     ids=find_program_input.keys(),
 )
 def test_add_cubit(
-    names: str | list[str], checkprog_side_effect: list[str | None], first_found_path: str | None
+    names: str | list[str],
+    kwargs: dict[str, typing.Any],
+    checkprog_side_effect: list[str | None],
+    first_found_path: str | None,
 ) -> None:
     # Test function style interface
     env = SCons.Environment.Environment()
@@ -216,7 +267,7 @@ def test_add_cubit(
         patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
         patch("pathlib.Path.exists", return_value=True),
     ):
-        program = scons_extensions.add_cubit(env, names)
+        program = scons_extensions.add_cubit(env, names, **kwargs)
     assert program == first_found_path
     if first_found_path is not None:
         parent_path = pathlib.Path(first_found_path).parent.resolve()
@@ -241,7 +292,7 @@ def test_add_cubit(
         patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
         patch("pathlib.Path.exists", return_value=True),
     ):
-        program = env.AddCubit(names)
+        program = env.AddCubit(names, **kwargs)
     assert program == first_found_path
     if first_found_path is not None:
         parent_path = pathlib.Path(first_found_path).parent.resolve()
