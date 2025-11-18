@@ -75,7 +75,6 @@ class TestCatenationStudy:
             {"1": (CartesianProduct, {"parameter_1": [1]}), "2": (CartesianProduct, {"parameter_1": [2]})},
             {},
             None,
-            None,
             xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
@@ -101,7 +100,6 @@ class TestCatenationStudy:
             },
             {},
             None,
-            None,
             xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
@@ -124,7 +122,6 @@ class TestCatenationStudy:
             {"1": (CartesianProduct, {"parameter_1": [1]}), "2": (CartesianProduct, {"parameter_1": [2]})},
             {"set_name_template": "set@number"},
             None,
-            None,
             xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
@@ -145,7 +142,6 @@ class TestCatenationStudy:
                 "2": (OneAtATime, {"parameter_1": [2], "parameter_2": ["b"]}),
             },
             {},
-            None,
             None,
             xarray.Dataset(
                 {
@@ -179,7 +175,6 @@ class TestCatenationStudy:
         "two parameter propagate": (
             {"1": (CartesianProduct, {"parameter_1": [1, 2]}), "2": (CartesianProduct, {"parameter_2": ["a", "b"]})},
             {},
-            None,
             None,
             xarray.Dataset(
                 {
@@ -217,7 +212,6 @@ class TestCatenationStudy:
         "mixed generators ints and floats": (
             {"1": (CartesianProduct, {"parameter_1": [1, 2]}), "2": (OneAtATime, {"parameter_2": [3.0, 4.0]})},
             {},
-            None,
             None,
             xarray.Dataset(
                 {
@@ -259,7 +253,6 @@ class TestCatenationStudy:
             },
             {},
             None,
-            None,
             xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
@@ -297,7 +290,6 @@ class TestCatenationStudy:
                 "3": (OneAtATime, {"parameter_3": ["a"]}),
             },
             {},
-            None,
             None,
             xarray.Dataset(
                 {
@@ -356,7 +348,6 @@ class TestCatenationStudy:
             },
             {},
             None,
-            None,
             xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
@@ -392,17 +383,15 @@ class TestCatenationStudy:
         ),
         "previous study one parameter cartesian product": (
             {"1": (CartesianProduct, {"parameter_1": [3]}), "2": (CartesianProduct, {"parameter_1": [4]})},
-            {},
+            {"previous_parameter_study": "dummy_path.h5"},
             CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
-            "previous_study",
             CartesianProduct({"parameter_1": [1, 2, 3, 4]}).parameter_study,
             {"parameter_1": numpy.int64},
         ),
         "previous study two shared parameters cartesian product": (
             {"1": (CartesianProduct, {"parameter_1": [5]}), "2": (CartesianProduct, {"parameter_2": [7.0]})},
-            {},
+            {"previous_parameter_study": "dummy_path.h5"},
             CartesianProduct({"parameter_1": [1], "parameter_2": [3.0]}).parameter_study,
-            "previous_study",
             xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
@@ -431,17 +420,15 @@ class TestCatenationStudy:
         ),
         "previous study two different parameters cartesian product": (
             {"1": (CartesianProduct, {"parameter_2": [3.0]}), "2": (CartesianProduct, {"parameter_2": [4.0]})},
-            {},
+            {"previous_parameter_study": "dummy_path.h5"},
             CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
-            "previous_study",
             CartesianProduct({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}).parameter_study,
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
         ),
         "previous study two shared parameters mixed generators": (
             {"1": (CartesianProduct, {"parameter_1": [5, 6]}), "2": (CartesianProduct, {"parameter_2": [7.0, 8.0]})},
-            {},
+            {"previous_parameter_study": "dummy_path.h5"},
             OneAtATime({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}).parameter_study,
-            "previous_study",
             xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
@@ -497,7 +484,7 @@ class TestCatenationStudy:
     }
 
     @pytest.mark.parametrize(
-        ("parameter_schema", "kwargs", "previous_study", "previous_study_path", "expected_dataset", "expected_types"),
+        ("parameter_schema", "kwargs", "previous_study", "expected_dataset", "expected_types"),
         generate_io.values(),
         ids=generate_io.keys(),
     )
@@ -506,7 +493,6 @@ class TestCatenationStudy:
         parameter_schema: dict[str, tuple],
         kwargs: dict[str, typing.Any],
         previous_study: xarray.Dataset | None,
-        previous_study_path: str | None,
         expected_dataset: xarray.Dataset,
         expected_types: dict[str, type],
     ) -> None:
@@ -514,7 +500,7 @@ class TestCatenationStudy:
             patch("waves.parameter_generators._open_parameter_study", return_value=previous_study),
             patch("pathlib.Path.is_file", return_value=True),
         ):
-            test_generate = CatenationStudy(parameter_schema, previous_parameter_study=previous_study_path, **kwargs)
+            test_generate = CatenationStudy(parameter_schema, **kwargs)
             xarray.testing.assert_identical(test_generate.parameter_study, expected_dataset)
             for key in test_generate.parameter_study:
                 assert test_generate.parameter_study[key].dtype == expected_types[str(key)]
