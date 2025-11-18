@@ -469,9 +469,6 @@ require_third_party_system_tests: list = [
             ),
             pytest.mark.cubit,
             pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
-            # TODO: Fix Cubit PATH search behavior on Windows
-            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/983
-            pytest.mark.skipif(testing_windows, reason="Cubit PATH search behavior broken on Windows"),
         ],
     ),
     pytest.param(
@@ -489,7 +486,7 @@ require_third_party_system_tests: list = [
             pytest.mark.fierro,
             pytest.mark.skipif(
                 testing_macos,
-                reason="Cubit does not support import within external Python interpretter on Apple Silicon",
+                reason="Cubit does not support import within external Python interpreter on Apple Silicon",
             ),
             pytest.mark.skipif(testing_windows, reason="Fierro does not support Windows"),
         ],
@@ -538,10 +535,10 @@ require_third_party_system_tests: list = [
             pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
             # TODO: Fix Cubit PATH search behavior on Windows
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/983
-            pytest.mark.skipif(testing_windows, reason="Cubit PATH search behavior broken on Windows"),
-            # TODO: Remove this skip when Cubit python interpretter search is fixed
+            pytest.mark.skipif(testing_windows, reason="Cubit Python interpreter search behavior broken on Windows"),
+            # TODO: Remove this skip when Cubit python interpreter search is fixed
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/917
-            pytest.mark.skipif(testing_hpc, reason="Cubit Python interpretter search fails on HPC"),
+            pytest.mark.skipif(testing_hpc, reason="Cubit Python interpreter search fails on HPC"),
         ],
     ),
     pytest.param(
@@ -558,9 +555,9 @@ require_third_party_system_tests: list = [
             pytest.mark.cubit,
             pytest.mark.fierro,
             pytest.mark.skipif(testing_windows, reason="Fierro does not support Windows"),
-            # TODO: Remove this skip when Cubit python interpretter search is fixed
+            # TODO: Remove this skip when Cubit python interpreter search is fixed
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/917
-            pytest.mark.skipif(testing_hpc, reason="Cubit Python interpretter search fails on HPC"),
+            pytest.mark.skipif(testing_hpc, reason="Cubit Python interpreter search fails on HPC"),
         ],
     ),
     pytest.param(
@@ -583,9 +580,9 @@ require_third_party_system_tests: list = [
             pytest.mark.skipif(
                 python_313_or_above, reason="Sierra version on CI server is incompatible with Python 3.13"
             ),
-            # TODO: Remove this skip when Cubit python interpretter search is fixed
+            # TODO: Remove this skip when Cubit python interpreter search is fixed
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/917
-            pytest.mark.skipif(testing_hpc, reason="Cubit Python interpretter search fails on HPC"),
+            pytest.mark.skipif(testing_hpc, reason="Cubit Python interpreter search fails on HPC"),
         ],
     ),
     pytest.param(
