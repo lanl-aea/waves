@@ -14,7 +14,6 @@ Requires the following ``SConscript(..., exports={})``
 """
 
 import pathlib
-import platform
 
 # Inherit the parent construction environment
 Import("env", "env_cubit")
@@ -36,10 +35,11 @@ SConscript(
 )
 
 # Modify mesh target(s) element type.
-# Linux style sed command options must be modified for macOS. Command must be modified if on Windows.
-system = platform.system()
-sed_options = "-i ''" if system.lower() == "darwin" else "-i"
-env.AddPostAction("rectangle_mesh.inp", f"sed {sed_options} 's/CPE4/CPS4/g' ${{TARGET.abspath}}")
+text_substitution_script = env.File("#/modsim_package/text_substitution.py").abspath
+env.AddPostAction(
+    "rectangle_mesh.inp",
+    f"python {text_substitution_script} --input-file ${{TARGET.abspath}} --output-file ${{TARGET.abspath}} --pattern CPE4 --replacement CPS4",
+)
 
 # SolverPrep
 copy_source_list = [
