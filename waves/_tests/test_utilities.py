@@ -200,7 +200,7 @@ test_cubit_os_bin_cases = {
     test_cubit_os_bin_cases.values(),
     ids=test_cubit_os_bin_cases.keys(),
 )
-def test_cubit_os_bin(mock_system, expected) -> None:
+def test_cubit_os_bin(mock_system: str, expected: str) -> None:
     with patch("platform.system", return_value=mock_system):
         bin_directory = _utilities.cubit_os_bin()
         assert bin_directory == expected
@@ -218,7 +218,7 @@ test_cubit_os_python_cases = {
     test_cubit_os_python_cases.values(),
     ids=test_cubit_os_python_cases.keys(),
 )
-def test_cubit_os_python(mock_system, expected) -> None:
+def test_cubit_os_python(mock_system: str, expected: str) -> None:
     with patch("platform.system", return_value=mock_system):
         python_command = _utilities.cubit_os_python()
         assert python_command == expected
