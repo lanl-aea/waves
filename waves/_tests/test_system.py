@@ -453,7 +453,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons abaqus_cubit sierra_cubit fierro_cubit ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"
+                "scons abaqus_cubit sierra_cubit fierro_cubit ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
             ),
         ],
         "tutorials/tutorial_cubit",
