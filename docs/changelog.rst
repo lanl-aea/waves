@@ -12,6 +12,12 @@ New Features
 ============
 - Add CatenationStudy parameter generator. (:issue:`845`, :merge:`1262`). By  `Chris Johnson`_.
 
+Enhancements
+============
+- Allow path handling overrides in the SCons extensions programs (``find_program``, ``add_program``, ``add_cubit``) to
+  change the behavior of quoting path parts containing spaces. Allows Windows users to manage PYTHONPATH for programs
+  installed in ``C:\Program Files``, e.g. Cubit (:issue:`983`, :merge:`1271`). By `Kyle Brindley`_.
+
 ******************
 1.0.2 (2025-11-13)
 ******************
