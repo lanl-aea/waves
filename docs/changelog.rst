@@ -5,12 +5,16 @@ Changelog
 #########
 
 ******************
-1.1.0 (unreleased)
+1.2.0 (unreleased)
+******************
+
+******************
+1.1.0 (2025-11-19)
 ******************
 
 New Features
 ============
-- Add CatenationStudy parameter generator. (:issue:`845`, :merge:`1262`). By  `Chris Johnson`_.
+- Add CatenationStudy parameter generator (:issue:`845`, :merge:`1262`). By  `Chris Johnson`_.
 
 Internal Changes
 ================
@@ -45,7 +49,7 @@ Internal Changes
 
 Enhancements
 ============
-- Add QOI histogram report. (:merge:`1263`). By `Matthew Fister`_.
+- Add QOI histogram report (:merge:`1263`). By `Matthew Fister`_.
 
 ******************
 1.0.1 (2025-10-10)
