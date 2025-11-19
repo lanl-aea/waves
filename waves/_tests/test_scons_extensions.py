@@ -104,26 +104,29 @@ find_program_input = {
     "string": (
         "dummy",
         {},
-        ["/installed/executable/dummy"],
-        str(pathlib.Path("/installed/executable/dummy")),
+        [str(pathlib.Path("/installed/executable/dummy").resolve())],
+        str(pathlib.Path("/installed/executable/dummy").resolve()),
     ),
     "one path": (
         ["dummy"],
         {},
-        ["/installed/executable/dummy"],
-        str(pathlib.Path("/installed/executable/dummy")),
+        [str(pathlib.Path("/installed/executable/dummy").resolve())],
+        str(pathlib.Path("/installed/executable/dummy").resolve()),
     ),
     "first missing": (
         ["notfound", "dummy"],
         {},
-        [None, "/installed/executable/dummy"],
-        str(pathlib.Path("/installed/executable/dummy")),
+        [None, str(pathlib.Path("/installed/executable/dummy").resolve())],
+        str(pathlib.Path("/installed/executable/dummy").resolve()),
     ),
     "two found": (
         ["dummy", "dummy1"],
         {},
-        ["/installed/executable/dummy", "/installed/executable/dummy1"],
-        str(pathlib.Path("/installed/executable/dummy")),
+        [
+            str(pathlib.Path("/installed/executable/dummy").resolve()),
+            str(pathlib.Path("/installed/executable/dummy1").resolve())
+        ],
+        str(pathlib.Path("/installed/executable/dummy").resolve()),
     ),
     "none found": (
         ["notfound", "dummy"],
@@ -134,32 +137,35 @@ find_program_input = {
     "path with spaces": (
         ["dummy"],
         {},
-        ["/installed/executable with space/dummy"],
-        str(pathlib.Path('/installed/"executable with space"/dummy')),
+        [str(pathlib.Path("/installed/executable with space/dummy").resolve())],
+        str(pathlib.Path('/installed/"executable with space"/dummy').resolve()),
     ),
     "string, no quotes": (
         "dummy",
         {"quote_spaces_in_path": False},
-        ["/installed/executable/dummy"],
-        str(pathlib.Path("/installed/executable/dummy")),
+        [str(pathlib.Path("/installed/executable/dummy").resolve())],
+        str(pathlib.Path("/installed/executable/dummy").resolve()),
     ),
     "one path, no quotes": (
         ["dummy"],
         {"quote_spaces_in_path": False},
-        ["/installed/executable/dummy"],
-        str(pathlib.Path("/installed/executable/dummy")),
+        [str(pathlib.Path("/installed/executable/dummy").resolve())],
+        str(pathlib.Path("/installed/executable/dummy").resolve()),
     ),
     "first missing, no quotes": (
         ["notfound", "dummy"],
         {"quote_spaces_in_path": False},
-        [None, "/installed/executable/dummy"],
-        str(pathlib.Path("/installed/executable/dummy")),
+        [None, str(pathlib.Path("/installed/executable/dummy").resolve())],
+        str(pathlib.Path("/installed/executable/dummy").resolve()),
     ),
     "two found, no quotes": (
         ["dummy", "dummy1"],
         {"quote_spaces_in_path": False},
-        ["/installed/executable/dummy", "/installed/executable/dummy1"],
-        str(pathlib.Path("/installed/executable/dummy")),
+        [
+            str(pathlib.Path("/installed/executable/dummy").resolve()),
+            str(pathlib.Path("/installed/executable/dummy1").resolve())
+        ],
+        str(pathlib.Path("/installed/executable/dummy").resolve()),
     ),
     "none found, no quotes": (
         ["notfound", "dummy"],
@@ -170,8 +176,8 @@ find_program_input = {
     "path with spaces, no quotes": (
         ["dummy"],
         {"quote_spaces_in_path": False},
-        ["/installed/executable with space/dummy"],
-        str(pathlib.Path("/installed/executable with space/dummy")),
+        [str(pathlib.Path("/installed/executable with space/dummy").resolve())],
+        str(pathlib.Path("/installed/executable with space/dummy").resolve()),
     ),
 }
 
@@ -222,10 +228,10 @@ def test_add_program(
         program = scons_extensions.add_program(env, names, **kwargs)
     assert program == first_found_path
     if first_found_path is not None:
-        parent_path = str(pathlib.Path(first_found_path).parent.resolve())
-        assert parent_path == env["ENV"]["PATH"].split(os.pathsep)[-1]
+        parent_path = str(pathlib.Path(first_found_path).parent)
+        assert env["ENV"]["PATH"].split(os.pathsep)[-1] == parent_path
     else:
-        assert original_path == env["ENV"]["PATH"]
+        assert env["ENV"]["PATH"] == original_path
 
     # Test SCons AddMethod style interface
     env = SCons.Environment.Environment()
@@ -238,10 +244,10 @@ def test_add_program(
         program = env.AddProgram(names, **kwargs)
     assert program == first_found_path
     if first_found_path is not None:
-        parent_path = str(pathlib.Path(first_found_path).parent.resolve())
-        assert parent_path == env["ENV"]["PATH"].split(os.pathsep)[-1]
+        parent_path = str(pathlib.Path(first_found_path).parent)
+        assert env["ENV"]["PATH"].split(os.pathsep)[-1] == parent_path
     else:
-        assert original_path == env["ENV"]["PATH"]
+        assert env["ENV"]["PATH"] == original_path
 
 
 @pytest.mark.parametrize(

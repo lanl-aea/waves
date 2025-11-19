@@ -658,7 +658,7 @@ def find_program(
         first_found_path = _utilities._quote_spaces_in_path(first_found_path)
     # Regularize the pathseps for the current OS to match ``_utilities._quote_spaces_in_path`` behavior.
     elif first_found_path is not None and not quote_spaces_in_path:
-        first_found_path = str(pathlib.Path(first_found_path))
+        first_found_path = str(pathlib.Path(first_found_path).resolve())
     return first_found_path
 
 
@@ -687,14 +687,9 @@ def add_program(
 
     :return: Absolute path of the found program. None if none of the names are found.
     """
-    first_found_path = find_program(env, names, quote_spaces_in_path=False)
+    first_found_path = find_program(env, names, quote_spaces_in_path=quote_spaces_in_path)
     if first_found_path:
-        append_env_path(env, first_found_path)
-    if first_found_path is not None and quote_spaces_in_path:
-        first_found_path = _utilities._quote_spaces_in_path(first_found_path)
-    # Regularize the pathseps for the current OS to match ``_utilities._quote_spaces_in_path`` behavior.
-    elif first_found_path is not None and not quote_spaces_in_path:
-        first_found_path = str(pathlib.Path(first_found_path))
+        env.AppendENVPath("PATH", str(pathlib.Path(first_found_path).parent), delete_existing=False)
     return first_found_path
 
 
