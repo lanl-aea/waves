@@ -645,7 +645,9 @@ def find_program(
 
     :param env: The SCons construction environment object to modify
     :param names: list of string program names. May include an absolute path.
-    :param quote_spaces_in_path: surround path parts that contain spaces with double quotes
+    :param quote_spaces_in_path: Surround path parts that contain spaces with double quotes.
+        May need to set as ``False`` if using the path in ``pathlib``, ``shutil``, or OS PATH-like variables,
+        particularly on Windows.
 
     :return: Absolute path of the found program. None if none of the names are found.
     """
@@ -683,7 +685,8 @@ def add_program(
 
     :param env: The SCons construction environment object to modify
     :param names: list of string program names. May include an absolute path.
-    :param quote_spaces_in_path: surround path parts that contain spaces with double quotes
+    :param quote_spaces_in_path: Surround path parts that contain spaces with double quotes.
+        May need to set as ``False`` when relying on this function's PATH modifications, particularly on Windows.
 
     :return: Absolute path of the found program. None if none of the names are found.
     """
@@ -717,7 +720,9 @@ def add_cubit(
 
     :param env: The SCons construction environment object to modify
     :param names: list of string program names for the main Cubit executable. May include an absolute path.
-    :param quote_spaces_in_path: surround path parts that contain spaces with double quotes
+    :param quote_spaces_in_path: Surround path parts that contain spaces with double quotes.
+        May need to set as ``False`` when relying on this function's PATH and PYTHONPATH modifications, particularly on
+        Windows.
 
     :return: Absolute path of the Cubit executable. None if none of the names are found.
     """
