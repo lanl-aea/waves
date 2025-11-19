@@ -12,6 +12,20 @@ New Features
 ============
 - Add CatenationStudy parameter generator. (:issue:`845`, :merge:`1262`). By  `Chris Johnson`_.
 
+Internal Changes
+================
+- Add system tests Cubit tutorial on Windows (:issue:`983`, :merge:`1271`). By `Kyle Brindley`_.
+
+Enhancements
+============
+- Allow path handling overrides in the SCons extensions programs (``find_program``, ``add_program``, ``add_cubit``) to
+  change the behavior of quoting path parts containing spaces. Allows Windows users to manage PYTHONPATH for programs
+  installed in ``C:\Program Files``, e.g. Cubit (:issue:`983`, :merge:`1271`). By `Kyle Brindley`_.
+- Avoid quoting spaces in path parts in the Cubit tutorial. Allows execution of the tutorial on Windows (:issue:`983`,
+  :merge:`1271`). By `Kyle Brindley`_.
+- Include an OS-agnostic text replacement script in the Cubit tutorials. Replaces the ``sed`` command to allow tutorial
+  to run on Windows (:issue:`983`, :merge:`1271`). By `Kyle Brindley`_.
+
 ******************
 1.0.2 (2025-11-13)
 ******************

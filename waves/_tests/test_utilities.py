@@ -118,31 +118,31 @@ def test_set_name_substitution(
 quote_spaces_in_path_input = {
     "string, no spaces": (
         "/path/without_space/executable",
-        pathlib.Path("/path/without_space/executable"),
+        str(pathlib.Path("/path/without_space/executable")),
     ),
     "string, spaces": (
         "/path/with space/executable",
-        pathlib.Path('/path/"with space"/executable'),
+        str(pathlib.Path('/path/"with space"/executable')),
     ),
     "pathlib, no spaces": (
         pathlib.Path("/path/without_space/executable"),
-        pathlib.Path("/path/without_space/executable"),
+        str(pathlib.Path("/path/without_space/executable")),
     ),
     "pathlib, spaces": (
         pathlib.Path("/path/with space/executable"),
-        pathlib.Path('/path/"with space"/executable'),
+        str(pathlib.Path('/path/"with space"/executable')),
     ),
     "space in root": (
         pathlib.Path("/path space/with space/executable"),
-        pathlib.Path('/"path space"/"with space"/executable'),
+        str(pathlib.Path('/"path space"/"with space"/executable')),
     ),
     "relative path": (
         pathlib.Path("path space/without_space/executable"),
-        pathlib.Path('"path space"/without_space/executable'),
+        str(pathlib.Path('"path space"/without_space/executable')),
     ),
     "space in executable": (
         pathlib.Path("path/without_space/executable space"),
-        pathlib.Path('path/without_space/"executable space"'),
+        str(pathlib.Path('path/without_space/"executable space"')),
     ),
 }
 
@@ -188,19 +188,40 @@ def test_find_command(
         assert command_abspath == found
 
 
-def test_cubit_os_bin() -> None:
-    with patch("platform.system", return_value="Darwin"):
-        bin_directory = _utilities.cubit_os_bin()
-        assert bin_directory == "MacOS"
+test_cubit_os_bin_cases = {
+    "macOS": ("Darwin", "MacOS"),
+    "Windows": ("Windows", "bin"),
+    "Linux": ("Linux", "bin"),
+}
 
-    with patch("platform.system", return_value="Linux"):
-        bin_directory = _utilities.cubit_os_bin()
-        assert bin_directory == "bin"
 
-    # TODO: Find the Windows bin directory name, update the function and the test.
-    with patch("platform.system", return_value="Windows"):
+@pytest.mark.parametrize(
+    ("mock_system", "expected"),
+    test_cubit_os_bin_cases.values(),
+    ids=test_cubit_os_bin_cases.keys(),
+)
+def test_cubit_os_bin(mock_system: str, expected: str) -> None:
+    with patch("platform.system", return_value=mock_system):
         bin_directory = _utilities.cubit_os_bin()
-        assert bin_directory == "bin"
+        assert bin_directory == expected
+
+
+test_cubit_os_python_cases = {
+    "macOS": ("Darwin", "python3*"),
+    "Windows": ("Windows", "python3*/python.exe"),
+    "Linux": ("Linux", "python3*"),
+}
+
+
+@pytest.mark.parametrize(
+    ("mock_system", "expected"),
+    test_cubit_os_python_cases.values(),
+    ids=test_cubit_os_python_cases.keys(),
+)
+def test_cubit_os_python(mock_system: str, expected: str) -> None:
+    with patch("platform.system", return_value=mock_system):
+        python_command = _utilities.cubit_os_python()
+        assert python_command == expected
 
 
 def test_find_cubit_bin() -> None:

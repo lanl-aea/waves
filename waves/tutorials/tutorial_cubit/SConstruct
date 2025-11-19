@@ -89,7 +89,8 @@ env["ABAQUS_PROGRAM"] = env.AddProgram(
     env["abaqus_commands"] if env["abaqus_commands"] is not None else default_abaqus_commands
 )
 env["CUBIT_PROGRAM"] = env.AddCubit(
-    env["cubit_commands"] if env["cubit_commands"] is not None else default_cubit_commands
+    env["cubit_commands"] if env["cubit_commands"] is not None else default_cubit_commands,
+    quote_spaces_in_path=False,
 )
 env["FIERRO_IMPLICIT_PROGRAM"] = env.AddProgram(["fierro-parallel-implicit"])
 

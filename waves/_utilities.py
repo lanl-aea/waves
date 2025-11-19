@@ -66,14 +66,17 @@ def set_name_substitution(
         return original
 
 
-def _quote_spaces_in_path(path: str | pathlib.Path) -> pathlib.Path:
+def _quote_spaces_in_path(path: str | pathlib.Path) -> str:
     """Traverse parts of a path and place in double quotes if there are spaces in the part.
+
+    Returns as a string because pathlib already handles spaces correctly and will treat any double quotes as literal
+    characters in the path. This function should not be used if a ``pathlib.Path`` object is required.
 
     >>> import pathlib
     >>> import waves
     >>> path = pathlib.Path("path/directory with space/filename.ext")
     >>> waves.scons_extensions._quote_spaces_in_path(path)
-    PosixPath('path/"directory with space"/filename.ext')
+    'path/"directory with space"/filename.ext'
 
     :param path: path to modify as necessary
 
@@ -87,7 +90,7 @@ def _quote_spaces_in_path(path: str | pathlib.Path) -> pathlib.Path:
         else:
             new_part = part
         new_path = new_path / new_part
-    return new_path
+    return str(new_path)
 
 
 def search_commands(options: collections.abc.Sequence[str]) -> str | None:
@@ -124,15 +127,28 @@ def cubit_os_bin() -> str:
     On other systems it is "bin".
 
     :returns: bin directory name, e.g. "bin" or "MacOS"
-    :rtype:
     """
     system = platform.system().lower()
     if system == "darwin":
         bin_directory = "MacOS"
-    # TODO: Find the Windows bin directory name, update the function and the test.
     else:
         bin_directory = "bin"
     return bin_directory
+
+
+def cubit_os_python() -> str:
+    """Return the OS specific Cubit Python interpreter rglob search term.
+
+    Intended for use in :func:`waves._utilities.find_cubit_python`
+
+    :returns: Cubit Python Interpreter search term specific to OS
+    """
+    system = platform.system().lower()
+    if system == "windows":
+        python_command = "python3*/python.exe"
+    else:
+        python_command = "python3*"
+    return python_command
 
 
 def find_cubit_bin(options: collections.abc.Sequence[str], bin_directory: str | None = None) -> pathlib.Path:
@@ -171,18 +187,22 @@ def find_cubit_bin(options: collections.abc.Sequence[str], bin_directory: str | 
     return cubit_bin
 
 
-def find_cubit_python(options: collections.abc.Sequence[str], python_command: str = "python3*") -> pathlib.Path:
+def find_cubit_python(options: collections.abc.Sequence[str], python_command: str | None = None) -> pathlib.Path:
     """Search for the Cubit Python interpreter given a few options for the Cubit executable.
 
     Recommend first checking to see if cubit will import.
 
     :param options: Cubit command options
-    :param python_command: Cubit's Python executable file basename or ``pathlib.Path.rglob`` pattern
+    :param python_command: Cubit's Python executable file basename or ``pathlib.Path.rglob`` pattern. Override the
+        python command returned by :meth:`waves._utilities.cubit_os_python`
 
     :returns: Cubit Python intepreter executable absolute path
 
     :raise FileNotFoundError: If the Cubit command or Cubit Python interpreter is not found
     """
+    if python_command is None:
+        python_command = cubit_os_python()
+
     message = (
         "Could not find a Cubit Python interpreter. Please ensure the Cubit executable is on PATH or provide "
         "an absolute path to the Cubit executable."

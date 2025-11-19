@@ -243,10 +243,10 @@ def get_odb_report_args(odb_report_args: str, input_file: pathlib.Path, job_name
     :param input_file: ``.odb`` file.
     :param job_name: Report file.
     """
-    input_file = _quote_spaces_in_path(input_file)
-    job_name = _quote_spaces_in_path(job_name)
+    input_file_string = _quote_spaces_in_path(input_file)
+    job_name_string = _quote_spaces_in_path(job_name.with_suffix(""))
 
-    required_arguments = f"-job {job_name.with_suffix('')} -odb {input_file} -mode CSV -blocked"
+    required_arguments = f"-job {job_name_string} -odb {input_file_string} -mode CSV -blocked"
     if not odb_report_args:
         odb_report_args = f"-all {required_arguments}"
     else:
