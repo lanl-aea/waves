@@ -785,8 +785,18 @@ def test_ssh_builder_actions(target: list[str], builder_kwargs: dict, task_kwarg
 
 
 prepend_env_input = {
-    "path exists": (f"{root_fs}program", True, does_not_raise),
-    "path does not exist": (f"{root_fs}notapath", False, pytest.raises(FileNotFoundError)),
+    "path exists, str": (str(pathlib.Path("/directory/program")), True, does_not_raise),
+    "path exists, pathlib": (pathlib.Path("/directory/program"), True, does_not_raise),
+    "path with spaces, str": (str(pathlib.Path("/directory with spaces/program")), True, does_not_raise),
+    "path with spaces, pathlib": (pathlib.Path("/directory with spaces/program"), True, does_not_raise),
+    "path with spaces and quotes, str": (str(pathlib.Path('/"directory with spaces"/program')), True, does_not_raise),
+    "path with spaces and quotes, pathlib": (pathlib.Path('/"directory with spaces"/program'), True, does_not_raise),
+    "path does not exist, str": (
+        str(pathlib.Path("/directory/not_a_program")), False, pytest.raises(FileNotFoundError)
+    ),
+    "path does not exist, pathlib": (
+        pathlib.Path("/directory/not_a_program"), False, pytest.raises(FileNotFoundError)
+    ),
 }
 
 
@@ -795,7 +805,11 @@ prepend_env_input = {
     prepend_env_input.values(),
     ids=prepend_env_input.keys(),
 )
-def test_append_env_path(program: str, mock_exists: bool, outcome: contextlib.nullcontext | pytest.RaisesExc) -> None:
+def test_append_env_path(
+    program: str | pathlib.Path, mock_exists: bool, outcome: contextlib.nullcontext | pytest.RaisesExc
+) -> None:
+    parent_path = str(pathlib.Path(program).parent.resolve())
+
     # Test function interface
     env = SCons.Environment.Environment()
     with (
@@ -803,18 +817,19 @@ def test_append_env_path(program: str, mock_exists: bool, outcome: contextlib.nu
         outcome,
     ):
         scons_extensions.append_env_path(env, program)
-        assert root_fs == env["ENV"]["PATH"].split(os.pathsep)[-1]
+        assert parent_path == env["ENV"]["PATH"].split(os.pathsep)[-1]
         assert "PYTHONPATH" not in env["ENV"]
         assert "LD_LIBRARY_PATH" not in env["ENV"]
 
     # Test AddMethod interface
+    env = SCons.Environment.Environment()
     env.AddMethod(scons_extensions.append_env_path, "AppendEnvPath")
     with (
         patch("pathlib.Path.exists", return_value=mock_exists),
         outcome,
     ):
         env.AppendEnvPath(program)
-        assert root_fs == env["ENV"]["PATH"].split(os.pathsep)[-1]
+        assert parent_path == env["ENV"]["PATH"].split(os.pathsep)[-1]
         assert "PYTHONPATH" not in env["ENV"]
         assert "LD_LIBRARY_PATH" not in env["ENV"]
 

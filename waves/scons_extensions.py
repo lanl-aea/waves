@@ -622,7 +622,7 @@ def append_env_path(
     program = pathlib.Path(program).resolve()
     if not program.exists():
         raise FileNotFoundError(f"The program '{program}' does not exist.")
-    env.AppendENVPath("PATH", _utilities._quote_spaces_in_path(program.parent), delete_existing=False)
+    env.AppendENVPath("PATH", str(program.parent), delete_existing=False)
 
 
 def find_program(
