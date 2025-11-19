@@ -124,7 +124,7 @@ find_program_input = {
         {},
         [
             str(pathlib.Path("/installed/executable/dummy").resolve()),
-            str(pathlib.Path("/installed/executable/dummy1").resolve())
+            str(pathlib.Path("/installed/executable/dummy1").resolve()),
         ],
         str(pathlib.Path("/installed/executable/dummy").resolve()),
     ),
@@ -163,7 +163,7 @@ find_program_input = {
         {"quote_spaces_in_path": False},
         [
             str(pathlib.Path("/installed/executable/dummy").resolve()),
-            str(pathlib.Path("/installed/executable/dummy1").resolve())
+            str(pathlib.Path("/installed/executable/dummy1").resolve()),
         ],
         str(pathlib.Path("/installed/executable/dummy").resolve()),
     ),
@@ -791,11 +791,11 @@ prepend_env_input = {
     "path with spaces and quotes, str": (str(pathlib.Path('/"directory with spaces"/program')), True, does_not_raise),
     "path with spaces and quotes, pathlib": (pathlib.Path('/"directory with spaces"/program'), True, does_not_raise),
     "path does not exist, str": (
-        str(pathlib.Path("/directory/not_a_program")), False, pytest.raises(FileNotFoundError)
+        str(pathlib.Path("/directory/not_a_program")),
+        False,
+        pytest.raises(FileNotFoundError),
     ),
-    "path does not exist, pathlib": (
-        pathlib.Path("/directory/not_a_program"), False, pytest.raises(FileNotFoundError)
-    ),
+    "path does not exist, pathlib": (pathlib.Path("/directory/not_a_program"), False, pytest.raises(FileNotFoundError)),
 }
 
 
