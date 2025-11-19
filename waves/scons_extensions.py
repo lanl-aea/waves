@@ -721,17 +721,22 @@ def add_cubit(
 
     :return: Absolute path of the Cubit executable. None if none of the names are found.
     """
-    first_found_path = add_program(env, names, quote_spaces_in_path=False)
+    # Need a path without quotes for ``find_cubit_bin`` because method uses ``shutil`` internally, which treats quotes
+    # as string literal path parts.
+    first_found_path = find_program(env, names, quote_spaces_in_path=False)
     if first_found_path:
-        cubit_bin = _utilities.find_cubit_bin([first_found_path])
-        cubit_python_library_dir = cubit_bin / "python3"
-        env.PrependENVPath("PYTHONPATH", str(cubit_bin.resolve()))
-        env.PrependENVPath("LD_LIBRARY_PATH", str(cubit_python_library_dir.resolve()))
-    if first_found_path is not None and quote_spaces_in_path:
-        first_found_path = _utilities._quote_spaces_in_path(first_found_path)
-    # Regularize the pathseps for the current OS to match ``_utilities._quote_spaces_in_path`` behavior.
-    elif first_found_path is not None and not quote_spaces_in_path:
-        first_found_path = str(pathlib.Path(first_found_path))
+        cubit_bin_path = _utilities.find_cubit_bin([first_found_path])
+        cubit_python_library_dir_path = cubit_bin_path / "python3"
+        if quote_spaces_in_path:
+            first_found_path = _utilities._quote_spaces_in_path(first_found_path)
+            cubit_bin = _utilities._quote_spaces_in_path(cubit_bin_path)
+            cubit_python_library_dir = _utilities._quote_spaces_in_path(cubit_python_library_dir_path)
+        else:
+            cubit_bin = str(cubit_bin_path)
+            cubit_python_library_dir = str(cubit_python_library_dir_path)
+        env.AppendENVPath("PATH", str(pathlib.Path(first_found_path).parent), delete_existing=False)
+        env.PrependENVPath("PYTHONPATH", cubit_bin)
+        env.PrependENVPath("LD_LIBRARY_PATH", cubit_python_library_dir)
     return first_found_path
 
 
