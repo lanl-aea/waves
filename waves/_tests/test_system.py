@@ -18,7 +18,6 @@ import importlib
 import inspect
 import os
 import pathlib
-import shlex
 import shutil
 import string
 import subprocess
@@ -242,7 +241,7 @@ system_tests: list = [
         marks=[pytest.mark.scons],
     ),
     pytest.param(
-        [fetch_template, string.Template("scons . --waves-command='${waves_command}'")],
+        [fetch_template, string.Template('scons . --waves-command="${waves_command}"')],
         "tutorials/tutorial_qoi",
         marks=[pytest.mark.scons],
         id="tutorial_qoi",
@@ -1267,8 +1266,8 @@ def test_system(
         "fetch_options": fetch_options,
         "temporary_directory": temporary_path,
         "unconditional_build": "--unconditional-build" if unconditional_build else "",
-        "abaqus_command": " ".join(f"--abaqus-command={command}" for command in abaqus_command),
-        "cubit_command": " ".join(f"--cubit-command={command}" for command in cubit_command),
+        "abaqus_command": " ".join(f'--abaqus-command="{command}"' for command in abaqus_command),
+        "cubit_command": " ".join(f'--cubit-command="{command}"' for command in cubit_command),
     }
     try:
         for command in commands:
@@ -1276,12 +1275,9 @@ def test_system(
                 command_string = command.substitute(template_substitution)
             else:
                 command_string = command
-            # TODO: Find a better way to split ``--waves-command='python -m waves._main'`` correctly for Windows
-            if "--waves-command" in command_string:
-                command_list = shlex.split(command_string, posix=True)
-            else:
-                command_list = shlex.split(command_string, posix=not testing_windows)
-            subprocess.check_output(command_list, env=system_test_environment, cwd=temporary_path, text=True)
+            subprocess.check_output(
+                command_string, env=system_test_environment, cwd=temporary_path, text=True, shell=True
+            )
     except Exception as err:
         raise err
     else:
