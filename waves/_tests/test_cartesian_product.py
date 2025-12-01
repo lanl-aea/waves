@@ -141,12 +141,23 @@ class TestCartesianProduct:
     def test_verify_parameter_study(
         self,
         parameter_schema: dict,
-        # FIXME: trace original use of ``expected_array`` and ``expected_types``. Either use in test or remove from test
-        # function arguments. Remove ``noqa: ARG002`` after fixing.
-        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/961
         expected_array: numpy.ndarray,  # noqa: ARG002
         expected_types: dict[str, type],  # noqa: ARG002
     ) -> None:
+        """Test that correctly built parameter studies do not raise an exception when verified
+
+        Test originates to catch a past bug where correctly built parameter study objects would fail the verification
+        check. This is a proof-of-success function to protect against inconsistencies between the verification check
+        function and the parameter study objects. The ``generate_io`` test cases should all produce correct parameter
+        studies, so they should never generate an exception in the ``_verify_parameter_study`` method, either.
+
+        :param parameter_schema: parameter schema that should result in a correct CartesianProduct parameter study
+            definition.
+        :param expected_array: the expected parameter study numpy data. Unused by this test function. Must be present
+            to allow re-use of the ``test_generate`` test case dictionary.
+        :param expected_types: the expected parameter study parameter data types. Unused by this test function. Must be
+            present to allow re-use of the ``test_generate`` test case dictionary.
+        """
         test_generate = CartesianProduct(parameter_schema)
         parameter_generators._verify_parameter_study(test_generate.parameter_study)
 
