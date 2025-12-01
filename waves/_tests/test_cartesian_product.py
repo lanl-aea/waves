@@ -144,7 +144,7 @@ class TestCartesianProduct:
         expected_array: numpy.ndarray,  # noqa: ARG002
         expected_types: dict[str, type],  # noqa: ARG002
     ) -> None:
-        """Test that correctly built parameter studies do not raise an exception when verified
+        """Test that correctly built parameter studies do not raise an exception when verified.
 
         Test originates to catch a past bug where correctly built parameter study objects would fail the verification
         check. This is a proof-of-success function to protect against inconsistencies between the verification check
