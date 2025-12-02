@@ -64,10 +64,7 @@ class TestLatinHypercube:
         parameter_schema: dict,
         seed: int,
         expected_samples: numpy.ndarray,
-        # FIXME: trace the original use of the ``expected_scipy_kwds`` variable and either use in tests or remove.
-        # Remove ``noqa: ARG002`` after fixing.
-        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/960
-        expected_scipy_kwds: list[dict[str, typing.Any]],  # noqa: ARG002
+        expected_scipy_kwds: list[dict[str, typing.Any]],
     ) -> None:
         parameter_names = [key for key in parameter_schema if key != "num_simulations"]
         kwargs = {"seed": seed}
