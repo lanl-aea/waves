@@ -91,6 +91,8 @@ class TestLatinHypercube:
             # Check that the parameter names are correct
             assert parameter_names == test_generate._parameter_names
             assert parameter_names == list(test_generate.parameter_study.keys())
+            for parameter_name, expected_kwds in zip(parameter_names, expected_scipy_kwds, strict=True):
+                assert test_generate.parameter_distributions[parameter_name].kwds == expected_kwds
 
     merge_test = {
         "increase simulations": (
