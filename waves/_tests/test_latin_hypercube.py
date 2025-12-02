@@ -64,11 +64,19 @@ class TestLatinHypercube:
         parameter_schema: dict,
         seed: int,
         expected_samples: numpy.ndarray,
-        # FIXME: trace the original use of the ``expected_scipy_kwds`` variable and either use in tests or remove.
-        # Remove ``noqa: ARG002`` after fixing.
-        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/960
-        expected_scipy_kwds: list[dict[str, typing.Any]],  # noqa: ARG002
+        expected_scipy_kwds: list[dict[str, typing.Any]],
     ) -> None:
+        """Test specific instances of LHC generator.
+
+        Test specific instances of the generator to protect against any generator-specific behavior that could
+        accidentally break the assumed behavior of the scipy base class.
+
+        :param parameter_schema: dictionary schema defining number of simulations and the parameter distributions
+        :param seed: integer randomization seed to ensure consistent test output
+        :param expected_samples: numpy array of the expected parameter study samples.
+        :param expected_scipy_kwds: list containing dictionaries of each parameter, with keywords defining the
+            statistical distribution of samples.
+        """
         parameter_names = [key for key in parameter_schema if key != "num_simulations"]
         kwargs = {"seed": seed}
         generator_classes = (
@@ -91,6 +99,8 @@ class TestLatinHypercube:
             # Check that the parameter names are correct
             assert parameter_names == test_generate._parameter_names
             assert parameter_names == list(test_generate.parameter_study.keys())
+            for parameter_name, expected_kwds in zip(parameter_names, expected_scipy_kwds, strict=True):
+                assert test_generate.parameter_distributions[parameter_name].kwds == expected_kwds
 
     merge_test = {
         "increase simulations": (
