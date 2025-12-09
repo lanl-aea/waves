@@ -87,6 +87,7 @@ class ParameterGenerator(ABC):
         **kwargs,
     ) -> None:
         self.parameter_schema = parameter_schema
+        self.output_file_template = output_file_template
         self._output_file_template = (
             _utilities._AtSignTemplate(output_file_template) if output_file_template is not None else None
         )
@@ -938,11 +939,11 @@ class OneAtATime(ParameterGenerator):
         # This is not possible with super()._generate()
         nominal_study = CustomStudy(
             {"parameter_samples": nominal_set, "parameter_names": self._parameter_names},
-            set_name_template=self.set_name_template.template,
+            set_name_template=self.set_name_template,
         ).parameter_study
         off_nominal_study = CustomStudy(
             {"parameter_samples": all_sets, "parameter_names": self._parameter_names},
-            set_name_template=self.set_name_template.template,
+            set_name_template=self.set_name_template,
         ).parameter_study
         self.parameter_study = _merge_parameter_studies([nominal_study, off_nominal_study], self._set_name_template)
         self.parameter_study = self.parameter_study.sortby(_set_coordinate_key)
@@ -1523,18 +1524,13 @@ class CatenationStudy(ParameterGenerator):
 
     def _generate(self, **kwargs) -> None:
         """Generate the parameter studies and combine them."""
-        if self._output_file_template is not None:
-            output_file_template_string = self._output_file_template.template
-        else:
-            output_file_template_string = None
-
         studies = [
             generator(
                 schema,
-                output_file_template=output_file_template_string,
+                output_file_template=self.output_file_template,
                 output_file=self.output_file,
                 output_file_type=self.output_file_type,
-                set_name_template=self.set_name_template.template,
+                set_name_template=self.set_name_template,
                 overwrite=self.overwrite,
                 write_meta=self.write_meta,
                 **kwargs,
