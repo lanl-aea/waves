@@ -87,53 +87,53 @@ class ParameterGenerator(ABC):
         **kwargs,
     ) -> None:
         self.parameter_schema = parameter_schema
-        self.output_file_template = (
+        self._output_file_template = (
             _utilities._AtSignTemplate(output_file_template) if output_file_template is not None else None
         )
-        self.output_file = pathlib.Path(output_file) if output_file is not None else None
-        self.output_file_type = output_file_type
-        self.set_name_template = _utilities._AtSignTemplate(set_name_template)
-        self.previous_parameter_study = (
+        self._output_file = pathlib.Path(output_file) if output_file is not None else None
+        self._output_file_type = output_file_type
+        self._set_name_template = _utilities._AtSignTemplate(set_name_template)
+        self._previous_parameter_study = (
             pathlib.Path(previous_parameter_study) if previous_parameter_study is not None else None
         )
-        self.require_previous_parameter_study = require_previous_parameter_study
+        self._require_previous_parameter_study = require_previous_parameter_study
         self.overwrite = overwrite
         self.write_meta = write_meta
 
-        if self.output_file_template is not None and self.output_file is not None:
+        if self._output_file_template is not None and self._output_file is not None:
             raise MutuallyExclusiveError(
                 "The options 'output_file_template' and 'output_file' are mutually exclusive. "
                 "Please specify one or the other."
             )
 
-        if self.output_file_type not in _settings._allowable_output_file_types:
+        if self._output_file_type not in _settings._allowable_output_file_types:
             raise ChoicesError(
-                f"Unsupported 'output_file_type': '{self.output_file_type}'. "
+                f"Unsupported 'output_file_type': '{self._output_file_type}'. "
                 f"The 'output_file_type' must be one of {_settings._allowable_output_file_types}"
             )
 
-        if self.previous_parameter_study is not None and not self.previous_parameter_study.is_file():
-            message = f"Previous parameter study file '{self.previous_parameter_study}' does not exist."
-            if self.require_previous_parameter_study:
+        if self._previous_parameter_study is not None and not self._previous_parameter_study.is_file():
+            message = f"Previous parameter study file '{self._previous_parameter_study}' does not exist."
+            if self._require_previous_parameter_study:
                 raise RuntimeError(message)
             else:
                 warnings.warn(message)
 
         # Override set name template if output name template is provided.
         self.provided_output_file_template = False
-        if self.output_file_template is not None:
+        if self._output_file_template is not None:
             self.provided_output_file_template = True
             # Append the set number placeholder if missing
-            output_file_template_string = self.output_file_template.safe_substitute()
+            output_file_template_string = self._output_file_template.safe_substitute()
             if _settings._template_placeholder not in output_file_template_string:
-                self.output_file_template = _utilities._AtSignTemplate(
+                self._output_file_template = _utilities._AtSignTemplate(
                     f"{output_file_template_string}{_settings._template_placeholder}"
                 )
-            self.set_name_template = self.output_file_template
+            self._set_name_template = self._output_file_template
 
         # Infer output directory from output file template if provided. Set to PWD otherwise.
-        if self.output_file_template is not None:
-            self.output_directory = pathlib.Path(self.output_file_template.safe_substitute()).parent
+        if self._output_file_template is not None:
+            self.output_directory = pathlib.Path(self._output_file_template.safe_substitute()).parent
         else:
             self.output_directory = pathlib.Path.cwd()
         self.parameter_study_meta_file = self.output_directory / _settings._parameter_study_meta_file
@@ -202,7 +202,7 @@ class ParameterGenerator(ABC):
         self._create_set_hashes()
         self._create_set_names()
         self._create_parameter_study()
-        if self.previous_parameter_study is not None and self.previous_parameter_study.is_file():
+        if self._previous_parameter_study is not None and self._previous_parameter_study.is_file():
             self._merge_parameter_studies()
 
     def write(
@@ -233,7 +233,7 @@ class ParameterGenerator(ABC):
         :raises waves.exceptions.ChoicesError: If an unsupported output file type is requested
         """
         if output_file_type is None:
-            output_file_type = self.output_file_type
+            output_file_type = self._output_file_type
 
         self.output_directory.mkdir(parents=True, exist_ok=True)
 
@@ -258,7 +258,7 @@ class ParameterGenerator(ABC):
             conditional_write_function = self._conditionally_write_yaml
         else:
             raise ChoicesError(
-                f"Unsupported 'output_file_type': '{self.output_file_type}. "
+                f"Unsupported 'output_file_type': '{self._output_file_type}. "
                 f"The 'output_file_type' must be one of {_settings._allowable_output_file_types}"
             )
         self._write(
@@ -310,12 +310,12 @@ class ParameterGenerator(ABC):
                 if isinstance(parameter_study_object, dict)
                 else f"{parameter_study_object}\n"
             )
-            if self.output_file and not dry_run:
+            if self._output_file and not dry_run:
                 # Remove (or refactor away) from this static type checking skip
                 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/812
-                conditional_write_function(self.output_file, parameter_study_object)  # type: ignore[arg-type]
-            elif self.output_file and dry_run:
-                sys.stdout.write(f"{self.output_file.resolve()}\n{output_text}")
+                conditional_write_function(self._output_file, parameter_study_object)  # type: ignore[arg-type]
+            elif self._output_file and dry_run:
+                sys.stdout.write(f"{self._output_file.resolve()}\n{output_text}")
             else:
                 sys.stdout.write(output_text)
         # If output file template is provided, writing to parameter set files
@@ -383,8 +383,8 @@ class ParameterGenerator(ABC):
         set_files = [pathlib.Path(set_name) for set_name in self.parameter_study.coords[_set_coordinate_key].values]
         # Always overwrite the meta data file to ensure that *all* parameter file names are included.
         with self.parameter_study_meta_file.open(mode="w") as meta_file:
-            if self.output_file:
-                meta_file.write(f"{self.output_file.resolve()}\n")
+            if self._output_file:
+                meta_file.write(f"{self._output_file.resolve()}\n")
             else:
                 for set_file in set_files:
                     meta_file.write(f"{set_file.resolve()}\n")
@@ -414,13 +414,13 @@ class ParameterGenerator(ABC):
         requires:
 
         * ``self._set_hashes``: parameter set content hashes identifying rows of parameter study
-        * ``self.set_name_template``: Parameter set name template. Overridden by ``output_file_template``, if provided
+        * ``self._set_name_template``: Parameter set name template. Overridden by ``output_file_template``, if provided
 
         creates attribute:
 
         * ``self._set_names``: Dictionary mapping parameter set hash to parameter set name
         """
-        self._set_names = _create_set_names(self._set_hashes, self.set_name_template)
+        self._set_names = _create_set_names(self._set_hashes, self._set_name_template)
 
     def _create_set_names_array(self) -> xarray.DataArray:
         """Create an Xarray DataArray with the parameter set names using parameter set hashes as the coordinate.
@@ -512,14 +512,14 @@ class ParameterGenerator(ABC):
         * ``self._set_hashes``
         * ``self._set_names``
 
-        :raises RuntimeError: If the ``self.previous_parameter_study`` attribute is None
+        :raises RuntimeError: If the ``self._previous_parameter_study`` attribute is None
         """
-        if self.previous_parameter_study is None:
+        if self._previous_parameter_study is None:
             raise RuntimeError("Called without a previous parameter study")
 
-        previous_parameter_study = _open_parameter_study(self.previous_parameter_study)
+        previous_parameter_study = _open_parameter_study(self._previous_parameter_study)
         self.parameter_study = _merge_parameter_studies(
-            [previous_parameter_study, self.parameter_study], self.set_name_template
+            [previous_parameter_study, self.parameter_study], self._set_name_template
         )
         self.parameter_study = self.parameter_study.swap_dims({_set_coordinate_key: _hash_coordinate_key})
         previous_parameter_study.close()
@@ -944,7 +944,7 @@ class OneAtATime(ParameterGenerator):
             {"parameter_samples": all_sets, "parameter_names": self._parameter_names},
             set_name_template=self.set_name_template.template,
         ).parameter_study
-        self.parameter_study = _merge_parameter_studies([nominal_study, off_nominal_study], self.set_name_template)
+        self.parameter_study = _merge_parameter_studies([nominal_study, off_nominal_study], self._set_name_template)
         self.parameter_study = self.parameter_study.sortby(_set_coordinate_key)
         # Do work normally performed by super()._generate(). Must re-calculate semi-private variables
         self.parameter_study = self.parameter_study.swap_dims({_set_coordinate_key: _hash_coordinate_key})
@@ -952,7 +952,7 @@ class OneAtATime(ParameterGenerator):
         self._set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
         self._set_names = self.parameter_study[_set_coordinate_key].to_series().to_dict()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
-        if self.previous_parameter_study is not None and self.previous_parameter_study.is_file():
+        if self._previous_parameter_study is not None and self._previous_parameter_study.is_file():
             self._merge_parameter_studies()
 
 
@@ -1523,8 +1523,8 @@ class CatenationStudy(ParameterGenerator):
 
     def _generate(self, **kwargs) -> None:
         """Generate the parameter studies and combine them."""
-        if self.output_file_template is not None:
-            output_file_template_string = self.output_file_template.template
+        if self._output_file_template is not None:
+            output_file_template_string = self._output_file_template.template
         else:
             output_file_template_string = None
 
@@ -1542,7 +1542,7 @@ class CatenationStudy(ParameterGenerator):
             for generator, schema in self.parameter_schema.values()
         ]
 
-        self.parameter_study = _merge_parameter_studies(studies, self.set_name_template)
+        self.parameter_study = _merge_parameter_studies(studies, self._set_name_template)
         self.parameter_study = self.parameter_study.sortby(_set_coordinate_key)
         # Do work normally performed by super()._generate(). Must re-calculate semi-private variables
         self.parameter_study = self.parameter_study.swap_dims({_set_coordinate_key: _hash_coordinate_key})
@@ -1550,7 +1550,7 @@ class CatenationStudy(ParameterGenerator):
         self._set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
         self._set_names = self.parameter_study[_set_coordinate_key].to_series().to_dict()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
-        if self.previous_parameter_study is not None and self.previous_parameter_study.is_file():
+        if self._previous_parameter_study is not None and self._previous_parameter_study.is_file():
             self._merge_parameter_studies()
 
 
