@@ -12,6 +12,8 @@ Internal Changes
 ================
 - More robust third-party executable path handling in system test pass through constructions (:merge:`1275`). By `Kyle
   Brindley`_.
+- Explicit type conversion from hashable to string for static type checking of parameter set identity calculation. By
+  `Kyle Brindley`_.
 
 ******************
 1.1.0 (2025-11-19)
