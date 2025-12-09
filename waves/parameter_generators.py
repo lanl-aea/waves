@@ -1554,7 +1554,7 @@ class CatenationStudy(ParameterGenerator):
             self._merge_parameter_studies()
 
 
-def _calculate_set_hash(parameter_names: collections.abc.Sequence[str], set_samples: collections.abc.Sequence) -> str:
+def _calculate_set_hash(parameter_names: collections.abc.Sequence[typing.Hashable], set_samples: collections.abc.Sequence) -> str:
     """Calculate the unique, repeatable parameter set content hash for a single parameter set.
 
     :param parameter_names: list of parameter names in matching order with parameter samples
