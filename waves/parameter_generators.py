@@ -86,54 +86,65 @@ class ParameterGenerator(ABC):
         write_meta: bool = _settings._default_write_meta,
         **kwargs,
     ) -> None:
+        # Store variables as public attributes - used for propagation into sub-created generators
         self.parameter_schema = parameter_schema
-        self.output_file_template = (
-            _utilities._AtSignTemplate(output_file_template) if output_file_template is not None else None
-        )
-        self.output_file = pathlib.Path(output_file) if output_file is not None else None
+        self.output_file_template = output_file_template
+        self.output_file = output_file
         self.output_file_type = output_file_type
-        self.set_name_template = _utilities._AtSignTemplate(set_name_template)
-        self.previous_parameter_study = (
-            pathlib.Path(previous_parameter_study) if previous_parameter_study is not None else None
-        )
+        self.set_name_template = set_name_template
+        self.previous_parameter_study = previous_parameter_study
         self.require_previous_parameter_study = require_previous_parameter_study
         self.overwrite = overwrite
         self.write_meta = write_meta
 
-        if self.output_file_template is not None and self.output_file is not None:
+        # Create semi-private attributes for internal use
+        self._output_file_template = (
+            _utilities._AtSignTemplate(output_file_template) if output_file_template is not None else None
+        )
+        self._output_file = pathlib.Path(output_file) if output_file is not None else None
+        self._output_file_type = output_file_type
+        self._set_name_template = _utilities._AtSignTemplate(set_name_template)
+        self._previous_parameter_study = (
+            pathlib.Path(previous_parameter_study) if previous_parameter_study is not None else None
+        )
+        self._require_previous_parameter_study = require_previous_parameter_study
+        self._overwrite = overwrite
+        self._write_meta = write_meta
+
+        if self._output_file_template is not None and self._output_file is not None:
             raise MutuallyExclusiveError(
                 "The options 'output_file_template' and 'output_file' are mutually exclusive. "
                 "Please specify one or the other."
             )
 
-        if self.output_file_type not in _settings._allowable_output_file_types:
+        if self._output_file_type not in _settings._allowable_output_file_types:
             raise ChoicesError(
-                f"Unsupported 'output_file_type': '{self.output_file_type}'. "
+                f"Unsupported 'output_file_type': '{self._output_file_type}'. "
                 f"The 'output_file_type' must be one of {_settings._allowable_output_file_types}"
             )
 
-        if self.previous_parameter_study is not None and not self.previous_parameter_study.is_file():
-            message = f"Previous parameter study file '{self.previous_parameter_study}' does not exist."
-            if self.require_previous_parameter_study:
+        if self._previous_parameter_study is not None and not self._previous_parameter_study.is_file():
+            message = f"Previous parameter study file '{self._previous_parameter_study}' does not exist."
+            if self._require_previous_parameter_study:
                 raise RuntimeError(message)
             else:
                 warnings.warn(message)
 
         # Override set name template if output name template is provided.
         self.provided_output_file_template = False
-        if self.output_file_template is not None:
+        if self._output_file_template is not None:
             self.provided_output_file_template = True
             # Append the set number placeholder if missing
-            output_file_template_string = self.output_file_template.safe_substitute()
+            output_file_template_string = self._output_file_template.safe_substitute()
             if _settings._template_placeholder not in output_file_template_string:
-                self.output_file_template = _utilities._AtSignTemplate(
+                self._output_file_template = _utilities._AtSignTemplate(
                     f"{output_file_template_string}{_settings._template_placeholder}"
                 )
-            self.set_name_template = self.output_file_template
+            self._set_name_template = self._output_file_template
 
         # Infer output directory from output file template if provided. Set to PWD otherwise.
-        if self.output_file_template is not None:
-            self.output_directory = pathlib.Path(self.output_file_template.safe_substitute()).parent
+        if self._output_file_template is not None:
+            self.output_directory = pathlib.Path(self._output_file_template.safe_substitute()).parent
         else:
             self.output_directory = pathlib.Path.cwd()
         self.parameter_study_meta_file = self.output_directory / _settings._parameter_study_meta_file
@@ -202,7 +213,7 @@ class ParameterGenerator(ABC):
         self._create_set_hashes()
         self._create_set_names()
         self._create_parameter_study()
-        if self.previous_parameter_study is not None and self.previous_parameter_study.is_file():
+        if self._previous_parameter_study is not None and self._previous_parameter_study.is_file():
             self._merge_parameter_studies()
 
     def write(
