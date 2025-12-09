@@ -1728,14 +1728,14 @@ def _assess_parameter_spaces(studies: list[xarray.Dataset]) -> dict[str, list[xa
     # Group studies by parameter space hash
     parameter_spaces = collections.defaultdict(list)
     for study in studies:
-        parameters = [str(parameter) for parameter in study.data_vars]
+        parameters = list(study.data_vars)
         parameter_space_hash = _calculate_set_hash(parameters, parameters)
         parameter_spaces[parameter_space_hash].append(study)
 
     # Verify no partial overlapping studies
     spaces = list(parameter_spaces.keys())
     for index, space in enumerate(spaces):
-        parameters = [str(parameter for parameter in parameter_spaces[space][0].data_vars)]
+        parameters = list(parameter_spaces[space][0].data_vars)
         for space_other in spaces[index + 1 :]:
             parameters_other = list(parameter_spaces[space_other][0].data_vars)
             shared_parameters = set(parameters) & set(parameters_other)
