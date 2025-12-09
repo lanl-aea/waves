@@ -86,8 +86,18 @@ class ParameterGenerator(ABC):
         write_meta: bool = _settings._default_write_meta,
         **kwargs,
     ) -> None:
+        # Save the input kwargs as public attributes
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
+        self.output_file = output_file
+        self.output_file_type = output_file_type
+        self.set_name_template = set_name_template
+        self.previous_parameter_study = previous_parameter_study
+        self.require_previous_parameter_study = require_previous_parameter_study
+        self.overwrite = overwrite
+        self.write_meta = write_meta
+
+        # Save modified kwargs as separate semi-private attributes
         self._output_file_template = (
             _utilities._AtSignTemplate(output_file_template) if output_file_template is not None else None
         )
@@ -98,8 +108,6 @@ class ParameterGenerator(ABC):
             pathlib.Path(previous_parameter_study) if previous_parameter_study is not None else None
         )
         self._require_previous_parameter_study = require_previous_parameter_study
-        self.overwrite = overwrite
-        self.write_meta = write_meta
 
         if self._output_file_template is not None and self._output_file is not None:
             raise MutuallyExclusiveError(
