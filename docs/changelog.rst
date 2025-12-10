@@ -12,6 +12,7 @@ Internal Changes
 ================
 - More robust third-party executable path handling in system test pass through constructions (:merge:`1275`). By `Kyle
   Brindley`_.
+- Internal API type hint updates to match implemented use for static type checking (:merge:`1278`). By `Kyle Brindley`_.
 
 ******************
 1.1.0 (2025-11-19)
