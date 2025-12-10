@@ -139,6 +139,13 @@ class ParameterGenerator(ABC):
                     f"{output_file_template_string}{_settings._template_placeholder}"
                 )
             self._set_name_template = self._output_file_template
+        else:
+            set_name_template_string = self._set_name_template.safe_substitute()
+            # Append the set number placeholder if missing
+            if _settings._template_placeholder not in set_name_template_string:
+                self._set_name_template = _utilities._AtSignTemplate(
+                    f"{set_name_template_string}{_settings._template_placeholder}"
+                )
 
         # Infer output directory from output file template if provided. Set to PWD otherwise.
         if self._output_file_template is not None:
@@ -947,10 +954,12 @@ class OneAtATime(ParameterGenerator):
         # This is not possible with super()._generate()
         nominal_study = CustomStudy(
             {"parameter_samples": nominal_set, "parameter_names": self._parameter_names},
+            output_file_template=self.output_file_template,
             set_name_template=self.set_name_template,
         ).parameter_study
         off_nominal_study = CustomStudy(
             {"parameter_samples": all_sets, "parameter_names": self._parameter_names},
+            output_file_template=self.output_file_template,
             set_name_template=self.set_name_template,
         ).parameter_study
         self.parameter_study = _merge_parameter_studies([nominal_study, off_nominal_study], self._set_name_template)
