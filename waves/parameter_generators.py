@@ -86,15 +86,7 @@ class ParameterGenerator(ABC):
         write_meta: bool = _settings._default_write_meta,
         **kwargs,
     ) -> None:
-        # Save propagated kwargs as public attributes
         self.parameter_schema = parameter_schema
-        self.output_file_template = output_file_template
-        self.output_file = output_file
-        self.output_file_type = output_file_type
-        self.set_name_template = set_name_template
-        self.write_meta = write_meta
-
-        # Save other kwargs as separate semi-private attributes
         self._output_file_template = (
             _utilities._AtSignTemplate(output_file_template) if output_file_template is not None else None
         )
@@ -106,6 +98,7 @@ class ParameterGenerator(ABC):
         )
         self._require_previous_parameter_study = require_previous_parameter_study
         self._overwrite = overwrite
+        self.write_meta = write_meta
 
         if self._output_file_template is not None and self._output_file is not None:
             raise MutuallyExclusiveError(
@@ -952,13 +945,11 @@ class OneAtATime(ParameterGenerator):
         # This is not possible with super()._generate()
         nominal_study = CustomStudy(
             {"parameter_samples": nominal_set, "parameter_names": self._parameter_names},
-            output_file_template=self.output_file_template,
-            set_name_template=self.set_name_template,
+            set_name_template=self._set_name_template.template,
         ).parameter_study
         off_nominal_study = CustomStudy(
             {"parameter_samples": all_sets, "parameter_names": self._parameter_names},
-            output_file_template=self.output_file_template,
-            set_name_template=self.set_name_template,
+            set_name_template=self._set_name_template.template,
         ).parameter_study
         self.parameter_study = _merge_parameter_studies([nominal_study, off_nominal_study], self._set_name_template)
         self.parameter_study = self.parameter_study.sortby(_set_coordinate_key)
@@ -1539,13 +1530,18 @@ class CatenationStudy(ParameterGenerator):
 
     def _generate(self, **kwargs) -> None:
         """Generate the parameter studies and combine them."""
+        if self._output_file_template is not None:
+            output_file_template_string = self._output_file_template.template
+        else:
+            output_file_template_string = None
+
         studies = [
             generator(
                 schema,
-                output_file_template=self.output_file_template,
-                output_file=self.output_file,
-                output_file_type=self.output_file_type,
-                set_name_template=self.set_name_template,
+                output_file_template=output_file_template_string,
+                output_file=self._output_file,
+                output_file_type=self._output_file_type,
+                set_name_template=self._set_name_template.template,
                 overwrite=self._overwrite,
                 write_meta=self.write_meta,
                 **kwargs,
