@@ -1835,7 +1835,7 @@ class TestParameterGenerator:
     def test_merge_parameter_studies_with_missing_previous_parameter_study(self) -> None:
         # Test exception on missing previous parameter study attribute
         dummy_generator = DummyGenerator({})
-        dummy_generator.previous_parameter_study = None
+        dummy_generator._previous_parameter_study = None
         with pytest.raises(RuntimeError):
             dummy_generator._merge_parameter_studies()
 
