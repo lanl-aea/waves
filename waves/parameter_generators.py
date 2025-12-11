@@ -90,7 +90,7 @@ class ParameterGenerator(ABC):
         self._output_file_template = (
             _utilities._AtSignTemplate(output_file_template) if output_file_template is not None else None
         )
-        self._output_file = pathlib.Path(output_file) if output_file is not None else None
+        self.output_file = pathlib.Path(output_file) if output_file is not None else None
         self._output_file_type = output_file_type
         self._set_name_template = _utilities._AtSignTemplate(set_name_template)
         self._previous_parameter_study = (
@@ -100,7 +100,7 @@ class ParameterGenerator(ABC):
         self._overwrite = overwrite
         self.write_meta = write_meta
 
-        if self._output_file_template is not None and self._output_file is not None:
+        if self._output_file_template is not None and self.output_file is not None:
             raise MutuallyExclusiveError(
                 "The options 'output_file_template' and 'output_file' are mutually exclusive. "
                 "Please specify one or the other."
@@ -317,12 +317,12 @@ class ParameterGenerator(ABC):
                 if isinstance(parameter_study_object, dict)
                 else f"{parameter_study_object}\n"
             )
-            if self._output_file and not dry_run:
+            if self.output_file and not dry_run:
                 # Remove (or refactor away) from this static type checking skip
                 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/812
-                conditional_write_function(self._output_file, parameter_study_object)  # type: ignore[arg-type]
-            elif self._output_file and dry_run:
-                sys.stdout.write(f"{self._output_file.resolve()}\n{output_text}")
+                conditional_write_function(self.output_file, parameter_study_object)  # type: ignore[arg-type]
+            elif self.output_file and dry_run:
+                sys.stdout.write(f"{self.output_file.resolve()}\n{output_text}")
             else:
                 sys.stdout.write(output_text)
         # If output file template is provided, writing to parameter set files
@@ -390,8 +390,8 @@ class ParameterGenerator(ABC):
         set_files = [pathlib.Path(set_name) for set_name in self.parameter_study.coords[_set_coordinate_key].values]
         # Always overwrite the meta data file to ensure that *all* parameter file names are included.
         with self.parameter_study_meta_file.open(mode="w") as meta_file:
-            if self._output_file:
-                meta_file.write(f"{self._output_file.resolve()}\n")
+            if self.output_file:
+                meta_file.write(f"{self.output_file.resolve()}\n")
             else:
                 for set_file in set_files:
                     meta_file.write(f"{set_file.resolve()}\n")
@@ -1539,7 +1539,7 @@ class CatenationStudy(ParameterGenerator):
             generator(
                 schema,
                 output_file_template=output_file_template_string,
-                output_file=self._output_file,
+                output_file=self.output_file,
                 output_file_type=self._output_file_type,
                 set_name_template=self._set_name_template.template,
                 overwrite=self._overwrite,
