@@ -130,13 +130,8 @@ class ParameterGenerator(ABC):
                     f"{output_file_template_string}{_settings._template_placeholder}"
                 )
             self._set_name_template = self._output_file_template
-        else:
-            set_name_template_string = self._set_name_template.safe_substitute()
-            # Append the set number placeholder if missing
-            if _settings._template_placeholder not in set_name_template_string:
-                self._set_name_template = _utilities._AtSignTemplate(
-                    f"{set_name_template_string}{_settings._template_placeholder}"
-                )
+        # TODO: Add similar logic to ensure the template placeholder is present in set_name_template
+        # Issue: https://re-git.lanl.gov/aea/python-projects/waves/-/issues/990
 
         # Infer output directory from output file template if provided. Set to PWD otherwise.
         if self._output_file_template is not None:
