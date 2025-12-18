@@ -98,7 +98,7 @@ class ParameterGenerator(ABC):
         )
         self._require_previous_parameter_study = require_previous_parameter_study
         self._overwrite = overwrite
-        self.write_meta = write_meta
+        self._write_meta_flag = write_meta
 
         if self._output_file_template is not None and self.output_file is not None:
             raise MutuallyExclusiveError(
@@ -239,7 +239,7 @@ class ParameterGenerator(ABC):
 
         self.output_directory.mkdir(parents=True, exist_ok=True)
 
-        if self.write_meta and self.provided_output_file_template:
+        if self._write_meta_flag and self.provided_output_file_template:
             self._write_meta()
 
         # Remove (or refactor away) from these complex types
@@ -1538,7 +1538,7 @@ class CatenationStudy(ParameterGenerator):
                 output_file_type=self._output_file_type,
                 set_name_template=self._set_name_template.template,
                 overwrite=self._overwrite,
-                write_meta=self.write_meta,
+                write_meta=self._write_meta_flag,
                 **kwargs,
             ).parameter_study
             for generator, schema in self.parameter_schema.values()
