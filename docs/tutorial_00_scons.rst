@@ -360,9 +360,9 @@ line in your project configuration.
             /home/roppenheimer/waves-tutorials
             $ scons -h
             scons: Reading SConscript files ...
-            Checking whether '/apps/abaqus/Commands/abq2024' program exists.../apps/abaqus/Commands/abq2024
-            Checking whether '/usr/projects/ea/abaqus/Commands/abq2024' program exists...no
-            Checking whether 'abq2024' program exists.../apps/abaqus/Commands/abq2024
+            Checking whether '/apps/abaqus/Commands/abq2025' program exists.../apps/abaqus/Commands/abq2025
+            Checking whether '/usr/projects/ea/abaqus/Commands/abq2025' program exists...no
+            Checking whether 'abq2025' program exists.../apps/abaqus/Commands/abq2025
             Checking whether 'abaqus' program exists...no
             scons: done reading SConscript files.
             Local Options:
@@ -371,7 +371,7 @@ line in your project configuration.
                                            action program is missing and it would normally be ignored. (default: 'False')
               --print-build-failures    Print task *.stdout target file(s) on build failures. (default: 'False')
               --abaqus-command=COMMAND  Override for the Abaqus command. Repeat to specify more than one (default:
-                                          ['/apps/abaqus/Commands/abq2024', '/usr/projects/ea/abaqus/Commands/abq2024', 'abq2024', 
+                                          ['/apps/abaqus/Commands/abq2025', '/usr/projects/ea/abaqus/Commands/abq2025', 'abq2025', 
                                           'abaqus'])
 
             Default Targets:
@@ -393,9 +393,9 @@ line in your project configuration.
 
             PS > scons -h
             scons: Reading SConscript files ...
-            Checking whether '/apps/abaqus/Commands/abq2024' program exists...no
-            Checking whether '/usr/projects/ea/abaqus/Commands/abq2024' program exists...no
-            Checking whether 'abq2024' program exists...C:\SIMULIA\Commands\abq2024.BAT
+            Checking whether '/apps/abaqus/Commands/abq2025' program exists...no
+            Checking whether '/usr/projects/ea/abaqus/Commands/abq2025' program exists...no
+            Checking whether 'abq2025' program exists...C:\SIMULIA\Commands\abq2025.BAT
             Checking whether 'abaqus' program exists...C:\SIMULIA\Commands\abaqus.BAT
             scons: done reading SConscript files.
             Local Options:
@@ -404,7 +404,7 @@ line in your project configuration.
                                            action program is missing and it would normally be ignored. (default: 'False')
               --print-build-failures    Print task *.stdout target file(s) on build failures. (default: 'False')
               --abaqus-command=COMMAND  Override for the Abaqus command. Repeat to specify more than one (default:
-                                          ['/apps/abaqus/Commands/abq2024', '/usr/projects/ea/abaqus/Commands/abq2024', 'abq2024', 
+                                          ['/apps/abaqus/Commands/abq2025', '/usr/projects/ea/abaqus/Commands/abq2025', 'abq2025', 
                                           'abaqus'])
 
             Default Targets:

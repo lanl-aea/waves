@@ -5,6 +5,11 @@
     environment_file: "environment.yml"
     conda_artifacts_directory: "conda-bld"
   before_script:
+    # FIXME: trace the Gitlab-CI behavior that unsets LANG VVV
+    - if [[ -z "${LANG}" ]]; then export LANG='en_US.UTF-8'; fi
+    - function check_variable () { echo "$1"; if [[ -z $1 ]]; then exit 1; fi; }
+    - check_variable "${LANG}"
+    # FIXME: trace the Gitlab-CI behavior that unsets LANG ^^^
     - function check_directory_variable () { echo "$1"; if [[ -z $1 ]] || [[ ! -d $1 ]]; then exit 1; fi; }
     - check_directory_variable "${conda_installation}"
     - echo ${environment_file}
@@ -28,6 +33,8 @@
     - conda activate ${prefix}
     - conda info
     - conda env export
+    # texlive module setting LC_ALL breaks Abaqus 2025
+    - unset LC_ALL
   after_script:
     - rm -r $PWD/conda-environment $PWD/conda-pkgs || true
 
@@ -72,8 +79,8 @@
     - check_directory_variable "${cubit_command_prefix}"
     - echo ${PARENT_CI_PIPELINE_SOURCE}
     # Job commands
-    - scons regression --keep-going --unconditional-build --abaqus-command=${abaqus_command_prefix}/abq2024 --cubit-command=${cubit_command_prefix}/Cubit-16.16/cubit
-    - if [[ $PARENT_CI_PIPELINE_SOURCE == "schedule" ]]; then scons systemtest --keep-going --unconditional-build --abaqus-command=${abaqus_command_prefix}/abq2023 --cubit-command=${cubit_command_prefix}/Cubit-16.12/cubit; fi
+    - scons regression --keep-going --unconditional-build --abaqus-command=${abaqus_command_prefix}/abq2025 --cubit-command=${cubit_command_prefix}/Cubit-16.16/cubit
+    - if [[ $PARENT_CI_PIPELINE_SOURCE == "schedule" ]]; then scons systemtest --keep-going --unconditional-build --abaqus-command=${abaqus_command_prefix}/abq2024 --abaqus-command=${abaqus_command_prefix}/abq2023 --cubit-command=${cubit_command_prefix}/Cubit-16.12/cubit; fi
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
     reports:

@@ -13,6 +13,7 @@ Internal Changes
 - More robust third-party executable path handling in system test pass through constructions (:merge:`1275`). By `Kyle
   Brindley`_.
 - Internal API type hint updates to match implemented use for static type checking (:merge:`1278`). By `Kyle Brindley`_.
+- Use and test Abaqus 2025. Preserves scheduled testing against Abaqus 2024 and 2023. By `Kyle Brindley`_.
 
 ******************
 1.1.0 (2025-11-19)
