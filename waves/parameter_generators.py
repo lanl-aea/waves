@@ -135,10 +135,10 @@ class ParameterGenerator(ABC):
 
         # Infer output directory from output file template if provided. Set to PWD otherwise.
         if self._output_file_template is not None:
-            self.output_directory = pathlib.Path(self._output_file_template.safe_substitute()).parent
+            self._output_directory = pathlib.Path(self._output_file_template.safe_substitute()).parent
         else:
-            self.output_directory = pathlib.Path.cwd()
-        self.parameter_study_meta_file = self.output_directory / _settings._parameter_study_meta_file
+            self._output_directory = pathlib.Path.cwd()
+        self.parameter_study_meta_file = self._output_directory / _settings._parameter_study_meta_file
 
         # Help mypy determine types of attributes set in semi-private function calls
         # TODO: make these return values from _validate and assign directly in __init__?
@@ -237,7 +237,7 @@ class ParameterGenerator(ABC):
         if output_file_type is None:
             output_file_type = self._output_file_type
 
-        self.output_directory.mkdir(parents=True, exist_ok=True)
+        self._output_directory.mkdir(parents=True, exist_ok=True)
 
         if self._write_meta_flag and self._provided_output_file_template:
             self._write_meta()
