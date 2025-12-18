@@ -138,7 +138,7 @@ class ParameterGenerator(ABC):
             self._output_directory = pathlib.Path(self._output_file_template.safe_substitute()).parent
         else:
             self._output_directory = pathlib.Path.cwd()
-        self.parameter_study_meta_file = self._output_directory / _settings._parameter_study_meta_file
+        self._parameter_study_meta_file = self._output_directory / _settings._parameter_study_meta_file
 
         # Help mypy determine types of attributes set in semi-private function calls
         # TODO: make these return values from _validate and assign directly in __init__?
@@ -384,7 +384,7 @@ class ParameterGenerator(ABC):
         """
         set_files = [pathlib.Path(set_name) for set_name in self.parameter_study.coords[_set_coordinate_key].values]
         # Always overwrite the meta data file to ensure that *all* parameter file names are included.
-        with self.parameter_study_meta_file.open(mode="w") as meta_file:
+        with self._parameter_study_meta_file.open(mode="w") as meta_file:
             if self.output_file:
                 meta_file.write(f"{self.output_file.resolve()}\n")
             else:
