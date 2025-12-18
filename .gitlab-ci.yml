@@ -216,9 +216,6 @@ hpc:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-  variables:
-    PARENT_CI_PIPELINE_SOURCE: $CI_PIPELINE_SOURCE
-    PARENT_CI_COMMIT_BRANCH: $CI_COMMIT_BRANCH
 
 win:
   stage: test
@@ -228,9 +225,6 @@ win:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-  variables:
-    PARENT_CI_PIPELINE_SOURCE: $CI_PIPELINE_SOURCE
-    PARENT_CI_COMMIT_BRANCH: $CI_COMMIT_BRANCH
 
 mac:
   stage: test
@@ -240,6 +234,3 @@ mac:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-  variables:
-    PARENT_CI_PIPELINE_SOURCE: $CI_PIPELINE_SOURCE
-    PARENT_CI_COMMIT_BRANCH: $CI_COMMIT_BRANCH

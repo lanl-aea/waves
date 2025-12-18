@@ -1,3 +1,7 @@
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
+
 include: ".pipeline-common.yml"
 
 stages:
@@ -8,56 +12,16 @@ default:
     - windows
     - pn2606796
 
-.win-job-environment: &win-job-environment
-  variables:
-    GIT_STRATEGY: clone
-    conda_installation: "C:/ProgramData/miniconda3"
-    environment_file: "environment-win.yml"
-  before_script:
-    - $PSVersionTable
-    - $env:username
-    - git config --list --show-origin | Select-String -Pattern "symlinks="
-    - git ls-tree -r HEAD | Select-String -Pattern "^120" | Measure-Object -Line
-    - Get-ChildItem -Recurse | Where-Object { $_.LinkType -eq 'SymbolicLink' } | Measure-Object -Line
-    - if ([string]::IsNullOrEmpty($environment_file)) { exit 1 }
-    - if ([string]::IsNullOrEmpty($conda_installation)) { exit 1 }
-    # Common job variables
-    - $prefix="$pwd\conda-environment"
-    - $conda_pkgs_dirs="$pwd\conda-pkgs"
-    - Write-Output $conda_installation
-    - Write-Output $environment_file
-    - Write-Output $prefix
-    - Write-Output $conda_pkgs_dirs
-    - if (!(Test-Path -Path $conda_installation -PathType Container)) { exit 1 }
-    - if ([string]::IsNullOrEmpty($prefix)) { exit 1 }
-    # Environment creation
-    - $env:CONDA_PKGS_DIRS=$conda_pkgs_dirs
-    - (& "$conda_installation\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | ?{$_} | Invoke-Expression
-    - conda info
-    - conda env create --prefix $prefix --file $environment_file --yes
-    - conda activate $prefix
-    - conda info
-    - python -c "import getpass; print(getpass.getuser())"
-  after_script:
-    - Remove-Item -Force -Recurse $pwd\conda-environment -ErrorAction Continue
-    - Remove-Item -Force -Recurse $pwd\conda-pkgs -ErrorAction Continue
-
 win-developer-test:
   extends:
     - .win-job-environment
     - .developer-test-no-third-party
   stage: test
-  rules:
-    - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
-    - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
 
 win-conda-build:
   extends:
     - .win-job-environment
   stage: test
-  rules:
-    - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
-    - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
   variables:
     environment_file: "conda-build.yml"
     recipe_directory: "recipe"
@@ -74,9 +38,6 @@ win-pip-build:
   extends:
     - .win-job-environment
   stage: test
-  rules:
-    - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
-    - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
   variables:
     distribution_name: "waves"
     environment_file: "pip-build.yml"
