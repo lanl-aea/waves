@@ -536,15 +536,15 @@ class ParameterGenerator(ABC):
 
 
 class _ScipyGenerator(ParameterGenerator, ABC):
-    sampler_class: str = ""
+    _sampler_class: str = ""
 
     def __init__(self, *args, **kwargs) -> None:
-        """Require concrete child classes to set the ``self.sampler_class`` attribute to a string.
+        """Require concrete child classes to set the ``self._sampler_class`` attribute to a string.
 
-        :raises TypeError: if the ``self.sampler_class`` attribute is not overridden
+        :raises TypeError: if the ``self._sampler_class`` attribute is not overridden
         """
-        if not self.sampler_class:
-            raise ValueError("_ScipyGenerator subclasses must set ``sampler_class`` to a non-empty string")
+        if not self._sampler_class:
+            raise ValueError("_ScipyGenerator subclasses must set ``_sampler_class`` to a non-empty string")
         super().__init__(*args, **kwargs)
 
     def _validate(self) -> None:
@@ -614,7 +614,7 @@ class _ScipyGenerator(ParameterGenerator, ABC):
             kwargs.update(override_kwargs)
         else:
             kwargs = override_kwargs
-        sampler = getattr(scipy.stats.qmc, self.sampler_class)(**kwargs)
+        sampler = getattr(scipy.stats.qmc, self._sampler_class)(**kwargs)
         self._generate_distribution_samples(sampler, set_count, parameter_count)
         super()._generate()
 
@@ -828,7 +828,7 @@ class LatinHypercube(_ScipyGenerator):
     """
 
     def __init__(self, *args, **kwargs) -> None:
-        self.sampler_class = "LatinHypercube"
+        self._sampler_class = "LatinHypercube"
         super().__init__(*args, **kwargs)
 
     def _generate(self, **kwargs) -> None:
@@ -1139,7 +1139,7 @@ class SobolSequence(_ScipyGenerator):
     """
 
     def __init__(self, *args, **kwargs) -> None:
-        self.sampler_class = "Sobol"
+        self._sampler_class = "Sobol"
         super().__init__(*args, **kwargs)
 
     def _generate(self, **kwargs) -> None:
@@ -1235,7 +1235,7 @@ class ScipySampler(_ScipyGenerator):
     """
 
     def __init__(self, sampler_class: str, *args, **kwargs) -> None:
-        self.sampler_class = sampler_class
+        self._sampler_class = sampler_class
         super().__init__(*args, **kwargs)
 
     def _generate(self, **kwargs) -> None:
@@ -1340,7 +1340,7 @@ class SALibSampler(ParameterGenerator, ABC):
     """
 
     def __init__(self, sampler_class: str, *args, **kwargs) -> None:
-        self.sampler_class = sampler_class
+        self._sampler_class = sampler_class
         super().__init__(*args, **kwargs)
 
     def _validate(self) -> None:
@@ -1377,9 +1377,9 @@ class SALibSampler(ParameterGenerator, ABC):
         :raises waves.exceptions.SchemaValidationError: A sobol or morris sampler contains fewer than two parameters
         """
         parameter_count = len(self._parameter_names)
-        if self.sampler_class == "sobol" and parameter_count < 2:
+        if self._sampler_class == "sobol" and parameter_count < 2:
             raise SchemaValidationError("The SALib Sobol sampler requires at least two parameters")
-        if self.sampler_class == "morris" and parameter_count < 2:
+        if self._sampler_class == "morris" and parameter_count < 2:
             raise SchemaValidationError("The SALib Morris sampler requires at least two parameters")
 
     def _sampler_overrides(self, override_kwargs: dict | None = None) -> dict:
@@ -1395,7 +1395,7 @@ class SALibSampler(ParameterGenerator, ABC):
         if override_kwargs is None:
             override_kwargs = {}
         parameter_count = len(self._parameter_names)
-        if self.sampler_class == "sobol" and parameter_count == 2:
+        if self._sampler_class == "sobol" and parameter_count == 2:
             override_kwargs = {**override_kwargs, "calc_second_order": False}
         return override_kwargs
 
@@ -1411,8 +1411,8 @@ class SALibSampler(ParameterGenerator, ABC):
             kwargs.update(override_kwargs)
         else:
             kwargs = override_kwargs
-        __import__("SALib.sample", fromlist=[self.sampler_class])
-        sampler = getattr(SALib.sample, self.sampler_class)
+        __import__("SALib.sample", fromlist=[self._sampler_class])
+        sampler = getattr(SALib.sample, self._sampler_class)
         problem = self.parameter_schema["problem"]
         self._samples = sampler.sample(problem, N, **kwargs)
         self._samples = numpy.unique(self._samples, axis=0)

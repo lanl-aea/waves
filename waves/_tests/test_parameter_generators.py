@@ -2305,7 +2305,7 @@ class TestParameterDistributions:
                 super().__init__(*args, **kwargs)
 
         class HasRequiredAttribute(parameter_generators._ScipyGenerator):
-            sampler_class = "dummy"
+            _sampler_class = "dummy"
 
             def _validate(self) -> None:
                 pass
@@ -2314,7 +2314,7 @@ class TestParameterDistributions:
                 pass
 
         with pytest.raises(
-            ValueError, match="_ScipyGenerator subclasses must set ``sampler_class`` to a non-empty string"
+            ValueError, match="_ScipyGenerator subclasses must set ``_sampler_class`` to a non-empty string"
         ):
             MissingRequiredAttribute({})
 
@@ -2428,7 +2428,7 @@ class DummyGenerator(parameter_generators.ParameterGenerator):
 
 
 class ParameterDistributions(parameter_generators._ScipyGenerator):
-    sampler_class = "dummy"
+    _sampler_class = "dummy"
 
     def _generate(self, **kwargs) -> None:
         pass
