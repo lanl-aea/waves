@@ -120,9 +120,9 @@ class ParameterGenerator(ABC):
                 warnings.warn(message)
 
         # Override set name template if output name template is provided.
-        self.provided_output_file_template = False
+        self._provided_output_file_template = False
         if self._output_file_template is not None:
-            self.provided_output_file_template = True
+            self._provided_output_file_template = True
             # Append the set number placeholder if missing
             output_file_template_string = self._output_file_template.safe_substitute()
             if _settings._template_placeholder not in output_file_template_string:
@@ -239,7 +239,7 @@ class ParameterGenerator(ABC):
 
         self.output_directory.mkdir(parents=True, exist_ok=True)
 
-        if self._write_meta_flag and self.provided_output_file_template:
+        if self._write_meta_flag and self._provided_output_file_template:
             self._write_meta()
 
         # Remove (or refactor away) from these complex types
@@ -305,7 +305,7 @@ class ParameterGenerator(ABC):
         Behavior as specified in :meth:`waves.parameter_generators.ParameterGenerator.write`
         """
         # If no output file template is provided, printing to stdout or single file. Prepend set names.
-        if not self.provided_output_file_template:
+        if not self._provided_output_file_template:
             # If no output file template is provided, printing to stdout or a single file
             output_text = (
                 yaml.safe_dump(parameter_study_object)
