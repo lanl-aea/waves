@@ -83,7 +83,7 @@ class ParameterGenerator(ABC):
         previous_parameter_study: str | pathlib.Path | None = _settings._default_previous_parameter_study,
         require_previous_parameter_study: bool = _settings._default_require_previous_parameter_study,
         overwrite: bool = _settings._default_overwrite,
-        write_meta: bool = _settings._default_write_meta,
+        write_meta: bool = _settings._default_write_meta_flag,
         **kwargs,
     ) -> None:
         self.parameter_schema = parameter_schema

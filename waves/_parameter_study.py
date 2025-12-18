@@ -148,7 +148,7 @@ def main(
     require_previous_parameter_study: bool = _settings._default_require_previous_parameter_study,
     overwrite: bool = _settings._default_overwrite,
     dry_run: bool = _settings._default_dry_run,
-    write_meta: bool = _settings._default_write_meta,
+    write_meta: bool = _settings._default_write_meta_flag,
 ) -> None:
     """Build parameter studies.
 
