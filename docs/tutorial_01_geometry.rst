@@ -456,8 +456,7 @@ Now that you've created the geometry task in ``tutorial_01_geometry.scons``, thi
                Checking whether 'abaqus' program exists...no
                scons: done reading SConscript files.
                scons: Building targets ...
-               cd /home/roppenheimer/waves-tutorials/build/tutorial_01_geometry && /apps/abaqus/Commands/abq2025 cae -noGui
-               /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.cae.stdout 2>&1
+               cd /home/roppenheimer/waves-tutorials/build/tutorial_01_geometry && /apps/abaqus/Commands/abq2025 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.cae.stdout 2>&1
                scons: done building targets.
 
          .. tab-item:: Windows
@@ -479,9 +478,7 @@ Now that you've created the geometry task in ``tutorial_01_geometry.scons``, thi
                Checking whether 'abaqus' program exists...C:\SIMULIA\Commands\abaqus.BAT
                scons: done reading SConscript files.
                scons: Building targets ...
-               cd C:\Users\roppenheimer\waves-tutorials\build\tutorial_01_geometry && C:\SIMULIA\Commands\abq2025.BAT cae -noGUI 
-               C:\Users\roppenheimer\waves-tutorials\modsim_package\abaqus\rectangle_geometry.py -- > 
-               C:\Users\roppenheimer\waves-tutorials\build\tutorial_01_geometry\rectangle_geometry.cae.stdout 2>&1
+               cd C:\Users\roppenheimer\waves-tutorials\build\tutorial_01_geometry && C:\SIMULIA\Commands\abq2025.BAT cae -noGUI C:\Users\roppenheimer\waves-tutorials\modsim_package\abaqus\rectangle_geometry.py -- > C:\Users\roppenheimer\waves-tutorials\build\tutorial_01_geometry\rectangle_geometry.cae.stdout 2>&1
                scons: done building targets.
 
 The default build directory name is ``build`` and located in the same parent directory as
