@@ -101,6 +101,23 @@ class TestOneAtATime:
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64},
         ),
+        "one_parameter: 1, 2, custom template no placeholder": (
+            {"parameter_1": [1, 2]},
+            {"set_name_template": "set"},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1, 2],
+                        coords={_set_coordinate_key: xarray.DataArray(["set0", "set1"], dims=_set_coordinate_key)},
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["1661dcd0bf4761d25471c1cf5514ceae", "0b588b6a82c1d3d3d19fda304f940342"],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {"parameter_1": numpy.int64},
+        ),
         "one_parameter: 2, 1": (
             {"parameter_1": [2, 1]},
             {},
