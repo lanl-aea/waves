@@ -154,6 +154,35 @@ class ParameterGenerator(ABC):
         self.parameter_study: xarray.Dataset
         self._generate(**kwargs)
 
+    # Public attributes return read-only processed semi-private attributes
+    @property
+    def output_file_template(self) -> string.Template | None:
+        return self._output_file_template
+
+    @property
+    def output_file_type(self) -> _settings._allowable_output_file_typing:
+        return self._output_file_type
+
+    @property
+    def set_name_template(self) -> string.Template:
+        return self._set_name_template
+
+    @property
+    def previous_parameter_study(self) -> pathlib.Path | None:
+        return self._previous_parameter_study
+
+    @property
+    def require_previous_parameter_study(self) -> bool:
+        return self._require_previous_parameter_study
+
+    @property
+    def overwrite(self) -> bool:
+        return self._overwrite
+
+    @property
+    def write_meta(self) -> bool:
+        return self._write_meta_flag
+
     @abstractmethod
     def _validate(self) -> None:
         """Process parameter study input to verify schema.
