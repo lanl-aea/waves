@@ -45,9 +45,9 @@ AddOption(
 )
 # Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
 default_abaqus_commands = [
-    "/apps/abaqus/Commands/abq2024",
-    "/usr/projects/ea/abaqus/Commands/abq2024",
-    "abq2024",
+    "/apps/abaqus/Commands/abq2025",
+    "/usr/projects/ea/abaqus/Commands/abq2025",
+    "abq2025",
     "abaqus",
 ]
 AddOption(

@@ -136,6 +136,24 @@ class TestCatenationStudy:
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64},
         ),
+        "one parameter custom template no placeholder": (
+            {"1": (CartesianProduct, {"parameter_1": [1]}), "2": (CartesianProduct, {"parameter_1": [2]})},
+            {"set_name_template": "set"},
+            None,
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1, 2],
+                        coords={_set_coordinate_key: xarray.DataArray(["set0", "set1"], dims=_set_coordinate_key)},
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["1661dcd0bf4761d25471c1cf5514ceae", "0b588b6a82c1d3d3d19fda304f940342"],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {"parameter_1": numpy.int64},
+        ),
         "two parameter merge": (
             {
                 "1": (OneAtATime, {"parameter_1": [1], "parameter_2": ["a"]}),
