@@ -8,6 +8,10 @@ Changelog
 1.2.0 (unreleased)
 ******************
 
+Bug fixes
+=========
+- Add set number placeholder to set name templates that lack it  (:issue:`990`, :merge:`1281`). By  `Chris Johnson`_.
+
 Internal Changes
 ================
 - More robust third-party executable path handling in system test pass through constructions (:merge:`1275`). By `Kyle

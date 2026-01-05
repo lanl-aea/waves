@@ -1829,6 +1829,7 @@ class TestParameterGenerator:
         "no template": ({}, None, None, ["parameter_set0"]),
         "file template": ({}, "out", None, ["out0"]),
         "set template": ({}, None, "out@number", ["out0"]),
+        "set template, no placeholder": ({}, None, "out", ["out0"]),
         "set template, overridden": ({}, "out", "overridden", ["out0"]),
     }
 
