@@ -86,7 +86,7 @@ class ParameterGenerator(ABC):
         write_meta: bool = _settings._default_write_meta_flag,
         **kwargs,
     ) -> None:
-        self.parameter_schema = parameter_schema
+        self._parameter_schema = parameter_schema
         self._output_file_template = (
             _utilities._AtSignTemplate(output_file_template) if output_file_template is not None else None
         )
@@ -158,6 +158,10 @@ class ParameterGenerator(ABC):
         self._generate(**kwargs)
 
     # Public attributes return read-only processed semi-private attributes
+    @property
+    def parameter_schema(self) -> dict:
+        return self._parameter_schema
+
     @property
     def output_file_template(self) -> string.Template | None:
         return self._output_file_template
