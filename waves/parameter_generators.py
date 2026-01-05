@@ -90,7 +90,7 @@ class ParameterGenerator(ABC):
         self._output_file_template = (
             _utilities._AtSignTemplate(output_file_template) if output_file_template is not None else None
         )
-        self.output_file = pathlib.Path(output_file) if output_file is not None else None
+        self._output_file = pathlib.Path(output_file) if output_file is not None else None
         self._output_file_type = output_file_type
         self._set_name_template = _utilities._AtSignTemplate(set_name_template)
         self._previous_parameter_study = (
@@ -100,7 +100,7 @@ class ParameterGenerator(ABC):
         self._overwrite = overwrite
         self._write_meta_flag = write_meta
 
-        if self._output_file_template is not None and self.output_file is not None:
+        if self._output_file_template is not None and self._output_file is not None:
             raise MutuallyExclusiveError(
                 "The options 'output_file_template' and 'output_file' are mutually exclusive. "
                 "Please specify one or the other."
@@ -165,6 +165,10 @@ class ParameterGenerator(ABC):
     @property
     def output_file_template(self) -> string.Template | None:
         return self._output_file_template
+
+    @property
+    def output_file(self) -> pathlib.Path | None:
+        return self._output_file
 
     @property
     def output_file_type(self) -> _settings._allowable_output_file_typing:
