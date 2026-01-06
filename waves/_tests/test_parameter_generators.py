@@ -2248,7 +2248,7 @@ class TestParameterGenerator:
             handle.write.assert_called_once_with("parameter_set1.h5\n")
 
         # TODO: reconcile this test, which changes an attribute post-generation, with issue #949
-        # MR !1279 changes all generator attributes to read-only
+        # Issue #949, MR !1279 changes all user kwarg derived generator attributes to read-only
         write_meta_parameter_generator._output_file = pathlib.Path("dummy.h5")
         with (
             patch("pathlib.Path.open", mock_open()) as mock_file,
