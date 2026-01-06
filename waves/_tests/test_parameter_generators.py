@@ -1771,18 +1771,26 @@ def test_open_parameter_study() -> None:
 class TestParameterGenerator:
     """Class for testing ABC ParameterGenerator."""
 
-    kwarg_read_only_cases = {
-        "parameter_schema": ("parameter_schema", {"parameter_1": [1]}, {"parameter_1": [1]}),
-    }
+    property_parameter_schema_case = {"parameter_schema": ({"parameter_1": [1]}, {"parameter_1": [1]})}
+    property_output_file_template_case = {"output_file_template": (None, _settings._default_output_file_template)}
 
     @pytest.mark.parametrize(
-        ("user_kwarg", "input_value", "expected_value"),
-        kwarg_read_only_cases.values(),
-        ids=kwarg_read_only_cases.keys(),
+        ("input_value", "expected_value"),
+        property_parameter_schema_case.values(),
+        ids=property_parameter_schema_case.keys(),
     )
-    def test_parameter_schema(self, user_kwarg, input_value, expected_value) -> None:
+    def test_parameter_schema(self, input_value, expected_value) -> None:
         generator = DummyGenerator(input_value)
         assert generator.parameter_schema == expected_value
+
+    @pytest.mark.parametrize(
+        ("input_value", "expected_value"),
+        property_output_file_template_case.values(),
+        ids=property_output_file_template_case.keys(),
+    )
+    def test_output_file_template(self, input_value, expected_value) -> None:
+        generator = DummyGenerator({}, output_file_template=input_value)
+        assert generator.output_file_template == expected_value
 
     def test_output_file_conflict(self) -> None:
         with pytest.raises(MutuallyExclusiveError):
