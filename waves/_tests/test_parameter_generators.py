@@ -2247,7 +2247,9 @@ class TestParameterGenerator:
             handle = mock_file()
             handle.write.assert_called_once_with("parameter_set1.h5\n")
 
-        write_meta_parameter_generator.output_file = pathlib.Path("dummy.h5")
+        # TODO: reconcile this test, which changes an attribute post-generation, with issue #949
+        # MR !1279 changes all generator attributes to read-only
+        write_meta_parameter_generator._output_file = pathlib.Path("dummy.h5")
         with (
             patch("pathlib.Path.open", mock_open()) as mock_file,
             patch("pathlib.Path.resolve", return_value=pathlib.Path("dummy.h5")),
