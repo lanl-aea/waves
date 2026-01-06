@@ -14,7 +14,8 @@ Bug fixes
 
 Internal Changes
 ================
-- Parameter generators no longer modify the user supplied input keyword arguments (:issue:`949`, :merge:`1279`). By  `Chris Johnson`_.
+- Parameter generator attributes derived from the user supplied keyword arguments are now read-only attributes (:issue:`949`, 
+  :merge:`1279`). By  `Chris Johnson`_.
 - More robust third-party executable path handling in system test pass through constructions (:merge:`1275`). By `Kyle
   Brindley`_.
 - Internal API type hint updates to match implemented use for static type checking (:merge:`1278`). By `Kyle Brindley`_.
