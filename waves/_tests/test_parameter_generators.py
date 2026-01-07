@@ -1784,6 +1784,10 @@ class TestParameterGenerator:
         "h5": ("h5", "h5"),
         "yaml": ("yaml", "yaml"),
     }
+    property_set_name_template_cases = {
+        "no arg": (None, _utilities._AtSignTemplate(_settings._default_set_name_template)),
+        "custom": ("custom", _utilities._AtSignTemplate(f"custom{_settings._template_placeholder}")),
+    }
 
     @pytest.mark.parametrize(
         ("input_value", "expected_value"),
@@ -1824,7 +1828,17 @@ class TestParameterGenerator:
         generator = DummyGenerator({}, output_file_type=input_value)
         assert generator.output_file_type == expected_value
 
-
+    @pytest.mark.parametrize(
+        ("input_value", "expected_value"),
+        property_set_name_template_cases.values(),
+        ids=property_set_name_template_cases.keys(),
+    )
+    def test_property_set_name_template(self, input_value, expected_value) -> None:
+        if input_value is not None:
+            generator = DummyGenerator({}, set_name_template=input_value)
+        else:
+            generator = DummyGenerator({})
+        assert generator.set_name_template.template == expected_value.template
 
 
     def test_output_file_conflict(self) -> None:
