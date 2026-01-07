@@ -1799,7 +1799,7 @@ class TestParameterGenerator:
         self, kwargs: dict, expected_value: _utilities._AtSignTemplate | None
     ) -> None:
         generator = DummyGenerator({}, **kwargs)
-        if kwargs:
+        if expected_value is not None:
             assert generator.output_file_template.template == expected_value.template
         else:
             assert generator.output_file_template == expected_value
