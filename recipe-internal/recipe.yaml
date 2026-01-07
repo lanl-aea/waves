@@ -100,7 +100,6 @@ tests:
           # Required to satisfy undocumented SALib dependencies on numpy version for the senstivity study tutorial
           - numpy >=2
           - pandas
-          - pip
           - pytest >=6
           - pytest-xdist
           - python-gmsh

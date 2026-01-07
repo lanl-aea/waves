@@ -78,7 +78,6 @@ tests:
       - requirements:
         run:
           - python
-          - pip
           - pytest >=6
           - pytest-xdist
           - sphinx >=7.1
