@@ -14,10 +14,10 @@ CROOT = "--croot ${croot}/recipe-matrix" if "croot" in env else ""
 repository_directory = pathlib.Path(os.path.realpath(__file__)).parent.parent
 
 command_template = string.Template(
-    "VERSION=$(python -m setuptools_scm) conda build recipe-matrix --channel fierromechanics "
-    "--channel conda-forge --no-anaconda-upload "
-    "${CROOT} ${OUTPUT_FOLDER} "
-    "--python ${python_version} --variants \"{'scons':['${scons_version}']}\""
+    "VERSION=$(python -m setuptools_scm) rattler-build build --recipe recipe-matrix --channel fierromechanics "
+    "--channel conda-forge "
+    "--output-dir ${OUTPUT_FOLDER} "
+    "--python ${python_version} --variant 'scons==${scons_version}'
 )
 
 python_versions = ["3.10", "3.11", "3.12", "3.13"]
