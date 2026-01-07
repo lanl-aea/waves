@@ -1773,12 +1773,16 @@ class TestParameterGenerator:
 
     property_parameter_schema_cases = {"schema": ({"parameter_1": [1]}, {"parameter_1": [1]})}
     property_output_file_template_cases = {
-        "no template": (None, _settings._default_output_file_template),
-        "custom template": ("custom", _utilities._AtSignTemplate(f"custom{_settings._template_placeholder}")),
+        "no arg": (None, _settings._default_output_file_template),
+        "custom": ("custom", _utilities._AtSignTemplate(f"custom{_settings._template_placeholder}")),
     }
     property_output_file_cases = {
-        "no output file": (None, _settings._default_output_file),
-        "custom file": ("custom.h5", pathlib.Path("custom.h5")),
+        "no arg": (None, _settings._default_output_file),
+        "custom": ("custom.h5", pathlib.Path("custom.h5")),
+    }
+    property_output_file_type_cases = {
+        "h5": ("h5", "h5"),
+        "yaml": ("yaml", "yaml"),
     }
 
     @pytest.mark.parametrize(
@@ -1786,7 +1790,7 @@ class TestParameterGenerator:
         property_parameter_schema_cases.values(),
         ids=property_parameter_schema_cases.keys(),
     )
-    def test_parameter_schema(self, input_value, expected_value) -> None:
+    def test_property_parameter_schema(self, input_value, expected_value) -> None:
         generator = DummyGenerator(input_value)
         assert generator.parameter_schema == expected_value
 
@@ -1795,7 +1799,7 @@ class TestParameterGenerator:
         property_output_file_template_cases.values(),
         ids=property_output_file_template_cases.keys(),
     )
-    def test_output_file_template(self, input_value, expected_value) -> None:
+    def test_property_output_file_template(self, input_value, expected_value) -> None:
         generator = DummyGenerator({}, output_file_template=input_value)
         if input_value is not None:
             assert generator.output_file_template.template == expected_value.template
@@ -1807,9 +1811,21 @@ class TestParameterGenerator:
         property_output_file_cases.values(),
         ids=property_output_file_cases.keys(),
     )
-    def test_output_file(self, input_value, expected_value) -> None:
+    def test_property_output_file(self, input_value, expected_value) -> None:
         generator = DummyGenerator({}, output_file=input_value)
         assert generator.output_file == expected_value
+
+    @pytest.mark.parametrize(
+        ("input_value", "expected_value"),
+        property_output_file_type_cases.values(),
+        ids=property_output_file_type_cases.keys(),
+    )
+    def test_property_output_file_type(self, input_value, expected_value) -> None:
+        generator = DummyGenerator({}, output_file_type=input_value)
+        assert generator.output_file_type == expected_value
+
+
+
 
     def test_output_file_conflict(self) -> None:
         with pytest.raises(MutuallyExclusiveError):
