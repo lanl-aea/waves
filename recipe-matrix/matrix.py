@@ -10,14 +10,13 @@ import pytest
 
 env = os.environ.copy()
 OUTPUT_FOLDER = "--output-folder ${conda_build_artifacts}" if "conda_build_artifacts" in env else ""
-CROOT = "--croot ${croot}/recipe-matrix" if "croot" in env else ""
 repository_directory = pathlib.Path(os.path.realpath(__file__)).parent.parent
 
 command_template = string.Template(
     "VERSION=$(python -m setuptools_scm) rattler-build build --recipe recipe-matrix --channel fierromechanics "
     "--channel conda-forge "
     "--output-dir ${OUTPUT_FOLDER} "
-    "--python ${python_version} --variant 'scons==${scons_version}'
+    "--variant python=${python_version} --variant scons=${scons_version}"
 )
 
 python_versions = ["3.10", "3.11", "3.12", "3.13"]
@@ -37,7 +36,6 @@ def test_matrix(python_version: str, scons_version: str) -> None:
     command = template.safe_substitute(
         {
             "OUTPUT_FOLDER": OUTPUT_FOLDER,
-            "CROOT": CROOT,
             "python_version": python_version,
             "scons_version": scons_version,
         }
