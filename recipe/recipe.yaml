@@ -74,7 +74,7 @@ tests:
       - if: unix
         then:
           - system_test_directory=$PWD
-          - cd $SP_DIR/$PKG_NAME
+          - cd $(find $PREFIX -name site-packages -type d)/$PKG_NAME
           - pytest -vvv -n 4 -m "not require_third_party" --system-test-dir=${system_test_directory}
       - if: win
         then:
