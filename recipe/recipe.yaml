@@ -2,7 +2,7 @@ schema_version: 1
 
 context:
   name: waves
-  version: 6.6.6
+  version: ${{ env.get("VERSION", default="0.0.0") }}
   python_min: 3.10
 
 package:
