@@ -32,7 +32,7 @@ win-conda-build:
     # Job commands
     - scons pyproject.toml
     - $env:VERSION=python -m setuptools_scm
-    - rattler-build build --recipe $recipe_directory --channel conda-forge --no-anaconda-upload --output-dir $env:temp
+    - rattler-build build --recipe $recipe_directory --channel conda-forge --output-dir $env:temp
 
 win-pip-build:
   extends:
