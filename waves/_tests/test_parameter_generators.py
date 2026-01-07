@@ -1828,7 +1828,7 @@ class TestParameterGenerator:
         property_output_file_type_cases.values(),
         ids=property_output_file_type_cases.keys(),
     )
-    def test_property_output_file_type(self, kwargs: dict, expected_value: typing.Literal) -> None:
+    def test_property_output_file_type(self, kwargs: dict, expected_value: str) -> None:
         generator = DummyGenerator({}, **kwargs)
         assert generator.output_file_type == expected_value
 
