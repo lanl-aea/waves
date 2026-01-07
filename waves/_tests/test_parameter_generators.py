@@ -1796,10 +1796,10 @@ class TestParameterGenerator:
         ids=property_output_file_template_cases.keys(),
     )
     def test_property_output_file_template(
-        self, kwargs: dict, expected_value: _utilities._AtSignTemplate | None
+        self, kwargs: dict, expected_value: string.Template | None
     ) -> None:
         generator = DummyGenerator({}, **kwargs)
-        if generator.output_file_template is None:
+        if expected_value is None:
             assert generator.output_file_template == expected_value
         else:
             assert generator.output_file_template.template == expected_value.template
@@ -1845,7 +1845,7 @@ class TestParameterGenerator:
         property_set_name_template_cases.values(),
         ids=property_set_name_template_cases.keys(),
     )
-    def test_property_set_name_template(self, kwargs: dict, expected_value: _utilities._AtSignTemplate) -> None:
+    def test_property_set_name_template(self, kwargs: dict, expected_value: string.Template) -> None:
         generator = DummyGenerator({}, **kwargs)
         assert generator.set_name_template.template == expected_value.template
 
