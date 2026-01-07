@@ -18,7 +18,7 @@
     - if [[ -z ${conda_artifacts_directory} ]]; then exit 1; fi
     # Common job variables
     - prefix="$PWD/env"
-    - conda_pkgs_dirs="$PWD/conda-pkgs"
+    - conda_pkgs_dirs="$PWD/pkgs"
     - echo ${prefix}
     - echo ${conda_pkgs_dirs}
     - if [[ -z ${prefix} ]]; then exit 1; fi
@@ -36,7 +36,7 @@
     # texlive module setting LC_ALL breaks Abaqus 2025
     - unset LC_ALL
   after_script:
-    - rm -r $PWD/env $PWD/conda-pkgs || true
+    - rm -r $PWD/env $PWD/pkgs || true
 
 .win-job-environment: &win-job-environment
   variables:
@@ -53,7 +53,7 @@
     - if ([string]::IsNullOrEmpty($conda_installation)) { exit 1 }
     # Common job variables
     - $prefix="$pwd\env"
-    - $conda_pkgs_dirs="$pwd\conda-pkgs"
+    - $conda_pkgs_dirs="$pwd\pkgs"
     - Write-Output $conda_installation
     - Write-Output $environment_file
     - Write-Output $prefix
@@ -70,7 +70,7 @@
     - python -c "import getpass; print(getpass.getuser())"
   after_script:
     - Remove-Item -Force -Recurse $pwd\env -ErrorAction Continue
-    - Remove-Item -Force -Recurse $pwd\conda-pkgs -ErrorAction Continue
+    - Remove-Item -Force -Recurse $pwd\pkgs -ErrorAction Continue
 
 .developer-test: &developer-test
   script:
