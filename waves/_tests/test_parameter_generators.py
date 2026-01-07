@@ -1799,7 +1799,8 @@ class TestParameterGenerator:
         self, kwargs: dict, expected_value: string.Template | None
     ) -> None:
         generator = DummyGenerator({}, **kwargs)
-        if expected_value is None:
+        assert type(generator.output_file_template) == type(expected_value)
+        if generator.output_file_template is None and expected_value is None:
             assert generator.output_file_template == expected_value
         else:
             assert generator.output_file_template.template == expected_value.template
