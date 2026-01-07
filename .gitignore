@@ -25,6 +25,7 @@ _version.py
 *.egg-info
 dist/
 conda-bld/
+output/
 *.pyc
 
 # Temp files
