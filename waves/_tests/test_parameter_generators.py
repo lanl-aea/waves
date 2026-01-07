@@ -1774,7 +1774,10 @@ class TestParameterGenerator:
     property_parameter_schema_cases = {"schema": ({"parameter_1": [1]}, {"parameter_1": [1]})}
     property_output_file_template_cases = {
         "no arg": ({}, _settings._default_output_file_template),
-        "custom": ({"output_file_template": "custom"}, _utilities._AtSignTemplate(f"custom{_settings._template_placeholder}")),
+        "custom": (
+            {"output_file_template": "custom"},
+            _utilities._AtSignTemplate(f"custom{_settings._template_placeholder}"),
+        ),
     }
     property_output_file_cases = {
         "no arg": ({}, _settings._default_output_file),
@@ -1786,7 +1789,26 @@ class TestParameterGenerator:
     }
     property_set_name_template_cases = {
         "no arg": ({}, _utilities._AtSignTemplate(_settings._default_set_name_template)),
-        "custom": ({"set_name_template": "custom"}, _utilities._AtSignTemplate(f"custom{_settings._template_placeholder}")),
+        "custom": (
+            {"set_name_template": "custom"},
+            _utilities._AtSignTemplate(f"custom{_settings._template_placeholder}"),
+        ),
+    }
+    property_previous_parameter_study_cases = {
+        "no arg": ({}, _settings._default_previous_parameter_study),
+        "use previous": ({"previous_parameter_study": "dummy.h5"}, pathlib.Path("dummy.h5")),
+    }
+    property_require_previous_parameter_study_cases = {
+        "no arg": ({}, _settings._default_require_previous_parameter_study),
+        "use previous": ({"require_previous_parameter_study": True}, True),
+    }
+    property_overwrite_cases = {
+        "no arg": ({}, _settings._default_overwrite),
+        "overwrite": ({"overwrite": True}, True),
+    }
+    property_write_meta_cases = {
+        "no arg": ({}, _settings._default_write_meta_flag),
+        "write meta": ({"write_meta": True}, True),
     }
 
     @pytest.mark.parametrize(
@@ -1794,7 +1816,7 @@ class TestParameterGenerator:
         property_parameter_schema_cases.values(),
         ids=property_parameter_schema_cases.keys(),
     )
-    def test_property_parameter_schema(self, input_value, expected_value) -> None:
+    def test_property_parameter_schema(self, input_value: dict, expected_value: dict) -> None:
         generator = DummyGenerator(input_value)
         assert generator.parameter_schema == expected_value
 
@@ -1803,7 +1825,9 @@ class TestParameterGenerator:
         property_output_file_template_cases.values(),
         ids=property_output_file_template_cases.keys(),
     )
-    def test_property_output_file_template(self, kwargs, expected_value) -> None:
+    def test_property_output_file_template(
+        self, kwargs: dict, expected_value: _utilities._AtSignTemplate | None
+    ) -> None:
         generator = DummyGenerator({}, **kwargs)
         if kwargs:
             assert generator.output_file_template.template == expected_value.template
@@ -1815,7 +1839,7 @@ class TestParameterGenerator:
         property_output_file_cases.values(),
         ids=property_output_file_cases.keys(),
     )
-    def test_property_output_file(self, kwargs, expected_value) -> None:
+    def test_property_output_file(self, kwargs: dict, expected_value: pathlib.Path | None) -> None:
         generator = DummyGenerator({}, **kwargs)
         assert generator.output_file == expected_value
 
@@ -1824,7 +1848,7 @@ class TestParameterGenerator:
         property_output_file_type_cases.values(),
         ids=property_output_file_type_cases.keys(),
     )
-    def test_property_output_file_type(self, kwargs, expected_value) -> None:
+    def test_property_output_file_type(self, kwargs: dict, expected_value: typing.Literal) -> None:
         generator = DummyGenerator({}, **kwargs)
         assert generator.output_file_type == expected_value
 
@@ -1833,12 +1857,45 @@ class TestParameterGenerator:
         property_set_name_template_cases.values(),
         ids=property_set_name_template_cases.keys(),
     )
-    def test_property_set_name_template(self, kwargs, expected_value) -> None:
+    def test_property_set_name_template(self, kwargs: dict, expected_value: _utilities._AtSignTemplate) -> None:
         generator = DummyGenerator({}, **kwargs)
         assert generator.set_name_template.template == expected_value.template
 
+    @pytest.mark.parametrize(
+        ("kwargs", "expected_value"),
+        property_previous_parameter_study_cases.values(),
+        ids=property_previous_parameter_study_cases.keys(),
+    )
+    def test_property_previous_parameter_study(self, kwargs: dict, expected_value: pathlib.Path | None) -> None:
+        generator = DummyGenerator({}, **kwargs)
+        assert generator.previous_parameter_study == expected_value
 
+    @pytest.mark.parametrize(
+        ("kwargs", "expected_value"),
+        property_require_previous_parameter_study_cases.values(),
+        ids=property_require_previous_parameter_study_cases.keys(),
+    )
+    def test_property_require_previous_parameter_study(self, kwargs: dict, expected_value: bool) -> None:
+        generator = DummyGenerator({}, **kwargs)
+        assert generator.require_previous_parameter_study == expected_value
 
+    @pytest.mark.parametrize(
+        ("kwargs", "expected_value"),
+        property_overwrite_cases.values(),
+        ids=property_overwrite_cases.keys(),
+    )
+    def test_property_overwrite(self, kwargs: dict, expected_value: bool) -> None:
+        generator = DummyGenerator({}, **kwargs)
+        assert generator.overwrite == expected_value
+
+    @pytest.mark.parametrize(
+        ("kwargs", "expected_value"),
+        property_write_meta_cases.values(),
+        ids=property_write_meta_cases.keys(),
+    )
+    def test_property_write_meta(self, kwargs: dict, expected_value: bool) -> None:
+        generator = DummyGenerator({}, **kwargs)
+        assert generator.write_meta == expected_value
 
     def test_output_file_conflict(self) -> None:
         with pytest.raises(MutuallyExclusiveError):
