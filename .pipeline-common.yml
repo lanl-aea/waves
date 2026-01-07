@@ -52,8 +52,8 @@
     - if ([string]::IsNullOrEmpty($environment_file)) { exit 1 }
     - if ([string]::IsNullOrEmpty($conda_installation)) { exit 1 }
     # Common job variables
-    - $prefix="$pwd\env"
-    - $conda_pkgs_dirs="$pwd\pkgs"
+    - $prefix="$env:temp\env"
+    - $conda_pkgs_dirs="$env:temp\pkgs"
     - Write-Output $conda_installation
     - Write-Output $environment_file
     - Write-Output $prefix
@@ -69,8 +69,8 @@
     - conda info
     - python -c "import getpass; print(getpass.getuser())"
   after_script:
-    - Remove-Item -Force -Recurse $pwd\env -ErrorAction Continue
-    - Remove-Item -Force -Recurse $pwd\pkgs -ErrorAction Continue
+    - Remove-Item -Force -Recurse $env:temp\env -ErrorAction Continue
+    - Remove-Item -Force -Recurse $env:temp\pkgs -ErrorAction Continue
 
 .developer-test: &developer-test
   script:
