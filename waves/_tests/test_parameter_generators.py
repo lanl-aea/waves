@@ -1773,20 +1773,20 @@ class TestParameterGenerator:
 
     property_parameter_schema_cases = {"schema": ({"parameter_1": [1]}, {"parameter_1": [1]})}
     property_output_file_template_cases = {
-        "no arg": (None, _settings._default_output_file_template),
-        "custom": ("custom", _utilities._AtSignTemplate(f"custom{_settings._template_placeholder}")),
+        "no arg": ({}, _settings._default_output_file_template),
+        "custom": ({"output_file_template": "custom"}, _utilities._AtSignTemplate(f"custom{_settings._template_placeholder}")),
     }
     property_output_file_cases = {
-        "no arg": (None, _settings._default_output_file),
-        "custom": ("custom.h5", pathlib.Path("custom.h5")),
+        "no arg": ({}, _settings._default_output_file),
+        "custom": ({"output_file": "custom.h5"}, pathlib.Path("custom.h5")),
     }
     property_output_file_type_cases = {
-        "h5": ("h5", "h5"),
-        "yaml": ("yaml", "yaml"),
+        "no arg": ({}, "h5"),
+        "yaml": ({"output_file_type": "yaml"}, "yaml"),
     }
     property_set_name_template_cases = {
-        "no arg": (None, _utilities._AtSignTemplate(_settings._default_set_name_template)),
-        "custom": ("custom", _utilities._AtSignTemplate(f"custom{_settings._template_placeholder}")),
+        "no arg": ({}, _utilities._AtSignTemplate(_settings._default_set_name_template)),
+        "custom": ({"set_name_template": "custom"}, _utilities._AtSignTemplate(f"custom{_settings._template_placeholder}")),
     }
 
     @pytest.mark.parametrize(
@@ -1799,46 +1799,45 @@ class TestParameterGenerator:
         assert generator.parameter_schema == expected_value
 
     @pytest.mark.parametrize(
-        ("input_value", "expected_value"),
+        ("kwargs", "expected_value"),
         property_output_file_template_cases.values(),
         ids=property_output_file_template_cases.keys(),
     )
-    def test_property_output_file_template(self, input_value, expected_value) -> None:
-        generator = DummyGenerator({}, output_file_template=input_value)
-        if input_value is not None:
+    def test_property_output_file_template(self, kwargs, expected_value) -> None:
+        generator = DummyGenerator({}, **kwargs)
+        if kwargs:
             assert generator.output_file_template.template == expected_value.template
         else:
             assert generator.output_file_template == expected_value
 
     @pytest.mark.parametrize(
-        ("input_value", "expected_value"),
+        ("kwargs", "expected_value"),
         property_output_file_cases.values(),
         ids=property_output_file_cases.keys(),
     )
-    def test_property_output_file(self, input_value, expected_value) -> None:
-        generator = DummyGenerator({}, output_file=input_value)
+    def test_property_output_file(self, kwargs, expected_value) -> None:
+        generator = DummyGenerator({}, **kwargs)
         assert generator.output_file == expected_value
 
     @pytest.mark.parametrize(
-        ("input_value", "expected_value"),
+        ("kwargs", "expected_value"),
         property_output_file_type_cases.values(),
         ids=property_output_file_type_cases.keys(),
     )
-    def test_property_output_file_type(self, input_value, expected_value) -> None:
-        generator = DummyGenerator({}, output_file_type=input_value)
+    def test_property_output_file_type(self, kwargs, expected_value) -> None:
+        generator = DummyGenerator({}, **kwargs)
         assert generator.output_file_type == expected_value
 
     @pytest.mark.parametrize(
-        ("input_value", "expected_value"),
+        ("kwargs", "expected_value"),
         property_set_name_template_cases.values(),
         ids=property_set_name_template_cases.keys(),
     )
-    def test_property_set_name_template(self, input_value, expected_value) -> None:
-        if input_value is not None:
-            generator = DummyGenerator({}, set_name_template=input_value)
-        else:
-            generator = DummyGenerator({})
+    def test_property_set_name_template(self, kwargs, expected_value) -> None:
+        generator = DummyGenerator({}, **kwargs)
         assert generator.set_name_template.template == expected_value.template
+
+
 
 
     def test_output_file_conflict(self) -> None:
