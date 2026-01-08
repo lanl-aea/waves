@@ -7,7 +7,7 @@ dependencies:
   - h5py
   - matplotlib-base
   - networkx
-  - numpy
+  - numpy >=2
   - pip
   - pytest >=6
   - pytest-xdist

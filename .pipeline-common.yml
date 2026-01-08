@@ -17,8 +17,8 @@
     - echo ${conda_artifacts_directory}
     - if [[ -z ${conda_artifacts_directory} ]]; then exit 1; fi
     # Common job variables
-    - prefix="$PWD/conda-environment"
-    - conda_pkgs_dirs="$PWD/conda-pkgs"
+    - prefix="$PWD/env"
+    - conda_pkgs_dirs="$PWD/pkgs"
     - echo ${prefix}
     - echo ${conda_pkgs_dirs}
     - if [[ -z ${prefix} ]]; then exit 1; fi
@@ -36,7 +36,7 @@
     # texlive module setting LC_ALL breaks Abaqus 2025
     - unset LC_ALL
   after_script:
-    - rm -r $PWD/conda-environment $PWD/conda-pkgs || true
+    - rm -r $PWD/env $PWD/pkgs || true
 
 .win-job-environment: &win-job-environment
   variables:
@@ -52,8 +52,12 @@
     - if ([string]::IsNullOrEmpty($environment_file)) { exit 1 }
     - if ([string]::IsNullOrEmpty($conda_installation)) { exit 1 }
     # Common job variables
-    - $prefix="$pwd\conda-environment"
-    - $conda_pkgs_dirs="$pwd\conda-pkgs"
+    - if ([string]::IsNullOrEmpty($CI_JOB_ID)) { exit 1 }
+    - Write-Output $CI_JOB_ID
+    - $temporary_directory=(New-Item -ItemType Directory -Path (Join-Path ([System.IO.Path]::GetTempPath()) "$CI_JOB_ID"))
+    - Write-Output $temporary_directory
+    - $prefix="$temporary_directory\env"
+    - $conda_pkgs_dirs="$temporary_directory\pkgs"
     - Write-Output $conda_installation
     - Write-Output $environment_file
     - Write-Output $prefix
@@ -69,8 +73,12 @@
     - conda info
     - python -c "import getpass; print(getpass.getuser())"
   after_script:
-    - Remove-Item -Force -Recurse $pwd\conda-environment -ErrorAction Continue
-    - Remove-Item -Force -Recurse $pwd\conda-pkgs -ErrorAction Continue
+    - if ([string]::IsNullOrEmpty($CI_JOB_ID)) { exit 1 }
+    - Write-Output $CI_JOB_ID
+    - $temporary_directory=(Join-Path ([System.IO.Path]::GetTempPath()) "$CI_JOB_ID")
+    - Write-Output $temporary_directory
+    - Remove-Item -Force -Recurse $temporary_directory\env -ErrorAction Continue
+    - Remove-Item -Force -Recurse $temporary_directory\pkgs -ErrorAction Continue
 
 .developer-test: &developer-test
   script:
@@ -143,7 +151,7 @@
     - umask 0022
     - mkdir ${conda_artifacts_directory}
     - scons pyproject.toml
-    - VERSION=$(python -m setuptools_scm) conda mambabuild ${recipe_directory} --channel fierromechanics --channel conda-forge --no-anaconda-upload --output-folder ${conda_artifacts_directory}
+    - VERSION=$(python -m setuptools_scm) conda build ${recipe_directory} --channel fierromechanics --channel conda-forge --no-anaconda-upload --output-folder ${conda_artifacts_directory}
     # Help downstream deploy pipeline find this job by ID
     - tag_job_file_root="/nettmp/aea_service"
     - tag_job_file_parent="${tag_job_file_root}/${CI_PROJECT_PATH}"

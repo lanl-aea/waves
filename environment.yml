@@ -4,9 +4,9 @@ channels:
   - nodefaults
 
 dependencies:
-  - boa
   - calculix
   - ccx2paraview
+  - conda-build
   - fierro-fe-cpu
   # Remove trilinos-cpu explicit requirement when Fierro package(s) resolve the missing library issue
   # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/865
@@ -20,7 +20,6 @@ dependencies:
   - meshio
   - mypy
   - networkx
-  # Required to satisfy undocumented SALib dependencies on numpy version
   - numpy >=2
   - pandas
   - pip
@@ -31,7 +30,6 @@ dependencies:
   - python-gmsh
   - pyyaml
   - ruff
-  # Required to satisfy undocumented SALib dependencies on numpy version
   - salib >=1.5.1
   - scipy >=1
   - scons >=4.6
