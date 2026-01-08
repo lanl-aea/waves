@@ -32,7 +32,7 @@ dependencies = [
     "h5py",
     "matplotlib",
     "networkx",
-    "numpy",
+    "numpy >=2",
     "pyyaml",
     "salib >=1.4.6",
     "scipy >=1.7",
