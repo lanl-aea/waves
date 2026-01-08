@@ -3,6 +3,7 @@ channels:
   - nodefaults
 
 dependencies:
+  - conda-build
   - pytest
   - scons >=4.6
   - setuptools >=77

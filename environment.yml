@@ -6,6 +6,7 @@ channels:
 dependencies:
   - calculix
   - ccx2paraview
+  - conda-build
   - fierro-fe-cpu
   # Remove trilinos-cpu explicit requirement when Fierro package(s) resolve the missing library issue
   # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/865

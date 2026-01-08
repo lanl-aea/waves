@@ -5,6 +5,7 @@ channels:
 dependencies:
   - calculix
   - ccx2paraview >=3.2
+  - conda-build
   - h5netcdf
   - h5py
   - matplotlib-base
