@@ -18,6 +18,8 @@ Internal Changes
   Brindley`_.
 - Internal API type hint updates to match implemented use for static type checking (:merge:`1278`). By `Kyle Brindley`_.
 - Use and test Abaqus 2025. Preserves scheduled testing against Abaqus 2024 and 2023. By `Kyle Brindley`_.
+- Convert from deprecated ``boa`` packager back to vanilla ``conda-build`` as an interim solution to migrating to the
+  conda-forge preferred ``rattler-build`` packager with an updated recipe syntax. By `Kyle Brindley`_.
 
 ******************
 1.1.0 (2025-11-19)
