@@ -74,7 +74,7 @@ tests:
       - if: unix
         then: ./run_test.sh
       - if: win
-        then: ./run_bat.sh
+        then: ./run_test.bat
       - requirements:
         run:
           - python
