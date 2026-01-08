@@ -28,7 +28,7 @@ requirements:
     - h5py
     - matplotlib-base
     - networkx
-    - numpy
+    - numpy >=2
     - pip
     - python-build
     - pyyaml
