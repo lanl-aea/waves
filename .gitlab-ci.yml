@@ -61,7 +61,7 @@ aea-conda-build-internal:
   artifacts:
     expire_in: '2 hrs'
     paths:
-      - conda-bld/noarch/waves-*-*.tar.bz2
+      - conda-bld/noarch/waves-*-*.conda
 
 aea-conda-build:
   extends:
@@ -98,7 +98,7 @@ aea-conda-deploy:
     AEA_CONDA_DEPLOY_JOB: aea-conda-deploy-curl-jobid
     PARENT_CI_PROJECT_ID: $CI_PROJECT_ID
     AEA_CONDA_PACKAGE_JOB: aea-conda-build-internal
-    AEA_CONDA_PACKAGE_ARTIFACTS: conda-bld/noarch/waves-*-*.tar.bz2
+    AEA_CONDA_PACKAGE_ARTIFACTS: conda-bld/noarch/waves-*-*.conda
   trigger:
     project: aea/developer-operations/aea-conda
     branch: main
