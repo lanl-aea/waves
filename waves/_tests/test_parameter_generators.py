@@ -1797,11 +1797,10 @@ class TestParameterGenerator:
     )
     def test_property_output_file_template(self, kwargs: dict, expected_value: string.Template | None) -> None:
         generator = DummyGenerator({}, **kwargs)
-        assert type(generator.output_file_template) is type(expected_value)
-        if generator.output_file_template is None and expected_value is None:
-            assert generator.output_file_template == expected_value
-        else:
+        if generator.output_file_template is not None and expected_value is not None:
             assert generator.output_file_template.template == expected_value.template
+        else:
+            assert generator.output_file_template == expected_value
 
     property_output_file_cases = {
         "no arg": ({}, _settings._default_output_file),
