@@ -52,8 +52,12 @@
     - if ([string]::IsNullOrEmpty($environment_file)) { exit 1 }
     - if ([string]::IsNullOrEmpty($conda_installation)) { exit 1 }
     # Common job variables
-    - $prefix="$env:temp\env"
-    - $conda_pkgs_dirs="$env:temp\pkgs"
+    - if ([string]::IsNullOrEmpty($CI_JOB_ID)) { exit 1 }
+    - Write-Output $CI_JOB_ID
+    - $temporary_directory=(New-Item -ItemType Directory -Path (Join-Path ([System.IO.Path]::GetTempPath()) "$CI_JOB_ID"))
+    - Write-Output $temporary_directory
+    - $prefix="$temporary_directory\env"
+    - $conda_pkgs_dirs="$temporary_directory\pkgs"
     - Write-Output $conda_installation
     - Write-Output $environment_file
     - Write-Output $prefix
@@ -69,8 +73,12 @@
     - conda info
     - python -c "import getpass; print(getpass.getuser())"
   after_script:
-    - Remove-Item -Force -Recurse $env:temp\env -ErrorAction Continue
-    - Remove-Item -Force -Recurse $env:temp\pkgs -ErrorAction Continue
+    - if ([string]::IsNullOrEmpty($CI_JOB_ID)) { exit 1 }
+    - Write-Output $CI_JOB_ID
+    - $temporary_directory=(Join-Path ([System.IO.Path]::GetTempPath()) "$CI_JOB_ID"))
+    - Write-Output $temporary_directory
+    - Remove-Item -Force -Recurse $temporary_directory\env -ErrorAction Continue
+    - Remove-Item -Force -Recurse $temporary_directory\pkgs -ErrorAction Continue
 
 .developer-test: &developer-test
   script:
