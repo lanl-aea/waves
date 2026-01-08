@@ -21,8 +21,7 @@ dependencies:
   - python-build
   - python-gmsh
   - pyyaml
-  # Useful for developers' environments, but includes long paths that break the CI developer test on Windows.
-  #- rattler-build
+  - rattler-build
   - ruff
   - salib >=1.5.1
   - scipy >=1
