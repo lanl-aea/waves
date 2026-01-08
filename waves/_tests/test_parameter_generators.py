@@ -1771,6 +1771,138 @@ def test_open_parameter_study() -> None:
 class TestParameterGenerator:
     """Class for testing ABC ParameterGenerator."""
 
+    property_parameter_schema_cases = {"schema": ({"parameter_1": [1]}, {"parameter_1": [1]})}
+
+    @pytest.mark.parametrize(
+        ("input_value", "expected_value"),
+        property_parameter_schema_cases.values(),
+        ids=property_parameter_schema_cases.keys(),
+    )
+    def test_property_parameter_schema(self, input_value: dict, expected_value: dict) -> None:
+        generator = DummyGenerator(input_value)
+        assert generator.parameter_schema == expected_value
+
+    property_output_file_template_cases = {
+        "no arg": ({}, _settings._default_output_file_template),
+        "custom": (
+            {"output_file_template": "custom"},
+            _utilities._AtSignTemplate(f"custom{_settings._template_placeholder}"),
+        ),
+    }
+
+    @pytest.mark.parametrize(
+        ("kwargs", "expected_value"),
+        property_output_file_template_cases.values(),
+        ids=property_output_file_template_cases.keys(),
+    )
+    def test_property_output_file_template(self, kwargs: dict, expected_value: string.Template | None) -> None:
+        generator = DummyGenerator({}, **kwargs)
+        if generator.output_file_template is not None and expected_value is not None:
+            assert generator.output_file_template.template == expected_value.template
+        else:
+            assert generator.output_file_template == expected_value
+
+    property_output_file_cases = {
+        "no arg": ({}, _settings._default_output_file),
+        "custom": ({"output_file": "custom.h5"}, pathlib.Path("custom.h5")),
+    }
+
+    @pytest.mark.parametrize(
+        ("kwargs", "expected_value"),
+        property_output_file_cases.values(),
+        ids=property_output_file_cases.keys(),
+    )
+    def test_property_output_file(self, kwargs: dict, expected_value: pathlib.Path | None) -> None:
+        generator = DummyGenerator({}, **kwargs)
+        assert generator.output_file == expected_value
+
+    property_output_file_type_cases = {
+        "no arg": ({}, "h5"),
+        "yaml": ({"output_file_type": "yaml"}, "yaml"),
+    }
+
+    @pytest.mark.parametrize(
+        ("kwargs", "expected_value"),
+        property_output_file_type_cases.values(),
+        ids=property_output_file_type_cases.keys(),
+    )
+    def test_property_output_file_type(self, kwargs: dict, expected_value: str) -> None:
+        generator = DummyGenerator({}, **kwargs)
+        assert generator.output_file_type == expected_value
+
+    property_set_name_template_cases = {
+        "no arg": ({}, _utilities._AtSignTemplate(_settings._default_set_name_template)),
+        "custom": (
+            {"set_name_template": "custom"},
+            _utilities._AtSignTemplate(f"custom{_settings._template_placeholder}"),
+        ),
+    }
+
+    @pytest.mark.parametrize(
+        ("kwargs", "expected_value"),
+        property_set_name_template_cases.values(),
+        ids=property_set_name_template_cases.keys(),
+    )
+    def test_property_set_name_template(self, kwargs: dict, expected_value: string.Template) -> None:
+        generator = DummyGenerator({}, **kwargs)
+        assert generator.set_name_template.template == expected_value.template
+
+    property_previous_parameter_study_cases = {
+        "no arg": ({}, _settings._default_previous_parameter_study),
+        "use previous": ({"previous_parameter_study": "dummy.h5"}, pathlib.Path("dummy.h5")),
+    }
+
+    @pytest.mark.parametrize(
+        ("kwargs", "expected_value"),
+        property_previous_parameter_study_cases.values(),
+        ids=property_previous_parameter_study_cases.keys(),
+    )
+    def test_property_previous_parameter_study(self, kwargs: dict, expected_value: pathlib.Path | None) -> None:
+        generator = DummyGenerator({}, **kwargs)
+        assert generator.previous_parameter_study == expected_value
+
+    property_require_previous_parameter_study_cases = {
+        "no arg": ({}, _settings._default_require_previous_parameter_study),
+        "use previous": ({"require_previous_parameter_study": True}, True),
+    }
+
+    @pytest.mark.parametrize(
+        ("kwargs", "expected_value"),
+        property_require_previous_parameter_study_cases.values(),
+        ids=property_require_previous_parameter_study_cases.keys(),
+    )
+    def test_property_require_previous_parameter_study(self, kwargs: dict, expected_value: bool) -> None:
+        generator = DummyGenerator({}, **kwargs)
+        assert generator.require_previous_parameter_study == expected_value
+
+    property_overwrite_cases = {
+        "no arg": ({}, _settings._default_overwrite),
+        "overwrite": ({"overwrite": True}, True),
+    }
+
+    @pytest.mark.parametrize(
+        ("kwargs", "expected_value"),
+        property_overwrite_cases.values(),
+        ids=property_overwrite_cases.keys(),
+    )
+    def test_property_overwrite(self, kwargs: dict, expected_value: bool) -> None:
+        generator = DummyGenerator({}, **kwargs)
+        assert generator.overwrite == expected_value
+
+    property_write_meta_cases = {
+        "no arg": ({}, _settings._default_write_meta_flag),
+        "write meta": ({"write_meta": True}, True),
+    }
+
+    @pytest.mark.parametrize(
+        ("kwargs", "expected_value"),
+        property_write_meta_cases.values(),
+        ids=property_write_meta_cases.keys(),
+    )
+    def test_property_write_meta(self, kwargs: dict, expected_value: bool) -> None:
+        generator = DummyGenerator({}, **kwargs)
+        assert generator.write_meta == expected_value
+
     def test_output_file_conflict(self) -> None:
         with pytest.raises(MutuallyExclusiveError):
             DummyGenerator({}, output_file_template="out@number", output_file="single_output_file")
@@ -1836,7 +1968,7 @@ class TestParameterGenerator:
     def test_merge_parameter_studies_with_missing_previous_parameter_study(self) -> None:
         # Test exception on missing previous parameter study attribute
         dummy_generator = DummyGenerator({})
-        dummy_generator.previous_parameter_study = None
+        dummy_generator._previous_parameter_study = None
         with pytest.raises(RuntimeError):
             dummy_generator._merge_parameter_studies()
 
@@ -2227,8 +2359,8 @@ class TestParameterGenerator:
 
     def test_write_call_to_write_meta(self) -> None:
         write_parameter_generator = DummyGenerator({})
-        write_parameter_generator.write_meta = True
-        write_parameter_generator.provided_output_file_template = True
+        write_parameter_generator._write_meta_flag = True
+        write_parameter_generator._provided_output_file_template = True
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta") as mock_write_meta,
             patch("waves.parameter_generators.ParameterGenerator._write") as mock_private_write,
@@ -2247,7 +2379,7 @@ class TestParameterGenerator:
             handle = mock_file()
             handle.write.assert_called_once_with("parameter_set1.h5\n")
 
-        write_meta_parameter_generator.output_file = pathlib.Path("dummy.h5")
+        write_meta_parameter_generator = DummyGenerator({}, output_file="dummy.h5")
         with (
             patch("pathlib.Path.open", mock_open()) as mock_file,
             patch("pathlib.Path.resolve", return_value=pathlib.Path("dummy.h5")),
@@ -2306,7 +2438,7 @@ class TestParameterDistributions:
                 super().__init__(*args, **kwargs)
 
         class HasRequiredAttribute(parameter_generators._ScipyGenerator):
-            sampler_class = "dummy"
+            _sampler_class = "dummy"
 
             def _validate(self) -> None:
                 pass
@@ -2315,7 +2447,7 @@ class TestParameterDistributions:
                 pass
 
         with pytest.raises(
-            ValueError, match="_ScipyGenerator subclasses must set ``sampler_class`` to a non-empty string"
+            ValueError, match="_ScipyGenerator subclasses must set ``_sampler_class`` to a non-empty string"
         ):
             MissingRequiredAttribute({})
 
@@ -2429,7 +2561,7 @@ class DummyGenerator(parameter_generators.ParameterGenerator):
 
 
 class ParameterDistributions(parameter_generators._ScipyGenerator):
-    sampler_class = "dummy"
+    _sampler_class = "dummy"
 
     def _generate(self, **kwargs) -> None:
         pass

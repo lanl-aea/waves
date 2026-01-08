@@ -83,65 +83,65 @@ class ParameterGenerator(ABC):
         previous_parameter_study: str | pathlib.Path | None = _settings._default_previous_parameter_study,
         require_previous_parameter_study: bool = _settings._default_require_previous_parameter_study,
         overwrite: bool = _settings._default_overwrite,
-        write_meta: bool = _settings._default_write_meta,
+        write_meta: bool = _settings._default_write_meta_flag,
         **kwargs,
     ) -> None:
-        self.parameter_schema = parameter_schema
-        self.output_file_template = (
+        self._parameter_schema = parameter_schema
+        self._output_file_template = (
             _utilities._AtSignTemplate(output_file_template) if output_file_template is not None else None
         )
-        self.output_file = pathlib.Path(output_file) if output_file is not None else None
-        self.output_file_type = output_file_type
-        self.set_name_template = _utilities._AtSignTemplate(set_name_template)
-        self.previous_parameter_study = (
+        self._output_file = pathlib.Path(output_file) if output_file is not None else None
+        self._output_file_type = output_file_type
+        self._set_name_template = _utilities._AtSignTemplate(set_name_template)
+        self._previous_parameter_study = (
             pathlib.Path(previous_parameter_study) if previous_parameter_study is not None else None
         )
-        self.require_previous_parameter_study = require_previous_parameter_study
-        self.overwrite = overwrite
-        self.write_meta = write_meta
+        self._require_previous_parameter_study = require_previous_parameter_study
+        self._overwrite = overwrite
+        self._write_meta_flag = write_meta
 
-        if self.output_file_template is not None and self.output_file is not None:
+        if self._output_file_template is not None and self._output_file is not None:
             raise MutuallyExclusiveError(
                 "The options 'output_file_template' and 'output_file' are mutually exclusive. "
                 "Please specify one or the other."
             )
 
-        if self.output_file_type not in _settings._allowable_output_file_types:
+        if self._output_file_type not in _settings._allowable_output_file_types:
             raise ChoicesError(
-                f"Unsupported 'output_file_type': '{self.output_file_type}'. "
+                f"Unsupported 'output_file_type': '{self._output_file_type}'. "
                 f"The 'output_file_type' must be one of {_settings._allowable_output_file_types}"
             )
 
-        if self.previous_parameter_study is not None and not self.previous_parameter_study.is_file():
-            message = f"Previous parameter study file '{self.previous_parameter_study}' does not exist."
-            if self.require_previous_parameter_study:
+        if self._previous_parameter_study is not None and not self._previous_parameter_study.is_file():
+            message = f"Previous parameter study file '{self._previous_parameter_study}' does not exist."
+            if self._require_previous_parameter_study:
                 raise RuntimeError(message)
             else:
                 warnings.warn(message)
 
         # Override set name template if output name template is provided. Append set number placeholder if missing
-        self.provided_output_file_template = False
-        if self.output_file_template is not None:
-            self.provided_output_file_template = True
-            output_file_template_string = self.output_file_template.safe_substitute()
+        self._provided_output_file_template = False
+        if self._output_file_template is not None:
+            self._provided_output_file_template = True
+            output_file_template_string = self._output_file_template.safe_substitute()
             if _settings._template_placeholder not in output_file_template_string:
-                self.output_file_template = _utilities._AtSignTemplate(
+                self._output_file_template = _utilities._AtSignTemplate(
                     f"{output_file_template_string}{_settings._template_placeholder}"
                 )
-            self.set_name_template = self.output_file_template
+            self._set_name_template = self._output_file_template
         else:
-            set_name_template_string = self.set_name_template.safe_substitute()
+            set_name_template_string = self._set_name_template.safe_substitute()
             if _settings._template_placeholder not in set_name_template_string:
-                self.set_name_template = _utilities._AtSignTemplate(
+                self._set_name_template = _utilities._AtSignTemplate(
                     f"{set_name_template_string}{_settings._template_placeholder}"
                 )
 
         # Infer output directory from output file template if provided. Set to PWD otherwise.
-        if self.output_file_template is not None:
-            self.output_directory = pathlib.Path(self.output_file_template.safe_substitute()).parent
+        if self._output_file_template is not None:
+            self._output_directory = pathlib.Path(self._output_file_template.safe_substitute()).parent
         else:
-            self.output_directory = pathlib.Path.cwd()
-        self.parameter_study_meta_file = self.output_directory / _settings._parameter_study_meta_file
+            self._output_directory = pathlib.Path.cwd()
+        self._parameter_study_meta_file = self._output_directory / _settings._parameter_study_meta_file
 
         # Help mypy determine types of attributes set in semi-private function calls
         # TODO: make these return values from _validate and assign directly in __init__?
@@ -156,6 +156,43 @@ class ParameterGenerator(ABC):
         self._set_names: dict[str, str]
         self.parameter_study: xarray.Dataset
         self._generate(**kwargs)
+
+    # Public attributes return read-only processed semi-private attributes
+    @property
+    def parameter_schema(self) -> dict:
+        return self._parameter_schema
+
+    @property
+    def output_file_template(self) -> string.Template | None:
+        return self._output_file_template
+
+    @property
+    def output_file(self) -> pathlib.Path | None:
+        return self._output_file
+
+    @property
+    def output_file_type(self) -> _settings._allowable_output_file_typing:
+        return self._output_file_type
+
+    @property
+    def set_name_template(self) -> string.Template:
+        return self._set_name_template
+
+    @property
+    def previous_parameter_study(self) -> pathlib.Path | None:
+        return self._previous_parameter_study
+
+    @property
+    def require_previous_parameter_study(self) -> bool:
+        return self._require_previous_parameter_study
+
+    @property
+    def overwrite(self) -> bool:
+        return self._overwrite
+
+    @property
+    def write_meta(self) -> bool:
+        return self._write_meta_flag
 
     @abstractmethod
     def _validate(self) -> None:
@@ -207,7 +244,7 @@ class ParameterGenerator(ABC):
         self._create_set_hashes()
         self._create_set_names()
         self._create_parameter_study()
-        if self.previous_parameter_study is not None and self.previous_parameter_study.is_file():
+        if self._previous_parameter_study is not None and self._previous_parameter_study.is_file():
             self._merge_parameter_studies()
 
     def write(
@@ -238,11 +275,11 @@ class ParameterGenerator(ABC):
         :raises waves.exceptions.ChoicesError: If an unsupported output file type is requested
         """
         if output_file_type is None:
-            output_file_type = self.output_file_type
+            output_file_type = self._output_file_type
 
-        self.output_directory.mkdir(parents=True, exist_ok=True)
+        self._output_directory.mkdir(parents=True, exist_ok=True)
 
-        if self.write_meta and self.provided_output_file_template:
+        if self._write_meta_flag and self._provided_output_file_template:
             self._write_meta()
 
         # Remove (or refactor away) from these complex types
@@ -263,7 +300,7 @@ class ParameterGenerator(ABC):
             conditional_write_function = self._conditionally_write_yaml
         else:
             raise ChoicesError(
-                f"Unsupported 'output_file_type': '{self.output_file_type}. "
+                f"Unsupported 'output_file_type': '{self._output_file_type}. "
                 f"The 'output_file_type' must be one of {_settings._allowable_output_file_types}"
             )
         self._write(
@@ -308,19 +345,19 @@ class ParameterGenerator(ABC):
         Behavior as specified in :meth:`waves.parameter_generators.ParameterGenerator.write`
         """
         # If no output file template is provided, printing to stdout or single file. Prepend set names.
-        if not self.provided_output_file_template:
+        if not self._provided_output_file_template:
             # If no output file template is provided, printing to stdout or a single file
             output_text = (
                 yaml.safe_dump(parameter_study_object)
                 if isinstance(parameter_study_object, dict)
                 else f"{parameter_study_object}\n"
             )
-            if self.output_file and not dry_run:
+            if self._output_file and not dry_run:
                 # Remove (or refactor away) from this static type checking skip
                 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/812
-                conditional_write_function(self.output_file, parameter_study_object)  # type: ignore[arg-type]
-            elif self.output_file and dry_run:
-                sys.stdout.write(f"{self.output_file.resolve()}\n{output_text}")
+                conditional_write_function(self._output_file, parameter_study_object)  # type: ignore[arg-type]
+            elif self._output_file and dry_run:
+                sys.stdout.write(f"{self._output_file.resolve()}\n{output_text}")
             else:
                 sys.stdout.write(output_text)
         # If output file template is provided, writing to parameter set files
@@ -328,7 +365,7 @@ class ParameterGenerator(ABC):
             for set_file, parameters in parameter_study_iterator:
                 set_path = pathlib.Path(set_file)
                 text = yaml.safe_dump(parameters) if isinstance(parameters, dict) else f"{parameters}\n"
-                if self.overwrite or not set_path.is_file():
+                if self._overwrite or not set_path.is_file():
                     # If dry run is specified, print the files that would have been written to stdout
                     if dry_run:
                         sys.stdout.write(f"{set_path.resolve()}\n{text}")
@@ -342,14 +379,14 @@ class ParameterGenerator(ABC):
         existing_parameter_study: pathlib.Path,
         parameter_study: xarray.Dataset,
     ) -> None:
-        """Write NetCDF file over previous study if the datasets have changed or self.overwrite is True.
+        """Write NetCDF file over previous study if the datasets have changed or self._overwrite is True.
 
         :param existing_parameter_study: A relative or absolute file path to a previously created parameter
             study Xarray Dataset
         :param parameter_study: Parameter study xarray dataset
         """
         write = True
-        if not self.overwrite and existing_parameter_study.is_file():
+        if not self._overwrite and existing_parameter_study.is_file():
             with xarray.open_dataset(existing_parameter_study, engine="h5netcdf") as existing_dataset:
                 if parameter_study.equals(existing_dataset):
                     write = False
@@ -362,13 +399,13 @@ class ParameterGenerator(ABC):
         output_file: str | pathlib.Path,
         parameter_dictionary: dict,
     ) -> None:
-        """Write YAML file over previous study if the datasets have changed or self.overwrite is True.
+        """Write YAML file over previous study if the datasets have changed or self._overwrite is True.
 
         :param output_file: A relative or absolute file path to the output YAML file
         :param parameter_dictionary: dictionary containing parameter set data
         """
         write = True
-        if not self.overwrite and pathlib.Path(output_file).is_file():
+        if not self._overwrite and pathlib.Path(output_file).is_file():
             # FIXME: simplify class API/attributes type handling to avoid the explict type cast
             with pathlib.Path(output_file).open(mode="r") as existing_file:
                 existing_yaml_object = yaml.safe_load(existing_file)
@@ -387,9 +424,9 @@ class ParameterGenerator(ABC):
         """
         set_files = [pathlib.Path(set_name) for set_name in self.parameter_study.coords[_set_coordinate_key].values]
         # Always overwrite the meta data file to ensure that *all* parameter file names are included.
-        with self.parameter_study_meta_file.open(mode="w") as meta_file:
-            if self.output_file:
-                meta_file.write(f"{self.output_file.resolve()}\n")
+        with self._parameter_study_meta_file.open(mode="w") as meta_file:
+            if self._output_file:
+                meta_file.write(f"{self._output_file.resolve()}\n")
             else:
                 for set_file in set_files:
                     meta_file.write(f"{set_file.resolve()}\n")
@@ -419,13 +456,13 @@ class ParameterGenerator(ABC):
         requires:
 
         * ``self._set_hashes``: parameter set content hashes identifying rows of parameter study
-        * ``self.set_name_template``: Parameter set name template. Overridden by ``output_file_template``, if provided
+        * ``self._set_name_template``: Parameter set name template. Overridden by ``output_file_template``, if provided
 
         creates attribute:
 
         * ``self._set_names``: Dictionary mapping parameter set hash to parameter set name
         """
-        self._set_names = _create_set_names(self._set_hashes, self.set_name_template)
+        self._set_names = _create_set_names(self._set_hashes, self._set_name_template)
 
     def _create_set_names_array(self) -> xarray.DataArray:
         """Create an Xarray DataArray with the parameter set names using parameter set hashes as the coordinate.
@@ -517,14 +554,14 @@ class ParameterGenerator(ABC):
         * ``self._set_hashes``
         * ``self._set_names``
 
-        :raises RuntimeError: If the ``self.previous_parameter_study`` attribute is None
+        :raises RuntimeError: If the ``self._previous_parameter_study`` attribute is None
         """
-        if self.previous_parameter_study is None:
+        if self._previous_parameter_study is None:
             raise RuntimeError("Called without a previous parameter study")
 
-        previous_parameter_study = _open_parameter_study(self.previous_parameter_study)
+        previous_parameter_study = _open_parameter_study(self._previous_parameter_study)
         self.parameter_study = _merge_parameter_studies(
-            [previous_parameter_study, self.parameter_study], self.set_name_template
+            [previous_parameter_study, self.parameter_study], self._set_name_template
         )
         self.parameter_study = self.parameter_study.swap_dims({_set_coordinate_key: _hash_coordinate_key})
         previous_parameter_study.close()
@@ -539,15 +576,15 @@ class ParameterGenerator(ABC):
 
 
 class _ScipyGenerator(ParameterGenerator, ABC):
-    sampler_class: str = ""
+    _sampler_class: str = ""
 
     def __init__(self, *args, **kwargs) -> None:
-        """Require concrete child classes to set the ``self.sampler_class`` attribute to a string.
+        """Require concrete child classes to set the ``self._sampler_class`` attribute to a string.
 
-        :raises TypeError: if the ``self.sampler_class`` attribute is not overridden
+        :raises TypeError: if the ``self._sampler_class`` attribute is not overridden
         """
-        if not self.sampler_class:
-            raise ValueError("_ScipyGenerator subclasses must set ``sampler_class`` to a non-empty string")
+        if not self._sampler_class:
+            raise ValueError("_ScipyGenerator subclasses must set ``_sampler_class`` to a non-empty string")
         super().__init__(*args, **kwargs)
 
     def _validate(self) -> None:
@@ -579,17 +616,17 @@ class _ScipyGenerator(ParameterGenerator, ABC):
             * Parameter schema does not have a ``num_simulations`` key
             * Parameter definition does not contain a ``distribution`` key
         """
-        if not isinstance(self.parameter_schema, dict):
+        if not isinstance(self._parameter_schema, dict):
             raise SchemaValidationError("parameter_schema must be a dictionary")
         # TODO: Settle on an input file schema and validation library
-        if "num_simulations" not in self.parameter_schema:
+        if "num_simulations" not in self._parameter_schema:
             raise SchemaValidationError("Parameter schema is missing the required 'num_simulations' key")
-        elif not isinstance(self.parameter_schema["num_simulations"], int):
+        elif not isinstance(self._parameter_schema["num_simulations"], int):
             raise SchemaValidationError("Parameter schema 'num_simulations' must be an integer.")
         self._create_parameter_names()
         for name in self._parameter_names:
-            parameter_keys = self.parameter_schema[name].keys()
-            parameter_definition = self.parameter_schema[name]
+            parameter_keys = self._parameter_schema[name].keys()
+            parameter_definition = self._parameter_schema[name]
             if "distribution" not in parameter_keys:
                 raise SchemaValidationError(f"Parameter '{name}' does not contain the required 'distribution' key")
             elif (
@@ -610,14 +647,14 @@ class _ScipyGenerator(ParameterGenerator, ABC):
         self.parameter_distributions = self._generate_parameter_distributions()
 
     def _generate(self, **kwargs) -> None:
-        set_count = self.parameter_schema["num_simulations"]
+        set_count = self._parameter_schema["num_simulations"]
         parameter_count = len(self._parameter_names)
         override_kwargs = {"d": parameter_count}
         if kwargs:
             kwargs.update(override_kwargs)
         else:
             kwargs = override_kwargs
-        sampler = getattr(scipy.stats.qmc, self.sampler_class)(**kwargs)
+        sampler = getattr(scipy.stats.qmc, self._sampler_class)(**kwargs)
         self._generate_distribution_samples(sampler, set_count, parameter_count)
         super()._generate()
 
@@ -626,7 +663,7 @@ class _ScipyGenerator(ParameterGenerator, ABC):
 
         :return: parameter_distributions
         """
-        parameter_dictionary = copy.deepcopy({key: self.parameter_schema[key] for key in self._parameter_names})
+        parameter_dictionary = copy.deepcopy({key: self._parameter_schema[key] for key in self._parameter_names})
         parameter_distributions = {}
         for parameter, attributes in parameter_dictionary.items():
             distribution_name = attributes.pop("distribution")
@@ -664,7 +701,7 @@ class _ScipyGenerator(ParameterGenerator, ABC):
 
     def _create_parameter_names(self) -> None:
         """Construct the parameter names from a distribution parameter schema."""
-        self._parameter_names = [key for key in self.parameter_schema if key != "num_simulations"]
+        self._parameter_names = [key for key in self._parameter_schema if key != "num_simulations"]
 
 
 class CartesianProduct(ParameterGenerator):
@@ -734,18 +771,18 @@ class CartesianProduct(ParameterGenerator):
 
     def _validate(self) -> None:
         """Validate the Cartesian Product parameter schema. Executed by class initiation."""
-        if not isinstance(self.parameter_schema, dict):
+        if not isinstance(self._parameter_schema, dict):
             raise SchemaValidationError("parameter_schema must be a dictionary")
         # TODO: Settle on an input file schema and validation library
-        self._parameter_names = list(self.parameter_schema.keys())
+        self._parameter_names = list(self._parameter_schema.keys())
         # List, sets, and tuples are the supported PyYAML iterables that will support expected behavior
         for name in self._parameter_names:
-            if not isinstance(self.parameter_schema[name], list | set | tuple):
+            if not isinstance(self._parameter_schema[name], list | set | tuple):
                 raise SchemaValidationError(f"Parameter '{name}' is not one of list, set, or tuple")
 
     def _generate(self, **kwargs) -> None:  # noqa: ARG002
         """Generate the Cartesian Product parameter sets."""
-        self._samples = numpy.array(list(itertools.product(*self.parameter_schema.values())), dtype=object)
+        self._samples = numpy.array(list(itertools.product(*self._parameter_schema.values())), dtype=object)
         super()._generate()
 
 
@@ -831,7 +868,7 @@ class LatinHypercube(_ScipyGenerator):
     """
 
     def __init__(self, *args, **kwargs) -> None:
-        self.sampler_class = "LatinHypercube"
+        self._sampler_class = "LatinHypercube"
         super().__init__(*args, **kwargs)
 
     def _generate(self, **kwargs) -> None:
@@ -915,41 +952,41 @@ class OneAtATime(ParameterGenerator):
 
     def _validate(self) -> None:
         """Validate the One-at-a-Time parameter schema. Executed by class initiation."""
-        if not isinstance(self.parameter_schema, dict):
+        if not isinstance(self._parameter_schema, dict):
             raise SchemaValidationError("parameter_schema must be a dictionary")
-        self._parameter_names = list(self.parameter_schema.keys())
+        self._parameter_names = list(self._parameter_schema.keys())
         # List and tuples are the supported PyYAML ordered iterables that will support expected behavior
         for name in self._parameter_names:
-            if not isinstance(self.parameter_schema[name], list | tuple):
+            if not isinstance(self._parameter_schema[name], list | tuple):
                 raise SchemaValidationError(f"Parameter '{name}' is not a list or tuple")
-            if len(self.parameter_schema[name]) < 1:
+            if len(self._parameter_schema[name]) < 1:
                 raise SchemaValidationError(f"Parameter '{name}' must have at least one value")
 
     def _generate(self, **kwargs) -> None:  # noqa: ARG002
         """Generate the parameter sets from the user provided parameter values."""
         # Count how many total sets will be generated (= nominal set + number of off-nominal values)
-        set_count = 1 + numpy.sum([len(self.parameter_schema[name]) - 1 for name in self._parameter_names])
+        set_count = 1 + numpy.sum([len(self._parameter_schema[name]) - 1 for name in self._parameter_names])
         # Generate the nominal set, assuming that the first entry of each parameter is the nominal parameter
-        nominal_set = numpy.array([[self.parameter_schema[name][0] for name in self._parameter_names]], dtype=object)
+        nominal_set = numpy.array([[self._parameter_schema[name][0] for name in self._parameter_names]], dtype=object)
         # Generate the off-nominal sets, assuming that the first entry of each parameter is the nominal parameter
         all_sets = numpy.repeat([nominal_set[0]], set_count, axis=0)
         parameter_set_index = 1  # Start at 1 since we don't change the nominal set
         for parameter_name_index, name in enumerate(self._parameter_names):
-            if len(self.parameter_schema[name]) > 1:
-                for value in self.parameter_schema[name][1:]:  # Skip nominal value
+            if len(self._parameter_schema[name]) > 1:
+                for value in self._parameter_schema[name][1:]:  # Skip nominal value
                     all_sets[parameter_set_index][parameter_name_index] = value
                     parameter_set_index += 1
         # Combine the studies, preserving the nominal set as first set, e.g. "parameter_set0" by default.
         # This is not possible with super()._generate()
         nominal_study = CustomStudy(
             {"parameter_samples": nominal_set, "parameter_names": self._parameter_names},
-            set_name_template=self.set_name_template.template,
+            set_name_template=self._set_name_template.template,
         ).parameter_study
         off_nominal_study = CustomStudy(
             {"parameter_samples": all_sets, "parameter_names": self._parameter_names},
-            set_name_template=self.set_name_template.template,
+            set_name_template=self._set_name_template.template,
         ).parameter_study
-        self.parameter_study = _merge_parameter_studies([nominal_study, off_nominal_study], self.set_name_template)
+        self.parameter_study = _merge_parameter_studies([nominal_study, off_nominal_study], self._set_name_template)
         self.parameter_study = self.parameter_study.sortby(_set_coordinate_key)
         # Do work normally performed by super()._generate(). Must re-calculate semi-private variables
         self.parameter_study = self.parameter_study.swap_dims({_set_coordinate_key: _hash_coordinate_key})
@@ -957,7 +994,7 @@ class OneAtATime(ParameterGenerator):
         self._set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
         self._set_names = self.parameter_study[_set_coordinate_key].to_series().to_dict()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
-        if self.previous_parameter_study is not None and self.previous_parameter_study.is_file():
+        if self._previous_parameter_study is not None and self._previous_parameter_study.is_file():
             self._merge_parameter_studies()
 
 
@@ -1033,22 +1070,22 @@ class CustomStudy(ParameterGenerator):
 
     def _validate(self) -> None:
         """Validate the Custom Study parameter samples and names. Executed by class initiation."""
-        if not isinstance(self.parameter_schema, dict):
+        if not isinstance(self._parameter_schema, dict):
             raise SchemaValidationError("parameter_schema must be a dictionary")
         try:
-            self._parameter_names = self.parameter_schema["parameter_names"]
+            self._parameter_names = self._parameter_schema["parameter_names"]
         except KeyError as err:
             raise SchemaValidationError("parameter_schema must contain the key: parameter_names") from err
-        if "parameter_samples" not in self.parameter_schema:
+        if "parameter_samples" not in self._parameter_schema:
             raise SchemaValidationError("parameter_schema must contain the key: parameter_samples")
         # Always convert to numpy array for shape check and _generate()
         else:
-            self.parameter_schema["parameter_samples"] = numpy.array(
-                self.parameter_schema["parameter_samples"], dtype=object
+            self._parameter_schema["parameter_samples"] = numpy.array(
+                self._parameter_schema["parameter_samples"], dtype=object
             )
         if (
-            self.parameter_schema["parameter_samples"].ndim != 2
-            or len(self._parameter_names) != self.parameter_schema["parameter_samples"].shape[1]
+            self._parameter_schema["parameter_samples"].ndim != 2
+            or len(self._parameter_names) != self._parameter_schema["parameter_samples"].shape[1]
         ):
             raise SchemaValidationError(
                 "The parameter samples must be an array of shape MxN, where N is the number of parameters."
@@ -1058,7 +1095,7 @@ class CustomStudy(ParameterGenerator):
     def _generate(self, **kwargs) -> None:  # noqa: ARG002
         """Generate the parameter study dataset from the user provided parameter array."""
         # Converted to numpy array by _validate. Simply assign to correct attribute
-        self._samples = self.parameter_schema["parameter_samples"]
+        self._samples = self._parameter_schema["parameter_samples"]
         super()._generate()
 
 
@@ -1142,7 +1179,7 @@ class SobolSequence(_ScipyGenerator):
     """
 
     def __init__(self, *args, **kwargs) -> None:
-        self.sampler_class = "Sobol"
+        self._sampler_class = "Sobol"
         super().__init__(*args, **kwargs)
 
     def _generate(self, **kwargs) -> None:
@@ -1238,7 +1275,7 @@ class ScipySampler(_ScipyGenerator):
     """
 
     def __init__(self, sampler_class: str, *args, **kwargs) -> None:
-        self.sampler_class = sampler_class
+        self._sampler_class = sampler_class
         super().__init__(*args, **kwargs)
 
     def _generate(self, **kwargs) -> None:
@@ -1343,25 +1380,25 @@ class SALibSampler(ParameterGenerator, ABC):
     """
 
     def __init__(self, sampler_class: str, *args, **kwargs) -> None:
-        self.sampler_class = sampler_class
+        self._sampler_class = sampler_class
         super().__init__(*args, **kwargs)
 
     def _validate(self) -> None:
-        if not isinstance(self.parameter_schema, dict):
+        if not isinstance(self._parameter_schema, dict):
             raise SchemaValidationError("parameter_schema must be a dictionary")
         # TODO: Settle on an input file schema and validation library
-        if "N" not in self.parameter_schema:
+        if "N" not in self._parameter_schema:
             raise SchemaValidationError("Parameter schema is missing the required 'N' key")
-        elif not isinstance(self.parameter_schema["N"], int):
+        elif not isinstance(self._parameter_schema["N"], int):
             raise SchemaValidationError("Parameter schema 'N' must be an integer.")
         # Check the SALib owned "problem" dictionary for necessary WAVES elements
-        if "problem" not in self.parameter_schema:
+        if "problem" not in self._parameter_schema:
             raise SchemaValidationError("Parameter schema is missing the required 'problem' key")
-        elif not isinstance(self.parameter_schema["problem"], dict):
+        elif not isinstance(self._parameter_schema["problem"], dict):
             raise SchemaValidationError("'problem' must be a dictionary")
-        if "names" not in self.parameter_schema["problem"]:
+        if "names" not in self._parameter_schema["problem"]:
             raise SchemaValidationError("Parameter schema 'problem' dict is missing the required 'names' key")
-        if not isinstance(self.parameter_schema["problem"]["names"], list | set | tuple):
+        if not isinstance(self._parameter_schema["problem"]["names"], list | set | tuple):
             raise SchemaValidationError("Parameter 'names' is not one of list, set, or tuple")
         self._create_parameter_names()
         # Sampler specific validation
@@ -1380,9 +1417,9 @@ class SALibSampler(ParameterGenerator, ABC):
         :raises waves.exceptions.SchemaValidationError: A sobol or morris sampler contains fewer than two parameters
         """
         parameter_count = len(self._parameter_names)
-        if self.sampler_class == "sobol" and parameter_count < 2:
+        if self._sampler_class == "sobol" and parameter_count < 2:
             raise SchemaValidationError("The SALib Sobol sampler requires at least two parameters")
-        if self.sampler_class == "morris" and parameter_count < 2:
+        if self._sampler_class == "morris" and parameter_count < 2:
             raise SchemaValidationError("The SALib Morris sampler requires at least two parameters")
 
     def _sampler_overrides(self, override_kwargs: dict | None = None) -> dict:
@@ -1398,25 +1435,25 @@ class SALibSampler(ParameterGenerator, ABC):
         if override_kwargs is None:
             override_kwargs = {}
         parameter_count = len(self._parameter_names)
-        if self.sampler_class == "sobol" and parameter_count == 2:
+        if self._sampler_class == "sobol" and parameter_count == 2:
             override_kwargs = {**override_kwargs, "calc_second_order": False}
         return override_kwargs
 
     def _create_parameter_names(self) -> None:
         """Construct the parameter names from a distribution parameter schema."""
-        self._parameter_names = self.parameter_schema["problem"]["names"]
+        self._parameter_names = self._parameter_schema["problem"]["names"]
 
     def _generate(self, **kwargs) -> None:
         """Generate the `SALib.sample`_ ``sampler_class`` parameter sets."""
-        N = self.parameter_schema["N"]  # noqa: N806
+        N = self._parameter_schema["N"]  # noqa: N806
         override_kwargs = self._sampler_overrides()
         if kwargs:
             kwargs.update(override_kwargs)
         else:
             kwargs = override_kwargs
-        __import__("SALib.sample", fromlist=[self.sampler_class])
-        sampler = getattr(SALib.sample, self.sampler_class)
-        problem = self.parameter_schema["problem"]
+        __import__("SALib.sample", fromlist=[self._sampler_class])
+        sampler = getattr(SALib.sample, self._sampler_class)
+        problem = self._parameter_schema["problem"]
         self._samples = sampler.sample(problem, N, **kwargs)
         self._samples = numpy.unique(self._samples, axis=0)
         super()._generate()
@@ -1508,11 +1545,11 @@ class CatenationStudy(ParameterGenerator):
 
     def _validate(self) -> None:
         """Validate the Catenation Study parameter schema and sub-schemas. Executed by class initiation."""
-        if not isinstance(self.parameter_schema, dict):
+        if not isinstance(self._parameter_schema, dict):
             raise SchemaValidationError("Input must be a dictionary")
-        if len(self.parameter_schema) < 2:
+        if len(self._parameter_schema) < 2:
             raise SchemaValidationError("Input dictionary must have at least two key:value entries")
-        for entry in self.parameter_schema.values():
+        for entry in self._parameter_schema.values():
             if not isinstance(entry, tuple):
                 raise SchemaValidationError("Each value of a key:value entry must be a tuple")
             if len(entry) != 2:
@@ -1528,8 +1565,8 @@ class CatenationStudy(ParameterGenerator):
 
     def _generate(self, **kwargs) -> None:
         """Generate the parameter studies and combine them."""
-        if self.output_file_template is not None:
-            output_file_template_string = self.output_file_template.template
+        if self._output_file_template is not None:
+            output_file_template_string = self._output_file_template.template
         else:
             output_file_template_string = None
 
@@ -1537,17 +1574,17 @@ class CatenationStudy(ParameterGenerator):
             generator(
                 schema,
                 output_file_template=output_file_template_string,
-                output_file=self.output_file,
-                output_file_type=self.output_file_type,
-                set_name_template=self.set_name_template.template,
-                overwrite=self.overwrite,
-                write_meta=self.write_meta,
+                output_file=self._output_file,
+                output_file_type=self._output_file_type,
+                set_name_template=self._set_name_template.template,
+                overwrite=self._overwrite,
+                write_meta=self._write_meta_flag,
                 **kwargs,
             ).parameter_study
-            for generator, schema in self.parameter_schema.values()
+            for generator, schema in self._parameter_schema.values()
         ]
 
-        self.parameter_study = _merge_parameter_studies(studies, self.set_name_template)
+        self.parameter_study = _merge_parameter_studies(studies, self._set_name_template)
         self.parameter_study = self.parameter_study.sortby(_set_coordinate_key)
         # Do work normally performed by super()._generate(). Must re-calculate semi-private variables
         self.parameter_study = self.parameter_study.swap_dims({_set_coordinate_key: _hash_coordinate_key})
@@ -1555,7 +1592,7 @@ class CatenationStudy(ParameterGenerator):
         self._set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
         self._set_names = self.parameter_study[_set_coordinate_key].to_series().to_dict()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
-        if self.previous_parameter_study is not None and self.previous_parameter_study.is_file():
+        if self._previous_parameter_study is not None and self._previous_parameter_study.is_file():
             self._merge_parameter_studies()
 
 
