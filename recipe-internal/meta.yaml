@@ -76,7 +76,6 @@ test:
     - h5py
     - matplotlib-base
     - meshio
-    # Required to satisfy undocumented SALib dependencies on numpy version for the senstivity study tutorial
     - numpy >=2
     - pandas
     - pip
@@ -84,7 +83,6 @@ test:
     - pytest-xdist
     - python-gmsh
     - pyyaml
-    # Required to satisfy undocumented SALib dependencies on numpy version for the senstivity study tutorial
     - salib >=1.5.1
     - scipy >=1.7
     - scons
