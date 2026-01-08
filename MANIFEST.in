@@ -6,7 +6,9 @@ recursive-exclude waves/docs/.doctrees *
 recursive-exclude build *
 recursive-exclude install *
 recursive-exclude conda-environment *
+recursive-exclude env *
 recursive-exclude conda-pkgs *
+recursive-exclude pkgs *
 recursive-exclude pip-build-test *
 recursive-exclude */*/build *
 recursive-exclude */*/*/build* *
