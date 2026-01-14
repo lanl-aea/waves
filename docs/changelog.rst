@@ -12,6 +12,10 @@ Bug fixes
 =========
 - Add set number placeholder to set name templates that lack it  (:issue:`990`, :merge:`1281`). By  `Chris Johnson`_.
 
+Documentation
+=============
+- Update PyPI package classifiers to reflect stable release status. By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Parameter generator attributes derived from the user supplied keyword arguments are now read-only attributes (:issue:`949`, 
