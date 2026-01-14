@@ -8,9 +8,13 @@ Changelog
 1.2.0 (unreleased)
 ******************
 
+******************
+1.1.1 (2025-01-14)
+******************
+
 Bug fixes
 =========
-- Add set number placeholder to set name templates that lack it  (:issue:`990`, :merge:`1281`). By  `Chris Johnson`_.
+- Add set number placeholder to set name templates that lack it (:issue:`990`, :merge:`1281`). By  `Chris Johnson`_.
 
 Documentation
 =============
@@ -18,14 +22,15 @@ Documentation
 
 Internal Changes
 ================
-- Parameter generator attributes derived from the user supplied keyword arguments are now read-only attributes (:issue:`949`, 
-  :merge:`1279`). By  `Chris Johnson`_.
+- Parameter generator attributes derived from the user supplied keyword arguments are now read-only attributes (:issue:`949`,
+  :merge:`1279`). By `Chris Johnson`_.
 - More robust third-party executable path handling in system test pass through constructions (:merge:`1275`). By `Kyle
   Brindley`_.
 - Internal API type hint updates to match implemented use for static type checking (:merge:`1278`). By `Kyle Brindley`_.
 - Use and test Abaqus 2025. Preserves scheduled testing against Abaqus 2024 and 2023. By `Kyle Brindley`_.
 - Convert from deprecated ``boa`` packager back to vanilla ``conda-build`` as an interim solution to migrating to the
   conda-forge preferred ``rattler-build`` packager with an updated recipe syntax. By `Kyle Brindley`_.
+- Drop support for numpy v1, which reached end-of-life in 2025. By `Kyle Brindley`_.
 
 ******************
 1.1.0 (2025-11-19)
@@ -1005,7 +1010,7 @@ Breaking changes
 - Remove the largely unused ``post_action`` builder behavior in favor of more modifiable builders and action modifier
   functions. Similar behavior can be provided on a per-target basis with the `SCons AddPostAction`_ feature
   (:issue:`725`, :merge:`898`). By `Kyle Brindley`_.
-- Replace the rsync options with a keyword argument in the  SSH builder actions (:issue:`728`, :merge:`899`). By `Kyle
+- Replace the rsync options with a keyword argument in the SSH builder actions (:issue:`728`, :merge:`899`). By `Kyle
   Brindley`_.
 
 New Features
@@ -1092,7 +1097,7 @@ Internal Changes
 Documentation
 =============
 - Clean up the index by removing the Python method entries (:issue:`699`, :merge:`873`). By `Kyle Brindley`_.
-- Update the GitHub URLs for the migration to https://github.com/lanl-aea (:issue:`700`, :merge:`874`).  By `Kyle
+- Update the GitHub URLs for the migration to https://github.com/lanl-aea (:issue:`700`, :merge:`874`). By `Kyle
   Brindley`_.
 
 ******************
@@ -2991,7 +2996,7 @@ Documentation
 Internal Changes
 ================
 - Remove remnants of the parameter study file I/O that is no longer necessary from the cartesian product configuration
-  (:issue:`184`, :merge:`161`).  By `Kyle Brindley`_.
+  (:issue:`184`, :merge:`161`). By `Kyle Brindley`_.
 - Remove the ``.jnl`` file from the list of targets appended by the Abaqus journal builder (:issue:`180`, :merge:`162`).
   By `Matthew Fister`_.
 - Explicitly manage the ``.jnl`` target additions for more complete SCons clean operations (:issue:`185`, :merge:`168`).
@@ -3237,7 +3242,7 @@ Internal Changes
   Brindley`_.
 - Move Conda package constants into a package internal settings file. Remove as many project settings from SCons
   configuration files as possible (:issue:`64`, :merge:`55`). By `Kyle Brindley`_.
-- Separate the parametery study utility from the parameter generators module (:issue:`64`, :merge:`55`).  By `Kyle
+- Separate the parametery study utility from the parameter generators module (:issue:`64`, :merge:`55`). By `Kyle
   Brindley`_.
 - Handle parameter study utility missing positional arguments gracefully by printing usage (:issue:`64`, :merge:`55`).
   By `Kyle Brindley`_.
