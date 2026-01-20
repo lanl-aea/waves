@@ -246,6 +246,13 @@ class ParameterGenerator(ABC):
         self._create_parameter_study()
         if self._previous_parameter_study is not None and self._previous_parameter_study.is_file():
             self._merge_parameter_studies()
+        try:
+            _verify_parameter_study(self.parameter_study)
+        except RuntimeError as err:
+            raise RuntimeError(
+                "Encountered hash inconsistency during parameter study validation! This may be due to "
+                "a generator edge case or bug - please contact the WAVES developers with this info."
+            ) from err
 
     def write(
         self,
@@ -1097,12 +1104,6 @@ class CustomStudy(ParameterGenerator):
         # Converted to numpy array by _validate. Simply assign to correct attribute
         self._samples = self._parameter_schema["parameter_samples"]
         super()._generate()
-        try:
-            _verify_parameter_study(self.parameter_study)
-        except:
-            raise RuntimeError("Encountered hash inconsistency during parameter study validation! This may be due to "
-                               "a generator edge case or bug - please contact the WAVES developers with this info.")
-
 
 
 class SobolSequence(_ScipyGenerator):
