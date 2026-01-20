@@ -1097,6 +1097,12 @@ class CustomStudy(ParameterGenerator):
         # Converted to numpy array by _validate. Simply assign to correct attribute
         self._samples = self._parameter_schema["parameter_samples"]
         super()._generate()
+        try:
+            _verify_parameter_study(self.parameter_study)
+        except:
+            raise RuntimeError("Encountered hash inconsistency during parameter study validation! This may be due to "
+                               "a generator edge case or bug - please contact the WAVES developers with this info.")
+
 
 
 class SobolSequence(_ScipyGenerator):
