@@ -250,8 +250,10 @@ class ParameterGenerator(ABC):
             _verify_parameter_study(self.parameter_study)
         except RuntimeError as err:
             raise RuntimeError(
-                "Encountered hash inconsistency during parameter study validation! This may be due to "
-                "a generator edge case or bug - please contact the WAVES developers with this info."
+                "Encountered hash inconsistency during parameter study verification. This can happen if the parameter "
+                "schema mixes Python builtin and numpy data types. Are the parameter values limited to the supported "
+                "Python builtin types: floats, integers, strings, and booleans? If so, you may have encountered a "
+                "generator edge case or a bug. Please contact the developers with your parameter study definition."
             ) from err
 
     def write(
