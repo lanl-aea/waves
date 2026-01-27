@@ -8,10 +8,10 @@ Changelog
 1.2.0 (unreleased)
 ******************
 
-Internal Changes
-================
-- Verify parameter study immediately after generation to prevent hash-content mismatch until #992 resolved (:issue:`993`,
-  :merge:`1287`). By `Chris Johnson`_.
+Enhancements
+============
+- Verify parameter study content hashes at generation to catch mismatched or unsupported type errors earlier 
+  with a meaningful user error message. (:issue:`993`, :merge:`1287`). By `Chris Johnson`_.
 
 ******************
 1.1.1 (2025-01-14)
