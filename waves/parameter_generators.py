@@ -246,6 +246,15 @@ class ParameterGenerator(ABC):
         self._create_parameter_study()
         if self._previous_parameter_study is not None and self._previous_parameter_study.is_file():
             self._merge_parameter_studies()
+        try:
+            _verify_parameter_study(self.parameter_study)
+        except RuntimeError as err:
+            raise RuntimeError(
+                "Encountered hash inconsistency during parameter study verification. This can happen if the parameter "
+                "schema mixes Python builtin and NumPy data types. Are the parameter values limited to the supported "
+                "Python builtin types: floats, integers, strings, and booleans? If so, you may have encountered a "
+                "generator edge case or a bug. Please contact the developers with your parameter study definition."
+            ) from err
 
     def write(
         self,

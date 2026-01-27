@@ -1939,6 +1939,19 @@ class TestParameterGenerator:
             finally:
                 pass
 
+    def test_generate_verification(self) -> None:
+        with (
+            patch("waves.parameter_generators._verify_parameter_study", return_value=None) as mock_verify,
+            does_not_raise,
+        ):
+            DummyGenerator({})
+            mock_verify.assert_called_once()
+        with (
+            patch("waves.parameter_generators._verify_parameter_study", side_effect=RuntimeError),
+            pytest.raises(RuntimeError, match="Encountered hash inconsistency during parameter study verification"),
+        ):
+            DummyGenerator({})
+
     scons_write_cases = {
         "no kwargs": ({}, {}),
         "output file type": ({"output_file_type": "h5"}, {"output_file_type": "h5"}),

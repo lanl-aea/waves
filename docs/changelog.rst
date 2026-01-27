@@ -8,6 +8,11 @@ Changelog
 1.2.0 (unreleased)
 ******************
 
+Enhancements
+============
+- Verify parameter study content hashes at generation to catch mismatched or unsupported type errors earlier 
+  with a meaningful user error message. (:issue:`993`, :merge:`1287`). By `Chris Johnson`_.
+
 ******************
 1.1.1 (2025-01-14)
 ******************
