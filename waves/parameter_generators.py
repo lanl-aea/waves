@@ -201,6 +201,7 @@ class ParameterGenerator(ABC):
         Must set the class attributes:
 
         * ``self._parameter_names``: list of strings containing the parameter study's parameter names
+        * ``self._samples``: numpy ndarray, which is input-validated to force Python builtin types
 
         Minimum necessary work example:
 
@@ -209,6 +210,7 @@ class ParameterGenerator(ABC):
            # Work unique to the parameter generator schema. Example matches CartesianProduct schema.
            self._parameter_names = list(self.parameter_schema.keys())
         """
+        self._samples = _convert_numpy_to_builtin(self._samples)
 
     @abstractmethod
     def _generate(self, **kwargs) -> None:
@@ -1996,6 +1998,36 @@ def _update_set_names(parameter_study: xarray.Dataset, template: string.Template
             ) from err
 
     return parameter_study
+
+
+def _convert_numpy_to_builtin(samples: numpy.ndarray) -> numpy.ndarray:
+    """Convert numpy-typed data to its corresponding Python built-in datatype.
+
+    Utilizes ``numpy.ndarray.item()`` to convert entries to their corresponding Python built-in datatype. If no exact
+    match is found, raises a TypeError.
+
+    :param samples: A numpy.ndarray of the samples of the parameter schema.
+
+    :return: numpy.ndarray with sample typing converted to Python datatypes
+
+    :raises TypeError: if the parameter schema samples contains a numpy datatype that does not have an exact
+        equivalent to a Python built-in type.
+    """
+    converted_samples = numpy.empty(samples.shape, dtype=object)
+    for i, row in enumerate(samples):
+        for j, entry in enumerate(row):
+            if isinstance(entry, numpy.generic):
+                try:
+                    converted_samples[i][j] = entry.item()
+                except TypeError as err:
+                    raise TypeError(
+                        f"Found sample {entry} with typing {type(entry)} that could not be converted to a Python "
+                        f"built-in datatype."
+                    ) from err
+            else:
+                converted_samples[i][j] = entry
+
+    return converted_samples
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace
