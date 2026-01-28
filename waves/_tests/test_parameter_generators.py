@@ -1736,6 +1736,50 @@ def test_update_set_names(
             pass
 
 
+test_convert_numpy_to_builtin_cases = {
+    "one parameter numpy typing": (
+        numpy.array(
+            [
+                [1.0, numpy.float64(10.0)],
+                [2.0, numpy.float64(20.0)],
+            ],
+            dtype=object,
+        ),
+        numpy.array(
+            [
+                [1.0, 10.0],
+                [2.0, 20.0],
+            ],
+            dtype=object,
+        ),
+        does_not_raise,
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("samples", "expected", "outcome"),
+    test_convert_numpy_to_builtin_cases.values(),
+    ids=test_convert_numpy_to_builtin_cases.keys(),
+)
+def test_convert_numpy_to_builtin(
+    samples: numpy.ndarray,
+    expected: numpy.ndarray,
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
+    """Check the function of converting numpy datatypes to Python datatypes.
+
+    :param samples: numpy.ndarray of samples
+    :param expected: expected output numpy.ndarray
+    """
+    with outcome:
+        try:
+            converted_samples = parameter_generators._convert_numpy_to_builtin(samples)
+            numpy.testing.assert_equal(converted_samples, expected)
+        finally:
+            pass
+
+
 def test_open_parameter_study() -> None:
     mock_file = "dummy.h5"
     with (
