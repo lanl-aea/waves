@@ -1737,7 +1737,7 @@ def test_update_set_names(
 
 
 test_convert_numpy_to_builtin_cases = {
-    "one parameter numpy typing": (
+    "one parameter numpy typing - float 64": (
         numpy.array(
             [
                 [1.0, numpy.float64(10.0)],
@@ -1753,6 +1753,147 @@ test_convert_numpy_to_builtin_cases = {
             dtype=object,
         ),
         does_not_raise,
+    ),
+    "all parameters numpy typing - float 64": (
+        numpy.array(
+            [
+                [numpy.float64(1.0), numpy.float64(10.0)],
+                [numpy.float64(2.0), numpy.float64(20.0)],
+            ],
+            dtype=object,
+        ),
+        numpy.array(
+            [
+                [1.0, 10.0],
+                [2.0, 20.0],
+            ],
+            dtype=object,
+        ),
+        does_not_raise,
+    ),
+    "one parameter numpy typing - int 64": (
+        numpy.array(
+            [
+                [numpy.int64(1), 10.0],
+                [numpy.int64(2), 20.0],
+            ],
+            dtype=object,
+        ),
+        numpy.array(
+            [
+                [1.0, 10.0],
+                [2.0, 20.0],
+            ],
+            dtype=object,
+        ),
+        does_not_raise,
+    ),
+    "all parameters numpy typing - int/float 64": (
+        numpy.array(
+            [
+                [numpy.int64(1), numpy.float64(10.0)],
+                [numpy.int64(2), numpy.float64(20.0)],
+            ],
+            dtype=object,
+        ),
+        numpy.array(
+            [
+                [1.0, 10.0],
+                [2.0, 20.0],
+            ],
+            dtype=object,
+        ),
+        does_not_raise,
+    ),
+    "one parameter numpy typing - boolean": (
+        numpy.array(
+            [
+                [numpy.bool_(True), 10.0],
+                [numpy.bool_(False), 20.0],
+            ],
+            dtype=object,
+        ),
+        numpy.array(
+            [
+                [True, 10.0],
+                [False, 20.0],
+            ],
+            dtype=object,
+        ),
+        does_not_raise,
+    ),
+    "one parameter numpy typing - string": (
+        numpy.array(
+            [
+                [numpy.str_("zero"), 10.0],
+                [numpy.str_("one"), 20.0],
+            ],
+            dtype=object,
+        ),
+        numpy.array(
+            [
+                ["zero", 10.0],
+                ["one", 20.0],
+            ],
+            dtype=object,
+        ),
+        does_not_raise,
+    ),
+    "one parameter numpy typing - int 32": (
+        numpy.array(
+            [
+                [numpy.int32(1), 10.0],
+                [numpy.int32(2), 20.0],
+            ],
+            dtype=object,
+        ),
+        numpy.array(
+            [
+                [1.0, 10.0],
+                [2.0, 20.0],
+            ],
+            dtype=object,
+        ),
+        does_not_raise,
+    ),
+    "one parameter numpy typing - int 16": (
+        numpy.array(
+            [
+                [numpy.int16(1), 10.0],
+                [numpy.int16(2), 20.0],
+            ],
+            dtype=object,
+        ),
+        numpy.array(
+            [
+                [1.0, 10.0],
+                [2.0, 20.0],
+            ],
+            dtype=object,
+        ),
+        does_not_raise,
+    ),
+    "one parameter numpy typing - float 32": (
+        numpy.array(
+            [
+                [1.0, numpy.float32(10.1234)],
+                [2.0, numpy.float32(20.1234)],
+            ],
+            dtype=object,
+        ),
+        None,
+        pytest.raises(TypeError, match="would lose numerical precision"),
+    ),
+    "one parameter numpy typing - float 16": (
+        numpy.array(
+            [
+                [1.0, numpy.float16(10.12)],
+                [2.0, numpy.float16(20.12)],
+            ],
+            dtype=object,
+        ),
+        None,
+        pytest.raises(TypeError, match="would lose numerical precision"),
     ),
 }
 

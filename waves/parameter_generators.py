@@ -2017,13 +2017,13 @@ def _convert_numpy_to_builtin(samples: numpy.ndarray) -> numpy.ndarray:
     for i, row in enumerate(samples):
         for j, entry in enumerate(row):
             if isinstance(entry, numpy.generic):
-                try:
-                    converted_samples[i][j] = entry.item()
-                except TypeError as err:
+                if isinstance(entry, (numpy.float16, numpy.float32)):
                     raise TypeError(
-                        f"Found sample {entry} with typing {type(entry)} that could not be converted to a Python "
-                        f"built-in datatype."
-                    ) from err
+                        f"Found sample {entry} with typing {type(entry)} that would lose numerical precision if "
+                        f"converted to a Python built-in datatype."
+                    )
+                else:
+                    converted_samples[i][j] = entry.item()
             else:
                 converted_samples[i][j] = entry
 
