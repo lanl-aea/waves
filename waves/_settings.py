@@ -33,7 +33,7 @@ _scons_tree_status = {
 }
 _scons_substfile_suffix = ".in"
 _stdout_extension = ".stdout"
-_cd_action_prefix = "cd ${TARGET.dir.abspath} &&"
+_cd_action_prefix = "$(cd$) ${TARGET.dir.abspath} &&"
 _redirect_action_suffix = "> ${TARGETS[-1].abspath} 2>&1"
 _redirect_environment_suffix = "> ${TARGETS[-2].abspath} 2>&1"
 
