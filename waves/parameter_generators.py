@@ -247,15 +247,7 @@ class ParameterGenerator(ABC):
         self._create_parameter_study()
         if self._previous_parameter_study is not None and self._previous_parameter_study.is_file():
             self._merge_parameter_studies()
-        try:
-            _verify_parameter_study(self.parameter_study)
-        except RuntimeError as err:
-            raise RuntimeError(
-                "Encountered hash inconsistency during parameter study verification. This can happen if the parameter "
-                "schema mixes Python builtin and NumPy data types. Are the parameter values limited to the supported "
-                "Python builtin types: floats, integers, strings, and booleans? If so, you may have encountered a "
-                "generator edge case or a bug. Please contact the developers with your parameter study definition."
-            ) from err
+        self._verify_generated_parameter_study()
 
     def write(
         self,
@@ -583,6 +575,25 @@ class ParameterGenerator(ABC):
         self._set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
         self._set_names = self.parameter_study[_set_coordinate_key].to_series().to_dict()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
+
+    def _verify_generated_parameter_study(self) -> None:
+        """Verify a parameter study immediately after generation to ensure hash consistency.
+
+        requires:
+
+        * ``self.parameter_study``: generated parameter study
+
+        :raises RuntimeError: If the generated parameter study fails verification
+        """
+        try:
+            _verify_parameter_study(self.parameter_study)
+        except RuntimeError as err:
+            raise RuntimeError(
+                "Encountered hash inconsistency during parameter study verification. This can happen if the parameter "
+                "schema mixes Python builtin and NumPy data types. Are the parameter values limited to the supported "
+                "Python builtin types: floats, integers, strings, and booleans? If so, you may have encountered a "
+                "generator edge case or a bug. Please contact the developers with your parameter study definition."
+            ) from err
 
 
 class _ScipyGenerator(ParameterGenerator, ABC):
@@ -1006,6 +1017,7 @@ class OneAtATime(ParameterGenerator):
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
         if self._previous_parameter_study is not None and self._previous_parameter_study.is_file():
             self._merge_parameter_studies()
+        self._verify_generated_parameter_study()
 
 
 class CustomStudy(ParameterGenerator):
@@ -1604,6 +1616,7 @@ class CatenationStudy(ParameterGenerator):
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
         if self._previous_parameter_study is not None and self._previous_parameter_study.is_file():
             self._merge_parameter_studies()
+        self._verify_generated_parameter_study()
 
 
 def _calculate_set_hash(
