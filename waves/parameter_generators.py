@@ -790,10 +790,11 @@ class CartesianProduct(ParameterGenerator):
         for name in self._parameter_names:
             if not isinstance(self._parameter_schema[name], list | set | tuple):
                 raise SchemaValidationError(f"Parameter '{name}' is not one of list, set, or tuple")
+        self._samples = numpy.array(list(itertools.product(*self._parameter_schema.values())), dtype=object)
+        super()._validate()
 
     def _generate(self, **kwargs) -> None:  # noqa: ARG002
         """Generate the Cartesian Product parameter sets."""
-        self._samples = numpy.array(list(itertools.product(*self._parameter_schema.values())), dtype=object)
         super()._generate()
 
 
