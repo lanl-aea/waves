@@ -2033,21 +2033,9 @@ def _convert_numpy_to_builtin(samples: numpy.ndarray) -> numpy.ndarray:
     :raises TypeError: if the parameter schema samples contains a numpy datatype that does not have an exact
         equivalent to a Python built-in type.
     """
-    converted_samples = numpy.empty(samples.shape, dtype=object)
-    for i, row in enumerate(samples):
-        for j, entry in enumerate(row):
-            if isinstance(entry, numpy.generic):
-                if isinstance(entry, (numpy.float16, numpy.float32)):
-                    raise TypeError(
-                        f"Found sample {entry} with typing {type(entry)} that would lose numerical precision if "
-                        f"converted to a Python built-in datatype."
-                    )
-                else:
-                    converted_samples[i][j] = entry.item()
-            else:
-                converted_samples[i][j] = entry
-
-    return converted_samples
+    # Convert flattened data, then reshape back to original dimensions
+    flat_converted = [entry.item() if hasattr(entry, 'item') else entry for entry in samples.flat]
+    return numpy.array(flat_converted, dtype=object).reshape(samples.shape)
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace
