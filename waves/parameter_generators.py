@@ -1008,15 +1008,6 @@ class OneAtATime(ParameterGenerator):
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
         if self._previous_parameter_study is not None and self._previous_parameter_study.is_file():
             self._merge_parameter_studies()
-        try:
-            _verify_parameter_study(self.parameter_study)
-        except RuntimeError as err:
-            raise RuntimeError(
-                "Encountered hash inconsistency during parameter study verification. This can happen if the parameter "
-                "schema mixes Python builtin and NumPy data types. Are the parameter values limited to the supported "
-                "Python builtin types: floats, integers, strings, and booleans? If so, you may have encountered a "
-                "generator edge case or a bug. Please contact the developers with your parameter study definition."
-            ) from err
 
 
 class CustomStudy(ParameterGenerator):
@@ -1111,13 +1102,12 @@ class CustomStudy(ParameterGenerator):
             raise SchemaValidationError(
                 "The parameter samples must be an array of shape MxN, where N is the number of parameters."
             )
-        # Converted to numpy array by _validate. Simply assign to correct attribute
-        self._samples = self._parameter_schema["parameter_samples"]
-        super()._validate()
         return
 
     def _generate(self, **kwargs) -> None:  # noqa: ARG002
         """Generate the parameter study dataset from the user provided parameter array."""
+        # Converted to numpy array by _validate. Simply assign to correct attribute
+        self._samples = self._parameter_schema["parameter_samples"]
         super()._generate()
 
 
@@ -1616,15 +1606,6 @@ class CatenationStudy(ParameterGenerator):
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
         if self._previous_parameter_study is not None and self._previous_parameter_study.is_file():
             self._merge_parameter_studies()
-        try:
-            _verify_parameter_study(self.parameter_study)
-        except RuntimeError as err:
-            raise RuntimeError(
-                "Encountered hash inconsistency during parameter study verification. This can happen if the parameter "
-                "schema mixes Python builtin and NumPy data types. Are the parameter values limited to the supported "
-                "Python builtin types: floats, integers, strings, and booleans? If so, you may have encountered a "
-                "generator edge case or a bug. Please contact the developers with your parameter study definition."
-            ) from err
 
 
 def _calculate_set_hash(
