@@ -4260,6 +4260,8 @@ class WAVESEnvironment(SConsEnvironment):
         PYTHON_PROGRAM: str = "python",  # noqa: N803
         SIERRA_PROGRAM: str = "sierra",  # noqa: N803
         SPHINX_BUILD_PROGRAM: str = "sphinx-build",  # noqa: N803
+        ACTION_PREFIX: str = _settings._cd_action_prefix,
+        ACTION_SUFFIX: str = _settings._redirect_action_suffix,
         **kwargs,
     ) -> None:
         super().__init__(
@@ -4275,6 +4277,8 @@ class WAVESEnvironment(SConsEnvironment):
             PYTHON_PROGRAM=PYTHON_PROGRAM,
             SIERRA_PROGRAM=SIERRA_PROGRAM,
             SPHINX_BUILD_PROGRAM=SPHINX_BUILD_PROGRAM,
+            ACTION_PREFIX=ACTION_PREFIX,
+            ACTION_SUFFIX=ACTION_SUFFIX,
             **kwargs,
         )
 
@@ -4372,12 +4376,15 @@ class WAVESEnvironment(SConsEnvironment):
     def FirstTargetBuilder(self, target: list, source: list, *args, **kwargs) -> SCons.Node.NodeList:  # noqa: N802
         """Define tasks with the builder returned by :meth:`waves.scons_extensions.first_target_builder_factory`.
 
+        :var action_prefix: ``${ACTION_PREFIX}``
+        :var action_suffix: ``${ACTION_SUFFIX}``
+
         :param target: The task target list
         :param source: The task source list
         :param args: All positional arguments are passed through to the builder (*not* to the builder factory)
         :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
         """
-        builder = first_target_builder_factory()
+        builder = first_target_builder_factory(action_prefix="${ACTION_PREFIX}", action_suffix="${ACTION_SUFFIX}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
     def AbaqusJournal(self, target: list, source: list, *args, **kwargs) -> SCons.Node.NodeList:  # noqa: N802
