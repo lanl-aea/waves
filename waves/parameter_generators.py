@@ -2022,18 +2022,18 @@ def _convert_numpy_to_builtin(samples: numpy.ndarray) -> numpy.ndarray:
 
     :return: numpy.ndarray with sample typing converted to Python datatypes
 
-    :raises RuntimeError: if the converted samples array still contains entries with NumPy typing
+    :raises TypeError: if the converted samples array still contains entries with NumPy typing
     """
     numpy_types = (numpy.generic, numpy.ndarray)
     # Convert to flattened data, then reshape back to original dimensions
     converted_flat = [entry.item() if isinstance(entry, numpy_types) else entry for entry in samples.flat]
     # Check for residual NumPy typing
-    for entry in converted_flat:
-        if isinstance(entry, numpy_types):
-            raise TypeError(
-                f"Encountered sample '{entry}' with typing '{type(entry)}' that could not be converted to a "
-                f"Python built-in type. Either a loss of precision would occur, or no valid Python type exists."
-            )
+    leftover_numpy_types = [entry for entry in converted_flat if isinstance(entry, numpy_types)]
+    if len(leftover_numpy_types) > 0:
+        raise TypeError(
+            f"Encountered samples: '{leftover_numpy_types}' that could not be converted to a Python built-in type. "
+            f"Either a loss of precision would occur, or no valid Python type exists."
+        )
     return numpy.array(converted_flat, dtype=object).reshape(samples.shape)
 
 
