@@ -2949,6 +2949,8 @@ waves_environment_attributes = {
             "SIERRA_PROGRAM": "different sierra",
             "ANSYS_PROGRAM": "different ansys",
             "SPHINX_BUILD_PROGRAM": "different sphinx-build",
+            "ACTION_PREFIX": "different action prefix",
+            "ACTION_SUFFIX": "different action suffix",
         }
     ),
 }

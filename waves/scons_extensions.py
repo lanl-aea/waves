@@ -4260,8 +4260,8 @@ class WAVESEnvironment(SConsEnvironment):
         PYTHON_PROGRAM: str = "python",  # noqa: N803
         SIERRA_PROGRAM: str = "sierra",  # noqa: N803
         SPHINX_BUILD_PROGRAM: str = "sphinx-build",  # noqa: N803
-        ACTION_PREFIX: str = _settings._cd_action_prefix,
-        ACTION_SUFFIX: str = _settings._redirect_action_suffix,
+        ACTION_PREFIX: str = _settings._cd_action_prefix,  # noqa: N803
+        ACTION_SUFFIX: str = _settings._redirect_action_suffix,  # noqa: N803
         **kwargs,
     ) -> None:
         super().__init__(
