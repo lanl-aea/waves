@@ -3013,7 +3013,11 @@ def test_waves_environment_methods(method: str, function: str) -> None:
 
 
 waves_environment_builders = {
-    "FirstTargetBuilder": ("FirstTargetBuilder", "first_target_builder_factory", {}),
+    "FirstTargetBuilder": (
+        "FirstTargetBuilder",
+        "first_target_builder_factory",
+        {"action_prefix": "${ACTION_PREFIX}", "action_suffix": "${ACTION_SUFFIX}"},
+    ),
     "AbaqusJournal": ("AbaqusJournal", "abaqus_journal_builder_factory", {"program": "${ABAQUS_PROGRAM}"}),
     "AbaqusSolver": ("AbaqusSolver", "abaqus_solver_builder_factory", {"program": "${ABAQUS_PROGRAM}"}),
     "AbaqusDatacheck": (
