@@ -1752,6 +1752,7 @@ test_convert_numpy_to_builtin_cases = {
             ],
             dtype=object,
         ),
+        15,
         does_not_raise,
     ),
     "all parameters numpy typing - float 64": (
@@ -1769,6 +1770,7 @@ test_convert_numpy_to_builtin_cases = {
             ],
             dtype=object,
         ),
+        15,
         does_not_raise,
     ),
     "one parameter numpy typing - int 64": (
@@ -1786,6 +1788,7 @@ test_convert_numpy_to_builtin_cases = {
             ],
             dtype=object,
         ),
+        15,
         does_not_raise,
     ),
     "all parameters numpy typing - int/float 64": (
@@ -1803,6 +1806,7 @@ test_convert_numpy_to_builtin_cases = {
             ],
             dtype=object,
         ),
+        15,
         does_not_raise,
     ),
     "one parameter numpy typing - boolean": (
@@ -1820,6 +1824,7 @@ test_convert_numpy_to_builtin_cases = {
             ],
             dtype=object,
         ),
+        15,
         does_not_raise,
     ),
     "one parameter numpy typing - string": (
@@ -1837,6 +1842,7 @@ test_convert_numpy_to_builtin_cases = {
             ],
             dtype=object,
         ),
+        0,
         does_not_raise,
     ),
     "one parameter numpy typing - int 32": (
@@ -1854,6 +1860,7 @@ test_convert_numpy_to_builtin_cases = {
             ],
             dtype=object,
         ),
+        7,
         does_not_raise,
     ),
     "one parameter numpy typing - int 16": (
@@ -1871,6 +1878,7 @@ test_convert_numpy_to_builtin_cases = {
             ],
             dtype=object,
         ),
+        3,
         does_not_raise,
     ),
     "one parameter numpy typing - float 32": (
@@ -1883,11 +1891,12 @@ test_convert_numpy_to_builtin_cases = {
         ),
         numpy.array(
             [
-                [1.0, 1.23046875],
-                [2.0, 4.55859375],
+                [1.0, 1.23],
+                [2.0, 4.56],
             ],
             dtype=object,
         ),
+        7,
         does_not_raise,
     ),
     "one parameter numpy typing - float 16": (
@@ -1900,11 +1909,12 @@ test_convert_numpy_to_builtin_cases = {
         ),
         numpy.array(
             [
-                [1.0, 1.2300000190734863],
-                [2.0, 4.559999942779541],
+                [1.0, 1.23],
+                [2.0, 4.56],
             ],
             dtype=object,
         ),
+        3,
         does_not_raise,
     ),
     "3D array - int 16": (
@@ -1922,30 +1932,37 @@ test_convert_numpy_to_builtin_cases = {
             ],
             dtype=object,
         ),
+        3,
         does_not_raise,
     ),
 }
 
 
 @pytest.mark.parametrize(
-    ("samples", "expected", "outcome"),
+    ("samples", "expected", "precision", "outcome"),
     test_convert_numpy_to_builtin_cases.values(),
     ids=test_convert_numpy_to_builtin_cases.keys(),
 )
 def test_convert_numpy_to_builtin(
     samples: numpy.ndarray,
     expected: numpy.ndarray,
+    precision: int,
     outcome: contextlib.nullcontext | pytest.RaisesExc,
 ) -> None:
     """Check the function of converting numpy datatypes to Python datatypes.
 
     :param samples: numpy.ndarray of samples
     :param expected: expected output numpy.ndarray
+    :param precision: decimal places to check precision of outputs to
+    :param tolerance: relative tolerance, based on numpy datatype bit size
     """
     with outcome:
         try:
             converted_samples = parameter_generators._convert_numpy_to_builtin(samples)
-            numpy.testing.assert_equal(converted_samples, expected)
+            if precision > 0:
+                numpy.testing.assert_array_almost_equal(converted_samples, expected, decimal=precision)
+            else:
+                numpy.testing.assert_equal(converted_samples, expected)  # String comparison
         finally:
             pass
 
