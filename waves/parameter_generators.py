@@ -201,7 +201,8 @@ class ParameterGenerator(ABC):
         Must set the class attributes:
 
         * ``self._parameter_names``: list of strings containing the parameter study's parameter names
-        * ``self._samples``: numpy ndarray, which is input-validated to force Python builtin types
+        * ``self._samples``: numpy dtype=object array of python builtins, explicit type conversion will cast any numpy
+            objects to python builtins.
 
         Minimum necessary work example:
 
@@ -2023,15 +2024,11 @@ def _update_set_names(parameter_study: xarray.Dataset, template: string.Template
 def _convert_numpy_to_builtin(samples: numpy.ndarray) -> numpy.ndarray:
     """Convert numpy-typed data to its corresponding Python built-in datatype.
 
-    Utilizes ``numpy.ndarray.item()`` to convert entries to their corresponding Python built-in datatype. If no exact
-    match is found, raises a TypeError.
+    Utilizes ``numpy.ndarray.item()`` to convert entries to their corresponding Python built-in datatype.
 
     :param samples: A numpy.ndarray of the samples of the parameter schema.
 
     :return: numpy.ndarray with sample typing converted to Python datatypes
-
-    :raises TypeError: if the parameter schema samples contains a numpy datatype that does not have an exact
-        equivalent to a Python built-in type.
     """
     # Convert flattened data, then reshape back to original dimensions
     flat_converted = [entry.item() if hasattr(entry, 'item') else entry for entry in samples.flat]
