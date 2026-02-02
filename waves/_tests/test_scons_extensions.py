@@ -2971,6 +2971,8 @@ def test_waves_environment_attributes(kwargs: dict[str, str]) -> None:
         "SIERRA_PROGRAM": "sierra",
         "ANSYS_PROGRAM": "ansys",
         "SPHINX_BUILD_PROGRAM": "sphinx-build",
+        "ACTION_PREFIX": "$(cd$) ${TARGET.dir.abspath} &&",
+        "ACTION_SUFFIX": "> ${TARGETS[-1].abspath} 2>&1",
     }
     expected_attributes.update(**kwargs)
     env = scons_extensions.WAVESEnvironment(**kwargs)
