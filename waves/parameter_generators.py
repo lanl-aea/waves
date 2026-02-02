@@ -2002,15 +2002,25 @@ def _update_set_names(parameter_study: xarray.Dataset, template: string.Template
 def _convert_numpy_to_builtin(samples: numpy.ndarray) -> numpy.ndarray:
     """Convert numpy-typed data to its corresponding Python built-in datatype.
 
-    Utilizes ``numpy.ndarray.item()`` to convert entries to their corresponding Python built-in datatype.
+    Utilizes ``numpy.ndarray.item()`` to convert entries to their corresponding Python built-in datatype. If samples
+        with NumPy typing persist in the output, raises a TypeError.
 
     :param samples: A numpy.ndarray of the samples of the parameter schema.
 
     :return: numpy.ndarray with sample typing converted to Python datatypes
+
+    :raises RuntimeError: if the converted samples array still contains entries with NumPy typing
     """
-    # Convert flattened data, then reshape back to original dimensions
-    flat_converted = [entry.item() if hasattr(entry, 'item') else entry for entry in samples.flat]
-    return numpy.array(flat_converted, dtype=object).reshape(samples.shape)
+    # Convert to flattened data, then reshape back to original dimensions
+    converted_flat = [entry.item() if hasattr(entry, "item") else entry for entry in samples.flat]
+    # Check for residual NumPy typing
+    for entry in converted_flat:
+        if hasattr(entry, "item"):
+            raise TypeError(
+                f"Encountered sample '{entry}' with typing '{type(entry)}' that could not be converted to a "
+                f"Python built-in type. Either a loss of precision would occur, or no valid Python type exists."
+            )
+    return numpy.array(converted_flat, dtype=object).reshape(samples.shape)
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace

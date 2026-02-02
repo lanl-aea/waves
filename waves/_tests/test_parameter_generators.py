@@ -1935,6 +1935,18 @@ test_convert_numpy_to_builtin_cases = {
         3,
         does_not_raise,
     ),
+    "one parameter numpy typing - float 128": (
+        numpy.array(
+            [
+                [1.0, numpy.float128(1.23)],
+                [2.0, numpy.float128(4.56)],
+            ],
+            dtype=object,
+        ),
+        None,
+        None,
+        pytest.raises(TypeError, match="could not be converted"),
+    ),
 }
 
 
