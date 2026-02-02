@@ -201,8 +201,6 @@ class ParameterGenerator(ABC):
         Must set the class attributes:
 
         * ``self._parameter_names``: list of strings containing the parameter study's parameter names
-        * ``self._samples``: numpy dtype=object array of python builtins, explicit type conversion will cast any numpy
-            objects to python builtins.
 
         Minimum necessary work example:
 
@@ -211,7 +209,6 @@ class ParameterGenerator(ABC):
            # Work unique to the parameter generator schema. Example matches CartesianProduct schema.
            self._parameter_names = list(self.parameter_schema.keys())
         """
-        self._samples = _convert_numpy_to_builtin(self._samples)
 
     @abstractmethod
     def _generate(self, **kwargs) -> None:
@@ -244,6 +241,7 @@ class ParameterGenerator(ABC):
            # Work performed by common ABC methods
            super()._generate()
         """
+        self._samples = _convert_numpy_to_builtin(self._samples)
         self._create_set_hashes()
         self._create_set_names()
         self._create_parameter_study()
