@@ -16,7 +16,7 @@ Internal Changes
 
 Enhancements
 ============
-- Convert parameter schema NumPy input types to Python built-in types prior to generation. (:issue:`992`, :merge:`1288`). 
+- Convert parameter schema NumPy input types to Python built-in types prior to generation (:issue:`992`, :merge:`1288`). 
   By `Chris Johnson`_.
 - Verify parameter study content hashes at generation to catch mismatched or unsupported type errors earlier 
   with a meaningful user error message. (:issue:`993`, :merge:`1287`). By `Chris Johnson`_.
