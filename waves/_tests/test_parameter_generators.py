@@ -1935,11 +1935,11 @@ test_convert_numpy_to_builtin_cases = {
         3,
         does_not_raise,
     ),
-    "one parameter numpy typing - float 128": (
+    "one parameter numpy typing - long double": (
         numpy.array(
             [
-                [1.0, numpy.float128(1.23)],
-                [2.0, numpy.float128(4.56)],
+                [1.0, numpy.longdouble(1.23)],
+                [2.0, numpy.longdouble(4.56)],
             ],
             dtype=object,
         ),
