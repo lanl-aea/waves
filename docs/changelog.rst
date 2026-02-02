@@ -16,7 +16,9 @@ Internal Changes
 
 Enhancements
 ============
-- Verify parameter study content hashes at generation to catch mismatched or unsupported type errors earlier
+- Convert parameter schema NumPy input types to Python built-in types prior to generation. (:issue:`992`, :merge:`1288`). 
+  By `Chris Johnson`_.
+- Verify parameter study content hashes at generation to catch mismatched or unsupported type errors earlier 
   with a meaningful user error message. (:issue:`993`, :merge:`1287`). By `Chris Johnson`_.
 - Escape the ``cd`` command in the default action prefix to avoid putting system absolute paths and binaries in task
   definition source lists. Helps when using a shared project cache from more than one server (:issue:`995`,
