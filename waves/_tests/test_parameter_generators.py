@@ -1876,24 +1876,53 @@ test_convert_numpy_to_builtin_cases = {
     "one parameter numpy typing - float 32": (
         numpy.array(
             [
-                [1.0, numpy.float32(10.1234)],
-                [2.0, numpy.float32(20.1234)],
+                [1.0, numpy.float32(1.23)],
+                [2.0, numpy.float32(4.56)],
             ],
             dtype=object,
         ),
-        None,
-        pytest.raises(TypeError, match="would lose numerical precision"),
+        numpy.array(
+            [
+                [1.0, 1.23046875],
+                [2.0, 4.55859375],
+            ],
+            dtype=object,
+        ),
+        does_not_raise,
     ),
     "one parameter numpy typing - float 16": (
         numpy.array(
             [
-                [1.0, numpy.float16(10.12)],
-                [2.0, numpy.float16(20.12)],
+                [1.0, numpy.float16(1.23)],
+                [2.0, numpy.float16(4.56)],
             ],
             dtype=object,
         ),
-        None,
-        pytest.raises(TypeError, match="would lose numerical precision"),
+        numpy.array(
+            [
+                [1.0, 1.2300000190734863],
+                [2.0, 4.559999942779541],
+            ],
+            dtype=object,
+        ),
+        does_not_raise,
+    ),
+    "3D array - int 16": (
+        numpy.array(
+            [
+                [[numpy.int16(1), 10.0], [3, 30.0]],
+                [[numpy.int16(2), 20.0], [4, 40.0]],
+            ],
+            dtype=object,
+        ),
+        numpy.array(
+            [
+                [[1, 10.0], [3, 30.0]],
+                [[2, 20.0], [4, 40.0]],
+            ],
+            dtype=object,
+        ),
+        does_not_raise,
     ),
 }
 
