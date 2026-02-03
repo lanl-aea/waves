@@ -4399,7 +4399,9 @@ class WAVESEnvironment(SConsEnvironment):
         :param args: All positional arguments are passed through to the builder (*not* to the builder factory)
         :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
         """
-        builder = abaqus_journal_builder_factory(program="${ABAQUS_PROGRAM}")
+        builder = abaqus_journal_builder_factory(
+            program="${ABAQUS_PROGRAM}", action_prefix="${ACTION_PREFIX}", action_suffix="${ACTION_SUFFIX}"
+        )
         return builder(self, *args, target=target, source=source, **kwargs)
 
     def AbaqusSolver(self, target: list, source: list, *args, **kwargs) -> SCons.Node.NodeList:  # noqa: N802
@@ -4414,7 +4416,9 @@ class WAVESEnvironment(SConsEnvironment):
         :param args: All positional arguments are passed through to the builder (*not* to the builder factory)
         :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
         """
-        builder = abaqus_solver_builder_factory(program="${ABAQUS_PROGRAM}")
+        builder = abaqus_solver_builder_factory(
+            program="${ABAQUS_PROGRAM}", action_prefix="${ACTION_PREFIX}", action_suffix="${ACTION_SUFFIX}"
+        )
         return builder(self, *args, target=target, source=source, **kwargs)
 
     def AbaqusDatacheck(self, target: list, source: list, *args, **kwargs) -> SCons.Node.NodeList:  # noqa: N802
@@ -4435,6 +4439,8 @@ class WAVESEnvironment(SConsEnvironment):
         builder = abaqus_solver_builder_factory(
             program="${ABAQUS_PROGRAM}",
             emitter=abaqus_datacheck_emitter,
+            action_prefix="${ACTION_PREFIX}",
+            action_suffix="${ACTION_SUFFIX}",
         )
         return builder(self, *args, target=target, source=source, **kwargs)
 
@@ -4456,6 +4462,8 @@ class WAVESEnvironment(SConsEnvironment):
         builder = abaqus_solver_builder_factory(
             program="${ABAQUS_PROGRAM}",
             emitter=abaqus_explicit_emitter,
+            action_prefix="${ACTION_PREFIX}",
+            action_suffix="${ACTION_SUFFIX}",
         )
         return builder(self, *args, target=target, source=source, **kwargs)
 
@@ -4477,6 +4485,8 @@ class WAVESEnvironment(SConsEnvironment):
         builder = abaqus_solver_builder_factory(
             program="${ABAQUS_PROGRAM}",
             emitter=abaqus_standard_emitter,
+            action_prefix="${ACTION_PREFIX}",
+            action_suffix="${ACTION_SUFFIX}",
         )
         return builder(self, *args, target=target, source=source, **kwargs)
 
@@ -4517,7 +4527,9 @@ class WAVESEnvironment(SConsEnvironment):
         :param args: All positional arguments are passed through to the builder (*not* to the builder factory)
         :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
         """
-        builder = python_builder_factory(program="${PYTHON_PROGRAM}")
+        builder = python_builder_factory(
+            program="${PYTHON_PROGRAM}", action_prefix="${ACTION_PREFIX}", action_suffix="${ACTION_SUFFIX}"
+        )
         return builder(self, *args, target=target, source=source, **kwargs)
 
     def QuinoaSolver(  # noqa: N802
@@ -4535,7 +4547,12 @@ class WAVESEnvironment(SConsEnvironment):
         :param args: All positional arguments are passed through to the builder (*not* to the builder factory)
         :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
         """
-        builder = quinoa_builder_factory(program="${CHARMRUN_PROGRAM}", subcommand="${INCITER_PROGRAM}")
+        builder = quinoa_builder_factory(
+            program="${CHARMRUN_PROGRAM}",
+            subcommand="${INCITER_PROGRAM}",
+            action_prefix="${ACTION_PREFIX}",
+            action_suffix="${ACTION_SUFFIX}",
+        )
         return builder(self, *args, target=target, source=source, **kwargs)
 
     def CalculiX(self, target: list, source: list, *args, **kwargs) -> SCons.Node.NodeList:  # noqa: N802
@@ -4550,7 +4567,9 @@ class WAVESEnvironment(SConsEnvironment):
         :param args: All positional arguments are passed through to the builder (*not* to the builder factory)
         :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
         """
-        builder = calculix_builder_factory(program="${CCX_PROGRAM}")
+        builder = calculix_builder_factory(
+            program="${CCX_PROGRAM}", action_prefix="${ACTION_PREFIX}", action_suffix="${ACTION_SUFFIX}"
+        )
         return builder(self, *args, target=target, source=source, **kwargs)
 
     def FierroExplicit(  # noqa: N802
@@ -4568,7 +4587,12 @@ class WAVESEnvironment(SConsEnvironment):
         :param args: All positional arguments are passed through to the builder (*not* to the builder factory)
         :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
         """
-        builder = fierro_explicit_builder_factory(program="${MPIRUN_PROGRAM}", subcommand="${FIERRO_EXPLICIT_PROGRAM}")
+        builder = fierro_explicit_builder_factory(
+            program="${MPIRUN_PROGRAM}",
+            subcommand="${FIERRO_EXPLICIT_PROGRAM}",
+            action_prefix="${ACTION_PREFIX}",
+            action_suffix="${ACTION_SUFFIX}",
+        )
         return builder(self, *args, target=target, source=source, **kwargs)
 
     def FierroImplicit(  # noqa: N802
@@ -4586,7 +4610,12 @@ class WAVESEnvironment(SConsEnvironment):
         :param args: All positional arguments are passed through to the builder (*not* to the builder factory)
         :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
         """
-        builder = fierro_implicit_builder_factory(program="${MPIRUN_PROGRAM}", subcommand="${FIERRO_IMPLICIT_PROGRAM}")
+        builder = fierro_implicit_builder_factory(
+            program="${MPIRUN_PROGRAM}",
+            subcommand="${FIERRO_IMPLICIT_PROGRAM}",
+            action_prefix="${ACTION_PREFIX}",
+            action_suffix="${ACTION_SUFFIX}",
+        )
         return builder(self, *args, target=target, source=source, **kwargs)
 
     def Sierra(self, target: list, source: list, *args, **kwargs) -> SCons.Node.NodeList:  # noqa: N802
@@ -4601,7 +4630,9 @@ class WAVESEnvironment(SConsEnvironment):
         :param args: All positional arguments are passed through to the builder (*not* to the builder factory)
         :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
         """
-        builder = sierra_builder_factory(program="${SIERRA_PROGRAM}")
+        builder = sierra_builder_factory(
+            program="${SIERRA_PROGRAM}", action_prefix="${ACTION_PREFIX}", action_suffix="${ACTION_SUFFIX}"
+        )
         return builder(self, *args, target=target, source=source, **kwargs)
 
     def AnsysAPDL(self, target: list, source: list, *args, **kwargs) -> SCons.Node.NodeList:  # noqa: N802
@@ -4616,7 +4647,9 @@ class WAVESEnvironment(SConsEnvironment):
         :param args: All positional arguments are passed through to the builder (*not* to the builder factory)
         :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
         """
-        builder = ansys_apdl_builder_factory(program="${ANSYS_PROGRAM}")
+        builder = ansys_apdl_builder_factory(
+            program="${ANSYS_PROGRAM}", action_prefix="${ACTION_PREFIX}", action_suffix="${ACTION_SUFFIX}"
+        )
         return builder(self, *args, target=target, source=source, **kwargs)
 
     def Truchas(self, target: list, source: list, *args, **kwargs) -> SCons.Node.NodeList:  # noqa: N802
@@ -4632,7 +4665,12 @@ class WAVESEnvironment(SConsEnvironment):
         :param args: All positional arguments are passed through to the builder (*not* to the builder factory)
         :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
         """
-        builder = truchas_builder_factory(program="${MPIRUN_PROGRAM}", subcommand="${TRUCHAS_PROGRAM}")
+        builder = truchas_builder_factory(
+            program="${MPIRUN_PROGRAM}",
+            subcommand="${TRUCHAS_PROGRAM}",
+            action_prefix="${ACTION_PREFIX}",
+            action_suffix="${ACTION_SUFFIX}",
+        )
         return builder(self, *args, target=target, source=source, **kwargs)
 
     def SphinxBuild(  # noqa: N802
