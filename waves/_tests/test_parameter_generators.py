@@ -1947,6 +1947,34 @@ test_convert_numpy_to_builtin_cases = {
         None,
         pytest.raises(TypeError, match="could not be converted"),
     ),
+    "item method check - float extended": (
+        numpy.array(
+            [
+                [1.0, numpy.float64(1.23456789123456789)],
+                [2.0, numpy.float64(4.56789123456789123)],
+            ],
+            dtype=object,
+        ),
+        numpy.array(
+            [
+                [1.0, numpy.float64(1.23456789123456789).item()],
+                [2.0, numpy.float64(4.56789123456789123).item()],
+            ],
+            dtype=object,
+        ),
+        15,
+        does_not_raise,
+    ),
+    # Not a valid WAVES input, but reliably triggers the ValueError
+    "string cast mismatch - timedelta": (
+        numpy.array(
+            [[numpy.timedelta64(1, "D")]],
+            dtype=object,
+        ),
+        None,
+        None,
+        pytest.raises(ValueError, match="string formatting differs"),
+    ),
 }
 
 
@@ -1977,10 +2005,6 @@ def test_convert_numpy_to_builtin(
                 numpy.testing.assert_array_almost_equal(converted_samples, expected, decimal=precision)
             else:
                 numpy.testing.assert_equal(converted_samples, expected)  # String comparison
-            # String cast check
-            numpy_typed_flat = [entry for entry in samples.flat if isinstance(entry, (numpy.generic, numpy.ndarray))]
-            for entry in numpy_typed_flat:
-                assert f"{entry}" == f"{entry.item()}"
         finally:
             pass
 
