@@ -16,7 +16,7 @@ Enhancements
   definition source lists. Helps when using a shared project cache from more than one server (:issue:`995`,
   :merge:`1289`). By `Kyle Brindley`_.
 - Verify parameter study content hashes at generation to catch mismatched or unsupported type errors earlier
-  with a meaningful user error message. (:issue:`993`, :merge:`1287`). By `Chris Johnson`_.
+  with a meaningful user error message (:issue:`993`, :merge:`1287`). By `Chris Johnson`_.
 
 ******************
 1.1.1 (2025-01-14)
