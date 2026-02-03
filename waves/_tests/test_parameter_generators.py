@@ -1961,7 +1961,9 @@ def test_convert_numpy_to_builtin(
     precision: int,
     outcome: contextlib.nullcontext | pytest.RaisesExc,
 ) -> None:
-    """Check the function of converting numpy datatypes to Python datatypes.
+    """Check the function of converting NumPy datatypes to Python datatypes.
+
+    Also checks the string cast from NumPy typing to the corresponding Python built-in type.
 
     :param samples: numpy.ndarray of samples
     :param expected: expected output numpy.ndarray
@@ -1975,6 +1977,10 @@ def test_convert_numpy_to_builtin(
                 numpy.testing.assert_array_almost_equal(converted_samples, expected, decimal=precision)
             else:
                 numpy.testing.assert_equal(converted_samples, expected)  # String comparison
+            # String cast check
+            numpy_typed_flat = [entry for entry in samples.flat if isinstance(entry, (numpy.generic, numpy.ndarray))]
+            for entry in numpy_typed_flat:
+                assert f"{entry}" == f"{entry.item()}"
         finally:
             pass
 
