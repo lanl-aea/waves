@@ -15,6 +15,8 @@ Enhancements
 - Escape the ``cd`` command in the default action prefix to avoid putting system absolute paths and binaries in task
   definition source lists. Helps when using a shared project cache from more than one server (:issue:`995`,
   :merge:`1289`). By `Kyle Brindley`_.
+- Allow action prefix and suffix overrrides for the WAVES construction environment. Enables overrides to default
+  behavior once at the environment level instead of once per builder (:issue:`994`, :merge:`1290`). By `Kyle Brindley`_.
 
 ******************
 1.1.1 (2025-01-14)
