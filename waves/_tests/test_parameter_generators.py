@@ -2184,7 +2184,7 @@ class TestParameterGenerator:
 
     def test_verify_generated_parameter_study(self) -> None:
         dummy_generator = DummyGenerator({})
-        with (does_not_raise):
+        with does_not_raise:
             dummy_generator._verify_generated_parameter_study()
         with (
             patch("waves.parameter_generators._verify_parameter_study", side_effect=RuntimeError),
