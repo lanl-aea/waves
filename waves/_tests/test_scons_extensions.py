@@ -2949,6 +2949,8 @@ waves_environment_attributes = {
             "SIERRA_PROGRAM": "different sierra",
             "ANSYS_PROGRAM": "different ansys",
             "SPHINX_BUILD_PROGRAM": "different sphinx-build",
+            "ACTION_PREFIX": "different action prefix",
+            "ACTION_SUFFIX": "different action suffix",
         }
     ),
 }
@@ -2971,6 +2973,8 @@ def test_waves_environment_attributes(kwargs: dict[str, str]) -> None:
         "SIERRA_PROGRAM": "sierra",
         "ANSYS_PROGRAM": "ansys",
         "SPHINX_BUILD_PROGRAM": "sphinx-build",
+        "ACTION_PREFIX": "$(cd$) ${TARGET.dir.abspath} &&",
+        "ACTION_SUFFIX": "> ${TARGETS[-1].abspath} 2>&1",
     }
     expected_attributes.update(**kwargs)
     env = scons_extensions.WAVESEnvironment(**kwargs)
@@ -3011,57 +3015,124 @@ def test_waves_environment_methods(method: str, function: str) -> None:
 
 
 waves_environment_builders = {
-    "FirstTargetBuilder": ("FirstTargetBuilder", "first_target_builder_factory", {}),
-    "AbaqusJournal": ("AbaqusJournal", "abaqus_journal_builder_factory", {"program": "${ABAQUS_PROGRAM}"}),
-    "AbaqusSolver": ("AbaqusSolver", "abaqus_solver_builder_factory", {"program": "${ABAQUS_PROGRAM}"}),
+    "FirstTargetBuilder": (
+        "FirstTargetBuilder",
+        "first_target_builder_factory",
+        {"action_prefix": "${ACTION_PREFIX}", "action_suffix": "${ACTION_SUFFIX}"},
+    ),
+    "AbaqusJournal": (
+        "AbaqusJournal",
+        "abaqus_journal_builder_factory",
+        {"program": "${ABAQUS_PROGRAM}", "action_prefix": "${ACTION_PREFIX}", "action_suffix": "${ACTION_SUFFIX}"},
+    ),
+    "AbaqusSolver": (
+        "AbaqusSolver",
+        "abaqus_solver_builder_factory",
+        {"program": "${ABAQUS_PROGRAM}", "action_prefix": "${ACTION_PREFIX}", "action_suffix": "${ACTION_SUFFIX}"},
+    ),
     "AbaqusDatacheck": (
         "AbaqusDatacheck",
         "abaqus_solver_builder_factory",
-        {"program": "${ABAQUS_PROGRAM}", "emitter": scons_extensions.abaqus_datacheck_emitter},
+        {
+            "program": "${ABAQUS_PROGRAM}",
+            "emitter": scons_extensions.abaqus_datacheck_emitter,
+            "action_prefix": "${ACTION_PREFIX}",
+            "action_suffix": "${ACTION_SUFFIX}",
+        },
     ),
     "AbaqusExplicit": (
         "AbaqusExplicit",
         "abaqus_solver_builder_factory",
-        {"program": "${ABAQUS_PROGRAM}", "emitter": scons_extensions.abaqus_explicit_emitter},
+        {
+            "program": "${ABAQUS_PROGRAM}",
+            "emitter": scons_extensions.abaqus_explicit_emitter,
+            "action_prefix": "${ACTION_PREFIX}",
+            "action_suffix": "${ACTION_SUFFIX}",
+        },
     ),
     "AbaqusStandard": (
         "AbaqusStandard",
         "abaqus_solver_builder_factory",
-        {"program": "${ABAQUS_PROGRAM}", "emitter": scons_extensions.abaqus_standard_emitter},
+        {
+            "program": "${ABAQUS_PROGRAM}",
+            "emitter": scons_extensions.abaqus_standard_emitter,
+            "action_prefix": "${ACTION_PREFIX}",
+            "action_suffix": "${ACTION_SUFFIX}",
+        },
     ),
-    "PythonScript": ("PythonScript", "python_builder_factory", {"program": "${PYTHON_PROGRAM}"}),
+    "PythonScript": (
+        "PythonScript",
+        "python_builder_factory",
+        {"program": "${PYTHON_PROGRAM}", "action_prefix": "${ACTION_PREFIX}", "action_suffix": "${ACTION_SUFFIX}"},
+    ),
     "QuinoaSolver": (
         "QuinoaSolver",
         "quinoa_builder_factory",
-        {"program": "${CHARMRUN_PROGRAM}", "subcommand": "${INCITER_PROGRAM}"},
+        {
+            "program": "${CHARMRUN_PROGRAM}",
+            "subcommand": "${INCITER_PROGRAM}",
+            "action_prefix": "${ACTION_PREFIX}",
+            "action_suffix": "${ACTION_SUFFIX}",
+        },
     ),
     "CalculiX": (
         "CalculiX",
         "calculix_builder_factory",
-        {"program": "${CCX_PROGRAM}"},
+        {"program": "${CCX_PROGRAM}", "action_prefix": "${ACTION_PREFIX}", "action_suffix": "${ACTION_SUFFIX}"},
     ),
     "FierroExplicit": (
         "FierroExplicit",
         "fierro_explicit_builder_factory",
-        {"program": "${MPIRUN_PROGRAM}", "subcommand": "${FIERRO_EXPLICIT_PROGRAM}"},
+        {
+            "program": "${MPIRUN_PROGRAM}",
+            "subcommand": "${FIERRO_EXPLICIT_PROGRAM}",
+            "action_prefix": "${ACTION_PREFIX}",
+            "action_suffix": "${ACTION_SUFFIX}",
+        },
     ),
     "FierroImplicit": (
         "FierroImplicit",
         "fierro_implicit_builder_factory",
-        {"program": "${MPIRUN_PROGRAM}", "subcommand": "${FIERRO_IMPLICIT_PROGRAM}"},
+        {
+            "program": "${MPIRUN_PROGRAM}",
+            "subcommand": "${FIERRO_IMPLICIT_PROGRAM}",
+            "action_prefix": "${ACTION_PREFIX}",
+            "action_suffix": "${ACTION_SUFFIX}",
+        },
     ),
     "Sierra": (
         "Sierra",
         "sierra_builder_factory",
-        {"program": "${SIERRA_PROGRAM}"},
+        {"program": "${SIERRA_PROGRAM}", "action_prefix": "${ACTION_PREFIX}", "action_suffix": "${ACTION_SUFFIX}"},
     ),
-    "AnsysAPDL": ("AnsysAPDL", "ansys_apdl_builder_factory", {"program": "${ANSYS_PROGRAM}"}),
-    "SphinxBuild": ("SphinxBuild", "sphinx_build", {"program": "${SPHINX_BUILD_PROGRAM}"}),
-    "SphinxPDF": ("SphinxPDF", "sphinx_latexpdf", {"program": "${SPHINX_BUILD_PROGRAM}"}),
+    "AnsysAPDL": (
+        "AnsysAPDL",
+        "ansys_apdl_builder_factory",
+        {"program": "${ANSYS_PROGRAM}", "action_prefix": "${ACTION_PREFIX}", "action_suffix": "${ACTION_SUFFIX}"},
+    ),
+    "SphinxBuild": (
+        "SphinxBuild",
+        "sphinx_build",
+        {
+            "program": "${SPHINX_BUILD_PROGRAM}",
+        },
+    ),
+    "SphinxPDF": (
+        "SphinxPDF",
+        "sphinx_latexpdf",
+        {
+            "program": "${SPHINX_BUILD_PROGRAM}",
+        },
+    ),
     "Truchas": (
         "Truchas",
         "truchas_builder_factory",
-        {"program": "${MPIRUN_PROGRAM}", "subcommand": "${TRUCHAS_PROGRAM}"},
+        {
+            "program": "${MPIRUN_PROGRAM}",
+            "subcommand": "${TRUCHAS_PROGRAM}",
+            "action_prefix": "${ACTION_PREFIX}",
+            "action_suffix": "${ACTION_SUFFIX}",
+        },
     ),
 }
 
