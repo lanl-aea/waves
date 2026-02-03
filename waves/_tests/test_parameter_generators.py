@@ -2182,6 +2182,21 @@ class TestParameterGenerator:
             finally:
                 pass
 
+    def test_verify_generated_parameter_study(self) -> None:
+        with (
+            patch("waves.parameter_generators._verify_parameter_study", return_value=None) as mock_verify,
+            does_not_raise,
+        ):
+            dummy_generator = DummyGenerator({})
+            mock_verify.assert_called_once()
+            dummy_generator._verify_generated_parameter_study()
+            assert mock_verify.call_count == 2
+        with (
+            patch("waves.parameter_generators._verify_parameter_study", side_effect=RuntimeError),
+            pytest.raises(RuntimeError, match="Encountered hash inconsistency during parameter study verification"),
+        ):
+            dummy_generator._verify_generated_parameter_study()
+
     def test_generate_verification(self) -> None:
         with (
             patch("waves.parameter_generators._verify_parameter_study", return_value=None) as mock_verify,
