@@ -4391,6 +4391,8 @@ class WAVESEnvironment(SConsEnvironment):
         """Define tasks with the builder returned by :meth:`waves.scons_extensions.abaqus_journal_builder_factory`.
 
         :var program: ``${ABAQUS_PROGRAM}``
+        :var action_prefix: ``${ACTION_PREFIX}``
+        :var action_suffix: ``${ACTION_SUFFIX}``
 
         :param target: The task target list
         :param source: The task source list
@@ -4404,6 +4406,8 @@ class WAVESEnvironment(SConsEnvironment):
         """Define tasks with the builder returned by :meth:`waves.scons_extensions.abaqus_solver_builder_factory`.
 
         :var program: ``${ABAQUS_PROGRAM}``
+        :var action_prefix: ``${ACTION_PREFIX}``
+        :var action_suffix: ``${ACTION_SUFFIX}``
 
         :param target: The task target list
         :param source: The task source list
@@ -4420,6 +4424,8 @@ class WAVESEnvironment(SConsEnvironment):
 
         :var program: ``${ABAQUS_PROGRAM}``
         :var emitter: :meth:`waves.scons_extensions.abaqus_datacheck_emitter`
+        :var action_prefix: ``${ACTION_PREFIX}``
+        :var action_suffix: ``${ACTION_SUFFIX}``
 
         :param target: The task target list
         :param source: The task source list
@@ -4439,6 +4445,8 @@ class WAVESEnvironment(SConsEnvironment):
 
         :var program: ``${ABAQUS_PROGRAM}``
         :var emitter: :meth:`waves.scons_extensions.abaqus_explicit_emitter`
+        :var action_prefix: ``${ACTION_PREFIX}``
+        :var action_suffix: ``${ACTION_SUFFIX}``
 
         :param target: The task target list
         :param source: The task source list
@@ -4458,6 +4466,8 @@ class WAVESEnvironment(SConsEnvironment):
 
         :var program: ``${ABAQUS_PROGRAM}``
         :var emitter: :meth:`waves.scons_extensions.abaqus_standard_emitter`
+        :var action_prefix: ``${ACTION_PREFIX}``
+        :var action_suffix: ``${ACTION_SUFFIX}``
 
         :param target: The task target list
         :param source: The task source list
@@ -4499,6 +4509,8 @@ class WAVESEnvironment(SConsEnvironment):
         """Define tasks with the builder returned by :meth:`waves.scons_extensions.python_builder_factory`.
 
         :var program: ``${PYTHON_PROGRAM}``
+        :var action_prefix: ``${ACTION_PREFIX}``
+        :var action_suffix: ``${ACTION_SUFFIX}``
 
         :param target: The task target list
         :param source: The task source list
@@ -4515,6 +4527,8 @@ class WAVESEnvironment(SConsEnvironment):
 
         :var program: ``${CHARMRUN_PROGRAM}``
         :var subcommand: ``${INCITER_PROGRAM}``
+        :var action_prefix: ``${ACTION_PREFIX}``
+        :var action_suffix: ``${ACTION_SUFFIX}``
 
         :param target: The task target list
         :param source: The task source list
@@ -4528,6 +4542,8 @@ class WAVESEnvironment(SConsEnvironment):
         """Define tasks with the builder returned by :meth:`waves.scons_extensions.calculix_builder_factory`.
 
         :var program: ``${CCX_PROGRAM}``
+        :var action_prefix: ``${ACTION_PREFIX}``
+        :var action_suffix: ``${ACTION_SUFFIX}``
 
         :param target: The task target list
         :param source: The task source list
@@ -4544,6 +4560,8 @@ class WAVESEnvironment(SConsEnvironment):
 
         :var program: ``${MPIRUN_PROGRAM}``
         :var subcommand: ``${FIERRO_EXPLICIT_PROGRAM}``
+        :var action_prefix: ``${ACTION_PREFIX}``
+        :var action_suffix: ``${ACTION_SUFFIX}``
 
         :param target: The task target list
         :param source: The task source list
@@ -4560,6 +4578,8 @@ class WAVESEnvironment(SConsEnvironment):
 
         :var program: ``${MPIRUN_PROGRAM}``
         :var subcommand: ``${FIERRO_IMPLICIT_PROGRAM}``
+        :var action_prefix: ``${ACTION_PREFIX}``
+        :var action_suffix: ``${ACTION_SUFFIX}``
 
         :param target: The task target list
         :param source: The task source list
@@ -4573,6 +4593,8 @@ class WAVESEnvironment(SConsEnvironment):
         """Define tasks with the builder returned by :meth:`waves.scons_extensions.sierra_builder_factory`.
 
         :var program: ``${SIERRA_PROGRAM}``
+        :var action_prefix: ``${ACTION_PREFIX}``
+        :var action_suffix: ``${ACTION_SUFFIX}``
 
         :param target: The task target list
         :param source: The task source list
@@ -4586,6 +4608,8 @@ class WAVESEnvironment(SConsEnvironment):
         """Define tasks with the builder returned by :meth:`waves.scons_extensions.ansys_apdl_builder_factory`.
 
         :var program: ``${ANSYS_PROGRAM}``
+        :var action_prefix: ``${ACTION_PREFIX}``
+        :var action_suffix: ``${ACTION_SUFFIX}``
 
         :param target: The task target list
         :param source: The task source list
@@ -4600,6 +4624,8 @@ class WAVESEnvironment(SConsEnvironment):
 
         :var program: ``${MPIRUN_PROGRAM}``
         :var subcommand: ``${TRUCHAS_PROGRAM}``
+        :var action_prefix: ``${ACTION_PREFIX}``
+        :var action_suffix: ``${ACTION_SUFFIX}``
 
         :param target: The task target list
         :param source: The task source list
