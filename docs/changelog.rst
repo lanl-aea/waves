@@ -25,6 +25,8 @@ Enhancements
   :merge:`1289`). By `Kyle Brindley`_.
 - Allow action prefix and suffix overrides for the WAVES construction environment. Enables overrides to default
   behavior once at the environment level instead of once per builder (:issue:`994`, :merge:`1290`). By `Kyle Brindley`_.
+- Verify parameter study content hashes at generation to catch mismatched or unsupported type errors earlier
+  with a meaningful user error message (:issue:`993`, :merge:`1287`). By `Chris Johnson`_.
 
 ******************
 1.1.1 (2025-01-14)
