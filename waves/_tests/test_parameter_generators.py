@@ -1917,6 +1917,25 @@ test_convert_numpy_to_builtin_cases = {
         3,
         does_not_raise,
     ),
+    "one parameter numpy typing - equivalent WAVES types": (
+        # Python int bit size is variable, from ~16-64. Floats are always 64.
+        numpy.array(
+            [
+                [numpy.int16(1), numpy.int32(-1), numpy.int64(-10), numpy.float64(1.23), numpy.bool_(True)],
+                [numpy.int16(2), numpy.int32(-2), numpy.int64(-20), numpy.float64(4.56), numpy.bool_(False)],
+            ],
+            dtype=object,
+        ),
+        numpy.array(
+            [
+                [1, -1, -10, 1.23, True],
+                [2, -2, -20, 4.56, False],
+            ],
+            dtype=object,
+        ),
+        15,
+        does_not_raise,
+    ),
     "3D array - int 16": (
         numpy.array(
             [
