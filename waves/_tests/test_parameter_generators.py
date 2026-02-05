@@ -2050,7 +2050,7 @@ def test_convert_numpy_to_builtin(
             for converted_entry, expected_entry in zip(converted.flat, expected.flat, strict=True):
                 assert type(converted_entry) is type(expected_entry)
                 if isinstance(expected_entry, (numpy.inexact, float)):
-                    assert numpy.isclose(converted_entry, expected_entry, rtol=precision)
+                    assert numpy.isclose(converted_entry, expected_entry, rtol=tolerance)
                 else:
                     assert converted_entry == expected_entry
         finally:
