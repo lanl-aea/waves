@@ -1921,24 +1921,48 @@ test_convert_numpy_to_builtin_cases = {
         # Python int bit size is variable, from ~16-64. Floats are always 64.
         numpy.array(
             [
-                [numpy.int16(1), numpy.int32(-1), numpy.int64(-10), numpy.float64(1.23), numpy.bool_(True)],
-                [numpy.int16(2), numpy.int32(-2), numpy.int64(-20), numpy.float64(4.56), numpy.bool_(False)],
+                [
+                    numpy.int16(1),
+                    numpy.int32(-1),
+                    numpy.int64(-10),
+                    numpy.float64(1.23),
+                    numpy.bool_(True),
+                    numpy.str_("zero"),
+                ],
+                [
+                    numpy.int16(2),
+                    numpy.int32(-2),
+                    numpy.int64(-20),
+                    numpy.float64(4.56),
+                    numpy.bool_(False),
+                    numpy.str_("one"),
+                ],
             ],
             dtype=object,
         ),
         numpy.array(
             [
-                [1, -1, -10, 1.23, True],
-                [2, -2, -20, 4.56, False],
+                [1, -1, -10, 1.23, True, "zero"],
+                [2, -2, -20, 4.56, False, "one"],
             ],
             dtype=object,
         ),
         1e-15,
         does_not_raise,
     ),
-    "1D array - string": (
-        numpy.array([numpy.str_("test")], dtype=object),
-        numpy.array(["test"], dtype=object),
+    "1D array - equivalent WAVES types": (
+        numpy.array(
+            [
+                numpy.int16(1),
+                numpy.int32(-1),
+                numpy.int64(-10),
+                numpy.float64(1.23),
+                numpy.bool_(True),
+                numpy.str_("zero"),
+            ],
+            dtype=object,
+        ),
+        numpy.array([1, -1, -10, 1.23, True, "zero"], dtype=object),
         None,
         does_not_raise,
     ),
