@@ -2050,10 +2050,10 @@ def test_convert_numpy_to_builtin(
             expected_flat = expected.flat
             assert len(converted_flat) == len(expected_flat)
             for index, entry in enumerate(converted_flat):
-                if isinstance(entry, (numpy.flexible, numpy.bool_, str, bool)):
-                    numpy.testing.assert_equal(entry, expected_flat[index])
-                else:
+                if isinstance(entry, (numpy.inexact, float)):
                     numpy.testing.assert_allclose(entry, expected_flat[index], rtol=precision)
+                else:
+                    numpy.testing.assert_equal(entry, expected_flat[index])
         finally:
             pass
 
