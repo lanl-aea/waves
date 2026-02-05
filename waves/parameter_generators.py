@@ -2017,35 +2017,27 @@ def _convert_numpy_to_builtin(samples: numpy.ndarray) -> numpy.ndarray:
 
     Utilizes ``numpy.ndarray.item()`` to convert entries to their corresponding Python built-in datatype. If samples
         with NumPy typing persist in the output, raises a TypeError. If string casting discrepancies from conversion
-        exist, raises a ValueError.
+        exist, raises a TypeError.
 
     :param samples: A numpy.ndarray of the samples of the parameter schema.
 
     :return: numpy.ndarray with sample typing converted to Python datatypes
 
-    :raises TypeError: if the converted samples array still contains entries with NumPy typing
-    :raises ValueError: if string casting the numpy and built-in type obtained from ``.item()`` results in different
-        outputs
+    :raises TypeError: if the converted samples array still contains entries with NumPy typing, or if string casting
+        the numpy and built-in type obtained from ``.item()`` results in different outputs
     """
     numpy_types = (numpy.generic, numpy.ndarray)
     # Convert to flattened data, then reshape back to original dimensions
-    converted_flat = [entry.item() if isinstance(entry, numpy_types) else entry for entry in samples.flat]
-    # Check for residual NumPy typing
-    leftover_numpy_types = [entry for entry in converted_flat if isinstance(entry, numpy_types)]
-    if len(leftover_numpy_types) > 0:
-        raise TypeError(
-            f"Encountered samples: '{leftover_numpy_types}' that could not be converted to a Python built-in type. "
-            f"Either a loss of precision would occur, or no valid Python type exists."
-        )
-    # Check for potential string cast discrepancies from using `.item()`
-    string_cast_different = [
-        entry for entry in samples.flat if isinstance(entry, numpy_types) and f"{entry}" != f"{entry.item()}"
+    converted_flat = [
+        entry.item() if (isinstance(entry, numpy_types) and f"{entry}" == f"{entry.item()}") else entry
+        for entry in samples.flat
     ]
-    if len(string_cast_different) > 0:
-        string_cast_builtin = [entry.item() for entry in string_cast_different]
-        raise ValueError(
-            f"Found samples whose string formatting differs in NumPy: '{string_cast_different}' versus Python "
-            f"built-in: '{string_cast_builtin}'. This could represent a loss of precision or formatting differences."
+    # Check for residual NumPy typing or string representation mismatches
+    not_converted = [entry for entry in converted_flat if isinstance(entry, numpy_types)]
+    if len(not_converted) > 0:
+        raise TypeError(
+            f"Encountered samples: '{not_converted}' that could not be converted to a Python built-in type. "
+            f"Either a loss of precision would occur, a cast to string differs, or no valid Python type exists."
         )
     return converted_flat.reshape(samples.shape)
 
