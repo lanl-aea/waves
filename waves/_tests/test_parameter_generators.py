@@ -1783,8 +1783,8 @@ test_convert_numpy_to_builtin_cases = {
         ),
         numpy.array(
             [
-                [1.0, 10.0],
-                [2.0, 20.0],
+                [1, 10.0],
+                [2, 20.0],
             ],
             dtype=object,
         ),
@@ -1801,8 +1801,8 @@ test_convert_numpy_to_builtin_cases = {
         ),
         numpy.array(
             [
-                [1.0, 10.0],
-                [2.0, 20.0],
+                [1, 10.0],
+                [2, 20.0],
             ],
             dtype=object,
         ),
@@ -1855,8 +1855,8 @@ test_convert_numpy_to_builtin_cases = {
         ),
         numpy.array(
             [
-                [1.0, 10.0],
-                [2.0, 20.0],
+                [1, 10.0],
+                [2, 20.0],
             ],
             dtype=object,
         ),
@@ -1873,8 +1873,8 @@ test_convert_numpy_to_builtin_cases = {
         ),
         numpy.array(
             [
-                [1.0, 10.0],
-                [2.0, 20.0],
+                [1, 10.0],
+                [2, 20.0],
             ],
             dtype=object,
         ),
@@ -2049,9 +2049,10 @@ def test_convert_numpy_to_builtin(
             converted = parameter_generators._convert_numpy_to_builtin(samples)
             for converted_entry, expected_entry in zip(converted.flat, expected.flat, strict=True):
                 if all(isinstance(entry, (numpy.inexact, float)) for entry in (converted_entry, expected_entry)):
-                    numpy.testing.assert_allclose(converted_entry, expected_entry, rtol=precision)
+                    assert numpy.isclose(converted_entry, expected_entry, rtol=precision)
                 else:
-                    numpy.testing.assert_equal(converted_entry, expected_entry)
+                    assert converted_entry == expected_entry
+                assert type(converted_entry) == type(expected_entry)
         finally:
             pass
 
