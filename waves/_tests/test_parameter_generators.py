@@ -1752,7 +1752,7 @@ test_convert_numpy_to_builtin_cases = {
             ],
             dtype=object,
         ),
-        15,
+        1e-15,
         does_not_raise,
     ),
     "all parameters numpy typing - float 64": (
@@ -1770,7 +1770,7 @@ test_convert_numpy_to_builtin_cases = {
             ],
             dtype=object,
         ),
-        15,
+        1e-15,
         does_not_raise,
     ),
     "one parameter numpy typing - int 64": (
@@ -1788,7 +1788,7 @@ test_convert_numpy_to_builtin_cases = {
             ],
             dtype=object,
         ),
-        15,
+        1e-15,
         does_not_raise,
     ),
     "all parameters numpy typing - int/float 64": (
@@ -1806,7 +1806,7 @@ test_convert_numpy_to_builtin_cases = {
             ],
             dtype=object,
         ),
-        15,
+        1e-15,
         does_not_raise,
     ),
     "one parameter numpy typing - boolean": (
@@ -1824,7 +1824,7 @@ test_convert_numpy_to_builtin_cases = {
             ],
             dtype=object,
         ),
-        15,
+        1e-15,
         does_not_raise,
     ),
     "one parameter numpy typing - string": (
@@ -1842,7 +1842,7 @@ test_convert_numpy_to_builtin_cases = {
             ],
             dtype=object,
         ),
-        0,
+        1e-15,
         does_not_raise,
     ),
     "one parameter numpy typing - int 32": (
@@ -1860,7 +1860,7 @@ test_convert_numpy_to_builtin_cases = {
             ],
             dtype=object,
         ),
-        7,
+        1e-7,
         does_not_raise,
     ),
     "one parameter numpy typing - int 16": (
@@ -1878,7 +1878,7 @@ test_convert_numpy_to_builtin_cases = {
             ],
             dtype=object,
         ),
-        3,
+        1e-3,
         does_not_raise,
     ),
     "one parameter numpy typing - float 32": (
@@ -1896,7 +1896,7 @@ test_convert_numpy_to_builtin_cases = {
             ],
             dtype=object,
         ),
-        7,
+        1e-7,
         does_not_raise,
     ),
     "one parameter numpy typing - float 16": (
@@ -1914,7 +1914,7 @@ test_convert_numpy_to_builtin_cases = {
             ],
             dtype=object,
         ),
-        3,
+        1e-3,
         does_not_raise,
     ),
     "one parameter numpy typing - equivalent WAVES types": (
@@ -1933,13 +1933,13 @@ test_convert_numpy_to_builtin_cases = {
             ],
             dtype=object,
         ),
-        15,
+        1e-15,
         does_not_raise,
     ),
     "1D array - string": (
         numpy.array([numpy.str_("test")], dtype=object),
         numpy.array(["test"], dtype=object),
-        0,
+        None,
         does_not_raise,
     ),
     "3D array - int 16": (
@@ -1957,7 +1957,7 @@ test_convert_numpy_to_builtin_cases = {
             ],
             dtype=object,
         ),
-        3,
+        1e-3,
         does_not_raise,
     ),
     "one parameter numpy typing - long double": (
@@ -1987,7 +1987,7 @@ test_convert_numpy_to_builtin_cases = {
             ],
             dtype=object,
         ),
-        15,
+        1e-15,
         does_not_raise,
     ),
     # Not a valid WAVES input, but reliably triggers TypeError from string mismatch
@@ -2018,15 +2018,18 @@ def test_convert_numpy_to_builtin(
 
     :param samples: numpy.ndarray of samples
     :param expected: expected output numpy.ndarray
-    :param precision: decimal places to check precision of outputs to
+    :param precision: relative tolerance to check precision of outputs to
     """
     with outcome:
         try:
-            converted_samples = parameter_generators._convert_numpy_to_builtin(samples)
-            if precision > 0:
-                numpy.testing.assert_array_almost_equal(converted_samples, expected, decimal=precision)
-            else:
-                numpy.testing.assert_equal(converted_samples, expected)  # String comparison
+            converted_flat = parameter_generators._convert_numpy_to_builtin(samples).flat
+            expected_flat = expected.flat
+            assert len(converted_flat) == len(expected_flat)
+            for index, entry in enumerate(converted_flat):
+                if isinstance(entry, (numpy.flexible, numpy.bool_, str, bool)):
+                    numpy.testing.assert_equal(entry, expected_flat[index])
+                else:
+                    numpy.testing.assert_allclose(entry, expected_flat[index], rtol=precision)
         finally:
             pass
 
