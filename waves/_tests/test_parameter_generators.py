@@ -2048,11 +2048,11 @@ def test_convert_numpy_to_builtin(
         try:
             converted = parameter_generators._convert_numpy_to_builtin(samples)
             for converted_entry, expected_entry in zip(converted.flat, expected.flat, strict=True):
-                if all(isinstance(entry, (numpy.inexact, float)) for entry in (converted_entry, expected_entry)):
+                assert type(converted_entry) is type(expected_entry)
+                if isinstance(expected_entry, (numpy.inexact, float)):
                     assert numpy.isclose(converted_entry, expected_entry, rtol=precision)
                 else:
                     assert converted_entry == expected_entry
-                assert type(converted_entry) is type(expected_entry)
         finally:
             pass
 
