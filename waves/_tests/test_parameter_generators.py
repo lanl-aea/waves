@@ -1990,7 +1990,7 @@ test_convert_numpy_to_builtin_cases = {
         15,
         does_not_raise,
     ),
-    # Not a valid WAVES input, but reliably triggers the ValueError
+    # Not a valid WAVES input, but reliably triggers TypeError from string mismatch
     "string cast mismatch - timedelta": (
         numpy.array(
             [[numpy.timedelta64(1, "D")]],
@@ -1998,7 +1998,7 @@ test_convert_numpy_to_builtin_cases = {
         ),
         None,
         None,
-        pytest.raises(ValueError, match="string formatting differs"),
+        pytest.raises(TypeError, match="could not be converted"),
     ),
 }
 
