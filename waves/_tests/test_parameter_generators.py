@@ -1936,6 +1936,12 @@ test_convert_numpy_to_builtin_cases = {
         15,
         does_not_raise,
     ),
+    "1D array - string": (
+        numpy.array([numpy.str_("test")], dtype=object),
+        numpy.array(["test"], dtype=object),
+        0,
+        does_not_raise,
+    ),
     "3D array - int 16": (
         numpy.array(
             [
