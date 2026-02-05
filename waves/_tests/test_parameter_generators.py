@@ -2046,14 +2046,12 @@ def test_convert_numpy_to_builtin(
     """
     with outcome:
         try:
-            converted_flat = parameter_generators._convert_numpy_to_builtin(samples).flat
-            expected_flat = expected.flat
-            assert len(converted_flat) == len(expected_flat)
-            for index, entry in enumerate(converted_flat):
-                if isinstance(entry, (numpy.inexact, float)):
-                    numpy.testing.assert_allclose(entry, expected_flat[index], rtol=precision)
+            converted = parameter_generators._convert_numpy_to_builtin(samples)
+            for converted_entry, expected_entry in zip(converted.flat, expected.flat, strict=True):
+                if all(isinstance(entry, (numpy.inexact, float)) for entry in (converted_entry, expected_entry)):
+                    numpy.testing.assert_allclose(converted_entry, expected_entry, rtol=precision)
                 else:
-                    numpy.testing.assert_equal(entry, expected_flat[index])
+                    numpy.testing.assert_equal(converted_entry, expected_entry)
         finally:
             pass
 
