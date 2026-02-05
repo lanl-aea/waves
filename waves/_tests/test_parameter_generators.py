@@ -1963,7 +1963,7 @@ test_convert_numpy_to_builtin_cases = {
             dtype=object,
         ),
         numpy.array([1, -1, -10, 1.23, True, "zero"], dtype=object),
-        None,
+        1e-15,
         does_not_raise,
     ),
     "3D array - int 16": (
