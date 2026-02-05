@@ -2060,7 +2060,7 @@ def _convert_numpy_to_builtin(samples: numpy.ndarray) -> numpy.ndarray:
             f"Found samples whose string formatting differs in NumPy: '{string_cast_different}' versus Python "
             f"built-in: '{string_cast_builtin}'. This could represent a loss of precision or formatting differences."
         )
-    return numpy.array(converted_flat, dtype=object).reshape(samples.shape)
+    return converted_flat.reshape(samples.shape)
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace
