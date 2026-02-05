@@ -2016,8 +2016,6 @@ def test_convert_numpy_to_builtin(
 ) -> None:
     """Check the function of converting NumPy datatypes to Python datatypes.
 
-    Also checks the string cast from NumPy typing to the corresponding Python built-in type.
-
     :param samples: numpy.ndarray of samples
     :param expected: expected output numpy.ndarray
     :param precision: decimal places to check precision of outputs to
