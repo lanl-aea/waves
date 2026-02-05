@@ -2039,7 +2039,7 @@ def _convert_numpy_to_builtin(samples: numpy.ndarray) -> numpy.ndarray:
             f"Encountered samples: '{not_converted}' that could not be converted to a Python built-in type. "
             f"Either a loss of precision would occur, a cast to string differs, or no valid Python type exists."
         )
-    return converted_flat.reshape(samples.shape)
+    return numpy.array(converted_flat, dtype=object).reshape(samples.shape)
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace
