@@ -2021,7 +2021,6 @@ def test_convert_numpy_to_builtin(
     :param samples: numpy.ndarray of samples
     :param expected: expected output numpy.ndarray
     :param precision: decimal places to check precision of outputs to
-    :param tolerance: relative tolerance, based on numpy datatype bit size
     """
     with outcome:
         try:
