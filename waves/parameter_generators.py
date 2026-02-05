@@ -2029,20 +2029,33 @@ def _convert_numpy_to_builtin(samples: numpy.ndarray) -> numpy.ndarray:
     """
     numpy_types = (numpy.generic, numpy.ndarray)
     # Convert to flattened data, then reshape back to original dimensions
-    converted_flat = [entry.item() if isinstance(entry, numpy_types) else entry for entry in samples.flat]
-    # Check for residual NumPy typing
-    leftover_numpy_types = [entry for entry in converted_flat if isinstance(entry, numpy_types)]
+    converted_flat = numpy.full(len(samples.flat), numpy.nan, dtype=object)
+    leftover_numpy_types = []
+    string_cast_different = []
+    string_cast_builtin = []
+
+    for index, entry in enumerate(samples.flat):
+        if isinstance(entry, numpy_types):
+            converted_entry = entry.item()
+            converted_flat[index] = converted_entry
+            # Check for residual NumPy typing
+            if isinstance(converted_entry, numpy_types):
+                leftover_numpy_types.append(entry)
+            # Check for potential string cast discrepancies from using `.item()`
+            string_entry = f"{entry}"
+            string_converted_entry = f"{converted_entry}"
+            if string_entry != string_converted_entry:
+                string_cast_different.append(string_entry)
+                string_cast_builtin.append(string_converted_entry)
+        else:
+            converted_flat[index] = entry
+
     if len(leftover_numpy_types) > 0:
         raise TypeError(
             f"Encountered samples: '{leftover_numpy_types}' that could not be converted to a Python built-in type. "
             f"Either a loss of precision would occur, or no valid Python type exists."
         )
-    # Check for potential string cast discrepancies from using `.item()`
-    string_cast_different = [
-        entry for entry in samples.flat if isinstance(entry, numpy_types) and f"{entry}" != f"{entry.item()}"
-    ]
     if len(string_cast_different) > 0:
-        string_cast_builtin = [entry.item() for entry in string_cast_different]
         raise ValueError(
             f"Found samples whose string formatting differs in NumPy: '{string_cast_different}' versus Python "
             f"built-in: '{string_cast_builtin}'. This could represent a loss of precision or formatting differences."
