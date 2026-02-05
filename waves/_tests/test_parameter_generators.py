@@ -1917,7 +1917,7 @@ test_convert_numpy_to_builtin_cases = {
         1e-3,
         does_not_raise,
     ),
-    "one parameter numpy typing - equivalent WAVES types": (
+    "all parameters numpy typing - equivalent WAVES types": (
         # Python int bit size is variable, from ~16-64. Floats are always 64.
         numpy.array(
             [
