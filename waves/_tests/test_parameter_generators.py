@@ -2052,7 +2052,7 @@ def test_convert_numpy_to_builtin(
                     assert numpy.isclose(converted_entry, expected_entry, rtol=precision)
                 else:
                     assert converted_entry == expected_entry
-                assert type(converted_entry) == type(expected_entry)
+                assert type(converted_entry) is type(expected_entry)
         finally:
             pass
 
