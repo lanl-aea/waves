@@ -2028,21 +2028,21 @@ test_convert_numpy_to_builtin_cases = {
 
 
 @pytest.mark.parametrize(
-    ("samples", "expected", "precision", "outcome"),
+    ("samples", "expected", "tolerance", "outcome"),
     test_convert_numpy_to_builtin_cases.values(),
     ids=test_convert_numpy_to_builtin_cases.keys(),
 )
 def test_convert_numpy_to_builtin(
     samples: numpy.ndarray,
     expected: numpy.ndarray,
-    precision: int,
+    tolerance: float,
     outcome: contextlib.nullcontext | pytest.RaisesExc,
 ) -> None:
     """Check the function of converting NumPy datatypes to Python datatypes.
 
     :param samples: numpy.ndarray of samples
     :param expected: expected output numpy.ndarray
-    :param precision: relative tolerance to check precision of outputs to
+    :param tolerance: relative tolerance
     """
     with outcome:
         try:
