@@ -329,6 +329,8 @@ class TestOneAtATime:
                             )
                         },
                     ),
+                    # Set hashes should be identical in all three test cases:
+                    # "all numpy typing", "mixed numpy typing", "all built-in typing"
                     "set_hash": xarray.DataArray(
                         [
                             "501f23f42f3aabd912e1b70072701434",
@@ -407,6 +409,8 @@ class TestOneAtATime:
                             )
                         },
                     ),
+                    # Set hashes should be identical in all three test cases:
+                    # "all numpy typing", "mixed numpy typing", "all built-in typing"
                     "set_hash": xarray.DataArray(
                         [
                             "501f23f42f3aabd912e1b70072701434",
@@ -485,6 +489,8 @@ class TestOneAtATime:
                             )
                         },
                     ),
+                    # Set hashes should be identical in all three test cases:
+                    # "all numpy typing", "mixed numpy typing", "all built-in typing"
                     "set_hash": xarray.DataArray(
                         [
                             "501f23f42f3aabd912e1b70072701434",
