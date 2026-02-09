@@ -70,6 +70,88 @@ class TestCustomStudy:
             numpy.array([[1, 10.0], [2, 20.0]], dtype=object),
             {"a": numpy.int64, "b": numpy.float64},
         ),
+        "all numpy typing": (
+            {
+                "parameter_names": [
+                    "parameter_1",
+                    "parameter_2",
+                    "parameter_3",
+                    "parameter_4",
+                    "parameter_5",
+                    "parameter_6",
+                ],
+                "parameter_samples": numpy.array(
+                    [
+                        [
+                            numpy.int16(1),
+                            numpy.int32(-1),
+                            numpy.int64(-10),
+                            numpy.float64(1.23),
+                            numpy.bool_(True),
+                            numpy.str_("zero"),
+                        ],
+                        [
+                            numpy.int16(1),
+                            numpy.int32(-1),
+                            numpy.int64(-10),
+                            numpy.float64(1.23),
+                            numpy.bool_(True),
+                            numpy.str_("one"),
+                        ],
+                    ],
+                    dtype=object,
+                ),
+            },
+            numpy.array(
+                [
+                    [1, -1, -10, 1.23, True, "zero"],
+                    [1, -1, -10, 1.23, True, "one"],
+                ],
+                dtype=object,
+            ),
+            {
+                "parameter_1": numpy.int64,
+                "parameter_2": numpy.int64,
+                "parameter_3": numpy.int64,
+                "parameter_4": numpy.float64,
+                "parameter_5": bool,
+                "parameter_6": numpy.dtype("U4"),
+            },
+        ),
+        "mixed numpy typing": (
+            {
+                "parameter_names": [
+                    "parameter_1",
+                    "parameter_2",
+                    "parameter_3",
+                    "parameter_4",
+                    "parameter_5",
+                    "parameter_6",
+                ],
+                "parameter_samples": numpy.array(
+                    [
+                        [1, numpy.int32(-1), numpy.float64(10), 1.23, numpy.bool_(True), "zero"],
+                        [1, numpy.int32(-1), numpy.float64(10), 1.23, numpy.bool_(True), "one"],
+                    ],
+                    dtype=object,
+                ),
+            },
+            numpy.array(
+                [
+                    [1, -1, 10.0, 1.23, True, "zero"],
+                    [1, -1, 10.0, 1.23, True, "one"],
+                ],
+                dtype=object,
+            ),
+            {
+                "parameter_1": numpy.int64,
+                "parameter_2": numpy.int64,
+                "parameter_3": numpy.float64,
+                "parameter_4": numpy.float64,
+                "parameter_5": bool,
+                "parameter_6": numpy.dtype("U4"),
+            },
+        ),
     }
 
     @pytest.mark.parametrize(
