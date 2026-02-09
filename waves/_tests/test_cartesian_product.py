@@ -140,22 +140,22 @@ class TestCartesianProduct:
             {
                 "parameter_1": [1],
                 "parameter_2": [numpy.int32(-1)],
-                "parameter_3": [numpy.float64(10)],
-                "parameter_4": [1.23],
+                "parameter_3": [-10],
+                "parameter_4": [numpy.float64(1.23)],
                 "parameter_5": [numpy.bool_(True)],
                 "parameter_6": ["zero", "one"],
             },
             numpy.array(
                 [
-                    [1, -1, 10.0, 1.23, True, "zero"],
-                    [1, -1, 10.0, 1.23, True, "one"],
+                    [1, -1, -10, 1.23, True, "zero"],
+                    [1, -1, -10, 1.23, True, "one"],
                 ],
                 dtype=object,
             ),
             {
                 "parameter_1": numpy.int64,
                 "parameter_2": numpy.int64,
-                "parameter_3": numpy.float64,
+                "parameter_3": numpy.int64,
                 "parameter_4": numpy.float64,
                 "parameter_5": bool,
                 "parameter_6": numpy.dtype("U4"),
