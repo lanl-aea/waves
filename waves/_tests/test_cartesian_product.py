@@ -215,6 +215,31 @@ class TestCartesianProduct:
             ).set_coords("set_hash"),
             {"parameter_1": numpy.float64, "parameter_2": bool},
         ),
+        "all numpy typing": (
+            {
+                "parameter_1": [numpy.int16(1)],
+                "parameter_2": [numpy.int32(-1)],
+                "parameter_3": [numpy.int64(-10)],
+                "parameter_4": [numpy.float64(1.23)],
+                "parameter_5": [numpy.bool_(True)],
+                "parameter_6": [numpy.str_("zero"), numpy.str_("one")],
+            },
+            numpy.array(
+                [
+                    [1, -1, -10, 1.23, True, "zero"],
+                    [1, -1, -10, 1.23, True, "one"],
+                ],
+                dtype=object,
+            ),
+            {
+                "parameter_1": numpy.int64,
+                "parameter_2": numpy.int64,
+                "parameter_3": numpy.int64,
+                "parameter_4": numpy.float64,
+                "parameter_5": bool,
+                "parameter_6": numpy.dtype("U4"),
+            },
+        ),
     }
 
     @pytest.mark.parametrize(
