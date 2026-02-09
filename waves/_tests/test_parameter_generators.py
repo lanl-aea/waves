@@ -2043,6 +2043,7 @@ def test_convert_numpy_to_builtin(
     :param samples: numpy.ndarray of samples
     :param expected: expected output numpy.ndarray
     :param tolerance: relative tolerance
+    :param outcome: pytest outcome
     """
     with outcome:
         converted = parameter_generators._convert_numpy_to_builtin(samples)
