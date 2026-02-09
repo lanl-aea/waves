@@ -53,8 +53,8 @@ AddOption(
     help=f"Override for the Abaqus command. Repeat to specify more than one (default: {default_abaqus_commands})",
 )
 default_cubit_commands = [
-    "/apps/Cubit-16.12/cubit",
-    "/usr/projects/ea/Cubit/Cubit-16.12/cubit",
+    "/apps/Cubit-17.06/cubit",
+    "/usr/projects/ea/Cubit/Cubit-17.06/cubit",
     "cubit",
 ]
 AddOption(
