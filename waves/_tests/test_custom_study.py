@@ -177,23 +177,23 @@ class TestCustomStudy:
                 ],
                 "parameter_samples": numpy.array(
                     [
-                        [1, numpy.int32(-1), numpy.float64(10), 1.23, numpy.bool_(True), "zero"],
-                        [1, numpy.int32(-1), numpy.float64(10), 1.23, numpy.bool_(True), "one"],
+                        [1, numpy.int32(-1), -10, numpy.float64(1.23), numpy.bool_(True), "zero"],
+                        [1, numpy.int32(-1), -10, numpy.float64(1.23), numpy.bool_(True), "one"],
                     ],
                     dtype=object,
                 ),
             },
             numpy.array(
                 [
-                    [1, -1, 10.0, 1.23, True, "zero"],
-                    [1, -1, 10.0, 1.23, True, "one"],
+                    [1, -1, -10, 1.23, True, "zero"],
+                    [1, -1, -10, 1.23, True, "one"],
                 ],
                 dtype=object,
             ),
             {
                 "parameter_1": numpy.int64,
                 "parameter_2": numpy.int64,
-                "parameter_3": numpy.float64,
+                "parameter_3": numpy.int64,
                 "parameter_4": numpy.float64,
                 "parameter_5": bool,
                 "parameter_6": numpy.dtype("U4"),

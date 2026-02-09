@@ -351,8 +351,8 @@ class TestOneAtATime:
             {
                 "parameter_1": [1],
                 "parameter_2": [numpy.int32(-1)],
-                "parameter_3": [numpy.float64(10)],
-                "parameter_4": [1.23],
+                "parameter_3": [-10],
+                "parameter_4": [numpy.float64(1.23)],
                 "parameter_5": [numpy.bool_(True)],
                 "parameter_6": ["zero", "one"],
             },
@@ -376,7 +376,7 @@ class TestOneAtATime:
                         },
                     ),
                     "parameter_3": xarray.DataArray(
-                        [10.0, 10.0],
+                        [-10, -10],
                         coords={
                             _set_coordinate_key: xarray.DataArray(
                                 ["parameter_set0", "parameter_set1"], dims=_set_coordinate_key
@@ -409,8 +409,8 @@ class TestOneAtATime:
                     ),
                     "set_hash": xarray.DataArray(
                         [
-                            "1c5cc930083050291a95b0b648d4a6ad",
-                            "f16603f86c512f1cd16cf6a6e931242d",
+                            "501f23f42f3aabd912e1b70072701434",
+                            "c88259b8113aeb6880829e4c092dd445",
                         ],
                         dims=_set_coordinate_key,
                     ),
@@ -419,7 +419,7 @@ class TestOneAtATime:
             {
                 "parameter_1": numpy.int64,
                 "parameter_2": numpy.int64,
-                "parameter_3": numpy.float64,
+                "parameter_3": numpy.int64,
                 "parameter_4": numpy.float64,
                 "parameter_5": bool,
                 "parameter_6": numpy.dtype("U4"),
