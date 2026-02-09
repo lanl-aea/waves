@@ -82,7 +82,10 @@ class TestCustomStudy:
             {"parameter_1": numpy.int64},
         ),
         "two_parameter": (
-            {"parameter_names": ["parameter_1", "parameter_2"], "parameter_samples": numpy.array([[1, 10.0], [2, 20.0]], dtype=object)},
+            {
+                "parameter_names": ["parameter_1", "parameter_2"],
+                "parameter_samples": numpy.array([[1, 10.0], [2, 20.0]], dtype=object),
+            },
             xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
