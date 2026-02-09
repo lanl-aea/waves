@@ -36,8 +36,8 @@ AddOption(
 )
 # Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
 default_cubit_commands = [
-    "/apps/Cubit-16.12/cubit",
-    "/usr/projects/ea/Cubit/Cubit-16.12/cubit",
+    "/apps/Cubit-17.06/cubit",
+    "/usr/projects/ea/Cubit/Cubit-17.06/cubit",
     "cubit",
 ]
 AddOption(

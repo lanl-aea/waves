@@ -34,5 +34,5 @@ hpc-developer-test:
     - if [[ -z ${cubit_command_prefix} ]]; then exit 1; fi
     - echo ${PARENT_CI_PIPELINE_SOURCE}
     # Job commands
-    - scons pytest systemtest --keep-going --unconditional-build --abaqus-command=${abaqus_command_prefix}/abq2025 --cubit-command=${cubit_command_prefix}/Cubit-16.16/cubit
-    - if [[ $PARENT_CI_PIPELINE_SOURCE == "schedule" ]]; then scons systemtest --keep-going --unconditional-build --abaqus-command=${abaqus_command_prefix}/abq2024 --abaqus-command=${abaqus_command_prefix}/abq2023 --cubit-command=${cubit_command_prefix}/Cubit-16.12/cubit; fi
+    - scons pytest systemtest --keep-going --unconditional-build --abaqus-command=${abaqus_command_prefix}/abq2025 --cubit-command=${cubit_command_prefix}/Cubit-17.06/cubit
+    - if [[ $PARENT_CI_PIPELINE_SOURCE == "schedule" ]]; then scons systemtest --keep-going --unconditional-build --abaqus-command=${abaqus_command_prefix}/abq2024 --abaqus-command=${abaqus_command_prefix}/abq2023 --cubit-command=${cubit_command_prefix}/Cubit-16.16/cubit; fi

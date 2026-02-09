@@ -8,6 +8,10 @@ Changelog
 1.2.0 (unreleased)
 ******************
 
+Internal Changes
+================
+- Run system tests against a Cubit 17 and 16 version (:issue:`996`, :merge:`1291`). By `Kyle Brindley`_.
+
 Enhancements
 ============
 - Verify parameter study content hashes at generation to catch mismatched or unsupported type errors earlier

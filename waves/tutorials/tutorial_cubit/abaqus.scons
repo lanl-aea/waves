@@ -33,7 +33,7 @@ env.AddPostAction(
     "rectangle_mesh.inp",
     (
         f"python {text_substitution_script} --input-file ${{TARGET.abspath}} --output-file ${{TARGET.abspath}}"
-        " --pattern CPE4 --replacement CPS4"
+        ' --pattern "ELEMENT, TYPE=.*," --replacement "ELEMENT, TYPE=CPS4,"'
     ),
 )
 
