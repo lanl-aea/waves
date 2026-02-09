@@ -31,8 +31,8 @@ AddOption(
     help=f"Override for the Truchas command. Repeat to specify more than one (default: {default_truchas_commands})",
 )
 default_cubit_commands = [
-    "/apps/Cubit-16.12/cubit",
-    "/usr/projects/ea/Cubit/Cubit-16.12/cubit",
+    "/apps/Cubit-17.06/cubit",
+    "/usr/projects/ea/Cubit/Cubit-17.06/cubit",
     "cubit",
 ]
 AddOption(
