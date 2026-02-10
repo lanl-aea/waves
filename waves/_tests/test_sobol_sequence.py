@@ -116,7 +116,7 @@ class TestSobolSequence:
         generate_input.values(),
         ids=generate_input.keys(),
     )
-    def test_generate(self, parameter_schema: dict, kwargs: dict, expected_dataset: numpy.ndarray) -> None:
+    def test_generate(self, parameter_schema: dict, kwargs: dict, expected_dataset: xarray.Dataset) -> None:
         parameter_names = [key for key in parameter_schema if key != "num_simulations"]
         generator_classes = (
             SobolSequence(parameter_schema, **kwargs),
