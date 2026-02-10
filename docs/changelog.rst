@@ -10,6 +10,8 @@ Changelog
 
 Internal Changes
 ================
+- Use Xarray dataset comparisons for parameter generator generate method testing (:issue:`997`, :merge:`1292`). 
+  By `Chris Johnson`_.
 - Run system tests against a Cubit 17 and 16 version (:issue:`996`, :merge:`1291`). By `Kyle Brindley`_.
 
 Enhancements
