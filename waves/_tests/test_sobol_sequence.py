@@ -108,34 +108,29 @@ class TestSobolSequence:
                     "set_hash": xarray.DataArray(["aa5e177c64820d6c5e66aacff18e8a6a"], dims=_set_coordinate_key),
                 }
             ).set_coords("set_hash"),
-            numpy.array([[0.0, 2.0]]),
         ),
     }
 
     @pytest.mark.parametrize(
-        ("parameter_schema", "kwargs", "expected_samples"),
+        ("parameter_schema", "kwargs", "expected_dataset"),
         generate_input.values(),
         ids=generate_input.keys(),
     )
-    def test_generate(self, parameter_schema: dict, kwargs: dict, expected_samples: numpy.ndarray) -> None:
+    def test_generate(self, parameter_schema: dict, kwargs: dict, expected_dataset: numpy.ndarray) -> None:
         parameter_names = [key for key in parameter_schema if key != "num_simulations"]
         generator_classes = (
             SobolSequence(parameter_schema, **kwargs),
             ScipySampler("Sobol", parameter_schema, **kwargs),
         )
         for test_generate in generator_classes:
-            samples_array = test_generate._samples
-            assert numpy.allclose(samples_array, expected_samples)
+            xarray.testing.assert_allclose(test_generate.parameter_study, expected_dataset)
             # Check for type preservation
             for key in test_generate.parameter_study:
                 assert test_generate.parameter_study[key].dtype == numpy.float64
             # Verify that the parameter set name creation method was called
-            expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
-            assert list(test_generate._set_names.values()) == expected_set_names
-            # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
-            expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
-            set_names = list(test_generate.parameter_study[_set_coordinate_key])
-            assert numpy.all(set_names == expected_set_names)
+            # TODO: _set_names is an ordered object (dictionary). Fix test to compare dictionary-to-dictionary instead
+            # of implied consistency according to value order.
+            assert list(test_generate._set_names.values()) == list(expected_dataset[_set_coordinate_key].to_numpy())
             # Check that the parameter names are correct
             assert parameter_names == test_generate._parameter_names
             assert parameter_names == list(test_generate.parameter_study.keys())
