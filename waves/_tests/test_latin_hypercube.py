@@ -29,7 +29,13 @@ class TestLatinHypercube:
                         [51.01609863, 48.09331069, 50.37931242, 50.20487353, 49.67971797],
                         coords={
                             _set_coordinate_key: xarray.DataArray(
-                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3", "parameter_set4"],
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                ],
                                 dims=_set_coordinate_key,
                             )
                         },
@@ -38,7 +44,13 @@ class TestLatinHypercube:
                         [-51.21478363, -49.58609982, -50.14390653, -49.140834, -50.49606915],
                         coords={
                             _set_coordinate_key: xarray.DataArray(
-                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3", "parameter_set4"],
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                ],
                                 dims=_set_coordinate_key,
                             )
                         },
@@ -58,10 +70,7 @@ class TestLatinHypercube:
             [{"loc": 50, "scale": 1}, {"loc": -50, "scale": 1}],
         ),
         "good schema 2x1": (
-            {
-                "num_simulations": 2,
-                "parameter_1": {"distribution": "norm", "loc": 50, "scale": 1},
-            },
+            {"num_simulations": 2, "parameter_1": {"distribution": "norm", "loc": 50, "scale": 1}},
             42,
             xarray.Dataset(
                 {
@@ -141,8 +150,8 @@ class TestLatinHypercube:
             for key in test_generate.parameter_study:
                 assert test_generate.parameter_study[key].dtype == numpy.float64
             # Verify that the parameter set name creation method was called
-            # TODO: _set_names is an ordered object (dictionary). Fix test to compare dictionary-to-dictionary instead of
-            # implied consistency according to value order.
+            # TODO: _set_names is an ordered object (dictionary). Fix test to compare dictionary-to-dictionary instead
+            # of implied consistency according to value order.
             assert list(test_generate._set_names.values()) == list(expected_dataset[_set_coordinate_key].to_numpy())
             # Check that the parameter names are correct
             assert parameter_names == test_generate._parameter_names
