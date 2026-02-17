@@ -4,6 +4,7 @@ from unittest.mock import patch
 
 import numpy
 import pytest
+import xarrat
 
 from waves._settings import _set_coordinate_key, _supported_scipy_samplers
 from waves._tests.common import consistent_hash_parameter_check, merge_samplers, self_consistency_checks
@@ -22,6 +23,50 @@ class TestScipySampler:
                 "parameter_2": {"distribution": "uniform", "loc": 2, "scale": 3},
             },
             {"seed": 42},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [4.31029474, 9.61578793, 0.35047322, 5.6453192, 2.38067276],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [4.44310392, 2.93422983, 2.07952781, 3.79350291, 3.91909283],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "0f9510490d521d7fa85154245288622e",
+                            "2f71fbb34825f6fc651a9cdddce1adc8",
+                            "4444a85f48a564a2c2e3ba3666b9967b",
+                            "4c861fec1563e21bf1598d06dbe97dc7",
+                            "658dfb19c773f5b3db9cf61a1d301668",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
         ),
         "sobol: good schema 2x1": (
             "Sobol",
@@ -52,20 +97,21 @@ class TestScipySampler:
     }
 
     @pytest.mark.parametrize(
-        ("sampler", "parameter_schema", "kwargs"),
+        ("sampler", "parameter_schema", "kwargs", "expected_dataset"),
         generate_input.values(),
         ids=generate_input.keys(),
     )
-    def test_generate(self, sampler: str, parameter_schema: dict, kwargs: dict) -> None:
+    def test_generate(self, sampler: str, parameter_schema: dict, kwargs: dict, expected_dataset: xarray.Dataset) -> None:
         parameter_names = [key for key in parameter_schema if key != "num_simulations"]
         test_generate = ScipySampler(sampler, parameter_schema, **kwargs)
+        xarray.testing.assert_allclose(test_generate.parameter_study, expected_dataset)
+        # Check for type preservation
+        for key in test_generate.parameter_study:
+            assert test_generate.parameter_study[key].dtype == numpy.float64
         # Verify that the parameter set name creation method was called
-        expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
-        assert list(test_generate._set_names.values()) == expected_set_names
-        # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
-        expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
-        set_names = list(test_generate.parameter_study[_set_coordinate_key])
-        assert numpy.all(set_names == expected_set_names)
+        # TODO: _set_names is an ordered object (dictionary). Fix test to compare dictionary-to-dictionary instead
+        # of implied consistency according to value order.
+        assert list(test_generate._set_names.values()) == list(expected_dataset[_set_coordinate_key].to_numpy())
         # Check that the parameter names are correct
         assert parameter_names == test_generate._parameter_names
         assert parameter_names == list(test_generate.parameter_study.keys())
