@@ -104,11 +104,11 @@ class TestScipySampler:
             xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
-                        [4.31],
+                        [4.31029474],
                         coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
                     ),
                     "parameter_2": xarray.DataArray(
-                        [4.443],
+                        [4.44310392],
                         coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
                     ),
                     "set_hash": xarray.DataArray(["0f9510490d521d7fa85154245288622e"], dims=_set_coordinate_key),
@@ -123,7 +123,20 @@ class TestScipySampler:
                 "parameter_2": {"distribution": "uniform", "loc": 2, "scale": 3},
             },
             {},
-            None,
+            # Values will be different due to random seed, but parameter names and sets should be aligned
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [4.31029474],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [4.44310392],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "set_hash": xarray.DataArray(["0f9510490d521d7fa85154245288622e"], dims=_set_coordinate_key),
+                }
+            ).set_coords("set_hash"),
         ),
     }
 
@@ -132,10 +145,12 @@ class TestScipySampler:
         generate_input.values(),
         ids=generate_input.keys(),
     )
-    def test_generate(self, sampler: str, parameter_schema: dict, kwargs: dict, expected_dataset: xarray.Dataset) -> None:
+    def test_generate(
+        self, sampler: str, parameter_schema: dict, kwargs: dict, expected_dataset: xarray.Dataset
+    ) -> None:
         parameter_names = [key for key in parameter_schema if key != "num_simulations"]
         test_generate = ScipySampler(sampler, parameter_schema, **kwargs)
-        if expected_dataset is not None:
+        if kwargs:
             xarray.testing.assert_allclose(test_generate.parameter_study, expected_dataset)
         # Check for type preservation
         for key in test_generate.parameter_study:
