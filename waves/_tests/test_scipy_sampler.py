@@ -4,7 +4,7 @@ from unittest.mock import patch
 
 import numpy
 import pytest
-import xarrat
+import xarray
 
 from waves._settings import _set_coordinate_key, _supported_scipy_samplers
 from waves._tests.common import consistent_hash_parameter_check, merge_samplers, self_consistency_checks
@@ -75,6 +75,23 @@ class TestScipySampler:
                 "parameter_1": {"distribution": "uniform", "loc": 0, "scale": 10},
             },
             {"seed": 42},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [4.31029474, 6.3441517],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["710d5b8c4c251c3847f09d923c1fef13", "f515960e20568d073440635e97fcde64"],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
         ),
         "sobol: good schema 1x2": (
             "Sobol",
@@ -84,6 +101,19 @@ class TestScipySampler:
                 "parameter_2": {"distribution": "uniform", "loc": 2, "scale": 3},
             },
             {"seed": 42},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [4.31],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [4.443],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "set_hash": xarray.DataArray(["0f9510490d521d7fa85154245288622e"], dims=_set_coordinate_key),
+                }
+            ).set_coords("set_hash"),
         ),
         "sobol: good schema 1x2, no seed": (
             "Sobol",
@@ -93,6 +123,7 @@ class TestScipySampler:
                 "parameter_2": {"distribution": "uniform", "loc": 2, "scale": 3},
             },
             {},
+            None,
         ),
     }
 
@@ -104,7 +135,8 @@ class TestScipySampler:
     def test_generate(self, sampler: str, parameter_schema: dict, kwargs: dict, expected_dataset: xarray.Dataset) -> None:
         parameter_names = [key for key in parameter_schema if key != "num_simulations"]
         test_generate = ScipySampler(sampler, parameter_schema, **kwargs)
-        xarray.testing.assert_allclose(test_generate.parameter_study, expected_dataset)
+        if expected_dataset is not None:
+            xarray.testing.assert_allclose(test_generate.parameter_study, expected_dataset)
         # Check for type preservation
         for key in test_generate.parameter_study:
             assert test_generate.parameter_study[key].dtype == numpy.float64
