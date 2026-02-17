@@ -261,6 +261,129 @@ class TestScipySampler:
                 }
             ).set_coords("set_hash"),
         ),
+        "latin hypercube: good schema 5x2": (
+            "LatinHypercube",
+            {
+                "num_simulations": 5,
+                "parameter_1": {"distribution": "uniform", "loc": 0, "scale": 10},
+                "parameter_2": {"distribution": "uniform", "loc": 2, "scale": 3},
+            },
+            {"seed": 42},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [6.4777206, 5.8116453, 8.4520879, 3.74377273, 0.28280416],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [3.32836142, 4.41462659, 2.33667294, 2.92976844, 3.98157918],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "013636ea8865a13c2b86d8043bbcd2d6",
+                            "7c225945863abc12f0c92dcc49d90669",
+                            "aa3844e906957716d05ecfffd8db471c",
+                            "ee32d86b63d4984b497dc6099a9eda42",
+                            "f742eef431ee0dbc138ca8df720fca21",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+        ),
+        "latin hypercube: good schema 2x1": (
+            "LatinHypercube",
+            {
+                "num_simulations": 2,
+                "parameter_1": {"distribution": "uniform", "loc": 0, "scale": 10},
+            },
+            {"seed": 42},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [6.13021976, 2.8056078],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["e846f8f7cc614e036a39b60b22d0d6f9", "fd8da5001063283e8b665e59bab3a5e5"],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+        ),
+        "latin hypercube: good schema 1x2": (
+            "LatinHypercube",
+            {
+                "num_simulations": 1,
+                "parameter_1": {"distribution": "uniform", "loc": 0, "scale": 10},
+                "parameter_2": {"distribution": "uniform", "loc": 2, "scale": 3},
+            },
+            {"seed": 42},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2.26043951],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [3.68336468],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "set_hash": xarray.DataArray(["742f13896220c59851df3072477f4a0c"], dims=_set_coordinate_key),
+                }
+            ).set_coords("set_hash"),
+        ),
+        "latin hypercube: good schema 1x2, no seed": (
+            "LatinHypercube",
+            {
+                "num_simulations": 1,
+                "parameter_1": {"distribution": "uniform", "loc": 0, "scale": 10},
+                "parameter_2": {"distribution": "uniform", "loc": 2, "scale": 3},
+            },
+            {},
+            # Values will be different due to random seed, but parameter names and sets should be aligned
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [4.31029474],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [4.44310392],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "set_hash": xarray.DataArray(["0f9510490d521d7fa85154245288622e"], dims=_set_coordinate_key),
+                }
+            ).set_coords("set_hash"),
+        ),
     }
 
     @pytest.mark.parametrize(
