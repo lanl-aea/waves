@@ -384,6 +384,129 @@ class TestScipySampler:
                 }
             ).set_coords("set_hash"),
         ),
+        "poisson disk: good schema 5x2": (
+            "PoissonDisk",
+            {
+                "num_simulations": 5,
+                "parameter_1": {"distribution": "uniform", "loc": 0, "scale": 10},
+                "parameter_2": {"distribution": "uniform", "loc": 2, "scale": 3},
+            },
+            {"seed": 42},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [8.30518613, 6.93479829, 7.73956049, 7.72868365, 8.18720158],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [3.30699128, 3.15549858, 3.31663532, 3.15096067, 3.48494823],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "23bc90dfa61704980a7a944f12457ea7",
+                            "50ccf1d6e5c8395a17e9773a7a33ec27",
+                            "a90d1ba8aa6786907bb5f8ef488b666f",
+                            "d4322096540bf143c5a7cffbca0f7173",
+                            "fe9fb0c1a4661724d0f8790ef92d69dc",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+        ),
+        "poisson disk: good schema 2x1": (
+            "PoissonDisk",
+            {
+                "num_simulations": 2,
+                "parameter_1": {"distribution": "uniform", "loc": 0, "scale": 10},
+            },
+            {"seed": 42},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [7.03790777, 7.73956049],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["34e54a4fdffe134ecabe83f59f31be7f", "7827973d24662c3952157d9e3dd7aabc"],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+        ),
+        "poisson disk: good schema 1x2": (
+            "PoissonDisk",
+            {
+                "num_simulations": 1,
+                "parameter_1": {"distribution": "uniform", "loc": 0, "scale": 10},
+                "parameter_2": {"distribution": "uniform", "loc": 2, "scale": 3},
+            },
+            {"seed": 42},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [7.73956049],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [3.31663532],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "set_hash": xarray.DataArray(["a90d1ba8aa6786907bb5f8ef488b666f"], dims=_set_coordinate_key),
+                }
+            ).set_coords("set_hash"),
+        ),
+        "poisson disk: good schema 1x2, no seed": (
+            "PoissonDisk",
+            {
+                "num_simulations": 1,
+                "parameter_1": {"distribution": "uniform", "loc": 0, "scale": 10},
+                "parameter_2": {"distribution": "uniform", "loc": 2, "scale": 3},
+            },
+            {},
+            # Values will be different due to random seed, but parameter names and sets should be aligned
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [4.31029474],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [4.44310392],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "set_hash": xarray.DataArray(["0f9510490d521d7fa85154245288622e"], dims=_set_coordinate_key),
+                }
+            ).set_coords("set_hash"),
+        ),
     }
 
     @pytest.mark.parametrize(
