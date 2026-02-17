@@ -138,6 +138,129 @@ class TestScipySampler:
                 }
             ).set_coords("set_hash"),
         ),
+        "halton: good schema 5x2": (
+            "Halton",
+            {
+                "num_simulations": 5,
+                "parameter_1": {"distribution": "uniform", "loc": 0, "scale": 10},
+                "parameter_2": {"distribution": "uniform", "loc": 2, "scale": 3},
+            },
+            {"seed": 42},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [8.01305869, 3.01305869, 0.51305869, 6.76305869, 5.51305869],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [3.45530394, 2.78863727, 4.45530394, 4.78863727, 2.45530394],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "19dae7d5facf1ec27c799d50780b2844",
+                            "2aa029475addd33b53330e5a8db7eb0a",
+                            "31012af62d9968adb1030f7c8a9faa79",
+                            "4a70f8ac568aa17b4d04ea2ab4a1493d",
+                            "5b395830351e94db34bee7cd75364a96",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+        ),
+        "halton: good schema 2x1": (
+            "Halton",
+            {
+                "num_simulations": 2,
+                "parameter_1": {"distribution": "uniform", "loc": 0, "scale": 10},
+            },
+            {"seed": 42},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [0.51305869, 5.51305869],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["26c15fcb00e527f8acfdf5ea7eb4135f", "fe36599598fe4e8b7369dbe91df418a7"],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+        ),
+        "halton: good schema 1x2": (
+            "Halton",
+            {
+                "num_simulations": 1,
+                "parameter_1": {"distribution": "uniform", "loc": 0, "scale": 10},
+                "parameter_2": {"distribution": "uniform", "loc": 2, "scale": 3},
+            },
+            {"seed": 42},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [5.51305869],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [2.45530394],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "set_hash": xarray.DataArray(["5b395830351e94db34bee7cd75364a96"], dims=_set_coordinate_key),
+                }
+            ).set_coords("set_hash"),
+        ),
+        "halton: good schema 1x2, no seed": (
+            "Halton",
+            {
+                "num_simulations": 1,
+                "parameter_1": {"distribution": "uniform", "loc": 0, "scale": 10},
+                "parameter_2": {"distribution": "uniform", "loc": 2, "scale": 3},
+            },
+            {},
+            # Values will be different due to random seed, but parameter names and sets should be aligned
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [4.31029474],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [4.44310392],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "set_hash": xarray.DataArray(["0f9510490d521d7fa85154245288622e"], dims=_set_coordinate_key),
+                }
+            ).set_coords("set_hash"),
+        ),
     }
 
     @pytest.mark.parametrize(
