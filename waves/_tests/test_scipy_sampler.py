@@ -14,7 +14,8 @@ class TestScipySampler:
     """Class for testing Scipy Sequence parameter study generator class."""
 
     generate_input = {
-        "good schema 5x2": (
+        "sobol: good schema 5x2": (
+            "Sobol",
             {
                 "num_simulations": 5,
                 "parameter_1": {"distribution": "uniform", "loc": 0, "scale": 10},
@@ -22,14 +23,16 @@ class TestScipySampler:
             },
             {"seed": 42},
         ),
-        "good schema 2x1": (
+        "sobol: good schema 2x1": (
+            "Sobol",
             {
                 "num_simulations": 2,
                 "parameter_1": {"distribution": "uniform", "loc": 0, "scale": 10},
             },
             {"seed": 42},
         ),
-        "good schema 1x2": (
+        "sobol: good schema 1x2": (
+            "Sobol",
             {
                 "num_simulations": 1,
                 "parameter_1": {"distribution": "uniform", "loc": 0, "scale": 10},
@@ -37,7 +40,8 @@ class TestScipySampler:
             },
             {"seed": 42},
         ),
-        "good schema 1x2, no seed": (
+        "sobol: good schema 1x2, no seed": (
+            "Sobol",
             {
                 "num_simulations": 1,
                 "parameter_1": {"distribution": "uniform", "loc": 0, "scale": 10},
@@ -48,27 +52,23 @@ class TestScipySampler:
     }
 
     @pytest.mark.parametrize(
-        ("parameter_schema", "kwargs"),
+        ("sampler", "parameter_schema", "kwargs"),
         generate_input.values(),
         ids=generate_input.keys(),
     )
-    def test_generate(self, parameter_schema: dict, kwargs: dict) -> None:
+    def test_generate(self, sampler: str, parameter_schema: dict, kwargs: dict) -> None:
         parameter_names = [key for key in parameter_schema if key != "num_simulations"]
-        for sampler in _supported_scipy_samplers:
-            # NOTE: we cannot test the samples array while simulateously iterating over available samplers because each
-            # sampler will produce different samples arrays. To test expected sample arrays we must separate the test
-            # expectations with hardcoded duplicate tests, one per sampler.
-            test_generate = ScipySampler(sampler, parameter_schema, **kwargs)
-            # Verify that the parameter set name creation method was called
-            expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
-            assert list(test_generate._set_names.values()) == expected_set_names
-            # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
-            expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
-            set_names = list(test_generate.parameter_study[_set_coordinate_key])
-            assert numpy.all(set_names == expected_set_names)
-            # Check that the parameter names are correct
-            assert parameter_names == test_generate._parameter_names
-            assert parameter_names == list(test_generate.parameter_study.keys())
+        test_generate = ScipySampler(sampler, parameter_schema, **kwargs)
+        # Verify that the parameter set name creation method was called
+        expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
+        assert list(test_generate._set_names.values()) == expected_set_names
+        # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
+        expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
+        set_names = list(test_generate.parameter_study[_set_coordinate_key])
+        assert numpy.all(set_names == expected_set_names)
+        # Check that the parameter names are correct
+        assert parameter_names == test_generate._parameter_names
+        assert parameter_names == list(test_generate.parameter_study.keys())
 
     merge_test = {
         "new sets": (
