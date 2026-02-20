@@ -157,7 +157,7 @@ class TestSALibSampler:
             test_validate = SALibSampler(sampler_class, parameter_schema)
             assert isinstance(test_validate, SALibSampler)
 
-    generate_input = {
+    generate_shapes_input = {
         "good schema 5x2": (
             {
                 "N": 5,
@@ -241,8 +241,8 @@ class TestSALibSampler:
 
     @pytest.mark.parametrize(
         ("parameter_schema", "kwargs"),
-        generate_input.values(),
-        ids=generate_input.keys(),
+        generate_shapes_input.values(),
+        ids=generate_shapes_input.keys(),
     )
     def test_generate_shapes(self, parameter_schema: dict, kwargs: dict) -> None:
         for sampler in _supported_salib_samplers:
@@ -265,13 +265,439 @@ class TestSALibSampler:
                 set_names = list(test_generate.parameter_study[_set_coordinate_key])
                 assert numpy.all(set_names == expected_set_names)
 
+    generate_input = {
+        "morris: good schema 5x2": (
+            "morris",
+            {
+                "N": 5,
+                "problem": {
+                    "num_vars": 2,
+                    "names": ["parameter_1", "parameter_2"],
+                    "bounds": [[-1, 1], [-2, 2]],
+                },
+            },
+            {"seed": 42},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [-0.33333333, 1.0, 1.0, -0.33333333, 0.33333333, 1.0, -1.0, -0.33333333, -1.0, 0.33333333],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                    "parameter_set5",
+                                    "parameter_set6",
+                                    "parameter_set7",
+                                    "parameter_set8",
+                                    "parameter_set9",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [-0.66666667, -2.0, 2.0, 2.0, -2.0, 0.66666667, -2.0, 0.66666667, 0.66666667, 0.66666667],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                    "parameter_set5",
+                                    "parameter_set6",
+                                    "parameter_set7",
+                                    "parameter_set8",
+                                    "parameter_set9",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "057a406025af9bc9831729c9770bfba4",
+                            "2b18a719c7945d3296dd1debe2350c0d",
+                            "30b1b83a463b6ec2a285675a02b6c303",
+                            "4a34fe7bccad4fef1c82d4ceda72766c",
+                            "52736bd353e11f6a22570350ebb868b6",
+                            "658601aa8b10b092a99d7e4f9d3c0358",
+                            "94a32bb5e68d117276ffc4f138677803",
+                            "bbca8f41f728353583e788e5dad118e9",
+                            "da268cacb7badc54f7d2fe8b8a0a2db4",
+                            "eddac337f9c9c79d03e0ae0278076dc9",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+        ),
+        "latin: good schema 2x1": (
+            "latin",
+            {
+                "N": 2,
+                "problem": {
+                    "num_vars": 1,
+                    "names": ["parameter_1"],
+                    "bounds": [[-1, 1]],
+                },
+            },
+            {"seed": 42},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [-0.22604395, 0.43887844],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["6400508900158a61b0ec622281662fd8", "9730dec062211dbebb12f90bd45bf7ce"],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+        ),
+        "sobol: good schema 1x2": (
+            "sobol",
+            {
+                "N": 1,
+                "problem": {
+                    "num_vars": 2,
+                    "names": ["parameter_1", "parameter_2"],
+                    "bounds": [[-1, 1], [-2, 2]],
+                },
+            },
+            {"seed": 42},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [-0.13794105, 0.61282553, 0.61282553, -0.13794105],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [-1.78617326, 1.25747189, -1.78617326, 1.25747189],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "588a0fe5d064f8c972922a341fc32bf8",
+                            "682c5b5176eda1cb47b736b6c98330c2",
+                            "cfac62f65b2e8a2eafc97eb2d9a5e25e",
+                            "ed806bda1ad84b54f933af0f792002fb",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+        ),
+        "finite diff: good schema 1x3": (
+            "finite_diff",
+            {
+                "N": 1,
+                "problem": {
+                    "num_vars": 3,
+                    "names": ["parameter_1", "parameter_2", "parameter_3"],
+                    "bounds": [[-1, 1], [-2, 2], [-3, 3]],
+                },
+            },
+            {"seed": 42},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [-1.0, -0.99707031, -0.99707031, -0.99707031],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [-0.49414062, -0.49414062, -0.49908203, -0.49414062],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_3": xarray.DataArray(
+                        [-0.31347656, -0.31347656, -0.31347656, -0.31661133],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "1fdc4976fafdea84bdc8bbe4e14491ee",
+                            "61bac0b1bae84a5f18f47fd6255285e4",
+                            "dec5fa1decc5b82df746e8264ace22ab",
+                            "faf3dc89be7811c84e5ec61da31752e2",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+        ),
+        "fast sampler: good schema 65x1": (
+            "fast_sampler",
+            {
+                "N": 65,
+                "problem": {
+                    "num_vars": 1,
+                    "names": ["parameter_1"],
+                    "bounds": [[-1, 1]],
+                },
+            },
+            {"seed": 42},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [
+                            -0.35032965,
+                            0.87340658,
+                            0.01186811,
+                            -0.84967035,
+                            -0.41186811,
+                            -0.35736266,
+                            -0.22725273,
+                            0.50417581,
+                            0.32659342,
+                            -0.29582419,
+                            -0.84263734,
+                            0.2035165,
+                            0.07340658,
+                            0.44967035,
+                            0.26505496,
+                            0.14197804,
+                            -0.96571427,
+                            0.81186811,
+                            0.81890112,
+                            -0.11120881,
+                            0.13494504,
+                            0.51120881,
+                            -0.91120881,
+                            -0.48043958,
+                            -0.97274727,
+                            -0.66505496,
+                            0.38109888,
+                            0.68879119,
+                            0.31956042,
+                            -0.90417581,
+                            0.63428573,
+                            -0.10417581,
+                            -0.78813189,
+                            -0.54197804,
+                            -0.72659342,
+                            0.88043958,
+                            -0.65802196,
+                            -0.28879119,
+                            0.44263734,
+                            0.75736266,
+                            -0.16571427,
+                            0.94197804,
+                            0.01890112,
+                            -0.71956042,
+                            -0.04263734,
+                            0.08043958,
+                            -0.41890112,
+                            -0.47340658,
+                            0.25802196,
+                            0.57274727,
+                            0.62725273,
+                            0.1964835,
+                            -0.78109888,
+                            -0.5964835,
+                            0.93494504,
+                            0.69582419,
+                            -0.53494504,
+                            0.75032965,
+                            0.56571427,
+                            0.9964835,
+                            -0.17274727,
+                            -0.04967035,
+                            -0.6035165,
+                            0.38813189,
+                            -0.23428573,
+                        ],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                    "parameter_set5",
+                                    "parameter_set6",
+                                    "parameter_set7",
+                                    "parameter_set8",
+                                    "parameter_set9",
+                                    "parameter_set10",
+                                    "parameter_set11",
+                                    "parameter_set12",
+                                    "parameter_set13",
+                                    "parameter_set14",
+                                    "parameter_set15",
+                                    "parameter_set16",
+                                    "parameter_set17",
+                                    "parameter_set18",
+                                    "parameter_set19",
+                                    "parameter_set20",
+                                    "parameter_set21",
+                                    "parameter_set22",
+                                    "parameter_set23",
+                                    "parameter_set24",
+                                    "parameter_set25",
+                                    "parameter_set26",
+                                    "parameter_set27",
+                                    "parameter_set28",
+                                    "parameter_set29",
+                                    "parameter_set30",
+                                    "parameter_set31",
+                                    "parameter_set32",
+                                    "parameter_set33",
+                                    "parameter_set34",
+                                    "parameter_set35",
+                                    "parameter_set36",
+                                    "parameter_set37",
+                                    "parameter_set38",
+                                    "parameter_set39",
+                                    "parameter_set40",
+                                    "parameter_set41",
+                                    "parameter_set42",
+                                    "parameter_set43",
+                                    "parameter_set44",
+                                    "parameter_set45",
+                                    "parameter_set46",
+                                    "parameter_set47",
+                                    "parameter_set48",
+                                    "parameter_set49",
+                                    "parameter_set50",
+                                    "parameter_set51",
+                                    "parameter_set52",
+                                    "parameter_set53",
+                                    "parameter_set54",
+                                    "parameter_set55",
+                                    "parameter_set56",
+                                    "parameter_set57",
+                                    "parameter_set58",
+                                    "parameter_set59",
+                                    "parameter_set60",
+                                    "parameter_set61",
+                                    "parameter_set62",
+                                    "parameter_set63",
+                                    "parameter_set64",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "06fef79b88be7d9698d3f310307a31ad",
+                            "072986c01debd6f0d8d2596e0ced3bae",
+                            "08f6d8b600b38201ec9cb39aeb06d6fb",
+                            "134cc2e649cd3cbf582baf8ba3a9a763",
+                            "18f13cff07746b69705fb381d06c52a3",
+                            "27ecadc5090af0dc48a017f5504d428c",
+                            "2821483395ace54382c415b394a00859",
+                            "285f99341a817b6649b4916a52e37762",
+                            "288a842a0f58e3c04b388daa6079fdf7",
+                            "295af31ae559ae8f71c1d175ee7b46a8",
+                            "298d77ff25b85cf7c25b252c1a95b25a",
+                            "2ac6a38cadf9f64ab5c53af0b5cf864b",
+                            "326344747cad9ba92bb846b829179a4d",
+                            "349b0d0cb89f7adc5f81fd6b171372a4",
+                            "362eda574f2fe41361a1e7b80ed7440c",
+                            "3940ef1ef26d8692544ed9b9bc458a19",
+                            "42c75970995f0d4bc4e5646192a657f2",
+                            "46f286289977ac497aaf28cf4a793f0a",
+                            "4745aa4e9448460b877b4a459a7a1f2f",
+                            "476ca493d9eed4e81eb6c36555415448",
+                            "504e94700fd75e65f3787659a6a6de52",
+                            "57ea3ea7f1f97a2830d6d5fe64ce1d18",
+                            "57ef2a497b431a9d551f83245d7f5f5d",
+                            "5dd6b49107f89e93e2291b29e98f3d8b",
+                            "60afcda90ba20c51450ab488dbaa5421",
+                            "61efb702db70071290a361a3209f2bb1",
+                            "6a9b93286fcf31170e7ab0138cd27cb7",
+                            "7270b415afbb3f716c349b4435819037",
+                            "72a6cc8a668a68d5b560da8323783d26",
+                            "7612d06d508069164109d9ccf9478b3e",
+                            "8482c2dc5b531b02a76c1cdc6bcba964",
+                            "88492a15372b7f67e73cdfb9980795e0",
+                            "89a7b151d76c778fc5cddba591443f12",
+                            "8d386a31a92e88297e139516b12a262f",
+                            "8e3a160362a7fa4f3ba7b1810823dccf",
+                            "9d48b3d40c0bd1d352feb8b84c7b35f1",
+                            "a151e8b530402e6bd887d54da5bc9d8c",
+                            "a494c59d77733634c14d086ecc8a97db",
+                            "a499f180bc51afe98e57ed5c007c21de",
+                            "a62fbaf0d7418751cdc77625b8d47e69",
+                            "a8deaf8d70eb7d29b6fe0bcd2ca63863",
+                            "af6dcd2c4968d84ff16c33581cd4c2e3",
+                            "b09a7329c3f5b86343127de475f99121",
+                            "b598d21c2d52a8146657483a6550c27b",
+                            "b7e9ded2f729d1967001013081e98d52",
+                            "bc00c93faf614543dc5bca2ba26e5b9a",
+                            "bd32e7d1f0e0ec63a235b7457f54cda3",
+                            "bd57b6e543f52ac0dc9c55bdac0ef2d4",
+                            "bdd962687e4e9ab321ac2903a3438d1c",
+                            "c45d545546db87c187808f416185c7f2",
+                            "c75c372f3bd37bec6d45600def2d71ff",
+                            "c8b2d32d6290f7376e2b93b89fe6e5be",
+                            "ca40d3e9e5bd3987b74897afe6a751eb",
+                            "cdc5ccfc61107a29997c76c8225b8f5d",
+                            "ce38b79251b7256e31e51fe119b79056",
+                            "cfa134730f3924a0d4c9468a57cb3d6f",
+                            "d0cbd66f59cb309b4e2a9f1c20e0c793",
+                            "de32cdd33352a8ea97240e0039ffe20c",
+                            "e1ceaf9c60a9aba4a91ce4381c176d43",
+                            "eb07f839fede536cc93dbe6aa1dc92e1",
+                            "edcc73d00aabdb7de229e6795e2e8ff2",
+                            "f62dfb7548b3bbe8a32ae82867e15d08",
+                            "f82f55b1b65e9b9eaeb6f2af3a387d7f",
+                            "fdc5ae91af19820fa3cc9d351309eb19",
+                            "fdd9f648153eb6e10a7a233817f1f945",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+        ),
+    }
 
     @pytest.mark.parametrize(
         ("sampler", "parameter_schema", "kwargs", "expected_dataset"),
         generate_input.values(),
         ids=generate_input.keys(),
     )
-    def test_generate(self, sampler: str, parameter_schema: dict, kwargs: dict, expected_dataset: xarray.Dataset) -> None:
+    def test_generate(
+        self, sampler: str, parameter_schema: dict, kwargs: dict, expected_dataset: xarray.Dataset
+    ) -> None:
         test_generate = SALibSampler(sampler, parameter_schema, **kwargs)
         xarray.testing.assert_allclose(test_generate.parameter_study, expected_dataset)
         # Check for type preservation
@@ -281,7 +707,6 @@ class TestSALibSampler:
         # TODO: _set_names is an ordered object (dictionary). Fix test to compare dictionary-to-dictionary instead
         # of implied consistency according to value order.
         assert list(test_generate._set_names.values()) == list(expected_dataset[_set_coordinate_key].to_numpy())
-
 
     merge_test = {
         "new sets, 5(8)x2": (
