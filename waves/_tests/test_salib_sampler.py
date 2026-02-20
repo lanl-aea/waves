@@ -243,7 +243,7 @@ class TestSALibSampler:
         generate_input.values(),
         ids=generate_input.keys(),
     )
-    def test_generate(self, parameter_schema: dict, kwargs: dict) -> None:
+    def test_generate_shapes(self, parameter_schema: dict, kwargs: dict) -> None:
         for sampler in _supported_salib_samplers:
             # TODO: find a better way to separate the sampler types and their test parameterization
             if not self._big_enough(sampler, parameter_schema["N"], parameter_schema["problem"]["num_vars"]):
