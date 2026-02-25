@@ -5,6 +5,7 @@ from unittest.mock import patch
 
 import numpy
 import pytest
+import xarray
 
 from waves._settings import _hash_coordinate_key, _set_coordinate_key
 from waves._tests.common import merge_samplers
@@ -22,24 +23,72 @@ class TestLatinHypercube:
                 "parameter_2": {"distribution": "norm", "loc": -50, "scale": 1},
             },
             42,
-            numpy.array(
-                [
-                    [51.01609863, -51.21478363],
-                    [48.09331069, -49.58609982],
-                    [50.20487353, -49.140834],
-                    [50.37931242, -50.14390653],
-                    [49.67971797, -50.49606915],
-                ]
-            ),
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [51.01609863, 48.09331069, 50.37931242, 50.20487353, 49.67971797],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [-51.21478363, -49.58609982, -50.14390653, -49.140834, -50.49606915],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "10a53f8bbab9abcd9538087ed75a554c",
+                            "39c2bf5b15394faeae3e93dcd0a6725e",
+                            "8b77d886a6636ea41b45e7a61dd6c2f9",
+                            "9abbd4182b58a04464f8e4a1377c9e51",
+                            "e515d1a7e6e352140a1a7ae86c5425e8",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
             [{"loc": 50, "scale": 1}, {"loc": -50, "scale": 1}],
         ),
         "good schema 2x1": (
-            {
-                "num_simulations": 2,
-                "parameter_1": {"distribution": "norm", "loc": 50, "scale": 1},
-            },
+            {"num_simulations": 2, "parameter_1": {"distribution": "norm", "loc": 50, "scale": 1}},
             42,
-            numpy.array([[50.2872041], [49.41882358]]),
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [49.41882358, 50.2872041],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["57e4c109b2e72ad106455e7976b1a07f", "ed32dfec2e7e74b8edb368cfb7a548ba"],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
             [{"loc": 50, "scale": 1}],
         ),
         "good schema 1x2": (
@@ -49,13 +98,25 @@ class TestLatinHypercube:
                 "parameter_2": {"distribution": "norm", "loc": -50, "scale": 1},
             },
             42,
-            numpy.array([[49.24806127, -49.84618661]]),
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [49.24806127],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [-49.84618661],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "set_hash": xarray.DataArray(["dca1ee590a69d20d5fe79641f0c00e8e"], dims=_set_coordinate_key),
+                }
+            ).set_coords("set_hash"),
             [{"loc": 50, "scale": 1}, {"loc": -50, "scale": 1}],
         ),
     }
 
     @pytest.mark.parametrize(
-        ("parameter_schema", "seed", "expected_samples", "expected_scipy_kwds"),
+        ("parameter_schema", "seed", "expected_dataset", "expected_scipy_kwds"),
         generate_input.values(),
         ids=generate_input.keys(),
     )
@@ -63,7 +124,7 @@ class TestLatinHypercube:
         self,
         parameter_schema: dict,
         seed: int,
-        expected_samples: numpy.ndarray,
+        expected_dataset: xarray.Dataset,
         expected_scipy_kwds: list[dict[str, typing.Any]],
     ) -> None:
         """Test specific instances of LHC generator.
@@ -73,7 +134,7 @@ class TestLatinHypercube:
 
         :param parameter_schema: dictionary schema defining number of simulations and the parameter distributions
         :param seed: integer randomization seed to ensure consistent test output
-        :param expected_samples: numpy array of the expected parameter study samples.
+        :param expected_dataset: numpy array of the expected parameter study samples.
         :param expected_scipy_kwds: list containing dictionaries of each parameter, with keywords defining the
             statistical distribution of samples.
         """
@@ -84,18 +145,14 @@ class TestLatinHypercube:
             ScipySampler("LatinHypercube", parameter_schema, **kwargs),
         )
         for test_generate in generator_classes:
-            samples_array = test_generate._samples
-            assert numpy.allclose(samples_array, expected_samples)
+            xarray.testing.assert_allclose(test_generate.parameter_study, expected_dataset)
             # Check for type preservation
             for key in test_generate.parameter_study:
                 assert test_generate.parameter_study[key].dtype == numpy.float64
             # Verify that the parameter set name creation method was called
-            expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
-            assert list(test_generate._set_names.values()) == expected_set_names
-            # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
-            expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
-            set_names = list(test_generate.parameter_study[_set_coordinate_key])
-            assert numpy.all(set_names == expected_set_names)
+            # TODO: _set_names is an ordered object (dictionary). Fix test to compare dictionary-to-dictionary instead
+            # of implied consistency according to value order.
+            assert list(test_generate._set_names.values()) == list(expected_dataset[_set_coordinate_key].to_numpy())
             # Check that the parameter names are correct
             assert parameter_names == test_generate._parameter_names
             assert parameter_names == list(test_generate.parameter_study.keys())
