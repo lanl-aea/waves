@@ -924,11 +924,16 @@ class TestSALibSampler:
             marks=[
                 pytest.mark.skipif(
                     not testing_windows,
-                    reason="Machine precision result known to differ on Windows CI servers",
+                    reason="Machine precision result known to be specific to Windows OS",
                 ),
                 # TODO: Figure out why different windows machines result in inconsistent test results
                 # Issue #999: https://re-git.lanl.gov/aea/python-projects/waves/-/issues/999
-                pytest.mark.skip(reason="Currently skipping due to pass/fail depending on Windows machine"),
+                pytest.mark.skip(
+                    reason=(
+                        "Windows pip-build CI job fails but is unreproducible locally."
+                        " Skip until CI failure can be fixed."
+                    )
+                ),
             ],
         ),
         "fast sampler: good schema 65x1 (macos)": pytest.param(
