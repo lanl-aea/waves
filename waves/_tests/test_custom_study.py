@@ -207,7 +207,7 @@ class TestCustomStudy:
                         },
                     ),
                     "set_hash": xarray.DataArray(
-                        ['501f23f42f3aabd912e1b70072701434', 'c88259b8113aeb6880829e4c092dd445'],
+                        ["501f23f42f3aabd912e1b70072701434", "c88259b8113aeb6880829e4c092dd445"],
                         dims=_set_coordinate_key,
                     ),
                 }
@@ -296,7 +296,7 @@ class TestCustomStudy:
                         },
                     ),
                     "set_hash": xarray.DataArray(
-                        ['501f23f42f3aabd912e1b70072701434', 'c88259b8113aeb6880829e4c092dd445'],
+                        ["501f23f42f3aabd912e1b70072701434", "c88259b8113aeb6880829e4c092dd445"],
                         dims=_set_coordinate_key,
                     ),
                 }
@@ -385,7 +385,7 @@ class TestCustomStudy:
                         },
                     ),
                     "set_hash": xarray.DataArray(
-                        ['501f23f42f3aabd912e1b70072701434', 'c88259b8113aeb6880829e4c092dd445'],
+                        ["501f23f42f3aabd912e1b70072701434", "c88259b8113aeb6880829e4c092dd445"],
                         dims=_set_coordinate_key,
                     ),
                 }
