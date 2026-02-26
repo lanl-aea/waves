@@ -6,6 +6,7 @@ from unittest.mock import call, mock_open, patch
 
 import numpy
 import pytest
+import xarray
 
 from waves import parameter_generators
 from waves._settings import _allowable_output_file_typing, _set_coordinate_key
@@ -56,60 +57,238 @@ class TestCartesianProduct:
     generate_io = {
         "one_parameter": (
             {"parameter_1": [1, 2]},
-            numpy.array([[1], [2]]),
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2, 1],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"], dims=_set_coordinate_key
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
             {"parameter_1": numpy.int64},
         ),
         "two_parameter": (
             {"parameter_1": [1, 2], "parameter_2": ["a", "b"]},
-            numpy.array(
-                [
-                    [1, "a"],
-                    [1, "b"],
-                    [2, "a"],
-                    [2, "b"],
-                ],
-                dtype=object,
-            ),
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1, 1, 2, 2],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        ["a", "b", "b", "a"],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "3b86be0b68c8a5a2a7dca07213846681",
+                            "dd8d813de1f1b82671b694817bf10c3f",
+                            "e90b9780b64cf43849b31dd6c5582015",
+                            "f4f5a25089f52a0d069c83f34ce6b68b",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
             {"parameter_1": numpy.int64, "parameter_2": numpy.dtype("U1")},
         ),
         "ints and floats": (
             {"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]},
-            numpy.array(
-                [
-                    [1, 3.0],
-                    [1, 4.0],
-                    [2, 3.0],
-                    [2, 4.0],
-                ],
-                dtype=object,
-            ),
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1, 1, 2, 2],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [4.0, 3.0, 4.0, 3.0],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "6a184a4ff7991572e4c8f2d096656b6b",
+                            "ad4d9f0b45ec964db8f313a2b64636de",
+                            "bdaabe6f836f8be5f34e39f328fa6c9d",
+                            "e12bff8429a0bc549e4f029ffcb14e6b",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
         ),
         "ints and bools": (
             {"parameter_1": [1, 2], "parameter_2": [True, False]},
-            numpy.array(
-                [
-                    [1, True],
-                    [1, False],
-                    [2, True],
-                    [2, False],
-                ],
-                dtype=object,
-            ),
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2, 1, 2, 1],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [True, True, False, False],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "6b483a95c061cff58194545c7d2b548c",
+                            "d65bccd02f05b0419dc634e643418e62",
+                            "df1ac82da14f4f1fd9d73159bb64a717",
+                            "fad886b3a9a58a623ba80745c094f53f",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
             {"parameter_1": numpy.int64, "parameter_2": bool},
         ),
         "float and bool": (
             {"parameter_1": [1.0, 2.0], "parameter_2": [True, False]},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1.0, 2.0, 1.0, 2.0],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [False, True, True, False],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "7052493af57e86c7b9aa704f3056c8ad",
+                            "8612daddcbbd616b8b426b39e9b47fef",
+                            "92988d818731c8f420bfb0b14180c3b5",
+                            "d269ea65e04db7050191b6ecfdb3bba7",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {"parameter_1": numpy.float64, "parameter_2": bool},
+        ),
+        "all numpy typing": (
+            {
+                "parameter_1": [numpy.int16(1)],
+                "parameter_2": [numpy.int32(-1)],
+                "parameter_3": [numpy.int64(-10)],
+                "parameter_4": [numpy.float64(1.23)],
+                "parameter_5": [numpy.bool_(True)],
+                "parameter_6": [numpy.str_("zero"), numpy.str_("one")],
+            },
             numpy.array(
                 [
-                    [1.0, True],
-                    [1.0, False],
-                    [2.0, True],
-                    [2.0, False],
+                    [1, -1, -10, 1.23, True, "zero"],
+                    [1, -1, -10, 1.23, True, "one"],
                 ],
                 dtype=object,
             ),
-            {"parameter_1": numpy.float64, "parameter_2": bool},
+            {
+                "parameter_1": numpy.int64,
+                "parameter_2": numpy.int64,
+                "parameter_3": numpy.int64,
+                "parameter_4": numpy.float64,
+                "parameter_5": bool,
+                "parameter_6": numpy.dtype("U4"),
+            },
+        ),
+        "mixed numpy typing": (
+            {
+                "parameter_1": [1],
+                "parameter_2": [numpy.int32(-1)],
+                "parameter_3": [-10],
+                "parameter_4": [numpy.float64(1.23)],
+                "parameter_5": [numpy.bool_(True)],
+                "parameter_6": ["zero", "one"],
+            },
+            numpy.array(
+                [
+                    [1, -1, -10, 1.23, True, "zero"],
+                    [1, -1, -10, 1.23, True, "one"],
+                ],
+                dtype=object,
+            ),
+            {
+                "parameter_1": numpy.int64,
+                "parameter_2": numpy.int64,
+                "parameter_3": numpy.int64,
+                "parameter_4": numpy.float64,
+                "parameter_5": bool,
+                "parameter_6": numpy.dtype("U4"),
+            },
+        ),
+        "all built-in typing": (
+            {
+                "parameter_1": [1],
+                "parameter_2": [-1],
+                "parameter_3": [-10],
+                "parameter_4": [1.23],
+                "parameter_5": [True],
+                "parameter_6": ["zero", "one"],
+            },
+            numpy.array(
+                [
+                    [1, -1, -10, 1.23, True, "zero"],
+                    [1, -1, -10, 1.23, True, "one"],
+                ],
+                dtype=object,
+            ),
+            {
+                "parameter_1": numpy.int64,
+                "parameter_2": numpy.int64,
+                "parameter_3": numpy.int64,
+                "parameter_4": numpy.float64,
+                "parameter_5": bool,
+                "parameter_6": numpy.dtype("U4"),
+            },
         ),
         "all numpy typing": (
             {
@@ -189,24 +368,21 @@ class TestCartesianProduct:
     }
 
     @pytest.mark.parametrize(
-        ("parameter_schema", "expected_array", "expected_types"),
+        ("parameter_schema", "expected_dataset", "expected_types"),
         generate_io.values(),
         ids=generate_io.keys(),
     )
     def test_generate(
-        self, parameter_schema: dict, expected_array: numpy.ndarray, expected_types: dict[str, type]
+        self, parameter_schema: dict, expected_dataset: xarray.Dataset, expected_types: dict[str, type]
     ) -> None:
         test_generate = CartesianProduct(parameter_schema)
-        generate_array = test_generate._samples
-        assert numpy.all(generate_array == expected_array)
+        xarray.testing.assert_identical(test_generate.parameter_study, expected_dataset)
         for key in test_generate.parameter_study:
             assert test_generate.parameter_study[key].dtype == expected_types[str(key)]
         # Verify that the parameter set name creation method was called
-        assert list(test_generate._set_names.values()) == [f"parameter_set{num}" for num in range(len(expected_array))]
-        # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
-        expected_set_names = [f"parameter_set{num}" for num in range(len(expected_array))]
-        set_names = list(test_generate.parameter_study[_set_coordinate_key])
-        assert numpy.all(set_names == expected_set_names)
+        # TODO: _set_names is an ordered object (dictionary). Fix test to compare dictionary-to-dictionary instead of
+        # implied consistency according to value order.
+        assert list(test_generate._set_names.values()) == list(expected_dataset[_set_coordinate_key].to_numpy())
 
     @pytest.mark.parametrize(
         ("parameter_schema", "expected_array", "expected_types"),

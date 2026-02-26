@@ -10,19 +10,21 @@ Changelog
 
 Internal Changes
 ================
+- Stricter unit tests for parameter generator generate method by including calculated parameter set hash indices
+  (:issue:`997`, :merge:`1292`). By `Chris Johnson`_.
 - Run system tests against a Cubit 17 and 16 version (:issue:`996`, :merge:`1291`). By `Kyle Brindley`_.
 
 Enhancements
 ============
-- Convert parameter schema NumPy input types to Python built-in types prior to generation (:issue:`992`, :merge:`1288`). 
-  By `Chris Johnson`_.
-- Allow action prefix and suffix overrides for the WAVES construction environment. Enables overrides to default
-  behavior once at the environment level instead of once per builder (:issue:`994`, :merge:`1290`). By `Kyle Brindley`_.
 - Escape the ``cd`` command in the default action prefix to avoid putting system absolute paths and binaries in task
   definition source lists. Helps when using a shared project cache from more than one server (:issue:`995`,
   :merge:`1289`). By `Kyle Brindley`_.
+- Allow action prefix and suffix overrides for the WAVES construction environment. Enables overrides to default
+  behavior once at the environment level instead of once per builder (:issue:`994`, :merge:`1290`). By `Kyle Brindley`_.
 - Verify parameter study content hashes at generation to catch mismatched or unsupported type errors earlier
   with a meaningful user error message (:issue:`993`, :merge:`1287`). By `Chris Johnson`_.
+- Convert parameter schema NumPy input types to Python built-in types prior to generation (:issue:`992`, :merge:`1288`).
+  By `Chris Johnson`_.
 
 ******************
 1.1.1 (2025-01-14)
