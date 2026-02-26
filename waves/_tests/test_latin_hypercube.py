@@ -113,6 +113,72 @@ class TestLatinHypercube:
             ).set_coords("set_hash"),
             [{"loc": 50, "scale": 1}, {"loc": -50, "scale": 1}],
         ),
+        "all numpy typing": (
+            {
+                "num_simulations": 1,
+                "parameter_1": {"distribution": "norm", "loc": numpy.float64(50), "scale": numpy.int64(1)},
+                "parameter_2": {"distribution": "norm", "loc": numpy.float64(-50), "scale": numpy.int64(1)},
+            },
+            42,
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [49.24806127],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [-49.84618661],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "set_hash": xarray.DataArray(["dca1ee590a69d20d5fe79641f0c00e8e"], dims=_set_coordinate_key),
+                }
+            ).set_coords("set_hash"),
+            [{"loc": 50, "scale": 1}, {"loc": -50, "scale": 1}],
+        ),
+        "mixed numpy typing": (
+            {
+                "num_simulations": 1,
+                "parameter_1": {"distribution": "norm", "loc": numpy.float64(50), "scale": 1},
+                "parameter_2": {"distribution": "norm", "loc": -50, "scale": numpy.int64(1)},
+            },
+            42,
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [49.24806127],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [-49.84618661],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "set_hash": xarray.DataArray(["dca1ee590a69d20d5fe79641f0c00e8e"], dims=_set_coordinate_key),
+                }
+            ).set_coords("set_hash"),
+            [{"loc": 50, "scale": 1}, {"loc": -50, "scale": 1}],
+        ),
+        "all built-in typing": (
+            {
+                "num_simulations": 1,
+                "parameter_1": {"distribution": "norm", "loc": 50, "scale": 1},
+                "parameter_2": {"distribution": "norm", "loc": -50, "scale": 1},
+            },
+            42,
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [49.24806127],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [-49.84618661],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "set_hash": xarray.DataArray(["dca1ee590a69d20d5fe79641f0c00e8e"], dims=_set_coordinate_key),
+                }
+            ).set_coords("set_hash"),
+            [{"loc": 50, "scale": 1}, {"loc": -50, "scale": 1}],
+        ),
     }
 
     @pytest.mark.parametrize(
