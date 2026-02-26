@@ -224,13 +224,69 @@ class TestCartesianProduct:
                 "parameter_5": [numpy.bool_(True)],
                 "parameter_6": [numpy.str_("zero"), numpy.str_("one")],
             },
-            numpy.array(
-                [
-                    [1, -1, -10, 1.23, True, "zero"],
-                    [1, -1, -10, 1.23, True, "one"],
-                ],
-                dtype=object,
-            ),
+            # Same expected output for numpy typing, mixed typing, and built-in typing
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1, 1],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [-1, -1],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_3": xarray.DataArray(
+                        [-10, -10],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_4": xarray.DataArray(
+                        [1.23, 1.23],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_5": xarray.DataArray(
+                        [True, True],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_6": xarray.DataArray(
+                        ["zero", "one"],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ['501f23f42f3aabd912e1b70072701434', 'c88259b8113aeb6880829e4c092dd445'],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
             {
                 "parameter_1": numpy.int64,
                 "parameter_2": numpy.int64,
@@ -249,13 +305,68 @@ class TestCartesianProduct:
                 "parameter_5": [numpy.bool_(True)],
                 "parameter_6": ["zero", "one"],
             },
-            numpy.array(
-                [
-                    [1, -1, -10, 1.23, True, "zero"],
-                    [1, -1, -10, 1.23, True, "one"],
-                ],
-                dtype=object,
-            ),
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1, 1],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [-1, -1],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_3": xarray.DataArray(
+                        [-10, -10],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_4": xarray.DataArray(
+                        [1.23, 1.23],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_5": xarray.DataArray(
+                        [True, True],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_6": xarray.DataArray(
+                        ["zero", "one"],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ['501f23f42f3aabd912e1b70072701434', 'c88259b8113aeb6880829e4c092dd445'],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
             {
                 "parameter_1": numpy.int64,
                 "parameter_2": numpy.int64,
@@ -274,13 +385,68 @@ class TestCartesianProduct:
                 "parameter_5": [True],
                 "parameter_6": ["zero", "one"],
             },
-            numpy.array(
-                [
-                    [1, -1, -10, 1.23, True, "zero"],
-                    [1, -1, -10, 1.23, True, "one"],
-                ],
-                dtype=object,
-            ),
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1, 1],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [-1, -1],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_3": xarray.DataArray(
+                        [-10, -10],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_4": xarray.DataArray(
+                        [1.23, 1.23],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_5": xarray.DataArray(
+                        [True, True],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_6": xarray.DataArray(
+                        ["zero", "one"],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ['501f23f42f3aabd912e1b70072701434', 'c88259b8113aeb6880829e4c092dd445'],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
             {
                 "parameter_1": numpy.int64,
                 "parameter_2": numpy.int64,
