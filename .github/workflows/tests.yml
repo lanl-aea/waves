@@ -32,7 +32,7 @@ jobs:
         run: |
           conda activate tests && scons pyproject.toml
           $env:VERSION=python -m setuptools_scm
-          conda build recipe --channel conda-forge --no-anaconda-upload --output-folder conda-bld
+          rattler-build build --recipe recipe --channel conda-forge --output-folder conda-bld
 
   ubuntu:
     runs-on: ubuntu-latest
@@ -53,4 +53,4 @@ jobs:
         run: conda env create --name tests --file conda-build.yml
       - name: Conda build
         shell: bash -el {0}
-        run: conda activate tests && scons pyproject.toml && VERSION=$(python -m setuptools_scm) conda build recipe --channel conda-forge --no-anaconda-upload --output-folder conda-bld
+        run: conda activate tests && scons pyproject.toml && VERSION=$(python -m setuptools_scm) rattler-build build --recipe recipe --channel conda-forge --output-folder conda-bld
