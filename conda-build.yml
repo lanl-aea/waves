@@ -3,7 +3,7 @@ channels:
   - nodefaults
 
 dependencies:
-  - pytest
+  - pytest >=6
   - rattler-build
   - scons >=4.6
   - setuptools >=77
