@@ -76,14 +76,14 @@ tests:
       - if: win
         then: ./run_test.bat
       - requirements:
-        run:
-          - python
-          - pytest >=6
-          - pytest-xdist
-          - sphinx >=7.1
-          - sphinx-argparse
-          - sphinx-book-theme
-          - sphinxcontrib-bibtex
+          run:
+            - python
+            - pytest >=6
+            - pytest-xdist
+            - sphinx >=7.1
+            - sphinx-argparse
+            - sphinx-book-theme
+            - sphinxcontrib-bibtex
 
 about:
   license: BSD-3-Clause
