@@ -151,7 +151,7 @@ def create_qoi(
 def create_qoi_set(qois: typing.Iterable[xarray.DataArray]) -> xarray.Dataset:
     """Create a QOI dataset containing multiple QOIs from a single simulation.
 
-    This operation combines multiple QOIs (``xarray.DataArray``s) into a single "QOI Set" (``xarray.Dataset``) using
+    This operation combines multiple QOIs (``xarray.DataArray`` s) into a single "QOI Set" (``xarray.Dataset``) using
     ``xarray.merge()``.
     This results in an ``xarray.Dataset`` with each QOI represented as a separate data variable.
     Each QOI must have a unique name.
