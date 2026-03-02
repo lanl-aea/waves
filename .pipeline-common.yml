@@ -151,7 +151,7 @@
     - umask 0022
     - mkdir ${conda_artifacts_directory}
     - scons pyproject.toml
-    - VERSION=$(python -m setuptools_scm) conda build ${recipe_directory} --channel fierromechanics --channel conda-forge --no-anaconda-upload --output-folder ${conda_artifacts_directory}
+    - VERSION=$(python -m setuptools_scm) rattler-build build --recipe ${recipe_directory} --channel fierromechanics --channel conda-forge --output-dir ${conda_artifacts_directory}
     # Help downstream deploy pipeline find this job by ID
     - tag_job_file_root="/nettmp/aea_service"
     - tag_job_file_parent="${tag_job_file_root}/${CI_PROJECT_PATH}"

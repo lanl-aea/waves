@@ -5,7 +5,7 @@ channels:
 
 dependencies:
   - calculix
-  - ccx2paraview
+  - ccx2paraview >=3.2
   - conda-build
   - fierro-fe-cpu
   # Remove trilinos-cpu explicit requirement when Fierro package(s) resolve the missing library issue
@@ -29,6 +29,7 @@ dependencies:
   - python-build
   - python-gmsh
   - pyyaml
+  - rattler-build
   - ruff
   - salib >=1.5.1
   - scipy >=1

@@ -1,0 +1,96 @@
+schema_version: 1
+
+context:
+  name: waves
+  version: ${{ env.get("VERSION", default="0.0.0") }}
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  git: ..
+  lfs: true
+
+build:
+  number: 0
+  # NOTE: CANNOT use noarch builds. conda-build will not use python variants if the package is marked "noarch: python"
+  script:
+    env:
+      SETUPTOOLS_SCM_PRETEND_VERSION: ${{ version }}
+    content:
+      - if: unix
+        then: scons install --prefix=${PREFIX}
+      - if: win
+        then: scons install --prefix=%PREFIX%
+  python:
+    entry_points:
+      - odb_extract = waves._abaqus.odb_extract:main
+      - waves = waves._main:main
+
+requirements:
+  host:
+    - python ==${{ python }}
+    - h5netcdf
+    - h5py
+    - matplotlib-base
+    - networkx
+    - numpy
+    - pip
+    - python-build
+    - pyyaml
+    - salib >=1.4.6
+    - scipy >=1.7
+    - scons ==${{ scons }}
+    - setuptools >=77
+    - setuptools_scm >=8
+    - sphinx >=7.1
+    - sphinx-argparse
+    - sphinx-book-theme
+    - sphinx-copybutton >=0.5.1
+    - sphinx-design
+    - sphinxcontrib-bibtex
+    - xarray >=2024.10.0
+  run:
+    - python ==${{ python }}
+    - h5netcdf
+    - h5py
+    - matplotlib-base
+    - networkx
+    - numpy
+    - pyyaml
+    - salib >=1.4.6
+    - scipy >=1.7
+    - scons ==${{ scons }}
+    - xarray >=2024.10.0
+
+tests:
+  - python:
+      imports:
+        - waves
+      pip_check: true
+  - script:
+      - if: unix
+        then: ./run_test.sh
+      - if: win
+        then: ./run_test.bat
+    requirements:
+      run:
+        - python ==${{ python }}
+        - pytest >=6
+        - pytest-xdist
+        - sphinx >=7.1
+        - sphinx-argparse
+        - sphinx-book-theme
+        - sphinxcontrib-bibtex
+
+about:
+  license: BSD-3-Clause
+  license_file: LICENSE.txt
+  summary: Computational science and engineering parameteric study workflows
+  description: |
+    WAVES (LANL code C23004) is a computational science and engineering workflow tool that integrates parametric studies
+    with traditional software build systems.
+  homepage: https://github.com/lanl-aea/waves
+  repository: https://github.com/lanl-aea/waves
+  documentation: https://lanl-aea.github.io/waves/index.html
