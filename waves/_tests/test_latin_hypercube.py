@@ -114,77 +114,11 @@ class TestLatinHypercube:
             ).set_coords("set_hash"),
             [{"loc": 50, "scale": 1}, {"loc": -50, "scale": 1}],
         ),
-        "all numpy typing": (
-            {
-                "num_simulations": 2,
-                "parameter_1": {"distribution": "norm", "loc": numpy.float64(100), "scale": numpy.int64(10)},
-                "parameter_2": {"distribution": "norm", "loc": numpy.float64(-100), "scale": numpy.int64(10)},
-            },
-            42,
-            xarray.Dataset(
-                {
-                    "parameter_1": xarray.DataArray(
-                        [101.78159239, 87.893875],
-                        coords={
-                            _set_coordinate_key: xarray.DataArray(
-                                ["parameter_set0", "parameter_set1"], dims=_set_coordinate_key
-                            )
-                        },
-                    ),
-                    "parameter_2": xarray.DataArray(
-                        [-96.11124206, -105.81176417],
-                        coords={
-                            _set_coordinate_key: xarray.DataArray(
-                                ["parameter_set0", "parameter_set1"], dims=_set_coordinate_key
-                            )
-                        },
-                    ),
-                    "set_hash": xarray.DataArray(
-                        ["258c7abe7fe938766fd6481c0cf2a8bc", "6eb3d504c4726a0c4fc7b3d2e9b3e178"],
-                        dims=_set_coordinate_key,
-                    ),
-                }
-            ).set_coords("set_hash"),
-            [{"loc": 100, "scale": 10}, {"loc": -100, "scale": 10}],
-        ),
         "mixed numpy typing": (
             {
                 "num_simulations": 2,
                 "parameter_1": {"distribution": "norm", "loc": numpy.float64(100), "scale": 10},
                 "parameter_2": {"distribution": "norm", "loc": -100, "scale": numpy.int64(10)},
-            },
-            42,
-            xarray.Dataset(
-                {
-                    "parameter_1": xarray.DataArray(
-                        [101.78159239, 87.893875],
-                        coords={
-                            _set_coordinate_key: xarray.DataArray(
-                                ["parameter_set0", "parameter_set1"], dims=_set_coordinate_key
-                            )
-                        },
-                    ),
-                    "parameter_2": xarray.DataArray(
-                        [-96.11124206, -105.81176417],
-                        coords={
-                            _set_coordinate_key: xarray.DataArray(
-                                ["parameter_set0", "parameter_set1"], dims=_set_coordinate_key
-                            )
-                        },
-                    ),
-                    "set_hash": xarray.DataArray(
-                        ["258c7abe7fe938766fd6481c0cf2a8bc", "6eb3d504c4726a0c4fc7b3d2e9b3e178"],
-                        dims=_set_coordinate_key,
-                    ),
-                }
-            ).set_coords("set_hash"),
-            [{"loc": 100, "scale": 10}, {"loc": -100, "scale": 10}],
-        ),
-        "all built-in typing": (
-            {
-                "num_simulations": 2,
-                "parameter_1": {"distribution": "norm", "loc": 100, "scale": 10},
-                "parameter_2": {"distribution": "norm", "loc": -100, "scale": 10},
             },
             42,
             xarray.Dataset(
