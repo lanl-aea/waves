@@ -590,9 +590,10 @@ class ParameterGenerator(ABC):
         except RuntimeError as err:
             raise RuntimeError(
                 "Encountered hash inconsistency during parameter study verification. This can happen if the parameter "
-                "schema mixes Python builtin and NumPy data types. Are the parameter values limited to the supported "
-                "Python builtin types: floats, integers, strings, and booleans? If so, you may have encountered a "
-                "generator edge case or a bug. Please contact the developers with your parameter study definition."
+                "schema uses something other than the supported Python built-in types. Are the parameter values "
+                "limited to the supported Python builtin types: floats, integers, strings, and booleans? If so, you "
+                "may have encountered a generator edge case or a bug. Please contact the developers with your "
+                "parameter study definition."
             ) from err
 
 
