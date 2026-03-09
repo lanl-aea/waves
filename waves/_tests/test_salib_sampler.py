@@ -1179,15 +1179,27 @@ class TestSALibSampler:
     def test_generate(
         self, sampler: str, parameter_schema: dict, kwargs: dict, expected_dataset: xarray.Dataset
     ) -> None:
-        test_generate = SALibSampler(sampler, parameter_schema, **kwargs)
-        xarray.testing.assert_allclose(test_generate.parameter_study, expected_dataset)
-        # Check for type preservation
-        for key in test_generate.parameter_study:
-            assert test_generate.parameter_study[key].dtype == numpy.float64
-        # Verify that the parameter set name creation method was called
-        # TODO: _set_names is an ordered object (dictionary). Fix test to compare dictionary-to-dictionary instead
-        # of implied consistency according to value order.
-        assert list(test_generate._set_names.values()) == list(expected_dataset[_set_coordinate_key].to_numpy())
+        dtype_variants = [float, int, numpy.float32, numpy.float64, numpy.int64, numpy.int32, numpy.int16, numpy.int8]
+        parameter_schema_dtype_variants = [
+            {
+                **parameter_schema,
+                "problem": {
+                    **parameter_schema["problem"],
+                    "bounds": [[dtype(value) for value in bounds] for bounds in parameter_schema["problem"]["bounds"]],
+                },
+            }
+            for dtype in dtype_variants
+        ]
+        for schema in parameter_schema_dtype_variants:
+            test_generate = SALibSampler(sampler, schema, **kwargs)
+            xarray.testing.assert_allclose(test_generate.parameter_study, expected_dataset)
+            # Check for type preservation
+            for key in test_generate.parameter_study:
+                assert test_generate.parameter_study[key].dtype == numpy.float64
+            # Verify that the parameter set name creation method was called
+            # TODO: _set_names is an ordered object (dictionary). Fix test to compare dictionary-to-dictionary instead
+            # of implied consistency according to value order.
+            assert list(test_generate._set_names.values()) == list(expected_dataset[_set_coordinate_key].to_numpy())
 
     merge_test = {
         "new sets, 5(8)x2": (

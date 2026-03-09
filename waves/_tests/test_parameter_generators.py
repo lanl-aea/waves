@@ -1736,6 +1736,325 @@ def test_update_set_names(
             pass
 
 
+test_convert_numpy_to_builtin_cases = {
+    "one parameter numpy typing - float 64": (
+        numpy.array(
+            [
+                [1.0, numpy.float64(10.0)],
+                [2.0, numpy.float64(20.0)],
+            ],
+            dtype=object,
+        ),
+        numpy.array(
+            [
+                [1.0, 10.0],
+                [2.0, 20.0],
+            ],
+            dtype=object,
+        ),
+        1e-15,
+        does_not_raise,
+    ),
+    "all parameters numpy typing - float 64": (
+        numpy.array(
+            [
+                [numpy.float64(1.0), numpy.float64(10.0)],
+                [numpy.float64(2.0), numpy.float64(20.0)],
+            ],
+            dtype=object,
+        ),
+        numpy.array(
+            [
+                [1.0, 10.0],
+                [2.0, 20.0],
+            ],
+            dtype=object,
+        ),
+        1e-15,
+        does_not_raise,
+    ),
+    "one parameter numpy typing - int 64": (
+        numpy.array(
+            [
+                [numpy.int64(1), 10.0],
+                [numpy.int64(2), 20.0],
+            ],
+            dtype=object,
+        ),
+        numpy.array(
+            [
+                [1, 10.0],
+                [2, 20.0],
+            ],
+            dtype=object,
+        ),
+        1e-15,
+        does_not_raise,
+    ),
+    "all parameters numpy typing - int/float 64": (
+        numpy.array(
+            [
+                [numpy.int64(1), numpy.float64(10.0)],
+                [numpy.int64(2), numpy.float64(20.0)],
+            ],
+            dtype=object,
+        ),
+        numpy.array(
+            [
+                [1, 10.0],
+                [2, 20.0],
+            ],
+            dtype=object,
+        ),
+        1e-15,
+        does_not_raise,
+    ),
+    "one parameter numpy typing - boolean": (
+        numpy.array(
+            [
+                [numpy.bool_(True), 10.0],
+                [numpy.bool_(False), 20.0],
+            ],
+            dtype=object,
+        ),
+        numpy.array(
+            [
+                [True, 10.0],
+                [False, 20.0],
+            ],
+            dtype=object,
+        ),
+        1e-15,
+        does_not_raise,
+    ),
+    "one parameter numpy typing - string": (
+        numpy.array(
+            [
+                [numpy.str_("zero"), 10.0],
+                [numpy.str_("one"), 20.0],
+            ],
+            dtype=object,
+        ),
+        numpy.array(
+            [
+                ["zero", 10.0],
+                ["one", 20.0],
+            ],
+            dtype=object,
+        ),
+        1e-15,
+        does_not_raise,
+    ),
+    "one parameter numpy typing - int 32": (
+        numpy.array(
+            [
+                [numpy.int32(1), 10.0],
+                [numpy.int32(2), 20.0],
+            ],
+            dtype=object,
+        ),
+        numpy.array(
+            [
+                [1, 10.0],
+                [2, 20.0],
+            ],
+            dtype=object,
+        ),
+        1e-7,
+        does_not_raise,
+    ),
+    "one parameter numpy typing - int 16": (
+        numpy.array(
+            [
+                [numpy.int16(1), 10.0],
+                [numpy.int16(2), 20.0],
+            ],
+            dtype=object,
+        ),
+        numpy.array(
+            [
+                [1, 10.0],
+                [2, 20.0],
+            ],
+            dtype=object,
+        ),
+        1e-3,
+        does_not_raise,
+    ),
+    "one parameter numpy typing - float 32": (
+        numpy.array(
+            [
+                [1.0, numpy.float32(1.23)],
+                [2.0, numpy.float32(4.56)],
+            ],
+            dtype=object,
+        ),
+        numpy.array(
+            [
+                [1.0, 1.23],
+                [2.0, 4.56],
+            ],
+            dtype=object,
+        ),
+        1e-7,
+        does_not_raise,
+    ),
+    "one parameter numpy typing - float 16": (
+        numpy.array(
+            [
+                [1.0, numpy.float16(1.23)],
+                [2.0, numpy.float16(4.56)],
+            ],
+            dtype=object,
+        ),
+        numpy.array(
+            [
+                [1.0, 1.23],
+                [2.0, 4.56],
+            ],
+            dtype=object,
+        ),
+        1e-3,
+        does_not_raise,
+    ),
+    "all parameters numpy typing - equivalent WAVES types": (
+        # Python int bit size is variable, from ~16-64. Floats are always 64.
+        numpy.array(
+            [
+                [
+                    numpy.int16(1),
+                    numpy.int32(-1),
+                    numpy.int64(-10),
+                    numpy.float64(1.23),
+                    numpy.bool_(True),
+                    numpy.str_("zero"),
+                ],
+                [
+                    numpy.int16(2),
+                    numpy.int32(-2),
+                    numpy.int64(-20),
+                    numpy.float64(4.56),
+                    numpy.bool_(False),
+                    numpy.str_("one"),
+                ],
+            ],
+            dtype=object,
+        ),
+        numpy.array(
+            [
+                [1, -1, -10, 1.23, True, "zero"],
+                [2, -2, -20, 4.56, False, "one"],
+            ],
+            dtype=object,
+        ),
+        1e-15,
+        does_not_raise,
+    ),
+    "1D array - equivalent WAVES types": (
+        numpy.array(
+            [
+                numpy.int16(1),
+                numpy.int32(-1),
+                numpy.int64(-10),
+                numpy.float64(1.23),
+                numpy.bool_(True),
+                numpy.str_("zero"),
+            ],
+            dtype=object,
+        ),
+        numpy.array([1, -1, -10, 1.23, True, "zero"], dtype=object),
+        1e-15,
+        does_not_raise,
+    ),
+    "3D array - int 16": (
+        numpy.array(
+            [
+                [[numpy.int16(1), 10.0], [3, 30.0]],
+                [[numpy.int16(2), 20.0], [4, 40.0]],
+            ],
+            dtype=object,
+        ),
+        numpy.array(
+            [
+                [[1, 10.0], [3, 30.0]],
+                [[2, 20.0], [4, 40.0]],
+            ],
+            dtype=object,
+        ),
+        1e-3,
+        does_not_raise,
+    ),
+    "one parameter numpy typing - long double": (
+        numpy.array(
+            [
+                [1.0, numpy.longdouble(1.23)],
+                [2.0, numpy.longdouble(4.56)],
+            ],
+            dtype=object,
+        ),
+        None,
+        None,
+        pytest.raises(TypeError, match="could not be converted"),
+    ),
+    "item method check - float extended": (
+        numpy.array(
+            [
+                [1.0, numpy.float64(1.23456789123456789)],
+                [2.0, numpy.float64(4.56789123456789123)],
+            ],
+            dtype=object,
+        ),
+        numpy.array(
+            [
+                [1.0, numpy.float64(1.23456789123456789).item()],
+                [2.0, numpy.float64(4.56789123456789123).item()],
+            ],
+            dtype=object,
+        ),
+        1e-15,
+        does_not_raise,
+    ),
+    # Not a valid WAVES input, but reliably triggers TypeError from string mismatch
+    "string cast mismatch - timedelta": (
+        numpy.array(
+            [[numpy.timedelta64(1, "D")]],
+            dtype=object,
+        ),
+        None,
+        None,
+        pytest.raises(TypeError, match="could not be converted"),
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("samples", "expected", "tolerance", "outcome"),
+    test_convert_numpy_to_builtin_cases.values(),
+    ids=test_convert_numpy_to_builtin_cases.keys(),
+)
+def test_convert_numpy_to_builtin(
+    samples: numpy.ndarray,
+    expected: numpy.ndarray,
+    tolerance: float,
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
+    """Check the function of converting NumPy datatypes to Python datatypes.
+
+    :param samples: numpy.ndarray of samples
+    :param expected: expected output numpy.ndarray
+    :param tolerance: relative tolerance
+    :param outcome: pytest outcome
+    """
+    with outcome:
+        converted = parameter_generators._convert_numpy_to_builtin(samples)
+        for converted_entry, expected_entry in zip(converted.flat, expected.flat, strict=True):
+            assert type(converted_entry) is type(expected_entry)
+            if isinstance(expected_entry, (numpy.inexact, float)):
+                assert numpy.isclose(converted_entry, expected_entry, rtol=tolerance)
+            else:
+                assert converted_entry == expected_entry
+
+
 def test_open_parameter_study() -> None:
     mock_file = "dummy.h5"
     with (
@@ -1938,6 +2257,16 @@ class TestParameterGenerator:
                 mock_warn.assert_called_once()
             finally:
                 pass
+
+    def test_verify_generated_parameter_study(self) -> None:
+        dummy_generator = DummyGenerator({})
+        with does_not_raise:
+            dummy_generator._verify_generated_parameter_study()
+        with (
+            patch("waves.parameter_generators._verify_parameter_study", side_effect=RuntimeError),
+            pytest.raises(RuntimeError, match="Encountered hash inconsistency during parameter study verification"),
+        ):
+            dummy_generator._verify_generated_parameter_study()
 
     def test_generate_verification(self) -> None:
         with (

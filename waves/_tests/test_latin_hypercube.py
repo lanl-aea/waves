@@ -1,5 +1,6 @@
 """Test LatinHypercube Class."""
 
+import itertools
 import typing
 from unittest.mock import patch
 
@@ -140,11 +141,27 @@ class TestLatinHypercube:
         """
         parameter_names = [key for key in parameter_schema if key != "num_simulations"]
         kwargs = {"seed": seed}
+        dtype_variants = [float, int, numpy.float32, numpy.float64, numpy.int64, numpy.int32, numpy.int16, numpy.int8]
+        parameter_schema_dtype_variants = [
+            {
+                **parameter_schema,
+                **{
+                    key: {**val, "loc": dtype(val["loc"]), "scale": dtype(val["scale"])}
+                    for key, val in parameter_schema.items()
+                    if key != "num_simulations"
+                },
+            }
+            for dtype in dtype_variants
+        ]
         generator_classes = (
-            LatinHypercube(parameter_schema, **kwargs),
-            ScipySampler("LatinHypercube", parameter_schema, **kwargs),
+            lambda schema: LatinHypercube(schema, **kwargs),
+            lambda schema: ScipySampler("LatinHypercube", schema, **kwargs),
         )
-        for test_generate in generator_classes:
+        generator_instances = [
+            generator_class(schema)
+            for generator_class, schema in itertools.product(generator_classes, parameter_schema_dtype_variants)
+        ]
+        for test_generate in generator_instances:
             xarray.testing.assert_allclose(test_generate.parameter_study, expected_dataset)
             # Check for type preservation
             for key in test_generate.parameter_study:

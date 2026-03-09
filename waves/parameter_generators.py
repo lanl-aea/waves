@@ -241,20 +241,13 @@ class ParameterGenerator(ABC):
            # Work performed by common ABC methods
            super()._generate()
         """
+        self._samples = _convert_numpy_to_builtin(self._samples)
         self._create_set_hashes()
         self._create_set_names()
         self._create_parameter_study()
         if self._previous_parameter_study is not None and self._previous_parameter_study.is_file():
             self._merge_parameter_studies()
-        try:
-            _verify_parameter_study(self.parameter_study)
-        except RuntimeError as err:
-            raise RuntimeError(
-                "Encountered hash inconsistency during parameter study verification. This can happen if the parameter "
-                "schema mixes Python builtin and NumPy data types. Are the parameter values limited to the supported "
-                "Python builtin types: floats, integers, strings, and booleans? If so, you may have encountered a "
-                "generator edge case or a bug. Please contact the developers with your parameter study definition."
-            ) from err
+        self._verify_generated_parameter_study()
 
     def write(
         self,
@@ -582,6 +575,26 @@ class ParameterGenerator(ABC):
         self._set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
         self._set_names = self.parameter_study[_set_coordinate_key].to_series().to_dict()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
+
+    def _verify_generated_parameter_study(self) -> None:
+        """Verify a parameter study immediately after generation to ensure hash consistency.
+
+        requires:
+
+        * ``self.parameter_study``: generated parameter study
+
+        :raises RuntimeError: If the generated parameter study fails verification
+        """
+        try:
+            _verify_parameter_study(self.parameter_study)
+        except RuntimeError as err:
+            raise RuntimeError(
+                "Encountered hash inconsistency during parameter study verification. This can happen if the parameter "
+                "schema uses something other than the supported Python built-in types. Are the parameter values "
+                "limited to the supported Python builtin types: floats, integers, strings, and booleans? If so, you "
+                "may have encountered a generator edge case or a bug. Please contact the developers with your "
+                "parameter study definition."
+            ) from err
 
 
 class _ScipyGenerator(ParameterGenerator, ABC):
@@ -1005,6 +1018,7 @@ class OneAtATime(ParameterGenerator):
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
         if self._previous_parameter_study is not None and self._previous_parameter_study.is_file():
             self._merge_parameter_studies()
+        self._verify_generated_parameter_study()
 
 
 class CustomStudy(ParameterGenerator):
@@ -1603,6 +1617,7 @@ class CatenationStudy(ParameterGenerator):
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
         if self._previous_parameter_study is not None and self._previous_parameter_study.is_file():
             self._merge_parameter_studies()
+        self._verify_generated_parameter_study()
 
 
 def _calculate_set_hash(
@@ -1996,6 +2011,36 @@ def _update_set_names(parameter_study: xarray.Dataset, template: string.Template
             ) from err
 
     return parameter_study
+
+
+def _convert_numpy_to_builtin(samples: numpy.ndarray) -> numpy.ndarray:
+    """Convert numpy-typed data to its corresponding Python built-in datatype.
+
+    Utilizes ``numpy.ndarray.item()`` to convert entries to their corresponding Python built-in datatype. If samples
+        with NumPy typing persist in the output, raises a TypeError. If string casting discrepancies from conversion
+        exist, raises a TypeError.
+
+    :param samples: A numpy.ndarray of the samples of the parameter schema.
+
+    :return: numpy.ndarray with sample typing converted to Python datatypes
+
+    :raises TypeError: if the converted samples array still contains entries with NumPy typing, or if string casting
+        the numpy and built-in type obtained from ``.item()`` results in different outputs
+    """
+    numpy_types = (numpy.generic, numpy.ndarray)
+    # Convert to flattened data, then reshape back to original dimensions
+    converted_flat = [
+        entry.item() if (isinstance(entry, numpy_types) and f"{entry}" == f"{entry.item()}") else entry
+        for entry in samples.flat
+    ]
+    # Check for residual NumPy typing or string representation mismatches
+    not_converted = [entry for entry in converted_flat if isinstance(entry, numpy_types)]
+    if len(not_converted) > 0:
+        raise TypeError(
+            f"Encountered samples: '{not_converted}' that could not be converted to a Python built-in type. "
+            f"Either a loss of precision would occur, a cast to string differs, or no valid Python type exists."
+        )
+    return numpy.array(converted_flat, dtype=object).reshape(samples.shape)
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace
