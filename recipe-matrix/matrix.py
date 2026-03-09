@@ -19,10 +19,13 @@ command_template = string.Template(
     '--variant python="${python_version}" --variant scons="${scons_version}"'
 )
 
-python_versions = ["3.10", "3.11", "3.12", "3.13"]
-scons_versions = ["4.6", "4.7", "4.8"]
+python_versions = ["3.10", "3.11", "3.12", "3.13", "3.14"]
+scons_versions = ["4.6", "4.7", "4.8", "4.9", "4.10"]
 conda_build_test_matrix = list(itertools.product(python_versions, scons_versions))
 conda_build_test_matrix.remove(("3.13", "4.6"))  # SCons 4.6 not available for Python 3.13
+conda_build_test_matrix.remove(("3.14", "4.6"))  # SCons 4.6 not available for Python 3.14
+conda_build_test_matrix.remove(("3.14", "4.7"))  # SCons 4.7 not available for Python 3.14
+conda_build_test_matrix.remove(("3.14", "4.8"))  # SCons 4.8 not available for Python 3.14
 
 
 @pytest.mark.parametrize(("python_version", "scons_version"), conda_build_test_matrix)

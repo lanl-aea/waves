@@ -14,6 +14,7 @@ Internal Changes
   (:issue:`997`, :merge:`1292`). By `Chris Johnson`_.
 - Run system tests against a Cubit 17 and 16 version (:issue:`996`, :merge:`1291`). By `Kyle Brindley`_.
 - Update the Conda recipe matrix test script to be stand-alone and not depend on CI job variables. By `Kyle Brindley`_.
+- Add Python 3.14 and SCons 4.9,4.10 to Conda recipe dependency matrix tests. By `Kyle Brindley`_.
 
 Enhancements
 ============
