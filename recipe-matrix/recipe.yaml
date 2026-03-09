@@ -30,7 +30,7 @@ build:
 
 requirements:
   host:
-    - python ==${{ python }}
+    - python =${{ python }}
     - h5netcdf
     - h5py
     - matplotlib-base
@@ -41,7 +41,7 @@ requirements:
     - pyyaml
     - salib >=1.4.6
     - scipy >=1.7
-    - scons ==${{ scons }}
+    - scons =${{ scons }}
     - setuptools >=77
     - setuptools_scm >=8
     - sphinx >=7.1
@@ -52,7 +52,7 @@ requirements:
     - sphinxcontrib-bibtex
     - xarray >=2024.10.0
   run:
-    - python ==${{ python }}
+    - python =${{ python }}
     - h5netcdf
     - h5py
     - matplotlib-base
@@ -61,7 +61,7 @@ requirements:
     - pyyaml
     - salib >=1.4.6
     - scipy >=1.7
-    - scons ==${{ scons }}
+    - scons =${{ scons }}
     - xarray >=2024.10.0
 
 tests:
@@ -76,7 +76,7 @@ tests:
         then: ./run_test.bat
     requirements:
       run:
-        - python ==${{ python }}
+        - python =${{ python }}
         - pytest >=6
         - pytest-xdist
         - sphinx >=7.1
