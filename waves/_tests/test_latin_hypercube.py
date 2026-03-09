@@ -245,7 +245,7 @@ class TestLatinHypercube:
             samples = test_merge2._samples.astype(float)
             # Sort flattens the array if no axis is provided.
             # We must preserve set contents (rows), so must sort on columns.
-            # The unindexed set order doesn"t matter, so sorting on columns doesn"t impact these assertions
+            # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
             assert numpy.allclose(numpy.sort(samples, axis=0), numpy.sort(expected_samples, axis=0))
             # Check for type preservation
             for key in test_merge2.parameter_study:
@@ -267,7 +267,7 @@ class TestLatinHypercube:
             samples = test_merge2._samples.astype(float)
             # Sort flattens the array if no axis is provided.
             # We must preserve set contents (rows), so must sort on columns.
-            # The unindexed set order doesn"t matter, so sorting on columns doesn"t impact these assertions
+            # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
             assert numpy.allclose(numpy.sort(samples, axis=0), numpy.sort(expected_samples, axis=0))
             # Check for consistent hash-parameter set relationships
             for set_name, parameters in test_merge1.parameter_study.groupby(_set_coordinate_key):
