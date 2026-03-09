@@ -15,7 +15,7 @@ repository_directory = pathlib.Path(os.path.realpath(__file__)).parent.parent
 command_template = string.Template(
     "VERSION=$(python -m setuptools_scm) rattler-build build --recipe recipe-matrix --channel fierromechanics "
     "--channel conda-forge "
-    "--output-dir ${OUTPUT_FOLDER} "
+    "--output-dir conda-bld "
     "--variant python=${python_version} --variant scons=${scons_version}"
 )
 
@@ -49,3 +49,7 @@ def test_matrix(python_version: str, scons_version: str) -> None:
         stdin=subprocess.DEVNULL,
         start_new_session=True,
     )
+
+
+if __name__ == "__main__":
+    pass
