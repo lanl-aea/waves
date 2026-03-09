@@ -16,7 +16,7 @@ command_template = string.Template(
     "VERSION=$(python -m setuptools_scm) rattler-build build --recipe recipe-matrix --channel fierromechanics "
     "--channel conda-forge "
     "--output-dir conda-bld "
-    "--variant python='${python_version}' --variant scons='${scons_version}'"
+    '--variant python="${python_version}" --variant scons="${scons_version}"'
 )
 
 python_versions = ["3.10", "3.11", "3.12", "3.13"]
