@@ -148,7 +148,7 @@ class TestLatinHypercube:
                 **{
                     key: {**val, "loc": dtype(val["loc"]), "scale": dtype(val["scale"])}
                     for key, val in parameter_schema.items()
-                    if "num_simulations" not in key
+                    if key != "num_simulations"
                 },
             }
             for dtype in dtype_variants
