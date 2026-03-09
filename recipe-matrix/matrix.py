@@ -16,11 +16,11 @@ command_template = string.Template(
     "VERSION=$(python -m setuptools_scm) rattler-build build --recipe recipe-matrix --channel fierromechanics "
     "--channel conda-forge "
     "--output-dir conda-bld "
-    "--variant python=${python_version} --variant scons=${scons_version}"
+    "--variant 'python=${python_version}' --variant 'scons=${scons_version}'"
 )
 
-python_versions = ["3.10", "3.11", "3.12", "3.13"]
-scons_versions = ["4.6", "4.7", "4.8"]
+python_versions = ["3.10.*", "3.11.*", "3.12.*", "3.13.*"]
+scons_versions = ["4.6.*", "4.7.*", "4.8.*"]
 conda_build_test_matrix = list(itertools.product(python_versions, scons_versions))
 conda_build_test_matrix.remove(("3.13", "4.6"))  # SCons 4.6 not available for Python 3.13
 
@@ -35,7 +35,6 @@ def test_matrix(python_version: str, scons_version: str) -> None:
     template = command_template
     command = template.safe_substitute(
         {
-            "OUTPUT_FOLDER": OUTPUT_FOLDER,
             "python_version": python_version,
             "scons_version": scons_version,
         }
