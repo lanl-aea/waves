@@ -1185,7 +1185,7 @@ class TestSALibSampler:
                 **parameter_schema,
                 "problem": {
                     **parameter_schema["problem"],
-                    "bounds": [[dtype(value) for value in bounds] for bounds in parameter_schema["problem"]["bounds"]]
+                    "bounds": [[dtype(value) for value in bounds] for bounds in parameter_schema["problem"]["bounds"]],
                 },
             }
             for dtype in dtype_variants
