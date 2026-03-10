@@ -12,17 +12,17 @@ warnings.filterwarnings(action="ignore", message="tag", category=UserWarning, mo
 
 # ========================================================================================================= SETTINGS ===
 # Set project meta variables
-project_dir = pathlib.Path(Dir(".").abspath)
+project_directory = pathlib.Path(Dir("#").abspath)
 project_name = "waves"
 package_dir = pathlib.Path("waves")
 distribution_name_default = "waves"
 version = setuptools_scm.get_version()
 project_variables = {
-    "project_dir": project_dir,
-    "package_dir": project_dir / package_dir,
+    "project_directory": project_directory,
+    "package_dir": project_directory / package_dir,
     "version": version,
     "documentation_pdf": f"{project_name}-{version}.pdf",
-    "tutorials_dir": project_dir / "waves/tutorials",
+    "tutorials_dir": project_directory / "waves/tutorials",
     "modsim_dir": "modsim_package",
     "abaqus_dir": "modsim_package/abaqus",
     "argparse_types_dir": "modsim_package/argparse_types",
