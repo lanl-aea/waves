@@ -93,11 +93,10 @@ artifacts.extend(
 )
 
 # Post-processing
-plot_name = "stress_strain_comparison"
 post_processing_source = ["rectangle_compression_datasets.h5"]
 workflow.extend(
     env.PythonScript(
-        target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
+        target=["stress_strain_comparison.pdf", "stress_strain_comparison.csv"],
         source=[modsim_package_abspath / "post_processing.py", *post_processing_source],
         subcommand_options=(
             "--input-file ${post_processing_source} --output-file ${TARGET.file} --x-units mm/mm --y-units MPa"

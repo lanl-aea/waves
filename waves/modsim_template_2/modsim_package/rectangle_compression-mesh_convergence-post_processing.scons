@@ -21,7 +21,6 @@ artifacts = []
 workflow = []
 
 # Post-processing
-plot_name = "stress_strain_comparison"
 parameter_study_file = parameter_generator.output_file
 post_processing_source = [
     pathlib.Path(set_name) / "rectangle_compression_datasets.h5"
@@ -29,30 +28,32 @@ post_processing_source = [
 ]
 workflow.extend(
     env.PythonScript(
-        target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
+        target=["stress_strain_comparison.pdf", "stress_strain_comparison.csv"],
         source=[env["modsim_package_abspath"] / "post_processing.py", parameter_study_file, *post_processing_source],
         subcommand_options=(
             "--input-file ${post_processing_source}"
             " --output-file ${TARGET.file} --x-units mm/mm --y-units MPa"
-            f" --parameter-study-file {parameter_study_file}"
+            " --parameter-study-file ${parameter_study_file}"
         ),
         post_processing_source=post_processing_source,
+        parameter_study_file=str(parameter_study_file),
     )
 )
 
-plot_name = "mesh_convergence_stress"
-selection_dict = env["modsim_package_abspath"] / f"{plot_name}.yaml"
+selection_dictionary_file = env["modsim_package_abspath"] / "mesh_convergence_stress.yaml"
 workflow.extend(
     env.PythonScript(
-        target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
+        target=["mesh_convergence_stress.pdf", "mesh_convergence_stress.csv"],
         source=[env["modsim_package_abspath"] / "post_processing.py", parameter_study_file, *post_processing_source],
         subcommand_options=(
             "--input-file ${post_processing_source}"
             " --output-file ${TARGET.file} --x-units mm --y-units MPa --x-var global_seed --y-var S"
-            f" --parameter-study-file {parameter_study_file}"
-            f" --selection-dict {selection_dict}"
+            " --parameter-study-file ${parameter_study_file}"
+            " --selection-dict ${selection_dictionary_file}"
         ),
         post_processing_source=post_processing_source,
+        parameter_study_file=parameter_study_file,
+        selection_dictionary_file=selection_dictionary_file,
     )
 )
 artifacts.extend(workflow)
