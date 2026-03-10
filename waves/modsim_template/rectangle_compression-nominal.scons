@@ -51,10 +51,9 @@ artifacts.extend(
 )
 
 # Regression test
-plot_name = "stress_strain_comparison"
 script = modsim_package_abspath / "regression.py"
-regression_file = modsim_package_abspath / f"{workflow_name}-{plot_name}.csv"
-current_file = f"{plot_name}.csv"
+regression_file = modsim_package_abspath / f"{workflow_name}-stress_strain_comparison.csv"
+current_file = "stress_strain_comparison.csv"
 workflow.extend(
     env.PythonScript(
         target=["regression.yaml"],
