@@ -29,7 +29,7 @@ modsim_package_abspath = env["modsim_package_abspath"]
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
 workflow_file = pathlib.Path(inspect.getfile(lambda: None)).name
-workflow_configuration = [env["project_configuration"], workflow_file]
+workflow_configuration = ["#/SConstruct", workflow_file]
 parameter_schema = rectangle_compression.mesh_convergence()
 parameter_study_file = build_directory / "mesh_convergence.h5"
 

@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 """Configure the WAVES modsim template project."""
 
-import inspect
 import os
 import pathlib
 import sys
@@ -79,7 +78,7 @@ env.PrintBuildFailures(print_stdout=env["print_build_failures"])
 env.Default()
 
 # Set project internal variables and variable substitution dictionaries
-project_configuration = pathlib.Path(inspect.getfile(lambda: None))
+project_configuration = pathlib.Path(env.Dir("#").abspath)
 project_dir = project_configuration.parent
 project_name = project_dir.name
 version = "0.1.0"

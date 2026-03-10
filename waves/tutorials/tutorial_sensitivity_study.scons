@@ -8,7 +8,6 @@ Requires the following ``SConscript(..., exports={})``
   * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
   * ``regression_alias`` - String for the alias collecting the regression test suite targets
   * ``archive_prefix`` - String prefix for archive target(s) containing identifying project and version information
-  * ``project_configuration`` - String absolute path to the project SCons configuration file
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``abaqus`` - String path for the Abaqus executable
 """
@@ -27,7 +26,7 @@ Import("env")
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
-workflow_configuration = [env["project_configuration"], workflow_name]
+workflow_configuration = ["#/SConstruct", workflow_name]
 parameter_study_file = build_directory / "parameter_study.h5"
 simulation_constants = {
     "global_seed": 1,

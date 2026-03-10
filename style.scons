@@ -12,7 +12,6 @@ ruff_check = env.Command(
     action=["ruff check . && ruff format . --check"],
 )
 env.AlwaysBuild(ruff_check)
-env.Alias("ruff-check", ruff_check)
 env.Alias("style", ruff_check)
 ruff_format = env.Command(
     target=["ruff-format.txt"],
@@ -20,4 +19,4 @@ ruff_format = env.Command(
     action=["ruff check . --fix; ruff format ."],
 )
 env.AlwaysBuild(ruff_format)
-env.Alias("ruff-format", ruff_format)
+env.Alias("style-format", ruff_format)
