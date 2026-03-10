@@ -79,13 +79,14 @@ workflow.extend(
         subcommand_options=(
             "--input-file ${post_processing_source}"
             " --output-file ${TARGET.file} --x-units mm/mm --y-units MPa"
-            f" --parameter-study-file {parameter_study_file.name}"
+            " --parameter-study-file ${parameter_study_file}"
         ),
         post_processing_source=post_processing_source,
+        parameter_study_file=parameter_study_file.name,
     )
 )
 
-selection_dict = modsim_package_abspath / "mesh_convergence_stress.yaml"
+selection_dictionary_file = modsim_package_abspath / "mesh_convergence_stress.yaml"
 workflow.extend(
     env.PythonScript(
         target=["mesh_convergence_stress.pdf", "mesh_convergence_stress.csv"],
@@ -93,18 +94,19 @@ workflow.extend(
         subcommand_options=(
             "--input-file ${post_processing_source}"
             " --output-file ${TARGET.file} --x-units mm --y-units MPa --x-var global_seed --y-var S"
-            f" --parameter-study-file {parameter_study_file.name}"
-            f" --selection-dict {selection_dict}"
+            " --parameter-study-file ${parameter_study_file}"
+            " --selection-dict ${selection_dictionary_file}"
         ),
         post_processing_source=post_processing_source,
+        parameter_study_file=parameter_study_file.name,
+        selection_dictionary_file=selection_dictionary_file,
     )
 )
 
 # Data archival
 artifacts.extend(workflow)
-archive_name = f"{env['project_name']}-{workflow_name}-{env['version']}"
 archive_target = env.Tar(
-    target=archive_name,
+    target=f"{env['project_name']}-{workflow_name}-{env['version']}",
     source=artifacts + workflow_configuration,
 )
 
