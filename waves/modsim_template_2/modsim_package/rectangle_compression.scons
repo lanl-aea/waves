@@ -48,14 +48,13 @@ artifacts.extend(
 )
 
 # Part images
-script_options = (
-    "--input-file ${SOURCES[1].abspath} --output-file ${TARGET.file} --model-name ${model} --part-name ${model}"
-)
 images.extend(
     env.AbaqusJournal(
         target=["rectangle_compression.png"],
         source=["export_abaqus_image.py", "rectangle_compression.inp"],
-        subcommand_options=script_options,
+        subcommand_options=(
+            "--input-file ${SOURCES[1].abspath} --output-file ${TARGET.file} --model-name ${model} --part-name ${model}"
+        ),
         model="rectangle",
     )
 )
@@ -96,13 +95,13 @@ artifacts.extend(
 # Post-processing
 plot_name = "stress_strain_comparison"
 post_processing_source = ["rectangle_compression_datasets.h5"]
-script_options = "--input-file ${post_processing_source}"
-script_options += " --output-file ${TARGET.file} --x-units mm/mm --y-units MPa"
 workflow.extend(
     env.PythonScript(
         target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
         source=[modsim_package_abspath / "post_processing.py", *post_processing_source],
-        subcommand_options=script_options,
+        subcommand_options=(
+            "--input-file ${post_processing_source} --output-file ${TARGET.file} --x-units mm/mm --y-units MPa"
+        ),
         post_processing_source=post_processing_source,
     )
 )
