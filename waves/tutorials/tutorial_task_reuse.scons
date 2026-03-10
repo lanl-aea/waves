@@ -8,6 +8,7 @@ Requires the following ``SConscript(..., exports={})``
   * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
   * ``regression_alias`` - String for the alias collecting the regression test suite targets
   * ``archive_prefix`` - String prefix for archive target(s) containing identifying project and version information
+  * ``project_configuration`` - String absolute path to the project SCons configuration file
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``abaqus`` - String path for the Abaqus executable
 """
@@ -29,7 +30,7 @@ workflow_name = build_directory.name
 parameter_study_file = build_directory / "parameter_study.h5"
 geometry_configuration = "rectangle_geometry_partition.scons"
 simulation_configuration = "rectangle_mesh_solverprep_solve_extract.scons"
-workflow_configuration = ["#/SConstruct", workflow_name, geometry_configuration, simulation_configuration]
+workflow_configuration = [env["project_configuration"], workflow_name, geometry_configuration, simulation_configuration]
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
