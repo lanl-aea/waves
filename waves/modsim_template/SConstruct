@@ -78,8 +78,7 @@ env.PrintBuildFailures(print_stdout=env["print_build_failures"])
 env.Default()
 
 # Set project internal variables and variable substitution dictionaries
-project_configuration = pathlib.Path(env.Dir("#").abspath)
-project_dir = project_configuration.parent
+project_dir = pathlib.Path(env.Dir("#").abspath)
 project_name = project_dir.name
 version = "0.1.0"
 author_list = [
