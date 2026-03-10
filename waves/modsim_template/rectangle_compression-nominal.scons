@@ -27,7 +27,7 @@ modsim_package_abspath = env["modsim_package_abspath"]
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
 workflow_file = pathlib.Path(inspect.getfile(lambda: None)).name
-workflow_configuration = [env["project_configuration"], workflow_file]
+workflow_configuration = ["#/SConstruct", workflow_file]
 parameters = rectangle_compression.nominal()
 
 # Collect the target nodes to build concise target alias(es)

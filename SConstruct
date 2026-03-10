@@ -12,17 +12,17 @@ warnings.filterwarnings(action="ignore", message="tag", category=UserWarning, mo
 
 # ========================================================================================================= SETTINGS ===
 # Set project meta variables
-project_dir = pathlib.Path(Dir(".").abspath)
+project_directory = pathlib.Path(Dir("#").abspath)
 project_name = "waves"
-package_dir = pathlib.Path("waves")
+package_directory = pathlib.Path("waves")
 distribution_name_default = "waves"
 version = setuptools_scm.get_version()
 project_variables = {
-    "project_dir": project_dir,
-    "package_dir": project_dir / package_dir,
+    "project_directory": project_directory,
+    "package_directory": project_directory / package_directory,
     "version": version,
     "documentation_pdf": f"{project_name}-{version}.pdf",
-    "tutorials_dir": project_dir / "waves/tutorials",
+    "tutorials_dir": project_directory / "waves/tutorials",
     "modsim_dir": "modsim_package",
     "abaqus_dir": "modsim_package/abaqus",
     "argparse_types_dir": "modsim_package/argparse_types",
@@ -140,7 +140,7 @@ env.Substfile(
 )
 
 # Build
-installed_documentation = package_dir / "docs"
+installed_documentation = package_directory / "docs"
 packages = env.Command(
     target=[
         build_directory / f"dist/{package_specification}.tar.gz",
@@ -148,8 +148,8 @@ packages = env.Command(
     ],
     source=["pyproject.toml"],
     action=[
-        Copy(package_dir / "README.rst", "README.rst"),
-        Copy(package_dir / "pyproject.toml", "pyproject.toml"),
+        Copy(package_directory / "README.rst", "README.rst"),
+        Copy(package_directory / "pyproject.toml", "pyproject.toml"),
         Delete(Dir(installed_documentation)),
         Copy(Dir(installed_documentation), Dir(build_directory / "docs/html")),
         Delete(Dir(installed_documentation / ".doctrees")),
@@ -160,8 +160,8 @@ packages = env.Command(
         Delete(Dir(package_specification)),
         Delete(Dir(f"{distribution_filename}.egg-info")),
         Delete(Dir(installed_documentation)),
-        Delete(package_dir / "README.rst"),
-        Delete(package_dir / "pyproject.toml"),
+        Delete(package_directory / "README.rst"),
+        Delete(package_directory / "pyproject.toml"),
     ],
 )
 env.Depends(packages, [Alias("html"), Alias("man")])

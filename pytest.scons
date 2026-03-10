@@ -14,7 +14,7 @@ pytest_source_list = [
 ]
 
 # Common task options
-pytest_command = "cd ${package_dir} && pytest -n 4 "
+pytest_command = "cd ${package_directory} && pytest -n 4 "
 if env["unconditional_build"]:
     pytest_command += " --unconditional-build"
 
@@ -36,7 +36,7 @@ env.Clean("pytest", Dir("./coverage"))
 env.AlwaysBuild(pytest_node)
 
 # System tests
-source = [*pytest_source_list, env["package_dir"] / "_tests/test_system.py"]
+source = [*pytest_source_list, env["package_directory"] / "_tests/test_system.py"]
 systemtest_node = env.Command(
     target=["systemtest_results.xml"],
     source=source,

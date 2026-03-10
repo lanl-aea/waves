@@ -8,6 +8,11 @@ Changelog
 1.3.0 (unreleased)
 ******************
 
+Documentation
+=============
+- Use a more SCons native solution to finding the project root directory and root configuration file in the tutorials
+  and modsim templates (:issue:`1001`, :merge:`1295`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Removed the explicit VTK dependency pins (:issue:`901`, :merge:`901`). By `Erica Hinrichs`_.
