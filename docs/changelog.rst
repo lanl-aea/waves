@@ -8,6 +8,10 @@ Changelog
 1.3.0 (unreleased)
 ******************
 
+Internal Changes
+================
+- Removed the explicit VTK dependency pins (:issue:`901`, :merge:`901`). By `Erica Hinrichs`_.
+
 ******************
 1.2.0 (2026-03-09)
 ******************
