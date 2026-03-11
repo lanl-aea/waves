@@ -88,8 +88,8 @@ env.PrintBuildFailures(print_stdout=env["print_build_failures"])
 env.Default()
 
 # Set project internal variables and variable substitution dictionaries
-project_dir = pathlib.Path(Dir("#").abspath)
-project_name = project_dir.name
+project_directory = pathlib.Path(Dir("#").abspath)
+project_name = project_directory.name
 version = "0.1.0"
 author_list = [
     "Kyle Brindley",
@@ -107,7 +107,7 @@ modsim_package_dir = pathlib.Path("modsim_package")
 test_source_dir = "modsim_package/tests"
 parameter_study_build_dir = build_directory / "parameter_studies"
 project_variables = {
-    "project_dir": project_dir,
+    "project_directory": project_directory,
     "project_name": project_name,
     "version": version,
     "author_list": author_list,
@@ -115,16 +115,16 @@ project_variables = {
     "author_latex": author_latex,
     "documentation_pdf": f"{latex_project_name}-{version}.pdf",
     "report_pdf": f"{latex_project_name}-{version}-report.pdf",
-    "documentation_abspath": project_dir / documentation_source_dir,
-    "test_source_abspath": project_dir / test_source_dir,
+    "documentation_abspath": project_directory / documentation_source_dir,
+    "test_source_abspath": project_directory / test_source_dir,
     "parameter_study_build_abspath": parameter_study_build_dir.resolve(),
 }
 for key, value in project_variables.items():
     env[key] = value
 
 # Make the modsim package importable for: (1) SConscript files and (2) Python and Abaqus Python environments
-sys.path.insert(0, str(project_dir))
-env.PrependENVPath("PYTHONPATH", project_dir)
+sys.path.insert(0, str(project_directory))
+env.PrependENVPath("PYTHONPATH", project_directory)
 import modsim_package.rectangle_compression  # noqa: E402
 import modsim_package.utilities  # noqa: E402
 
