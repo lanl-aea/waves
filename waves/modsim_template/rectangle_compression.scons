@@ -112,7 +112,7 @@ workflow.extend(
 )
 
 # QOI regression test
-env.QOI(
+qoi_regression = env.QOI(
     calculated="qoi.csv",
     expected="#/modsim_package/nominal_qoi.csv",
 )
@@ -123,8 +123,10 @@ artifacts.extend(workflow)
 # Collector alias based on build directory name
 env.Alias(env["regression_alias"], datacheck)
 env.Alias(env["datacheck_alias"], datacheck)
+env.Alias("qoi-regression", qoi_regression)
 env.Alias(f"{workflow_name}-datacheck", datacheck)
 env.Alias(f"{workflow_name}-images", images)
+env.Alias(f"{workflow_name}-qoi-regression", qoi_regression)
 env.Alias(workflow_name, workflow)
 
 if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
