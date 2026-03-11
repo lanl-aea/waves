@@ -8,6 +8,10 @@ Changelog
 1.3.0 (unreleased)
 ******************
 
+******************
+1.2.1 (2026-03-11)
+******************
+
 Bug fixes
 =========
 - Replace WAVES <1.2.0 and >=1.2.0 action prefix patterns in SSH builder actions (:merge:`1297`). By `Kyle Brindley`_.
