@@ -232,8 +232,8 @@ def ssh_builder_actions(
 
     * Creates the ``remote_directory`` with ``mkdir -p``. ``mkdir`` must exist on the ``remote_server``.
     * Copies all source files to a flat ``remote_directory`` with ``rsync``. ``rsync`` must exist on the local system.
-    * Replaces instances of ``$(cd$) ${TARGET.dir.abspath} &&`` with ``cd ${remote_directory} &&`` in the original builder
-      actions and keyword arguments.
+    * Replaces instances of ``$(cd$) ${TARGET.dir.abspath} &&`` with ``cd ${remote_directory} &&`` in the original
+      builder actions and keyword arguments.
     * Replaces instances of ``SOURCE.abspath`` or ``SOURCES.abspath`` with ``SOURCE[S].file`` in the original builder
       actions and keyword arguments.
     * Replaces instances of ``SOURCES[0-9]/TARGETS[0-9].abspath`` with  ``SOURCES[0-9]/TARGETS[0-9].file`` in the
