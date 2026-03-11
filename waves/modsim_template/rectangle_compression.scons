@@ -6,8 +6,6 @@ Requires the following ``SConscript(..., exports={})``
 * ``env`` - The SCons construction environment with the following required keys
 
   * ``solve_cpus`` - Integer number of cpus to use in the Abaqus solve task
-  * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
-  * ``regression_alias`` - String for the alias collecting the regression workflow targets
   * ``abaqus`` - String path for the Abaqus executable
 
 * ``parameters`` - The current simulation parameter set
@@ -121,8 +119,8 @@ qoi_regression = env.QOI(
 artifacts.extend(workflow)
 
 # Collector alias(es)
-env.Alias(env["regression_alias"], datacheck)
-env.Alias(env["datacheck_alias"], datacheck)
+env.Alias("regression", datacheck)
+env.Alias("datacheck", datacheck)
 env.Alias("qoi-regression", qoi_regression)
 env.Alias(f"{workflow_name}-datacheck", datacheck)
 env.Alias(f"{workflow_name}-images", images)
@@ -131,7 +129,7 @@ env.Alias(workflow_name, workflow)
 
 if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
-    Ignore([".", env["regression_alias"], env["datacheck_alias"], f"{workflow_name}-datacheck"], datacheck)
+    Ignore([".", "regression", "datacheck", f"{workflow_name}-datacheck"], datacheck)
     Ignore([".", f"{workflow_name}-images"], images)
 
 Return("artifacts")

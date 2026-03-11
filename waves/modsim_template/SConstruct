@@ -116,8 +116,6 @@ project_variables = {
     "report_pdf": f"{latex_project_name}-{version}-report.pdf",
     "documentation_abspath": project_dir / documentation_source_dir,
     "test_source_abspath": project_dir / test_source_dir,
-    "datacheck_alias": "datacheck",
-    "regression_alias": "regression",
 }
 for key, value in project_variables.items():
     env[key] = value

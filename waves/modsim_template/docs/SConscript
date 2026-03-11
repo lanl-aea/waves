@@ -6,7 +6,6 @@ Requires the following ``SConscript(..., exports={})``
 * ``env`` - The SCons construction environment with the following required keys
 
   * ``SPHINX_BUILD`` - String path for the Sphinx build executable
-  * ``regression_alias`` - String for the alias collecting the regression workflow targets
 
 * ``project_variables`` - The project variables for use in Sphinx documentation parameters
 """
@@ -86,7 +85,7 @@ env.Alias("latexpdf", latexpdf)
 
 # Collector alias to build all documentation
 env.Alias("documentation", html + latexpdf)
-env.Alias(env["regression_alias"], html + latexpdf)
+env.Alias("regression", html + latexpdf)
 
 if not env["SPHINX_BUILD"]:
     print("Program 'sphinx-build' was not found in construction environment. Ignoring Sphinx target(s)")

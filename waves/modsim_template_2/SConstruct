@@ -118,8 +118,6 @@ project_variables = {
     "documentation_abspath": project_dir / documentation_source_dir,
     "test_source_abspath": project_dir / test_source_dir,
     "parameter_study_build_abspath": parameter_study_build_dir.resolve(),
-    "datacheck_alias": "datacheck",
-    "regression_alias": "regression",
 }
 for key, value in project_variables.items():
     env[key] = value
