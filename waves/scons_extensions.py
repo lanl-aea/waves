@@ -232,8 +232,8 @@ def ssh_builder_actions(
 
     * Creates the ``remote_directory`` with ``mkdir -p``. ``mkdir`` must exist on the ``remote_server``.
     * Copies all source files to a flat ``remote_directory`` with ``rsync``. ``rsync`` must exist on the local system.
-    * Replaces instances of ``cd ${TARGET.dir.abspath} &&`` with ``cd ${remote_directory} &&`` in the original builder
-      actions and keyword arguments.
+    * Replaces instances of ``$(cd$) ${TARGET.dir.abspath} &&`` with ``cd ${remote_directory} &&`` in the original
+      builder actions and keyword arguments.
     * Replaces instances of ``SOURCE.abspath`` or ``SOURCES.abspath`` with ``SOURCE[S].file`` in the original builder
       actions and keyword arguments.
     * Replaces instances of ``SOURCES[0-9]/TARGETS[0-9].abspath`` with  ``SOURCES[0-9]/TARGETS[0-9].file`` in the
@@ -301,11 +301,11 @@ def ssh_builder_actions(
        cat ${SOURCES.abspath} | tee ${TARGETS[0].abspath}
        echo "Hello World!"
        >>> my_package.print_builder_actions(my_package.ssh_build_cat)
-       ssh ${ssh_options} ${remote_server} "mkdir -p /scratch/roppenheimer/ssh_wrapper"
-       rsync ${rsync_push_options} ${SOURCES.abspath} ${remote_server}:${remote_directory}
-       ssh ${ssh_options} ${remote_server} 'cd ${remote_directory} && cat ${SOURCES.file} | tee ${TARGETS[0].file}'
-       ssh ${ssh_options} ${remote_server} 'cd ${remote_directory} && echo "Hello World!"'
-       rsync ${rsync_pull_options} ${remote_server}:${remote_directory} ${TARGET.dir.abspath}
+       $(ssh$) ${ssh_options} ${remote_server} "mkdir -p /scratch/roppenheimer/ssh_wrapper"
+       $(rsync$) ${rsync_push_options} ${SOURCES.abspath} ${remote_server}:${remote_directory}
+       $(ssh$) ${ssh_options} ${remote_server} 'cd ${remote_directory} && cat ${SOURCES.file} | tee ${TARGETS[0].file}'
+       $(ssh$) ${ssh_options} ${remote_server} 'cd ${remote_directory} && echo "Hello World!"'
+       $(rsync$) ${rsync_pull_options} ${remote_server}:${remote_directory} ${TARGET.dir.abspath}
 
     :param builder: The SCons builder to modify
     :param remote_server: remote server where the original builder's actions should be executed
@@ -327,6 +327,7 @@ def ssh_builder_actions(
         :returns: Modified action string with SSH action substitutions
         """
         action = action.replace("cd ${TARGET.dir.abspath} &&", cd_prefix)
+        action = action.replace("$(cd$) ${TARGET.dir.abspath} &&", cd_prefix)
         action = action.replace("SOURCE.abspath", "SOURCE.file")
         action = action.replace("SOURCES.abspath", "SOURCES.file")
         action = re.sub(r"(SOURCES\[[-0-9]+\])\.abspath", r"\1.file", action)
@@ -344,15 +345,15 @@ def ssh_builder_actions(
         )
         for action in action_list
     ]
-    action_list = [f"ssh ${{ssh_options}} ${{remote_server}} '{action}'" for action in action_list]
+    action_list = [f"$(ssh$) ${{ssh_options}} ${{remote_server}} '{action}'" for action in action_list]
 
     # Pre/Append SSH wrapper actions
     ssh_actions = [
-        'ssh ${ssh_options} ${remote_server} "mkdir -p ${remote_directory}"',
-        "rsync ${rsync_push_options} ${SOURCES.abspath} ${remote_server}:${remote_directory}",
+        '$(ssh$) ${ssh_options} ${remote_server} "mkdir -p ${remote_directory}"',
+        "$(rsync$) ${rsync_push_options} ${SOURCES.abspath} ${remote_server}:${remote_directory}",
     ]
     ssh_actions.extend(action_list)
-    ssh_actions.append("rsync ${rsync_pull_options} ${remote_server}:${remote_directory}/ ${TARGET.dir.abspath}")
+    ssh_actions.append("$(rsync$) ${rsync_pull_options} ${remote_server}:${remote_directory}/ ${TARGET.dir.abspath}")
 
     # Override oroginal builder actions with SSH wrapped action updates
     builder.action = action_list_scons(ssh_actions)
