@@ -5,7 +5,6 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``modsim_package_abspath`` - Absolute path to the project package
   * ``solve_cpus`` - Integer number of cpus to use in the Abaqus solve task
   * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
   * ``regression_alias`` - String for the alias collecting the regression workflow targets
@@ -20,9 +19,6 @@ import pathlib
 
 # Inherit the parent construction environment
 Import("env", "alias", "parameters")
-
-# Set project-wide paths with os-agnostic path separators
-modsim_package_abspath = env["modsim_package_abspath"]
 
 # Collect the target nodes to build concise target alias(es)
 workflow_file = pathlib.Path(inspect.getfile(lambda: None))
@@ -42,7 +38,7 @@ artifacts.extend(
 # SolverPrep
 artifacts.extend(
     env.CopySubstfile(
-        [modsim_package_abspath / "rectangle_compression.inp.in"],
+        ["#/modsim_package/rectangle_compression.inp.in"],
         substitution_dictionary=env.SubstitutionSyntax(parameters),
     )
 )
@@ -97,7 +93,7 @@ post_processing_source = ["rectangle_compression_datasets.h5"]
 workflow.extend(
     env.PythonScript(
         target=["stress_strain_comparison.pdf", "stress_strain_comparison.csv"],
-        source=[modsim_package_abspath / "post_processing.py", *post_processing_source],
+        source=["#/modsim_package/post_processing.py", *post_processing_source],
         subcommand_options=(
             "--input-file ${post_processing_source} --output-file ${TARGET.file} --x-units mm/mm --y-units MPa"
         ),

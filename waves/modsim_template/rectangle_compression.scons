@@ -5,7 +5,6 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``modsim_package_abspath`` - String absolute path to the project package
   * ``solve_cpus`` - Number of cpus to use in Abaqus solve task
   * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
   * ``regression_alias`` - String for the alias collecting the regression workflow targets
@@ -19,9 +18,6 @@ import pathlib
 # Inherit the parent construction environment
 Import("env", "parameters", "workflow_name")
 
-# Set project-wide paths with os-agnostic path separators
-modsim_package_abspath = env["modsim_package_abspath"]
-
 # Collect the target nodes to build concise target alias(es)
 artifacts = []
 workflow = []
@@ -30,13 +26,13 @@ images = []
 
 # SolverPrep
 abaqus_source_list = [
-    modsim_package_abspath / "rectangle_compression.inp.in",
-    modsim_package_abspath / "assembly.inp",
-    modsim_package_abspath / "boundary.inp",
-    modsim_package_abspath / "field_output.inp",
-    modsim_package_abspath / "materials.inp",
-    modsim_package_abspath / "parts.inp",
-    modsim_package_abspath / "history_output.inp",
+    "#/modsim_package/rectangle_compression.inp.in",
+    "#/modsim_package/assembly.inp",
+    "#/modsim_package/boundary.inp",
+    "#/modsim_package/field_output.inp",
+    "#/modsim_package/materials.inp",
+    "#/modsim_package/parts.inp",
+    "#/modsim_package/history_output.inp",
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
 artifacts.extend(
@@ -53,7 +49,7 @@ solve_source_list.append("rectangle_mesh.inp")
 images.extend(
     env.AbaqusJournal(
         target=["rectangle_compression.png"],
-        source=[modsim_package_abspath / "export_abaqus_image.py", *solve_source_list],
+        source=["#/modsim_package/export_abaqus_image.py", *solve_source_list],
         subcommand_options=(
             "--input-file ${SOURCES[1].abspath} --output-file ${TARGET.file} --model-name ${model} --part-name ${model}"
         ),
@@ -94,12 +90,10 @@ artifacts.extend(
 )
 
 # Post-processing
-script = modsim_package_abspath / "post_processing.py"
-post_processing_source = ["rectangle_compression_datasets.h5"]
 workflow.extend(
     env.PythonScript(
         target=["stress_strain_comparison.pdf", "stress_strain_comparison.csv"],
-        source=[script, *post_processing_source],
+        source=["#/modsim_package/post_processing.py", "rectangle_compression_datasets.h5"],
         subcommand_options=(
             "--input-file ${SOURCES[1:].abspath} --output-file ${TARGET.file} --x-units mm/mm --y-units MPa"
         ),

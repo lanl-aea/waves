@@ -4,9 +4,6 @@
 Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
-
-  * ``modsim_package_abspath`` - String absolute path to the project package
-
 * ``parameters`` - The current simulation parameter set
 """
 
@@ -15,9 +12,6 @@ import pathlib
 
 # Inherit the parent construction environment
 Import("env", "parameters")
-
-# Set project-wide paths with os-agnostic path separators
-modsim_package_abspath = env["modsim_package_abspath"]
 
 # Collect the target nodes to build concise target alias(es)
 workflow_file = pathlib.Path(inspect.getfile(lambda: None))

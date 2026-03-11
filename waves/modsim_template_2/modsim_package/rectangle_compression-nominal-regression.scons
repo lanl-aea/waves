@@ -4,9 +4,6 @@
 Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
-
-  * ``modsim_package_abspath`` - Absolute path to the project package
-
 * ``alias`` - The workflow name alias root
 """
 
@@ -20,14 +17,13 @@ artifacts = []
 workflow = []
 
 # Post-processing
-build_file = pathlib.Path("stress_strain_comparison.csv")
 workflow.extend(
     env.PythonScript(
         target=["regression.yaml"],
         source=[
-            env["modsim_package_abspath"] / "regression.py",
-            env["modsim_package_abspath"] / f"{alias}-{build_file.stem}.csv",
-            build_file,
+            "#/modsim_package/regression.py",
+            f"#/modsim_package/{alias}-stress_strain_comparison.csv",
+            "stress_strain_comparison.csv",
         ],
         subcommand_options="${SOURCES[1:].abspath}",
     )

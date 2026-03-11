@@ -105,7 +105,6 @@ project_variables = {
     "documentation_pdf": f"{latex_project_name}-{version}.pdf",
     "report_pdf": f"{latex_project_name}-{version}-report.pdf",
     "documentation_abspath": project_dir / documentation_source_dir,
-    "modsim_package_abspath": project_dir / modsim_package_dir,
     "test_source_abspath": project_dir / test_source_dir,
     "parameter_study_build_abspath": parameter_study_build_dir.resolve(),
     "datacheck_alias": "datacheck",

@@ -5,7 +5,6 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``modsim_package_abspath`` - Absolute path to the project package
   * ``solve_cpus`` - Integer number of cpus to use in the Abaqus solve task
   * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
   * ``regression_alias`` - String for the alias collecting the regression workflow targets
@@ -19,9 +18,6 @@ from modsim_package import rectangle_compression
 
 # Inherit the parent construction environment
 Import("env")
-
-# Set project-wide paths with os-agnostic path separators
-modsim_package_abspath = env["modsim_package_abspath"]
 
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
@@ -55,9 +51,9 @@ workflow.extend(
     env.PythonScript(
         target=["regression.yaml"],
         source=[
-            modsim_package_abspath / "regression.py",
+            "#/modsim_package/regression.py",
             "stress_strain_comparison.csv",
-            modsim_package_abspath / f"{workflow_name}-stress_strain_comparison.csv",
+            f"#/modsim_package/{workflow_name}-stress_strain_comparison.csv",
         ],
         subcommand_options="${SOURCES[1:].abspath} --output-file ${TARGET.abspath}",
     )
