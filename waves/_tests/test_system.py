@@ -617,6 +617,9 @@ require_third_party_system_tests: list = [
             pytest.mark.scons,
             pytest.mark.cubit,
             pytest.mark.quinoa,
+            # TODO: Remove HPC skip after Quinoa team fixes HPC behavior
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/1002
+            pytest.mark.skipif(testing_hpc, reason="Quinoa fails on HPC"),
             pytest.mark.skipif(testing_macos, reason="Quinoa does not support macOS"),
             pytest.mark.skipif(testing_windows, reason="Quinoa does not support Windows"),
         ],
