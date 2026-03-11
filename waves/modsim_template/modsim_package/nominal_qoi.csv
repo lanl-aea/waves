@@ -1,0 +1,3 @@
+name,expected,lower_limit,upper_limit,long_name,description,group,units
+strain,-0.01,-0.0101,-0.0099,true strain,true strain tensor component E22 from final increment,rectangle_compression-nominal,mm/mm
+stress,-1.0,-1.01,-0.99,true stress,true stress tensor component S22 from final increment,rectangle_compression-nominal,MPa
