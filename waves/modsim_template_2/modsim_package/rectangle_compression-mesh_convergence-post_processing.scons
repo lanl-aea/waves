@@ -42,7 +42,7 @@ workflow.extend(
             "#/modsim_package/post_processing.py",
             parameter_study_file,
             "#/modsim_package/mesh_convergence_stress.yaml",
-            *post_processing_source
+            *post_processing_source,
         ],
         subcommand_options=(
             "--input-file ${SOURCES[3:].abspath}"
