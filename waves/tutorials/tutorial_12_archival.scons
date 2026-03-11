@@ -204,8 +204,8 @@ archive_target = env.Tar(
 # Collector alias based on parent directory name
 env.Alias(workflow_name, workflow)
 env.Alias(f"{workflow_name}_datacheck", datacheck)
-env.Alias(env["datacheck_alias"], datacheck)
-env.Alias(env["regression_alias"], datacheck)
+env.Alias("datacheck", datacheck)
+env.Alias("regression", datacheck)
 archive_alias = f"{workflow_name}_archive"
 env.Alias(archive_alias, archive_target)
 
@@ -217,4 +217,4 @@ if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
     Ignore([".", workflow_name], workflow)
     Ignore([".", archive_alias], archive_target)
     Ignore([".", f"{workflow_name}_datacheck"], datacheck)
-    Ignore([".", env["datacheck_alias"], env["regression_alias"]], datacheck)
+    Ignore([".", "datacheck", "regression"], datacheck)
