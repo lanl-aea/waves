@@ -220,16 +220,6 @@ for workflow, study_name, study_definition in workflow_configurations:
         duplicate=True,
     )
 
-# Post-processing: rectangle compression nominal regression testing
-alias = "rectangle_compression-nominal"
-workflow_artifacts[alias].extend(
-    SConscript(
-        modsim_package_dir / f"{alias}-regression.scons",
-        variant_dir=build_directory / alias,
-        exports={"env": env, "alias": alias},
-    )
-)
-
 # Post-processing: rectangle compression mesh convergence collective
 alias = "rectangle_compression-mesh_convergence"
 workflow_artifacts[alias].extend(

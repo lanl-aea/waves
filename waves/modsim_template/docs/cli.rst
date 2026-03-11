@@ -34,8 +34,8 @@ post_processing.py
 .. argparse::
     :ref: modsim_package.post_processing.get_parser
 
-regression.py
-=============
+qoi.py
+======
 
 .. argparse::
-    :ref: modsim_package.regression.get_parser
+    :ref: modsim_package.qoi.get_parser
