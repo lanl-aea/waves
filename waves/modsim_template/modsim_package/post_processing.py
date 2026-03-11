@@ -5,7 +5,6 @@ import argparse
 import pathlib
 import sys
 
-import pandas
 import yaml
 from waves.parameter_generators import SET_COORDINATE_KEY
 
