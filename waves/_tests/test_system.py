@@ -1028,6 +1028,7 @@ require_third_party_system_tests: list = [
                 "scons --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"
                 ' --waves-command="${waves_command}"'
                 " datacheck"
+                " qoi-regression"
                 " rectangle_compression-nominal-datacheck"
                 " rectangle_compression-nominal-images"
                 " rectangle_compression-nominal"
@@ -1037,6 +1038,7 @@ require_third_party_system_tests: list = [
                 " rectangle_compression-mesh_convergence-images"
                 " rectangle_compression-mesh_convergence"
                 " rectangle_compression-mesh_convergence-archive"
+                " rectangle_compression-mesh_convergence-qoi-regression"
                 " unit_testing"
             ),
             string.Template(
@@ -1070,6 +1072,7 @@ require_third_party_system_tests: list = [
                 "scons --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"
                 ' --waves-command="${waves_command}"'
                 " datacheck"
+                " qoi-regression"
                 " rectangle_compression-nominal-datacheck"
                 " rectangle_compression-nominal-images"
                 " rectangle_compression-nominal"
@@ -1077,6 +1080,7 @@ require_third_party_system_tests: list = [
                 " rectangle_compression-mesh_convergence-datacheck"
                 " rectangle_compression-mesh_convergence-images"
                 " rectangle_compression-mesh_convergence"
+                " rectangle_compression-mesh_convergence-qoi-regression"
                 " unit_testing"
             ),
             string.Template(
@@ -1118,15 +1122,19 @@ require_third_party_system_tests: list = [
             # TODO: return to testing ``.`` all targets if/when system tests are less fragile
             string.Template(
                 "scons --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"
+                ' --waves-command="${waves_command}"'
                 " datacheck"
+                " qoi-regression"
                 " rectangle_compression-nominal-datacheck"
                 " rectangle_compression-nominal-images"
                 " rectangle_compression-nominal"
                 " rectangle_compression-nominal-archive"
+                " rectangle_compression-nominal-qoi-regression"
                 " rectangle_compression-mesh_convergence-datacheck"
                 " rectangle_compression-mesh_convergence-images"
                 " rectangle_compression-mesh_convergence"
                 " rectangle_compression-mesh_convergence-archive"
+                " rectangle_compression-mesh_convergence-qoi-regression"
                 " unit_testing"
             ),
             string.Template(
@@ -1158,13 +1166,17 @@ require_third_party_system_tests: list = [
             # TODO: return to testing ``.`` all targets if/when system tests are less fragile
             string.Template(
                 "scons --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"
+                ' --waves-command="${waves_command}"'
                 " datacheck"
+                " qoi-regression"
                 " rectangle_compression-nominal-datacheck"
                 " rectangle_compression-nominal-images"
                 " rectangle_compression-nominal"
+                " rectangle_compression-nominal-qoi-regression"
                 " rectangle_compression-mesh_convergence-datacheck"
                 " rectangle_compression-mesh_convergence-images"
                 " rectangle_compression-mesh_convergence"
+                " rectangle_compression-mesh_convergence-qoi-regression"
                 " unit_testing"
             ),
             string.Template(
