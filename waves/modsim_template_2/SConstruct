@@ -74,14 +74,13 @@ env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
     unconditional_build=GetOption("unconditional_build"),
     solve_cpus=GetOption("solve_cpus"),
-    print_build_failures=GetOption("print_build_failures"),
     TARFLAGS="-c -j",
     TARSUFFIX=".tar.bz2",
 )
 build_directory = pathlib.Path(GetOption("build_directory"))
 
 # Conditionally print failed task *.stdout files
-env.PrintBuildFailures(print_stdout=env["print_build_failures"])
+env.PrintBuildFailures(print_stdout=GetOption("print_build_failures"))
 
 # Empty defaults list to avoid building all simulation targets by default
 env.Default()
