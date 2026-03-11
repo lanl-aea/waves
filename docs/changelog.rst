@@ -10,7 +10,7 @@ Changelog
 
 Bug fixes
 =========
-- Replace WAVES <1.2.0 and >=1.2.0 action prefix patterns in SSH builder actions. By `Kyle Brindley`_.
+- Replace WAVES <1.2.0 and >=1.2.0 action prefix patterns in SSH builder actions (:merge:`1297`). By `Kyle Brindley`_.
 
 Documentation
 =============
