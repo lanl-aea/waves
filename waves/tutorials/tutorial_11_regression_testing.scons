@@ -194,11 +194,11 @@ workflow.extend(
 # Collector alias based on parent directory name
 env.Alias(workflow_name, workflow)
 env.Alias(f"{workflow_name}_datacheck", datacheck)
-env.Alias(env["datacheck_alias"], datacheck)
-env.Alias(env["regression_alias"], datacheck)
+env.Alias("datacheck", datacheck)
+env.Alias("regression", datacheck)
 
 if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
     Ignore([".", workflow_name], workflow)
     Ignore([".", f"{workflow_name}_datacheck"], datacheck)
-    Ignore([".", env["datacheck_alias"], env["regression_alias"]], datacheck)
+    Ignore([".", "datacheck", "regression"], datacheck)

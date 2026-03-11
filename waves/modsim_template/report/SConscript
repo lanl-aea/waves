@@ -6,7 +6,6 @@ Requires the following ``SConscript(..., exports={})``
 * ``env`` - The SCons construction environment with the following required keys
 
   * ``SPHINX_BUILD`` - String path for the Sphinx build executable
-  * ``regression_alias`` - String for the alias collecting the regression workflow targets
   * ``documentation_abspath`` - String absolute path to the modsim HTML documentation source files
 
 * ``project_variables`` - The project variables for use in Sphinx documentation parameters
@@ -86,7 +85,7 @@ report.extend(
 )
 env.Clean(report, [Dir("latex"), *sources])
 env.Alias("report", report)
-env.Alias(env["regression_alias"], report)
+env.Alias("regression", report)
 
 # Collector alias to build the PDF report
 parent_directory = Dir(".").srcnode().name

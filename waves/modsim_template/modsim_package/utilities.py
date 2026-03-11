@@ -1,7 +1,6 @@
 """Python 3 utilities not compatible with Abaqus Python 2."""
 
 import pathlib
-import sys
 
 import matplotlib.pyplot
 import pandas
@@ -110,36 +109,6 @@ def sort_dataframe(
     :returns: sorted and indexed dataframe
     """
     return dataframe.reindex(sorted(dataframe.columns), axis=1).sort_values(list(sort_columns)).set_index(index_column)
-
-
-def csv_files_match(
-    current_csv: pandas.DataFrame,
-    expected_csv: pandas.DataFrame,
-    index_column: str = "time",
-    sort_columns: list[str] | tuple[str, ...] = ("time", "set_name"),
-) -> bool:
-    """Compare two pandas DataFrame objects and determine if they match.
-
-    :param current_csv: Current CSV data of generated plot.
-    :param expected_csv: Expected CSV data.
-    :param index_column: name of the column to use an index
-    :param sort_columns: name of the column(s) to sort by. Defaults to ``["time", "set_name"]``
-
-    :returns: True if the CSV files match, False otherwise.
-    """
-    current = sort_dataframe(current_csv, index_column=index_column, sort_columns=sort_columns)
-    expected = sort_dataframe(expected_csv, index_column=index_column, sort_columns=sort_columns)
-    try:
-        pandas.testing.assert_frame_equal(current, expected)
-    except AssertionError as err:
-        print(
-            f"The CSV regression test failed. Data in expected CSV file and current CSV file do not match.\n{err}",
-            file=sys.stderr,
-        )
-        equal = False
-    else:
-        equal = True
-    return equal
 
 
 def write_study_definition(

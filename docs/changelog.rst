@@ -16,6 +16,9 @@ Documentation
 =============
 - Use a more SCons native solution to finding the project root directory and root configuration file in the tutorials
   and modsim templates (:issue:`1001`, :merge:`1295`). By `Kyle Brindley`_.
+- Simplify alias definitions in tutorials and modsim templates (:merge:`1296`). By `Kyle Brindley`_.
+- Replace custom QOI regression test script with WAVES QOI module and pseudo-builder in modsim templates
+  (:merge:`1296`). By `Kyle Brindley`_.
 
 Internal Changes
 ================

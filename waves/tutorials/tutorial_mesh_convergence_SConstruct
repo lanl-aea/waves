@@ -82,8 +82,6 @@ project_variables = {
     "project_name": project_name,
     "project_dir": project_dir,
     "version": version,
-    "regression_alias": "regression",
-    "datacheck_alias": "datacheck",
 }
 for key, value in project_variables.items():
     env[key] = value

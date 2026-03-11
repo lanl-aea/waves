@@ -6,8 +6,6 @@ Requires the following ``SConscript(..., exports={})``
 * ``env`` - The SCons construction environment with the following required keys
 
   * ``solve_cpus`` - Integer number of cpus to use in the Abaqus solve task
-  * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
-  * ``regression_alias`` - String for the alias collecting the regression workflow targets
   * ``abaqus`` - String path for the Abaqus executable
 
 * ``alias`` - The workflow name alias root
@@ -100,19 +98,40 @@ workflow.extend(
         post_processing_source=post_processing_source,
     )
 )
+
+# Calculate QOIs
+workflow.extend(
+    env.PythonScript(
+        target=["qoi.csv"],
+        source=["#/modsim_package/qoi.py", "rectangle_compression_datasets.h5"],
+        subcommand_options=(
+            "--input-file ${SOURCES[1].abspath} --output-file ${TARGET.file} --strain-units mm/mm --stress-units MPa"
+        ),
+    )
+)
+
+# QOI regression test
+qoi_regression = env.QOI(
+    calculated="qoi.csv",
+    expected="#/modsim_package/expected_qoi.csv",
+)
+
+# Add final workflow files to artifacts list
 artifacts.extend(workflow)
 
 # Collector alias(es)
-env.Alias(env["regression_alias"], datacheck)
-env.Alias(env["datacheck_alias"], datacheck)
+env.Alias("regression", datacheck)
+env.Alias("datacheck", datacheck)
+env.Alias("qoi-regression", qoi_regression)
 env.Alias(f"{alias}-datacheck", datacheck)
 env.Alias(f"{alias}-images", images)
+env.Alias(f"{alias}-qoi-regression", qoi_regression)
 env.Alias(alias, workflow)
 
 if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{alias}' target(s)")
     Ignore([".", alias], workflow)
     Ignore([".", f"{alias}-images"], images)
-    Ignore([".", env["datacheck_alias"], env["regression_alias"], f"{alias}-datacheck"], datacheck)
+    Ignore([".", "datacheck", "regression", f"{alias}-datacheck"], datacheck)
 
 Return("artifacts")

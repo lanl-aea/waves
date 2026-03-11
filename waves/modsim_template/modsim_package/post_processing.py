@@ -5,7 +5,6 @@ import argparse
 import pathlib
 import sys
 
-import pandas
 import yaml
 from waves.parameter_generators import SET_COORDINATE_KEY
 
@@ -30,7 +29,6 @@ def main(
     y_units: str,
     selection_dict: dict,
     parameter_study_file: pathlib.Path | None = None,
-    csv_regression_file: pathlib.Path | None = None,
 ):
     """Catenate ``input_files`` datasets along the ``set_name`` dimension and plot selected data.
 
@@ -49,12 +47,8 @@ def main(
         pairs must match the data variables and coordinates of the expected Xarray Dataset object.
     :param parameter_study_file: path-like or file-like object containing the parameter study dataset. Assumes the
         h5netcdf file contains only a single dataset at the root group path, .e.g. ``/``.
-    :param csv_regression_file: path-like or file-like object containing the CSV dataset to compare with the current
-        plot data. If the data sets do not match a non-zero exit code is returned.
     """
     output_csv = output_file.with_suffix(".csv")
-    if csv_regression_file:
-        csv_regression_file = pathlib.Path(csv_regression_file)
     concat_coord = SET_COORDINATE_KEY
 
     # Build single dataset along the "set_name" dimension
@@ -74,15 +68,6 @@ def main(
 
     # Clean up open files
     combined_data.close()
-
-    # Regression test(s)
-    regression_results = []
-    if csv_regression_file:
-        current_csv = pandas.read_csv(output_csv)
-        regression_csv = pandas.read_csv(csv_regression_file)
-        regression_results.append(modsim_package.utilities.csv_files_match(current_csv, regression_csv))
-    if len(regression_results) > 0 and not all(regression_results):
-        sys.exit("One or more regression tests failed")
 
 
 def get_parser() -> argparse.ArgumentParser:
@@ -173,15 +158,6 @@ def get_parser() -> argparse.ArgumentParser:
         default=default_parameter_study_file,
         help="An optional h5 file with a WAVES parameter study Xarray Dataset (default: %(default)s)",
     )
-    parser.add_argument(
-        "--csv-regression-file",
-        type=pathlib.Path,
-        default=None,
-        help=(
-            "An optional CSV file to compare with the current plot data. If the CSV file data and "
-            "the current plot data do not match, a non-zero exit code is returned (default: %(default)s)"
-        ),
-    )
 
     return parser
 
@@ -205,6 +181,5 @@ if __name__ == "__main__":
             y_units=args.y_units,
             selection_dict=selection_dict,
             parameter_study_file=args.parameter_study_file,
-            csv_regression_file=args.csv_regression_file,
         )
     )

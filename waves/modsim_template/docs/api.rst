@@ -88,12 +88,12 @@ post_processing.py
     :members:
     :show-inheritance:
 
-.. _regression_api:
+.. _qoi_api:
 
-regression.py
-=============
+qoi.py
+======
 
-.. automodule:: modsim_package.regression
+.. automodule:: modsim_package.qoi
     :noindex:
     :members:
     :show-inheritance:

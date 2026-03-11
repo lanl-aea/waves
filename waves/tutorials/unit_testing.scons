@@ -30,4 +30,4 @@ workflow.extend(
 )
 
 env.Alias(workflow_name, workflow)
-env.Alias(env["regression_alias"], workflow)
+env.Alias("regression", workflow)
