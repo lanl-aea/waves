@@ -114,7 +114,7 @@ workflow.extend(
 # QOI regression test
 qoi_regression = env.QOI(
     calculated="qoi.csv",
-    expected="#/modsim_package/nominal_qoi.csv",
+    expected="#/modsim_package/expected_qoi.csv",
 )
 
 # Add final workflow files to artifacts list
