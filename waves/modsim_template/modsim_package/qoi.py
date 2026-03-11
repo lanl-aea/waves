@@ -4,7 +4,6 @@
 import argparse
 import datetime
 import pathlib
-import sys
 
 import waves
 import yaml
@@ -151,4 +150,3 @@ if __name__ == "__main__":
         stress_units=args.stress_units,
         selection_dict=selection_dict,
     )
-

@@ -1,7 +1,6 @@
 """Python 3 utilities not compatible with Abaqus Python 2."""
 
 import pathlib
-import sys
 
 import matplotlib.pyplot
 import pandas

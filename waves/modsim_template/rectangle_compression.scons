@@ -107,7 +107,7 @@ workflow.extend(
         source=["#/modsim_package/qoi.py", "rectangle_compression_datasets.h5"],
         subcommand_options=(
             "--input-file ${SOURCES[1].abspath} --output-file ${TARGET.file} --strain-units mm/mm --stress-units MPa"
-        )
+        ),
     )
 )
 
