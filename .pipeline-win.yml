@@ -17,6 +17,7 @@ win-developer-test:
     - .win-job-environment
     - .developer-test-no-third-party
   stage: test
+  timeout: 3h
 
 win-conda-build:
   extends:
