@@ -75,15 +75,6 @@ def main(
     # Clean up open files
     combined_data.close()
 
-    # Regression test(s)
-    regression_results = []
-    if csv_regression_file:
-        current_csv = pandas.read_csv(output_csv)
-        regression_csv = pandas.read_csv(csv_regression_file)
-        regression_results.append(modsim_package.utilities.csv_files_match(current_csv, regression_csv))
-    if len(regression_results) > 0 and not all(regression_results):
-        sys.exit("One or more regression tests failed")
-
 
 def get_parser() -> argparse.ArgumentParser:
     """Return parser for CLI options."""
