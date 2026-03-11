@@ -716,6 +716,8 @@ def test_ssh_builder_actions(target: list[str], builder_kwargs: dict, task_kwarg
     def cat() -> SCons.Builder.Builder:
         return SCons.Builder.Builder(
             action=[
+                "cd ${TARGET.dir.abspath} && echo",
+                "$(cd$) ${TARGET.dir.abspath} && echo",
                 "cat ${SOURCE.abspath} | tee ${TARGETS[0].abspath}",
                 "cat ${SOURCES.abspath} | tee ${TARGETS[0].abspath}",
                 "cat ${SOURCES[99].abspath} | tee ${TARGETS[0].abspath}",
@@ -728,6 +730,8 @@ def test_ssh_builder_actions(target: list[str], builder_kwargs: dict, task_kwarg
     build_cat = cat()
     build_cat_action_list = [action.cmd_list for action in build_cat.action.list]
     expected = [
+        "cd ${TARGET.dir.abspath} && echo",
+        "$(cd$) ${TARGET.dir.abspath} && echo",
         "cat ${SOURCE.abspath} | tee ${TARGETS[0].abspath}",
         "cat ${SOURCES.abspath} | tee ${TARGETS[0].abspath}",
         "cat ${SOURCES[99].abspath} | tee ${TARGETS[0].abspath}",
@@ -743,6 +747,8 @@ def test_ssh_builder_actions(target: list[str], builder_kwargs: dict, task_kwarg
     expected = [
         'ssh ${ssh_options} ${remote_server} "mkdir -p ${remote_directory}"',
         "rsync ${rsync_push_options} ${SOURCES.abspath} ${remote_server}:${remote_directory}",
+        "ssh ${ssh_options} ${remote_server} 'cd ${remote_directory} && echo'",
+        "ssh ${ssh_options} ${remote_server} 'cd ${remote_directory} && echo'",
         "ssh ${ssh_options} ${remote_server} 'cd ${remote_directory} && cat ${SOURCE.file} | tee ${TARGETS[0].file}'",
         "ssh ${ssh_options} ${remote_server} 'cd ${remote_directory} && cat ${SOURCES.file} | tee ${TARGETS[0].file}'",
         (
