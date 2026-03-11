@@ -75,7 +75,6 @@ env = waves.scons_extensions.WAVESEnvironment(
     unconditional_build=GetOption("unconditional_build"),
     solve_cpus=GetOption("solve_cpus"),
     print_build_failures=GetOption("print_build_failures"),
-    abaqus_commands=GetOption("abaqus_command"),
     TARFLAGS="-c -j",
     TARSUFFIX=".tar.bz2",
 )
@@ -131,8 +130,9 @@ for key, value in project_variables.items():
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env["SPHINX_BUILD"] = env.AddProgram(["sphinx-build"])
+abaqus_commands = GetOption("abaqus_command")
 env["ABAQUS_PROGRAM"] = env.AddProgram(
-    env["abaqus_commands"] if env["abaqus_commands"] is not None else default_abaqus_commands
+    abaqus_commands if abaqus_commands is not None else default_abaqus_commands
 )
 
 # Add WAVES builders and scanners
