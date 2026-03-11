@@ -9,6 +9,7 @@ import waves
 import yaml
 
 import modsim_package.utilities
+from modsim_package import __version__
 
 TODAY = datetime.date.today()
 DEFAULT_SELECTION_DICT = {
@@ -55,6 +56,7 @@ def main(
         long_name="true strain",
         description=f"true strain tensor component {selection_dict['E values']} from final increment",
         group=qoi_data["set_name"].item(),
+        version=__version__,
         date=TODAY,
         units=strain_units,
     )
@@ -64,6 +66,7 @@ def main(
         long_name="true stress",
         description=f"true stress tensor component {selection_dict['S values']} from final increment",
         group=qoi_data["set_name"].item(),
+        version=__version__,
         date=TODAY,
         units=stress_units,
     )

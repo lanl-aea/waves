@@ -87,10 +87,17 @@ env.PrintBuildFailures(print_stdout=env["print_build_failures"])
 # Empty defaults list to avoid building all simulation targets by default
 env.Default()
 
-# Set project internal variables and variable substitution dictionaries
+# Make the modsim package importable for: (1) SConscript files and (2) Python and Abaqus Python environments
 project_directory = pathlib.Path(Dir("#").abspath)
+sys.path.insert(0, str(project_directory))
+env.PrependENVPath("PYTHONPATH", project_directory)
+
+import modsim_package.rectangle_compression  # noqa: E402
+import modsim_package.utilities  # noqa: E402
+from modsim_package import __version__ as version  # noqa: E402
+
+# Set project internal variables and variable substitution dictionaries
 project_name = project_directory.name
-version = "0.1.0"
 author_list = [
     "Kyle Brindley",
     "Prabhu S. Khalsa",
@@ -121,12 +128,6 @@ project_variables = {
 }
 for key, value in project_variables.items():
     env[key] = value
-
-# Make the modsim package importable for: (1) SConscript files and (2) Python and Abaqus Python environments
-sys.path.insert(0, str(project_directory))
-env.PrependENVPath("PYTHONPATH", project_directory)
-import modsim_package.rectangle_compression  # noqa: E402
-import modsim_package.utilities  # noqa: E402
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env["SPHINX_BUILD"] = env.AddProgram(["sphinx-build"])
