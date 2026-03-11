@@ -8,6 +8,10 @@ Changelog
 1.3.0 (unreleased)
 ******************
 
+Bug fixes
+=========
+- Replace WAVES <1.2.0 and >=1.2.0 action prefix patterns in SSH builder actions. By `Kyle Brindley`_.
+
 Documentation
 =============
 - Use a more SCons native solution to finding the project root directory and root configuration file in the tutorials
