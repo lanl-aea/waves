@@ -745,23 +745,26 @@ def test_ssh_builder_actions(target: list[str], builder_kwargs: dict, task_kwarg
     ssh_build_cat = scons_extensions.ssh_builder_actions(cat(), **builder_kwargs)
     ssh_build_cat_action_list = [action.cmd_list for action in ssh_build_cat.action.list]
     expected = [
-        'ssh ${ssh_options} ${remote_server} "mkdir -p ${remote_directory}"',
-        "rsync ${rsync_push_options} ${SOURCES.abspath} ${remote_server}:${remote_directory}",
-        "ssh ${ssh_options} ${remote_server} 'cd ${remote_directory} && echo'",
-        "ssh ${ssh_options} ${remote_server} 'cd ${remote_directory} && echo'",
-        "ssh ${ssh_options} ${remote_server} 'cd ${remote_directory} && cat ${SOURCE.file} | tee ${TARGETS[0].file}'",
-        "ssh ${ssh_options} ${remote_server} 'cd ${remote_directory} && cat ${SOURCES.file} | tee ${TARGETS[0].file}'",
+        '$(ssh$) ${ssh_options} ${remote_server} "mkdir -p ${remote_directory}"',
+        "$(rsync$) ${rsync_push_options} ${SOURCES.abspath} ${remote_server}:${remote_directory}",
+        "$(ssh$) ${ssh_options} ${remote_server} 'cd ${remote_directory} && echo'",
+        "$(ssh$) ${ssh_options} ${remote_server} 'cd ${remote_directory} && echo'",
+        "$(ssh$) ${ssh_options} ${remote_server} 'cd ${remote_directory} && cat ${SOURCE.file} | tee ${TARGETS[0].file}'",
+        "$(ssh$) ${ssh_options} ${remote_server} 'cd ${remote_directory} && cat ${SOURCES.file} | tee ${TARGETS[0].file}'",
         (
-            "ssh ${ssh_options} ${remote_server} "
+            "$(ssh$) ${ssh_options} ${remote_server} "
             "'cd ${remote_directory} && cat ${SOURCES[99].file} | tee ${TARGETS[0].file}'"
         ),
         (
-            "ssh ${ssh_options} ${remote_server} "
+            "$(ssh$) ${ssh_options} ${remote_server} "
             "'cd ${remote_directory} && cat ${SOURCES[-1].file} | tee ${TARGETS[0].file}'"
         ),
-        "ssh ${ssh_options} ${remote_server} 'cd ${remote_directory} && cat ${SOURCES[-1].file} > ${TARGETS[-1].file}'",
-        "ssh ${ssh_options} ${remote_server} 'cd ${remote_directory} && echo \"Hello World!\"'",
-        "rsync ${rsync_pull_options} ${remote_server}:${remote_directory}/ ${TARGET.dir.abspath}",
+        (
+            "$(ssh$) ${ssh_options} ${remote_server} "
+            "'cd ${remote_directory} && cat ${SOURCES[-1].file} > ${TARGETS[-1].file}'"
+        ),
+        "$(ssh$) ${ssh_options} ${remote_server} 'cd ${remote_directory} && echo \"Hello World!\"'",
+        "$(rsync$) ${rsync_pull_options} ${remote_server}:${remote_directory}/ ${TARGET.dir.abspath}",
     ]
     # Test builder action(s)
     assert ssh_build_cat_action_list == expected
@@ -777,14 +780,14 @@ def test_ssh_builder_actions(target: list[str], builder_kwargs: dict, task_kwarg
     ssh_python_builder = scons_extensions.ssh_builder_actions(scons_extensions.python_builder_factory())
     ssh_python_builder_action_list = [action.cmd_list for action in ssh_python_builder.action.list]
     expected = [
-        'ssh ${ssh_options} ${remote_server} "mkdir -p ${remote_directory}"',
-        "rsync ${rsync_push_options} ${SOURCES.abspath} ${remote_server}:${remote_directory}",
+        '$(ssh$) ${ssh_options} ${remote_server} "mkdir -p ${remote_directory}"',
+        "$(rsync$) ${rsync_push_options} ${SOURCES.abspath} ${remote_server}:${remote_directory}",
         (
-            "ssh ${ssh_options} ${remote_server} 'cd ${remote_directory} && ${environment} ${action_prefix} "
+            "$(ssh$) ${ssh_options} ${remote_server} 'cd ${remote_directory} && ${environment} ${action_prefix} "
             "${program} ${program_required} ${program_options} "
             "${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}'"
         ),
-        "rsync ${rsync_pull_options} ${remote_server}:${remote_directory}/ ${TARGET.dir.abspath}",
+        "$(rsync$) ${rsync_pull_options} ${remote_server}:${remote_directory}/ ${TARGET.dir.abspath}",
     ]
     assert ssh_python_builder_action_list == expected
 
