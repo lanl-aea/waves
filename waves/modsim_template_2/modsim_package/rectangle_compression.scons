@@ -100,13 +100,34 @@ workflow.extend(
         post_processing_source=post_processing_source,
     )
 )
+
+# Calculate QOIs
+workflow.extend(
+    env.PythonScript(
+        target=["qoi.csv"],
+        source=["#/modsim_package/qoi.py", "rectangle_compression_datasets.h5"],
+        subcommand_options=(
+            "--input-file ${SOURCES[1].abspath} --output-file ${TARGET.file} --strain-units mm/mm --stress-units MPa"
+        ),
+    )
+)
+
+# QOI regression test
+qoi_regression = env.QOI(
+    calculated="qoi.csv",
+    expected="#/modsim_package/expected_qoi.csv",
+)
+
+# Add final workflow files to artifacts list
 artifacts.extend(workflow)
 
 # Collector alias(es)
 env.Alias(env["regression_alias"], datacheck)
 env.Alias(env["datacheck_alias"], datacheck)
+env.Alias("qoi-regression", qoi_regression)
 env.Alias(f"{alias}-datacheck", datacheck)
 env.Alias(f"{alias}-images", images)
+env.Alias(f"{alias}-qoi-regression", qoi_regression)
 env.Alias(alias, workflow)
 
 if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
