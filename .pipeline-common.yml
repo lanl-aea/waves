@@ -77,8 +77,7 @@
     - Write-Output $CI_JOB_ID
     - $temporary_directory=(Join-Path ([System.IO.Path]::GetTempPath()) "$CI_JOB_ID")
     - Write-Output $temporary_directory
-    - Remove-Item -Force -Recurse $temporary_directory\env -ErrorAction Continue
-    - Remove-Item -Force -Recurse $temporary_directory\pkgs -ErrorAction Continue
+    - Remove-Item -Force -Recurse $temporary_directory -ErrorAction Continue
 
 .developer-test: &developer-test
   script:
