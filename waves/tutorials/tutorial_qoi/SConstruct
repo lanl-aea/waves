@@ -5,9 +5,6 @@ import pathlib
 
 import waves
 
-# Required for developer testing. End users may assume that the WAVES CLI command is 'waves'.
-WAVES_PROGRAM = waves._WAVES_CLI_COMMAND
-
 AddOption(
     "--build-dir",
     dest="build_directory",
@@ -63,6 +60,9 @@ env.AddMethod(
     "QOI",
 )
 env.PrintBuildFailures()
+
+# Required for developer testing. End users may assume that the WAVES CLI command is 'waves'.
+env["WAVES_PROGRAM"] = waves._WAVES_CLI_COMMAND
 
 ################################################################################
 # QOI testing

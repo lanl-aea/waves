@@ -4222,8 +4222,7 @@ class QOIPseudoBuilder:
                 target=[f"{name}_check.stdout"],
                 source=[diff],
                 action=(
-                    f"{_WAVES_CLI_COMMAND} qoi check"
-                    " --diff ${{SOURCES[0].abspath}} > ${{TARGETS[-1].abspath}} 2>&1"
+                    f"{_WAVES_CLI_COMMAND} qoi check --diff ${{SOURCES[0].abspath}} > ${{TARGETS[-1].abspath}} 2>&1"
                 ),
             )
             targets.extend(check_target)
