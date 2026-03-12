@@ -56,7 +56,6 @@ AddOption(
 # Inherit user's full environment and set project variables
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
-    build_directory=pathlib.Path(GetOption("build_directory")),
     unconditional_build=GetOption("unconditional_build"),
     print_build_failures=GetOption("print_build_failures"),
     abaqus_commands=GetOption("abaqus_command"),
@@ -114,7 +113,7 @@ workflow_configurations = [
     "tutorial_remote_execution.scons",
 ]
 for workflow in workflow_configurations:
-    build_dir = env["build_directory"] / pathlib.Path(workflow).stem
+    build_dir = build_directory / pathlib.Path(workflow).stem
     SConscript(workflow, variant_dir=build_dir, exports={"env": env}, duplicate=False)
 
 # Comments used in tutorial code snippets: marker-7

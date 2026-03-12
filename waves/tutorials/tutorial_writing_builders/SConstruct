@@ -30,7 +30,6 @@ AddOption(
 
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
-    build_directory=pathlib.Path(GetOption("build_directory")),
     solve_cpus=GetOption("solve_cpus"),
 )
 env["ENV"]["PYTHONDONTWRITEBYTECODE"] = 1
@@ -68,7 +67,7 @@ workflow_configurations = [
     "implicit_workflow.scons",
 ]
 for workflow in workflow_configurations:
-    build_dir = env["build_directory"] / pathlib.Path(workflow).stem
+    build_dir = build_directory / pathlib.Path(workflow).stem
     SConscript(workflow, variant_dir=build_dir, exports={"env": env}, duplicate=False)
 
 # Print project local help
