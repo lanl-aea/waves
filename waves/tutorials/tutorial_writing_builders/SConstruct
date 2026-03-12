@@ -9,7 +9,7 @@ import waves
 
 AddOption(
     "--build-dir",
-    dest="variant_dir_base",
+    dest="build_directory",
     default="build",
     nargs=1,
     type="string",
@@ -30,7 +30,7 @@ AddOption(
 
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
-    variant_dir_base=pathlib.Path(GetOption("variant_dir_base")),
+    build_directory=pathlib.Path(GetOption("build_directory")),
     solve_cpus=GetOption("solve_cpus"),
 )
 env["ENV"]["PYTHONDONTWRITEBYTECODE"] = 1
@@ -68,7 +68,7 @@ workflow_configurations = [
     "implicit_workflow.scons",
 ]
 for workflow in workflow_configurations:
-    build_dir = env["variant_dir_base"] / pathlib.Path(workflow).stem
+    build_dir = env["build_directory"] / pathlib.Path(workflow).stem
     SConscript(workflow, variant_dir=build_dir, exports={"env": env}, duplicate=False)
 
 # Print project local help

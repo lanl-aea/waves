@@ -8,7 +8,7 @@ import waves
 
 AddOption(
     "--build-dir",
-    dest="variant_dir_base",
+    dest="build_directory",
     default="build",
     nargs=1,
     type="string",
@@ -64,7 +64,7 @@ env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
     waves_command=GetOption("waves_command").strip("'"),
 )
-build_directory = pathlib.Path(env.GetOption("variant_dir_base"))
+build_directory = pathlib.Path(env.GetOption("build_directory"))
 env.AddMethod(
     waves.scons_extensions.QOIPseudoBuilder(
         collection_dir=(build_directory / "qoi").resolve(),
