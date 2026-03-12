@@ -178,10 +178,6 @@ The ``--unconditional-build`` option is mostly useful for :ref:`testing` and con
 tutorial workflows to force a workflow to execute, even if the required programs are not found. This is useful for
 system testing software availability in the construction environment itself.
 
-By default, |PROJECT| builders redirect task STDOUT and STDERR to a ``*.stdout`` file to avoid cluttering the task
-execution reported by SCons.  The ``--print-build-failures`` will print the associated ``*.stdout`` file of all failed
-tasks at the end of SCons execution.
-
 At the end of this tutorial, you will see how to explore the project specific command-line options help and usage.
 
 6. Add the content below to the ``SConstruct`` file to initialize the :class:`waves.scons_extensions.WAVESEnvironment`
@@ -369,7 +365,6 @@ line in your project configuration.
               --build-dir=DIR           SCons build (variant) root directory. Relative or absolute path. (default: 'build')
               --unconditional-build     Boolean flag to force building of conditionally ignored targets, e.g. if the target's
                                            action program is missing and it would normally be ignored. (default: 'False')
-              --print-build-failures    Print task *.stdout target file(s) on build failures. (default: 'False')
               --abaqus-command=COMMAND  Override for the Abaqus command. Repeat to specify more than one (default:
                                           ['/apps/abaqus/Commands/abq2025', '/usr/projects/ea/abaqus/Commands/abq2025', 'abq2025', 
                                           'abaqus'])
@@ -402,7 +397,6 @@ line in your project configuration.
               --build-dir=DIR           SCons build (variant) root directory. Relative or absolute path. (default: 'build')
               --unconditional-build     Boolean flag to force building of conditionally ignored targets, e.g. if the target's
                                            action program is missing and it would normally be ignored. (default: 'False')
-              --print-build-failures    Print task *.stdout target file(s) on build failures. (default: 'False')
               --abaqus-command=COMMAND  Override for the Abaqus command. Repeat to specify more than one (default:
                                           ['/apps/abaqus/Commands/abq2025', '/usr/projects/ea/abaqus/Commands/abq2025', 'abq2025', 
                                           'abaqus'])
