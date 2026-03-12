@@ -5,8 +5,6 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
-  * ``regression_alias`` - String for the alias collecting the regression test suite targets
   * ``archive_prefix`` - String prefix for archive target(s) containing identifying project and version information
   * ``project_configuration`` - String absolute path to the project SCons configuration file
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets

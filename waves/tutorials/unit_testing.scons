@@ -4,8 +4,6 @@
 Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
-
-  * ``regression_alias`` - String for the alias collecting the regression test suite targets
 """
 
 import pathlib
