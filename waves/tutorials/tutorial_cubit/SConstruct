@@ -70,6 +70,7 @@ AddOption(
 # Comments used in tutorial code snippets: marker-2
 
 # Inherit user's full environment and set project variables
+build_directory = pathlib.Path(GetOption("build_directory"))
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
     unconditional_build=GetOption("unconditional_build"),
@@ -147,10 +148,10 @@ workflow_configurations = [
     "fierro.scons",
 ]
 for workflow in workflow_configurations:
-    build_dir = build_directory / pathlib.Path(workflow).stem
+    workflow_build_directory = build_directory / pathlib.Path(workflow).stem
     SConscript(
         workflow,
-        variant_dir=build_dir,
+        variant_dir=build_directory,
         exports={"env": env, "env_sierra": env_sierra},
         duplicate=False,
     )

@@ -7,7 +7,7 @@ import pathlib
 # Add build directory CLI arg
 AddOption(
     "--build-dir",
-    dest="build_dir",
+    dest="build_directory",
     default="build",
     nargs=1,
     type="string",
@@ -40,9 +40,9 @@ AddOption(
 )
 
 # Inherit user's full environment
+build_directory = pathlib.Path(env.GetOption("build_directory"))
 env = Environment(
     ENV=os.environ.copy(),
-    build_dir=GetOption("build_dir"),
     unconditional_build=GetOption("unconditional_build"),
     abaqus_commands=GetOption("abaqus_command"),
 )
@@ -63,4 +63,4 @@ if env["ABAQUS_PROGRAM"]:
     env.PrependENVPath("PATH", pathlib.Path(env["ABAQUS_PROGRAM"]).parent)
 
 # Add workflow(s)
-SConscript("SConscript", variant_dir=env["build_dir"], exports={"env": env}, duplicate=True)
+SConscript("SConscript", variant_dir=build_directory, exports={"env": env}, duplicate=True)

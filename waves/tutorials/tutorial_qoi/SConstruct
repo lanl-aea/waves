@@ -60,11 +60,11 @@ AddOption(
     help="Override for the WAVES command (default: '%default')",
 )
 
+build_directory = pathlib.Path(env.GetOption("build_directory"))
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
     waves_command=GetOption("waves_command").strip("'"),
 )
-build_directory = pathlib.Path(env.GetOption("build_directory"))
 env.AddMethod(
     waves.scons_extensions.QOIPseudoBuilder(
         collection_dir=(build_directory / "qoi").resolve(),

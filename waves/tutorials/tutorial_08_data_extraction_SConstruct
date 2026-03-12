@@ -54,6 +54,7 @@ AddOption(
 # Comments used in tutorial code snippets: marker-2
 
 # Inherit user's full environment and set project variables
+build_directory = pathlib.Path(GetOption("build_directory"))
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
     unconditional_build=GetOption("unconditional_build"),
@@ -112,8 +113,8 @@ workflow_configurations = [
     "tutorial_08_data_extraction.scons",
 ]
 for workflow in workflow_configurations:
-    build_dir = build_directory / pathlib.Path(workflow).stem
-    SConscript(workflow, variant_dir=build_dir, exports={"env": env}, duplicate=False)
+    workflow_build_directory = build_directory / pathlib.Path(workflow).stem
+    SConscript(workflow, variant_dir=workflow_build_directory, exports={"env": env}, duplicate=False)
 
 # Comments used in tutorial code snippets: marker-7
 
