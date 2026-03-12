@@ -57,12 +57,11 @@ build_directory = pathlib.Path(GetOption("build_directory"))
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
     unconditional_build=GetOption("unconditional_build"),
-    print_build_failures=GetOption("print_build_failures"),
     abaqus_commands=GetOption("abaqus_command"),
 )
 
 # Conditionally print failed task *.stdout files
-env.PrintBuildFailures(print_stdout=env["print_build_failures"])
+env.PrintBuildFailures(print_stdout=GetOption("print_build_failures"))
 
 # Comments used in tutorial code snippets: marker-3
 
