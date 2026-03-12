@@ -28,7 +28,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from waves import _settings, _utilities
+from waves import _WAVES_CLI_COMMAND, _settings, _utilities
 from waves._tests.common import platform_check
 
 MODULE_NAME = pathlib.Path(__file__).stem
@@ -147,7 +147,6 @@ def test_augment_system_test_environment(args: tuple[dict, bool], expected: dict
 testing_ci_user = check_ci_user()
 installed = check_installed()
 system_test_environment = augment_system_test_environment(os.environ.copy(), installed)
-waves_command = "waves" if installed else "python -m waves._main"
 odb_extract_command = "odb_extract" if installed else "python -m waves._abaqus.odb_extract"
 
 fetch_template = string.Template("${waves_command} fetch ${fetch_options} --destination ${temporary_directory}")
@@ -241,7 +240,7 @@ system_tests: list = [
         marks=[pytest.mark.scons],
     ),
     pytest.param(
-        [fetch_template, string.Template('scons . --waves-command="${waves_command}"')],
+        [fetch_template, string.Template("scons .")],
         "tutorials/tutorial_qoi",
         marks=[pytest.mark.scons],
         id="tutorial_qoi",
@@ -1015,7 +1014,6 @@ require_third_party_system_tests: list = [
             # TODO: return to testing ``.`` all targets if/when system tests are less fragile
             string.Template(
                 "scons --jobs=4 ${unconditional_build} ${abaqus_command}"
-                ' --waves-command="${waves_command}"'
                 " datacheck"
                 " qoi-regression"
                 " rectangle_compression-nominal-datacheck"
@@ -1059,7 +1057,6 @@ require_third_party_system_tests: list = [
             # TODO: return to testing ``.`` all targets if/when system tests are less fragile
             string.Template(
                 "scons --jobs=4 ${unconditional_build} ${abaqus_command}"
-                ' --waves-command="${waves_command}"'
                 " datacheck"
                 " qoi-regression"
                 " rectangle_compression-nominal-datacheck"
@@ -1111,7 +1108,6 @@ require_third_party_system_tests: list = [
             # TODO: return to testing ``.`` all targets if/when system tests are less fragile
             string.Template(
                 "scons --jobs=4 ${unconditional_build} ${abaqus_command}"
-                ' --waves-command="${waves_command}"'
                 " datacheck"
                 " qoi-regression"
                 " rectangle_compression-nominal-datacheck"
@@ -1155,7 +1151,6 @@ require_third_party_system_tests: list = [
             # TODO: return to testing ``.`` all targets if/when system tests are less fragile
             string.Template(
                 "scons --jobs=4 ${unconditional_build} ${abaqus_command}"
-                ' --waves-command="${waves_command}"'
                 " datacheck"
                 " qoi-regression"
                 " rectangle_compression-nominal-datacheck"
@@ -1266,7 +1261,7 @@ def test_system(
     temporary_path.mkdir(parents=True, exist_ok=True)
     # Move to common test utility ^^^
     template_substitution = {
-        "waves_command": waves_command,
+        "waves_command": _WAVES_CLI_COMMAND,
         "odb_extract_command": odb_extract_command,
         "fetch_options": fetch_options,
         "temporary_directory": temporary_path,

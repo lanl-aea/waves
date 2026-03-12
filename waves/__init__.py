@@ -47,6 +47,7 @@ warnings.filterwarnings(
     category=UserWarning,
 )
 
+_WAVES_CLI_COMMAND = "waves"
 try:
     __version__ = version("waves")
 except PackageNotFoundError:
@@ -62,6 +63,7 @@ except PackageNotFoundError:
         import setuptools_scm
 
         __version__ = setuptools_scm.get_version(root=pathlib.Path(__file__).parent.parent)
+        _WAVES_CLI_COMMAND = "python -m waves._main"
         # Remove third-party packages from the project namespace
         del pathlib, setuptools_scm
 
