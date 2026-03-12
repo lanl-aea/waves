@@ -332,7 +332,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons . --sconstruct=tutorial_00_SConstruct ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons . --sconstruct=tutorial_00_SConstruct ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 0",
@@ -342,7 +342,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_01_geometry --sconstruct=tutorial_01_geometry_SConstruct ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_01_geometry --sconstruct=tutorial_01_geometry_SConstruct ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 1",
@@ -372,7 +372,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_02_partition_mesh --sconstruct=tutorial_02_partition_mesh_SConstruct ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_02_partition_mesh --sconstruct=tutorial_02_partition_mesh_SConstruct ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 2",
@@ -392,7 +392,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_argparse_types --sconstruct=tutorial_argparse_types_SConstruct ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_argparse_types --sconstruct=tutorial_argparse_types_SConstruct ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "tutorials",
@@ -412,7 +412,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_03_solverprep --sconstruct=tutorial_03_solverprep_SConstruct ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_03_solverprep --sconstruct=tutorial_03_solverprep_SConstruct ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 3",
@@ -432,7 +432,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_04_simulation --sconstruct=tutorial_04_simulation_SConstruct ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_04_simulation --sconstruct=tutorial_04_simulation_SConstruct ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 4",
@@ -452,7 +452,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons abaqus_cubit sierra_cubit fierro_cubit ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"  # noqa: E501
+                "scons abaqus_cubit sierra_cubit fierro_cubit ${unconditional_build} ${abaqus_command} ${cubit_command}"  # noqa: E501
             ),
         ],
         "tutorials/tutorial_cubit",
@@ -471,7 +471,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons abaqus ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"
+                "scons abaqus ${unconditional_build} ${abaqus_command} ${cubit_command}"
             ),
         ],
         "tutorials/tutorial_cubit",
@@ -494,7 +494,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons fierro ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"
+                "scons fierro ${unconditional_build} ${abaqus_command} ${cubit_command}"
             ),
         ],
         "tutorials/tutorial_cubit",
@@ -515,7 +515,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons sierra ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"
+                "scons sierra ${unconditional_build} ${abaqus_command} ${cubit_command}"
             ),
         ],
         "tutorials/tutorial_cubit",
@@ -538,7 +538,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons abaqus ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"
+                "scons abaqus ${unconditional_build} ${abaqus_command} ${cubit_command}"
             ),
         ],
         "tutorials/tutorial_cubit_alternate",
@@ -566,7 +566,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons fierro ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"
+                "scons fierro ${unconditional_build} ${abaqus_command} ${cubit_command}"
             ),
         ],
         "tutorials/tutorial_cubit_alternate",
@@ -585,7 +585,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons sierra ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"
+                "scons sierra ${unconditional_build} ${abaqus_command} ${cubit_command}"
             ),
         ],
         "tutorials/tutorial_cubit_alternate",
@@ -609,7 +609,7 @@ require_third_party_system_tests: list = [
     pytest.param(
         [
             fetch_template,
-            string.Template("scons quinoa-local ${unconditional_build} --print-build-failures ${cubit_command}"),
+            string.Template("scons quinoa-local ${unconditional_build} ${cubit_command}"),
         ],
         "tutorials/tutorial_quinoa",
         marks=[
@@ -628,7 +628,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_escape_sequences --sconstruct=tutorial_escape_sequences_SConstruct --solve-cpus=1 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_escape_sequences --sconstruct=tutorial_escape_sequences_SConstruct --solve-cpus=1 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "tutorials",
@@ -650,7 +650,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_remote_execution --sconstruct=tutorial_remote_execution_SConstruct ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_remote_execution --sconstruct=tutorial_remote_execution_SConstruct ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "tutorials",
@@ -665,7 +665,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_sbatch --sconstruct=tutorial_sbatch_SConstruct ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_sbatch --sconstruct=tutorial_sbatch_SConstruct ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "tutorials",
@@ -685,7 +685,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_05_parameter_substitution --sconstruct=tutorial_05_parameter_substitution_SConstruct ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_05_parameter_substitution --sconstruct=tutorial_05_parameter_substitution_SConstruct ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 5",
@@ -705,7 +705,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_06_include_files --sconstruct=tutorial_06_include_files_SConstruct ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_06_include_files --sconstruct=tutorial_06_include_files_SConstruct ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 6",
@@ -725,7 +725,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_07_cartesian_product --sconstruct=tutorial_07_cartesian_product_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_07_cartesian_product --sconstruct=tutorial_07_cartesian_product_SConstruct --jobs=4 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 7",
@@ -746,7 +746,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_07_latin_hypercube --sconstruct=tutorial_07_latin_hypercube_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_07_latin_hypercube --sconstruct=tutorial_07_latin_hypercube_SConstruct --jobs=4 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "tutorials",
@@ -766,7 +766,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_07_sobol_sequence --sconstruct=tutorial_07_sobol_sequence_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_07_sobol_sequence --sconstruct=tutorial_07_sobol_sequence_SConstruct --jobs=4 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "tutorials",
@@ -786,7 +786,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_07_one_at_a_time --sconstruct=tutorial_07_one_at_a_time_SConstruct --jobs=3 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_07_one_at_a_time --sconstruct=tutorial_07_one_at_a_time_SConstruct --jobs=3 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "tutorials one at a time",
@@ -806,7 +806,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_08_data_extraction --sconstruct=tutorial_08_data_extraction_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_08_data_extraction --sconstruct=tutorial_08_data_extraction_SConstruct --jobs=4 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 8",
@@ -826,7 +826,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_09_post_processing --sconstruct=tutorial_09_post_processing_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_09_post_processing --sconstruct=tutorial_09_post_processing_SConstruct --jobs=4 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 9",
@@ -846,7 +846,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons unit_testing --sconstruct=tutorial_10_unit_testing_SConstruct ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons unit_testing --sconstruct=tutorial_10_unit_testing_SConstruct ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 10",
@@ -866,7 +866,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_sensitivity_study --sconstruct=tutorial_sensitivity_study_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_sensitivity_study --sconstruct=tutorial_sensitivity_study_SConstruct --jobs=4 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "tutorials",
@@ -886,7 +886,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons datacheck --sconstruct=tutorial_11_regression_testing_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons datacheck --sconstruct=tutorial_11_regression_testing_SConstruct --jobs=4 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 11",
@@ -906,7 +906,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_12_archival tutorial_12_archival_archive --sconstruct=tutorial_12_archival_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_12_archival tutorial_12_archival_archive --sconstruct=tutorial_12_archival_SConstruct --jobs=4 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 12",
@@ -926,7 +926,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_abaqus_pseudo_builder --sconstruct=tutorial_abaqus_pseudo_builder_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_abaqus_pseudo_builder --sconstruct=tutorial_abaqus_pseudo_builder_SConstruct --jobs=4 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "tutorials",
@@ -946,7 +946,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_task_reuse --sconstruct=tutorial_task_reuse_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_task_reuse --sconstruct=tutorial_task_reuse_SConstruct --jobs=4 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "tutorials",
@@ -966,7 +966,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_mesh_convergence --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_mesh_convergence --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "tutorials",
@@ -1006,7 +1006,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_part_image --sconstruct=tutorial_part_image_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_part_image --sconstruct=tutorial_part_image_SConstruct --jobs=4 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "tutorials",
@@ -1028,7 +1028,7 @@ require_third_party_system_tests: list = [
             fetch_template,
             # TODO: return to testing ``.`` all targets if/when system tests are less fragile
             string.Template(
-                "scons --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"
+                "scons --jobs=4 ${unconditional_build} ${abaqus_command}"
                 ' --waves-command="${waves_command}"'
                 " datacheck"
                 " qoi-regression"
@@ -1072,7 +1072,7 @@ require_third_party_system_tests: list = [
             fetch_template,
             # TODO: return to testing ``.`` all targets if/when system tests are less fragile
             string.Template(
-                "scons --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"
+                "scons --jobs=4 ${unconditional_build} ${abaqus_command}"
                 ' --waves-command="${waves_command}"'
                 " datacheck"
                 " qoi-regression"
@@ -1124,7 +1124,7 @@ require_third_party_system_tests: list = [
             fetch_template,
             # TODO: return to testing ``.`` all targets if/when system tests are less fragile
             string.Template(
-                "scons --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"
+                "scons --jobs=4 ${unconditional_build} ${abaqus_command}"
                 ' --waves-command="${waves_command}"'
                 " datacheck"
                 " qoi-regression"
@@ -1168,7 +1168,7 @@ require_third_party_system_tests: list = [
             fetch_template,
             # TODO: return to testing ``.`` all targets if/when system tests are less fragile
             string.Template(
-                "scons --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"
+                "scons --jobs=4 ${unconditional_build} ${abaqus_command}"
                 ' --waves-command="${waves_command}"'
                 " datacheck"
                 " qoi-regression"
