@@ -8,6 +8,11 @@ Changelog
 1.3.0 (unreleased)
 ******************
 
+Documentation
+=============
+- Minor simplifications to tutorial and modsim template SCons command-line options and environment setup. By `Kyle
+  Brindley`_.
+
 ******************
 1.2.1 (2026-03-11)
 ******************
