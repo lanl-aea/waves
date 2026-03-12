@@ -27,13 +27,6 @@ AddOption(
     action="store_true",
     help="Boolean flag to force building of conditionally ignored targets. (default: '%default')",
 )
-AddOption(
-    "--print-build-failures",
-    dest="print_build_failures",
-    default=False,
-    action="store_true",
-    help="Print task *.stdout target file(s) on build failures. (default: '%default')",
-)
 # Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
 default_cubit_commands = [
     "/apps/Cubit-17.06/cubit",
@@ -59,8 +52,6 @@ env = waves.scons_extensions.WAVESEnvironment(
     unconditional_build=GetOption("unconditional_build"),
     cubit_commands=GetOption("cubit_command"),
 )
-
-# Conditionally print failed task *.stdout files
 env.PrintBuildFailures()
 
 # Always copy (no sym-links) when duplicating
