@@ -26,13 +26,6 @@ AddOption(
     action="store_true",
     help="Boolean flag to force building of conditionally ignored targets. (default: '%default')",
 )
-AddOption(
-    "--print-build-failures",
-    dest="print_build_failures",
-    default=False,
-    action="store_true",
-    help="Print task *.stdout target file(s) on build failures. (default: '%default')",
-)
 
 # Comments used in tutorial code snippets: marker-2
 
@@ -42,8 +35,6 @@ env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
     unconditional_build=GetOption("unconditional_build"),
 )
-
-# Conditionally print failed task *.stdout files
 env.PrintBuildFailures()
 
 # Comments used in tutorial code snippets: marker-3

@@ -36,13 +36,6 @@ AddOption(
     metavar="N",
     help="Run the Abaqus Solve task using N CPUs. (default: '%default')",
 )
-AddOption(
-    "--print-build-failures",
-    dest="print_build_failures",
-    default=False,
-    action="store_true",
-    help="Print task *.stdout target file(s) on build failures. (default: '%default')",
-)
 # Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
 default_abaqus_commands = [
     "/apps/abaqus/Commands/abq2025",
@@ -78,8 +71,6 @@ env = waves.scons_extensions.WAVESEnvironment(
     TARFLAGS="-c -j",
     TARSUFFIX=".tar.bz2",
 )
-
-# Conditionally print failed task *.stdout files
 env.PrintBuildFailures(print_stdout=GetOption("print_build_failures"))
 
 # Empty defaults list to avoid building all simulation targets by default
