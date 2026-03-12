@@ -44,7 +44,7 @@ AddOption(
 )
 
 # Inherit user's full environment
-build_directory = pathlib.Path(env.GetOption("build_directory"))
+build_directory = pathlib.Path(GetOption("build_directory"))
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
     unconditional_build=GetOption("unconditional_build"),
