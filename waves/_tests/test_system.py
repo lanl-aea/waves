@@ -331,9 +331,7 @@ require_third_party_system_tests: list = [
     pytest.param(
         [
             fetch_template,
-            string.Template(
-                "scons . --sconstruct=tutorial_00_SConstruct ${unconditional_build} ${abaqus_command}"  # noqa: E501
-            ),
+            string.Template("scons . --sconstruct=tutorial_00_SConstruct ${unconditional_build} ${abaqus_command}"),
         ],
         "--tutorial 0",
         marks=[pytest.mark.require_third_party, pytest.mark.scons],
@@ -452,7 +450,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons abaqus_cubit sierra_cubit fierro_cubit ${unconditional_build} ${abaqus_command} ${cubit_command}"  # noqa: E501
+                "scons abaqus_cubit sierra_cubit fierro_cubit ${unconditional_build} ${abaqus_command} ${cubit_command}"
             ),
         ],
         "tutorials/tutorial_cubit",
@@ -470,9 +468,7 @@ require_third_party_system_tests: list = [
     pytest.param(
         [
             fetch_template,
-            string.Template(
-                "scons abaqus ${unconditional_build} ${abaqus_command} ${cubit_command}"
-            ),
+            string.Template("scons abaqus ${unconditional_build} ${abaqus_command} ${cubit_command}"),
         ],
         "tutorials/tutorial_cubit",
         marks=[
@@ -493,9 +489,7 @@ require_third_party_system_tests: list = [
     pytest.param(
         [
             fetch_template,
-            string.Template(
-                "scons fierro ${unconditional_build} ${abaqus_command} ${cubit_command}"
-            ),
+            string.Template("scons fierro ${unconditional_build} ${abaqus_command} ${cubit_command}"),
         ],
         "tutorials/tutorial_cubit",
         marks=[
@@ -514,9 +508,7 @@ require_third_party_system_tests: list = [
     pytest.param(
         [
             fetch_template,
-            string.Template(
-                "scons sierra ${unconditional_build} ${abaqus_command} ${cubit_command}"
-            ),
+            string.Template("scons sierra ${unconditional_build} ${abaqus_command} ${cubit_command}"),
         ],
         "tutorials/tutorial_cubit",
         marks=[
@@ -537,9 +529,7 @@ require_third_party_system_tests: list = [
     pytest.param(
         [
             fetch_template,
-            string.Template(
-                "scons abaqus ${unconditional_build} ${abaqus_command} ${cubit_command}"
-            ),
+            string.Template("scons abaqus ${unconditional_build} ${abaqus_command} ${cubit_command}"),
         ],
         "tutorials/tutorial_cubit_alternate",
         marks=[
@@ -565,9 +555,7 @@ require_third_party_system_tests: list = [
     pytest.param(
         [
             fetch_template,
-            string.Template(
-                "scons fierro ${unconditional_build} ${abaqus_command} ${cubit_command}"
-            ),
+            string.Template("scons fierro ${unconditional_build} ${abaqus_command} ${cubit_command}"),
         ],
         "tutorials/tutorial_cubit_alternate",
         marks=[
@@ -584,9 +572,7 @@ require_third_party_system_tests: list = [
     pytest.param(
         [
             fetch_template,
-            string.Template(
-                "scons sierra ${unconditional_build} ${abaqus_command} ${cubit_command}"
-            ),
+            string.Template("scons sierra ${unconditional_build} ${abaqus_command} ${cubit_command}"),
         ],
         "tutorials/tutorial_cubit_alternate",
         marks=[
@@ -665,7 +651,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_sbatch --sconstruct=tutorial_sbatch_SConstruct ${unconditional_build} ${abaqus_command}"  # noqa: E501
+                "scons tutorial_sbatch --sconstruct=tutorial_sbatch_SConstruct ${unconditional_build} ${abaqus_command}"
             ),
         ],
         "tutorials",
