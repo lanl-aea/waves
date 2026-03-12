@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-"""Configure the WAVES project."""
 
 import os
 import pathlib

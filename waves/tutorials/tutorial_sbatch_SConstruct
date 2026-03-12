@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-"""Configure the WAVES SLURM sbatch tutorial."""
 
 import os
 import pathlib
@@ -85,7 +84,6 @@ env.PrependENVPath("PYTHONPATH", project_dir)
 
 # Add builders and pseudo-builders
 def solve_builder_select() -> SCons.Builder.Builder:
-    """Run the SLURM sbatch builder if available. Fall back to AbaqusSolver builder in not."""
     if env["SBATCH_PROGRAM"]:
         return waves.scons_extensions.sbatch_abaqus_solver_builder_factory(program="${ABAQUS_PROGRAM}")
     else:

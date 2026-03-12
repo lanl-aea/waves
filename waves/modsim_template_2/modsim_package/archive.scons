@@ -1,4 +1,3 @@
-"""Configure the project's archive workflow."""
 
 # Inherit the parent construction environment
 Import("env", "alias", "artifacts")

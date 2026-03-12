@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-"""Configure the WAVES modsim template 2 project."""
 
 import optparse
 import os
