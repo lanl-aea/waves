@@ -1,6 +1,5 @@
 #! /usr/bin/env python
 
-import optparse
 import os
 import pathlib
 import sys
@@ -50,15 +49,6 @@ AddOption(
     action="append",
     metavar="COMMAND",
     help=f"Override for the Abaqus command. Repeat to specify more than one (default: {default_abaqus_commands})",
-)
-# Enable CLI executable name change for system testing the tutorials in the repository, ``python -m waves._main``.
-# End users may remove this option and all uses of this option.
-AddOption(
-    "--waves-command",
-    default="waves",
-    action="store",
-    metavar="COMMAND",
-    help=optparse.SUPPRESS_USAGE,
 )
 
 # Inherit user's full environment and set project options
@@ -135,7 +125,6 @@ env.AddMethod(
     waves.scons_extensions.QOIPseudoBuilder(
         collection_dir=(build_directory / "qoi").resolve(),
         build_dir=build_directory.resolve(),
-        _program=GetOption("waves_command"),
     ),
     "QOI",
 )

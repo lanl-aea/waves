@@ -35,18 +35,13 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import warnings
 from importlib.metadata import PackageNotFoundError, version
 
-from waves import (  # noqa: F401
-    parameter_generators,
-    qoi,
-    scons_extensions,
-)
-
 warnings.filterwarnings(
     action="ignore",
     message="The `squeeze` kwarg to GroupBy is being removed",
     category=UserWarning,
 )
 
+_WAVES_CLI_COMMAND = "waves"
 try:
     __version__ = version("waves")
 except PackageNotFoundError:
@@ -62,8 +57,15 @@ except PackageNotFoundError:
         import setuptools_scm
 
         __version__ = setuptools_scm.get_version(root=pathlib.Path(__file__).parent.parent)
+        _WAVES_CLI_COMMAND = "python -m waves._main"
         # Remove third-party packages from the project namespace
         del pathlib, setuptools_scm
+
+from waves import (  # noqa: F401,E402
+    parameter_generators,
+    qoi,
+    scons_extensions,
+)
 
 # Remove third-party packages from the project namespace
 del warnings, version, PackageNotFoundError

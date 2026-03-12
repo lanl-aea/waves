@@ -18,7 +18,7 @@ import SCons.Scanner
 import SCons.Script
 from SCons.Script.SConscript import SConsEnvironment
 
-from waves import _settings, _utilities, parameter_generators
+from waves import _WAVES_CLI_COMMAND, _settings, _utilities, parameter_generators
 
 _exclude_from_namespace = set(globals().keys())
 
@@ -4120,8 +4120,6 @@ class QOIPseudoBuilder:
     :param build_dir: Root directory of SCons project build artifacts.
     :param updated_expected: Update the expected QOI CSV source files to match the calculated QOI values instead of
         comparing the calculated and expected values.
-    :param _program: The WAVES command line program call. Intended for internal use by developers to perform
-        in-repository system testing. End users should not change the default value of this argument.
     """
 
     def __init__(
@@ -4129,12 +4127,10 @@ class QOIPseudoBuilder:
         collection_dir: pathlib.Path,
         build_dir: pathlib.Path,
         update_expected: bool = False,
-        _program: str = "waves",
     ) -> None:
         self.collection_dir = collection_dir
         self.build_dir = build_dir
         self.update_expected = update_expected
-        self._program = _program
 
     def __call__(
         self,
@@ -4193,7 +4189,7 @@ class QOIPseudoBuilder:
                 target=[f"{calculated}_{expected}.stdout"],
                 source=[calculated, expected],
                 action=(
-                    f"{self._program} qoi accept"
+                    f"{_WAVES_CLI_COMMAND} qoi accept"
                     " --calculated ${SOURCES[0].abspath}"
                     f" --expected {expected_source}"
                     " > ${TARGETS[-1].abspath} 2>&1"
@@ -4214,7 +4210,7 @@ class QOIPseudoBuilder:
                 target=[diff],
                 source=[calculated, expected],
                 action=(
-                    f"{self._program} qoi diff"
+                    f"{_WAVES_CLI_COMMAND} qoi diff"
                     " --expected ${SOURCES[1].abspath}"
                     " --calculated ${SOURCES[0].abspath}"
                     " --output ${TARGETS[0].abspath}"
@@ -4225,7 +4221,9 @@ class QOIPseudoBuilder:
             check_target = env.Command(
                 target=[f"{name}_check.stdout"],
                 source=[diff],
-                action=(f"{self._program} qoi check" + " --diff ${SOURCES[0].abspath} > ${TARGETS[-1].abspath} 2>&1"),
+                action=(
+                    f"{_WAVES_CLI_COMMAND} qoi check --diff ${{SOURCES[0].abspath}} > ${{TARGETS[-1].abspath}} 2>&1"
+                ),
             )
             targets.extend(check_target)
 
