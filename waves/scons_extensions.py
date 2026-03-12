@@ -4221,7 +4221,7 @@ class QOIPseudoBuilder:
             check_target = env.Command(
                 target=[f"{name}_check.stdout"],
                 source=[diff],
-                action=(f"{self._program} qoi check" + " --diff ${SOURCES[0].abspath} > ${TARGETS[-1].abspath} 2>&1"),
+                action=(f"{_WAVES_CLI_COMMAND} qoi check" + " --diff ${SOURCES[0].abspath} > ${TARGETS[-1].abspath} 2>&1"),
             )
             targets.extend(check_target)
 
