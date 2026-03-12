@@ -34,7 +34,7 @@ project_variables = {
 # ============================================================================================= COMMAND LINE OPTIONS ===
 AddOption(
     "--build-dir",
-    dest="build_dir",
+    dest="build_directory",
     default="build",
     nargs=1,
     type="string",
@@ -93,16 +93,15 @@ AddOption(
 
 # ========================================================================================= CONSTRUCTION ENVIRONMENT ===
 # Inherit user's full environment and set project options
+build_directory = pathlib.Path(GetOption("build_directory"))
 env = Environment(
     ENV=os.environ.copy(),
-    build_dir=pathlib.Path(GetOption("build_dir")),
     prefix=pathlib.Path(GetOption("prefix")),
     distribution_name=GetOption("distribution_name"),
     unconditional_build=GetOption("unconditional_build"),
     abaqus_command=GetOption("abaqus_command"),
     cubit_command=GetOption("cubit_command"),
 )
-build_directory = pathlib.Path(env["build_dir"])
 print(f"Using build directory...{build_directory}")
 prefix = pathlib.Path(env["prefix"])
 print(f"Using install prefix directory...{prefix}")

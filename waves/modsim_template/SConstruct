@@ -146,19 +146,19 @@ env.Alias("environment", environment_target)
 
 # Add documentation target(s)
 # Project documentation
-build_dir = build_directory / documentation_source_dir
+documentation_build_directory = build_directory / documentation_source_dir
 SConscript(
     documentation_source_dir / "SConscript",
-    variant_dir=build_dir,
+    variant_dir=documentation_build_directory,
     exports={"env": env, "project_variables": project_variables},
 )
 
 # Analysis report
 report_dir = pathlib.Path("report")
-build_dir = build_directory / report_dir
+report_build_directory = build_directory / report_dir
 SConscript(
     report_dir / "SConscript",
-    variant_dir=build_dir,
+    variant_dir=report_build_directory,
     exports={"env": env, "project_variables": project_variables},
     duplicate=True,
 )
@@ -170,14 +170,14 @@ workflow_configurations = [
     "rectangle_compression-mesh_convergence.scons",
 ]
 for workflow in workflow_configurations:
-    build_dir = build_directory / pathlib.Path(workflow).stem
-    SConscript(workflow, variant_dir=build_dir, exports={"env": env}, duplicate=False)
+    workflow_build_directory = build_directory / pathlib.Path(workflow).stem
+    SConscript(workflow, variant_dir=workflow_build_directory, exports={"env": env}, duplicate=False)
 # Marker: workflow-configurations-start-do-not-remove
 
 # Add unit test target
 test_workflow = "unit_testing.scons"
-test_build_dir = build_directory / pathlib.Path(test_workflow).stem
-SConscript(test_workflow, variant_dir=test_build_dir, exports={"env": env}, duplicate=False)
+test_build_directory = build_directory / pathlib.Path(test_workflow).stem
+SConscript(test_workflow, variant_dir=test_build_directory, exports={"env": env}, duplicate=False)
 
 # Add default target list to help message
 # Add aliases to help message so users know what build target options are available

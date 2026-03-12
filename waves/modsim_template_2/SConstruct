@@ -101,7 +101,7 @@ latex_project_name = project_name.replace("_", "-")
 documentation_source_dir = pathlib.Path("docs")
 modsim_package_dir = pathlib.Path("modsim_package")
 test_source_dir = "modsim_package/tests"
-parameter_study_build_dir = build_directory / "parameter_studies"
+parameter_study_build_directory = build_directory / "parameter_studies"
 project_variables = {
     "project_directory": project_directory,
     "project_name": project_name,
@@ -113,7 +113,7 @@ project_variables = {
     "report_pdf": f"{latex_project_name}-{version}-report.pdf",
     "documentation_abspath": project_directory / documentation_source_dir,
     "test_source_abspath": project_directory / test_source_dir,
-    "parameter_study_build_abspath": parameter_study_build_dir.resolve(),
+    "parameter_study_build_abspath": parameter_study_build_directory.resolve(),
 }
 for key, value in project_variables.items():
     env[key] = value
@@ -151,19 +151,19 @@ env.Alias("environment", environment_target)
 
 # Add documentation target(s)
 # Project documentation
-build_dir = build_directory / documentation_source_dir
+documentation_build_directory = build_directory / documentation_source_dir
 SConscript(
     documentation_source_dir / "SConscript",
-    variant_dir=build_dir,
+    variant_dir=documentation_build_directory,
     exports={"env": env, "project_variables": project_variables},
 )
 
 # Analysis report
 report_dir = pathlib.Path("report")
-build_dir = build_directory / report_dir
+report_build_directory = build_directory / report_dir
 SConscript(
     report_dir / "SConscript",
-    variant_dir=build_dir,
+    variant_dir=report_build_directory,
     exports={"env": env, "project_variables": project_variables},
     duplicate=True,
 )
@@ -190,7 +190,7 @@ for workflow, study_name, study_definition in workflow_configurations:
     # Marker: workflow-naming-conventions-start-do-not-remove
     # Project naming conventions
     alias = f"{pathlib.Path(workflow).stem}-{study_name}"
-    build_dir = build_directory / alias
+    workflow_build_directory = build_directory / alias
     workflow_file = modsim_package_dir / workflow
     # Marker: workflow-naming-conventions-end-do-not-remove
 
@@ -200,7 +200,7 @@ for workflow, study_name, study_definition in workflow_configurations:
     # Call workflow configuration
     workflow_artifacts[alias] = env.ParameterStudySConscript(
         workflow_file,
-        variant_dir=build_dir,
+        variant_dir=workflow_build_directory,
         exports={"env": env, "alias": alias},
         study=study_definition,
         subdirectories=True,
@@ -227,8 +227,8 @@ for alias, artifacts in workflow_artifacts.items():
 
 # Add unit test target
 test_workflow = "unit_testing.scons"
-test_build_dir = build_directory / pathlib.Path(test_workflow).stem
-SConscript(test_workflow, variant_dir=test_build_dir, exports={"env": env}, duplicate=False)
+test_build_directory = build_directory / pathlib.Path(test_workflow).stem
+SConscript(test_workflow, variant_dir=test_build_directory, exports={"env": env}, duplicate=False)
 
 # Add default target list to help message
 # Add aliases to help message so users know what build target options are available
