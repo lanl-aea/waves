@@ -71,7 +71,7 @@ env = waves.scons_extensions.WAVESEnvironment(
     TARFLAGS="-c -j",
     TARSUFFIX=".tar.bz2",
 )
-env.PrintBuildFailures(print_stdout=GetOption("print_build_failures"))
+env.PrintBuildFailures()
 
 # Empty defaults list to avoid building all simulation targets by default
 env.Default()
