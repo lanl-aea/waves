@@ -92,7 +92,7 @@ workflow_configurations = [
 ]
 for workflow in workflow_configurations:
     workflow_build_directory = build_directory / pathlib.Path(workflow).stem
-    SConscript(workflow, variant_dir=build_directory, exports={"env": env}, duplicate=False)
+    SConscript(workflow, variant_dir=workflow_build_directory, exports={"env": env}, duplicate=False)
 
 # Comments used in tutorial code snippets: marker-7
 
