@@ -94,18 +94,16 @@ AddOption(
 # ========================================================================================= CONSTRUCTION ENVIRONMENT ===
 # Inherit user's full environment and set project options
 build_directory = pathlib.Path(GetOption("build_directory"))
+prefix = pathlib.Path(GetOption("prefix"))
+distribution_name = GetOption("distribution_name")
 env = Environment(
     ENV=os.environ.copy(),
-    prefix=pathlib.Path(GetOption("prefix")),
-    distribution_name=GetOption("distribution_name"),
     unconditional_build=GetOption("unconditional_build"),
     abaqus_command=GetOption("abaqus_command"),
     cubit_command=GetOption("cubit_command"),
 )
 print(f"Using build directory...{build_directory}")
-prefix = pathlib.Path(env["prefix"])
 print(f"Using install prefix directory...{prefix}")
-distribution_name = env["distribution_name"]
 distribution_filename = distribution_name.replace("-", "_")
 package_specification = f"{distribution_filename}-{version}"
 print(f"Using distribution name...{distribution_name}")
