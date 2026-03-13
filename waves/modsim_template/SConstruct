@@ -116,6 +116,8 @@ def tar_script(
     self,
     target: str | SCons.Node.Node | list | SCons.Node.NodeList,
     source: str | SCons.Node.Node | list | SCons.Node.NodeList,
+    shell: str | None = None,
+    extension: str | None = None,
 ) -> SCons.Node.NodeList:
     def convert_to_pathlib(items) -> list[pathlib.Path]:
         items = [pathlib.Path(str(item)).resolve() if not str(item).startswith("#") else item for item in items]
@@ -128,11 +130,11 @@ def tar_script(
         return items
 
     if platform.system().lower() == "windows":
-        shell = "pwsh"
-        extension = ".ps1"
+        shell = "pwsh" if shell is None
+        extension = ".ps1" if extension is None
     else:
-        shell = "bash"
-        extension = ".script"
+        shell = "bash" if shell is None
+        extension = ".sh" if shell is None
 
     if isinstance(target, (str, SCons.Node.Node)):
         target = [target]
