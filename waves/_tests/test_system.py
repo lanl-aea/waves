@@ -1059,57 +1059,6 @@ require_third_party_system_tests: list = [
                 " rectangle_compression-nominal-datacheck"
                 " rectangle_compression-nominal-images"
                 " rectangle_compression-nominal"
-                " rectangle_compression-nominal-qoi-regression"
-                " rectangle_compression-mesh_convergence-datacheck"
-                " rectangle_compression-mesh_convergence-images"
-                " rectangle_compression-mesh_convergence"
-                " rectangle_compression-mesh_convergence-qoi-regression"
-                " unit_testing"
-            ),
-            string.Template(
-                "${waves_command} visualize rectangle_compression-nominal --output-file nominal.png ${abaqus_command}"
-            ),
-            string.Template(
-                "${waves_command} print_study build/rectangle_compression-mesh_convergence/mesh_convergence.h5"
-            ),
-        ],
-        "modsim_template",
-        marks=[
-            pytest.mark.require_third_party,
-            pytest.mark.scons,
-            pytest.mark.sphinx,
-            pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
-            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
-            pytest.mark.skipif(
-                testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
-            ),
-            pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
-            pytest.mark.skipif(
-                not testing_windows,
-                reason=(
-                    "Windows specific test variation. "
-                    "On other operating systems, this test is covered by 'modsim_template_full'"
-                ),
-            ),
-            # TODO: Fix HPC CI system tests that run TeXLive
-            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
-            pytest.mark.skipif(testing_hpc, reason="HPC CI server fails TeXLive PDF builds"),
-        ],
-        id="modsim_template_without_archive",
-    ),
-    pytest.param(
-        [
-            fetch_template,
-            # TODO: return to testing ``.`` all targets if/when system tests are less fragile
-            string.Template(
-                "scons --jobs=4 ${unconditional_build} ${abaqus_command}"
-                " datacheck"
-                " qoi-regression"
-                " rectangle_compression-nominal-datacheck"
-                " rectangle_compression-nominal-images"
-                " rectangle_compression-nominal"
                 " rectangle_compression-nominal-archive"
                 " rectangle_compression-nominal-qoi-regression"
                 " rectangle_compression-mesh_convergence-datacheck"
@@ -1138,57 +1087,6 @@ require_third_party_system_tests: list = [
             pytest.mark.skipif(testing_hpc, reason="HPC CI server fails TeXLive PDF builds"),
         ],
         id="modsim_template_2_full",
-    ),
-    pytest.param(
-        [
-            fetch_template,
-            # TODO: return to testing ``.`` all targets if/when system tests are less fragile
-            string.Template(
-                "scons --jobs=4 ${unconditional_build} ${abaqus_command}"
-                " datacheck"
-                " qoi-regression"
-                " rectangle_compression-nominal-datacheck"
-                " rectangle_compression-nominal-images"
-                " rectangle_compression-nominal"
-                " rectangle_compression-nominal-qoi-regression"
-                " rectangle_compression-mesh_convergence-datacheck"
-                " rectangle_compression-mesh_convergence-images"
-                " rectangle_compression-mesh_convergence"
-                " rectangle_compression-mesh_convergence-qoi-regression"
-                " unit_testing"
-            ),
-            string.Template(
-                "${waves_command} visualize rectangle_compression-nominal --output-file nominal.png ${abaqus_command}"
-            ),
-            string.Template(
-                "${waves_command} print_study build/parameter_studies/rectangle_compression-mesh_convergence.h5"
-            ),
-        ],
-        "modsim_template_2",
-        marks=[
-            pytest.mark.require_third_party,
-            pytest.mark.scons,
-            pytest.mark.sphinx,
-            pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
-            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
-            pytest.mark.skipif(
-                testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
-            ),
-            pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
-            pytest.mark.skipif(
-                not testing_windows,
-                reason=(
-                    "Windows specific test variation. "
-                    "On other operating systems, this test is covered by 'modsim_template_full'"
-                ),
-            ),
-            # TODO: Fix HPC CI system tests that run TeXLive
-            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
-            pytest.mark.skipif(testing_hpc, reason="HPC CI server fails TeXLive PDF builds"),
-        ],
-        id="modsim_template_2_without_archive",
     ),
 ]
 
