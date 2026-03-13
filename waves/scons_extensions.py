@@ -4242,6 +4242,63 @@ class QOIPseudoBuilder:
         return targets
 
 
+def tar_script(
+    env: SCons.Environment.Environment,
+    target: str | SCons.Node.Node | list[str | SCons.Node.Node] | SCons.Node.NodeList,
+    source: str | SCons.Node.Node | list[str | SCons.Node.Node] | SCons.Node.NodeList,
+    shell: str | None = None,
+    extension: str | None = None,
+) -> SCons.Node.NodeList:
+    """Return the target Tar archive.
+
+    Differs from SCons Tar builder by writing the Tar command to a shell script and executing the shell script instead
+    of executing the Tar command directly in the users's shell. Intended to workaround long source lists that may be longer
+    than the shell's longest allowable command line string.
+
+    :param env: SCons construction environment
+    :param target: The task target list
+    :param source: The task source list
+    :param shell: force a specific shell. Method falls back to 'pwsh' for Windows and 'bash' for everything else.
+    :param extension: force a specific shell script extension. Method falls back to '.ps1' for Windows and '.sh' for
+        everything else.
+    """
+    def convert_to_pathlib(items) -> list[pathlib.Path]:
+        items = [pathlib.Path(env.File(item).abspath) for item in items]
+        return items
+
+    if platform.system().lower() == "windows":
+        fallback_shell = "pwsh"
+        fallback_extension = ".ps1"
+    else:
+        fallback_shell = "bash"
+        fallback_extension = ".sh"
+    shell = fallback_shell if shell is None else shell
+    extension = fallback_extension if extension is None else extension
+
+    if isinstance(target, (str, SCons.Node.Node)):
+        target = [target]
+    target = convert_to_pathlib(target)
+    if not str(target[0]).endswith(env["TARSUFFIX"]):
+        target[0] = pathlib.Path(f"{target[0]}{env['TARSUFFIX']}")
+    if isinstance(source, (str, SCons.Node.Node)):
+        source = [source]
+    source = convert_to_pathlib(source)
+    script = pathlib.Path(f"{target[0]}{extension}").resolve()
+
+    project_root = pathlib.Path(env.Dir("#").abspath)
+    source_string = " ".join(str(item.relative_to(project_root)) for item in source)
+    tar_command = f"tar {env['TARFLAGS']} -f {target[0].relative_to(project_root)} {source_string}"
+    with script.open("w") as outfile:
+        outfile.write(tar_command)
+
+    return env.Command(
+        target=target,
+        source=[script, *source],
+        action=["${shell} ${SOURCES[0].abspath}"],
+        shell=shell,
+    )
+
+
 class WAVESEnvironment(SConsEnvironment):
     """Overload SConsEnvironment with WAVES construction environment methods and builders."""
 
