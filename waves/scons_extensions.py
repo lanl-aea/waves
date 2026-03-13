@@ -5,6 +5,7 @@ import collections
 import copy
 import functools
 import pathlib
+import platform
 import re
 import shutil
 import sys

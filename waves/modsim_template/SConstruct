@@ -124,7 +124,7 @@ env.AddMethod(
     ),
     "QOI",
 )
-env.AddMethod(tar_script, "TarScript")
+env.AddMethod(waves.scons_extensions.tar_script, "TarScript")
 
 # Dump the Conda environment as documentation of as-built target environment
 environment_target = env.CondaEnvironment(
