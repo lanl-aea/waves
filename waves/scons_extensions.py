@@ -4245,8 +4245,8 @@ class QOIPseudoBuilder:
 
 def tar_script(
     env: SCons.Environment.Environment,
-    target: str | SCons.Node.Node | list[str | SCons.Node.Node] | SCons.Node.NodeList,
-    source: str | SCons.Node.Node | list[str | SCons.Node.Node] | SCons.Node.NodeList,
+    target: str  | pathlib.Path | SCons.Node.Node | list[str | pathlib.Path | SCons.Node.Node] | SCons.Node.NodeList,
+    source: str  | pathlib.Path | SCons.Node.Node | list[str | pathlib.Path | SCons.Node.Node] | SCons.Node.NodeList,
     shell: str | None = None,
     extension: str | None = None,
 ) -> SCons.Node.NodeList:
