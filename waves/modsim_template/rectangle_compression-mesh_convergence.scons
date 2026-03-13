@@ -100,7 +100,7 @@ workflow.extend(
 
 # Data archival
 artifacts.extend(workflow)
-archive_target = env.Tar(
+archive_target = env.TarScript(
     target=f"{env['project_name']}-{workflow_name}-{env['version']}",
     source=artifacts + workflow_configuration,
 )

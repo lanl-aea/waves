@@ -2,8 +2,10 @@
 
 import os
 import pathlib
+import platform
 import sys
 
+import SCons.Node
 import waves
 
 # Accept command line options with fall back default values
@@ -108,7 +110,55 @@ env["SPHINX_BUILD"] = env.AddProgram(["sphinx-build"])
 abaqus_commands = GetOption("abaqus_command")
 env["ABAQUS_PROGRAM"] = env.AddProgram(abaqus_commands if abaqus_commands is not None else default_abaqus_commands)
 
-# Add WAVES builders and scanners
+
+# Add WAVES builders and scanners:wqa
+def tar_script(
+    self,
+    target: str | SCons.Node.Node | list | SCons.Node.NodeList,
+    source: str | SCons.Node.Node | list | SCons.Node.NodeList,
+) -> SCons.Node.NodeList:
+    def convert_to_pathlib(items) -> list[pathlib.Path]:
+        items = [pathlib.Path(str(item)).resolve() if not str(item).startswith("#") else item for item in items]
+        items = [
+            pathlib.Path(self.File(item).abspath)
+            if str(item).startswith("#")
+            else item
+            for item in items
+        ]
+        return items
+
+    if platform.system().lower() == "windows":
+        shell = "pwsh"
+        extension = ".ps1"
+    else:
+        shell = "bash"
+        extension = ".script"
+
+    if isinstance(target, (str, SCons.Node.Node)):
+        target = [target]
+    target = convert_to_pathlib(target)
+    if not str(target[0]).endswith(env["TARSUFFIX"]):
+        target[0] = pathlib.Path(f"{target[0]}{env['TARSUFFIX']}")
+    if isinstance(source, (str, SCons.Node.Node)):
+        source = [source]
+    source = convert_to_pathlib(source)
+    script = pathlib.Path(f"{target[0]}{extension}").resolve()
+    source = [script, *source]
+
+    project_root = pathlib.Path(self.Dir("#").abspath)
+    source_string = " ".join(str(item.relative_to(project_root)) for item in source)
+    tar_command = f"tar {env['TARFLAGS']} -f {target[0].relative_to(project_root)} {source_string}"
+    with script.open("w") as outfile:
+        outfile.write(tar_command)
+
+    return self.Command(
+        target=target,
+        source=source,
+        action=["${shell} ${SOURCES[0].abspath}"],
+        shell=shell,
+    )
+
+
 env.Append(
     BUILDERS={
         "AbaqusExtract": waves.scons_extensions.abaqus_extract(program=env["ABAQUS_PROGRAM"]),
@@ -123,6 +173,7 @@ env.AddMethod(
     ),
     "QOI",
 )
+env.AddMethod(tar_script, "TarScript")
 
 # Dump the Conda environment as documentation of as-built target environment
 environment_target = env.CondaEnvironment(
