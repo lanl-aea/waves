@@ -17,6 +17,9 @@ Internal Changes
 ================
 - Set the WAVES CLI command-line call internally for developer testing to avoid putting developer test behavior in
   tutorials and user-facing files (:merge:`1299`). By `Kyle Brindley`_.
+- More complete cleanup after Windows CI server jobs. By `Kyle Brindley`_.
+- Force the writing tutorials 'solver' to explicitly run with Python on Windows to fix the CI test hanging behavior. By
+  `Kyle Brindley`_.
 
 ******************
 1.2.1 (2026-03-11)
