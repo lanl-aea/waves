@@ -4277,7 +4277,7 @@ def tar_script(
     extension = fallback_extension if extension is None else extension
 
     def convert_to_pathlib_list(
-        items: str | pathlib.Path | SCons.Node.Node | list[str | pathlib.Path | SCons.Node.Node] | SCons.Node.NodeList
+        items: str | pathlib.Path | SCons.Node.Node | list[str | pathlib.Path | SCons.Node.Node] | SCons.Node.NodeList,
     ) -> list[pathlib.Path]:
         if isinstance(items, (str, pathlib.Path, SCons.Node.Node)):
             items = [items]
@@ -4295,7 +4295,7 @@ def tar_script(
     source_string = " ".join(str(item.relative_to(project_root)) for item in source)
     tar_command = f"tar {env['TARFLAGS']} -f {target[0].relative_to(project_root)} {source_string}"
 
-    def write_script(target: typing.Any, source: typing.Any, env: SCons.Environment.Environment):
+    def write_script(target: list, source: list, env: SCons.Environment.Environment) -> None:  # noqa: ARG001
         with script.open("w") as outfile:
             outfile.write(tar_command)
 
