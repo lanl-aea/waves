@@ -4277,7 +4277,7 @@ def tar_script(
     extension = fallback_extension if extension is None else extension
 
     def convert_to_pathlib_list(
-        items: str | pathlib.Path | SCons.Node.Node, list[str | pathlib.Path | SCons.Node.Node] | SCons.Node.NodeList
+        items: str | pathlib.Path | SCons.Node.Node | list[str | pathlib.Path | SCons.Node.Node] | SCons.Node.NodeList
     ) -> list[pathlib.Path]:
         if isinstance(items, (str, pathlib.Path, SCons.Node.Node)):
             items = [items]
