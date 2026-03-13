@@ -23,7 +23,7 @@ Import("env")
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
 workflow_file = pathlib.Path(inspect.getfile(lambda: None)).name
-workflow_configuration = ["#/SConstruct", workflow_file]
+workflow_configuration = ["#/SConstruct", f"#/{workflow_file}"]
 parameter_schema = rectangle_compression.mesh_convergence()
 parameter_study_file = build_directory / "mesh_convergence.h5"
 
