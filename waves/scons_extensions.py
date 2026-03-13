@@ -4269,6 +4269,7 @@ def tar_script(
     """
 
     def convert_to_pathlib(items: list | SCons.Node.NodeList) -> list[pathlib.Path]:
+        items = env.Flatten(items)
         items = [pathlib.Path(env.File(item).abspath) for item in items]
         return items
 
