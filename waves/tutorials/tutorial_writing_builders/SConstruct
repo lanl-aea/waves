@@ -2,6 +2,7 @@
 
 import os
 import pathlib
+import platform
 
 import scons_extensions
 import waves
@@ -49,7 +50,7 @@ env["solver"] = env.AddProgram([solver_executable])
 # on Windows, force execution with the Python interpretter and absolute path.
 #
 # VVV Code specific to making tutorial execution more robust VVV
-if env["solver"] is None:
+if env["solver"] is None or platform.system().lower() == "windows":
     env["solver"] = f"python {solver_executable}"
 # ^^^ Code specific to making tutorial execution more robust ^^^
 
