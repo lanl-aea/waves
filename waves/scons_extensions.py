@@ -4282,8 +4282,7 @@ def tar_script(
         if isinstance(items, (str, pathlib.Path, SCons.Node.Node)):
             items = [items]
         items = env.Flatten(items)
-        items = [pathlib.Path(env.File(item).abspath) for item in items]
-        return items
+        return [pathlib.Path(env.File(item).abspath) for item in items]
 
     target = convert_to_pathlib_list(target)
     if not str(target[0]).endswith(env["TARSUFFIX"]):
