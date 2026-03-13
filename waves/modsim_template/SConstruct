@@ -143,7 +143,6 @@ def tar_script(
         source = [source]
     source = convert_to_pathlib(source)
     script = pathlib.Path(f"{target[0]}{extension}").resolve()
-    source = [script, *source]
 
     project_root = pathlib.Path(self.Dir("#").abspath)
     source_string = " ".join(str(item.relative_to(project_root)) for item in source)
@@ -153,7 +152,7 @@ def tar_script(
 
     return self.Command(
         target=target,
-        source=source,
+        source=[script, *source],
         action=["${shell} ${SOURCES[0].abspath}"],
         shell=shell,
     )
