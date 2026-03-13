@@ -4295,13 +4295,15 @@ def tar_script(
     project_root = pathlib.Path(env.Dir("#").abspath)
     source_string = " ".join(str(item.relative_to(project_root)) for item in source)
     tar_command = f"tar {env['TARFLAGS']} -f {target[0].relative_to(project_root)} {source_string}"
-    with script.open("w") as outfile:
-        outfile.write(tar_command)
+
+    def write_script(target, source, env):
+        with script.open("w") as outfile:
+            outfile.write(tar_command)
 
     return env.Command(
-        target=target,
-        source=[script, *source],
-        action=["${shell} ${SOURCES[0].abspath}"],
+        target=[*target, script],
+        source=[*source, env.Value(tar_command)],
+        action=[write_script, "${shell} ${TARGETS[-1].abspath}"],
         shell=shell,
     )
 
