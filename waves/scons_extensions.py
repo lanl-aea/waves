@@ -4253,8 +4253,8 @@ def tar_script(
     """Return the target Tar archive.
 
     Differs from SCons Tar builder by writing the Tar command to a shell script and executing the shell script instead
-    of executing the Tar command directly in the users's shell. Intended to workaround long source lists that may be longer
-    than the shell's longest allowable command line string.
+    of executing the Tar command directly in the users's shell. Intended to workaround long source lists that may be
+    longer than the shell's longest allowable command line string.
 
     Requires at least one target. The first target is assumed to be the archive and will be appended with
     ``env['TARSUFFIX']`` if the arhive doesn't already end in the Tar suffix. Target and source paths for the Tar
@@ -4267,7 +4267,8 @@ def tar_script(
     :param extension: force a specific shell script extension. Method falls back to '.ps1' for Windows and '.sh' for
         everything else.
     """
-    def convert_to_pathlib(items) -> list[pathlib.Path]:
+
+    def convert_to_pathlib(items: list | SCons.Node.NodeList) -> list[pathlib.Path]:
         items = [pathlib.Path(env.File(item).abspath) for item in items]
         return items
 
