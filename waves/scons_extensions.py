@@ -4267,12 +4267,6 @@ def tar_script(
     :param extension: force a specific shell script extension. Method falls back to '.ps1' for Windows and '.sh' for
         everything else.
     """
-
-    def convert_to_pathlib(items: list | SCons.Node.NodeList) -> list[pathlib.Path]:
-        items = env.Flatten(items)
-        items = [pathlib.Path(env.File(item).abspath) for item in items]
-        return items
-
     if platform.system().lower() == "windows":
         fallback_shell = "pwsh"
         fallback_extension = ".ps1"
@@ -4282,27 +4276,32 @@ def tar_script(
     shell = fallback_shell if shell is None else shell
     extension = fallback_extension if extension is None else extension
 
-    if isinstance(target, (str, SCons.Node.Node)):
-        target = [target]
-    target = convert_to_pathlib(target)
+    def convert_to_pathlib_list(
+        items: str | pathlib.Path | SCons.Node.Node, list[str | pathlib.Path | SCons.Node.Node] | SCons.Node.NodeList
+    ) -> list[pathlib.Path]:
+        if isinstance(items, (str, pathlib.Path, SCons.Node.Node)):
+            items = [items]
+        items = env.Flatten(items)
+        items = [pathlib.Path(env.File(item).abspath) for item in items]
+        return items
+
+    target = convert_to_pathlib_list(target)
     if not str(target[0]).endswith(env["TARSUFFIX"]):
         target[0] = pathlib.Path(f"{target[0]}{env['TARSUFFIX']}")
-    if isinstance(source, (str, SCons.Node.Node)):
-        source = [source]
-    source = convert_to_pathlib(source)
+    source = convert_to_pathlib_list(source)
     script = pathlib.Path(f"{target[0]}{extension}").resolve()
 
     project_root = pathlib.Path(env.Dir("#").abspath)
     source_string = " ".join(str(item.relative_to(project_root)) for item in source)
     tar_command = f"tar {env['TARFLAGS']} -f {target[0].relative_to(project_root)} {source_string}"
 
-    def write_script(target, source, env):
+    def write_script(target: typing.Any, source: typing.Any, env: SCons.Environment.Environment):
         with script.open("w") as outfile:
             outfile.write(tar_command)
 
     return env.Command(
         target=[*target, script],
-        source=[*source, env.Value(tar_command)],
+        source=source,
         action=[write_script, "${shell} ${TARGETS[-1].abspath}"],
         shell=shell,
     )
