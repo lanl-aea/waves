@@ -108,7 +108,6 @@ env["SPHINX_BUILD"] = env.AddProgram(["sphinx-build"])
 abaqus_commands = GetOption("abaqus_command")
 env["ABAQUS_PROGRAM"] = env.AddProgram(abaqus_commands if abaqus_commands is not None else default_abaqus_commands)
 
-
 # Add WAVES builders and scanners
 env.Append(
     BUILDERS={
