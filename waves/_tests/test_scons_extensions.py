@@ -3000,6 +3000,43 @@ def test_qoi_pseudo_builder(
         assert targets == expected
 
 
+test_tar_script_cases = {
+    "default TAR variables": (
+        "archive", "source.one", {"shell": "shell", "extension": ".script"}, {}, ["archive.tar", "archive.tar.script"]
+    ),
+    "nondefault TARSUFFIX": (
+        "archive",
+        "source.one",
+        {"shell": "shell", "extension": ".script"},
+        {"TARSUFFIX": ".tar.bz2"},
+        ["archive.tar.bz2", "archive.tar.bz2.script"],
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("target", "source", "kwargs", "env_kwargs", "expected"),
+    test_tar_script_cases.values(),
+    ids=test_tar_script_cases.keys(),
+)
+def test_tar_script(
+    target: str | pathlib.Path | SCons.Node.Node | list[str | pathlib.Path | SCons.Node.Node] | SCons.Node.NodeList,
+    source: str | pathlib.Path | SCons.Node.Node | list[str | pathlib.Path | SCons.Node.Node] | SCons.Node.NodeList,
+    kwargs: dict,
+    env_kwargs: dict,
+    expected: list[str],
+) -> None:
+    expected_action = "write_script(target, source, env)\n${shell} ${TARGETS[-1].abspath}"
+    env = SCons.Environment.Environment(**env_kwargs)
+    output = scons_extensions.tar_script(env, target=target, source=source, **kwargs)
+    assert [str(item) for item in output] == expected
+    check_action_string(output, 2, 1, expected_action)
+    env.AddMethod(scons_extensions.tar_script, "TarScript")
+    output = env.TarScript(target=target, source=source, **kwargs)
+    assert [str(item) for item in output] == expected
+    check_action_string(output, 2, 1, expected_action)
+
+
 waves_environment_attributes = {
     "default": ({}),
     "no defaults": (
