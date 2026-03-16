@@ -4290,6 +4290,8 @@ def tar_script(
     :param shell: force a specific shell. Method falls back to 'pwsh' for Windows and 'bash' for everything else.
     :param extension: force a specific shell script extension. Method falls back to '.ps1' for Windows and '.sh' for
         everything else.
+
+    :returns: target node list
     """
     fallback_shell, fallback_extension = _tar_script_os_fallback()
     shell = fallback_shell if shell is None else shell
@@ -4774,6 +4776,23 @@ class WAVESEnvironment(SConsEnvironment):
         """
         builder = sphinx_latexpdf(program="${SPHINX_BUILD_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
+
+    def TarScript(  # noqa: N802
+        self, target: list, source: list, shell: str | None = None, extension: str | None = None
+    ) -> SCons.Node.NodeList:
+        """Define tasks with the function :meth:`waves.scons_extensions.tar_script`.
+
+        When using this environment pseudo-builder, do not provide the first ``env`` argument
+
+        :param target: The task target list
+        :param source: The task source list
+        :param shell: force a specific shell. Method falls back to 'pwsh' for Windows and 'bash' for everything else.
+        :param extension: force a specific shell script extension. Method falls back to '.ps1' for Windows and '.sh' for
+            everything else.
+
+        :returns: target node list
+        """
+        return tar_script(self, target=target, source=source, shell=shell, extension=extension)
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace

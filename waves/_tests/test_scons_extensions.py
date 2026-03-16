@@ -3152,30 +3152,34 @@ def test_waves_environment_attributes(kwargs: dict[str, str]) -> None:
 
 
 waves_environment_methods = {
-    "PrintBuildFailures": ("PrintBuildFailures", "print_build_failures"),
-    "CheckProgram": ("CheckProgram", "check_program"),
-    "FindProgram": ("FindProgram", "find_program"),
-    "AddProgram": ("AddProgram", "add_program"),
-    "AddCubit": ("AddCubit", "add_cubit"),
-    "AddCubitPython": ("AddCubitPython", "add_cubit_python"),
-    "CopySubstfile": ("CopySubstfile", "copy_substfile"),
-    "ProjectHelp": ("ProjectHelp", "project_help"),
-    "ProjectAlias": ("ProjectAlias", "project_alias"),
-    "SubstitutionSyntax": ("SubstitutionSyntax", "substitution_syntax"),
-    "ParameterStudyTask": ("ParameterStudyTask", "parameter_study_task"),
-    "ParameterStudySConscript": ("ParameterStudySConscript", "parameter_study_sconscript"),
-    "ParameterStudyWrite": ("ParameterStudyWrite", "parameter_study_write"),
+    "PrintBuildFailures": ("PrintBuildFailures", "print_build_failures", ("arg1",), {"kwarg1": "value1"}),
+    "CheckProgram": ("CheckProgram", "check_program", ("arg1",), {"kwarg1": "value1"}),
+    "FindProgram": ("FindProgram", "find_program", ("arg1",), {"kwarg1": "value1"}),
+    "AddProgram": ("AddProgram", "add_program", ("arg1",), {"kwarg1": "value1"}),
+    "AddCubit": ("AddCubit", "add_cubit", ("arg1",), {"kwarg1": "value1"}),
+    "AddCubitPython": ("AddCubitPython", "add_cubit_python", ("arg1",), {"kwarg1": "value1"}),
+    "CopySubstfile": ("CopySubstfile", "copy_substfile", ("arg1",), {"kwarg1": "value1"}),
+    "ProjectHelp": ("ProjectHelp", "project_help", ("arg1",), {"kwarg1": "value1"}),
+    "ProjectAlias": ("ProjectAlias", "project_alias", ("arg1",), {"kwarg1": "value1"}),
+    "SubstitutionSyntax": ("SubstitutionSyntax", "substitution_syntax", ("arg1",), {"kwarg1": "value1"}),
+    "ParameterStudyTask": ("ParameterStudyTask", "parameter_study_task", ("arg1",), {"kwarg1": "value1"}),
+    "ParameterStudySConscript": (
+        "ParameterStudySConscript",
+        "parameter_study_sconscript",
+        ("arg1",),
+        {"kwarg1": "value1"},
+    ),
+    "ParameterStudyWrite": ("ParameterStudyWrite", "parameter_study_write", ("arg1",), {"kwarg1": "value1"}),
+    "TarScript": ("TarScript", "tar_script", (["target"], ["source"]), {"kwarg1": "value1"}),
 }
 
 
 @pytest.mark.parametrize(
-    ("method", "function"),
+    ("method", "function", "args", "kwargs"),
     waves_environment_methods.values(),
     ids=waves_environment_methods.keys(),
 )
-def test_waves_environment_methods(method: str, function: str) -> None:
-    args = ["arg1"]
-    kwargs = {"kwarg1": "value1"}
+def test_waves_environment_methods(method: str, function: str, args: tuple, kwargs: dict) -> None:
     env = scons_extensions.WAVESEnvironment()
     attribute = getattr(env, method)
     with patch(f"waves.scons_extensions.{function}") as mock_function:
