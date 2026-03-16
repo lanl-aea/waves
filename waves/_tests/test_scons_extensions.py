@@ -76,7 +76,10 @@ test_convert_to_pathlib_list_cases = {
     test_convert_to_pathlib_list_cases.values(),
     ids=test_convert_to_pathlib_list_cases.keys(),
 )
-def test_convert_to_pathlib_list(items, expected) -> None:
+def test_convert_to_pathlib_list(
+    items: str | pathlib.Path | SCons.Node.Node | list[str | pathlib.Path | SCons.Node.Node] | SCons.Node.NodeList,
+    expected: list[pathlib.Path],
+) -> None:
     environment = SCons.Environment.Environment()
     output = scons_extensions._convert_to_pathlib_list(items, environment=environment)
     assert output == expected
