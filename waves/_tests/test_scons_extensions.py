@@ -30,9 +30,56 @@ from waves._tests.common import platform_check
 does_not_raise = contextlib.nullcontext()
 
 # Test setup and helper functions
-fs = SCons.Node.FS.FS()
-
+file_system = SCons.Node.FS.FS()
+scons_test_root_directory = pathlib.Path(SCons.Script.Dir("#").abspath)
 testing_windows, root_fs, testing_macos = platform_check()
+
+test_convert_to_pathlib_list_cases = {
+    "relative path str": ("one.txt", [scons_test_root_directory / "one.txt"]),
+    "absolute path str": ("/one.txt", [pathlib.Path("/one.txt")]),
+    "SCons absolute path str": ("#/one.txt", [scons_test_root_directory / "one.txt"]),
+    "relative path Path": (pathlib.Path("one.txt"), [scons_test_root_directory / "one.txt"]),
+    "absolute path Path": (pathlib.Path("/one.txt"), [pathlib.Path("/one.txt")]),
+    "SCons absolute path Path": (pathlib.Path("#/one.txt"), [scons_test_root_directory / "one.txt"]),
+    "relative path File": (file_system.File("one.txt"), [scons_test_root_directory / "one.txt"]),
+    "absolute path File": (file_system.File("/one.txt"), [pathlib.Path("/one.txt")]),
+    "SCons absolute path File": (file_system.File("#/one.txt"), [scons_test_root_directory / "one.txt"]),
+    "list str": (
+        ["one.txt", "/one.txt", "#/one.txt"],
+        [scons_test_root_directory / "one.txt", pathlib.Path("/one.txt"), scons_test_root_directory / "one.txt"],
+    ),
+    "list Path": (
+        [pathlib.Path("one.txt"), pathlib.Path("/one.txt"), pathlib.Path("#/one.txt")],
+        [scons_test_root_directory / "one.txt", pathlib.Path("/one.txt"), scons_test_root_directory / "one.txt"],
+    ),
+    "list Node": (
+        [file_system.File("one.txt"), file_system.File("/one.txt"), file_system.File("#/one.txt")],
+        [scons_test_root_directory / "one.txt", pathlib.Path("/one.txt"), scons_test_root_directory / "one.txt"],
+    ),
+    "SCons NodeList str": (
+        SCons.Node.NodeList(["one.txt", "/one.txt", "#/one.txt"]),
+        [scons_test_root_directory / "one.txt", pathlib.Path("/one.txt"), scons_test_root_directory / "one.txt"],
+    ),
+    "SCons NodeList Path": (
+        SCons.Node.NodeList([pathlib.Path("one.txt"), pathlib.Path("/one.txt"), pathlib.Path("#/one.txt")]),
+        [scons_test_root_directory / "one.txt", pathlib.Path("/one.txt"), scons_test_root_directory / "one.txt"],
+    ),
+    "SCons NodeList Node": (
+        SCons.Node.NodeList([file_system.File("one.txt"), file_system.File("/one.txt"), file_system.File("#/one.txt")]),
+        [scons_test_root_directory / "one.txt", pathlib.Path("/one.txt"), scons_test_root_directory / "one.txt"],
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("items", "expected"),
+    test_convert_to_pathlib_list_cases.values(),
+    ids=test_convert_to_pathlib_list_cases.keys(),
+)
+def test_convert_to_pathlib_list(items, expected) -> None:
+    environment = SCons.Environment.Environment()
+    output = scons_extensions._convert_to_pathlib_list(items, environment=environment)
+    assert output == expected
 
 
 mock_decodable = Mock()
@@ -954,7 +1001,7 @@ def test_construct_action_list(actions: list[str], prefix: str, suffix: str, exp
     assert output == expected
 
 
-source_file = fs.File("dummy.py")
+source_file = file_system.File("dummy.py")
 journal_emitter_input = {
     "one target": (
         ["target.cae"],
@@ -1061,7 +1108,7 @@ def test_sbatch_abaqus_journal() -> None:
     assert builder.emitter == scons_extensions._abaqus_journal_emitter
 
 
-source_file = fs.File("root.inp")
+source_file = file_system.File("root.inp")
 solver_emitter_input = {
     "empty targets": (
         "job",
@@ -1834,7 +1881,7 @@ def test_build_subdirectory(target: list[str], expected: pathlib.Path) -> None:
     assert scons_extensions._build_subdirectory(target) == expected
 
 
-source_file = fs.File("dummy.py")
+source_file = file_system.File("dummy.py")
 first_target_emitter_input = {
     "one target": (
         ["target.cub"],
@@ -2190,7 +2237,7 @@ def test_sbatch_first_target_builder_factories(name: str) -> None:
     assert builder.emitter == scons_extensions.first_target_emitter
 
 
-source_file = fs.File("dummy.m")
+source_file = file_system.File("dummy.m")
 matlab_emitter_input = {
     "one target": (
         ["target.matlab"],
@@ -2349,7 +2396,7 @@ def test_conda_environment(builder_kwargs: dict[str, str], task_kwargs: dict[str
             assert node.env[key] == expected_value
 
 
-source_file = fs.File("dummy.odb")
+source_file = file_system.File("dummy.odb")
 abaqus_extract_emitter_input = {
     "empty targets": (
         [],
@@ -2416,8 +2463,8 @@ def test_abaqus_extract() -> None:
     check_action_string(nodes, 3, 1, expected_string)
 
 
-source_file = fs.File("/dummy.source")
-target_file = fs.File("/dummy.target")
+source_file = file_system.File("/dummy.source")
+target_file = file_system.File("/dummy.target")
 build_odb_extract_input = {
     "no kwargs": (
         [target_file],

@@ -24,6 +24,16 @@ from waves import _WAVES_CLI_COMMAND, _settings, _utilities, parameter_generator
 _exclude_from_namespace = set(globals().keys())
 
 
+def _convert_to_pathlib_list(
+    items: str | pathlib.Path | SCons.Node.Node | list[str | pathlib.Path | SCons.Node.Node] | SCons.Node.NodeList,
+    environment: SCons.Environment.Environment | None = None,
+) -> list[pathlib.Path]:
+    if environment is None:
+        environment = SCons.Environment.Environment()
+    items = environment.Flatten(items)
+    return [pathlib.Path(environment.File(item).abspath) for item in items]
+
+
 def print_action_signature_string(
     s: str,
     target: list,
@@ -4276,18 +4286,10 @@ def tar_script(
     shell = fallback_shell if shell is None else shell
     extension = fallback_extension if extension is None else extension
 
-    def convert_to_pathlib_list(
-        items: str | pathlib.Path | SCons.Node.Node | list[str | pathlib.Path | SCons.Node.Node] | SCons.Node.NodeList,
-    ) -> list[pathlib.Path]:
-        if isinstance(items, (str, pathlib.Path, SCons.Node.Node)):
-            items = [items]
-        items = env.Flatten(items)
-        return [pathlib.Path(env.File(item).abspath) for item in items]
-
-    target = convert_to_pathlib_list(target)
+    target = _convert_to_pathlib_list(target, environment=env)
     if not str(target[0]).endswith(env["TARSUFFIX"]):
         target[0] = pathlib.Path(f"{target[0]}{env['TARSUFFIX']}")
-    source = convert_to_pathlib_list(source)
+    source = _convert_to_pathlib_list(source, environment=env)
     script = pathlib.Path(f"{target[0]}{extension}").resolve()
 
     project_root = pathlib.Path(env.Dir("#").abspath)
