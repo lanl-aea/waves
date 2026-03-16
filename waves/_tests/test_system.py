@@ -1042,6 +1042,12 @@ require_third_party_system_tests: list = [
             pytest.mark.sphinx,
             pytest.mark.abaqus,
             pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
             # TODO: Fix HPC CI system tests that run TeXLive
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
             pytest.mark.skipif(testing_hpc, reason="HPC CI server fails TeXLive PDF builds"),
@@ -1082,6 +1088,12 @@ require_third_party_system_tests: list = [
             pytest.mark.sphinx,
             pytest.mark.abaqus,
             pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
+            pytest.mark.skipif(
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
+            ),
             # TODO: Fix HPC CI system tests that run TeXLive
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
             pytest.mark.skipif(testing_hpc, reason="HPC CI server fails TeXLive PDF builds"),
