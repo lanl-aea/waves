@@ -3020,15 +3020,57 @@ def test_tar_script_os_fallback(mock_os: str, expected_shell: str, expected_exte
 
 
 test_tar_script_cases = {
-    "default TAR variables": (
+    "default TARSUFFIX without archive extension": (
+        "Linux",
         "archive",
         "source.one",
         {"shell": "shell", "extension": ".script"},
         {},
         ["archive.tar", "archive.tar.script"],
     ),
-    "nondefault TARSUFFIX": (
+    "default TARSUFFIX with archive extension": (
+        "Linux",
+        "archive.tar",
+        "source.one",
+        {"shell": "shell", "extension": ".script"},
+        {},
+        ["archive.tar", "archive.tar.script"],
+    ),
+    "default TARSUFFIX Windows": (
+        "Windows",
+        "archive.windows",
+        "source.one",
+        {},
+        {},
+        ["archive.windows.tar", "archive.windows.tar.ps1"],
+    ),
+    "default TARSUFFIX Linux": (
+        "Linux",
+        "archive.linux",
+        "source.one",
+        {},
+        {},
+        ["archive.linux.tar", "archive.linux.tar.sh"],
+    ),
+    "default TARSUFFIX macOS": (
+        "Darwin",
+        "archive.macos",
+        "source.one",
+        {},
+        {},
+        ["archive.macos.tar", "archive.macos.tar.sh"],
+    ),
+    "nondefault TARSUFFIX without archive extension": (
+        "Linux",
         "archive",
+        "source.one",
+        {"shell": "shell", "extension": ".script"},
+        {"TARSUFFIX": ".tar.bz2"},
+        ["archive.tar.bz2", "archive.tar.bz2.script"],
+    ),
+    "nondefault TARSUFFIX with archive extension": (
+        "Linux",
+        "archive.tar.bz2",
         "source.one",
         {"shell": "shell", "extension": ".script"},
         {"TARSUFFIX": ".tar.bz2"},
@@ -3038,11 +3080,12 @@ test_tar_script_cases = {
 
 
 @pytest.mark.parametrize(
-    ("target", "source", "kwargs", "env_kwargs", "expected"),
+    ("mock_os", "target", "source", "kwargs", "env_kwargs", "expected"),
     test_tar_script_cases.values(),
     ids=test_tar_script_cases.keys(),
 )
 def test_tar_script(
+    mock_os: str,
     target: str | pathlib.Path | SCons.Node.Node | list[str | pathlib.Path | SCons.Node.Node] | SCons.Node.NodeList,
     source: str | pathlib.Path | SCons.Node.Node | list[str | pathlib.Path | SCons.Node.Node] | SCons.Node.NodeList,
     kwargs: dict,
@@ -3051,13 +3094,14 @@ def test_tar_script(
 ) -> None:
     expected_action = "write_script(target, source, env)\n${shell} ${TARGETS[-1].abspath}"
     env = SCons.Environment.Environment(**env_kwargs)
-    output = scons_extensions.tar_script(env, target=target, source=source, **kwargs)
-    assert [str(item) for item in output] == expected
-    check_action_string(output, 2, 1, expected_action)
-    env.AddMethod(scons_extensions.tar_script, "TarScript")
-    output = env.TarScript(target=target, source=source, **kwargs)
-    assert [str(item) for item in output] == expected
-    check_action_string(output, 2, 1, expected_action)
+    with patch("platform.system", return_value=mock_os):
+        output = scons_extensions.tar_script(env, target=target, source=source, **kwargs)
+        assert [str(item) for item in output] == expected
+        check_action_string(output, 2, 1, expected_action)
+        env.AddMethod(scons_extensions.tar_script, "TarScript")
+        output = env.TarScript(target=target, source=source, **kwargs)
+        assert [str(item) for item in output] == expected
+        check_action_string(output, 2, 1, expected_action)
 
 
 waves_environment_attributes = {

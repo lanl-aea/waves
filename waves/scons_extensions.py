@@ -4274,14 +4274,14 @@ def tar_script(
     shell: str | None = None,
     extension: str | None = None,
 ) -> SCons.Node.NodeList:
-    """Return the target Tar archive.
+    """Return the target Tar archive and shell script.
 
     Differs from SCons Tar builder by writing the Tar command to a shell script and executing the shell script instead
     of executing the Tar command directly in the users's shell. Intended to workaround long source lists that may be
     longer than the shell's longest allowable command line string.
 
     Requires at least one target. The first target is assumed to be the archive and will be appended with
-    ``env['TARSUFFIX']`` if the arhive doesn't already end in the Tar suffix. Target and source paths for the Tar
+    ``env['TARSUFFIX']`` if the archive doesn't already end in the Tar suffix. Target and source paths for the Tar
     command are resolved relative to the project root directory.
 
     :param env: SCons construction environment
