@@ -8,9 +8,16 @@ Changelog
 1.3.0 (unreleased)
 ******************
 
+New Features
+============
+- Provide a shell script based method to workaround command line length restrictions for large archive creation
+  (:issue:`1003`, :merge:`1300`). By `Kyle Brindley`_.
+
 Documentation
 =============
 - Minor simplifications to tutorial and modsim template SCons command-line options and environment setup. By `Kyle
+  Brindley`_.
+- Enable archive of mesh convergence workflow in modsim templates on Windows (:issue:`1003`, :merge:`1300`). By `Kyle
   Brindley`_.
 
 Internal Changes
@@ -20,6 +27,8 @@ Internal Changes
 - More complete cleanup after Windows CI server jobs. By `Kyle Brindley`_.
 - Force the writing tutorials 'solver' to explicitly run with Python on Windows to fix the CI test hanging behavior. By
   `Kyle Brindley`_.
+- Remove the Windows modsim template archive alias skip in the system tests (:issue:`1003`, :merge:`1300`). By `Kyle
+  Brindley`_.
 
 ******************
 1.2.1 (2026-03-11)

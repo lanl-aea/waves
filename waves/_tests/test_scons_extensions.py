@@ -30,9 +30,61 @@ from waves._tests.common import platform_check
 does_not_raise = contextlib.nullcontext()
 
 # Test setup and helper functions
-fs = SCons.Node.FS.FS()
-
+file_system = SCons.Node.FS.FS()
+scons_test_root_directory = pathlib.Path(SCons.Script.Dir("#").abspath)
 testing_windows, root_fs, testing_macos = platform_check()
+
+test_convert_to_pathlib_list_cases = {
+    "relative path str": ("one.txt", [scons_test_root_directory / "one.txt"]),
+    "absolute path str": ("/one.txt", [pathlib.Path("/one.txt")]),
+    "SCons absolute path str": ("#/one.txt", [scons_test_root_directory / "one.txt"]),
+    "relative path Path": (pathlib.Path("one.txt"), [scons_test_root_directory / "one.txt"]),
+    "absolute path Path": (pathlib.Path("/one.txt"), [pathlib.Path("/one.txt")]),
+    "SCons absolute path Path": (pathlib.Path("#/one.txt"), [scons_test_root_directory / "one.txt"]),
+    "relative path File": (file_system.File("one.txt"), [scons_test_root_directory / "one.txt"]),
+    "absolute path File": (file_system.File("/one.txt"), [pathlib.Path("/one.txt")]),
+    "SCons absolute path File": (file_system.File("#/one.txt"), [scons_test_root_directory / "one.txt"]),
+    "list str": (
+        ["one.txt", "/one.txt", "#/one.txt"],
+        [scons_test_root_directory / "one.txt", pathlib.Path("/one.txt"), scons_test_root_directory / "one.txt"],
+    ),
+    "list Path": (
+        [pathlib.Path("one.txt"), pathlib.Path("/one.txt"), pathlib.Path("#/one.txt")],
+        [scons_test_root_directory / "one.txt", pathlib.Path("/one.txt"), scons_test_root_directory / "one.txt"],
+    ),
+    "list Node": (
+        [file_system.File("one.txt"), file_system.File("/one.txt"), file_system.File("#/one.txt")],
+        [scons_test_root_directory / "one.txt", pathlib.Path("/one.txt"), scons_test_root_directory / "one.txt"],
+    ),
+    "SCons NodeList str": (
+        SCons.Node.NodeList(["one.txt", "/one.txt", "#/one.txt"]),
+        [scons_test_root_directory / "one.txt", pathlib.Path("/one.txt"), scons_test_root_directory / "one.txt"],
+    ),
+    "SCons NodeList Path": (
+        SCons.Node.NodeList([pathlib.Path("one.txt"), pathlib.Path("/one.txt"), pathlib.Path("#/one.txt")]),
+        [scons_test_root_directory / "one.txt", pathlib.Path("/one.txt"), scons_test_root_directory / "one.txt"],
+    ),
+    "SCons NodeList Node": (
+        SCons.Node.NodeList([file_system.File("one.txt"), file_system.File("/one.txt"), file_system.File("#/one.txt")]),
+        [scons_test_root_directory / "one.txt", pathlib.Path("/one.txt"), scons_test_root_directory / "one.txt"],
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("items", "expected"),
+    test_convert_to_pathlib_list_cases.values(),
+    ids=test_convert_to_pathlib_list_cases.keys(),
+)
+def test_convert_to_pathlib_list(
+    items: str | pathlib.Path | SCons.Node.Node | list[str | pathlib.Path | SCons.Node.Node] | SCons.Node.NodeList,
+    expected: list[pathlib.Path],
+) -> None:
+    environment = SCons.Environment.Environment()
+    output = scons_extensions._convert_to_pathlib_list(items, environment=environment)
+    assert output == expected
+    output = scons_extensions._convert_to_pathlib_list(items)
+    assert output == expected
 
 
 mock_decodable = Mock()
@@ -954,7 +1006,7 @@ def test_construct_action_list(actions: list[str], prefix: str, suffix: str, exp
     assert output == expected
 
 
-source_file = fs.File("dummy.py")
+source_file = file_system.File("dummy.py")
 journal_emitter_input = {
     "one target": (
         ["target.cae"],
@@ -1061,7 +1113,7 @@ def test_sbatch_abaqus_journal() -> None:
     assert builder.emitter == scons_extensions._abaqus_journal_emitter
 
 
-source_file = fs.File("root.inp")
+source_file = file_system.File("root.inp")
 solver_emitter_input = {
     "empty targets": (
         "job",
@@ -1834,7 +1886,7 @@ def test_build_subdirectory(target: list[str], expected: pathlib.Path) -> None:
     assert scons_extensions._build_subdirectory(target) == expected
 
 
-source_file = fs.File("dummy.py")
+source_file = file_system.File("dummy.py")
 first_target_emitter_input = {
     "one target": (
         ["target.cub"],
@@ -2190,7 +2242,7 @@ def test_sbatch_first_target_builder_factories(name: str) -> None:
     assert builder.emitter == scons_extensions.first_target_emitter
 
 
-source_file = fs.File("dummy.m")
+source_file = file_system.File("dummy.m")
 matlab_emitter_input = {
     "one target": (
         ["target.matlab"],
@@ -2349,7 +2401,7 @@ def test_conda_environment(builder_kwargs: dict[str, str], task_kwargs: dict[str
             assert node.env[key] == expected_value
 
 
-source_file = fs.File("dummy.odb")
+source_file = file_system.File("dummy.odb")
 abaqus_extract_emitter_input = {
     "empty targets": (
         [],
@@ -2416,8 +2468,8 @@ def test_abaqus_extract() -> None:
     check_action_string(nodes, 3, 1, expected_string)
 
 
-source_file = fs.File("/dummy.source")
-target_file = fs.File("/dummy.target")
+source_file = file_system.File("/dummy.source")
+target_file = file_system.File("/dummy.target")
 build_odb_extract_input = {
     "no kwargs": (
         [target_file],
@@ -2950,6 +3002,110 @@ def test_qoi_pseudo_builder(
         assert targets == expected
 
 
+test_tar_script_os_fallback_cases = {
+    "windows": ("Windows", "pwsh", ".ps1"),
+    "linux": ("Linux", "bash", ".sh"),
+    "macos": ("Darwin", "bash", ".sh"),
+}
+
+
+@pytest.mark.parametrize(
+    ("mock_os", "expected_shell", "expected_extension"),
+    test_tar_script_os_fallback_cases.values(),
+    ids=test_tar_script_os_fallback_cases.keys(),
+)
+def test_tar_script_os_fallback(mock_os: str, expected_shell: str, expected_extension: str) -> None:
+    with patch("platform.system", return_value=mock_os):
+        shell, extension = scons_extensions._tar_script_os_fallback()
+        assert shell == expected_shell
+        assert extension == expected_extension
+
+
+test_tar_script_cases = {
+    "default TARSUFFIX without archive extension": (
+        "Linux",
+        "archive",
+        "source.one",
+        {"shell": "shell", "extension": ".script"},
+        {},
+        ["archive.tar", "archive.tar.script"],
+    ),
+    "default TARSUFFIX with archive extension": (
+        "Linux",
+        "archive.tar",
+        "source.one",
+        {"shell": "shell", "extension": ".script"},
+        {},
+        ["archive.tar", "archive.tar.script"],
+    ),
+    "default TARSUFFIX Windows": (
+        "Windows",
+        "archive.windows",
+        "source.one",
+        {},
+        {},
+        ["archive.windows.tar", "archive.windows.tar.ps1"],
+    ),
+    "default TARSUFFIX Linux": (
+        "Linux",
+        "archive.linux",
+        "source.one",
+        {},
+        {},
+        ["archive.linux.tar", "archive.linux.tar.sh"],
+    ),
+    "default TARSUFFIX macOS": (
+        "Darwin",
+        "archive.macos",
+        "source.one",
+        {},
+        {},
+        ["archive.macos.tar", "archive.macos.tar.sh"],
+    ),
+    "nondefault TARSUFFIX without archive extension": (
+        "Linux",
+        "archive",
+        "source.one",
+        {"shell": "shell", "extension": ".script"},
+        {"TARSUFFIX": ".tar.bz2"},
+        ["archive.tar.bz2", "archive.tar.bz2.script"],
+    ),
+    "nondefault TARSUFFIX with archive extension": (
+        "Linux",
+        "archive.tar.bz2",
+        "source.one",
+        {"shell": "shell", "extension": ".script"},
+        {"TARSUFFIX": ".tar.bz2"},
+        ["archive.tar.bz2", "archive.tar.bz2.script"],
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("mock_os", "target", "source", "kwargs", "env_kwargs", "expected"),
+    test_tar_script_cases.values(),
+    ids=test_tar_script_cases.keys(),
+)
+def test_tar_script(
+    mock_os: str,
+    target: str | pathlib.Path | SCons.Node.Node | list[str | pathlib.Path | SCons.Node.Node] | SCons.Node.NodeList,
+    source: str | pathlib.Path | SCons.Node.Node | list[str | pathlib.Path | SCons.Node.Node] | SCons.Node.NodeList,
+    kwargs: dict,
+    env_kwargs: dict,
+    expected: list[str],
+) -> None:
+    expected_action = "write_script(target, source, env)\n${shell} ${TARGETS[-1].abspath}"
+    env = SCons.Environment.Environment(**env_kwargs)
+    with patch("platform.system", return_value=mock_os):
+        output = scons_extensions.tar_script(env, target=target, source=source, **kwargs)
+        assert [str(item) for item in output] == expected
+        check_action_string(output, 2, 1, expected_action)
+        env.AddMethod(scons_extensions.tar_script, "TarScript")
+        output = env.TarScript(target=target, source=source, **kwargs)
+        assert [str(item) for item in output] == expected
+        check_action_string(output, 2, 1, expected_action)
+
+
 waves_environment_attributes = {
     "default": ({}),
     "no defaults": (
@@ -2998,30 +3154,34 @@ def test_waves_environment_attributes(kwargs: dict[str, str]) -> None:
 
 
 waves_environment_methods = {
-    "PrintBuildFailures": ("PrintBuildFailures", "print_build_failures"),
-    "CheckProgram": ("CheckProgram", "check_program"),
-    "FindProgram": ("FindProgram", "find_program"),
-    "AddProgram": ("AddProgram", "add_program"),
-    "AddCubit": ("AddCubit", "add_cubit"),
-    "AddCubitPython": ("AddCubitPython", "add_cubit_python"),
-    "CopySubstfile": ("CopySubstfile", "copy_substfile"),
-    "ProjectHelp": ("ProjectHelp", "project_help"),
-    "ProjectAlias": ("ProjectAlias", "project_alias"),
-    "SubstitutionSyntax": ("SubstitutionSyntax", "substitution_syntax"),
-    "ParameterStudyTask": ("ParameterStudyTask", "parameter_study_task"),
-    "ParameterStudySConscript": ("ParameterStudySConscript", "parameter_study_sconscript"),
-    "ParameterStudyWrite": ("ParameterStudyWrite", "parameter_study_write"),
+    "PrintBuildFailures": ("PrintBuildFailures", "print_build_failures", ("arg1",), {"kwarg1": "value1"}),
+    "CheckProgram": ("CheckProgram", "check_program", ("arg1",), {"kwarg1": "value1"}),
+    "FindProgram": ("FindProgram", "find_program", ("arg1",), {"kwarg1": "value1"}),
+    "AddProgram": ("AddProgram", "add_program", ("arg1",), {"kwarg1": "value1"}),
+    "AddCubit": ("AddCubit", "add_cubit", ("arg1",), {"kwarg1": "value1"}),
+    "AddCubitPython": ("AddCubitPython", "add_cubit_python", ("arg1",), {"kwarg1": "value1"}),
+    "CopySubstfile": ("CopySubstfile", "copy_substfile", ("arg1",), {"kwarg1": "value1"}),
+    "ProjectHelp": ("ProjectHelp", "project_help", ("arg1",), {"kwarg1": "value1"}),
+    "ProjectAlias": ("ProjectAlias", "project_alias", ("arg1",), {"kwarg1": "value1"}),
+    "SubstitutionSyntax": ("SubstitutionSyntax", "substitution_syntax", ("arg1",), {"kwarg1": "value1"}),
+    "ParameterStudyTask": ("ParameterStudyTask", "parameter_study_task", ("arg1",), {"kwarg1": "value1"}),
+    "ParameterStudySConscript": (
+        "ParameterStudySConscript",
+        "parameter_study_sconscript",
+        ("arg1",),
+        {"kwarg1": "value1"},
+    ),
+    "ParameterStudyWrite": ("ParameterStudyWrite", "parameter_study_write", ("arg1",), {"kwarg1": "value1"}),
+    "TarScript": ("TarScript", "tar_script", (["target"], ["source"]), {"shell": "shell", "extension": ".script"}),
 }
 
 
 @pytest.mark.parametrize(
-    ("method", "function"),
+    ("method", "function", "args", "kwargs"),
     waves_environment_methods.values(),
     ids=waves_environment_methods.keys(),
 )
-def test_waves_environment_methods(method: str, function: str) -> None:
-    args = ["arg1"]
-    kwargs = {"kwarg1": "value1"}
+def test_waves_environment_methods(method: str, function: str, args: tuple, kwargs: dict) -> None:
     env = scons_extensions.WAVESEnvironment()
     attribute = getattr(env, method)
     with patch(f"waves.scons_extensions.{function}") as mock_function:

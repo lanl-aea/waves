@@ -5,6 +5,7 @@ import collections
 import copy
 import functools
 import pathlib
+import platform
 import re
 import shutil
 import sys
@@ -21,6 +22,16 @@ from SCons.Script.SConscript import SConsEnvironment
 from waves import _WAVES_CLI_COMMAND, _settings, _utilities, parameter_generators
 
 _exclude_from_namespace = set(globals().keys())
+
+
+def _convert_to_pathlib_list(
+    items: str | pathlib.Path | SCons.Node.Node | list[str | pathlib.Path | SCons.Node.Node] | SCons.Node.NodeList,
+    environment: SCons.Environment.Environment | None = None,
+) -> list[pathlib.Path]:
+    if environment is None:
+        environment = SCons.Environment.Environment()
+    items = environment.Flatten(items)
+    return [pathlib.Path(environment.File(item).abspath) for item in items]
 
 
 def print_action_signature_string(
@@ -4242,6 +4253,72 @@ class QOIPseudoBuilder:
         return targets
 
 
+def _tar_script_os_fallback() -> tuple[str, str]:
+    """Return the OS-specific shell and extension necessary for action by script behavior.
+
+    :returns: shell, extension
+    """
+    if platform.system().lower() == "windows":
+        fallback_shell = "pwsh"
+        fallback_extension = ".ps1"
+    else:
+        fallback_shell = "bash"
+        fallback_extension = ".sh"
+    return fallback_shell, fallback_extension
+
+
+def tar_script(
+    env: SCons.Environment.Environment,
+    target: str | pathlib.Path | SCons.Node.Node | list[str | pathlib.Path | SCons.Node.Node] | SCons.Node.NodeList,
+    source: str | pathlib.Path | SCons.Node.Node | list[str | pathlib.Path | SCons.Node.Node] | SCons.Node.NodeList,
+    shell: str | None = None,
+    extension: str | None = None,
+) -> SCons.Node.NodeList:
+    """Return the target Tar archive and shell script.
+
+    Differs from SCons Tar builder by writing the Tar command to a shell script and executing the shell script instead
+    of executing the Tar command directly in the users's shell. Intended to workaround long source lists that may be
+    longer than the shell's longest allowable command line string.
+
+    Requires at least one target. The first target is assumed to be the archive and will be appended with
+    ``env['TARSUFFIX']`` if the archive doesn't already end in the Tar suffix. Target and source paths for the Tar
+    command are resolved relative to the project root directory.
+
+    :param env: SCons construction environment
+    :param target: The task target list
+    :param source: The task source list
+    :param shell: force a specific shell. Method falls back to 'pwsh' for Windows and 'bash' for everything else.
+    :param extension: force a specific shell script extension. Method falls back to '.ps1' for Windows and '.sh' for
+        everything else.
+
+    :returns: target node list
+    """
+    fallback_shell, fallback_extension = _tar_script_os_fallback()
+    shell = fallback_shell if shell is None else shell
+    extension = fallback_extension if extension is None else extension
+
+    target = _convert_to_pathlib_list(target, environment=env)
+    if not str(target[0]).endswith(env["TARSUFFIX"]):
+        target[0] = pathlib.Path(f"{target[0]}{env['TARSUFFIX']}")
+    source = _convert_to_pathlib_list(source, environment=env)
+    script = pathlib.Path(f"{target[0]}{extension}").resolve()
+
+    project_root = pathlib.Path(env.Dir("#").abspath)
+    source_string = " ".join(str(item.relative_to(project_root)) for item in source)
+    tar_command = f"tar {env['TARFLAGS']} -f {target[0].relative_to(project_root)} {source_string}"
+
+    def write_script(target: list, source: list, env: SCons.Environment.Environment) -> None:  # noqa: ARG001
+        with script.open("w") as outfile:
+            outfile.write(tar_command)
+
+    return env.Command(
+        target=[*target, script],
+        source=source,
+        action=[write_script, "${shell} ${TARGETS[-1].abspath}"],
+        shell=shell,
+    )
+
+
 class WAVESEnvironment(SConsEnvironment):
     """Overload SConsEnvironment with WAVES construction environment methods and builders."""
 
@@ -4699,6 +4776,23 @@ class WAVESEnvironment(SConsEnvironment):
         """
         builder = sphinx_latexpdf(program="${SPHINX_BUILD_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
+
+    def TarScript(  # noqa: N802
+        self, target: list, source: list, shell: str | None = None, extension: str | None = None
+    ) -> SCons.Node.NodeList:
+        """Define tasks with the function :meth:`waves.scons_extensions.tar_script`.
+
+        When using this environment pseudo-builder, do not provide the first ``env`` argument
+
+        :param target: The task target list
+        :param source: The task source list
+        :param shell: force a specific shell. Method falls back to 'pwsh' for Windows and 'bash' for everything else.
+        :param extension: force a specific shell script extension. Method falls back to '.ps1' for Windows and '.sh' for
+            everything else.
+
+        :returns: target node list
+        """
+        return tar_script(self, target, source, shell=shell, extension=extension)
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace

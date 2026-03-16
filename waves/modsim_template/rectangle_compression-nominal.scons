@@ -21,7 +21,7 @@ Import("env")
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
 workflow_file = pathlib.Path(inspect.getfile(lambda: None)).name
-workflow_configuration = ["#/SConstruct", workflow_file]
+workflow_configuration = ["#/SConstruct", f"#/{workflow_file}"]
 parameters = rectangle_compression.nominal()
 
 # Collect the target nodes to build concise target alias(es)
@@ -46,7 +46,7 @@ workflow.extend(
 
 # Data archival
 artifacts.extend(workflow)
-archive_target = env.Tar(
+archive_target = env.TarScript(
     target=f"{env['project_name']}-{workflow_name}-{env['version']}",
     source=artifacts + workflow_configuration,
 )
