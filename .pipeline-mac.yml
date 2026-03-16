@@ -9,8 +9,8 @@ stages:
 
 default:
   tags:
+    - shell
     - macos
-    - pn2301275
 
 mac-developer-test:
   extends:
