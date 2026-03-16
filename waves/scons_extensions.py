@@ -4792,7 +4792,7 @@ class WAVESEnvironment(SConsEnvironment):
 
         :returns: target node list
         """
-        return tar_script(self, target=target, source=source, shell=shell, extension=extension)
+        return tar_script(self, target, source, shell=shell, extension=extension)
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace
