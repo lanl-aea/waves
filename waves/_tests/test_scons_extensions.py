@@ -83,6 +83,8 @@ def test_convert_to_pathlib_list(
     environment = SCons.Environment.Environment()
     output = scons_extensions._convert_to_pathlib_list(items, environment=environment)
     assert output == expected
+    output = scons_extensions._convert_to_pathlib_list(items)
+    assert output == expected
 
 
 mock_decodable = Mock()
