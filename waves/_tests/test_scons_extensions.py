@@ -3000,6 +3000,25 @@ def test_qoi_pseudo_builder(
         assert targets == expected
 
 
+test_tar_script_os_fallback_cases = {
+    "windows": ("Windows", "pwsh", ".ps1"),
+    "linux": ("Linux", "bash", ".sh"),
+    "macos": ("Darwin", "bash", ".sh"),
+}
+
+
+@pytest.mark.parametrize(
+    ("mock_os", "expected_shell", "expected_extension"),
+    test_tar_script_os_fallback_cases.values(),
+    ids=test_tar_script_os_fallback_cases.keys(),
+)
+def test_tar_script_os_fallback(mock_os, expected_shell, expected_extension) -> None:
+    with patch("platform.system", return_value=mock_os):
+        shell, extension = scons_extensions._tar_script_os_fallback()
+        assert shell == expected_shell
+        assert extension == expected_extension
+
+
 test_tar_script_cases = {
     "default TAR variables": (
         "archive", "source.one", {"shell": "shell", "extension": ".script"}, {}, ["archive.tar", "archive.tar.script"]

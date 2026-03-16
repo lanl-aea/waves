@@ -4253,6 +4253,16 @@ class QOIPseudoBuilder:
         return targets
 
 
+def _tar_script_os_fallback() -> tuple[str, str]:
+    if platform.system().lower() == "windows":
+        fallback_shell = "pwsh"
+        fallback_extension = ".ps1"
+    else:
+        fallback_shell = "bash"
+        fallback_extension = ".sh"
+    return fallback_shell, fallback_extension
+
+
 def tar_script(
     env: SCons.Environment.Environment,
     target: str | pathlib.Path | SCons.Node.Node | list[str | pathlib.Path | SCons.Node.Node] | SCons.Node.NodeList,
@@ -4277,12 +4287,7 @@ def tar_script(
     :param extension: force a specific shell script extension. Method falls back to '.ps1' for Windows and '.sh' for
         everything else.
     """
-    if platform.system().lower() == "windows":
-        fallback_shell = "pwsh"
-        fallback_extension = ".ps1"
-    else:
-        fallback_shell = "bash"
-        fallback_extension = ".sh"
+    fallback_shell, fallback_extension = _tar_script_os_fallback()
     shell = fallback_shell if shell is None else shell
     extension = fallback_extension if extension is None else extension
 
