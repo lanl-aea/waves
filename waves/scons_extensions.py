@@ -4254,6 +4254,10 @@ class QOIPseudoBuilder:
 
 
 def _tar_script_os_fallback() -> tuple[str, str]:
+    """Return the OS-specific shell and extension necessary for action by script behavior.
+
+    :returns: shell, extension
+    """
     if platform.system().lower() == "windows":
         fallback_shell = "pwsh"
         fallback_extension = ".ps1"
