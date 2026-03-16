@@ -3012,7 +3012,7 @@ test_tar_script_os_fallback_cases = {
     test_tar_script_os_fallback_cases.values(),
     ids=test_tar_script_os_fallback_cases.keys(),
 )
-def test_tar_script_os_fallback(mock_os, expected_shell, expected_extension) -> None:
+def test_tar_script_os_fallback(mock_os: str, expected_shell: str, expected_extension: str) -> None:
     with patch("platform.system", return_value=mock_os):
         shell, extension = scons_extensions._tar_script_os_fallback()
         assert shell == expected_shell
@@ -3021,7 +3021,11 @@ def test_tar_script_os_fallback(mock_os, expected_shell, expected_extension) -> 
 
 test_tar_script_cases = {
     "default TAR variables": (
-        "archive", "source.one", {"shell": "shell", "extension": ".script"}, {}, ["archive.tar", "archive.tar.script"]
+        "archive",
+        "source.one",
+        {"shell": "shell", "extension": ".script"},
+        {},
+        ["archive.tar", "archive.tar.script"],
     ),
     "nondefault TARSUFFIX": (
         "archive",
