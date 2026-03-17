@@ -1,5 +1,7 @@
 #! /usr/bin/env python
 
+import pathlib
+
 import vtu2xarray
 
 Import("env", "alias", "parameters")
