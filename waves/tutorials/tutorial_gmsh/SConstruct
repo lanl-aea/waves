@@ -28,12 +28,11 @@ AddOption(
 # Inherit user's full environment
 project_directory = pathlib.Path(Dir("#").abspath)
 build_directory = pathlib.Path(GetOption("build_directory"))
+parameter_study_directory = build_directory / "parameter_studies"
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
-    project_directory=project_directory,
     unconditional_build=GetOption("unconditional_build"),
 )
-parameter_study_directory = build_directory / "parameter_studies"
 
 # Make the project package importable for: (1) SConscript files
 sys.path.insert(0, str(project_directory))

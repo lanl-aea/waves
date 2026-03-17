@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-"""Configure the WAVES Gmsh tutorial workflow."""
 
 import vtu2xarray
 
@@ -32,8 +31,7 @@ env.CalculiX(
 )
 
 # Extract
-time_points_source_file = env["project_directory"] / "time_points.inp"
-time_points = vtu2xarray.time_points_from_file(time_points_source_file)
+time_points = vtu2xarray.time_points_from_file(pathlib.Path(Dir("#").abspath) / "time_points.inp")
 time_point_indices = range(1, len(time_points) + 1, 1)
 vtu_files = [f"rectangle_compression.{increment:02}.vtu" for increment in time_point_indices]
 env.Command(
@@ -43,12 +41,11 @@ env.Command(
 )
 env.PythonScript(
     target=["rectangle_compression.h5"],
-    source=["vtu2xarray.py", "time_points.inp", vtu_files],
+    source=["vtu2xarray.py", "time_points.inp", *vtu_files],
     subcommand_options=(
         "--input-file ${SOURCES[2:].abspath} --output-file ${TARGET.abspath} --time-points-file ${SOURCES[1].abspath}"
     ),
 )
-
 
 # Post-processing
 target = env.PythonScript(
