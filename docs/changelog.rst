@@ -19,6 +19,7 @@ Documentation
   Brindley`_.
 - Enable archive of mesh convergence workflow in modsim templates on Windows (:issue:`1003`, :merge:`1300`). By `Kyle
   Brindley`_.
+- Simplify the Gmsh+CalculiX tutorial SCons configuration by reducing pass through variables. By `Kyle Brindley`_.
 
 Internal Changes
 ================
