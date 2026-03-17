@@ -33,7 +33,7 @@ env = waves.scons_extensions.WAVESEnvironment(
     project_directory=project_directory,
     unconditional_build=GetOption("unconditional_build"),
 )
-env["parameter_study_directory"] = build_directory / "parameter_studies"
+parameter_study_directory = build_directory / "parameter_studies"
 
 # Make the project package importable for: (1) SConscript files
 sys.path.insert(0, str(project_directory))
@@ -62,7 +62,7 @@ nominal_parameters = {
     "global_seed": 1.0,
     "displacement": -0.01,
 }
-mesh_convergence_parameter_study_file = env["parameter_study_directory"] / "mesh_convergence.h5"
+mesh_convergence_parameter_study_file = parameter_study_directory / "mesh_convergence.h5"
 mesh_convergence_parameter_generator = waves.parameter_generators.CartesianProduct(
     {
         "width": [1.0],
