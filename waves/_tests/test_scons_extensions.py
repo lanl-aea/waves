@@ -270,6 +270,20 @@ def test_add_program(
     checkprog_side_effect: list[str | None],
     first_found_path: str | None,
 ) -> None:
+    def assert_logic(
+        program: str | None,
+        env: SCons.Environment.Environment,
+        original_path: str,
+        index: int,
+        first_found_path: str | None = first_found_path,
+    ) -> None:
+        assert program == first_found_path
+        if first_found_path is not None:
+            parent_path = pathlib.Path(first_found_path).parent
+            assert env["ENV"]["PATH"].split(os.pathsep)[index] == str(parent_path)
+        else:
+            assert env["ENV"]["PATH"] == original_path
+
     for prepend, index in [(True, 0), (False, -1)]:
         # Test function style interface
         env = SCons.Environment.Environment()
@@ -278,12 +292,7 @@ def test_add_program(
             patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
         ):
             program = scons_extensions.add_program(env, names, prepend=prepend, **kwargs)
-        assert program == first_found_path
-        if first_found_path is not None:
-            parent_path = pathlib.Path(first_found_path).parent
-            assert env["ENV"]["PATH"].split(os.pathsep)[index] == str(parent_path)
-        else:
-            assert env["ENV"]["PATH"] == original_path
+            assert_logic(program, env, original_path, index)
 
         # Test SCons AddMethod style interface
         env = SCons.Environment.Environment()
@@ -293,12 +302,7 @@ def test_add_program(
             patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
         ):
             program = env.AddProgram(names, prepend=prepend, **kwargs)
-        assert program == first_found_path
-        if first_found_path is not None:
-            parent_path = pathlib.Path(first_found_path).parent
-            assert env["ENV"]["PATH"].split(os.pathsep)[index] == str(parent_path)
-        else:
-            assert env["ENV"]["PATH"] == original_path
+            assert_logic(program, env, original_path, index)
 
 
 @pytest.mark.parametrize(
