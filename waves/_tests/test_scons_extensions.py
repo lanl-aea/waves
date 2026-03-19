@@ -3203,7 +3203,12 @@ waves_environment_methods = {
         (),
         {"append": True, "local_only": True, "target_descriptions": None},
     ),
-    "ProjectAlias": ("ProjectAlias", "project_alias", ("arg1",), {"kwarg1": "value1"}),
+    "ProjectAlias": (
+        "ProjectAlias",
+        "project_alias",
+        ("arg1",),
+        {"description": "description text", "target_descriptions": {}, "kwarg1": "value1"},
+    ),
     "SubstitutionSyntax": ("SubstitutionSyntax", "substitution_syntax", ("arg1",), {"kwarg1": "value1"}),
     "ParameterStudyTask": ("ParameterStudyTask", "parameter_study_task", ("arg1",), {"kwarg1": "value1"}),
     "ParameterStudySConscript": (

@@ -4591,12 +4591,30 @@ class WAVESEnvironment(SConsEnvironment):
         """
         return project_help(self, append=append, local_only=local_only, target_descriptions=target_descriptions)
 
-    def ProjectAlias(self, *args, **kwargs) -> dict[str, str]:  # noqa: N802
-        """Call :meth:`waves.scons_extensions.project_alias` as a construction environment method.
+    def ProjectAlias(  # noqa: N802
+        self,
+        *args,
+        description: str = "",
+        # Normally you should not use mutables for argument defaults, but this method relies on the mutable behavior.
+        target_descriptions: dict = {},  # noqa: B006
+        **kwargs,
+    ) -> dict[str, str]:
+        """Compile and return a dictionary of ``{alias: description}`` pairs.
 
-        When using this environment method, do not provide the first ``env`` argument
+        Wrapper around the `SCons Alias`_ method. Appends and returns target descriptions dictionary.
+
+        :param env: The SCons construction environment object to modify.
+        :param args: All other positional arguments are passed to the `SCons Alias`_ method.
+        :param description: String representing metadata of the alias.
+        :param target_descriptions: Mutable dictionary used to keep track of all alias's metadata. If the function is
+            called with a user-supplied dictionary, the accumulated target descriptions are reset to match the provided
+            dictionary and all previously accumulated descriptions are discarded. If an existing alias is called it will
+            overwrite the previous description.
+        :param kwargs: All other keyword arguments are passed to the `SCons Alias`_ method.
+
+        :returns: target descriptions dictionary
         """
-        return project_alias(self, *args, **kwargs)
+        return project_alias(self, *args, description=description, target_descriptions=target_descriptions, **kwargs)
 
     def SubstitutionSyntax(self, *args, **kwargs) -> dict[str, typing.Any]:  # noqa: N802
         """Call :meth:`waves.scons_extensions.substitution_syntax` as a construction environment method.
