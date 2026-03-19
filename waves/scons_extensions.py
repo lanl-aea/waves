@@ -4370,12 +4370,27 @@ class WAVESEnvironment(SConsEnvironment):
             **kwargs,
         )
 
-    def PrintBuildFailures(self, *args, **kwargs) -> None:  # noqa: N802
-        """Call :meth:`waves.scons_extensions.print_build_failures` as a construction environment method.
+    def PrintBuildFailures(self, print_stdout: bool = True) -> None:  # noqa: N802
+        """On exit, query the SCons reported build failures and print the associated node's STDOUT file, if it exists.
 
-        When using this environment method, do not provide the first ``env`` argument
+        Built on :meth:`waves.scons_extensions.print_build_failures`
+
+        .. code-block::
+           :caption: SConstruct
+
+           AddOption(
+               "--print-build-failures",
+               dest="print_build_failures",
+               default=False,
+               action="store_true",
+               help="Print task *.stdout target file(s) on build failures. (default: '%default')"
+           )
+           env = WAVESEnvironment()
+           env.PrintBuildFailures(print_stdout=env["print_build_failures"])
+
+        :param print_stdout: Boolean to set the exit behavior. If False, don't modify the exit behavior.
         """
-        return print_build_failures(self, *args, **kwargs)
+        return print_build_failures(self, print_stdout=print_stdout)
 
     def CheckProgram(self, *args, **kwargs) -> str | None:  # noqa: N802
         """Call :meth:`waves.scons_extensions.check_program` as a construction environment method.

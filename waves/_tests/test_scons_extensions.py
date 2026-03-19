@@ -3185,7 +3185,7 @@ def test_waves_environment_attributes(kwargs: dict[str, str]) -> None:
 
 
 waves_environment_methods = {
-    "PrintBuildFailures": ("PrintBuildFailures", "print_build_failures", ("arg1",), {"kwarg1": "value1"}),
+    "PrintBuildFailures": ("PrintBuildFailures", "print_build_failures", (), {"print_stdout": True}),
     "CheckProgram": ("CheckProgram", "check_program", ("arg1",), {"kwarg1": "value1"}),
     "FindProgram": ("FindProgram", "find_program", ("arg1",), {"kwarg1": "value1"}),
     "AddProgram": ("AddProgram", "add_program", ("arg1",), {"kwarg1": "value1"}),
