@@ -4496,12 +4496,28 @@ class WAVESEnvironment(SConsEnvironment):
         """
         return add_cubit(self, names, quote_spaces_in_path=quote_spaces_in_path, prepend=prepend)
 
-    def AddCubitPython(self, *args, **kwargs) -> str | None:  # noqa: N802
-        """Call :meth:`waves.scons_extensions.add_cubit_python` as a construction environment method.
+    def AddCubitPython(self, names: collections.abc.Sequence[str]) -> str | None:  # noqa: N802
+        """Modify environment variables with the paths required to ``import cubit`` with the Cubit Python interpreter.
 
-        When using this environment method, do not provide the first ``env`` argument
+        Returns the absolute path of the first Cubit Python intepreter found. Prepends ``PATH`` with Cubit Python parent
+        directory if a program is found and the directory is not already on ``PATH``. Prepends ``PYTHONPATH`` with
+        ``parent/bin``.
+
+        Returns None if no Cubit Python interpreter is found.
+
+        .. code-block::
+           :caption: Example Cubit environment modification
+
+           import waves
+
+           env = waves.scons_extensions.WAVESEnvironment()
+           env["CUBIT_PROGRAM"] = env.AddCubitPython(["cubit"])
+
+        :param names: list of string program names for the main Cubit executable. May include an absolute path.
+
+        :return: Absolute path of the Cubit Python intepreter. None if none of the names are found.
         """
-        return add_cubit_python(self, *args, **kwargs)
+        return add_cubit_python(self, names)
 
     def CopySubstfile(self, *args, **kwargs) -> SCons.Node.NodeList:  # noqa: N802
         """Call :meth:`waves.scons_extensions.copy_substfile` as a construction environment method.
