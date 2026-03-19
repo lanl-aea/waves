@@ -4392,12 +4392,25 @@ class WAVESEnvironment(SConsEnvironment):
         """
         return print_build_failures(self, print_stdout=print_stdout)
 
-    def CheckProgram(self, *args, **kwargs) -> str | None:  # noqa: N802
-        """Call :meth:`waves.scons_extensions.check_program` as a construction environment method.
+    def CheckProgram(self, prog_name: str) -> str | None:  # noqa: N802
+        """Return the absolute path of the requested program or ``None``.
 
-        When using this environment method, do not provide the first ``env`` argument
+        Replacement for `SCons CheckProg`_ like behavior without an SCons configure object.
+
+        Built on :meth:`waves.scons_extensions.check_program`.
+
+        .. code-block::
+           :caption: Example search for an executable named "program"
+
+           import waves
+
+           env = Environment()
+           env.AddMethod(waves.scons_extensions.check_program, "CheckProgram")
+           env["PROGRAM"] = env.CheckProgram(["program"])
+
+        :param prog_name: string program name to search in the construction environment path
         """
-        return check_program(self, *args, **kwargs)
+        return check_program(self, prog_name)
 
     def FindProgram(self, *args, **kwargs) -> str | None:  # noqa: N802
         """Call :meth:`waves.scons_extensions.find_program` as a construction environment method.
