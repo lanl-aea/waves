@@ -4603,7 +4603,6 @@ class WAVESEnvironment(SConsEnvironment):
 
         Wrapper around the `SCons Alias`_ method. Appends and returns target descriptions dictionary.
 
-        :param env: The SCons construction environment object to modify.
         :param args: All other positional arguments are passed to the `SCons Alias`_ method.
         :param description: String representing metadata of the alias.
         :param target_descriptions: Mutable dictionary used to keep track of all alias's metadata. If the function is
@@ -4616,12 +4615,32 @@ class WAVESEnvironment(SConsEnvironment):
         """
         return project_alias(self, *args, description=description, target_descriptions=target_descriptions, **kwargs)
 
-    def SubstitutionSyntax(self, *args, **kwargs) -> dict[str, typing.Any]:  # noqa: N802
-        """Call :meth:`waves.scons_extensions.substitution_syntax` as a construction environment method.
+    def SubstitutionSyntax(  # noqa: N802
+        self,
+        substitution_dictionary: dict,
+        prefix: str = "@",
+        suffix: str = "@",
+    ) -> dict[str, typing.Any]:
+        """Return a dictionary copy with the pre/suffix added to the key strings.
 
-        When using this environment method, do not provide the first ``env`` argument
+        Assumes a flat dictionary with keys of type str. Keys that aren't strings will be converted to their string
+        representation. Nested dictionaries can be supplied, but only the first layer keys will be modified. Dictionary
+        values are unchanged.
+
+        .. code-block::
+           :caption: SConstruct
+
+           env = waves.scons_extensions.WAVESEnvironment()
+           original_dictionary = {"key": "value"}
+           substitution_dictionary = env.SubstitutionSyntax(original_dictionary)
+
+        :param dict substitution_dictionary: Original dictionary to copy
+        :param string prefix: String to prepend to all dictionary keys
+        :param string suffix: String to append to all dictionary keys
+
+        :return: Copy of the dictionary with key strings modified by the pre/suffix
         """
-        return substitution_syntax(self, *args, **kwargs)
+        return substitution_syntax(self, substitution_dictionary, prefix=prefix, suffix=suffix)
 
     def ParameterStudyTask(self, *args, **kwargs) -> SCons.Node.NodeList:  # noqa: N802
         """Call :meth:`waves.scons_extensions.parameter_study_task` as a construction environment method.

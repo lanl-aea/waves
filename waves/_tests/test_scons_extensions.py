@@ -3209,7 +3209,7 @@ waves_environment_methods = {
         ("arg1",),
         {"description": "description text", "target_descriptions": {}, "kwarg1": "value1"},
     ),
-    "SubstitutionSyntax": ("SubstitutionSyntax", "substitution_syntax", ("arg1",), {"kwarg1": "value1"}),
+    "SubstitutionSyntax": ("SubstitutionSyntax", "substitution_syntax", ({},), {"prefix": "@", "suffix": "@"}),
     "ParameterStudyTask": ("ParameterStudyTask", "parameter_study_task", ("arg1",), {"kwarg1": "value1"}),
     "ParameterStudySConscript": (
         "ParameterStudySConscript",
