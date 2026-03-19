@@ -46,27 +46,51 @@ test_convert_to_pathlib_list_cases = {
     "SCons absolute path File": (file_system.File("#/one.txt"), [scons_test_root_directory / "one.txt"]),
     "list str": (
         ["one.txt", "/one.txt", "#/one.txt"],
-        [scons_test_root_directory / "one.txt", pathlib.Path("/one.txt").resolve(), scons_test_root_directory / "one.txt"],
+        [
+            scons_test_root_directory / "one.txt",
+            pathlib.Path("/one.txt").resolve(),
+            scons_test_root_directory / "one.txt",
+        ],
     ),
     "list Path": (
         [pathlib.Path("one.txt"), pathlib.Path("/one.txt"), pathlib.Path("#/one.txt")],
-        [scons_test_root_directory / "one.txt", pathlib.Path("/one.txt").resolve(), scons_test_root_directory / "one.txt"],
+        [
+            scons_test_root_directory / "one.txt",
+            pathlib.Path("/one.txt").resolve(),
+            scons_test_root_directory / "one.txt",
+        ],
     ),
     "list Node": (
         [file_system.File("one.txt"), file_system.File("/one.txt"), file_system.File("#/one.txt")],
-        [scons_test_root_directory / "one.txt", pathlib.Path("/one.txt").resolve(), scons_test_root_directory / "one.txt"],
+        [
+            scons_test_root_directory / "one.txt",
+            pathlib.Path("/one.txt").resolve(),
+            scons_test_root_directory / "one.txt",
+        ],
     ),
     "SCons NodeList str": (
         SCons.Node.NodeList(["one.txt", "/one.txt", "#/one.txt"]),
-        [scons_test_root_directory / "one.txt", pathlib.Path("/one.txt").resolve(), scons_test_root_directory / "one.txt"],
+        [
+            scons_test_root_directory / "one.txt",
+            pathlib.Path("/one.txt").resolve(),
+            scons_test_root_directory / "one.txt",
+        ],
     ),
     "SCons NodeList Path": (
         SCons.Node.NodeList([pathlib.Path("one.txt"), pathlib.Path("/one.txt"), pathlib.Path("#/one.txt")]),
-        [scons_test_root_directory / "one.txt", pathlib.Path("/one.txt").resolve(), scons_test_root_directory / "one.txt"],
+        [
+            scons_test_root_directory / "one.txt",
+            pathlib.Path("/one.txt").resolve(),
+            scons_test_root_directory / "one.txt",
+        ],
     ),
     "SCons NodeList Node": (
         SCons.Node.NodeList([file_system.File("one.txt"), file_system.File("/one.txt"), file_system.File("#/one.txt")]),
-        [scons_test_root_directory / "one.txt", pathlib.Path("/one.txt").resolve(), scons_test_root_directory / "one.txt"],
+        [
+            scons_test_root_directory / "one.txt",
+            pathlib.Path("/one.txt").resolve(),
+            scons_test_root_directory / "one.txt",
+        ],
     ),
 }
 
