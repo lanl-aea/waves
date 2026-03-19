@@ -4642,12 +4642,100 @@ class WAVESEnvironment(SConsEnvironment):
         """
         return substitution_syntax(self, substitution_dictionary, prefix=prefix, suffix=suffix)
 
-    def ParameterStudyTask(self, *args, **kwargs) -> SCons.Node.NodeList:  # noqa: N802
-        """Call :meth:`waves.scons_extensions.parameter_study_task` as a construction environment method.
+    def ParameterStudyTask(  # noqa: N802
+        self,
+        builder: SCons.Builder.Builder,
+        *args,
+        study: dict | parameter_generators.ParameterGenerator | None = None,
+        subdirectories: bool = False,
+        **kwargs,
+    ) -> SCons.Node.NodeList:
+        """Parameter study pseudo-builder.
 
-        When using this environment pseudo-builder, do not provide the first ``env`` argument
+        `SCons Pseudo-Builder`_ aids in task construction for WAVES parameter studies with any SCons builder. Works with
+        WAVES parameter generators or parameter dictionaries to reduce parameter study task definition boilerplate and
+        make nominal workflow definitions directly re-usable in parameter studies.
+
+        * If the study is a WAVES parameter generator object, loop over the parameter sets and replace ``@{set_name}``
+          in any ``*args`` and ``**kwargs`` that are strings, paths, or lists of strings and paths.
+        * If the study is a ``dict()``, unpack the dictionary as keyword arguments directly into the builder.
+        * In all other cases, the task is passed through unchanged to the builder and the study variable is ignored.
+
+        When chaining parameter study tasks, arguments belonging to the parameter study can be prefixed by the template
+        ``@{set_name}source.ext``. If the task uses a parameter study, the set name prefix will be replaced to match
+        the task path modifications, e.g.  ``parameter_set0_source.ext`` or ``parameter_set0/source.ext`` depending on
+        the ``subdirectories`` boolean. If the task is not part of a parameter study, the set name will be removed from
+        the source, e.g. ``source.ext``. The ``@`` symbol is used as the delimiter to reduce with clashes in shell
+        variable syntax and SCons substitution syntax.
+
+        This pseudo-builder is most powerful when used in an SConscript call to a separate workflow configuration file.
+        The SConscript file can then be called with a nominal parameter dictionary or with a parameter generator object.
+        See the example below.
+
+        .. code-block::
+           :caption: SConstruct
+
+           import pathlib
+           import waves
+
+           env = Environment()
+           env.Append(BUILDERS={
+               "AbaqusJournal": waves.scons_extensions.abaqus_journal(),
+               "AbaqusSolver": waves.scons_extensions.abaqus_solver()
+           })
+           env.AddMethod(waves.scons_extensions.parameter_study_task, "ParameterStudyTask")
+
+           parameter_study_file = pathlib.Path("parameter_study.h5")
+           parameter_generator = waves.parameter_generators.CartesianProduct(
+               {"parameter_one": [1, 2, 3]},
+               output_file=parameter_study_file,
+               previous_parameter_study=parameter_study_file
+           )
+
+           studies = (
+               ("SConscript", parameter_generator),
+               ("SConscript", {"parameter_one": 1})
+           )
+           for workflow, study in studies:
+               SConscript(workflow, exports={"env": env, "study": study})
+
+        .. code-block::
+           :caption: SConscript
+
+           Import("env", "study")
+
+           env.ParameterStudyTask(
+               env.AbaqusJournal,
+               target=["@{set_name}job.inp"],
+               source=["journal.py"],
+               journal_options="--input=${SOURCE.abspath} --output=${TARGET.abspath} --option ${parameter_one}"
+               study=study,
+               subdirectories=True,
+           )
+
+           env.ParameterStudyTask(
+               env.AbaqusSolver,
+               target=["@{set_name}job.odb"],
+               source=["@{set_name}job.inp"],
+               job="job",
+               study=study,
+               subdirectories=True,
+           )
+
+        :param env: An SCons construction environment to use when defining the targets.
+        :param builder: The builder to parameterize
+        :param args: All other positional arguments are passed through to the builder after ``@{set_name}`` string
+            substitutions
+        :param study: Parameter generator or dictionary parameter set to provide to the builder. Parameter generators
+            are unpacked with set name directory prefixes. Dictionaries are unpacked as keyword arguments.
+        :param subdirectories: Switch to use parameter generator ``study`` set names as subdirectories. Ignored when
+            ``study`` is not a parameter generator.
+        :param kwargs: all other keyword arguments are passed through to the builder after ``@{set_name}`` string
+            substitutions
+
+        :return: SCons NodeList of target nodes
         """
-        return parameter_study_task(self, *args, **kwargs)
+        return parameter_study_task(self, builder, *args, study=study, subdirectories=subdirectories, **kwargs)
 
     def ParameterStudySConscript(self, *args, **kwargs) -> typing.Any | tuple[typing.Any] | None:  # noqa: N802, ANN401
         """Call :meth:`waves.scons_extensions.parameter_study_sconscript` as a construction environment method.
