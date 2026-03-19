@@ -1916,13 +1916,21 @@ copy_substfile_input = {
     ids=copy_substfile_input.keys(),
 )
 def test_copy_substfile(source_list: list[str | pathlib.Path], expected_list: list[str]) -> None:
+    # Test the function interface
     env = SCons.Environment.Environment()
     target_list = scons_extensions.copy_substfile(env, source_list, {})
     target_files = [str(target) for target in target_list]
     assert target_files == expected_list
 
     # Test the Pseudo-Builder style interface
+    env = SCons.Environment.Environment()
     env.AddMethod(scons_extensions.copy_substfile, "CopySubstfile")
+    target_list = env.CopySubstfile(source_list, {})
+    target_files = [str(target) for target in target_list]
+    assert target_files == expected_list
+
+    # Test the WAVESEnvironment method
+    env = scons_extensions.WAVESEnvironment()
     target_list = env.CopySubstfile(source_list, {})
     target_files = [str(target) for target in target_list]
     assert target_files == expected_list
