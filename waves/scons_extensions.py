@@ -4764,12 +4764,11 @@ class WAVESEnvironment(SConsEnvironment):
            import pathlib
            import waves
 
-           env = Environment()
+           env = waves.scons_extensions.WAVESEnvironment()
            env.Append(BUILDERS={
                "AbaqusJournal": waves.scons_extensions.abaqus_journal(),
                "AbaqusSolver": waves.scons_extensions.abaqus_solver()
            })
-           env.AddMethod(waves.scons_extensions.parameter_study_sconscript, "ParameterStudySConscript")
 
            parameter_study_file = pathlib.Path("parameter_study.h5")
            parameter_generator = waves.parameter_generators.CartesianProduct(
@@ -4831,12 +4830,37 @@ class WAVESEnvironment(SConsEnvironment):
             **kwargs,
         )
 
-    def ParameterStudyWrite(self, *args, **kwargs) -> SCons.Node.NodeList:  # noqa: N802
-        """Define tasks with the :meth:`waves.scons_extensions.parameter_study_write`.
+    def ParameterStudyWrite(  # noqa: N802
+        self,
+        parameter_generator: parameter_generators.ParameterGenerator,
+        **kwargs,
+    ) -> SCons.Node.NodeList:
+        """Pseudo-builder to write a parameter generator's parameter study file.
 
-        When using this environment method, do not provide the first ``env`` argument
+        .. code-block::
+           :caption: SConstruct
+
+           import pathlib
+           import waves
+
+           env = waves.scons_extensions.WAVESEnvironment()
+
+           parameter_study_file = pathlib.Path("parameter_study.h5")
+           parameter_generator = waves.parameter_generators.CartesianProduct(
+               {"parameter_one": [1, 2, 3]},
+               output_file=parameter_study_file,
+               previous_parameter_study=parameter_study_file
+           )
+
+           env.ParameterStudyWrite(parameter_generator)
+
+        :param parameter_generator: WAVES ParameterGenerator class
+        :param kwargs: All other keyword arguments are passed directly to the
+            :meth:`waves.parameter_generators.ParameterGenerator.write` method.
+
+        :return: SCons NodeList of target nodes
         """
-        return parameter_study_write(self, *args, **kwargs)
+        return parameter_study_write(self, parameter_generator, **kwargs)
 
     def FirstTargetBuilder(self, target: list, source: list, *args, **kwargs) -> SCons.Node.NodeList:  # noqa: N802
         """Define tasks with the builder returned by :meth:`waves.scons_extensions.first_target_builder_factory`.
