@@ -23,6 +23,11 @@ Enhancements
 - Allow prepend/append selection in ``add_program`` and ``add_cubit`` PATH modifications (:merge:`1302`). By `Kyle
   Brindley`_.
 
+Internal Changes
+================
+- Handle OS-specific test expecations in resolved absolute paths, e.g. Windows "C:\" prefix (:merge:`1302`). By `Kyle
+  Brindley`_.
+
 ******************
 1.3.0 (2026-03-17)
 ******************
