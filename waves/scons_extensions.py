@@ -2342,7 +2342,9 @@ def copy_substfile(
        :caption: SConstruct
 
        import pathlib
+
        import waves
+
        current_directory = pathlib.Path(Dir(".").abspath)
        env = Environment()
        env.AddMethod(waves.scons_extensions.copy_substfile, "CopySubstfile")
@@ -3966,7 +3968,6 @@ def parameter_study_sconscript(
     * In all other cases, the SConscript call is given the ``set_name`` from the method API and an empty ``parameters``
       dictionary.
 
-
     .. code-block::
        :caption: SConstruct
 
@@ -4373,10 +4374,10 @@ class WAVESEnvironment(SConsEnvironment):
     def PrintBuildFailures(self, print_stdout: bool = True) -> None:  # noqa: N802
         """On exit, query the SCons reported build failures and print the associated node's STDOUT file, if it exists.
 
-        Built on :meth:`waves.scons_extensions.print_build_failures`
-
         .. code-block::
            :caption: SConstruct
+
+           import waves
 
            AddOption(
                "--print-build-failures",
@@ -4385,7 +4386,7 @@ class WAVESEnvironment(SConsEnvironment):
                action="store_true",
                help="Print task *.stdout target file(s) on build failures. (default: '%default')"
            )
-           env = WAVESEnvironment()
+           env = waves.scons_extensions.WAVESEnvironment()
            env.PrintBuildFailures(print_stdout=env["print_build_failures"])
 
         :param print_stdout: Boolean to set the exit behavior. If False, don't modify the exit behavior.
@@ -4397,97 +4398,469 @@ class WAVESEnvironment(SConsEnvironment):
 
         Replacement for `SCons CheckProg`_ like behavior without an SCons configure object.
 
-        Built on :meth:`waves.scons_extensions.check_program`.
-
         .. code-block::
            :caption: Example search for an executable named "program"
 
            import waves
 
-           env = Environment()
-           env.AddMethod(waves.scons_extensions.check_program, "CheckProgram")
+           env = waves.scons_extensions.WAVESEnvironment()
            env["PROGRAM"] = env.CheckProgram(["program"])
 
         :param prog_name: string program name to search in the construction environment path
         """
         return check_program(self, prog_name)
 
-    def FindProgram(self, *args, **kwargs) -> str | None:  # noqa: N802
-        """Call :meth:`waves.scons_extensions.find_program` as a construction environment method.
+    def FindProgram(  # noqa: N802
+        self, names: collections.abc.Sequence[str], quote_spaces_in_path: bool = True
+    ) -> str | None:
+        """Search for a program from a list of possible program names.
 
-        When using this environment method, do not provide the first ``env`` argument
+        Returns the absolute path of the first program name found.
+
+        .. code-block::
+           :caption: Example search for an executable named "program"
+
+           import waves
+
+           env = waves.scons_extensions.WAVESEnvironment()
+           env["PROGRAM"] = env.FindProgram(["program"])
+
+        :param names: list of string program names. May include an absolute path.
+        :param quote_spaces_in_path: Surround path parts that contain spaces with double quotes.
+            May need to set as ``False`` if using the path in ``pathlib``, ``shutil``, or OS PATH-like variables,
+            particularly on Windows.
+
+        :return: Absolute path of the found program. None if none of the names are found.
         """
-        return find_program(self, *args, **kwargs)
+        return find_program(self, names, quote_spaces_in_path=quote_spaces_in_path)
 
-    def AddProgram(self, *args, **kwargs) -> str | None:  # noqa: N802
-        """Call :meth:`waves.scons_extensions.add_program` as a construction environment method.
+    def AddProgram(  # noqa: N802
+        self,
+        names: collections.abc.Sequence[str],
+        quote_spaces_in_path: bool = True,
+        prepend: bool = True,
+    ) -> str | None:
+        """Search for a program from a list of possible program names. Add first found to system ``PATH``.
 
-        When using this environment method, do not provide the first ``env`` argument
+        Returns the absolute path of the first program name found. Prepends ``PATH`` with first program's parent
+        directory if a program is found and the directory is not already on ``PATH``. Returns None if no program name is
+        found.
+
+        .. code-block::
+           :caption: Example search for an executable named "program"
+
+           import waves
+
+           env = waves.scons_extensions.WAVESEnvironment()
+           env["PROGRAM"] = env.AddProgram(["program"])
+
+        :param names: list of string program names. May include an absolute path.
+        :param quote_spaces_in_path: Surround path parts that contain spaces with double quotes.
+            May need to set as ``False`` when relying on this function's PATH modifications, particularly on Windows.
+        :param prepend: modify ``PATH`` by prepending the program parent path. Set to ``False`` to append ``PATH``
+            instead.
+
+        :return: Absolute path of the found program. None if none of the names are found.
         """
-        return add_program(self, *args, **kwargs)
+        return add_program(self, names, quote_spaces_in_path=quote_spaces_in_path, prepend=prepend)
 
-    def AddCubit(self, *args, **kwargs) -> str | None:  # noqa: N802
-        """Call :meth:`waves.scons_extensions.add_cubit` as a construction environment method.
+    def AddCubit(  # noqa: N802
+        self,
+        names: collections.abc.Sequence[str],
+        quote_spaces_in_path: bool = True,
+        prepend: bool = True,
+    ) -> str | None:
+        """Modify environment variables with the paths required to ``import cubit`` in a Python3 environment.
 
-        When using this environment method, do not provide the first ``env`` argument
+        Returns the absolute path of the first program name found. Prepends ``PATH`` with first program's parent
+        directory if a program is found and the directory is not already on ``PATH``. Prepends ``PYTHONPATH`` with
+        ``parent/bin``.  Prepends ``LD_LIBRARY_PATH`` with ``parent/bin/python3``.
+
+        Returns None if no program name is found.
+
+        .. code-block::
+           :caption: Example Cubit environment modification
+
+           import waves
+
+           env = waves.scons_extensions.WAVESEnvironment()
+           env["CUBIT_PROGRAM"] = env.AddCubit(["cubit"])
+
+        :param names: list of string program names for the main Cubit executable. May include an absolute path.
+        :param quote_spaces_in_path: Surround path parts that contain spaces with double quotes.
+            May need to set as ``False`` when relying on this function's PATH and PYTHONPATH modifications, particularly
+            on Windows.
+        :param prepend: modify ``PATH`` by prepending the program parent path. Set to ``False`` to append ``PATH``
+            instead.
+
+        :return: Absolute path of the Cubit executable. None if none of the names are found.
         """
-        return add_cubit(self, *args, **kwargs)
+        return add_cubit(self, names, quote_spaces_in_path=quote_spaces_in_path, prepend=prepend)
 
-    def AddCubitPython(self, *args, **kwargs) -> str | None:  # noqa: N802
-        """Call :meth:`waves.scons_extensions.add_cubit_python` as a construction environment method.
+    def AddCubitPython(self, names: collections.abc.Sequence[str]) -> str | None:  # noqa: N802
+        """Modify environment variables with the paths required to ``import cubit`` with the Cubit Python interpreter.
 
-        When using this environment method, do not provide the first ``env`` argument
+        Returns the absolute path of the first Cubit Python intepreter found. Prepends ``PATH`` with Cubit Python parent
+        directory if a program is found and the directory is not already on ``PATH``. Prepends ``PYTHONPATH`` with
+        ``parent/bin``.
+
+        Returns None if no Cubit Python interpreter is found.
+
+        .. code-block::
+           :caption: Example Cubit environment modification
+
+           import waves
+
+           env = waves.scons_extensions.WAVESEnvironment()
+           env["CUBIT_PROGRAM"] = env.AddCubitPython(["cubit"])
+
+        :param names: list of string program names for the main Cubit executable. May include an absolute path.
+
+        :return: Absolute path of the Cubit Python intepreter. None if none of the names are found.
         """
-        return add_cubit_python(self, *args, **kwargs)
+        return add_cubit_python(self, names)
 
-    def CopySubstfile(self, *args, **kwargs) -> SCons.Node.NodeList:  # noqa: N802
-        """Call :meth:`waves.scons_extensions.copy_substfile` as a construction environment method.
+    def CopySubstfile(  # noqa: N802
+        self,
+        source_list: list,
+        substitution_dictionary: dict | None = None,
+        build_subdirectory: str | pathlib.Path = ".",
+        symlink: bool = False,
+    ) -> SCons.Node.NodeList:
+        """Pseudo-builder to copy source list to build directory and perform template substitutions on ``*.in`` filenames.
 
-        When using this environment method, do not provide the first ``env`` argument
+        `SCons Pseudo-Builder`_ to chain two builders:  a builder with the `SCons Copy`_ action and the `SCons Substfile`_
+        builders. Files are first copied to the build (variant) directory and then template substitution is performed on
+        template files (any file ending with ``*.in`` suffix) to create a file without the template suffix.
+
+        To avoid dependency cycles, the source file(s) should be passed by absolute path.
+
+        .. code-block::
+           :caption: SConstruct
+
+           import pathlib
+
+           import waves
+
+           current_directory = pathlib.Path(Dir(".").abspath)
+           env = waves.scons_extensions.WAVESEnvironment()
+           source_list = [
+               "#/subdir3/file_three.ext",              # File found with respect to project root directory using SCons notation
+               current_directory / file_one.ext,        # File found in current SConscript directory
+               current_directory / "subdir2/file_two",  # File found below current SConscript directory
+               current_directory / "file_four.ext.in"   # File with substitutions matching substitution dictionary keys
+           ]
+           substitution_dictionary = {
+               "@variable_one@": "value_one"
+           }
+           env.CopySubstfile(source_list, substitution_dictionary=substitution_dictionary)
+
+        :param source_list: List of pathlike objects or strings. Will be converted to list of pathlib.Path objects.
+        :param substitution_dictionary: key: value pairs for template substitution. The keys must contain the optional
+            template characters if present, e.g. ``@variable@``. The template character, e.g. ``@``, can be anything that
+            works in the `SCons Substfile`_ builder.
+        :param build_subdirectory: build subdirectory relative path prepended to target files
+        :param symlink: Whether symbolic links are created as new symbolic links. If true, symbolic links are shallow
+            copies as a new symbolic link. If false, symbolic links are copied as a new file (dereferenced).
+
+        :return: SCons NodeList of Copy and Substfile target nodes
+        """  # noqa: E501
+        return copy_substfile(
+            self,
+            source_list,
+            substitution_dictionary=substitution_dictionary,
+            build_subdirectory=build_subdirectory,
+            symlink=symlink,
+        )
+
+    def ProjectHelp(  # noqa: N802
+        self,
+        append: bool = True,
+        local_only: bool = True,
+        target_descriptions: dict | None = None,
+    ) -> None:
+        """Add default targets and alias lists to project help message.
+
+        See the `SCons Help`_ documentation for appending behavior.
+
+        :param append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
+            overwritten if ``env.Help`` has not been previously called.
+        :param local_only: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
+        :param target_descriptions: dictionary containing target metadata.
         """
-        return copy_substfile(self, *args, **kwargs)
+        return project_help(self, append=append, local_only=local_only, target_descriptions=target_descriptions)
 
-    def ProjectHelp(self, *args, **kwargs) -> None:  # noqa: N802
-        """Call :meth:`waves.scons_extensions.project_help` as a construction environment method.
+    def ProjectAlias(  # noqa: N802
+        self,
+        *args,
+        description: str = "",
+        # Normally you should not use mutables for argument defaults, but this method relies on the mutable behavior.
+        target_descriptions: dict = {},  # noqa: B006
+        **kwargs,
+    ) -> dict[str, str]:
+        """Compile and return a dictionary of ``{alias: description}`` pairs.
 
-        When using this environment method, do not provide the first ``env`` argument
+        Wrapper around the `SCons Alias`_ method. Appends and returns target descriptions dictionary.
+
+        :param args: All other positional arguments are passed to the `SCons Alias`_ method.
+        :param description: String representing metadata of the alias.
+        :param target_descriptions: Mutable dictionary used to keep track of all alias's metadata. If the function is
+            called with a user-supplied dictionary, the accumulated target descriptions are reset to match the provided
+            dictionary and all previously accumulated descriptions are discarded. If an existing alias is called it will
+            overwrite the previous description.
+        :param kwargs: All other keyword arguments are passed to the `SCons Alias`_ method.
+
+        :returns: target descriptions dictionary
         """
-        return project_help(self, *args, **kwargs)
+        return project_alias(self, *args, description=description, target_descriptions=target_descriptions, **kwargs)
 
-    def ProjectAlias(self, *args, **kwargs) -> dict[str, str]:  # noqa: N802
-        """Call :meth:`waves.scons_extensions.project_alias` as a construction environment method.
+    def SubstitutionSyntax(  # noqa: N802
+        self,
+        substitution_dictionary: dict,
+        prefix: str = "@",
+        suffix: str = "@",
+    ) -> dict[str, typing.Any]:
+        """Return a dictionary copy with the pre/suffix added to the key strings.
 
-        When using this environment method, do not provide the first ``env`` argument
+        Assumes a flat dictionary with keys of type str. Keys that aren't strings will be converted to their string
+        representation. Nested dictionaries can be supplied, but only the first layer keys will be modified. Dictionary
+        values are unchanged.
+
+        .. code-block::
+           :caption: SConstruct
+
+           env = waves.scons_extensions.WAVESEnvironment()
+           original_dictionary = {"key": "value"}
+           substitution_dictionary = env.SubstitutionSyntax(original_dictionary)
+
+        :param dict substitution_dictionary: Original dictionary to copy
+        :param string prefix: String to prepend to all dictionary keys
+        :param string suffix: String to append to all dictionary keys
+
+        :return: Copy of the dictionary with key strings modified by the pre/suffix
         """
-        return project_alias(self, *args, **kwargs)
+        return substitution_syntax(self, substitution_dictionary, prefix=prefix, suffix=suffix)
 
-    def SubstitutionSyntax(self, *args, **kwargs) -> dict[str, typing.Any]:  # noqa: N802
-        """Call :meth:`waves.scons_extensions.substitution_syntax` as a construction environment method.
+    def ParameterStudyTask(  # noqa: N802
+        self,
+        builder: SCons.Builder.Builder,
+        *args,
+        study: dict | parameter_generators.ParameterGenerator | None = None,
+        subdirectories: bool = False,
+        **kwargs,
+    ) -> SCons.Node.NodeList:
+        """Parameter study pseudo-builder.
 
-        When using this environment method, do not provide the first ``env`` argument
+        `SCons Pseudo-Builder`_ aids in task construction for WAVES parameter studies with any SCons builder. Works with
+        WAVES parameter generators or parameter dictionaries to reduce parameter study task definition boilerplate and
+        make nominal workflow definitions directly re-usable in parameter studies.
+
+        * If the study is a WAVES parameter generator object, loop over the parameter sets and replace ``@{set_name}``
+          in any ``*args`` and ``**kwargs`` that are strings, paths, or lists of strings and paths.
+        * If the study is a ``dict()``, unpack the dictionary as keyword arguments directly into the builder.
+        * In all other cases, the task is passed through unchanged to the builder and the study variable is ignored.
+
+        When chaining parameter study tasks, arguments belonging to the parameter study can be prefixed by the template
+        ``@{set_name}source.ext``. If the task uses a parameter study, the set name prefix will be replaced to match
+        the task path modifications, e.g.  ``parameter_set0_source.ext`` or ``parameter_set0/source.ext`` depending on
+        the ``subdirectories`` boolean. If the task is not part of a parameter study, the set name will be removed from
+        the source, e.g. ``source.ext``. The ``@`` symbol is used as the delimiter to reduce with clashes in shell
+        variable syntax and SCons substitution syntax.
+
+        This pseudo-builder is most powerful when used in an SConscript call to a separate workflow configuration file.
+        The SConscript file can then be called with a nominal parameter dictionary or with a parameter generator object.
+        See the example below.
+
+        .. code-block::
+           :caption: SConstruct
+
+           import pathlib
+           import waves
+
+           env = Environment()
+           env.Append(BUILDERS={
+               "AbaqusJournal": waves.scons_extensions.abaqus_journal(),
+               "AbaqusSolver": waves.scons_extensions.abaqus_solver()
+           })
+           env.AddMethod(waves.scons_extensions.parameter_study_task, "ParameterStudyTask")
+
+           parameter_study_file = pathlib.Path("parameter_study.h5")
+           parameter_generator = waves.parameter_generators.CartesianProduct(
+               {"parameter_one": [1, 2, 3]},
+               output_file=parameter_study_file,
+               previous_parameter_study=parameter_study_file
+           )
+
+           studies = (
+               ("SConscript", parameter_generator),
+               ("SConscript", {"parameter_one": 1})
+           )
+           for workflow, study in studies:
+               SConscript(workflow, exports={"env": env, "study": study})
+
+        .. code-block::
+           :caption: SConscript
+
+           Import("env", "study")
+
+           env.ParameterStudyTask(
+               env.AbaqusJournal,
+               target=["@{set_name}job.inp"],
+               source=["journal.py"],
+               journal_options="--input=${SOURCE.abspath} --output=${TARGET.abspath} --option ${parameter_one}"
+               study=study,
+               subdirectories=True,
+           )
+
+           env.ParameterStudyTask(
+               env.AbaqusSolver,
+               target=["@{set_name}job.odb"],
+               source=["@{set_name}job.inp"],
+               job="job",
+               study=study,
+               subdirectories=True,
+           )
+
+        :param builder: The builder to parameterize
+        :param args: All other positional arguments are passed through to the builder after ``@{set_name}`` string
+            substitutions
+        :param study: Parameter generator or dictionary parameter set to provide to the builder. Parameter generators
+            are unpacked with set name directory prefixes. Dictionaries are unpacked as keyword arguments.
+        :param subdirectories: Switch to use parameter generator ``study`` set names as subdirectories. Ignored when
+            ``study`` is not a parameter generator.
+        :param kwargs: all other keyword arguments are passed through to the builder after ``@{set_name}`` string
+            substitutions
+
+        :return: SCons NodeList of target nodes
         """
-        return substitution_syntax(self, *args, **kwargs)
+        return parameter_study_task(self, builder, *args, study=study, subdirectories=subdirectories, **kwargs)
 
-    def ParameterStudyTask(self, *args, **kwargs) -> SCons.Node.NodeList:  # noqa: N802
-        """Call :meth:`waves.scons_extensions.parameter_study_task` as a construction environment method.
+    def ParameterStudySConscript(  # noqa: N802
+        self,
+        *args,
+        variant_dir: str | pathlib.Path | None = None,
+        exports: dict | None = None,
+        study: dict | parameter_generators.ParameterGenerator | None = None,
+        set_name: str = "",
+        subdirectories: bool = False,
+        **kwargs,
+    ) -> typing.Any | tuple[typing.Any] | None:  # noqa: ANN401
+        """Wrap the SCons SConscript call to unpack parameter generators.
 
-        When using this environment pseudo-builder, do not provide the first ``env`` argument
+        Always overrides the ``exports`` dictionary with ``set_name`` and ``parameters`` keys. When ``study`` is a
+        dictionary or parameter generator, the ``parameters`` are overridden. When ``study`` is a parameter generator,
+        the ``set_name`` is overridden.
+
+        * If the study is a WAVES parameter generator object, call SConscript once per ``set_name`` and ``parameters``
+          in the generator's parameter study dictionary.
+        * If the study is a ``dict``, call SConscript with the study as ``parameters`` and use the ``set_name`` from the
+          method API.
+        * In all other cases, the SConscript call is given the ``set_name`` from the method API and an empty
+          ``parameters`` dictionary.
+
+        .. code-block::
+           :caption: SConstruct
+
+           import pathlib
+           import waves
+
+           env = waves.scons_extensions.WAVESEnvironment()
+           env.Append(BUILDERS={
+               "AbaqusJournal": waves.scons_extensions.abaqus_journal(),
+               "AbaqusSolver": waves.scons_extensions.abaqus_solver()
+           })
+
+           parameter_study_file = pathlib.Path("parameter_study.h5")
+           parameter_generator = waves.parameter_generators.CartesianProduct(
+               {"parameter_one": [1, 2, 3]},
+               output_file=parameter_study_file,
+               previous_parameter_study=parameter_study_file
+           )
+
+           studies = (
+               ("SConscript", parameter_generator),
+               ("SConscript", {"parameter_one": 1})
+           )
+           for workflow, study in studies:
+               env.ParameterStudySConscript(workflow, variant_dir="build", study=study, subdirectories=True)
+
+        .. code-block::
+           :caption: SConscript
+
+           Import("env", "set_name", "parameters")
+
+           env.AbaqusJournal(
+               target=["job.inp"],
+               source=["journal.py"],
+               journal_options="--input=${SOURCE.abspath} --output=${TARGET.abspath} --option ${parameter_one}"
+               **parameters
+           )
+
+           env.AbaqusSolver(
+               target=["job.odb"],
+               source=["job.inp"],
+               job="job",
+               **parameters
+           )
+
+        :param args: All positional arguments are passed through to the SConscript call directly
+        :param variant_dir: The SConscript API variant directory argument
+        :param exports: Dictionary of ``{key: value}`` pairs for the ``exports`` variables. *Must* use the dictionary
+            style because the calling script's namespace is not available to the function namespace.
+        :param study: Parameter generator or dictionary simulation parameters
+        :param set_name: Set name to use when not provided a ``study``. Overridden by the ``study`` set names when
+            ``study`` is a parameter generator.
+        :param kwargs: All other keyword arguments are passed through to the SConscript call directly
+        :param subdirectories: Switch to use parameter generator ``study`` set names as subdirectories. Ignored when
+            ``study`` is not a parameter generator.
+
+        :returns: SConscript ``Export()`` variables. When called with a parameter generator study, the ``Export()``
+            variables are returned as a list with one entry per parameter set.
+
+        :raises TypeError: if ``exports`` is not a dictionary
         """
-        return parameter_study_task(self, *args, **kwargs)
+        return parameter_study_sconscript(
+            self,
+            *args,
+            variant_dir=variant_dir,
+            exports=exports,
+            study=study,
+            set_name=set_name,
+            subdirectories=subdirectories,
+            **kwargs,
+        )
 
-    def ParameterStudySConscript(self, *args, **kwargs) -> typing.Any | tuple[typing.Any] | None:  # noqa: N802, ANN401
-        """Call :meth:`waves.scons_extensions.parameter_study_sconscript` as a construction environment method.
+    def ParameterStudyWrite(  # noqa: N802
+        self,
+        parameter_generator: parameter_generators.ParameterGenerator,
+        **kwargs,
+    ) -> SCons.Node.NodeList:
+        """Pseudo-builder to write a parameter generator's parameter study file.
 
-        When using this environment method, do not provide the first ``env`` argument
+        .. code-block::
+           :caption: SConstruct
+
+           import pathlib
+           import waves
+
+           env = waves.scons_extensions.WAVESEnvironment()
+
+           parameter_study_file = pathlib.Path("parameter_study.h5")
+           parameter_generator = waves.parameter_generators.CartesianProduct(
+               {"parameter_one": [1, 2, 3]},
+               output_file=parameter_study_file,
+               previous_parameter_study=parameter_study_file
+           )
+
+           env.ParameterStudyWrite(parameter_generator)
+
+        :param parameter_generator: WAVES ParameterGenerator class
+        :param kwargs: All other keyword arguments are passed directly to the
+            :meth:`waves.parameter_generators.ParameterGenerator.write` method.
+
+        :return: SCons NodeList of target nodes
         """
-        return parameter_study_sconscript(self, *args, **kwargs)
-
-    def ParameterStudyWrite(self, *args, **kwargs) -> SCons.Node.NodeList:  # noqa: N802
-        """Define tasks with the :meth:`waves.scons_extensions.parameter_study_write`.
-
-        When using this environment method, do not provide the first ``env`` argument
-        """
-        return parameter_study_write(self, *args, **kwargs)
+        return parameter_study_write(self, parameter_generator, **kwargs)
 
     def FirstTargetBuilder(self, target: list, source: list, *args, **kwargs) -> SCons.Node.NodeList:  # noqa: N802
         """Define tasks with the builder returned by :meth:`waves.scons_extensions.first_target_builder_factory`.
