@@ -2987,6 +2987,17 @@ def test_parameter_study_sconscript(
         env.ParameterStudySConscript(*args, **kwargs)
         mock_sconscript.assert_called_once_with(*args, **expected)
 
+    # Test WAVESEnvironment method
+    env = scons_extensions.WAVESEnvironment()
+    # Git commit 7a95cef7: Normally you expect something like ``patch("SCons.Script.SConscript.SConsEnvironment...")``
+    # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
+    with (
+        patch("waves.scons_extensions.SConsEnvironment.SConscript") as mock_sconscript,
+        outcome,
+    ):
+        env.ParameterStudySConscript(*args, **kwargs)
+        mock_sconscript.assert_called_once_with(*args, **expected)
+
 
 parameter_study_write_cases: dict[str, tuple] = {
     "output file": (
