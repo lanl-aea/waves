@@ -282,6 +282,12 @@ def test_find_program(
         program = env.FindProgram(names, **kwargs)
     assert program == first_found_path
 
+    # Test WAVESEnvironment method
+    env = scons_extensions.WAVESEnvironment()
+    with patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect):
+        program = env.FindProgram(names, **kwargs)
+    assert program == first_found_path
+
 
 @pytest.mark.parametrize(
     ("names", "kwargs", "checkprog_side_effect", "first_found_path"),
@@ -322,6 +328,15 @@ def test_add_program(
         env = SCons.Environment.Environment()
         original_path = env["ENV"]["PATH"]
         env.AddMethod(scons_extensions.add_program, "AddProgram")
+        with (
+            patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+        ):
+            program = env.AddProgram(names, prepend=prepend, **kwargs)
+            assert_logic(program, env, original_path, index)
+
+        # Test SCons AddMethod style interface
+        env = scons_extensions.WAVESEnvironment()
+        original_path = env["ENV"]["PATH"]
         with (
             patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
         ):
