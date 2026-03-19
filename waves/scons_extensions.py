@@ -3968,7 +3968,6 @@ def parameter_study_sconscript(
     * In all other cases, the SConscript call is given the ``set_name`` from the method API and an empty ``parameters``
       dictionary.
 
-
     .. code-block::
        :caption: SConstruct
 
@@ -4722,7 +4721,6 @@ class WAVESEnvironment(SConsEnvironment):
                subdirectories=True,
            )
 
-        :param env: An SCons construction environment to use when defining the targets.
         :param builder: The builder to parameterize
         :param args: All other positional arguments are passed through to the builder after ``@{set_name}`` string
             substitutions
@@ -4737,12 +4735,101 @@ class WAVESEnvironment(SConsEnvironment):
         """
         return parameter_study_task(self, builder, *args, study=study, subdirectories=subdirectories, **kwargs)
 
-    def ParameterStudySConscript(self, *args, **kwargs) -> typing.Any | tuple[typing.Any] | None:  # noqa: N802, ANN401
-        """Call :meth:`waves.scons_extensions.parameter_study_sconscript` as a construction environment method.
+    def ParameterStudySConscript(  # noqa: N802
+        self,
+        *args,
+        variant_dir: str | pathlib.Path | None = None,
+        exports: dict | None = None,
+        study: dict | parameter_generators.ParameterGenerator | None = None,
+        set_name: str = "",
+        subdirectories: bool = False,
+        **kwargs,
+    ) -> typing.Any | tuple[typing.Any] | None:  # noqa: ANN401
+        """Wrap the SCons SConscript call to unpack parameter generators.
 
-        When using this environment method, do not provide the first ``env`` argument
+        Always overrides the ``exports`` dictionary with ``set_name`` and ``parameters`` keys. When ``study`` is a
+        dictionary or parameter generator, the ``parameters`` are overridden. When ``study`` is a parameter generator,
+        the ``set_name`` is overridden.
+
+        * If the study is a WAVES parameter generator object, call SConscript once per ``set_name`` and ``parameters``
+          in the generator's parameter study dictionary.
+        * If the study is a ``dict``, call SConscript with the study as ``parameters`` and use the ``set_name`` from the
+          method API.
+        * In all other cases, the SConscript call is given the ``set_name`` from the method API and an empty
+          ``parameters`` dictionary.
+
+        .. code-block::
+           :caption: SConstruct
+
+           import pathlib
+           import waves
+
+           env = Environment()
+           env.Append(BUILDERS={
+               "AbaqusJournal": waves.scons_extensions.abaqus_journal(),
+               "AbaqusSolver": waves.scons_extensions.abaqus_solver()
+           })
+           env.AddMethod(waves.scons_extensions.parameter_study_sconscript, "ParameterStudySConscript")
+
+           parameter_study_file = pathlib.Path("parameter_study.h5")
+           parameter_generator = waves.parameter_generators.CartesianProduct(
+               {"parameter_one": [1, 2, 3]},
+               output_file=parameter_study_file,
+               previous_parameter_study=parameter_study_file
+           )
+
+           studies = (
+               ("SConscript", parameter_generator),
+               ("SConscript", {"parameter_one": 1})
+           )
+           for workflow, study in studies:
+               env.ParameterStudySConscript(workflow, variant_dir="build", study=study, subdirectories=True)
+
+        .. code-block::
+           :caption: SConscript
+
+           Import("env", "set_name", "parameters")
+
+           env.AbaqusJournal(
+               target=["job.inp"],
+               source=["journal.py"],
+               journal_options="--input=${SOURCE.abspath} --output=${TARGET.abspath} --option ${parameter_one}"
+               **parameters
+           )
+
+           env.AbaqusSolver(
+               target=["job.odb"],
+               source=["job.inp"],
+               job="job",
+               **parameters
+           )
+
+        :param args: All positional arguments are passed through to the SConscript call directly
+        :param variant_dir: The SConscript API variant directory argument
+        :param exports: Dictionary of ``{key: value}`` pairs for the ``exports`` variables. *Must* use the dictionary
+            style because the calling script's namespace is not available to the function namespace.
+        :param study: Parameter generator or dictionary simulation parameters
+        :param set_name: Set name to use when not provided a ``study``. Overridden by the ``study`` set names when
+            ``study`` is a parameter generator.
+        :param kwargs: All other keyword arguments are passed through to the SConscript call directly
+        :param subdirectories: Switch to use parameter generator ``study`` set names as subdirectories. Ignored when
+            ``study`` is not a parameter generator.
+
+        :returns: SConscript ``Export()`` variables. When called with a parameter generator study, the ``Export()``
+            variables are returned as a list with one entry per parameter set.
+
+        :raises TypeError: if ``exports`` is not a dictionary
         """
-        return parameter_study_sconscript(self, *args, **kwargs)
+        return parameter_study_sconscript(
+            self,
+            *args,
+            variant_dir=variant_dir,
+            exports=exports,
+            study=study,
+            set_name=set_name,
+            subdirectories=subdirectories,
+            **kwargs,
+        )
 
     def ParameterStudyWrite(self, *args, **kwargs) -> SCons.Node.NodeList:  # noqa: N802
         """Define tasks with the :meth:`waves.scons_extensions.parameter_study_write`.
