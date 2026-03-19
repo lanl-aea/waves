@@ -4463,12 +4463,38 @@ class WAVESEnvironment(SConsEnvironment):
         """
         return add_program(self, names, quote_spaces_in_path=quote_spaces_in_path, prepend=prepend)
 
-    def AddCubit(self, *args, **kwargs) -> str | None:  # noqa: N802
-        """Call :meth:`waves.scons_extensions.add_cubit` as a construction environment method.
+    def AddCubit(  # noqa: N802
+        self,
+        names: collections.abc.Sequence[str],
+        quote_spaces_in_path: bool = True,
+        prepend: bool = True,
+    ) -> str | None:
+        """Modify environment variables with the paths required to ``import cubit`` in a Python3 environment.
 
-        When using this environment method, do not provide the first ``env`` argument
+        Returns the absolute path of the first program name found. Prepends ``PATH`` with first program's parent
+        directory if a program is found and the directory is not already on ``PATH``. Prepends ``PYTHONPATH`` with
+        ``parent/bin``.  Prepends ``LD_LIBRARY_PATH`` with ``parent/bin/python3``.
+
+        Returns None if no program name is found.
+
+        .. code-block::
+           :caption: Example Cubit environment modification
+
+           import waves
+
+           env = waves.scons_extensions.WAVESEnvironment()
+           env["CUBIT_PROGRAM"] = env.AddCubit(["cubit"])
+
+        :param names: list of string program names for the main Cubit executable. May include an absolute path.
+        :param quote_spaces_in_path: Surround path parts that contain spaces with double quotes.
+            May need to set as ``False`` when relying on this function's PATH and PYTHONPATH modifications, particularly
+            on Windows.
+        :param prepend: modify ``PATH`` by prepending the program parent path. Set to ``False`` to append ``PATH``
+            instead.
+
+        :return: Absolute path of the Cubit executable. None if none of the names are found.
         """
-        return add_cubit(self, *args, **kwargs)
+        return add_cubit(self, names, quote_spaces_in_path=quote_spaces_in_path, prepend=prepend)
 
     def AddCubitPython(self, *args, **kwargs) -> str | None:  # noqa: N802
         """Call :meth:`waves.scons_extensions.add_cubit_python` as a construction environment method.
