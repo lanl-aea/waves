@@ -365,6 +365,25 @@ def test_add_cubit(
     else:
         assert env["ENV"]["PATH"] == original_path
 
+    # Test function style interface
+    env = SCons.Environment.Environment()
+    original_path = env["ENV"]["PATH"]
+    with (
+        patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return),
+        patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+    ):
+        program = scons_extensions.add_cubit(env, names, prepend=False, **kwargs)
+    assert program == first_found_path
+    if first_found_path is not None:
+        parent_path = pathlib.Path(first_found_path).parent
+        cubit_bin = parent_path / "bin"
+        cubit_library_path = cubit_bin / "python3"
+        assert env["ENV"]["PATH"].split(os.pathsep)[-1] == str(parent_path)
+        assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[-1] == str(cubit_bin)
+        assert env["ENV"]["LD_LIBRARY_PATH"].split(os.pathsep)[-1] == str(cubit_library_path)
+    else:
+        assert env["ENV"]["PATH"] == original_path
+
     # Test SCons AddMethod style interface
     env = SCons.Environment.Environment()
     env.AddMethod(scons_extensions.add_cubit, "AddCubit")
@@ -381,6 +400,25 @@ def test_add_cubit(
         assert env["ENV"]["PATH"].split(os.pathsep)[0] == str(parent_path)
         assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[0] == str(cubit_bin)
         assert env["ENV"]["LD_LIBRARY_PATH"].split(os.pathsep)[0] == str(cubit_library_path)
+    else:
+        assert env["ENV"]["PATH"] == original_path
+
+    # Test SCons AddMethod style interface
+    env = SCons.Environment.Environment()
+    env.AddMethod(scons_extensions.add_cubit, "AddCubit")
+    original_path = env["ENV"]["PATH"]
+    with (
+        patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return),
+        patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+    ):
+        program = env.AddCubit(names, prepend=False, **kwargs)
+    assert program == first_found_path
+    if first_found_path is not None:
+        parent_path = pathlib.Path(first_found_path).parent
+        cubit_bin = parent_path / "bin"
+        assert env["ENV"]["PATH"].split(os.pathsep)[-1] == str(parent_path)
+        assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[-1] == str(cubit_bin)
+        assert env["ENV"]["LD_LIBRARY_PATH"].split(os.pathsep)[-1] == str(cubit_library_path)
     else:
         assert env["ENV"]["PATH"] == original_path
 
