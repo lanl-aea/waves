@@ -3207,26 +3207,31 @@ def test_tar_script(
 
 
 test_project_cache_directory_cases = {
-    "generic cache directory": (
-            None,
-            "cache",
-            {"cache_readonly": False, "cache_write": True},
-            None,
-        ),
+    "No cache directory": (
+        None,
+        None,
+        {"cache_readonly": False, "cache_write": True},
+        None,
+    ),
 }
 
 
 @pytest.mark.parametrize(
-    ("shared_cache_directory", "cache_directory", "kwargs", "expected"),
+    ("shared_cache_directory", "cache_directory", "kwargs", "expected_directory"),
     test_project_cache_directory_cases.values(),
     ids=test_project_cache_directory_cases.keys(),
 )
 def test_project_cache_directory(
-    shared_cache_directory: pathlib.Path | None = None,
-    cache_directory: str | pathlib.Path | None = None,
+    shared_cache_directory: pathlib.Path | None,
+    cache_directory: str | pathlib.Path | None,
     kwargs: dict,
-    expected: str,
+    expected_directory: str,
 ) -> None:
+    env = SCons.Environment.Environment()
+    active_cache_directory = scons_extensions.project_cache_directory(
+        env, shared_cache_directory, cache_directory, **kwargs
+    )
+    assert active_cache_directory == expected_directory
 
 
 waves_environment_attributes = {
