@@ -3053,6 +3053,11 @@ def test_parameter_study_write(
         targets = env.ParameterStudyWrite(parameter_generator, **kwargs)
         assert [str(target) for target in targets] == expected
 
+    env = scons_extensions.WAVESEnvironment()
+    with outcome:
+        targets = env.ParameterStudyWrite(parameter_generator, **kwargs)
+        assert [str(target) for target in targets] == expected
+
 
 test_qoi_pseudo_builder_cases: dict[str, tuple] = {
     "default call": (
