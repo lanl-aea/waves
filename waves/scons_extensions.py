@@ -722,8 +722,8 @@ def add_cubit(
 ) -> str | None:
     """Modify environment variables with the paths required to ``import cubit`` in a Python3 environment.
 
-    Returns the absolute path of the first program name found. Prepends ``PATH`` with first program's parent directory if
-    a program is found and the directory is not already on ``PATH``. Prepends ``PYTHONPATH`` with ``parent/bin``.
+    Returns the absolute path of the first program name found. Prepends ``PATH`` with first program's parent directory
+    if a program is found and the directory is not already on ``PATH``. Prepends ``PYTHONPATH`` with ``parent/bin``.
     Prepends ``LD_LIBRARY_PATH`` with ``parent/bin/python3``.
 
     Returns None if no program name is found.
