@@ -3106,6 +3106,29 @@ def test_tar_script(
         check_action_string(output, 2, 1, expected_action)
 
 
+test_project_cache_directory_cases = {
+    "generic cache directory": (
+            None,
+            "cache",
+            {"cache_readonly": False, "cache_write": True},
+            None,
+        ),
+}
+
+
+@pytest.mark.parametrize(
+    ("shared_cache_directory", "cache_directory", "kwargs", "expected"),
+    test_project_cache_directory_cases.values(),
+    ids=test_project_cache_directory_cases.keys(),
+)
+def test_project_cache_directory(
+    shared_cache_directory: pathlib.Path | None = None,
+    cache_directory: str | pathlib.Path | None = None,
+    kwargs: dict,
+    expected: str,
+) -> None:
+
+
 waves_environment_attributes = {
     "default": ({}),
     "no defaults": (
