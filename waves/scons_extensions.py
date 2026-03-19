@@ -4433,16 +4433,17 @@ class WAVESEnvironment(SConsEnvironment):
         """
         return find_program(self, names, quote_spaces_in_path=quote_spaces_in_path)
 
-    def AddProgram(
+    def AddProgram(  # noqa: N802
         self,
         names: collections.abc.Sequence[str],
         quote_spaces_in_path: bool = True,
         prepend: bool = True,
-    ) -> str | None:  # noqa: N802
+    ) -> str | None:
         """Search for a program from a list of possible program names. Add first found to system ``PATH``.
 
-        Returns the absolute path of the first program name found. Prepends ``PATH`` with first program's parent directory
-        if a program is found and the directory is not already on ``PATH``. Returns None if no program name is found.
+        Returns the absolute path of the first program name found. Prepends ``PATH`` with first program's parent
+        directory if a program is found and the directory is not already on ``PATH``. Returns None if no program name is
+        found.
 
         .. code-block::
            :caption: Example search for an executable named "program"
@@ -4455,7 +4456,8 @@ class WAVESEnvironment(SConsEnvironment):
         :param names: list of string program names. May include an absolute path.
         :param quote_spaces_in_path: Surround path parts that contain spaces with double quotes.
             May need to set as ``False`` when relying on this function's PATH modifications, particularly on Windows.
-        :param prepend: modify ``PATH`` by prepending the program parent path. Set to ``False`` to append ``PATH`` instead.
+        :param prepend: modify ``PATH`` by prepending the program parent path. Set to ``False`` to append ``PATH``
+            instead.
 
         :return: Absolute path of the found program. None if none of the names are found.
         """
