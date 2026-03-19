@@ -993,7 +993,7 @@ def test_substitution_syntax(substitution_dictionary: dict, keyword_arguments: d
     output_dictionary = env.SubstitutionSyntax(substitution_dictionary, **keyword_arguments)
     assert output_dictionary == expected_dictionary
 
-    # Test WAVESEnvironment method 
+    # Test WAVESEnvironment method
     env = scons_extensions.WAVESEnvironment()
     output_dictionary = env.SubstitutionSyntax(substitution_dictionary, **keyword_arguments)
     assert output_dictionary == expected_dictionary
@@ -2851,7 +2851,7 @@ python_script_input = {
     python_script_input.values(),
     ids=python_script_input.keys(),
 )
-def test_parameter_study(
+def test_parameter_study_task(
     node_count: int,
     action_count: int,
     args: tuple,
@@ -2864,6 +2864,7 @@ def test_parameter_study(
         "${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
     )
 
+    # Test the AddMethod style interface
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"PythonScript": scons_extensions.python_builder_factory()})
     env.AddMethod(scons_extensions.parameter_study_task, "ParameterStudyTask")
@@ -2875,7 +2876,19 @@ def test_parameter_study(
         study=study,
         **kwargs,
     )
+    check_action_string(nodes, node_count, action_count, expected_string)
+    assert [pathlib.Path(str(node)) for node in nodes] == [pathlib.Path(node) for node in expected_targets]
 
+    # Test the WAVESEnvironment method
+    env = scons_extensions.WAVESEnvironment()
+    nodes = env.ParameterStudyTask(
+        env.PythonScript,
+        *args,
+        source=["python_script.py"],
+        script_options="",
+        study=study,
+        **kwargs,
+    )
     check_action_string(nodes, node_count, action_count, expected_string)
     assert [pathlib.Path(str(node)) for node in nodes] == [pathlib.Path(node) for node in expected_targets]
 
