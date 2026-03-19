@@ -3188,7 +3188,7 @@ waves_environment_methods = {
     "PrintBuildFailures": ("PrintBuildFailures", "print_build_failures", (), {"print_stdout": True}),
     "CheckProgram": ("CheckProgram", "check_program", ("prog_name",), {}),
     "FindProgram": ("FindProgram", "find_program", (["names"],), {"quote_spaces_in_path": True}),
-    "AddProgram": ("AddProgram", "add_program", ("arg1",), {"kwarg1": "value1"}),
+    "AddProgram": ("AddProgram", "add_program", (["names"],), {"quote_spaces_in_path": True, "prepend": True}),
     "AddCubit": ("AddCubit", "add_cubit", ("arg1",), {"kwarg1": "value1"}),
     "AddCubitPython": ("AddCubitPython", "add_cubit_python", ("arg1",), {"kwarg1": "value1"}),
     "CopySubstfile": ("CopySubstfile", "copy_substfile", ("arg1",), {"kwarg1": "value1"}),
