@@ -8,6 +8,10 @@ Changelog
 1.4.0 (unreleased)
 ******************
 
+******************
+1.3.1 (2026-03-19)
+******************
+
 Bug fixes
 =========
 - Consistent append or prepend PATH-like modifications in the ``add_cubit`` method. All PATH-like modifications are now
