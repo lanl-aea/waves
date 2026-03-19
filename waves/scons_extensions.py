@@ -4574,12 +4574,22 @@ class WAVESEnvironment(SConsEnvironment):
             symlink=symlink,
         )
 
-    def ProjectHelp(self, *args, **kwargs) -> None:  # noqa: N802
-        """Call :meth:`waves.scons_extensions.project_help` as a construction environment method.
+    def ProjectHelp(  # noqa: N802
+        self,
+        append: bool = True,
+        local_only: bool = True,
+        target_descriptions: dict | None = None,
+    ) -> None:
+        """Add default targets and alias lists to project help message.
 
-        When using this environment method, do not provide the first ``env`` argument
+        See the `SCons Help`_ documentation for appending behavior.
+
+        :param append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
+            overwritten if ``env.Help`` has not been previously called.
+        :param local_only: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
+        :param target_descriptions: dictionary containing target metadata.
         """
-        return project_help(self, *args, **kwargs)
+        return project_help(self, append=append, local_only=local_only, target_descriptions=target_descriptions)
 
     def ProjectAlias(self, *args, **kwargs) -> dict[str, str]:  # noqa: N802
         """Call :meth:`waves.scons_extensions.project_alias` as a construction environment method.

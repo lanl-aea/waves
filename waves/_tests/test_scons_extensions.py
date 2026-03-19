@@ -3197,7 +3197,12 @@ waves_environment_methods = {
         (["source_list"],),
         {"substitution_dictionary": {"key": "value"}, "build_subdirectory": ".", "symlink": False},
     ),
-    "ProjectHelp": ("ProjectHelp", "project_help", ("arg1",), {"kwarg1": "value1"}),
+    "ProjectHelp": (
+        "ProjectHelp",
+        "project_help",
+        (),
+        {"append": True, "local_only": True, "target_descriptions": None},
+    ),
     "ProjectAlias": ("ProjectAlias", "project_alias", ("arg1",), {"kwarg1": "value1"}),
     "SubstitutionSyntax": ("SubstitutionSyntax", "substitution_syntax", ("arg1",), {"kwarg1": "value1"}),
     "ParameterStudyTask": ("ParameterStudyTask", "parameter_study_task", ("arg1",), {"kwarg1": "value1"}),
