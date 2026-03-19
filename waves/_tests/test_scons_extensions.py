@@ -458,27 +458,29 @@ def test_add_cubit_python() -> None:
     # Test SCons AddMethod style interface
     env = SCons.Environment.Environment()
     env.AddMethod(scons_extensions.add_cubit_python, "AddCubitPython")
+    waves_env = scons_extensions.WAVESEnvironment()
     cubit_bin = "/path/to/cubit/bin/"
     cubit_python = "/path/to/cubit/bin/python"
-    # Cubit Python not found mocked by add_program
-    with (
-        patch("waves._utilities.find_cubit_python"),
-        patch("waves.scons_extensions.find_program"),
-        patch("waves.scons_extensions.add_program", return_value=None),
-    ):
-        program = env.AddCubitPython("dummy_cubit_executable")
-    assert program is None
-    assert "PYTHONPATH" not in env["ENV"]
-    # Cubit Python found mocked by add_program
-    with (
-        patch("waves._utilities.find_cubit_python"),
-        patch("waves.scons_extensions.find_program"),
-        patch("waves.scons_extensions.add_program", return_value=cubit_python),
-        patch("waves._utilities.find_cubit_bin", return_value=cubit_bin),
-    ):
-        program = env.AddCubitPython("dummy_cubit_executable")
-    assert program == cubit_python
-    assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[0] == str(cubit_bin)
+    for environment in [env, waves_env]:
+        # Cubit Python not found mocked by add_program
+        with (
+            patch("waves._utilities.find_cubit_python"),
+            patch("waves.scons_extensions.find_program"),
+            patch("waves.scons_extensions.add_program", return_value=None),
+        ):
+            program = environment.AddCubitPython("dummy_cubit_executable")
+        assert program is None
+        assert "PYTHONPATH" not in environment["ENV"]
+        # Cubit Python found mocked by add_program
+        with (
+            patch("waves._utilities.find_cubit_python"),
+            patch("waves.scons_extensions.find_program"),
+            patch("waves.scons_extensions.add_program", return_value=cubit_python),
+            patch("waves._utilities.find_cubit_bin", return_value=cubit_bin),
+        ):
+            program = environment.AddCubitPython("dummy_cubit_executable")
+        assert program == cubit_python
+        assert environment["ENV"]["PYTHONPATH"].split(os.pathsep)[0] == str(cubit_bin)
 
 
 def dummy_emitter_for_testing(target: list, source: list, env: SCons.Environment.Environment) -> tuple[list, list]:  # noqa: ARG001
