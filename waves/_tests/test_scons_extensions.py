@@ -993,6 +993,11 @@ def test_substitution_syntax(substitution_dictionary: dict, keyword_arguments: d
     output_dictionary = env.SubstitutionSyntax(substitution_dictionary, **keyword_arguments)
     assert output_dictionary == expected_dictionary
 
+    # Test WAVESEnvironment method 
+    env = scons_extensions.WAVESEnvironment()
+    output_dictionary = env.SubstitutionSyntax(substitution_dictionary, **keyword_arguments)
+    assert output_dictionary == expected_dictionary
+
 
 shell_environment = {
     "default kwargs": (
