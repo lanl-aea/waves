@@ -270,63 +270,35 @@ def test_add_program(
     checkprog_side_effect: list[str | None],
     first_found_path: str | None,
 ) -> None:
-    # Test function style interface: prepend=True
-    env = SCons.Environment.Environment()
-    original_path = env["ENV"]["PATH"]
-    with (
-        patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
-    ):
-        program = scons_extensions.add_program(env, names, **kwargs)
-    assert program == first_found_path
-    if first_found_path is not None:
-        parent_path = pathlib.Path(first_found_path).parent
-        assert env["ENV"]["PATH"].split(os.pathsep)[0] == str(parent_path)
-    else:
-        assert env["ENV"]["PATH"] == original_path
+    for prepend, index in [(True, 0), (False, -1)]:
+        # Test function style interface
+        env = SCons.Environment.Environment()
+        original_path = env["ENV"]["PATH"]
+        with (
+            patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+        ):
+            program = scons_extensions.add_program(env, names, prepend=prepend, **kwargs)
+        assert program == first_found_path
+        if first_found_path is not None:
+            parent_path = pathlib.Path(first_found_path).parent
+            assert env["ENV"]["PATH"].split(os.pathsep)[index] == str(parent_path)
+        else:
+            assert env["ENV"]["PATH"] == original_path
 
-    # Test function style interface: prepend=False
-    env = SCons.Environment.Environment()
-    original_path = env["ENV"]["PATH"]
-    with (
-        patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
-    ):
-        program = scons_extensions.add_program(env, names, prepend=False, **kwargs)
-    assert program == first_found_path
-    if first_found_path is not None:
-        parent_path = pathlib.Path(first_found_path).parent
-        assert env["ENV"]["PATH"].split(os.pathsep)[-1] == str(parent_path)
-    else:
-        assert env["ENV"]["PATH"] == original_path
-
-    # Test SCons AddMethod style interface: prepend=True
-    env = SCons.Environment.Environment()
-    original_path = env["ENV"]["PATH"]
-    env.AddMethod(scons_extensions.add_program, "AddProgram")
-    with (
-        patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
-    ):
-        program = env.AddProgram(names, **kwargs)
-    assert program == first_found_path
-    if first_found_path is not None:
-        parent_path = pathlib.Path(first_found_path).parent
-        assert env["ENV"]["PATH"].split(os.pathsep)[0] == str(parent_path)
-    else:
-        assert env["ENV"]["PATH"] == original_path
-
-    # Test SCons AddMethod style interface: prepend=False
-    env = SCons.Environment.Environment()
-    original_path = env["ENV"]["PATH"]
-    env.AddMethod(scons_extensions.add_program, "AddProgram")
-    with (
-        patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
-    ):
-        program = env.AddProgram(names, prepend=False, **kwargs)
-    assert program == first_found_path
-    if first_found_path is not None:
-        parent_path = pathlib.Path(first_found_path).parent
-        assert env["ENV"]["PATH"].split(os.pathsep)[-1] == str(parent_path)
-    else:
-        assert env["ENV"]["PATH"] == original_path
+        # Test SCons AddMethod style interface
+        env = SCons.Environment.Environment()
+        original_path = env["ENV"]["PATH"]
+        env.AddMethod(scons_extensions.add_program, "AddProgram")
+        with (
+            patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+        ):
+            program = env.AddProgram(names, prepend=prepend, **kwargs)
+        assert program == first_found_path
+        if first_found_path is not None:
+            parent_path = pathlib.Path(first_found_path).parent
+            assert env["ENV"]["PATH"].split(os.pathsep)[index] == str(parent_path)
+        else:
+            assert env["ENV"]["PATH"] == original_path
 
 
 @pytest.mark.parametrize(
@@ -346,81 +318,44 @@ def test_add_cubit(
     else:
         find_cubit_bin_return = None
 
-    # Test function style interface
-    env = SCons.Environment.Environment()
-    original_path = env["ENV"]["PATH"]
-    with (
-        patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return),
-        patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
-    ):
-        program = scons_extensions.add_cubit(env, names, **kwargs)
-    assert program == first_found_path
-    if first_found_path is not None:
-        parent_path = pathlib.Path(first_found_path).parent
-        cubit_bin = parent_path / "bin"
-        cubit_library_path = cubit_bin / "python3"
-        assert env["ENV"]["PATH"].split(os.pathsep)[0] == str(parent_path)
-        assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[0] == str(cubit_bin)
-        assert env["ENV"]["LD_LIBRARY_PATH"].split(os.pathsep)[0] == str(cubit_library_path)
-    else:
-        assert env["ENV"]["PATH"] == original_path
+    for prepend, index in [(True, 0), (False, -1)]:
+        # Test function style interface
+        env = SCons.Environment.Environment()
+        original_path = env["ENV"]["PATH"]
+        with (
+            patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return),
+            patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+        ):
+            program = scons_extensions.add_cubit(env, names, prepend=prepend, **kwargs)
+        assert program == first_found_path
+        if first_found_path is not None:
+            parent_path = pathlib.Path(first_found_path).parent
+            cubit_bin = parent_path / "bin"
+            cubit_library_path = cubit_bin / "python3"
+            assert env["ENV"]["PATH"].split(os.pathsep)[index] == str(parent_path)
+            assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[index] == str(cubit_bin)
+            assert env["ENV"]["LD_LIBRARY_PATH"].split(os.pathsep)[index] == str(cubit_library_path)
+        else:
+            assert env["ENV"]["PATH"] == original_path
 
-    # Test function style interface
-    env = SCons.Environment.Environment()
-    original_path = env["ENV"]["PATH"]
-    with (
-        patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return),
-        patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
-    ):
-        program = scons_extensions.add_cubit(env, names, prepend=False, **kwargs)
-    assert program == first_found_path
-    if first_found_path is not None:
-        parent_path = pathlib.Path(first_found_path).parent
-        cubit_bin = parent_path / "bin"
-        cubit_library_path = cubit_bin / "python3"
-        assert env["ENV"]["PATH"].split(os.pathsep)[-1] == str(parent_path)
-        assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[-1] == str(cubit_bin)
-        assert env["ENV"]["LD_LIBRARY_PATH"].split(os.pathsep)[-1] == str(cubit_library_path)
-    else:
-        assert env["ENV"]["PATH"] == original_path
-
-    # Test SCons AddMethod style interface
-    env = SCons.Environment.Environment()
-    env.AddMethod(scons_extensions.add_cubit, "AddCubit")
-    original_path = env["ENV"]["PATH"]
-    with (
-        patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return),
-        patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
-    ):
-        program = env.AddCubit(names, **kwargs)
-    assert program == first_found_path
-    if first_found_path is not None:
-        parent_path = pathlib.Path(first_found_path).parent
-        cubit_bin = parent_path / "bin"
-        assert env["ENV"]["PATH"].split(os.pathsep)[0] == str(parent_path)
-        assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[0] == str(cubit_bin)
-        assert env["ENV"]["LD_LIBRARY_PATH"].split(os.pathsep)[0] == str(cubit_library_path)
-    else:
-        assert env["ENV"]["PATH"] == original_path
-
-    # Test SCons AddMethod style interface
-    env = SCons.Environment.Environment()
-    env.AddMethod(scons_extensions.add_cubit, "AddCubit")
-    original_path = env["ENV"]["PATH"]
-    with (
-        patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return),
-        patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
-    ):
-        program = env.AddCubit(names, prepend=False, **kwargs)
-    assert program == first_found_path
-    if first_found_path is not None:
-        parent_path = pathlib.Path(first_found_path).parent
-        cubit_bin = parent_path / "bin"
-        assert env["ENV"]["PATH"].split(os.pathsep)[-1] == str(parent_path)
-        assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[-1] == str(cubit_bin)
-        assert env["ENV"]["LD_LIBRARY_PATH"].split(os.pathsep)[-1] == str(cubit_library_path)
-    else:
-        assert env["ENV"]["PATH"] == original_path
+        # Test SCons AddMethod style interface
+        env = SCons.Environment.Environment()
+        env.AddMethod(scons_extensions.add_cubit, "AddCubit")
+        original_path = env["ENV"]["PATH"]
+        with (
+            patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return),
+            patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+        ):
+            program = env.AddCubit(names, prepend=prepend, **kwargs)
+        assert program == first_found_path
+        if first_found_path is not None:
+            parent_path = pathlib.Path(first_found_path).parent
+            cubit_bin = parent_path / "bin"
+            assert env["ENV"]["PATH"].split(os.pathsep)[index] == str(parent_path)
+            assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[index] == str(cubit_bin)
+            assert env["ENV"]["LD_LIBRARY_PATH"].split(os.pathsep)[index] == str(cubit_library_path)
+        else:
+            assert env["ENV"]["PATH"] == original_path
 
 
 def test_add_cubit_python() -> None:
