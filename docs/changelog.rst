@@ -8,6 +8,21 @@ Changelog
 1.4.0 (unreleased)
 ******************
 
+Bug fixes
+=========
+- Consistent append or prepend PATH-like modifications in the ``add_cubit`` method. All PATH-like modifications are now
+  performed with the same behavior to avoid mixing different versions of Cubit executables to incorrect Python and
+  compiled libraries when more than one version is found in the construction environment (:merge:`1302`). By `Kyle
+  Brindley`_.
+
+Enhancements
+============
+- Default to prepending PATH in the ``add_program`` method. Matches user expectations when updating an environment PATH
+  with more than one version of the same software. Last added version is found on PATH first (:merge:`1302`). By `Kyle
+  Brindley`_.
+- Allow prepend/append selection in ``add_program`` and ``add_cubit`` PATH modifications (:merge:`1302`). By `Kyle
+  Brindley`_.
+
 ******************
 1.3.0 (2026-03-17)
 ******************
