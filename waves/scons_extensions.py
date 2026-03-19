@@ -705,9 +705,9 @@ def add_program(
     :return: Absolute path of the found program. None if none of the names are found.
     """
     if prepend:
-        path_modification_method = env.PrependENVPATH
+        path_modification_method = env.PrependENVPath
     else:
-        path_modification_method = env.AppendENVPATH
+        path_modification_method = env.AppendENVPath
     first_found_path = find_program(env, names, quote_spaces_in_path=quote_spaces_in_path)
     if first_found_path:
         path_modification_method("PATH", str(pathlib.Path(first_found_path).parent), delete_existing=False)
@@ -747,9 +747,9 @@ def add_cubit(
     :return: Absolute path of the Cubit executable. None if none of the names are found.
     """
     if prepend:
-        path_modification_method = env.PrependENVPATH
+        path_modification_method = env.PrependENVPath
     else:
-        path_modification_method = env.AppendENVPATH
+        path_modification_method = env.AppendENVPath
     # Need a path without quotes for ``find_cubit_bin`` because method uses ``shutil`` internally, which treats quotes
     # as string literal path parts.
     first_found_path = find_program(env, names, quote_spaces_in_path=False)

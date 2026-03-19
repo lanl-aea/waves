@@ -270,7 +270,7 @@ def test_add_program(
     checkprog_side_effect: list[str | None],
     first_found_path: str | None,
 ) -> None:
-    # Test function style interface
+    # Test function style interface: prepend=True
     env = SCons.Environment.Environment()
     original_path = env["ENV"]["PATH"]
     with (
@@ -284,7 +284,21 @@ def test_add_program(
     else:
         assert env["ENV"]["PATH"] == original_path
 
-    # Test SCons AddMethod style interface
+    # Test function style interface: prepend=False
+    env = SCons.Environment.Environment()
+    original_path = env["ENV"]["PATH"]
+    with (
+        patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+    ):
+        program = scons_extensions.add_program(env, names, prepend=False, **kwargs)
+    assert program == first_found_path
+    if first_found_path is not None:
+        parent_path = pathlib.Path(first_found_path).parent
+        assert env["ENV"]["PATH"].split(os.pathsep)[-1] == str(parent_path)
+    else:
+        assert env["ENV"]["PATH"] == original_path
+
+    # Test SCons AddMethod style interface: prepend=True
     env = SCons.Environment.Environment()
     original_path = env["ENV"]["PATH"]
     env.AddMethod(scons_extensions.add_program, "AddProgram")
@@ -296,6 +310,21 @@ def test_add_program(
     if first_found_path is not None:
         parent_path = pathlib.Path(first_found_path).parent
         assert env["ENV"]["PATH"].split(os.pathsep)[0] == str(parent_path)
+    else:
+        assert env["ENV"]["PATH"] == original_path
+
+    # Test SCons AddMethod style interface: prepend=False
+    env = SCons.Environment.Environment()
+    original_path = env["ENV"]["PATH"]
+    env.AddMethod(scons_extensions.add_program, "AddProgram")
+    with (
+        patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+    ):
+        program = env.AddProgram(names, prepend=False, **kwargs)
+    assert program == first_found_path
+    if first_found_path is not None:
+        parent_path = pathlib.Path(first_found_path).parent
+        assert env["ENV"]["PATH"].split(os.pathsep)[-1] == str(parent_path)
     else:
         assert env["ENV"]["PATH"] == original_path
 
