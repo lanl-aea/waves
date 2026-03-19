@@ -2342,7 +2342,9 @@ def copy_substfile(
        :caption: SConstruct
 
        import pathlib
+
        import waves
+
        current_directory = pathlib.Path(Dir(".").abspath)
        env = Environment()
        env.AddMethod(waves.scons_extensions.copy_substfile, "CopySubstfile")
@@ -4519,12 +4521,58 @@ class WAVESEnvironment(SConsEnvironment):
         """
         return add_cubit_python(self, names)
 
-    def CopySubstfile(self, *args, **kwargs) -> SCons.Node.NodeList:  # noqa: N802
-        """Call :meth:`waves.scons_extensions.copy_substfile` as a construction environment method.
+    def CopySubstfile(  # noqa: N802
+        self,
+        source_list: list,
+        substitution_dictionary: dict | None = None,
+        build_subdirectory: str | pathlib.Path = ".",
+        symlink: bool = False,
+    ) -> SCons.Node.NodeList:
+        """Pseudo-builder to copy source list to build directory and perform template substitutions on ``*.in`` filenames.
 
-        When using this environment method, do not provide the first ``env`` argument
-        """
-        return copy_substfile(self, *args, **kwargs)
+        `SCons Pseudo-Builder`_ to chain two builders:  a builder with the `SCons Copy`_ action and the `SCons Substfile`_
+        builders. Files are first copied to the build (variant) directory and then template substitution is performed on
+        template files (any file ending with ``*.in`` suffix) to create a file without the template suffix.
+
+        To avoid dependency cycles, the source file(s) should be passed by absolute path.
+
+        .. code-block::
+           :caption: SConstruct
+
+           import pathlib
+
+           import waves
+
+           current_directory = pathlib.Path(Dir(".").abspath)
+           env = waves.scons_extensions.WAVESEnvironment()
+           source_list = [
+               "#/subdir3/file_three.ext",              # File found with respect to project root directory using SCons notation
+               current_directory / file_one.ext,        # File found in current SConscript directory
+               current_directory / "subdir2/file_two",  # File found below current SConscript directory
+               current_directory / "file_four.ext.in"   # File with substitutions matching substitution dictionary keys
+           ]
+           substitution_dictionary = {
+               "@variable_one@": "value_one"
+           }
+           env.CopySubstfile(source_list, substitution_dictionary=substitution_dictionary)
+
+        :param source_list: List of pathlike objects or strings. Will be converted to list of pathlib.Path objects.
+        :param substitution_dictionary: key: value pairs for template substitution. The keys must contain the optional
+            template characters if present, e.g. ``@variable@``. The template character, e.g. ``@``, can be anything that
+            works in the `SCons Substfile`_ builder.
+        :param build_subdirectory: build subdirectory relative path prepended to target files
+        :param symlink: Whether symbolic links are created as new symbolic links. If true, symbolic links are shallow
+            copies as a new symbolic link. If false, symbolic links are copied as a new file (dereferenced).
+
+        :return: SCons NodeList of Copy and Substfile target nodes
+        """  # noqa: E501
+        return copy_substfile(
+            self,
+            source_list,
+            substitution_dictionary=substitution_dictionary,
+            build_subdirectory=build_subdirectory,
+            symlink=symlink,
+        )
 
     def ProjectHelp(self, *args, **kwargs) -> None:  # noqa: N802
         """Call :meth:`waves.scons_extensions.project_help` as a construction environment method.

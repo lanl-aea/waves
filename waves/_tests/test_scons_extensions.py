@@ -3191,7 +3191,12 @@ waves_environment_methods = {
     "AddProgram": ("AddProgram", "add_program", (["names"],), {"quote_spaces_in_path": True, "prepend": True}),
     "AddCubit": ("AddCubit", "add_cubit", (["names"],), {"quote_spaces_in_path": True, "prepend": True}),
     "AddCubitPython": ("AddCubitPython", "add_cubit_python", (["names"],), {}),
-    "CopySubstfile": ("CopySubstfile", "copy_substfile", ("arg1",), {"kwarg1": "value1"}),
+    "CopySubstfile": (
+        "CopySubstfile",
+        "copy_substfile",
+        (["source_list"],),
+        {"substitution_dictionary": {"key": "value"}, "build_subdirectory": ".", "symlink": False},
+    ),
     "ProjectHelp": ("ProjectHelp", "project_help", ("arg1",), {"kwarg1": "value1"}),
     "ProjectAlias": ("ProjectAlias", "project_alias", ("arg1",), {"kwarg1": "value1"}),
     "SubstitutionSyntax": ("SubstitutionSyntax", "substitution_syntax", ("arg1",), {"kwarg1": "value1"}),
