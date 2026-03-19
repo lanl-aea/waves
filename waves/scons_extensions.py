@@ -4373,10 +4373,10 @@ class WAVESEnvironment(SConsEnvironment):
     def PrintBuildFailures(self, print_stdout: bool = True) -> None:  # noqa: N802
         """On exit, query the SCons reported build failures and print the associated node's STDOUT file, if it exists.
 
-        Built on :meth:`waves.scons_extensions.print_build_failures`
-
         .. code-block::
            :caption: SConstruct
+
+           import waves
 
            AddOption(
                "--print-build-failures",
@@ -4385,7 +4385,7 @@ class WAVESEnvironment(SConsEnvironment):
                action="store_true",
                help="Print task *.stdout target file(s) on build failures. (default: '%default')"
            )
-           env = WAVESEnvironment()
+           env = waves.scons_extensions.WAVESEnvironment()
            env.PrintBuildFailures(print_stdout=env["print_build_failures"])
 
         :param print_stdout: Boolean to set the exit behavior. If False, don't modify the exit behavior.
@@ -4397,27 +4397,42 @@ class WAVESEnvironment(SConsEnvironment):
 
         Replacement for `SCons CheckProg`_ like behavior without an SCons configure object.
 
-        Built on :meth:`waves.scons_extensions.check_program`.
-
         .. code-block::
            :caption: Example search for an executable named "program"
 
            import waves
 
-           env = Environment()
-           env.AddMethod(waves.scons_extensions.check_program, "CheckProgram")
+           env = waves.scons_extensions.WAVESEnvironment()
            env["PROGRAM"] = env.CheckProgram(["program"])
 
         :param prog_name: string program name to search in the construction environment path
         """
         return check_program(self, prog_name)
 
-    def FindProgram(self, *args, **kwargs) -> str | None:  # noqa: N802
-        """Call :meth:`waves.scons_extensions.find_program` as a construction environment method.
+    def FindProgram(  # noqa: N802
+        self, names: collections.abc.Sequence[str], quote_spaces_in_path: bool = True
+    ) -> str | None:
+        """Search for a program from a list of possible program names.
 
-        When using this environment method, do not provide the first ``env`` argument
+        Returns the absolute path of the first program name found.
+
+        .. code-block::
+           :caption: Example search for an executable named "program"
+
+           import waves
+
+           env = waves.scons_extensions.WAVESEnvironment()
+           env.AddMethod(waves.scons_extensions.find_program, "FindProgram")
+           env["PROGRAM"] = env.FindProgram(["program"])
+
+        :param names: list of string program names. May include an absolute path.
+        :param quote_spaces_in_path: Surround path parts that contain spaces with double quotes.
+            May need to set as ``False`` if using the path in ``pathlib``, ``shutil``, or OS PATH-like variables,
+            particularly on Windows.
+
+        :return: Absolute path of the found program. None if none of the names are found.
         """
-        return find_program(self, *args, **kwargs)
+        return find_program(self, names, quote_spaces_in_path=quote_spaces_in_path)
 
     def AddProgram(self, *args, **kwargs) -> str | None:  # noqa: N802
         """Call :meth:`waves.scons_extensions.add_program` as a construction environment method.
