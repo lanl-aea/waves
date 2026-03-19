@@ -334,7 +334,7 @@ def test_add_program(
             program = env.AddProgram(names, prepend=prepend, **kwargs)
             assert_logic(program, env, original_path, index)
 
-        # Test SCons AddMethod style interface
+        # Test WAVESEnvironment method
         env = scons_extensions.WAVESEnvironment()
         original_path = env["ENV"]["PATH"]
         with (
@@ -393,6 +393,16 @@ def test_add_cubit(
         # Test SCons AddMethod style interface
         env = SCons.Environment.Environment()
         env.AddMethod(scons_extensions.add_cubit, "AddCubit")
+        original_path = env["ENV"]["PATH"]
+        with (
+            patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return),
+            patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+        ):
+            program = env.AddCubit(names, prepend=prepend, **kwargs)
+            assert_logic(program, env, original_path, index)
+
+        # Test WAVESEnvironment method
+        env = scons_extensions.WAVESEnvironment()
         original_path = env["ENV"]["PATH"]
         with (
             patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return),
@@ -466,7 +476,7 @@ def test_add_cubit_python() -> None:
         patch("waves.scons_extensions.add_program", return_value=cubit_python),
         patch("waves._utilities.find_cubit_bin", return_value=cubit_bin),
     ):
-        program = scons_extensions.add_cubit_python(env, "dummy_cubit_executable")
+        program = env.AddCubitPython("dummy_cubit_executable")
     assert program == cubit_python
     assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[0] == str(cubit_bin)
 
