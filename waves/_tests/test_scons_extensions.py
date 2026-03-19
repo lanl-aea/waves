@@ -280,7 +280,7 @@ def test_add_program(
     assert program == first_found_path
     if first_found_path is not None:
         parent_path = pathlib.Path(first_found_path).parent
-        assert env["ENV"]["PATH"].split(os.pathsep)[-1] == str(parent_path)
+        assert env["ENV"]["PATH"].split(os.pathsep)[0] == str(parent_path)
     else:
         assert env["ENV"]["PATH"] == original_path
 
@@ -295,7 +295,7 @@ def test_add_program(
     assert program == first_found_path
     if first_found_path is not None:
         parent_path = pathlib.Path(first_found_path).parent
-        assert env["ENV"]["PATH"].split(os.pathsep)[-1] == str(parent_path)
+        assert env["ENV"]["PATH"].split(os.pathsep)[0] == str(parent_path)
     else:
         assert env["ENV"]["PATH"] == original_path
 
@@ -330,7 +330,7 @@ def test_add_cubit(
         parent_path = pathlib.Path(first_found_path).parent
         cubit_bin = parent_path / "bin"
         cubit_library_path = cubit_bin / "python3"
-        assert env["ENV"]["PATH"].split(os.pathsep)[-1] == str(parent_path)
+        assert env["ENV"]["PATH"].split(os.pathsep)[0] == str(parent_path)
         assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[0] == str(cubit_bin)
         assert env["ENV"]["LD_LIBRARY_PATH"].split(os.pathsep)[0] == str(cubit_library_path)
     else:
@@ -349,7 +349,7 @@ def test_add_cubit(
     if first_found_path is not None:
         parent_path = pathlib.Path(first_found_path).parent
         cubit_bin = parent_path / "bin"
-        assert env["ENV"]["PATH"].split(os.pathsep)[-1] == str(parent_path)
+        assert env["ENV"]["PATH"].split(os.pathsep)[0] == str(parent_path)
         assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[0] == str(cubit_bin)
         assert env["ENV"]["LD_LIBRARY_PATH"].split(os.pathsep)[0] == str(cubit_library_path)
     else:

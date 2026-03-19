@@ -683,7 +683,7 @@ def add_program(
 ) -> str | None:
     """Search for a program from a list of possible program names. Add first found to system ``PATH``.
 
-    Returns the absolute path of the first program name found. Appends ``PATH`` with first program's parent directory
+    Returns the absolute path of the first program name found. Prepends ``PATH`` with first program's parent directory
     if a program is found and the directory is not already on ``PATH``. Returns None if no program name is found.
 
     .. code-block::
@@ -704,7 +704,7 @@ def add_program(
     """
     first_found_path = find_program(env, names, quote_spaces_in_path=quote_spaces_in_path)
     if first_found_path:
-        env.AppendENVPath("PATH", str(pathlib.Path(first_found_path).parent), delete_existing=False)
+        env.PrependENVPath("PATH", str(pathlib.Path(first_found_path).parent), delete_existing=False)
     return first_found_path
 
 
@@ -715,7 +715,7 @@ def add_cubit(
 ) -> str | None:
     """Modify environment variables with the paths required to ``import cubit`` in a Python3 environment.
 
-    Returns the absolute path of the first program name found. Appends ``PATH`` with first program's parent directory if
+    Returns the absolute path of the first program name found. Prepends ``PATH`` with first program's parent directory if
     a program is found and the directory is not already on ``PATH``. Prepends ``PYTHONPATH`` with ``parent/bin``.
     Prepends ``LD_LIBRARY_PATH`` with ``parent/bin/python3``.
 
@@ -751,7 +751,7 @@ def add_cubit(
         else:
             cubit_bin = str(cubit_bin_path)
             cubit_python_library_dir = str(cubit_python_library_dir_path)
-        env.AppendENVPath("PATH", str(pathlib.Path(first_found_path).parent), delete_existing=False)
+        env.PrependENVPath("PATH", str(pathlib.Path(first_found_path).parent), delete_existing=False)
         env.PrependENVPath("PYTHONPATH", cubit_bin)
         env.PrependENVPath("LD_LIBRARY_PATH", cubit_python_library_dir)
     return first_found_path
@@ -763,7 +763,7 @@ def add_cubit_python(
 ) -> str | None:
     """Modify environment variables with the paths required to ``import cubit`` with the Cubit Python interpreter.
 
-    Returns the absolute path of the first Cubit Python intepreter found. Appends ``PATH`` with Cubit Python parent
+    Returns the absolute path of the first Cubit Python intepreter found. Prepends ``PATH`` with Cubit Python parent
     directory if a program is found and the directory is not already on ``PATH``. Prepends ``PYTHONPATH`` with
     ``parent/bin``.
 
