@@ -36,37 +36,61 @@ testing_windows, root_fs, testing_macos = platform_check()
 
 test_convert_to_pathlib_list_cases = {
     "relative path str": ("one.txt", [scons_test_root_directory / "one.txt"]),
-    "absolute path str": ("/one.txt", [pathlib.Path("/one.txt")]),
+    "absolute path str": ("/one.txt", [pathlib.Path("/one.txt").resolve()]),
     "SCons absolute path str": ("#/one.txt", [scons_test_root_directory / "one.txt"]),
     "relative path Path": (pathlib.Path("one.txt"), [scons_test_root_directory / "one.txt"]),
-    "absolute path Path": (pathlib.Path("/one.txt"), [pathlib.Path("/one.txt")]),
+    "absolute path Path": (pathlib.Path("/one.txt"), [pathlib.Path("/one.txt").resolve()]),
     "SCons absolute path Path": (pathlib.Path("#/one.txt"), [scons_test_root_directory / "one.txt"]),
     "relative path File": (file_system.File("one.txt"), [scons_test_root_directory / "one.txt"]),
-    "absolute path File": (file_system.File("/one.txt"), [pathlib.Path("/one.txt")]),
+    "absolute path File": (file_system.File("/one.txt"), [pathlib.Path("/one.txt").resolve()]),
     "SCons absolute path File": (file_system.File("#/one.txt"), [scons_test_root_directory / "one.txt"]),
     "list str": (
         ["one.txt", "/one.txt", "#/one.txt"],
-        [scons_test_root_directory / "one.txt", pathlib.Path("/one.txt"), scons_test_root_directory / "one.txt"],
+        [
+            scons_test_root_directory / "one.txt",
+            pathlib.Path("/one.txt").resolve(),
+            scons_test_root_directory / "one.txt",
+        ],
     ),
     "list Path": (
         [pathlib.Path("one.txt"), pathlib.Path("/one.txt"), pathlib.Path("#/one.txt")],
-        [scons_test_root_directory / "one.txt", pathlib.Path("/one.txt"), scons_test_root_directory / "one.txt"],
+        [
+            scons_test_root_directory / "one.txt",
+            pathlib.Path("/one.txt").resolve(),
+            scons_test_root_directory / "one.txt",
+        ],
     ),
     "list Node": (
         [file_system.File("one.txt"), file_system.File("/one.txt"), file_system.File("#/one.txt")],
-        [scons_test_root_directory / "one.txt", pathlib.Path("/one.txt"), scons_test_root_directory / "one.txt"],
+        [
+            scons_test_root_directory / "one.txt",
+            pathlib.Path("/one.txt").resolve(),
+            scons_test_root_directory / "one.txt",
+        ],
     ),
     "SCons NodeList str": (
         SCons.Node.NodeList(["one.txt", "/one.txt", "#/one.txt"]),
-        [scons_test_root_directory / "one.txt", pathlib.Path("/one.txt"), scons_test_root_directory / "one.txt"],
+        [
+            scons_test_root_directory / "one.txt",
+            pathlib.Path("/one.txt").resolve(),
+            scons_test_root_directory / "one.txt",
+        ],
     ),
     "SCons NodeList Path": (
         SCons.Node.NodeList([pathlib.Path("one.txt"), pathlib.Path("/one.txt"), pathlib.Path("#/one.txt")]),
-        [scons_test_root_directory / "one.txt", pathlib.Path("/one.txt"), scons_test_root_directory / "one.txt"],
+        [
+            scons_test_root_directory / "one.txt",
+            pathlib.Path("/one.txt").resolve(),
+            scons_test_root_directory / "one.txt",
+        ],
     ),
     "SCons NodeList Node": (
         SCons.Node.NodeList([file_system.File("one.txt"), file_system.File("/one.txt"), file_system.File("#/one.txt")]),
-        [scons_test_root_directory / "one.txt", pathlib.Path("/one.txt"), scons_test_root_directory / "one.txt"],
+        [
+            scons_test_root_directory / "one.txt",
+            pathlib.Path("/one.txt").resolve(),
+            scons_test_root_directory / "one.txt",
+        ],
     ),
 }
 
@@ -258,6 +282,12 @@ def test_find_program(
         program = env.FindProgram(names, **kwargs)
     assert program == first_found_path
 
+    # Test WAVESEnvironment method
+    env = scons_extensions.WAVESEnvironment()
+    with patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect):
+        program = env.FindProgram(names, **kwargs)
+    assert program == first_found_path
+
 
 @pytest.mark.parametrize(
     ("names", "kwargs", "checkprog_side_effect", "first_found_path"),
@@ -270,34 +300,48 @@ def test_add_program(
     checkprog_side_effect: list[str | None],
     first_found_path: str | None,
 ) -> None:
-    # Test function style interface
-    env = SCons.Environment.Environment()
-    original_path = env["ENV"]["PATH"]
-    with (
-        patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
-    ):
-        program = scons_extensions.add_program(env, names, **kwargs)
-    assert program == first_found_path
-    if first_found_path is not None:
-        parent_path = pathlib.Path(first_found_path).parent
-        assert env["ENV"]["PATH"].split(os.pathsep)[-1] == str(parent_path)
-    else:
-        assert env["ENV"]["PATH"] == original_path
+    def assert_logic(
+        program: str | None,
+        env: SCons.Environment.Environment,
+        original_path: str,
+        index: int,
+        first_found_path: str | None = first_found_path,
+    ) -> None:
+        assert program == first_found_path
+        if first_found_path is not None:
+            parent_path = pathlib.Path(first_found_path).parent
+            assert env["ENV"]["PATH"].split(os.pathsep)[index] == str(parent_path)
+        else:
+            assert env["ENV"]["PATH"] == original_path
 
-    # Test SCons AddMethod style interface
-    env = SCons.Environment.Environment()
-    original_path = env["ENV"]["PATH"]
-    env.AddMethod(scons_extensions.add_program, "AddProgram")
-    with (
-        patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
-    ):
-        program = env.AddProgram(names, **kwargs)
-    assert program == first_found_path
-    if first_found_path is not None:
-        parent_path = pathlib.Path(first_found_path).parent
-        assert env["ENV"]["PATH"].split(os.pathsep)[-1] == str(parent_path)
-    else:
-        assert env["ENV"]["PATH"] == original_path
+    for prepend, index in [(True, 0), (False, -1)]:
+        # Test function style interface
+        env = SCons.Environment.Environment()
+        original_path = env["ENV"]["PATH"]
+        with (
+            patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+        ):
+            program = scons_extensions.add_program(env, names, prepend=prepend, **kwargs)
+            assert_logic(program, env, original_path, index)
+
+        # Test SCons AddMethod style interface
+        env = SCons.Environment.Environment()
+        original_path = env["ENV"]["PATH"]
+        env.AddMethod(scons_extensions.add_program, "AddProgram")
+        with (
+            patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+        ):
+            program = env.AddProgram(names, prepend=prepend, **kwargs)
+            assert_logic(program, env, original_path, index)
+
+        # Test WAVESEnvironment method
+        env = scons_extensions.WAVESEnvironment()
+        original_path = env["ENV"]["PATH"]
+        with (
+            patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+        ):
+            program = env.AddProgram(names, prepend=prepend, **kwargs)
+            assert_logic(program, env, original_path, index)
 
 
 @pytest.mark.parametrize(
@@ -317,43 +361,55 @@ def test_add_cubit(
     else:
         find_cubit_bin_return = None
 
-    # Test function style interface
-    env = SCons.Environment.Environment()
-    original_path = env["ENV"]["PATH"]
-    with (
-        patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return),
-        patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
-    ):
-        program = scons_extensions.add_cubit(env, names, **kwargs)
-    assert program == first_found_path
-    if first_found_path is not None:
-        parent_path = pathlib.Path(first_found_path).parent
-        cubit_bin = parent_path / "bin"
-        cubit_library_path = cubit_bin / "python3"
-        assert env["ENV"]["PATH"].split(os.pathsep)[-1] == str(parent_path)
-        assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[0] == str(cubit_bin)
-        assert env["ENV"]["LD_LIBRARY_PATH"].split(os.pathsep)[0] == str(cubit_library_path)
-    else:
-        assert env["ENV"]["PATH"] == original_path
+    def assert_logic(
+        program: str | None,
+        env: SCons.Environment.Environment,
+        original_path: str,
+        index: int,
+        first_found_path: str | None = first_found_path,
+    ) -> None:
+        assert program == first_found_path
+        if first_found_path is not None:
+            parent_path = pathlib.Path(first_found_path).parent
+            cubit_bin = parent_path / "bin"
+            cubit_library_path = cubit_bin / "python3"
+            assert env["ENV"]["PATH"].split(os.pathsep)[index] == str(parent_path)
+            assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[index] == str(cubit_bin)
+            assert env["ENV"]["LD_LIBRARY_PATH"].split(os.pathsep)[index] == str(cubit_library_path)
+        else:
+            assert env["ENV"]["PATH"] == original_path
 
-    # Test SCons AddMethod style interface
-    env = SCons.Environment.Environment()
-    env.AddMethod(scons_extensions.add_cubit, "AddCubit")
-    original_path = env["ENV"]["PATH"]
-    with (
-        patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return),
-        patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
-    ):
-        program = env.AddCubit(names, **kwargs)
-    assert program == first_found_path
-    if first_found_path is not None:
-        parent_path = pathlib.Path(first_found_path).parent
-        cubit_bin = parent_path / "bin"
-        assert env["ENV"]["PATH"].split(os.pathsep)[-1] == str(parent_path)
-        assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[0] == str(cubit_bin)
-        assert env["ENV"]["LD_LIBRARY_PATH"].split(os.pathsep)[0] == str(cubit_library_path)
-    else:
-        assert env["ENV"]["PATH"] == original_path
+    for prepend, index in [(True, 0), (False, -1)]:
+        # Test function style interface
+        env = SCons.Environment.Environment()
+        original_path = env["ENV"]["PATH"]
+        with (
+            patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return),
+            patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+        ):
+            program = scons_extensions.add_cubit(env, names, prepend=prepend, **kwargs)
+            assert_logic(program, env, original_path, index)
+
+        # Test SCons AddMethod style interface
+        env = SCons.Environment.Environment()
+        env.AddMethod(scons_extensions.add_cubit, "AddCubit")
+        original_path = env["ENV"]["PATH"]
+        with (
+            patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return),
+            patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+        ):
+            program = env.AddCubit(names, prepend=prepend, **kwargs)
+            assert_logic(program, env, original_path, index)
+
+        # Test WAVESEnvironment method
+        env = scons_extensions.WAVESEnvironment()
+        original_path = env["ENV"]["PATH"]
+        with (
+            patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return),
+            patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+        ):
+            program = env.AddCubit(names, prepend=prepend, **kwargs)
+            assert_logic(program, env, original_path, index)
 
 
 def test_add_cubit_python() -> None:
@@ -402,27 +458,29 @@ def test_add_cubit_python() -> None:
     # Test SCons AddMethod style interface
     env = SCons.Environment.Environment()
     env.AddMethod(scons_extensions.add_cubit_python, "AddCubitPython")
+    waves_env = scons_extensions.WAVESEnvironment()
     cubit_bin = "/path/to/cubit/bin/"
     cubit_python = "/path/to/cubit/bin/python"
-    # Cubit Python not found mocked by add_program
-    with (
-        patch("waves._utilities.find_cubit_python"),
-        patch("waves.scons_extensions.find_program"),
-        patch("waves.scons_extensions.add_program", return_value=None),
-    ):
-        program = env.AddCubitPython("dummy_cubit_executable")
-    assert program is None
-    assert "PYTHONPATH" not in env["ENV"]
-    # Cubit Python found mocked by add_program
-    with (
-        patch("waves._utilities.find_cubit_python"),
-        patch("waves.scons_extensions.find_program"),
-        patch("waves.scons_extensions.add_program", return_value=cubit_python),
-        patch("waves._utilities.find_cubit_bin", return_value=cubit_bin),
-    ):
-        program = scons_extensions.add_cubit_python(env, "dummy_cubit_executable")
-    assert program == cubit_python
-    assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[0] == str(cubit_bin)
+    for environment in [env, waves_env]:
+        # Cubit Python not found mocked by add_program
+        with (
+            patch("waves._utilities.find_cubit_python"),
+            patch("waves.scons_extensions.find_program"),
+            patch("waves.scons_extensions.add_program", return_value=None),
+        ):
+            program = environment.AddCubitPython("dummy_cubit_executable")
+        assert program is None
+        assert "PYTHONPATH" not in environment["ENV"]
+        # Cubit Python found mocked by add_program
+        with (
+            patch("waves._utilities.find_cubit_python"),
+            patch("waves.scons_extensions.find_program"),
+            patch("waves.scons_extensions.add_program", return_value=cubit_python),
+            patch("waves._utilities.find_cubit_bin", return_value=cubit_bin),
+        ):
+            program = environment.AddCubitPython("dummy_cubit_executable")
+        assert program == cubit_python
+        assert environment["ENV"]["PYTHONPATH"].split(os.pathsep)[0] == str(cubit_bin)
 
 
 def dummy_emitter_for_testing(target: list, source: list, env: SCons.Environment.Environment) -> tuple[list, list]:  # noqa: ARG001
@@ -932,6 +990,11 @@ def test_substitution_syntax(substitution_dictionary: dict, keyword_arguments: d
 
     # Test AddMethod style interface
     env.AddMethod(scons_extensions.substitution_syntax, "SubstitutionSyntax")
+    output_dictionary = env.SubstitutionSyntax(substitution_dictionary, **keyword_arguments)
+    assert output_dictionary == expected_dictionary
+
+    # Test WAVESEnvironment method
+    env = scons_extensions.WAVESEnvironment()
     output_dictionary = env.SubstitutionSyntax(substitution_dictionary, **keyword_arguments)
     assert output_dictionary == expected_dictionary
 
@@ -1858,13 +1921,21 @@ copy_substfile_input = {
     ids=copy_substfile_input.keys(),
 )
 def test_copy_substfile(source_list: list[str | pathlib.Path], expected_list: list[str]) -> None:
+    # Test the function interface
     env = SCons.Environment.Environment()
     target_list = scons_extensions.copy_substfile(env, source_list, {})
     target_files = [str(target) for target in target_list]
     assert target_files == expected_list
 
     # Test the Pseudo-Builder style interface
+    env = SCons.Environment.Environment()
     env.AddMethod(scons_extensions.copy_substfile, "CopySubstfile")
+    target_list = env.CopySubstfile(source_list, {})
+    target_files = [str(target) for target in target_list]
+    assert target_files == expected_list
+
+    # Test the WAVESEnvironment method
+    env = scons_extensions.WAVESEnvironment()
     target_list = env.CopySubstfile(source_list, {})
     target_files = [str(target) for target in target_list]
     assert target_files == expected_list
@@ -2780,7 +2851,7 @@ python_script_input = {
     python_script_input.values(),
     ids=python_script_input.keys(),
 )
-def test_parameter_study(
+def test_parameter_study_task(
     node_count: int,
     action_count: int,
     args: tuple,
@@ -2793,6 +2864,7 @@ def test_parameter_study(
         "${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
     )
 
+    # Test the AddMethod style interface
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"PythonScript": scons_extensions.python_builder_factory()})
     env.AddMethod(scons_extensions.parameter_study_task, "ParameterStudyTask")
@@ -2804,7 +2876,19 @@ def test_parameter_study(
         study=study,
         **kwargs,
     )
+    check_action_string(nodes, node_count, action_count, expected_string)
+    assert [pathlib.Path(str(node)) for node in nodes] == [pathlib.Path(node) for node in expected_targets]
 
+    # Test the WAVESEnvironment method
+    env = scons_extensions.WAVESEnvironment()
+    nodes = env.ParameterStudyTask(
+        env.PythonScript,
+        *args,
+        source=["python_script.py"],
+        script_options="",
+        study=study,
+        **kwargs,
+    )
     check_action_string(nodes, node_count, action_count, expected_string)
     assert [pathlib.Path(str(node)) for node in nodes] == [pathlib.Path(node) for node in expected_targets]
 
@@ -2903,6 +2987,17 @@ def test_parameter_study_sconscript(
         env.ParameterStudySConscript(*args, **kwargs)
         mock_sconscript.assert_called_once_with(*args, **expected)
 
+    # Test WAVESEnvironment method
+    env = scons_extensions.WAVESEnvironment()
+    # Git commit 7a95cef7: Normally you expect something like ``patch("SCons.Script.SConscript.SConsEnvironment...")``
+    # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
+    with (
+        patch("waves.scons_extensions.SConsEnvironment.SConscript") as mock_sconscript,
+        outcome,
+    ):
+        env.ParameterStudySConscript(*args, **kwargs)
+        mock_sconscript.assert_called_once_with(*args, **expected)
+
 
 parameter_study_write_cases: dict[str, tuple] = {
     "output file": (
@@ -2955,6 +3050,11 @@ def test_parameter_study_write(
 
     with outcome:
         env.AddMethod(scons_extensions.parameter_study_write, "ParameterStudyWrite")
+        targets = env.ParameterStudyWrite(parameter_generator, **kwargs)
+        assert [str(target) for target in targets] == expected
+
+    env = scons_extensions.WAVESEnvironment()
+    with outcome:
         targets = env.ParameterStudyWrite(parameter_generator, **kwargs)
         assert [str(target) for target in targets] == expected
 
@@ -3177,24 +3277,51 @@ def test_waves_environment_attributes(kwargs: dict[str, str]) -> None:
 
 
 waves_environment_methods = {
-    "PrintBuildFailures": ("PrintBuildFailures", "print_build_failures", ("arg1",), {"kwarg1": "value1"}),
-    "CheckProgram": ("CheckProgram", "check_program", ("arg1",), {"kwarg1": "value1"}),
-    "FindProgram": ("FindProgram", "find_program", ("arg1",), {"kwarg1": "value1"}),
-    "AddProgram": ("AddProgram", "add_program", ("arg1",), {"kwarg1": "value1"}),
-    "AddCubit": ("AddCubit", "add_cubit", ("arg1",), {"kwarg1": "value1"}),
-    "AddCubitPython": ("AddCubitPython", "add_cubit_python", ("arg1",), {"kwarg1": "value1"}),
-    "CopySubstfile": ("CopySubstfile", "copy_substfile", ("arg1",), {"kwarg1": "value1"}),
-    "ProjectHelp": ("ProjectHelp", "project_help", ("arg1",), {"kwarg1": "value1"}),
-    "ProjectAlias": ("ProjectAlias", "project_alias", ("arg1",), {"kwarg1": "value1"}),
-    "SubstitutionSyntax": ("SubstitutionSyntax", "substitution_syntax", ("arg1",), {"kwarg1": "value1"}),
-    "ParameterStudyTask": ("ParameterStudyTask", "parameter_study_task", ("arg1",), {"kwarg1": "value1"}),
+    "PrintBuildFailures": ("PrintBuildFailures", "print_build_failures", (), {"print_stdout": True}),
+    "CheckProgram": ("CheckProgram", "check_program", ("prog_name",), {}),
+    "FindProgram": ("FindProgram", "find_program", (["names"],), {"quote_spaces_in_path": True}),
+    "AddProgram": ("AddProgram", "add_program", (["names"],), {"quote_spaces_in_path": True, "prepend": True}),
+    "AddCubit": ("AddCubit", "add_cubit", (["names"],), {"quote_spaces_in_path": True, "prepend": True}),
+    "AddCubitPython": ("AddCubitPython", "add_cubit_python", (["names"],), {}),
+    "CopySubstfile": (
+        "CopySubstfile",
+        "copy_substfile",
+        (["source_list"],),
+        {"substitution_dictionary": {"key": "value"}, "build_subdirectory": ".", "symlink": False},
+    ),
+    "ProjectHelp": (
+        "ProjectHelp",
+        "project_help",
+        (),
+        {"append": True, "local_only": True, "target_descriptions": None},
+    ),
+    "ProjectAlias": (
+        "ProjectAlias",
+        "project_alias",
+        ("arg1",),
+        {"description": "description text", "target_descriptions": {}, "kwarg1": "value1"},
+    ),
+    "SubstitutionSyntax": ("SubstitutionSyntax", "substitution_syntax", ({},), {"prefix": "@", "suffix": "@"}),
+    "ParameterStudyTask": (
+        "ParameterStudyTask",
+        "parameter_study_task",
+        ("dummy_builder", "arbitrary_argument"),
+        {"study": {}, "subdirectories": False, "arbitrary_kwarg": "arbitrary value"},
+    ),
     "ParameterStudySConscript": (
         "ParameterStudySConscript",
         "parameter_study_sconscript",
         ("arg1",),
-        {"kwarg1": "value1"},
+        {
+            "variant_dir": None,
+            "exports": None,
+            "study": None,
+            "set_name": "",
+            "subdirectories": False,
+            "kwarg1": "value1",
+        },
     ),
-    "ParameterStudyWrite": ("ParameterStudyWrite", "parameter_study_write", ("arg1",), {"kwarg1": "value1"}),
+    "ParameterStudyWrite": ("ParameterStudyWrite", "parameter_study_write", ("dummy_generator",), {"kwarg1": "value1"}),
     "TarScript": ("TarScript", "tar_script", (["target"], ["source"]), {"shell": "shell", "extension": ".script"}),
 }
 

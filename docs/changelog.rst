@@ -9,6 +9,36 @@ Changelog
 ******************
 
 ******************
+1.3.1 (2026-03-19)
+******************
+
+Bug fixes
+=========
+- Consistent append or prepend PATH-like modifications in the ``add_cubit`` method. All PATH-like modifications are now
+  performed with the same behavior to avoid mixing different versions of Cubit executables to incorrect Python and
+  compiled libraries when more than one version is found in the construction environment (:merge:`1302`). By `Kyle
+  Brindley`_.
+
+Enhancements
+============
+- Default to prepending PATH in the ``add_program`` method. Matches user expectations when updating an environment PATH
+  with more than one version of the same software. Last added version is found on PATH first (:merge:`1302`). By `Kyle
+  Brindley`_.
+- Allow prepend/append selection in ``add_program`` and ``add_cubit`` PATH modifications (:merge:`1302`). By `Kyle
+  Brindley`_.
+
+Documentation
+=============
+- Update WAVESEnvironment methods with more complete docstrings and explicit API descriptions where they previously
+  pointed to the underlying method's API (:merge:`1303`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Handle OS-specific test expecations in resolved absolute paths, e.g. Windows "C:\" prefix (:merge:`1302`). By `Kyle
+  Brindley`_.
+- More complete testing of the WAVESEnvironment methods (:merge:`1303`). By `Kyle Brindley`_.
+
+******************
 1.3.0 (2026-03-17)
 ******************
 
