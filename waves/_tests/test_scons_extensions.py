@@ -3268,10 +3268,13 @@ def test_project_cache_directory(
     kwargs: dict,
     expected_directory: str,
 ) -> None:
-    with patch("SCons.Environment.Environment.CacheDir"):
+    with patch("SCons.Environment.Environment.CacheDir") as mock_cache:
         env = SCons.Environment.Environment()
         active_cache_directory = scons_extensions.project_cache_directory(env, **kwargs)
         assert active_cache_directory == expected_directory
+        custom_class = {key: value for key, value in kwargs.items() if key == "custom_class"}
+        expected_path = str(expected_directory) if expected_directory else None
+        mock_cache.assert_called_once_with(expected_path, **custom_class)
 
 
 waves_environment_attributes = {
