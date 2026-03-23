@@ -3207,16 +3207,14 @@ def test_tar_script(
 
 
 test_project_cache_directory_cases = {
-    "No cache directory": (
-        {"cache_readonly": False, "cache_write": False},
+    "default args": (
+        {},
         None,
     ),
     "write to local cache directory": (
         {
             "shared_cache_directory": pathlib.Path("/shared/cache"),
             "cache_directory": "/build/cache",
-            "cache_readonly": False,
-            "cache_write": False,
         },
         pathlib.Path("/build/cache"),
     ),
@@ -3224,7 +3222,6 @@ test_project_cache_directory_cases = {
         {
             "shared_cache_directory": pathlib.Path("/shared/cache"),
             "cache_directory": "/shared/cache",
-            "cache_readonly": False,
             "cache_write": True,
         },
         pathlib.Path("/shared/cache"),
@@ -3234,7 +3231,6 @@ test_project_cache_directory_cases = {
             "shared_cache_directory": pathlib.Path("/shared/cache"),
             "cache_directory": "/shared/cache",
             "cache_readonly": True,
-            "cache_write": False,
         },
         pathlib.Path("/shared/cache"),
     ),
@@ -3242,8 +3238,6 @@ test_project_cache_directory_cases = {
         {
             "shared_cache_directory": pathlib.Path("/shared/cache"),
             "cache_directory": "/shared/cache",
-            "cache_readonly": False,
-            "cache_write": False,
         },
         None,
     ),
