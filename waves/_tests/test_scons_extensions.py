@@ -3353,6 +3353,12 @@ waves_environment_methods = {
     ),
     "ParameterStudyWrite": ("ParameterStudyWrite", "parameter_study_write", ("dummy_generator",), {"kwarg1": "value1"}),
     "TarScript": ("TarScript", "tar_script", (["target"], ["source"]), {"shell": "shell", "extension": ".script"}),
+    "ProjectCacheDirectory": (
+        "ProjectCacheDirectory",
+        "project_cache_directory",
+        (pathlib.Path("shared_cache"), "local_cache"),
+        {"cache_readonly": False, "cache_write": False},
+    ),
 }
 
 
