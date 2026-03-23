@@ -5258,7 +5258,14 @@ class WAVESEnvironment(SConsEnvironment):
         override is provided. The project is responsible for documenting when the cache-write override is used and
         configuring access permissions on the project's shared cache.
 
-        :param kwargs: All keyword arguments are passed to the function ``project_cache_directory``.
+        :param env: SCons construction environment
+        :param shared_cache_directory: the weakly protected project shared cache directory.
+        :param cache_directory: path to the cache directory
+        :param cache_readonly: treat the cache as read-only. False by default to match SCons controlled
+            ``--cache-readonly`` option. This controls the cache access even if ``cache_write`` is True.
+        :param cache_write: allow configuration of the shared cache directory even if ``cache_readonly`` is False.
+            ``cache_readonly`` still controls the cache access.
+        :param kwargs: All other keyword arguments are passed to the SCons ``CacheDir`` method.
 
         :return: the active build cache directory
         """
