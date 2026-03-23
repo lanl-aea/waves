@@ -3356,8 +3356,13 @@ waves_environment_methods = {
     "ProjectCacheDirectory": (
         "ProjectCacheDirectory",
         "project_cache_directory",
-        (pathlib.Path("shared_cache"), "local_cache"),
-        {"cache_readonly": False, "cache_write": False},
+        (),
+        {
+            "shared_cache_directory": pathlib.Path("shared_cache"),
+            "cache_directory": "local_cache",
+            "cache_readonly": False,
+            "cache_write": False,
+        },
     ),
 }
 
