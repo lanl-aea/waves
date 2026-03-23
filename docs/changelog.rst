@@ -8,8 +8,8 @@ Changelog
 1.4.0 (unreleased)
 ******************
 
-Internal Changes
-================
+New Features
+============
 - Add project cache directory function and WAVES Environment method to assist active cache directory assignment and 
   protection of the shared cache (:issue:`1004`, :merge:`1304`). By `Chris Johnson`_.
 
