@@ -8,6 +8,10 @@ Changelog
 1.4.0 (unreleased)
 ******************
 
+Bug fixes
+=========
+- Fix the behavior of the project alias function when no SCons environment is provided. By `Kyle Brindley`_.
+
 ******************
 1.3.1 (2026-03-19)
 ******************
