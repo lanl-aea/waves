@@ -495,7 +495,7 @@ def project_help_aliases(
 
 
 def project_alias(
-    env: SCons.Environment.Environment = None,
+    env: SCons.Environment.Environment | None = None,
     *args,
     description: str = "",
     # Normally you should not use mutables for argument defaults, but this method relies on the mutable behavior.
@@ -517,6 +517,8 @@ def project_alias(
 
     :returns: target descriptions dictionary
     """
+    if env is None:
+        env = SCons.Environment.Environment()
     if len(args) >= 1 and args[0] is not None:
         nodes = env.Alias(*args, **kwargs)
         new_target_descriptions = {str(node): description for node in nodes}

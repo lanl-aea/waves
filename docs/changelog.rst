@@ -8,9 +8,13 @@ Changelog
 1.4.0 (unreleased)
 ******************
 
+Bug fixes
+=========
+- Fix the behavior of the project alias function when no SCons environment is provided. By `Kyle Brindley`_.
+
 New Features
 ============
-- Add project cache directory function and WAVES Environment method to assist active cache directory assignment and 
+- Add project cache directory function and WAVES Environment method to assist active cache directory assignment and
   protection of the shared cache (:issue:`1004`, :merge:`1304`). By `Chris Johnson`_.
 
 ******************
