@@ -4335,7 +4335,7 @@ def tar_script(
 
 
 def project_cache_directory(
-    env: SCons.Environment.Environment,
+    env: SCons.Environment.Environment | None = None,
     shared_cache_directory: pathlib.Path | None = None,
     cache_directory: str | pathlib.Path | None = None,
     cache_readonly: bool = False,
@@ -4357,6 +4357,8 @@ def project_cache_directory(
 
     :return: the active build cache directory
     """
+    if env is None:
+        env = SCons.Environment.Environment()
     if shared_cache_directory is not None:
         shared_cache_directory = pathlib.Path(shared_cache_directory).resolve()
     if cache_directory is not None:
