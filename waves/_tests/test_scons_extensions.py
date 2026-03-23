@@ -3213,7 +3213,7 @@ test_project_cache_directory_cases = {
     ),
     "write to local cache directory": (
         {
-            "shared_cache_directory": pathlib.Path("/shared/cache"),
+            "shared_cache_directory": "/shared/cache",
             "cache_directory": "/build/cache",
         },
         pathlib.Path("/build/cache").resolve(),
@@ -3228,8 +3228,8 @@ test_project_cache_directory_cases = {
     ),
     "read-only override": (
         {
-            "shared_cache_directory": pathlib.Path("/shared/cache"),
-            "cache_directory": "/shared/cache",
+            "shared_cache_directory": "/shared/cache",
+            "cache_directory": pathlib.Path("/shared/cache"),
             "cache_readonly": True,
         },
         pathlib.Path("/shared/cache").resolve(),
@@ -3237,13 +3237,13 @@ test_project_cache_directory_cases = {
     "protect shared cache": (
         {
             "shared_cache_directory": pathlib.Path("/shared/cache"),
-            "cache_directory": "/shared/cache",
+            "cache_directory": pathlib.Path("/shared/cache"),
         },
         None,
     ),
     "custom class kwarg": (
         {
-            "shared_cache_directory": pathlib.Path("/shared/cache"),
+            "shared_cache_directory": "/shared/cache",
             "cache_directory": "/build/cache",
             "cache_write": True,
             "custom_class": "custom_cache_class",

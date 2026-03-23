@@ -4336,7 +4336,7 @@ def tar_script(
 
 def project_cache_directory(
     env: SCons.Environment.Environment | None = None,
-    shared_cache_directory: pathlib.Path | None = None,
+    shared_cache_directory: str | pathlib.Path | None = None,
     cache_directory: str | pathlib.Path | None = None,
     cache_readonly: bool = False,
     cache_write: bool = False,
@@ -5253,7 +5253,7 @@ class WAVESEnvironment(SConsEnvironment):
 
     def ProjectCacheDirectory(  # noqa: N802
         self,
-        shared_cache_directory: pathlib.Path | None = None,
+        shared_cache_directory: str | pathlib.Path | None = None,
         cache_directory: str | pathlib.Path | None = None,
         cache_readonly: bool = False,
         cache_write: bool = False,
