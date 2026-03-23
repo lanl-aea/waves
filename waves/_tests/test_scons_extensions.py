@@ -3210,13 +3210,13 @@ test_project_cache_directory_cases = {
     "No cache directory": (
         None,
         None,
-        {"cache_readonly": False, "cache_write": True},
+        {"cache_readonly": False, "cache_write": False},
         None,
     ),
     "write to local cache directory": (
         None,
         "/build/cache",
-        {"cache_readonly": False, "cache_write": True},
+        {"cache_readonly": False, "cache_write": False},
         pathlib.Path("/build/cache"),
     ),
     "overwrite shared cache directory": (
@@ -3228,7 +3228,7 @@ test_project_cache_directory_cases = {
     "write to new cache directory": (
         pathlib.Path("/shared/cache"),
         "/build/cache",
-        {"cache_readonly": False, "cache_write": True},
+        {"cache_readonly": False, "cache_write": False},
         pathlib.Path("/build/cache"),
     ),
 }
