@@ -495,7 +495,7 @@ def project_help_aliases(
 
 
 def project_alias(
-    env: SCons.Environment.Environment |  None = None,
+    env: SCons.Environment.Environment | None = None,
     *args,
     description: str = "",
     # Normally you should not use mutables for argument defaults, but this method relies on the mutable behavior.
