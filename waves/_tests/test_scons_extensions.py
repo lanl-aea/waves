@@ -3231,6 +3231,12 @@ test_project_cache_directory_cases = {
         {"cache_readonly": False, "cache_write": False},
         pathlib.Path("/build/cache"),
     ),
+    "read-only override": (
+        pathlib.Path("/shared/cache"),
+        "/shared/cache",
+        {"cache_readonly": True, "cache_write": False},
+        pathlib.Path("/shared/cache"),
+    ),
 }
 
 
