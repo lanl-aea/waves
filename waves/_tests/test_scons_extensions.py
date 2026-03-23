@@ -3214,7 +3214,7 @@ test_project_cache_directory_cases = {
         None,
     ),
     "write to local cache directory": (
-        None,
+        pathlib.Path("/shared/cache"),
         "/build/cache",
         {"cache_readonly": False, "cache_write": False},
         pathlib.Path("/build/cache"),
@@ -3224,12 +3224,6 @@ test_project_cache_directory_cases = {
         "/shared/cache",
         {"cache_readonly": False, "cache_write": True},
         pathlib.Path("/shared/cache"),
-    ),
-    "write to new cache directory": (
-        pathlib.Path("/shared/cache"),
-        "/build/cache",
-        {"cache_readonly": False, "cache_write": False},
-        pathlib.Path("/build/cache"),
     ),
     "read-only override": (
         pathlib.Path("/shared/cache"),
