@@ -3235,7 +3235,15 @@ test_project_cache_directory_cases = {
         {
             "shared_cache_directory": pathlib.Path("/shared/cache"),
             "cache_directory": "/shared/cache",
-            "cache_write": True,
+            "shared_cache_override": True,
+        },
+        pathlib.Path("/shared/cache").resolve(),
+    ),
+    "read-only of shared cache": (
+        {
+            "shared_cache_directory": "/shared/cache",
+            "cache_directory": pathlib.Path("/shared/cache"),
+            "cache_readonly": True,
         },
         pathlib.Path("/shared/cache").resolve(),
     ),
@@ -3244,6 +3252,7 @@ test_project_cache_directory_cases = {
             "shared_cache_directory": "/shared/cache",
             "cache_directory": pathlib.Path("/shared/cache"),
             "cache_readonly": True,
+            "shared_cache_override": True,
         },
         pathlib.Path("/shared/cache").resolve(),
     ),
@@ -3258,7 +3267,7 @@ test_project_cache_directory_cases = {
         {
             "shared_cache_directory": "/shared/cache",
             "cache_directory": "/build/cache",
-            "cache_write": True,
+            "shared_cache_override": True,
             "custom_class": "custom_cache_class",
         },
         pathlib.Path("/build/cache").resolve(),
@@ -3385,7 +3394,7 @@ waves_environment_methods = {
             "shared_cache_directory": pathlib.Path("shared_cache"),
             "cache_directory": "local_cache",
             "cache_readonly": False,
-            "cache_write": False,
+            "shared_cache_override": False,
         },
     ),
 }

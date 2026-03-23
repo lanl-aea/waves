@@ -4339,7 +4339,7 @@ def project_cache_directory(
     shared_cache_directory: str | pathlib.Path | None = None,
     cache_directory: str | pathlib.Path | None = None,
     cache_readonly: bool = False,
-    cache_write: bool = False,
+    shared_cache_override: bool = False,
     **kwargs,
 ) -> pathlib.Path | None:
     """Return the absolute path to the active build cache directory, providing weak protections to a shared cache.
@@ -4352,8 +4352,8 @@ def project_cache_directory(
     :param shared_cache_directory: the weakly protected project shared cache directory.
     :param cache_directory: path to the cache directory
     :param cache_readonly: treat the cache as read-only. False by default to match SCons controlled
-        ``--cache-readonly`` option. This controls the cache access even if ``cache_write`` is True.
-    :param cache_write: allow configuration of the shared cache directory even if ``cache_readonly`` is False.
+        ``--cache-readonly`` option. This controls the cache access even if ``shared_cache_override`` is True.
+    :param shared_cache_override: allow configuration of the shared cache directory even if ``cache_readonly`` is False.
         ``cache_readonly`` still controls the cache access.
     :param kwargs: All other keyword arguments are passed to the SCons ``CacheDir`` method.
 
@@ -4366,7 +4366,7 @@ def project_cache_directory(
     if cache_directory is not None:
         cache_directory = pathlib.Path(cache_directory).resolve()
     if cache_directory is not None and (
-        cache_readonly or cache_write or str(cache_directory) != str(shared_cache_directory)
+        cache_readonly or shared_cache_override or str(cache_directory) != str(shared_cache_directory)
     ):
         active_cache_directory = cache_directory
         env.CacheDir(str(active_cache_directory), **kwargs)
@@ -5256,7 +5256,7 @@ class WAVESEnvironment(SConsEnvironment):
         shared_cache_directory: str | pathlib.Path | None = None,
         cache_directory: str | pathlib.Path | None = None,
         cache_readonly: bool = False,
-        cache_write: bool = False,
+        shared_cache_override: bool = False,
         **kwargs,
     ) -> pathlib.Path | None:
         """Return the absolute path to the active build cache directory, providing weak protections to a shared cache.
@@ -5268,9 +5268,9 @@ class WAVESEnvironment(SConsEnvironment):
         :param shared_cache_directory: the weakly protected project shared cache directory.
         :param cache_directory: path to the cache directory
         :param cache_readonly: treat the cache as read-only. False by default to match SCons controlled
-            ``--cache-readonly`` option. This controls the cache access even if ``cache_write`` is True.
-        :param cache_write: allow configuration of the shared cache directory even if ``cache_readonly`` is False.
-            ``cache_readonly`` still controls the cache access.
+            ``--cache-readonly`` option. This controls the cache access even if ``shared_cache_override`` is True.
+        :param shared_cache_override: allow configuration of the shared cache directory even if ``cache_readonly`` is
+            False. ``cache_readonly`` still controls the cache access.
         :param kwargs: All other keyword arguments are passed to the SCons ``CacheDir`` method.
 
         :return: the active build cache directory
@@ -5280,7 +5280,7 @@ class WAVESEnvironment(SConsEnvironment):
             shared_cache_directory=shared_cache_directory,
             cache_directory=cache_directory,
             cache_readonly=cache_readonly,
-            cache_write=cache_write,
+            shared_cache_override=shared_cache_override,
             **kwargs,
         )
 
