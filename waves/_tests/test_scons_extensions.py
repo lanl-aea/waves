@@ -3225,6 +3225,12 @@ test_project_cache_directory_cases = {
         {"cache_readonly": False, "cache_write": True},
         pathlib.Path("/shared/cache"),
     ),
+    "write to new cache directory": (
+        pathlib.Path("/shared/cache"),
+        "/build/cache",
+        {"cache_readonly": False, "cache_write": True},
+        pathlib.Path("/build/cache"),
+    ),
 }
 
 
