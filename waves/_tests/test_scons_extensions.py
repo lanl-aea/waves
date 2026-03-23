@@ -3279,8 +3279,8 @@ def test_project_cache_directory(
         active_cache_directory = scons_extensions.project_cache_directory(**kwargs)
         assert active_cache_directory == expected_directory
         custom_class = {key: value for key, value in kwargs.items() if key == "custom_class"}
-        expected_path = str(expected_directory) if expected_directory else None
-        mock_cache.assert_called_once_with(expected_path, **custom_class)
+        expected_positional = str(expected_directory) if expected_directory else None
+        mock_cache.assert_called_once_with(expected_positional, **custom_class)
 
 
 waves_environment_attributes = {
