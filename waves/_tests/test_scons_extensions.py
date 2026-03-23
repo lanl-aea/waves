@@ -3206,6 +3206,92 @@ def test_tar_script(
         check_action_string(output, 2, 1, expected_action)
 
 
+test_project_cache_directory_cases = {
+    "default args": (
+        {},
+        None,
+    ),
+    "unshared cache only": (
+        {
+            "cache_directory": "/build/cache",
+        },
+        pathlib.Path("/build/cache").resolve(),
+    ),
+    "specified environment": (
+        {
+            "env": SCons.Environment.Environment(),
+            "cache_directory": "/build/cache",
+        },
+        pathlib.Path("/build/cache").resolve(),
+    ),
+    "write to unshared cache directory": (
+        {
+            "shared_cache_directory": "/shared/cache",
+            "cache_directory": "/build/cache",
+        },
+        pathlib.Path("/build/cache").resolve(),
+    ),
+    "overwrite shared cache directory": (
+        {
+            "shared_cache_directory": pathlib.Path("/shared/cache"),
+            "cache_directory": "/shared/cache",
+            "shared_cache_override": True,
+        },
+        pathlib.Path("/shared/cache").resolve(),
+    ),
+    "read-only of shared cache": (
+        {
+            "shared_cache_directory": "/shared/cache",
+            "cache_directory": pathlib.Path("/shared/cache"),
+            "cache_readonly": True,
+        },
+        pathlib.Path("/shared/cache").resolve(),
+    ),
+    "read-only override": (
+        {
+            "shared_cache_directory": "/shared/cache",
+            "cache_directory": pathlib.Path("/shared/cache"),
+            "cache_readonly": True,
+            "shared_cache_override": True,
+        },
+        pathlib.Path("/shared/cache").resolve(),
+    ),
+    "protect shared cache": (
+        {
+            "shared_cache_directory": pathlib.Path("/shared/cache"),
+            "cache_directory": pathlib.Path("/shared/cache"),
+        },
+        None,
+    ),
+    "custom class kwarg": (
+        {
+            "shared_cache_directory": "/shared/cache",
+            "cache_directory": "/build/cache",
+            "shared_cache_override": True,
+            "custom_class": "custom_cache_class",
+        },
+        pathlib.Path("/build/cache").resolve(),
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("kwargs", "expected_directory"),
+    test_project_cache_directory_cases.values(),
+    ids=test_project_cache_directory_cases.keys(),
+)
+def test_project_cache_directory(
+    kwargs: dict,
+    expected_directory: str,
+) -> None:
+    with patch("SCons.Environment.Environment.CacheDir") as mock_cache:
+        active_cache_directory = scons_extensions.project_cache_directory(**kwargs)
+        assert active_cache_directory == expected_directory
+        custom_class = {key: value for key, value in kwargs.items() if key == "custom_class"}
+        expected_positional = str(expected_directory) if expected_directory else None
+        mock_cache.assert_called_once_with(expected_positional, **custom_class)
+
+
 waves_environment_attributes = {
     "default": ({}),
     "no defaults": (
@@ -3300,6 +3386,17 @@ waves_environment_methods = {
     ),
     "ParameterStudyWrite": ("ParameterStudyWrite", "parameter_study_write", ("dummy_generator",), {"kwarg1": "value1"}),
     "TarScript": ("TarScript", "tar_script", (["target"], ["source"]), {"shell": "shell", "extension": ".script"}),
+    "ProjectCacheDirectory": (
+        "ProjectCacheDirectory",
+        "project_cache_directory",
+        (),
+        {
+            "shared_cache_directory": pathlib.Path("shared_cache"),
+            "cache_directory": "local_cache",
+            "cache_readonly": False,
+            "shared_cache_override": False,
+        },
+    ),
 }
 
 
