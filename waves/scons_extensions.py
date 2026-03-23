@@ -5267,7 +5267,9 @@ class WAVESEnvironment(SConsEnvironment):
 
         :return: the active build cache directory
         """
-        return project_cache_directory(self, shared_cache_directory, cache_directory, cache_readonly, cache_write)
+        return project_cache_directory(
+            self, shared_cache_directory, cache_directory, cache_readonly=cache_readonly, cache_write=cache_write
+        )
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace
