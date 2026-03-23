@@ -4354,7 +4354,7 @@ def project_cache_directory(
     :param cache_readonly: treat the cache as read-only. False by default to match SCons controlled
         ``--cache-readonly`` option. This controls the cache access even if ``shared_cache_override`` is True.
     :param shared_cache_override: allow configuration of the shared cache directory even if ``cache_readonly`` is False.
-        ``cache_readonly`` still controls the cache access.
+        ``cache_readonly`` still controls the cache access permissions.
     :param kwargs: All other keyword arguments are passed to the SCons ``CacheDir`` method.
 
     :return: the active build cache directory
@@ -5270,7 +5270,7 @@ class WAVESEnvironment(SConsEnvironment):
         :param cache_readonly: treat the cache as read-only. False by default to match SCons controlled
             ``--cache-readonly`` option. This controls the cache access even if ``shared_cache_override`` is True.
         :param shared_cache_override: allow configuration of the shared cache directory even if ``cache_readonly`` is
-            False. ``cache_readonly`` still controls the cache access.
+            False. ``cache_readonly`` still controls the cache access permissions.
         :param kwargs: All other keyword arguments are passed to the SCons ``CacheDir`` method.
 
         :return: the active build cache directory
