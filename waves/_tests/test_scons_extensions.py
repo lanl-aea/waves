@@ -3213,6 +3213,12 @@ test_project_cache_directory_cases = {
         {"cache_readonly": False, "cache_write": True},
         None,
     ),
+    "write to local cache directory": (
+        None,
+        "/build/cache",
+        {"cache_readonly": False, "cache_write": True},
+        pathlib.Path("/build/cache"),
+    ),
 }
 
 
@@ -3227,11 +3233,12 @@ def test_project_cache_directory(
     kwargs: dict,
     expected_directory: str,
 ) -> None:
-    env = SCons.Environment.Environment()
-    active_cache_directory = scons_extensions.project_cache_directory(
-        env, shared_cache_directory, cache_directory, **kwargs
-    )
-    assert active_cache_directory == expected_directory
+    with patch("SCons.Environment.Environment.CacheDir"):
+        env = SCons.Environment.Environment()
+        active_cache_directory = scons_extensions.project_cache_directory(
+            env, shared_cache_directory, cache_directory, **kwargs
+        )
+        assert active_cache_directory == expected_directory
 
 
 waves_environment_attributes = {
