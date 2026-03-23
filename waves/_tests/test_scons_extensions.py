@@ -3217,6 +3217,13 @@ test_project_cache_directory_cases = {
         },
         pathlib.Path("/build/cache").resolve(),
     ),
+    "specified environment": (
+        {
+            "env": SCons.Environment.Environment(),
+            "cache_directory": "/build/cache",
+        },
+        pathlib.Path("/build/cache").resolve(),
+    ),
     "write to unshared cache directory": (
         {
             "shared_cache_directory": "/shared/cache",
