@@ -8,6 +8,11 @@ Changelog
 1.4.0 (unreleased)
 ******************
 
+Internal Changes
+================
+- Add project cache directory function to assist active cache directory assignment and protection of the shared cache 
+  (:issue:`1004`, :merge:`1304`). By `Chris Johnson`_.
+
 ******************
 1.3.1 (2026-03-19)
 ******************
