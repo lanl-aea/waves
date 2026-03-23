@@ -3211,13 +3211,13 @@ test_project_cache_directory_cases = {
         {},
         None,
     ),
-    "local cache only": (
+    "unshared cache only": (
         {
             "cache_directory": "/build/cache",
         },
         pathlib.Path("/build/cache").resolve(),
     ),
-    "write to local cache directory": (
+    "write to unshared cache directory": (
         {
             "shared_cache_directory": "/shared/cache",
             "cache_directory": "/build/cache",
