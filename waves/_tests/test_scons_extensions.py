@@ -3208,54 +3208,60 @@ def test_tar_script(
 
 test_project_cache_directory_cases = {
     "No cache directory": (
-        None,
-        None,
         {"cache_readonly": False, "cache_write": False},
         None,
     ),
     "write to local cache directory": (
-        pathlib.Path("/shared/cache"),
-        "/build/cache",
-        {"cache_readonly": False, "cache_write": False},
+        {
+            "shared_cache_directory": pathlib.Path("/shared/cache"),
+            "cache_directory": "/build/cache",
+            "cache_readonly": False,
+            "cache_write": False,
+        },
         pathlib.Path("/build/cache"),
     ),
     "overwrite shared cache directory": (
-        pathlib.Path("/shared/cache"),
-        "/shared/cache",
-        {"cache_readonly": False, "cache_write": True},
+        {
+            "shared_cache_directory": pathlib.Path("/shared/cache"),
+            "cache_directory": "/shared/cache",
+            "cache_readonly": False,
+            "cache_write": True,
+        },
         pathlib.Path("/shared/cache"),
     ),
     "read-only override": (
-        pathlib.Path("/shared/cache"),
-        "/shared/cache",
-        {"cache_readonly": True, "cache_write": False},
+        {
+            "shared_cache_directory": pathlib.Path("/shared/cache"),
+            "cache_directory": "/shared/cache",
+            "cache_readonly": True,
+            "cache_write": False,
+        },
         pathlib.Path("/shared/cache"),
     ),
     "protect shared cache": (
-        pathlib.Path("/shared/cache"),
-        "/shared/cache",
-        {"cache_readonly": False, "cache_write": False},
+        {
+            "shared_cache_directory": pathlib.Path("/shared/cache"),
+            "cache_directory": "/shared/cache",
+            "cache_readonly": False,
+            "cache_write": False,
+        },
         None,
     ),
 }
 
 
 @pytest.mark.parametrize(
-    ("shared_cache_directory", "cache_directory", "kwargs", "expected_directory"),
+    ("kwargs", "expected_directory"),
     test_project_cache_directory_cases.values(),
     ids=test_project_cache_directory_cases.keys(),
 )
 def test_project_cache_directory(
-    shared_cache_directory: pathlib.Path | None,
-    cache_directory: str | pathlib.Path | None,
     kwargs: dict,
     expected_directory: str,
 ) -> None:
     with patch("SCons.Environment.Environment.CacheDir"):
         env = SCons.Environment.Environment()
-        active_cache_directory = scons_extensions.project_cache_directory(
-            env, shared_cache_directory, cache_directory, **kwargs
-        )
+        active_cache_directory = scons_extensions.project_cache_directory(env, **kwargs)
         assert active_cache_directory == expected_directory
 
 
