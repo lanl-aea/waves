@@ -5251,14 +5251,20 @@ class WAVESEnvironment(SConsEnvironment):
         """
         return tar_script(self, target, source, shell=shell, extension=extension)
 
-    def ProjectCacheDirectory(self, **kwargs) -> pathlib.Path | None:  # noqa: N802
+    def ProjectCacheDirectory(  # noqa: N802
+        self,
+        shared_cache_directory: pathlib.Path | None = None,
+        cache_directory: str | pathlib.Path | None = None,
+        cache_readonly: bool = False,
+        cache_write: bool = False,
+        **kwargs,
+    ) -> pathlib.Path | None:
         """Return the absolute path to the active build cache directory, providing weak protections to a shared cache.
 
         This method will avoid configuring the project's shared cache unless the read-only option or cache-write
         override is provided. The project is responsible for documenting when the cache-write override is used and
         configuring access permissions on the project's shared cache.
 
-        :param env: SCons construction environment
         :param shared_cache_directory: the weakly protected project shared cache directory.
         :param cache_directory: path to the cache directory
         :param cache_readonly: treat the cache as read-only. False by default to match SCons controlled
@@ -5269,7 +5275,14 @@ class WAVESEnvironment(SConsEnvironment):
 
         :return: the active build cache directory
         """
-        return project_cache_directory(self, **kwargs)
+        return project_cache_directory(
+            self,
+            shared_cache_directory=shared_cache_directory,
+            cache_directory=cache_directory,
+            cache_readonly=cache_readonly,
+            cache_write=cache_write,
+            **kwargs,
+        )
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace
