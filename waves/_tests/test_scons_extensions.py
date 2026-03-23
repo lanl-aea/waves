@@ -3216,7 +3216,7 @@ test_project_cache_directory_cases = {
             "shared_cache_directory": pathlib.Path("/shared/cache"),
             "cache_directory": "/build/cache",
         },
-        pathlib.Path("/build/cache"),
+        pathlib.Path("/build/cache").resolve(),
     ),
     "overwrite shared cache directory": (
         {
@@ -3224,7 +3224,7 @@ test_project_cache_directory_cases = {
             "cache_directory": "/shared/cache",
             "cache_write": True,
         },
-        pathlib.Path("/shared/cache"),
+        pathlib.Path("/shared/cache").resolve(),
     ),
     "read-only override": (
         {
@@ -3232,7 +3232,7 @@ test_project_cache_directory_cases = {
             "cache_directory": "/shared/cache",
             "cache_readonly": True,
         },
-        pathlib.Path("/shared/cache"),
+        pathlib.Path("/shared/cache").resolve(),
     ),
     "protect shared cache": (
         {
@@ -3248,7 +3248,7 @@ test_project_cache_directory_cases = {
             "cache_write": True,
             "custom_class": "custom_cache_class",
         },
-        pathlib.Path("/build/cache"),
+        pathlib.Path("/build/cache").resolve(),
     ),
 }
 
