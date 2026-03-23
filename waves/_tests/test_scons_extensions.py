@@ -3241,12 +3241,12 @@ test_project_cache_directory_cases = {
         },
         None,
     ),
-    "custom cache kwarg": (
+    "custom class kwarg": (
         {
             "shared_cache_directory": pathlib.Path("/shared/cache"),
             "cache_directory": "/build/cache",
             "cache_write": True,
-            "custom_cache": "custom_cache_class",
+            "custom_class": "custom_cache_class",
         },
         pathlib.Path("/build/cache"),
     ),
