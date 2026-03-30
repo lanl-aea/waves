@@ -49,6 +49,16 @@ AddOption(
         " ``--cache-readonly`` option to enable the shared project cache (default: '%default')"
     ),
 )
+AddOption(
+    "--shared-cache-override",
+    action="store_true",
+    default=False,
+    help=(
+        "WARNING: MAKES THE PROJECT SHARED BUILD CACHE WRITABLE."
+        " Allow write access to the project shared build cache. MUST NOT SPECIFY ``--cache-readonly`` or SCons will"
+        " override this option when configuring the build cache directory."
+    ),
+)
 # Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
 default_abaqus_commands = [
     "/apps/abaqus/Commands/abq2025",
