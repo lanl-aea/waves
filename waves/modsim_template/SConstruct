@@ -41,7 +41,7 @@ AddOption(
     help="SCons cache directory. Relative or absolute path (default: '%default')",
 )
 AddOption(
-    "--cache-dir-shared",
+    "--shared-cache-dir",
     action="store_true",
     default=False,
     help=(
