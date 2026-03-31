@@ -42,15 +42,13 @@ AddOption(
 )
 AddOption(
     "--shared-cache-dir",
-    action="store_true",
-    default=False,
-    help=(
-        "Override the ``--cache-dir`` with the shared project cache. Must also use SCons native"
-        " ``--cache-readonly`` option to enable the shared project cache (default: '%default')"
-    ),
+    dest="shared_cache_directory",
+    metavar="DIR",
+    help="SCons shared cache directory. Relative or absolute path (default: '%default')",
 )
 AddOption(
     "--shared-cache-override",
+    dest="shared_cache_override",
     action="store_true",
     default=False,
     help=(
@@ -86,6 +84,14 @@ env = waves.scons_extensions.WAVESEnvironment(
     TARSUFFIX=".tar.bz2",
 )
 env.PrintBuildFailures()
+
+# Set cache properties
+build_cache_directory = env.ProjectCacheDirectory(
+    GetOption("shared_cache_directory"),
+    GetOption("cache_directory"),
+    GetOption("cache_readonly"),
+    GetOption("shared_cache_override"),
+)
 
 # Empty defaults list to avoid building all simulation targets by default
 env.Default()
