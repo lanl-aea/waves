@@ -178,7 +178,7 @@ def main(
         _settings._sobol_sequence_subcommand: parameter_generators.SobolSequence,
         _settings._one_at_a_time_subcommand: parameter_generators.OneAtATime,
     }
-    parameter_generator = available_parameter_generators[subcommand](
+    parameter_generator = available_parameter_generators[subcommand](  # type: ignore[abstract]
         parameter_schema,
         output_file_template=output_file_template,
         output_file=output_file,
