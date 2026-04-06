@@ -62,7 +62,7 @@ rst_prolog = (
     f".. |copyright| replace:: © Copyright {copyright}.\n"
     f".. |project| replace:: {_project_name_short}\n"
     f".. |version| replace:: {version}\n"
-    ".. include:: targets.txt"
+    f".. include:: targets.txt"
 )
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 if tags.has("man"):
