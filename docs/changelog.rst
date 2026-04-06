@@ -11,6 +11,9 @@ Changelog
 Bug fixes
 =========
 - Fix the behavior of the project alias function when no SCons environment is provided. By `Kyle Brindley`_.
+- Manage XArray netcdf bug where post-merged datasets may have truncated strings in coordinates:
+  https://github.com/primap-community/primap2/issues/325, https://github.com/pydata/xarray/issues/9037. By
+  (:merge:`1306`) `Kyle Brindley`_.
 
 New Features
 ============
