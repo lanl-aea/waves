@@ -394,7 +394,9 @@ class ParameterGenerator(ABC):
                     write = False
         if write:
             existing_parameter_study.parent.mkdir(parents=True, exist_ok=True)
-            parameter_study.drop_encoding().to_netcdf(path=existing_parameter_study, mode="w", format="NETCDF4", engine="h5netcdf")
+            parameter_study.drop_encoding().to_netcdf(
+                path=existing_parameter_study, mode="w", format="NETCDF4", engine="h5netcdf"
+            )
 
     def _conditionally_write_yaml(
         self,

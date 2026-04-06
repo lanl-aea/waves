@@ -22,7 +22,11 @@ test_previous_parameter_study_cases = {
     "float and str": ("CartesianProduct", {"float": [1.0], "str": ["a"]}, {"float": [1.0], "str": ["a"]}),
     "float and bool": ("CartesianProduct", {"float": [1.0], "bool": [True]}, {"float": [1.0], "bool": [True]}),
     "str and bool": ("CartesianProduct", {"str": ["a"], "bool": [True]}, {"str": ["a"], "bool": [True]}),
-    "int, float, str, bool": ("CartesianProduct", {"int": [1], "float": [1.0], "str": ["a"], "bool": [True]}, {"int": [1], "float": [1.0], "str": ["a"], "bool": [True]}),
+    "int, float, str, bool": (
+        "CartesianProduct",
+        {"int": [1], "float": [1.0], "str": ["a"], "bool": [True]},
+        {"int": [1], "float": [1.0], "str": ["a"], "bool": [True]},
+    ),
     "change set name digits 1->2": ("CartesianProduct", {"int": list(range(0, 10))}, {"int": list(range(0, 11))}),
     "change set name digits 2->3": ("CartesianProduct", {"int": list(range(0, 100))}, {"int": list(range(0, 101))}),
 }
@@ -98,7 +102,7 @@ def test_previous_parameter_study(
         assert disk_waves.identical(memory.parameter_study)
         disk_waves.close()
         # Check that opening as a previous parameter study does not raise an exception
-        parameter_generator = generator_class(
+        _parameter_generator = generator_class(
             memory.parameter_schema,
             output_file_type="h5",
             previous_parameter_study=disk_file,
