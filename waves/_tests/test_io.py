@@ -75,6 +75,25 @@ def test_previous_parameter_study(
     temp_path.mkdir(parents=True, exist_ok=True)
     # Move to common test utility ^^^
 
+    def check_study(memory: xarray.Dataset, disk_file: pathlib.Path) -> None:
+        # Check that xarray thinks the datasets are identical as a sanity check
+        disk = xarray.open_dataset(disk_file, engine="h5netcdf")
+        assert disk.identical(memory)
+        # Check that the verify function does not raise an exception
+        waves.parameter_generators._verify_parameter_study(disk)
+        disk.close()
+        # Check that the open function does not raise an exception
+        disk_waves = waves.parameter_generators._open_parameter_study(disk_file)
+        assert disk_waves.identical(memory)
+        disk_waves.close()
+        # Check that opening as a previous parameter study does not raise an exception
+        parameter_generator = waves.parameter_generators.CartesianProduct(
+            schema,
+            output_file_type="h5",
+            previous_parameter_study=disk_file,
+            require_previous_parameter_study=True,
+        )
+
     parameter_study_file = temp_path / "parameter_study.h5"
     parameter_generator = waves.parameter_generators.CartesianProduct(
         schema,
@@ -83,26 +102,7 @@ def test_previous_parameter_study(
     )
     parameter_generator.write()
 
-    # Check that xarray thinks the datasets are identical as a sanity check
-    disk = xarray.open_dataset(parameter_study_file, engine="h5netcdf")
-    assert disk.identical(parameter_generator.parameter_study)
-
-    # Check that the verify function does not raise an exception
-    waves.parameter_generators._verify_parameter_study(disk)
-    disk.close()
-
-    # Check that the open function does not raise an exception
-    disk_waves = waves.parameter_generators._open_parameter_study(parameter_study_file)
-    assert disk_waves.identical(parameter_generator.parameter_study)
-    disk_waves.close()
-
-    # Check that opening as a previous parameter study does not raise an exception
-    parameter_generator = waves.parameter_generators.CartesianProduct(
-        schema,
-        output_file=parameter_study_file,
-        output_file_type="h5",
-        previous_parameter_study=parameter_study_file,
-    )
+    check_study(parameter_generator.parameter_study, parameter_study_file)
 
     if not keep_system_tests:
         temp_directory.cleanup()
