@@ -23,7 +23,8 @@ test_previous_parameter_study_cases = {
     "float and bool": ("CartesianProduct", {"float": [1.0], "bool": [True]}, {"float": [1.0], "bool": [True]}),
     "str and bool": ("CartesianProduct", {"str": ["a"], "bool": [True]}, {"str": ["a"], "bool": [True]}),
     "int, float, str, bool": ("CartesianProduct", {"int": [1], "float": [1.0], "str": ["a"], "bool": [True]}, {"int": [1], "float": [1.0], "str": ["a"], "bool": [True]}),
-    "change set name string length": ("CartesianProduct", {"int": list(range(0, 10))}, {"int": list(range(0, 11))}),
+    "change set name digits 1->2": ("CartesianProduct", {"int": list(range(0, 10))}, {"int": list(range(0, 11))}),
+    "change set name digits 2->3": ("CartesianProduct", {"int": list(range(0, 100))}, {"int": list(range(0, 101))}),
 }
 
 
