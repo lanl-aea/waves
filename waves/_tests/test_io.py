@@ -12,23 +12,23 @@ import xarray
 import waves
 
 test_previous_parameter_study_cases = {
-    "int": {"int": [1]},
-    "float": {"float": [1.0]},
-    "str": {"str": ["a"]},
-    "bool": {"bool": [True]},
-    "int and float": {"int": [1], "float": [1.0]},
-    "int and str": {"int": [1], "str": ["a"]},
-    "int and bool": {"int": [1], "bool": [True]},
-    "float and str": {"float": [1.0], "str": ["a"]},
-    "float and bool": {"float": [1.0], "bool": [True]},
-    "str and bool": {"str": ["a"], "bool": [True]},
-    "int, float, str, bool": {"int": [1], "float": [1.0], "str": ["a"], "bool": [True]},
+    "int": ("CartesianProduct", {"int": [1]}),
+    "float": ("CartesianProduct", {"float": [1.0]}),
+    "str": ("CartesianProduct", {"str": ["a"]}),
+    "bool": ("CartesianProduct", {"bool": [True]}),
+    "int and float": ("CartesianProduct", {"int": [1], "float": [1.0]}),
+    "int and str": ("CartesianProduct", {"int": [1], "str": ["a"]}),
+    "int and bool": ("CartesianProduct", {"int": [1], "bool": [True]}),
+    "float and str": ("CartesianProduct", {"float": [1.0], "str": ["a"]}),
+    "float and bool": ("CartesianProduct", {"float": [1.0], "bool": [True]}),
+    "str and bool": ("CartesianProduct", {"str": ["a"], "bool": [True]}),
+    "int, float, str, bool": ("CartesianProduct", {"int": [1], "float": [1.0], "str": ["a"], "bool": [True]}),
 }
 
 
 @pytest.mark.systemtest
 @pytest.mark.parametrize(
-    "schema",
+    ("name", "schema"),
     test_previous_parameter_study_cases.values(),
     ids=test_previous_parameter_study_cases.keys(),
 )
@@ -36,6 +36,7 @@ def test_previous_parameter_study(
     system_test_directory: pathlib.Path | None,
     keep_system_tests: bool,
     request: pytest.FixtureRequest,
+    name: str,
     schema: dict,
 ) -> None:
     """Run real system I/O from the waves.parameter_generators API and check parameter study merge behaviors.
@@ -46,7 +47,8 @@ def test_previous_parameter_study(
     :param system_test_directory: custom pytest decorator defined in conftest.py
     :param keep_system_tests: custom pytest decorator defined in conftest.py
     :param request: pytest decorator with test case meta data
-    :param schema: waves.parameter_generators.CartesianProduct schema
+    :param name: WAVES parameter generator class name. Case sensitive.
+    :param schema: schema for generator class ``name``
     """
     module_name = pathlib.Path(__file__).stem
     test_id = request.node.callspec.id
@@ -75,7 +77,13 @@ def test_previous_parameter_study(
     temp_path.mkdir(parents=True, exist_ok=True)
     # Move to common test utility ^^^
 
-    def check_study(memory: xarray.Dataset, disk_file: pathlib.Path) -> None:
+    generator_class = getattr(waves.parameter_generators, name)
+
+    def check_study(
+        memory: xarray.Dataset,
+        disk_file: pathlib.Path,
+        generator_class: waves.parameter_generators.ParameterGenerator = generator_class,
+    ) -> None:
         # Check that xarray thinks the datasets are identical as a sanity check
         disk = xarray.open_dataset(disk_file, engine="h5netcdf")
         assert disk.identical(memory)
@@ -87,7 +95,7 @@ def test_previous_parameter_study(
         assert disk_waves.identical(memory)
         disk_waves.close()
         # Check that opening as a previous parameter study does not raise an exception
-        parameter_generator = waves.parameter_generators.CartesianProduct(
+        parameter_generator = generator_class(
             schema,
             output_file_type="h5",
             previous_parameter_study=disk_file,
