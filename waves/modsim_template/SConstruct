@@ -34,23 +34,6 @@ AddOption(
     metavar="N",
     help="Run the Abaqus Solve task using N CPUs. (default: '%default')",
 )
-AddOption(
-    "--cache-dir",
-    dest="cache_directory",
-    metavar="DIR",
-    help="SCons cache directory. Relative or absolute path (default: '%default')",
-)
-AddOption(
-    "--shared-cache-override",
-    dest="shared_cache_override",
-    action="store_true",
-    default=False,
-    help=(
-        "WARNING: MAKES THE PROJECT SHARED BUILD CACHE WRITABLE."
-        " Allow write access to the project shared build cache. MUST NOT SPECIFY ``--cache-readonly`` or SCons will"
-        " override this option when configuring the build cache directory."
-    ),
-)
 # Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
 default_abaqus_commands = [
     "/apps/abaqus/Commands/abq2025",
@@ -122,7 +105,26 @@ project_variables = {
 for key, value in project_variables.items():
     env[key] = value
 
-# Set cache properties
+# Add cache options and set cache properties
+AddOption(
+    "--cache-dir",
+    dest="cache_directory",
+    metavar="DIR",
+    help=f"SCons cache directory. Relative or absolute path. The current shared cache directory is '{str(shared_cache_dir)}'."
+        " If the input cache directory is identical to the shared cache directory, cache access will be read-only unless the "
+        "``--shared-cache-override`` flag is used."
+)
+AddOption(
+    "--shared-cache-override",
+    dest="shared_cache_override",
+    action="store_true",
+    default=False,
+    help=(
+        "WARNING: MAKES THE PROJECT SHARED BUILD CACHE WRITABLE."
+        " Allow write access to the project shared build cache. MUST NOT SPECIFY ``--cache-readonly`` or SCons will"
+        " override this option when configuring the build cache directory."
+    ),
+)
 build_cache_directory = env.ProjectCacheDirectory(
     shared_cache_dir,
     GetOption("cache_directory"),
