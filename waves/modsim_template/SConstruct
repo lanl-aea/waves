@@ -111,6 +111,7 @@ latex_project_name = project_name.replace("_", "-")
 documentation_source_dir = pathlib.Path("docs")
 modsim_package_dir = pathlib.Path("modsim_package")
 test_source_dir = "modsim_package/tests"
+shared_cache_dir = project_directory / "shared_cache"  # This can be hardcoded to point to the repo shared cache
 project_variables = {
     "project_directory": project_directory,
     "project_name": project_name,
@@ -122,14 +123,14 @@ project_variables = {
     "report_pdf": f"{latex_project_name}-{version}-report.pdf",
     "documentation_abspath": project_directory / documentation_source_dir,
     "test_source_abspath": project_directory / test_source_dir,
-    "shared_cache_directory": project_directory / "shared_cache"  # This can be hardcoded to point to the repo shared cache
+    "shared_cache_directory": shared_cache_dir,
 }
 for key, value in project_variables.items():
     env[key] = value
 
 # Set cache properties
 build_cache_directory = env.ProjectCacheDirectory(
-    env[shared_cache_directory],
+    shared_cache_dir,
     GetOption("cache_directory"),
     GetOption("cache_readonly"),
     GetOption("shared_cache_override"),
