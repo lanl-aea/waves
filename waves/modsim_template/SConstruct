@@ -41,12 +41,6 @@ AddOption(
     help="SCons cache directory. Relative or absolute path (default: '%default')",
 )
 AddOption(
-    "--shared-cache-dir",
-    dest="shared_cache_directory",
-    metavar="DIR",
-    help="SCons shared cache directory. Relative or absolute path (default: '%default')",
-)
-AddOption(
     "--shared-cache-override",
     dest="shared_cache_override",
     action="store_true",
