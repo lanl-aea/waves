@@ -85,6 +85,14 @@ env = waves.scons_extensions.WAVESEnvironment(
 )
 env.PrintBuildFailures()
 
+# Set cache properties
+build_cache_directory = env.ProjectCacheDirectory(
+    GetOption("shared_cache_directory"),
+    GetOption("cache_directory"),
+    GetOption("cache_readonly"),
+    GetOption("shared_cache_override"),
+)
+
 # Empty defaults list to avoid building all simulation targets by default
 env.Default()
 
