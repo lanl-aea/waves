@@ -88,7 +88,9 @@ latex_project_name = project_name.replace("_", "-")
 documentation_source_dir = pathlib.Path("docs")
 modsim_package_dir = pathlib.Path("modsim_package")
 test_source_dir = "modsim_package/tests"
-shared_cache_dir = project_directory / "shared_cache"  # This can be hardcoded to point to the repo shared cache
+shared_cache_dir = (
+    project_directory / "shared_cache"
+)  # This should be hardcoded to point to the project's shared cache on a shared file system
 project_variables = {
     "project_directory": project_directory,
     "project_name": project_name,
@@ -109,9 +111,9 @@ AddOption(
     "--cache-dir",
     dest="cache_directory",
     metavar="DIR",
-    help=f"SCons cache directory. Relative or absolute path. The current shared cache directory is '{str(shared_cache_dir)}'."
-        " If the input cache directory is identical to the shared cache directory, cache access will be read-only unless the "
-        "``--shared-cache-override`` flag is used."
+    help=f"SCons cache directory. Relative or absolute path. The current shared cache directory is '{shared_cache_dir!s}'."
+    " If the input cache directory is identical to the shared cache directory, cache access will be read-only unless the "
+    "``--shared-cache-override`` flag is used.",
 )
 AddOption(
     "--shared-cache-override",
