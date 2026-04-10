@@ -111,9 +111,18 @@ AddOption(
     "--cache-dir",
     dest="cache_directory",
     metavar="DIR",
-    help=f"SCons cache directory. Relative or absolute path. The current shared cache directory is '{shared_cache_dir!s}'."
-    " If the input cache directory is identical to the shared cache directory, cache access will be read-only unless the "
-    "``--shared-cache-override`` flag is used.",
+    help="SCons cache directory. Relative or absolute path.",
+)
+AddOption(
+    "--shared-cache-dir",
+    dest="shared_cache_directory",
+    action="store_true",
+    default=False,
+    help=(
+        "Override the ``--cache-dir`` with the shared project cache. The current shared cache directory "
+        f"is '{shared_cache_dir}'. Must also use SCons native ``--cache-readonly`` option to access the "
+        "shared project cache (default: '%default')."
+    ),
 )
 AddOption(
     "--shared-cache-override",
