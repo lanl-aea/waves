@@ -3,7 +3,6 @@
     GIT_STRATEGY: clone
     conda_installation: "/apps/miniconda3/3.13-miniconda-25.5.1"
     environment_file: "environment.yml"
-    conda_artifacts_directory: "conda-bld"
   before_script:
     # FIXME: trace the Gitlab-CI behavior that unsets LANG VVV
     - if [[ -z "${LANG}" ]]; then export LANG='en_US.UTF-8'; fi
@@ -14,8 +13,6 @@
     - check_directory_variable "${conda_installation}"
     - echo ${environment_file}
     - if [[ -z ${environment_file} ]]; then exit 1; fi
-    - echo ${conda_artifacts_directory}
-    - if [[ -z ${conda_artifacts_directory} ]]; then exit 1; fi
     # Common job variables
     - prefix="$PWD/env"
     - conda_pkgs_dirs="$PWD/pkgs"
@@ -139,6 +136,10 @@
     - python -m pytest -vvv -n 4 -m "not require_third_party and not sphinx"
 
 .conda-build: &conda-build
+  variables:
+    recipe_directory: "recipe"
+    conda_artifacts_directory: "conda-bld"
+    rattler_build_extra_options: ""
   script:
     # Job variables
     - echo ${recipe_directory}
@@ -150,7 +151,7 @@
     - umask 0022
     - mkdir ${conda_artifacts_directory}
     - scons pyproject.toml
-    - VERSION=$(python -m setuptools_scm) rattler-build build --recipe ${recipe_directory} --channel fierromechanics --channel conda-forge --output-dir ${conda_artifacts_directory}
+    - VERSION=$(python -m setuptools_scm) rattler-build build --recipe ${recipe_directory} --channel fierromechanics --channel conda-forge --output-dir ${conda_artifacts_directory} ${rattler_build_extra_options}
     # Help downstream deploy pipeline find this job by ID
     - tag_job_file_root="/nettmp/aea_service"
     - tag_job_file_parent="${tag_job_file_root}/${CI_PROJECT_PATH}"
