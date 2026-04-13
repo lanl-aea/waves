@@ -147,7 +147,7 @@ def test_augment_system_test_environment(args: tuple[dict, bool], expected: dict
 testing_ci_user = check_ci_user()
 installed = check_installed()
 system_test_environment = augment_system_test_environment(os.environ.copy(), installed)
-if "LANG" not in system_test_environment or system_test_environment["LANG"] != "en_US.UTF-8":
+if "LANG" not in system_test_environment:
     system_test_environment["LANG"] = "en_US.UTF-8"
 odb_extract_command = "odb_extract" if installed else "python -m waves._abaqus.odb_extract"
 
