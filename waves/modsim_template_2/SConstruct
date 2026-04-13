@@ -117,8 +117,8 @@ AddOption(
     help="SCons cache directory. Relative or absolute path.",
 )
 AddOption(
-    "--shared-cache-override",
-    dest="shared_cache_override",
+    "--shared-cache-dir",
+    dest="shared_cache_directory",
     action="store_true",
     default=False,
     help=(
@@ -128,8 +128,8 @@ AddOption(
     ),
 )
 AddOption(
-    "--shared-cache-write",
-    dest="shared_cache_write",
+    "--shared-cache-override",
+    dest="shared_cache_override",
     action="store_true",
     default=False,
     help=(
@@ -138,7 +138,7 @@ AddOption(
         " override this option when configuring the build cache directory."
     ),
 )
-if GetOption("shared_cache_override"):
+if GetOption("shared_cache_directory"):
     cache_dir = shared_cache_dir
 else:
     cache_dir = GetOption("cache_directory")
@@ -146,7 +146,7 @@ build_cache_directory = env.ProjectCacheDirectory(
     shared_cache_dir,
     cache_dir,
     GetOption("cache_readonly"),
-    GetOption("shared_cache_write"),
+    GetOption("shared_cache_override"),
 )
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
