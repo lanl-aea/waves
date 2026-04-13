@@ -1,3 +1,4 @@
+set -o xtrace
 system_test_directory=${PWD}
 # Avoid file system maximum path length issues during CI testing. Can't use /tmp on CI server because some system tests require execute permissions.
 scratch_root=/scratch
