@@ -34,29 +34,6 @@ AddOption(
     metavar="N",
     help="Run the Abaqus Solve task using N CPUs. (default: '%default')",
 )
-AddOption(
-    "--cache-dir",
-    dest="cache_directory",
-    metavar="DIR",
-    help="SCons cache directory. Relative or absolute path (default: '%default')",
-)
-AddOption(
-    "--shared-cache-dir",
-    dest="shared_cache_directory",
-    metavar="DIR",
-    help="SCons shared cache directory. Relative or absolute path (default: '%default')",
-)
-AddOption(
-    "--shared-cache-override",
-    dest="shared_cache_override",
-    action="store_true",
-    default=False,
-    help=(
-        "WARNING: MAKES THE PROJECT SHARED BUILD CACHE WRITABLE."
-        " Allow write access to the project shared build cache. MUST NOT SPECIFY ``--cache-readonly`` or SCons will"
-        " override this option when configuring the build cache directory."
-    ),
-)
 # Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
 default_abaqus_commands = [
     "/apps/abaqus/Commands/abq2025",
@@ -84,14 +61,6 @@ env = waves.scons_extensions.WAVESEnvironment(
     TARSUFFIX=".tar.bz2",
 )
 env.PrintBuildFailures()
-
-# Set cache properties
-build_cache_directory = env.ProjectCacheDirectory(
-    GetOption("shared_cache_directory"),
-    GetOption("cache_directory"),
-    GetOption("cache_readonly"),
-    GetOption("shared_cache_override"),
-)
 
 # Empty defaults list to avoid building all simulation targets by default
 env.Default()
@@ -121,6 +90,8 @@ latex_project_name = project_name.replace("_", "-")
 documentation_source_dir = pathlib.Path("docs")
 modsim_package_dir = pathlib.Path("modsim_package")
 test_source_dir = "modsim_package/tests"
+# The shared cache should be hardcoded to point to the project's shared cache on a shared file system
+shared_cache_dir = project_directory / "shared_cache"
 parameter_study_build_directory = build_directory / "parameter_studies"
 project_variables = {
     "project_directory": project_directory,
@@ -137,6 +108,46 @@ project_variables = {
 }
 for key, value in project_variables.items():
     env[key] = value
+
+# Add cache options and set cache properties
+AddOption(
+    "--cache-dir",
+    dest="cache_directory",
+    metavar="DIR",
+    help="SCons cache directory. Relative or absolute path.",
+)
+AddOption(
+    "--shared-cache-override",
+    dest="shared_cache_override",
+    action="store_true",
+    default=False,
+    help=(
+        "Override the ``--cache-dir`` with the shared project cache. The current shared cache directory "
+        f"is '{shared_cache_dir}'. Must also use SCons native ``--cache-readonly`` option to access the "
+        "shared project cache (default: '%default')."
+    ),
+)
+AddOption(
+    "--shared-cache-write",
+    dest="shared_cache_write",
+    action="store_true",
+    default=False,
+    help=(
+        "WARNING: MAKES THE PROJECT SHARED BUILD CACHE WRITABLE."
+        " Allow write access to the project shared build cache. MUST NOT SPECIFY ``--cache-readonly`` or SCons will"
+        " override this option when configuring the build cache directory."
+    ),
+)
+if GetOption("shared_cache_override"):
+    cache_dir = shared_cache_dir
+else:
+    cache_dir = GetOption("cache_directory")
+build_cache_directory = env.ProjectCacheDirectory(
+    shared_cache_dir,
+    cache_dir,
+    GetOption("cache_readonly"),
+    GetOption("shared_cache_write"),
+)
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env["SPHINX_BUILD"] = env.AddProgram(["sphinx-build"])
