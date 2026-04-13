@@ -37,8 +37,10 @@ AddOption(
 AddOption(
     "--cache-dir",
     dest="cache_directory",
+    default=None,
+    action="store",
     metavar="DIR",
-    help="SCons cache directory. Relative or absolute path.",
+    help="SCons cache directory. Relative or absolute path. (default: '%default')",
 )
 AddOption(
     "--shared-cache-dir",
