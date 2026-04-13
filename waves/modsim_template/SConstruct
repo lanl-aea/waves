@@ -88,9 +88,8 @@ latex_project_name = project_name.replace("_", "-")
 documentation_source_dir = pathlib.Path("docs")
 modsim_package_dir = pathlib.Path("modsim_package")
 test_source_dir = "modsim_package/tests"
-shared_cache_dir = (
-    project_directory / "shared_cache"
-)  # This should be hardcoded to point to the project's shared cache on a shared file system
+# The shared cache should be hardcoded to point to the project's shared cache on a shared file system
+shared_cache_dir = project_directory / "shared_cache"
 project_variables = {
     "project_directory": project_directory,
     "project_name": project_name,
