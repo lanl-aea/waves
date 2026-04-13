@@ -141,6 +141,10 @@ for key, value in project_variables.items():
 # Set cache properties
 if GetOption("shared_cache_directory"):
     cache_dir = shared_cache_dir
+    print(
+        (f"WARNING: Overriding ``--cache-dir`` with the project's shared build cache directory {shared_cache_dir}"),
+        file=sys.stderr,
+    )
 else:
     cache_dir = GetOption("cache_directory")
 build_cache_directory = env.ProjectCacheDirectory(
