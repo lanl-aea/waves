@@ -58,7 +58,7 @@ aea-conda-build-internal:
   variables:
     environment_file: "conda-build.yml"
     recipe_directory: "recipe-internal"
-    rattler_build_extra_options: "--env-isolation none"
+    rattler_build_extra_options: "--env-isolation conda-build"
   artifacts:
     expire_in: '2 hrs'
     paths:
