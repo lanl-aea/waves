@@ -8,9 +8,9 @@ Changelog
 1.5.0 (unreleased)
 ******************
 
-New Features
-============
-- Add caching support with unshared and protected shared cache options to the modsim templates (:issue:`905`, 
+Documentation
+=============
+- Add caching support with unshared and protected shared cache options to the modsim templates (:issue:`905`,
   :merge:`1286`). By `Chris Johnson`_.
 
 ******************
