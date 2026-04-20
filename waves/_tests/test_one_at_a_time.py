@@ -70,7 +70,8 @@ class TestOneAtATime:
         "mixed length strings": (
             {"parameter_1": ["one", "two", "many"]},
             {},
-            xarray.Dataset( {
+            xarray.Dataset(
+                {
                     "parameter_1": xarray.DataArray(
                         ["one", "many", "two"],
                         coords={
