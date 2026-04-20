@@ -188,19 +188,19 @@ return_dataset_types_cases = {
     "CartesianProduct: inconsistent types: int/float": (
         parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
         parameter_generators.CartesianProduct({"parameter_1": [1.0]}).parameter_study,
-        {"parameter_1": numpy.int64},
+        None,
         pytest.raises(RuntimeError),
     ),
     "CartesianProduct: inconsistent types: int/str": (
         parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
         parameter_generators.CartesianProduct({"parameter_1": ["a"]}).parameter_study,
-        {"parameter_1": numpy.int64},
+        None,
         pytest.raises(RuntimeError),
     ),
     "CartesianProduct: inconsistent types: int/bool": (
         parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
         parameter_generators.CartesianProduct({"parameter_1": [True]}).parameter_study,
-        {"parameter_1": numpy.int64},
+        None,
         pytest.raises(RuntimeError),
     ),
     "OneAtATime: identical datasets": (
@@ -236,19 +236,19 @@ return_dataset_types_cases = {
     "OneAtATime: inconsistent types: int/float": (
         parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
         parameter_generators.OneAtATime({"parameter_1": [1.0]}).parameter_study,
-        {"parameter_1": numpy.int64},
+        None,
         pytest.raises(RuntimeError),
     ),
     "OneAtATime: inconsistent types: int/str": (
         parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
         parameter_generators.OneAtATime({"parameter_1": ["a"]}).parameter_study,
-        {"parameter_1": numpy.int64},
+        None,
         pytest.raises(RuntimeError),
     ),
     "OneAtATime: inconsistent types: int/bool": (
         parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
         parameter_generators.OneAtATime({"parameter_1": [True]}).parameter_study,
-        {"parameter_1": numpy.int64},
+        None,
         pytest.raises(RuntimeError),
     ),
 }
@@ -267,7 +267,7 @@ def test_return_dataset_types(
 ) -> None:
     with outcome:
         types = parameter_generators._return_dataset_types(dataset_1, dataset_2)
-        assert types == expected_types
+    assert types == expected_types
 
 
 coerce_values_cases = {
