@@ -562,6 +562,12 @@ class TestOneAtATime:
         assert list(test_generate._set_names.values()) == list(expected_dataset[_set_coordinate_key].to_numpy())
 
     merge_test = {
+        "mixed length strings": (
+            {"parameter_1": ["one"]},
+            {"parameter_1": ["many"]},
+            numpy.array([["many"], ["one"]], dtype=object),
+            {"parameter_1": numpy.dtype("U4")},
+        ),
         "single set unchanged": (
             {"parameter_1": [1]},
             {"parameter_1": [1]},
