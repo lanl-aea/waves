@@ -203,7 +203,7 @@ return_dataset_types_cases = {
         {"parameter_1": numpy.int64},
         does_not_raise,
     ),
-    "CartesianProduct: mixed length strings": (
+    "OneAtATime: mixed length strings": (
         parameter_generators.OneAtATime({"parameter_1": ["one", "two", "many"]}).parameter_study,
         parameter_generators.OneAtATime({"parameter_1": ["one", "two", "many"]}).parameter_study,
         {"parameter_1": numpy.dtype("U4")},
