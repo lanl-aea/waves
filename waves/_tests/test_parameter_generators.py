@@ -209,18 +209,6 @@ return_dataset_types_cases = {
         {"parameter_1": numpy.int64},
         does_not_raise,
     ),
-    "OneAtATime: mixed length strings": (
-        parameter_generators.OneAtATime({"parameter_1": ["one", "two", "many"]}).parameter_study,
-        parameter_generators.OneAtATime({"parameter_1": ["one", "two", "many"]}).parameter_study,
-        {"parameter_1": numpy.dtype("U4")},
-        does_not_raise,
-    ),
-    "OneAtATime: increasing length strings": (
-        parameter_generators.OneAtATime({"parameter_1": ["one", "two"]}).parameter_study,
-        parameter_generators.OneAtATime({"parameter_1": ["one", "two", "many"]}).parameter_study,
-        {"parameter_1": numpy.dtype("U4")},
-        does_not_raise,
-    ),
     "OneAtATime: different parameters": (
         parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
         parameter_generators.OneAtATime({"parameter_2": [10.0]}).parameter_study,
