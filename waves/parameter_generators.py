@@ -1725,8 +1725,18 @@ def _return_dataset_types(original_dataset: xarray.Dataset, update_dataset: xarr
     :raises RuntimeError: if data variables with matching names have different types
     """
     # TODO: Accept an arbitrarily long list of positional arguments
-    original_types = {key: original_dataset[key].dtype for key in original_dataset}
-    update_types = {key: update_dataset[key].dtype for key in update_dataset}
+    original_types = {}
+    for key in original_dataset:
+        dtype = original_dataset[key].dtype
+        if numpy.issubdtype(dtype, str):
+            dtype = str
+        original_types[key] = dtype
+    update_types = {}
+    for key in original_dataset:
+        dtype = original_dataset[key].dtype
+        if numpy.issubdtype(dtype, str):
+            dtype = str
+        update_types[key] = dtype
     matching_keys = set(original_types.keys()) & set(update_types.keys())
     for key in matching_keys:
         original_type = original_types[key]
