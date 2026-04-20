@@ -532,6 +532,12 @@ class TestCartesianProduct:
         parameter_generators._verify_parameter_study(test_generate.parameter_study)
 
     merge_test = {
+        "mixed length strings": (
+            {"parameter_1": ["one"]},
+            {"parameter_1": ["many"]},
+            numpy.array([["many"], ["one"]], dtype=object),
+            {"parameter_1": numpy.dtype("U4")},
+        ),
         "single set unchanged": (
             {"parameter_1": [1]},
             {"parameter_1": [1]},
