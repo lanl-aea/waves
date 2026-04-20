@@ -1732,8 +1732,8 @@ def _return_dataset_types(original_dataset: xarray.Dataset, update_dataset: xarr
             dtype = str
         original_types[key] = dtype
     update_types = {}
-    for key in original_dataset:
-        dtype = original_dataset[key].dtype
+    for key in update_dataset:
+        dtype = update_dataset[key].dtype
         if numpy.issubdtype(dtype, str):
             dtype = str
         update_types[key] = dtype

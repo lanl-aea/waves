@@ -267,7 +267,7 @@ def test_return_dataset_types(
 ) -> None:
     with outcome:
         types = parameter_generators._return_dataset_types(dataset_1, dataset_2)
-    assert types == expected_types
+        assert types == expected_types
 
 
 coerce_values_cases = {
