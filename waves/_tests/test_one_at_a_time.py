@@ -25,6 +25,10 @@ class TestOneAtATime:
             {"parameter_1": [1], "parameter_2": (2,), "parameter_3": [3, 4]},
             does_not_raise,
         ),
+        "mixed length strings": (
+            {"parameter_1": ["one", "two", "many"]},
+            does_not_raise,
+        ),
         "not a dict": (
             "not a dict",
             pytest.raises(SchemaValidationError),
