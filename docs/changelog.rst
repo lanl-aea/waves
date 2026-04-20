@@ -8,6 +8,15 @@ Changelog
 1.5.0 (unreleased)
 ******************
 
+******************
+1.4.1 (2026-04-06)
+******************
+
+Bug fixes
+=========
+- Fix behavior when merging parameter studies with parameters containing strings of mixed length (:issue:`991`,
+  :merge:`1308`). By `Kyle Brindley`_.
+
 Documentation
 =============
 - Add caching support with unshared and protected shared cache options to the modsim templates (:issue:`905`,
