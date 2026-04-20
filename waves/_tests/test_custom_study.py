@@ -27,6 +27,13 @@ class TestCustomStudy:
             {"parameter_names": ["a", "b"], "parameter_samples": numpy.array([[1, 2.0], [3, 4.5]])},
             does_not_raise,
         ),
+        "mixed length strings": (
+            {
+                "parameter_names": ["parameter_1"],
+                "parameter_samples": numpy.array([["one"], ["two"], ["many"]], dtype=object)
+            },
+            does_not_raise,
+        ),
         "not a dict": (
             "not a dict",
             pytest.raises(SchemaValidationError),
@@ -61,6 +68,33 @@ class TestCustomStudy:
             assert isinstance(test_validate, CustomStudy)
 
     test_generate_cases = {
+        "mixed length strings": (
+            {
+                "parameter_names": ["parameter_1"],
+                "parameter_samples": numpy.array([["one"], ["two"], ["many"]], dtype=object)
+            },
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        ["many", "one", "two"],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2"], dims=_set_coordinate_key
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "1780094887590cdd640fcd69c04fc323",
+                            "489dc5ad052f9d061c2b85fcf217072d",
+                            "5a1506e07dcd8f7126021ee5aec04afc",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {"parameter_1": numpy.dtype("U4")},
+        ),
         "one_parameter": (
             {"parameter_names": ["parameter_1"], "parameter_samples": numpy.array([[1], [2]], dtype=object)},
             xarray.Dataset(
