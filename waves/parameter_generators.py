@@ -1728,14 +1728,14 @@ def _return_dataset_types(original_dataset: xarray.Dataset, update_dataset: xarr
     original_types = {}
     for key in original_dataset:
         dtype = original_dataset[key].dtype
-        if numpy.issubdtype(dtype, str):
-            dtype = str
+        if numpy.issubdtype(dtype, numpy.dtype("U")):
+            dtype = numpy.dtype("U")
         original_types[key] = dtype
     update_types = {}
     for key in update_dataset:
         dtype = update_dataset[key].dtype
-        if numpy.issubdtype(dtype, str):
-            dtype = str
+        if numpy.issubdtype(dtype,  numpy.dtype("U")):
+            dtype = numpy.dtype("U")
         update_types[key] = dtype
     matching_keys = set(original_types.keys()) & set(update_types.keys())
     for key in matching_keys:
