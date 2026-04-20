@@ -30,7 +30,7 @@ class TestCustomStudy:
         "mixed length strings": (
             {
                 "parameter_names": ["parameter_1"],
-                "parameter_samples": numpy.array([["one"], ["two"], ["many"]], dtype=object)
+                "parameter_samples": numpy.array([["one"], ["two"], ["many"]], dtype=object),
             },
             does_not_raise,
         ),
@@ -71,7 +71,7 @@ class TestCustomStudy:
         "mixed length strings": (
             {
                 "parameter_names": ["parameter_1"],
-                "parameter_samples": numpy.array([["one"], ["two"], ["many"]], dtype=object)
+                "parameter_samples": numpy.array([["one"], ["two"], ["many"]], dtype=object),
             },
             xarray.Dataset(
                 {
