@@ -453,6 +453,12 @@ class TestCustomStudy:
         assert list(test_generate._set_names.values()) == list(expected_dataset[_set_coordinate_key].to_numpy())
 
     merge_test = {
+        "mixed length strings": (
+            {"parameter_names": ["parameter_1"], "parameter_samples": numpy.array([["one"]], dtype=object)},
+            {"parameter_names": ["parameter_1"], "parameter_samples": numpy.array([["many"]], dtype=object)},
+            numpy.array([["many"], ["one"]], dtype=object),
+            {"parameter_1": numpy.dtype("U4")},
+        ),
         "single set unchanged": (
             {"parameter_names": ["ints"], "parameter_samples": numpy.array([[1]], dtype=object)},
             {"parameter_names": ["ints"], "parameter_samples": numpy.array([[1]], dtype=object)},
