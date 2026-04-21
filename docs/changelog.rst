@@ -8,6 +8,10 @@ Changelog
 1.5.0 (unreleased)
 ******************
 
+Internal Changes
+================
+- Fix the Windows conda-build CI test (:merge:`1309`). By `Kyle Brindley`_.
+
 ******************
 1.4.1 (2026-04-21)
 ******************
