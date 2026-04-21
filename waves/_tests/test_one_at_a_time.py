@@ -25,6 +25,10 @@ class TestOneAtATime:
             {"parameter_1": [1], "parameter_2": (2,), "parameter_3": [3, 4]},
             does_not_raise,
         ),
+        "mixed length strings": (
+            {"parameter_1": ["one", "two", "many"]},
+            does_not_raise,
+        ),
         "not a dict": (
             "not a dict",
             pytest.raises(SchemaValidationError),
@@ -63,6 +67,31 @@ class TestOneAtATime:
             assert isinstance(test_validate, OneAtATime)
 
     generate_io = {
+        "mixed length strings": (
+            {"parameter_1": ["one", "two", "many"]},
+            {},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        ["one", "many", "two"],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2"], dims=_set_coordinate_key
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "489dc5ad052f9d061c2b85fcf217072d",
+                            "1780094887590cdd640fcd69c04fc323",
+                            "5a1506e07dcd8f7126021ee5aec04afc",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {"parameter_1": numpy.dtype("U4")},
+        ),
         "one_parameter: 1, 2": (
             {"parameter_1": [1, 2]},
             {},
@@ -533,6 +562,12 @@ class TestOneAtATime:
         assert list(test_generate._set_names.values()) == list(expected_dataset[_set_coordinate_key].to_numpy())
 
     merge_test = {
+        "mixed length strings": (
+            {"parameter_1": ["one"]},
+            {"parameter_1": ["many"]},
+            numpy.array([["many"], ["one"]], dtype=object),
+            {"parameter_1": numpy.dtype("U4")},
+        ),
         "single set unchanged": (
             {"parameter_1": [1]},
             {"parameter_1": [1]},

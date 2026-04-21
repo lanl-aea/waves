@@ -149,6 +149,18 @@ return_dataset_types_cases = {
         {"parameter_1": numpy.int64},
         does_not_raise,
     ),
+    "CartesianProduct: mixed length strings": (
+        parameter_generators.CartesianProduct({"parameter_1": ["one", "two", "many"]}).parameter_study,
+        parameter_generators.CartesianProduct({"parameter_1": ["one", "two", "many"]}).parameter_study,
+        {"parameter_1": numpy.dtype("U")},
+        does_not_raise,
+    ),
+    "CartesianProduct: increasing length strings": (
+        parameter_generators.CartesianProduct({"parameter_1": ["one", "two"]}).parameter_study,
+        parameter_generators.CartesianProduct({"parameter_1": ["one", "two", "many"]}).parameter_study,
+        {"parameter_1": numpy.dtype("U")},
+        does_not_raise,
+    ),
     "CartesianProduct: different parameters": (
         parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
         parameter_generators.CartesianProduct({"parameter_2": [10.0]}).parameter_study,
@@ -164,31 +176,31 @@ return_dataset_types_cases = {
     "CartesianProduct: extra parameters in both datasets": (
         parameter_generators.CartesianProduct({"parameter_1": [1], "parameter_3": ["a"]}).parameter_study,
         parameter_generators.CartesianProduct({"parameter_1": [1], "parameter_2": [10.0]}).parameter_study,
-        {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.dtype("U1")},
+        {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.dtype("U")},
         does_not_raise,
     ),
     "CartesianProduct: extra parameters bools": (
         parameter_generators.CartesianProduct({"parameter_1": [1], "parameter_3": ["a"]}).parameter_study,
         parameter_generators.CartesianProduct({"parameter_1": [1], "parameter_2": [True]}).parameter_study,
-        {"parameter_1": numpy.int64, "parameter_2": bool, "parameter_3": numpy.dtype("U1")},
+        {"parameter_1": numpy.int64, "parameter_2": bool, "parameter_3": numpy.dtype("U")},
         does_not_raise,
     ),
     "CartesianProduct: inconsistent types: int/float": (
         parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
         parameter_generators.CartesianProduct({"parameter_1": [1.0]}).parameter_study,
-        {"parameter_1": numpy.int64},
+        None,
         pytest.raises(RuntimeError),
     ),
     "CartesianProduct: inconsistent types: int/str": (
         parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
         parameter_generators.CartesianProduct({"parameter_1": ["a"]}).parameter_study,
-        {"parameter_1": numpy.int64},
+        None,
         pytest.raises(RuntimeError),
     ),
     "CartesianProduct: inconsistent types: int/bool": (
         parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
         parameter_generators.CartesianProduct({"parameter_1": [True]}).parameter_study,
-        {"parameter_1": numpy.int64},
+        None,
         pytest.raises(RuntimeError),
     ),
     "OneAtATime: identical datasets": (
@@ -212,31 +224,31 @@ return_dataset_types_cases = {
     "OneAtATime: extra parameters in both datasets": (
         parameter_generators.OneAtATime({"parameter_1": [1], "parameter_3": ["a"]}).parameter_study,
         parameter_generators.OneAtATime({"parameter_1": [1], "parameter_2": [10.0]}).parameter_study,
-        {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.dtype("U1")},
+        {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.dtype("U")},
         does_not_raise,
     ),
     "OneAtATime: extra parameters bools": (
         parameter_generators.OneAtATime({"parameter_1": [1], "parameter_3": ["a"]}).parameter_study,
         parameter_generators.OneAtATime({"parameter_1": [1], "parameter_2": [True]}).parameter_study,
-        {"parameter_1": numpy.int64, "parameter_2": bool, "parameter_3": numpy.dtype("U1")},
+        {"parameter_1": numpy.int64, "parameter_2": bool, "parameter_3": numpy.dtype("U")},
         does_not_raise,
     ),
     "OneAtATime: inconsistent types: int/float": (
         parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
         parameter_generators.OneAtATime({"parameter_1": [1.0]}).parameter_study,
-        {"parameter_1": numpy.int64},
+        None,
         pytest.raises(RuntimeError),
     ),
     "OneAtATime: inconsistent types: int/str": (
         parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
         parameter_generators.OneAtATime({"parameter_1": ["a"]}).parameter_study,
-        {"parameter_1": numpy.int64},
+        None,
         pytest.raises(RuntimeError),
     ),
     "OneAtATime: inconsistent types: int/bool": (
         parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
         parameter_generators.OneAtATime({"parameter_1": [True]}).parameter_study,
-        {"parameter_1": numpy.int64},
+        None,
         pytest.raises(RuntimeError),
     ),
 }
