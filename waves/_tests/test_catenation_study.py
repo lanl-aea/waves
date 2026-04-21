@@ -93,6 +93,35 @@ class TestCatenationStudy:
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64},
         ),
+        "one parameter mixed length strings": (
+            {
+                "1": (CartesianProduct, {"parameter_1": ["one"]}),
+                "2": (CartesianProduct, {"parameter_1": ["two", "many"]}),
+            },
+            {},
+            None,
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        ["one", "many", "two"],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2"], dims=_set_coordinate_key
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "489dc5ad052f9d061c2b85fcf217072d",
+                            "1780094887590cdd640fcd69c04fc323",
+                            "5a1506e07dcd8f7126021ee5aec04afc",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {"parameter_1": numpy.dtype("U4")},
+        ),
         "one parameter random keys": (
             {
                 "study 1": (CartesianProduct, {"parameter_1": [1]}),
