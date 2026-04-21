@@ -1716,6 +1716,8 @@ def _verify_parameter_study(parameter_study: xarray.Dataset) -> None:
 def _return_dataset_types(original_dataset: xarray.Dataset, update_dataset: xarray.Dataset) -> dict:
     """Return the union of data variables ``{name: dtype}``.
 
+    NumPy string subtypes are returned as the NumPy unicode string ``dtype("U")``.
+
     :param original_dataset: Xarray Dataset with original types
     :param update_dataset: Xarray Dataset with override types. Types in this dataset overwrite types in
     ``original_dataset``
@@ -1726,6 +1728,14 @@ def _return_dataset_types(original_dataset: xarray.Dataset, update_dataset: xarr
     :raises RuntimeError: if data variables with matching names have different types
     """
     def return_data_types(dataset: xarray.Dataset) -> dict:
+        """Return data variable types with string management.
+
+        NumPy string subtypes are returned as the NumPy unicode string ``dtype("U")``.
+
+        :param dataset: Xarray Dataset with original types
+
+        :return: Dictionary with entries of type ``{name: dtype}`` constructed from ``dataset``
+        """
         types = {}
         for key in dataset:
             dtype = dataset[key].dtype
