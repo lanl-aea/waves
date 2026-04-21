@@ -1727,6 +1727,7 @@ def _return_dataset_types(original_dataset: xarray.Dataset, update_dataset: xarr
 
     :raises RuntimeError: if data variables with matching names have different types
     """
+
     def return_data_types(dataset: xarray.Dataset) -> dict:
         """Return data variable types with string management.
 
