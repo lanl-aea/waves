@@ -27,12 +27,14 @@ win-conda-build:
     recipe_directory: "recipe"
   script:
     # Job variables
+    - $temporary_directory=(New-Item -ItemType Directory -Path (Join-Path ([System.IO.Path]::GetTempPath()) "$CI_JOB_ID"))
+    - Write-Output $temporary_directory
     - Write-Output $recipe_directory
     - if ([string]::IsNullOrEmpty($recipe_directory)) { exit 1 }
     # Job commands
     - scons pyproject.toml
     - $env:VERSION=python -m setuptools_scm
-    - rattler-build build --recipe $recipe_directory --channel conda-forge --output-dir $env:temp
+    - rattler-build build --recipe $recipe_directory --channel conda-forge --output-dir $temporary_directory\conda-bld
 
 win-pip-build:
   extends:
