@@ -27,7 +27,7 @@ win-conda-build:
     recipe_directory: "recipe"
   script:
     # Job variables
-    - $temporary_directory=(New-Item -ItemType Directory -Path (Join-Path ([System.IO.Path]::GetTempPath()) "$CI_JOB_ID"))
+    - $temporary_directory=(Join-Path ([System.IO.Path]::GetTempPath()) "$CI_JOB_ID")
     - Write-Output $temporary_directory
     - Write-Output $recipe_directory
     - if ([string]::IsNullOrEmpty($recipe_directory)) { exit 1 }
