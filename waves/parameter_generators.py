@@ -1712,6 +1712,7 @@ def _verify_parameter_study(parameter_study: xarray.Dataset) -> None:
         )
 
 
+# TODO: Accept an arbitrarily long list of positional arguments
 def _return_dataset_types(original_dataset: xarray.Dataset, update_dataset: xarray.Dataset) -> dict:
     """Return the union of data variables ``{name: dtype}``.
 
@@ -1724,19 +1725,17 @@ def _return_dataset_types(original_dataset: xarray.Dataset, update_dataset: xarr
 
     :raises RuntimeError: if data variables with matching names have different types
     """
-    # TODO: Accept an arbitrarily long list of positional arguments
-    original_types = {}
-    for key in original_dataset:
-        dtype = original_dataset[key].dtype
-        if numpy.issubdtype(dtype, numpy.dtype("U")):
-            dtype = numpy.dtype("U")
-        original_types[key] = dtype
-    update_types = {}
-    for key in update_dataset:
-        dtype = update_dataset[key].dtype
-        if numpy.issubdtype(dtype, numpy.dtype("U")):
-            dtype = numpy.dtype("U")
-        update_types[key] = dtype
+    def return_data_types(dataset: xarray.Dataset) -> dict:
+        types = {}
+        for key in dataset:
+            dtype = dataset[key].dtype
+            if numpy.issubdtype(dtype, numpy.dtype("U")):
+                dtype = numpy.dtype("U")
+            types[key] = dtype
+        return types
+
+    original_types = return_data_types(original_dataset)
+    update_types = return_data_types(update_dataset)
     matching_keys = set(original_types.keys()) & set(update_types.keys())
     for key in matching_keys:
         original_type = original_types[key]
