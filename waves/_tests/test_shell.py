@@ -1,7 +1,8 @@
 """Test system API calls that require real shell execution."""
 
-import pytest
 import shutil
+
+import pytest
 
 from waves import _utilities
 
@@ -66,7 +67,7 @@ def test_return_environment(command: str, kwargs: dict[str, str], expected: dict
 
 
 @pytest.mark.parametrize(("command", "kwargs", "expected"), test_return_environment_cases)
-def test_cache_environment(command: str, kwargs: dict[str, str | bool], expected: dict[str, str]) -> None:
+def test_cache_environment(command: str, kwargs: dict, expected: dict[str, str]) -> None:
     environment = _utilities.cache_environment(command, **kwargs)
     for key, value in expected.items():
         assert key in environment
