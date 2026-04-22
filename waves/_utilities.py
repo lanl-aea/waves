@@ -272,10 +272,10 @@ def return_environment(
     :raises subprocess.CalledProcessError: When the shell command returns a non-zero exit status
     """
     result = subprocess.run(
-        f'{shell} {string_option} "{command} {separator} {environment}"',
+        [shell, string_option, f"{command} {separator} {environment}"],
         check=True,
         capture_output=True,
-        shell=True,
+        shell=False,
     )
     stdout = result.stdout.decode()
     variables = stdout.split("\x00")
