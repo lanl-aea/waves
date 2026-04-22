@@ -11,6 +11,8 @@ Changelog
 Internal Changes
 ================
 - Fix the Windows conda-build CI test (:merge:`1309`). By `Kyle Brindley`_.
+- Test the internal shell environment recovery function against real shell execution (:issue:`1011`, :merge:`1310`). By
+  `Kyle Brindley`_.
 
 ******************
 1.4.1 (2026-04-21)
