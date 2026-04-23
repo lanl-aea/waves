@@ -95,47 +95,56 @@ universal_analyze_methods = [
     "rbd_fast",
     "rsa",
 ]
+skip_salib_analyze_incompatibility = (
+    "Known WAVES-SALib analyze incompatibility. Remove skip when WAVES enables"
+    " re-sorting to original SALib index order or when SALib enables user-input order handling."
+)
 
 
 @pytest.mark.parametrize(
     ("sample_method", "analyze_method"),
     [
-        # SALib documented single combination sample-analyze compatibilities
-        ("fast_sampler", "fast"),
-        ("finite_diff", "dgsm"),
-        ("sobol", "sobol"),
-        ("morris", "morris"),
-        # SALib full-factorial of analyze methods documented as "compatible with: all samplers"
-        ("fast_sampler", "delta"),
+        # Confirmed sample-analyze compatibility after WAVES re-shuffle
         ("fast_sampler", "discrepancy"),
-        ("fast_sampler", "hdmr"),
         ("fast_sampler", "pawn"),
-        ("fast_sampler", "rbd_fast"),
         ("fast_sampler", "rsa"),
-        ("finite_diff", "delta"),
         ("finite_diff", "discrepancy"),
-        ("finite_diff", "hdmr"),
         ("finite_diff", "pawn"),
-        ("finite_diff", "rbd_fast"),
         ("finite_diff", "rsa"),
-        ("latin", "delta"),
         ("latin", "discrepancy"),
-        ("latin", "hdmr"),
         ("latin", "pawn"),
-        ("latin", "rbd_fast"),
         ("latin", "rsa"),
-        ("morris", "delta"),
-        ("morris", "discrepancy"),
-        ("morris", "hdmr"),
-        ("morris", "pawn"),
-        ("morris", "rbd_fast"),
-        ("morris", "rsa"),
-        ("sobol", "delta"),
         ("sobol", "discrepancy"),
-        ("sobol", "hdmr"),
         ("sobol", "pawn"),
-        ("sobol", "rbd_fast"),
         ("sobol", "rsa"),
+        # SALib documented single combination sample-analyze compatibilities
+        # TODO: Add an SALib index to allow WAVES compatible sensitivity analysis
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1014
+        pytest.param("fast_sampler", "fast", marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
+        pytest.param("finite_diff", "dgsm", marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
+        pytest.param("sobol", "sobol", marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
+        pytest.param("morris", "morris", marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
+        # SALib full-factorial of analyze methods documented as "compatible with: all samplers"
+        # TODO: Add an SALib index to allow WAVES compatible sensitivity analysis
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1014
+        pytest.param("fast_sampler", "delta", marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
+        pytest.param("fast_sampler", "hdmr", marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
+        pytest.param("fast_sampler", "rbd_fast", marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
+        pytest.param("finite_diff", "delta", marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
+        pytest.param("finite_diff", "hdmr", marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
+        pytest.param("finite_diff", "rbd_fast", marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
+        pytest.param("latin", "delta", marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
+        pytest.param("latin", "hdmr", marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
+        pytest.param("latin", "rbd_fast", marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
+        pytest.param("morris", "delta", marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
+        pytest.param("morris", "discrepancy", marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
+        pytest.param("morris", "hdmr", marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
+        pytest.param("morris", "pawn", marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
+        pytest.param("morris", "rbd_fast", marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
+        pytest.param("morris", "rsa", marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
+        pytest.param("sobol", "delta", marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
+        pytest.param("sobol", "hdmr", marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
+        pytest.param("sobol", "rbd_fast", marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
     ],
 )
 def test_salib_analyze(sample_method: str, analyze_method: str) -> None:
