@@ -97,13 +97,15 @@ universal_analyze_methods = [
 ]
 
 
-# TODO: add the ("morris", "morris") case after tracing the numpy exception
 @pytest.mark.parametrize(
     ("sample_method", "analyze_method"),
     [
+        # SALib documented single sample-analyze compatibilities
         ("fast_sampler", "fast"),
         ("finite_diff", "dgsm"),
         ("sobol", "sobol"),
+        ("morris", "morris"),
+        # SALib full-factorial of analyze methods documented as "compatible with: all samplers"
         *[("fast_sampler", analyze) for analyze in universal_analyze_methods],
         *[("finite_diff", analyze) for analyze in universal_analyze_methods],
         *[("latin", analyze) for analyze in universal_analyze_methods],
