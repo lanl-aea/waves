@@ -12,6 +12,9 @@ Documentation
 =============
 - Update the SALibSampler with known WAVES parameter generator compatible sample-analyze method pairs for sensitivity
   analysis (:issue:`1013`, :merge:`1311`). By `Kyle Brindley`_.
+- Update the sensitivity tutorial to use a known WAVES parameter generator compatible sample-analyze method pair for
+  sensitivity analysis and add a warning about SALib compatibilities (:issue:`1013`, :merge:`1311`). By `Kyle
+  Brindley`_.
 
 Internal Changes
 ================
