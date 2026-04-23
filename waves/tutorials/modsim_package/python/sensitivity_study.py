@@ -119,10 +119,9 @@ def main(
     sensitivity_yaml = {}
     for key, value in sensitivity.items():
         # Convert numpy array of strings to list of strings
-        if isinstance(value, numpy.ndarray) and numpy.issubdtype(value.dtype, numpy.dtype("U")):
-            yaml_compatible_value = [str(item) for item in value]
-        # Convert list of numpy strings to list of strings
-        elif isinstance(value, list) and numpy.issubdtype(value[0].dtype, numpy.dtype("U")):
+        if (isinstance(value, numpy.ndarray) and numpy.issubdtype(value.dtype, numpy.dtype("U"))) or (
+            isinstance(value, list) and numpy.issubdtype(value[0].dtype, numpy.dtype("U"))
+        ):
             yaml_compatible_value = [str(item) for item in value]
         elif isinstance(value, numpy.ndarray):
             yaml_compatible_value = value.tolist()
