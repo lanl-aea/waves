@@ -859,6 +859,7 @@ def shell_environment(
 
     :raises subprocess.CalledProcessError: Print the captured output and re-raise exception when the shell command
         returns a non-zero exit status.
+    :raises FileNotFoundError: When the shell is not found on PATH
     """
     shell_environment = _utilities.cache_environment(
         command,

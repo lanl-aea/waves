@@ -270,12 +270,13 @@ def return_environment(
     :returns: shell environment dictionary
 
     :raises subprocess.CalledProcessError: When the shell command returns a non-zero exit status
+    :raises FileNotFoundError: When the shell is not found on PATH
     """
     result = subprocess.run(
-        f'{shell} {string_option} "{command} {separator} {environment}"',
+        [shell, string_option, f"{command} {separator} {environment}"],
         check=True,
         capture_output=True,
-        shell=True,
+        shell=False,
     )
     stdout = result.stdout.decode()
     variables = stdout.split("\x00")
@@ -331,6 +332,7 @@ def cache_environment(
 
     :raises subprocess.CalledProcessError: Print the captured output and re-raise exception when the shell command
         returns a non-zero exit status.
+    :raises FileNotFoundError: When the shell is not found on PATH
     """
     if cache:
         cache = pathlib.Path(cache).resolve()

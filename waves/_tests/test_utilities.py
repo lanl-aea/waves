@@ -324,17 +324,18 @@ def test_return_environment(command: str, kwargs: dict, stdout: bytes, expected:
         "environment": "env -0",
     }
     expected_kwargs.update(kwargs)
-    expected_command = (
-        f"{expected_kwargs['shell']} {expected_kwargs['string_option']} "
-        f'"{command} {expected_kwargs["separator"]} {expected_kwargs["environment"]}"'
-    )
+    expected_command = [
+        expected_kwargs["shell"],
+        expected_kwargs["string_option"],
+        f"{command} {expected_kwargs['separator']} {expected_kwargs['environment']}",
+    ]
 
     mock_run_return = subprocess.CompletedProcess(args=command, returncode=0, stdout=stdout)
     with patch("subprocess.run", return_value=mock_run_return) as mock_run:
         environment_dictionary = _utilities.return_environment(command, **kwargs)
 
     assert environment_dictionary == expected
-    mock_run.assert_called_once_with(expected_command, check=True, capture_output=True, shell=True)
+    mock_run.assert_called_once_with(expected_command, check=True, capture_output=True, shell=False)
 
 
 cache_environment = {
