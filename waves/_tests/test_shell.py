@@ -15,6 +15,7 @@ bash = shutil.which("bash")
 zsh = shutil.which("zsh")
 csh = shutil.which("csh")
 tcsh = shutil.which("tcsh")
+dash = shutil.which("dash")
 
 test_return_environment_cases = (
     pytest.param(
@@ -112,6 +113,22 @@ test_return_environment_cases = (
         pytest.raises(subprocess.CalledProcessError),
         marks=[pytest.mark.skipif(tcsh is None, reason="tcsh is required, but not found")],
         id="tcsh variable setenv",
+    ),
+    pytest.param(
+        "export THING_ONE=Bim && export THING_TWO=Ben",
+        {"shell": dash},
+        {"THING_ONE": "Bim", "THING_TWO": "Ben"},
+        does_not_raise,
+        marks=[pytest.mark.skipif(dash is None, reason="dash is required, but not found")],
+        id="dash variable export",
+    ),
+    pytest.param(
+        "exit 1",
+        {"shell": dash},
+        None,
+        pytest.raises(subprocess.CalledProcessError),
+        marks=[pytest.mark.skipif(dash is None, reason="dash is required, but not found")],
+        id="dash exit 1",
     ),
     pytest.param(
         "export THING_ONE=Bim && export THING_TWO=Ben",
