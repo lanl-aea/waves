@@ -176,7 +176,7 @@ def test_return_environment(
 @pytest.mark.parametrize(("command", "kwargs", "expected", "outcome"), test_return_environment_cases)
 def test_cache_environment(
     command: str,
-    kwargs: dict[str, str],
+    kwargs: dict,
     expected: dict[str, str],
     outcome: contextlib.nullcontext | pytest.RaisesExc,
 ) -> None:
