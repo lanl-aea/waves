@@ -1,5 +1,7 @@
 import contextlib
 
+import numpy
+import pytest
 import SALib.analyze.delta
 import SALib.analyze.dgsm
 import SALib.analyze.discrepancy
@@ -16,8 +18,7 @@ import SALib.sample.latin
 import SALib.sample.morris
 import SALib.sample.sobol
 import SALib.test_functions.Ishigami
-import numpy as numpy
-import pytest
+
 import waves
 
 does_not_raise = contextlib.nullcontext()
@@ -25,9 +26,7 @@ does_not_raise = contextlib.nullcontext()
 
 def column_sort(array: numpy.ndarray) -> numpy.ndarray:
     if array.ndim == 2:
-        indices = numpy.lexsort(
-            [array[:, column] for column in reversed(range(array.shape[1]))]
-        )
+        indices = numpy.lexsort([array[:, column] for column in reversed(range(array.shape[1]))])
         return array[indices]
     else:
         raise RuntimeError(f"Can only sort 2D arrays. Found '{array.ndim}' dimensions.")
@@ -64,16 +63,12 @@ def column_sort(array: numpy.ndarray) -> numpy.ndarray:
         (
             numpy.array([1, 2, 3]),
             None,
-            pytest.raises(
-                RuntimeError, match=r"Can only sort 2D arrays\. Found '1' dimensions\."
-            ),
+            pytest.raises(RuntimeError, match=r"Can only sort 2D arrays\. Found '1' dimensions\."),
         ),
         (
             numpy.array([[[1, 2, 3]]]),
             None,
-            pytest.raises(
-                RuntimeError, match=r"Can only sort 2D arrays\. Found '3' dimensions\."
-            ),
+            pytest.raises(RuntimeError, match=r"Can only sort 2D arrays\. Found '3' dimensions\."),
         ),
     ],
 )
@@ -170,34 +165,20 @@ def test_salib_analyze(sample_method: str, analyze_method: str) -> None:
     generator = waves.parameter_generators.SALibSampler(
         sample_method, {"problem": problem, "N": sample_count}, seed=seed
     )
-    waves_parameters = (
-        generator.parameter_study.to_dataframe().drop(columns=["set_hash"]).to_numpy()
-    )
+    waves_parameters = generator.parameter_study.to_dataframe().drop(columns=["set_hash"]).to_numpy()
     waves_dependent = SALib.test_functions.Ishigami.evaluate(waves_parameters)
 
     # Verify that the input is only out-of-order and not different
-    numpy.testing.assert_allclose(
-        column_sort(salib_parameters), column_sort(waves_parameters)
-    )
-    numpy.testing.assert_allclose(
-        numpy.sort(salib_dependent), numpy.sort(waves_dependent)
-    )
+    numpy.testing.assert_allclose(column_sort(salib_parameters), column_sort(waves_parameters))
+    numpy.testing.assert_allclose(numpy.sort(salib_dependent), numpy.sort(waves_dependent))
 
     # Analysis: handling API differences
     if analyze_method in ["sobol", "fast"]:
-        salib_sensitivity_indices = analyze_function.analyze(
-            problem, salib_dependent, seed=seed
-        )
-        waves_sensitivity_indices = analyze_function.analyze(
-            problem, waves_dependent, seed=seed
-        )
+        salib_sensitivity_indices = analyze_function.analyze(problem, salib_dependent, seed=seed)
+        waves_sensitivity_indices = analyze_function.analyze(problem, waves_dependent, seed=seed)
     elif analyze_method in [*universal_analyze_methods, "dgsm", "morris"]:
-        salib_sensitivity_indices = analyze_function.analyze(
-            problem, salib_parameters, salib_dependent, seed=seed
-        )
-        waves_sensitivity_indices = analyze_function.analyze(
-            problem, waves_parameters, waves_dependent, seed=seed
-        )
+        salib_sensitivity_indices = analyze_function.analyze(problem, salib_parameters, salib_dependent, seed=seed)
+        waves_sensitivity_indices = analyze_function.analyze(problem, waves_parameters, waves_dependent, seed=seed)
     else:
         raise RuntimeError(f"Unhandled analyze method '{analyze_method}'")
 
