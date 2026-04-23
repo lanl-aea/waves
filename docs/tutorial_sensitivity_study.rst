@@ -104,8 +104,17 @@ possible to calculate the sensitivity of output variables to input variables wit
 parameter set. After merging the output datasets with the parameter study, the correlation coefficients can be plotted
 with seaborn :cite:`seaborn`. Numpy :cite:`numpy` is used to perform a similar correlation coefficients calculation that
 can be saved to a CSV file for further post-processing or regression testing as in :ref:`tutorial_regression_testing`.
-Finally, SALib :cite:`salib` is used to perform a delta moment-independent analysis, which is compatible with all SALib
-sampling techniques.
+Finally, SALib :cite:`salib` is used to perform a sensitivity analysis with the PAWN index, which is compatible with
+most WAVES-ordered parameter studies from the :class:`waves.parameter_generators.SALibSampler` SALib sampling
+techniques.
+
+.. warning::
+
+   Some SALib sensitivity analysis methods have implicit dependencies on the sample index order produced by SALib sample
+   method(s). WAVES must re-order SALib parameter sets to provide the previous parameter study merge and efficient
+   re-execution behavior of the WAVES parameter generator modules. Not all SALib sample-analyze method pairs are
+   compatible with the WAVES parameter study object. See the :class:`waves.parameter_generators.SALibSampler` for known
+   compatible SALib sensitivity analysis methods.
 
 The value of processing output data into an Xarray :cite:`xarray` dataset is evident here, where each new plotting
 and analysis tool requires data in a slightly different form factor. For these tutorials, WAVES provides an extraction
