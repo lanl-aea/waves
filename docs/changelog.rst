@@ -8,6 +8,11 @@ Changelog
 1.5.0 (unreleased)
 ******************
 
+Documentation
+=============
+- Update the SALibSampler with known WAVES parameter generator compatible sample-analyze method pairs for sensitivity
+  analysis (:issue:`1013`, :merge:`1311`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Fix the Windows conda-build CI test (:merge:`1309`). By `Kyle Brindley`_.

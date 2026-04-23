@@ -1320,6 +1320,21 @@ class SALibSampler(ParameterGenerator, ABC):
     * sobol
     * morris
 
+    Some SALib sensitivity analysis methods have implicit dependencies on the sample index order produced by SALib
+    sample method(s). To enable robust and computationally efficient workflow re-execution, WAVES re-orders parameter
+    samples by a set-hash index before assigning set numbers. This parameter set re-indexing will break the implicit
+    requirements of some SALib analysis methods. The following :module:`SALib.sample`-:module:`SALib.analyze` method
+    pairs are tested for compatibility with the WAVES set hash re-ordering:
+
+    * fast_sampler: discrepancy, pawn, rsa
+    * finite_diff: discrepance, pawn, rsa
+    * latin: discrepancy, pawn, rsa
+    * sobol: discrepany, pawn, rsa
+
+    Developing a solution to preserve or recover the original SALib index order is a work-in-progress. The above
+    compatibility list will be updated with corresponding examples as more sample-analyze pair compatibilities are
+    confirmed and added to the unit test suite.
+
     .. warning::
 
        For small numbers of parameters, some SALib generators produce duplicate parameter sets. These duplicate sets are
