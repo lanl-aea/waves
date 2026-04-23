@@ -8,7 +8,7 @@ import sys
 import matplotlib.pyplot
 import numpy
 import pandas
-import SALib.analyze.delta
+import SALib.analyze.pawn
 import seaborn
 import xarray
 import yaml
@@ -115,10 +115,16 @@ def main(
     # Sensitivity analysis
     stress = combined_data.sel(selection_dict)["S"].to_numpy()
     inputs = combined_data.sel(selection_dict)[["width", "height"]].to_array().transpose().to_numpy()
-    sensitivity = SALib.analyze.delta.analyze(parameter_schema()["problem"], inputs, stress)
+    sensitivity = SALib.analyze.pawn.analyze(parameter_schema()["problem"], inputs, stress)
     sensitivity_yaml = {}
     for key, value in sensitivity.items():
-        if isinstance(value, numpy.ndarray):
+        # Convert numpy array of strings to list of strings
+        if isinstance(value, numpy.ndarray) and numpy.issubdtype(value.dtype, numpy.dtype("U")):
+            yaml_compatible_value = [str(item) for item in value]
+        # Convert list of numpy strings to list of strings
+        elif isinstance(value, list) and numpy.issubdtype(value[0].dtype, numpy.dtype("U")):
+            yaml_compatible_value = [str(item) for item in value]
+        elif isinstance(value, numpy.ndarray):
             yaml_compatible_value = value.tolist()
         else:
             yaml_compatible_value = value
