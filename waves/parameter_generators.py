@@ -1323,7 +1323,7 @@ class SALibSampler(ParameterGenerator, ABC):
     Some SALib sensitivity analysis methods have implicit dependencies on the sample index order produced by SALib
     sample method(s). To enable robust and computationally efficient workflow re-execution, WAVES re-orders parameter
     samples by a set-hash index before assigning set numbers. This parameter set re-indexing will break the implicit
-    requirements of some SALib analysis methods. The following :module:`SALib.sample`-:module:`SALib.analyze` method
+    requirements of some SALib analysis methods. The following `SALib.sample`_-`SALib.analyze`_ method
     pairs are tested for compatibility with the WAVES set hash re-ordering:
 
     * fast_sampler: discrepancy, pawn, rsa
