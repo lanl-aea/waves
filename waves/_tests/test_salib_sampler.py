@@ -367,6 +367,39 @@ class TestSALibSampler:
                 }
             ).set_coords("set_hash"),
         ),
+        "latin: good schema 2x1, original index": (
+            "latin",
+            {
+                "N": 2,
+                "problem": {
+                    "num_vars": 1,
+                    "names": ["parameter_1"],
+                    "bounds": [[-1, 1]],
+                },
+            },
+            {"seed": 42, "original_index": True},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [-0.22604395, 0.43887844],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            ),
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["6400508900158a61b0ec622281662fd8", "9730dec062211dbebb12f90bd45bf7ce"],
+                        dims=_set_coordinate_key,
+                    ),
+                    "original_index": xarray.DataArray(
+                        [0, 1],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords(["set_hash", "original_index"]),
+        ),
         "sobol: good schema 1x2": (
             "sobol",
             {
