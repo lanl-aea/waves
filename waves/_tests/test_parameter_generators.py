@@ -1012,6 +1012,42 @@ merge_parameter_studies_cases.update(
             None,
             pytest.raises(RuntimeError, match="Not enough parameter studies provided for merge operation"),
         ),
+        "concatenate original_index should raise": (
+            [
+                parameter_generators.SALibSampler(
+                    "latin",
+                    {
+                        "N": 2,
+                        "problem": {
+                            "num_vars": 1,
+                            "names": ["parameter_1"],
+                            "bounds": [[-1, 1]],
+                        },
+                    },
+                    seed=42,
+                    original_index=True
+                ).parameter_study,
+                parameter_generators.SALibSampler(
+                    "latin",
+                    {
+                        "N": 2,
+                        "problem": {
+                            "num_vars": 1,
+                            "names": ["parameter_1"],
+                            "bounds": [[-1, 1]],
+                        },
+                    },
+                    seed=42,
+                    original_index=True
+                ).parameter_study,
+            ],
+            None,
+            None,
+            None,
+            pytest.raises(
+                RuntimeError, match="The 'original_index' coordinate is incompatible with merging parameter studies"
+            ),
+        ),
         "concatenate with different numbers of parameters": (
             [
                 parameter_generators.OneAtATime({"parameter_1": [1.0]}).parameter_study,
