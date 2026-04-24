@@ -66,6 +66,12 @@ class ParameterGenerator(ABC):
     :param original_index: Assign a coordinate to track the original sample index order. Incompatible with merging
         parameter studies and previous parameter study behaviors.
 
+    .. warning::
+
+       The ``original_index`` behavior is considered experimental and is only tested for the
+       :class:`waves.parameter_generators.SALibSampler`. See the :class:`waves.parameter_generators.SALibSampler` for
+       usage and caveats.
+
     :var self.parameter_study: The final parameter study XArray Dataset object
 
     :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
