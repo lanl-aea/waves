@@ -79,7 +79,8 @@ class ParameterGenerator(ABC):
     :raises waves.exceptions.APIError: If an unknown output file type is requested
     :raises RuntimeError: If a previous parameter study file is specified and missing, and
         ``require_previous_parameter_study`` is ``True``
-    :raises RuntimeError: If both the ``original_index`` and ``previous_parameter_study`` are specified.
+    :raises waves.exceptions.MutuallyExclusiveError: If both the ``original_index`` and ``previous_parameter_study`` are
+        specified.
     """
 
     def __init__(
@@ -110,7 +111,9 @@ class ParameterGenerator(ABC):
         self._overwrite = overwrite
         self._write_meta_flag = write_meta
         if original_index and previous_parameter_study is not None:
-            raise RuntimeError("The original index and previous parameter study features are mutually incompatible.")
+            raise MutuallyExclusiveError(
+                "The original index and previous parameter study features are mutually incompatible."
+            )
         else:
             self._original_index = original_index
 
@@ -800,6 +803,8 @@ class CartesianProduct(ParameterGenerator):
     :raises waves.exceptions.APIError: If an unknown output file type is requested
     :raises RuntimeError: If a previous parameter study file is specified and missing, and
         ``require_previous_parameter_study`` is ``True``
+    :raises waves.exceptions.MutuallyExclusiveError: If both the ``original_index`` and ``previous_parameter_study`` are
+        specified.
     :raises waves.exceptions.SchemaValidationError:
 
         * Parameter schema is not a dictionary
@@ -887,6 +892,8 @@ class LatinHypercube(_ScipyGenerator):
     :raises waves.exceptions.APIError: If an unknown output file type is requested
     :raises RuntimeError: If a previous parameter study file is specified and missing, and
         ``require_previous_parameter_study`` is ``True``
+    :raises waves.exceptions.MutuallyExclusiveError: If both the ``original_index`` and ``previous_parameter_study`` are
+        specified.
 
     To produce consistent Latin Hypercubes on repeat instantiations, the ``**kwargs`` must include ``{'seed': <int>}``.
     See the `scipy Latin Hypercube`_ ``scipy.stats.qmc.LatinHypercube`` class documentation for details The ``d``
@@ -977,6 +984,8 @@ class OneAtATime(ParameterGenerator):
     :raises waves.exceptions.APIError: If an unknown output file type is requested
     :raises RuntimeError: If a previous parameter study file is specified and missing, and
         ``require_previous_parameter_study`` is ``True``
+    :raises waves.exceptions.MutuallyExclusiveError: If both the ``original_index`` and ``previous_parameter_study`` are
+        specified.
     :raises waves.exceptions.SchemaValidationError:
 
         * Parameter schema is not a dictionary
@@ -1097,6 +1106,8 @@ class CustomStudy(ParameterGenerator):
     :raises waves.exceptions.APIError: If an unknown output file type is requested
     :raises RuntimeError: If a previous parameter study file is specified and missing, and
         ``require_previous_parameter_study`` is ``True``
+    :raises waves.exceptions.MutuallyExclusiveError: If both the ``original_index`` and ``previous_parameter_study`` are
+        specified.
     :raises waves.exceptions.SchemaValidationError:
 
         * Parameter schema is not a dictionary
@@ -1200,6 +1211,8 @@ class SobolSequence(_ScipyGenerator):
     :raises waves.exceptions.APIError: If an unknown output file type is requested
     :raises RuntimeError: If a previous parameter study file is specified and missing, and
         ``require_previous_parameter_study`` is ``True``
+    :raises waves.exceptions.MutuallyExclusiveError: If both the ``original_index`` and ``previous_parameter_study`` are
+        specified.
 
     To produce consistent Sobol sequences on repeat instantiations, the ``**kwargs`` must include either
     ``scramble=False`` or ``seed=<int>``. See the `scipy Sobol`_ ``scipy.stats.qmc.Sobol`` class documentation for
@@ -1297,6 +1310,8 @@ class ScipySampler(_ScipyGenerator):
     :raises waves.exceptions.APIError: If an unknown output file type is requested
     :raises RuntimeError: If a previous parameter study file is specified and missing, and
         ``require_previous_parameter_study`` is ``True``
+    :raises waves.exceptions.MutuallyExclusiveError: If both the ``original_index`` and ``previous_parameter_study`` are
+        specified.
 
     Keyword arguments for the ``scipy.stats.qmc`` ``sampler_class``. The ``d`` keyword argument is internally managed
     and will be overwritten to match the number of parameters defined in the parameter schema.
@@ -1435,6 +1450,8 @@ class SALibSampler(ParameterGenerator, ABC):
     :raises waves.exceptions.APIError: If an unknown output file type is requested
     :raises RuntimeError: If a previous parameter study file is specified and missing, and
         ``require_previous_parameter_study`` is ``True``
+    :raises waves.exceptions.MutuallyExclusiveError: If both the ``original_index`` and ``previous_parameter_study`` are
+        specified.
     :raises waves.exceptions.SchemaValidationError:
 
         * If the `SALib sobol`_ or `SALib morris`_ sampler is specified and there are fewer than 2 parameters.
@@ -1642,6 +1659,8 @@ class CatenationStudy(ParameterGenerator):
     :raises waves.exceptions.APIError: If an unknown output file type is requested
     :raises RuntimeError: If a previous parameter study file is specified and missing, and
         ``require_previous_parameter_study`` is ``True``
+    :raises waves.exceptions.MutuallyExclusiveError: If both the ``original_index`` and ``previous_parameter_study`` are
+        specified.
     :raises waves.exceptions.SchemaValidationError:
 
         * Parameter schema is not a dictionary
