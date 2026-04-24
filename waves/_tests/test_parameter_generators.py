@@ -2102,35 +2102,6 @@ def test_open_parameter_study() -> None:
 class TestParameterGenerator:
     """Class for testing ABC ParameterGenerator."""
 
-    original_index_schema_cases = {
-        "default": ({}, does_not_raise),
-        "only original index": ({}, does_not_raise),
-        "only previous parameter study": ({"previous_parameter_study": "dummy.h5"}, does_not_raise),
-        "both original index and previous parameter study": (
-            {"previous_parameter_study": "dummy.h5", "original_index": True},
-            pytest.raises(
-                MutuallyExclusiveError,
-                match=r"The original index and previous parameter study features are mutually incompatible\.",
-            ),
-        ),
-    }
-
-    @pytest.mark.parametrize(
-        ("generator_kwargs", "outcome"),
-        original_index_schema_cases.values(),
-        ids=original_index_schema_cases.keys(),
-    )
-    def test_original_index_mutually_exclusive_behavior(
-        self, generator_kwargs: dict, outcome: contextlib.nullcontext | pytest.RaisesExc
-    ) -> None:
-        with (
-            outcome,
-            patch("pathlib.Path.is_file", return_value=True),
-            patch("waves.parameter_generators.ParameterGenerator._validate"),
-            patch("waves.parameter_generators.ParameterGenerator._generate"),
-        ):
-            DummyGenerator({}, **generator_kwargs)
-
     property_parameter_schema_cases = {"schema": ({"parameter_1": [1]}, {"parameter_1": [1]})}
 
     @pytest.mark.parametrize(
@@ -2770,6 +2741,37 @@ class TestParameterGenerator:
             write_meta_parameter_generator._write_meta()
             handle = mock_file()
             handle.write.assert_called_once_with("dummy.h5\n")
+
+    test_original_index_cases = {
+        "default": ({}, False, does_not_raise),
+        "only original index": ({"original_index": True}, True, does_not_raise),
+        "only previous parameter study": ({"previous_parameter_study": "dummy.h5"}, False, does_not_raise),
+        "both original index and previous parameter study": (
+            {"previous_parameter_study": "dummy.h5", "original_index": True},
+            None,
+            pytest.raises(
+                MutuallyExclusiveError,
+                match=r"The original index and previous parameter study features are mutually incompatible\.",
+            ),
+        ),
+    }
+
+    @pytest.mark.parametrize(
+        ("generator_kwargs", "expected", "outcome"),
+        test_original_index_cases.values(),
+        ids=test_original_index_cases.keys(),
+    )
+    def test_original_index(
+        self, generator_kwargs: dict, expected: bool, outcome: contextlib.nullcontext | pytest.RaisesExc
+    ) -> None:
+        with (
+            outcome,
+            patch("pathlib.Path.is_file", return_value=True),
+            patch("waves.parameter_generators.ParameterGenerator._validate"),
+            patch("waves.parameter_generators.ParameterGenerator._generate"),
+        ):
+            original_index_generator = DummyGenerator({}, **generator_kwargs)
+            assert original_index_generator._original_index is expected
 
     @pytest.mark.parametrize(
         ("parameter_names", "samples", "expected_hashes"),
