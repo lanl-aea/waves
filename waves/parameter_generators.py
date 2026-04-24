@@ -1359,9 +1359,29 @@ class SALibSampler(ParameterGenerator, ABC):
     * latin: discrepancy, pawn, rsa
     * sobol: discrepany, pawn, rsa
 
-    Developing a solution to preserve or recover the original SALib index order is a work-in-progress. The above
-    compatibility list will be updated with corresponding examples as more sample-analyze pair compatibilities are
-    confirmed and added to the unit test suite.
+    The ``original_index`` argument attempts to preserve the original SALib parameter set order. For sampler classes
+    that may produce duplicate parameter sets, e.g. morris, the ``original_index`` behavior cannot by honored because
+    WAVES parameter study behavior requires unique parameter sets. When available, the ``original_index`` coordinate can
+    enable more sample-analyze method pairs for sensitivity analysis, but is not yet compatible with parameter study
+    merge behaviors like the :class:`waves.parameter_generators.CatenationStudy` or the ``previous_parameter_study``
+    argument. The following sample-analyze pairs are tested for compatibility with the WAVES ``original_index``
+    behavior.
+
+    * fast_sampler: fast, delta, discrepancy, pawn, rbd_fast, rsa
+    * finite_diff: dgsm, delta, discrepance, pawn, rbd_fast, rsa
+    * latin: delta, discrepancy, pawn, rbd_fast, rsa
+    * sobol: sobol, delta, discrepany, pawn, rbd_fast, rsa
+
+    The following sample-analyze pairs have been tested in the past and are not compatible with WAVES parameter studies.
+    Note that the morris sampler class produces duplicate parameter sets, which is incompatible with the WAVES parameter
+    study behavior. The morris sampler class may be used to generate samples, but is not compatible with SALib
+    sensitivity analysis methods.
+
+    * fast_sampler: hdmr
+    * finite_diff: hdmr
+    * latin: hdmr
+    * morris: morris, delta, discrepancy, hdmr, pawn, rbd_fast, rsa
+    * sobol: hdmr
 
     .. warning::
 

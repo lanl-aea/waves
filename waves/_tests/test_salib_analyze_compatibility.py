@@ -126,15 +126,11 @@ skip_salib_analyze_incompatibility = (
         ("sobol", "pawn", True),
         ("sobol", "rsa", True),
         # SALib documented single combination sample-analyze compatibilities
-        # TODO: Add an SALib index to allow WAVES compatible sensitivity analysis
-        # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1014
         pytest.param("fast_sampler", "fast", True),
         pytest.param("finite_diff", "dgsm", True),
         pytest.param("sobol", "sobol", True),
         pytest.param("morris", "morris", True, marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
         # SALib full-factorial of analyze methods documented as "compatible with: all samplers"
-        # TODO: Add an SALib index to allow WAVES compatible sensitivity analysis
-        # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1014
         pytest.param("fast_sampler", "delta", True),
         pytest.param("fast_sampler", "hdmr", True, marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
         pytest.param("fast_sampler", "rbd_fast", True),
