@@ -1012,6 +1012,42 @@ merge_parameter_studies_cases.update(
             None,
             pytest.raises(RuntimeError, match="Not enough parameter studies provided for merge operation"),
         ),
+        "concatenate original_index should raise": (
+            [
+                parameter_generators.SALibSampler(
+                    "latin",
+                    {
+                        "N": 2,
+                        "problem": {
+                            "num_vars": 1,
+                            "names": ["parameter_1"],
+                            "bounds": [[-1, 1]],
+                        },
+                    },
+                    seed=42,
+                    original_index=True,
+                ).parameter_study,
+                parameter_generators.SALibSampler(
+                    "latin",
+                    {
+                        "N": 2,
+                        "problem": {
+                            "num_vars": 1,
+                            "names": ["parameter_1"],
+                            "bounds": [[-1, 1]],
+                        },
+                    },
+                    seed=42,
+                    original_index=True,
+                ).parameter_study,
+            ],
+            None,
+            None,
+            None,
+            pytest.raises(
+                RuntimeError, match="The 'original_index' coordinate is incompatible with merging parameter studies"
+            ),
+        ),
         "concatenate with different numbers of parameters": (
             [
                 parameter_generators.OneAtATime({"parameter_1": [1.0]}).parameter_study,
@@ -2742,6 +2778,37 @@ class TestParameterGenerator:
             handle = mock_file()
             handle.write.assert_called_once_with("dummy.h5\n")
 
+    test_original_index_cases = {
+        "default": ({}, False, does_not_raise),
+        "only original index": ({"original_index": True}, True, does_not_raise),
+        "only previous parameter study": ({"previous_parameter_study": "dummy.h5"}, False, does_not_raise),
+        "both original index and previous parameter study": (
+            {"previous_parameter_study": "dummy.h5", "original_index": True},
+            None,
+            pytest.raises(
+                MutuallyExclusiveError,
+                match=r"The original index and previous parameter study features are mutually incompatible\.",
+            ),
+        ),
+    }
+
+    @pytest.mark.parametrize(
+        ("generator_kwargs", "expected", "outcome"),
+        test_original_index_cases.values(),
+        ids=test_original_index_cases.keys(),
+    )
+    def test_original_index(
+        self, generator_kwargs: dict, expected: bool, outcome: contextlib.nullcontext | pytest.RaisesExc
+    ) -> None:
+        with (
+            outcome,
+            patch("pathlib.Path.is_file", return_value=True),
+            patch("waves.parameter_generators.ParameterGenerator._validate"),
+            patch("waves.parameter_generators.ParameterGenerator._generate"),
+        ):
+            original_index_generator = DummyGenerator({}, **generator_kwargs)
+            assert original_index_generator._original_index is expected
+
     @pytest.mark.parametrize(
         ("parameter_names", "samples", "expected_hashes"),
         set_hashes.values(),
@@ -2766,6 +2833,23 @@ class TestParameterGenerator:
         set_names_parameter_generator._create_set_hashes()
         set_names_parameter_generator._create_set_names()
         assert list(set_names_parameter_generator._set_names.values()) == ["out0", "out1"]
+
+    def test_create_parameter_study(self) -> None:
+        with does_not_raise:
+            generator = DummyGenerator({})
+            generator._create_parameter_study()
+        with does_not_raise:
+            generator = DummyGenerator({})
+            generator._create_parameter_study(original_index=True)
+        with (  # noqa: PT012
+            pytest.raises(
+                RuntimeError,
+                match=r"The original index and previous parameter study features are mutually incompatible\.",
+            ),
+        ):
+            generator = DummyGenerator({})
+            generator._previous_parameter_study = pathlib.Path("dummy.h5")
+            generator._create_parameter_study(original_index=True)
 
     def test_parameter_study_to_numpy(self) -> None:
         """Test the self-consistency of the parameter study dataset construction and deconstruction."""

@@ -337,6 +337,21 @@ class TestSALibSampler:
                     ),
                 }
             ).set_coords("set_hash"),
+            does_not_raise,
+        ),
+        "morris: good schema 5x2, non-unique samples and original index request": (
+            "morris",
+            {
+                "N": 5,
+                "problem": {
+                    "num_vars": 2,
+                    "names": ["parameter_1", "parameter_2"],
+                    "bounds": [[-1, 1], [-2, 2]],
+                },
+            },
+            {"seed": 42, "original_index": True},
+            None,
+            pytest.raises(RuntimeError, match=r"Sampler resulted in non-unique samples,"),
         ),
         "latin: good schema 2x1": (
             "latin",
@@ -366,6 +381,41 @@ class TestSALibSampler:
                     ),
                 }
             ).set_coords("set_hash"),
+            does_not_raise,
+        ),
+        "latin: good schema 2x1, original index": (
+            "latin",
+            {
+                "N": 2,
+                "problem": {
+                    "num_vars": 1,
+                    "names": ["parameter_1"],
+                    "bounds": [[-1, 1]],
+                },
+            },
+            {"seed": 42, "original_index": True},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [-0.22604395, 0.43887844],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            ),
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["6400508900158a61b0ec622281662fd8", "9730dec062211dbebb12f90bd45bf7ce"],
+                        dims=_set_coordinate_key,
+                    ),
+                    "original_index": xarray.DataArray(
+                        [1, 0],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords(["set_hash", "original_index"]),
+            does_not_raise,
         ),
         "sobol: good schema 1x2": (
             "sobol",
@@ -409,6 +459,7 @@ class TestSALibSampler:
                     ),
                 }
             ).set_coords("set_hash"),
+            does_not_raise,
         ),
         "finite diff: good schema 1x3": (
             "finite_diff",
@@ -461,6 +512,7 @@ class TestSALibSampler:
                     ),
                 }
             ).set_coords("set_hash"),
+            does_not_raise,
         ),
         "fast sampler: good schema 65x1 (linux)": pytest.param(
             "fast_sampler",
@@ -688,6 +740,7 @@ class TestSALibSampler:
                     ),
                 }
             ).set_coords("set_hash"),
+            does_not_raise,
             marks=[
                 pytest.mark.skipif(
                     testing_windows or testing_macos,
@@ -921,6 +974,7 @@ class TestSALibSampler:
                     ),
                 }
             ).set_coords("set_hash"),
+            does_not_raise,
             marks=[
                 pytest.mark.skipif(
                     not testing_windows,
@@ -1162,6 +1216,7 @@ class TestSALibSampler:
                     ),
                 }
             ).set_coords("set_hash"),
+            does_not_raise,
             marks=[
                 pytest.mark.skipif(
                     not testing_macos,
@@ -1172,12 +1227,17 @@ class TestSALibSampler:
     }
 
     @pytest.mark.parametrize(
-        ("sampler", "parameter_schema", "kwargs", "expected_dataset"),
+        ("sampler", "parameter_schema", "kwargs", "expected_dataset", "outcome"),
         generate_input.values(),
         ids=generate_input.keys(),
     )
     def test_generate(
-        self, sampler: str, parameter_schema: dict, kwargs: dict, expected_dataset: xarray.Dataset
+        self,
+        sampler: str,
+        parameter_schema: dict,
+        kwargs: dict,
+        expected_dataset: xarray.Dataset,
+        outcome: contextlib.nullcontext | pytest.RaisesExc,
     ) -> None:
         dtype_variants = [float, int, numpy.float32, numpy.float64, numpy.int64, numpy.int32, numpy.int16, numpy.int8]
         parameter_schema_dtype_variants = [
@@ -1191,15 +1251,16 @@ class TestSALibSampler:
             for dtype in dtype_variants
         ]
         for schema in parameter_schema_dtype_variants:
-            test_generate = SALibSampler(sampler, schema, **kwargs)
-            xarray.testing.assert_allclose(test_generate.parameter_study, expected_dataset)
-            # Check for type preservation
-            for key in test_generate.parameter_study:
-                assert test_generate.parameter_study[key].dtype == numpy.float64
-            # Verify that the parameter set name creation method was called
-            # TODO: _set_names is an ordered object (dictionary). Fix test to compare dictionary-to-dictionary instead
-            # of implied consistency according to value order.
-            assert list(test_generate._set_names.values()) == list(expected_dataset[_set_coordinate_key].to_numpy())
+            with outcome:
+                test_generate = SALibSampler(sampler, schema, **kwargs)
+                xarray.testing.assert_allclose(test_generate.parameter_study, expected_dataset)
+                # Check for type preservation
+                for key in test_generate.parameter_study:
+                    assert test_generate.parameter_study[key].dtype == numpy.float64
+                # Verify that the parameter set name creation method was called
+                # TODO: _set_names is an ordered object (dictionary). Fix test to compare dictionary-to-dictionary
+                # instead of implied consistency according to value order.
+                assert list(test_generate._set_names.values()) == list(expected_dataset[_set_coordinate_key].to_numpy())
 
     merge_test = {
         "new sets, 5(8)x2": (

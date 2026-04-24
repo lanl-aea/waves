@@ -55,6 +55,7 @@ _default_output_file_type_api = _allowable_output_file_types[0]
 _default_output_file_type_cli = _allowable_output_file_types[1]
 _hash_coordinate_key = "set_hash"
 _set_coordinate_key = "set_name"
+_original_coordinate_key = "original_index"
 _installed_docs_index = _project_root_abspath / "docs/index.html"
 _modsim_template_directory = _project_root_abspath / "modsim_template"
 _tutorials_directory = _project_root_abspath / "tutorials"

@@ -9,6 +9,18 @@ Changelog
 ******************
 
 ******************
+1.4.3 (unreleased)
+******************
+
+Enhancements
+============
+- Experimental enhancement to preserve original indices in parameter studies. Only tested against
+  :class:`waves.parameter_generators.SALibSampler`. Incompatible with parameter study merge behavior such as
+  :class:`waves.parameter_generators.CatenationStudy` and the ``previous_parameter_study`` argument. See the
+  :class:`waves.parameter_generators.SALibSampler` for usage and caveats (:issue:`1014`, :merge:`1312`). By `Kyle
+  Brindley`_.
+
+******************
 1.4.2 (2026-04-23)
 ******************
 

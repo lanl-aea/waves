@@ -23,7 +23,7 @@ import xarray
 import yaml
 
 from waves import _settings, _utilities
-from waves._settings import _hash_coordinate_key, _set_coordinate_key
+from waves._settings import _hash_coordinate_key, _original_coordinate_key, _set_coordinate_key
 from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
 
 _exclude_from_namespace = set(globals().keys())
@@ -63,6 +63,14 @@ class ParameterGenerator(ABC):
     :param overwrite: Overwrite existing output files
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
+    :param original_index: Assign a coordinate to track the original sample index order. Incompatible with merging
+        parameter studies and previous parameter study behaviors.
+
+    .. warning::
+
+       The ``original_index`` behavior is considered experimental and is only tested for the
+       :class:`waves.parameter_generators.SALibSampler`. See the :class:`waves.parameter_generators.SALibSampler` for
+       usage and caveats.
 
     :var self.parameter_study: The final parameter study XArray Dataset object
 
@@ -71,6 +79,8 @@ class ParameterGenerator(ABC):
     :raises waves.exceptions.APIError: If an unknown output file type is requested
     :raises RuntimeError: If a previous parameter study file is specified and missing, and
         ``require_previous_parameter_study`` is ``True``
+    :raises waves.exceptions.MutuallyExclusiveError: If both the ``original_index`` and ``previous_parameter_study`` are
+        specified.
     """
 
     def __init__(
@@ -84,6 +94,7 @@ class ParameterGenerator(ABC):
         require_previous_parameter_study: bool = _settings._default_require_previous_parameter_study,
         overwrite: bool = _settings._default_overwrite,
         write_meta: bool = _settings._default_write_meta_flag,
+        original_index: bool = False,
         **kwargs,
     ) -> None:
         self._parameter_schema = parameter_schema
@@ -99,6 +110,12 @@ class ParameterGenerator(ABC):
         self._require_previous_parameter_study = require_previous_parameter_study
         self._overwrite = overwrite
         self._write_meta_flag = write_meta
+        if original_index and previous_parameter_study is not None:
+            raise MutuallyExclusiveError(
+                "The original index and previous parameter study features are mutually incompatible."
+            )
+        else:
+            self._original_index = original_index
 
         if self._output_file_template is not None and self._output_file is not None:
             raise MutuallyExclusiveError(
@@ -194,6 +211,10 @@ class ParameterGenerator(ABC):
     def write_meta(self) -> bool:
         return self._write_meta_flag
 
+    @property
+    def original_index(self) -> bool:
+        return self._original_index
+
     @abstractmethod
     def _validate(self) -> None:
         """Process parameter study input to verify schema.
@@ -244,7 +265,7 @@ class ParameterGenerator(ABC):
         self._samples = _convert_numpy_to_builtin(self._samples)
         self._create_set_hashes()
         self._create_set_names()
-        self._create_parameter_study()
+        self._create_parameter_study(original_index=self.original_index)
         if self._previous_parameter_study is not None and self._previous_parameter_study.is_file():
             self._merge_parameter_studies()
         self._verify_generated_parameter_study()
@@ -487,7 +508,7 @@ class ParameterGenerator(ABC):
             [self.parameter_study.reset_coords(), set_names_array], join="outer", compat="no_conflicts"
         ).set_coords(_set_coordinate_key)
 
-    def _create_parameter_study(self) -> None:
+    def _create_parameter_study(self, original_index: bool = False) -> None:
         """Create the standard structure for the parameter study dataset.
 
         requires:
@@ -510,7 +531,23 @@ class ParameterGenerator(ABC):
             for name, values in zip(self._parameter_names, self._samples.T, strict=True)
         ]
         self.parameter_study = xarray.merge(sample_arrays, join="outer", compat="no_conflicts")
+        if original_index and self.previous_parameter_study is not None:
+            raise RuntimeError("The original index and previous parameter study features are mutually incompatible.")
+        elif (original_index and self.previous_parameter_study is None) and not numpy.allclose(
+            self._samples, self.parameter_study.to_dataframe().to_numpy()
+        ):
+            raise ValueError(
+                "The original index was requested but the sample order was not preserved. This is an internal logic"
+                " error. Please contact the developers."
+            )
+        elif original_index and self.previous_parameter_study is None:
+            original_index_range = range(0, self.parameter_study[_hash_coordinate_key].size)
+            self.parameter_study = self.parameter_study.assign_coords(
+                {_original_coordinate_key: ("set_hash", original_index_range)}
+            )
         self._merge_set_names_array()
+        if _original_coordinate_key in self.parameter_study:
+            self.parameter_study = self.parameter_study.set_coords(_original_coordinate_key)
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
     def _parameter_study_to_numpy(self) -> numpy.ndarray:
@@ -766,6 +803,8 @@ class CartesianProduct(ParameterGenerator):
     :raises waves.exceptions.APIError: If an unknown output file type is requested
     :raises RuntimeError: If a previous parameter study file is specified and missing, and
         ``require_previous_parameter_study`` is ``True``
+    :raises waves.exceptions.MutuallyExclusiveError: If both the ``original_index`` and ``previous_parameter_study`` are
+        specified.
     :raises waves.exceptions.SchemaValidationError:
 
         * Parameter schema is not a dictionary
@@ -853,6 +892,8 @@ class LatinHypercube(_ScipyGenerator):
     :raises waves.exceptions.APIError: If an unknown output file type is requested
     :raises RuntimeError: If a previous parameter study file is specified and missing, and
         ``require_previous_parameter_study`` is ``True``
+    :raises waves.exceptions.MutuallyExclusiveError: If both the ``original_index`` and ``previous_parameter_study`` are
+        specified.
 
     To produce consistent Latin Hypercubes on repeat instantiations, the ``**kwargs`` must include ``{'seed': <int>}``.
     See the `scipy Latin Hypercube`_ ``scipy.stats.qmc.LatinHypercube`` class documentation for details The ``d``
@@ -943,6 +984,8 @@ class OneAtATime(ParameterGenerator):
     :raises waves.exceptions.APIError: If an unknown output file type is requested
     :raises RuntimeError: If a previous parameter study file is specified and missing, and
         ``require_previous_parameter_study`` is ``True``
+    :raises waves.exceptions.MutuallyExclusiveError: If both the ``original_index`` and ``previous_parameter_study`` are
+        specified.
     :raises waves.exceptions.SchemaValidationError:
 
         * Parameter schema is not a dictionary
@@ -1063,6 +1106,8 @@ class CustomStudy(ParameterGenerator):
     :raises waves.exceptions.APIError: If an unknown output file type is requested
     :raises RuntimeError: If a previous parameter study file is specified and missing, and
         ``require_previous_parameter_study`` is ``True``
+    :raises waves.exceptions.MutuallyExclusiveError: If both the ``original_index`` and ``previous_parameter_study`` are
+        specified.
     :raises waves.exceptions.SchemaValidationError:
 
         * Parameter schema is not a dictionary
@@ -1166,6 +1211,8 @@ class SobolSequence(_ScipyGenerator):
     :raises waves.exceptions.APIError: If an unknown output file type is requested
     :raises RuntimeError: If a previous parameter study file is specified and missing, and
         ``require_previous_parameter_study`` is ``True``
+    :raises waves.exceptions.MutuallyExclusiveError: If both the ``original_index`` and ``previous_parameter_study`` are
+        specified.
 
     To produce consistent Sobol sequences on repeat instantiations, the ``**kwargs`` must include either
     ``scramble=False`` or ``seed=<int>``. See the `scipy Sobol`_ ``scipy.stats.qmc.Sobol`` class documentation for
@@ -1263,6 +1310,8 @@ class ScipySampler(_ScipyGenerator):
     :raises waves.exceptions.APIError: If an unknown output file type is requested
     :raises RuntimeError: If a previous parameter study file is specified and missing, and
         ``require_previous_parameter_study`` is ``True``
+    :raises waves.exceptions.MutuallyExclusiveError: If both the ``original_index`` and ``previous_parameter_study`` are
+        specified.
 
     Keyword arguments for the ``scipy.stats.qmc`` ``sampler_class``. The ``d`` keyword argument is internally managed
     and will be overwritten to match the number of parameters defined in the parameter schema.
@@ -1331,9 +1380,30 @@ class SALibSampler(ParameterGenerator, ABC):
     * latin: discrepancy, pawn, rsa
     * sobol: discrepany, pawn, rsa
 
-    Developing a solution to preserve or recover the original SALib index order is a work-in-progress. The above
-    compatibility list will be updated with corresponding examples as more sample-analyze pair compatibilities are
-    confirmed and added to the unit test suite.
+    The ``original_index`` argument attempts to preserve the original SALib parameter set order. For sampler classes
+    that may produce duplicate parameter sets, e.g. morris, the ``original_index`` behavior cannot by honored because
+    WAVES parameter study behavior requires unique parameter sets. When available, the ``original_index`` coordinate can
+    enable more sample-analyze method pairs for sensitivity analysis, but is not yet compatible with parameter study
+    merge behaviors like the :class:`waves.parameter_generators.CatenationStudy` or the ``previous_parameter_study``
+    argument. The following sample-analyze pairs are tested for compatibility with the WAVES ``original_index``
+    behavior. See the example at the end of the class documentation for a demonstration of the ``original_index``
+    sorting behavior.
+
+    * fast_sampler: fast, delta, discrepancy, pawn, rbd_fast, rsa
+    * finite_diff: dgsm, delta, discrepance, pawn, rbd_fast, rsa
+    * latin: delta, discrepancy, pawn, rbd_fast, rsa
+    * sobol: sobol, delta, discrepany, pawn, rbd_fast, rsa
+
+    The following sample-analyze pairs have been tested in the past and are not compatible with WAVES parameter studies.
+    Note that the morris sampler class produces duplicate parameter sets, which is incompatible with the WAVES parameter
+    study behavior. The morris sampler class may be used to generate samples, but is not compatible with SALib
+    sensitivity analysis methods.
+
+    * fast_sampler: hdmr
+    * finite_diff: hdmr
+    * latin: hdmr
+    * morris: morris, delta, discrepancy, hdmr, pawn, rbd_fast, rsa
+    * sobol: hdmr
 
     .. warning::
 
@@ -1380,6 +1450,8 @@ class SALibSampler(ParameterGenerator, ABC):
     :raises waves.exceptions.APIError: If an unknown output file type is requested
     :raises RuntimeError: If a previous parameter study file is specified and missing, and
         ``require_previous_parameter_study`` is ``True``
+    :raises waves.exceptions.MutuallyExclusiveError: If both the ``original_index`` and ``previous_parameter_study`` are
+        specified.
     :raises waves.exceptions.SchemaValidationError:
 
         * If the `SALib sobol`_ or `SALib morris`_ sampler is specified and there are fewer than 2 parameters.
@@ -1417,7 +1489,26 @@ class SALibSampler(ParameterGenerator, ABC):
            parameter_1   (set_name) float64 -0.2029 ... 0.187
            parameter_2   (set_name) float64 -0.801 ... 0.6682
            parameter_3   (set_name) float64 0.4287 ... -2.871
-    """
+
+    .. code-block::
+
+       >>> import numpy
+       >>> import SALib.sample.sobol
+       >>> import waves
+       >>> parameter_schema = {
+       ...     "N": 4,  # Required key. Value must be an integer.
+       ...     "problem": {  # Required key. See the SALib sampler interface documentation
+       ...         "num_vars": 3,
+       ...         "names": ["parameter_1", "parameter_2", "parameter_3"],
+       ...         "bounds": [[-1, 1], [-2, 2], [-3, 3]]
+       ...     }
+       ... }
+       >>> salib_samples = SALib.sample.sobol.sample(parameter_schema["problem"], parameter_schema["N"], seed=42)
+       >>> parameter_generator = waves.parameter_generators.SALibSampler("sobol", parameter_schema, original_index=True, seed=42)
+       >>> waves_samples = parameter_generator.parameter_study.swap_dims({"set_name": "original_index"}).sortby("original_index").drop_vars(["set_hash", "set_name"]).to_dataframe().to_numpy()
+       >>> numpy.allclose(waves_samples, salib_samples)
+       True
+    """  # noqa: E501
 
     def __init__(self, sampler_class: str, *args, **kwargs) -> None:
         self._sampler_class = sampler_class
@@ -1495,7 +1586,23 @@ class SALibSampler(ParameterGenerator, ABC):
         sampler = getattr(SALib.sample, self._sampler_class)
         problem = self._parameter_schema["problem"]
         self._samples = sampler.sample(problem, N, **kwargs)
-        self._samples = numpy.unique(self._samples, axis=0)
+
+        # Conditionally remove non-unique samples generated by low-sample counts for some sampler types
+        unique_samples = numpy.unique(self._samples, axis=0)
+        removed_samples = self._samples.shape != unique_samples.shape
+        if removed_samples and not self.original_index:
+            warnings.warn(
+                "Removing non-unique samples from the parameter study. Required for WAVES behavior."
+                " Resulting parameter study may not be compatible with SALib analyze methods."
+            )
+            self._samples = unique_samples
+        if removed_samples and self.original_index:
+            raise RuntimeError(
+                "Sampler resulted in non-unique samples, which is incompatible with the WAVES parameter study"
+                "behavior. Original index was requested, but cannot be honored. Try a larger sample count or a"
+                " different sampler class."
+            )
+
         super()._generate()
 
 
@@ -1552,6 +1659,8 @@ class CatenationStudy(ParameterGenerator):
     :raises waves.exceptions.APIError: If an unknown output file type is requested
     :raises RuntimeError: If a previous parameter study file is specified and missing, and
         ``require_previous_parameter_study`` is ``True``
+    :raises waves.exceptions.MutuallyExclusiveError: If both the ``original_index`` and ``previous_parameter_study`` are
+        specified.
     :raises waves.exceptions.SchemaValidationError:
 
         * Parameter schema is not a dictionary
@@ -1970,9 +2079,14 @@ def _merge_parameter_studies(studies: list[xarray.Dataset], template: string.Tem
     :return: parameter study xarray Dataset
 
     :raises RuntimeError: if fewer than two parameter studies are in the input parameter `studies`
+    :raises RuntimeError: If any study contains the ``original_index`` coordinate or data variable.
     """
     if len(studies) < 2:
         raise RuntimeError("Not enough parameter studies provided for merge operation")
+    if any(_original_coordinate_key in study for study in studies):
+        raise RuntimeError(
+            f"The '{_original_coordinate_key}' coordinate is incompatible with merging parameter studies"
+        )
 
     # Swap dimensions from the set name to the set hash to merge identical sets
     swap_to_hash_index = {_set_coordinate_key: _hash_coordinate_key}
