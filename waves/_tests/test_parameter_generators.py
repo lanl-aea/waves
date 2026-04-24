@@ -2798,6 +2798,23 @@ class TestParameterGenerator:
         set_names_parameter_generator._create_set_names()
         assert list(set_names_parameter_generator._set_names.values()) == ["out0", "out1"]
 
+    def test_create_parameter_study(self) -> None:
+        with does_not_raise:
+            generator = DummyGenerator({})
+            generator._create_parameter_study()
+        with does_not_raise:
+            generator = DummyGenerator({})
+            generator._create_parameter_study(original_index=True)
+        with (
+            pytest.raises(
+                RuntimeError,
+                match=r"The original index and previous parameter study features are mutually incompatible\."
+            ),
+        ):
+            generator = DummyGenerator({})
+            generator._previous_parameter_study = pathlib.Path("dummy.h5")
+            generator._create_parameter_study(original_index=True)
+
     def test_parameter_study_to_numpy(self) -> None:
         """Test the self-consistency of the parameter study dataset construction and deconstruction."""
         # Setup
