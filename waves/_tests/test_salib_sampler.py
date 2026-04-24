@@ -394,7 +394,7 @@ class TestSALibSampler:
                         dims=_set_coordinate_key,
                     ),
                     "original_index": xarray.DataArray(
-                        [0, 1],
+                        [1, 0],
                         dims=_set_coordinate_key,
                     ),
                 }
