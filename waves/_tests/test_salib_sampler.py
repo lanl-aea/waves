@@ -339,6 +339,20 @@ class TestSALibSampler:
             ).set_coords("set_hash"),
             does_not_raise,
         ),
+        "morris: good schema 5x2": (
+            "morris",
+            {
+                "N": 5,
+                "problem": {
+                    "num_vars": 2,
+                    "names": ["parameter_1", "parameter_2"],
+                    "bounds": [[-1, 1], [-2, 2]],
+                },
+            },
+            {"seed": 42, "original_index": True},
+            None,
+            pytest.raises(RuntimeError, match=r"Sampler resulted in non-unique samples,"),
+        ),
         "latin: good schema 2x1": (
             "latin",
             {
