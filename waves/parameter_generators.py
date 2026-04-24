@@ -23,7 +23,7 @@ import xarray
 import yaml
 
 from waves import _settings, _utilities
-from waves._settings import _hash_coordinate_key, _set_coordinate_key, _original_coordinate_key
+from waves._settings import _hash_coordinate_key, _original_coordinate_key, _set_coordinate_key
 from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
 
 _exclude_from_namespace = set(globals().keys())
@@ -524,13 +524,20 @@ class ParameterGenerator(ABC):
         self.parameter_study = xarray.merge(sample_arrays, join="outer", compat="no_conflicts")
         if original_index and self.previous_parameter_study is not None:
             raise RuntimeError("The original index and previous parameter study features are mutually incompatible.")
-        elif (original_index and self.previous_parameter_study is None) and not numpy.allclose(self._samples, self.parameter_study.to_dataframe().to_numpy()):
-            raise ValueError("The original index was requested but the sample order was not preserved. This is an internal logic error. Please contact the developers.")
+        elif (original_index and self.previous_parameter_study is None) and not numpy.allclose(
+            self._samples, self.parameter_study.to_dataframe().to_numpy()
+        ):
+            raise ValueError(
+                "The original index was requested but the sample order was not preserved. This is an internal logic"
+                " error. Please contact the developers."
+            )
         elif original_index and self.previous_parameter_study is None:
             original_index_range = range(0, self.parameter_study[_hash_coordinate_key].size)
-            self.parameter_study = self.parameter_study.assign_coords({_original_coordinate_key: ('set_hash', original_index_range)})
+            self.parameter_study = self.parameter_study.assign_coords(
+                {_original_coordinate_key: ("set_hash", original_index_range)}
+            )
         self._merge_set_names_array()
-        if _original_coordinate_key in self.parameter_study.keys():
+        if _original_coordinate_key in self.parameter_study:
             self.parameter_study = self.parameter_study.set_coords(_original_coordinate_key)
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
@@ -1995,7 +2002,7 @@ def _merge_parameter_studies(studies: list[xarray.Dataset], template: string.Tem
     """
     if len(studies) < 2:
         raise RuntimeError("Not enough parameter studies provided for merge operation")
-    if any([_original_coordinate_key in study.keys() for study in studies]):
+    if any(_original_coordinate_key in study for study in studies):
         raise RuntimeError(
             f"The '{_original_coordinate_key}' coordinate is incompatible with merging parameter studies"
         )
