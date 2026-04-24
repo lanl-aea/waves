@@ -1365,7 +1365,8 @@ class SALibSampler(ParameterGenerator, ABC):
     enable more sample-analyze method pairs for sensitivity analysis, but is not yet compatible with parameter study
     merge behaviors like the :class:`waves.parameter_generators.CatenationStudy` or the ``previous_parameter_study``
     argument. The following sample-analyze pairs are tested for compatibility with the WAVES ``original_index``
-    behavior.
+    behavior. See the examples at the end of the class documentation for a demonstration of the ``original_index``
+    argument and sorting behaviors.
 
     * fast_sampler: fast, delta, discrepancy, pawn, rbd_fast, rsa
     * finite_diff: dgsm, delta, discrepance, pawn, rbd_fast, rsa
@@ -1465,6 +1466,25 @@ class SALibSampler(ParameterGenerator, ABC):
            parameter_1   (set_name) float64 -0.2029 ... 0.187
            parameter_2   (set_name) float64 -0.801 ... 0.6682
            parameter_3   (set_name) float64 0.4287 ... -2.871
+
+    .. code-block::
+
+       >>> import numpy
+       >>> import SALib.sample.sobol
+       >>> import waves
+       >>> parameter_schema = {
+       ...     "N": 4,  # Required key. Value must be an integer.
+       ...     "problem": {  # Required key. See the SALib sampler interface documentation
+       ...         "num_vars": 3,
+       ...         "names": ["parameter_1", "parameter_2", "parameter_3"],
+       ...         "bounds": [[-1, 1], [-2, 2], [-3, 3]]
+       ...     }
+       ... }
+       >>> salib_samples = SALib.sample.sobol.sample(parameter_schema["problem"], parameter_schema["N"], seed=42)
+       >>> parameter_generator = waves.parameter_generators.SALibSampler("sobol", parameter_schema, original_index=True, seed=42)
+       >>> waves_samples = parameter_generator.parameter_study.swap_dims({"set_name": "original_index"}).sortby("original_index").drop_vars(["set_hash", "set_name"]).to_dataframe().to_numpy()
+       >>> numpy.allclose(waves_samples, salib_samples)
+       True
     """
 
     def __init__(self, sampler_class: str, *args, **kwargs) -> None:
