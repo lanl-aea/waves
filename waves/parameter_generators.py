@@ -23,7 +23,7 @@ import xarray
 import yaml
 
 from waves import _settings, _utilities
-from waves._settings import _hash_coordinate_key, _set_coordinate_key
+from waves._settings import _hash_coordinate_key, _set_coordinate_key, _original_coordinate_key
 from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
 
 _exclude_from_namespace = set(globals().keys())
@@ -487,7 +487,7 @@ class ParameterGenerator(ABC):
             [self.parameter_study.reset_coords(), set_names_array], join="outer", compat="no_conflicts"
         ).set_coords(_set_coordinate_key)
 
-    def _create_parameter_study(self) -> None:
+    def _create_parameter_study(self, original_index: bool = False) -> None:
         """Create the standard structure for the parameter study dataset.
 
         requires:
@@ -510,7 +510,16 @@ class ParameterGenerator(ABC):
             for name, values in zip(self._parameter_names, self._samples.T, strict=True)
         ]
         self.parameter_study = xarray.merge(sample_arrays, join="outer", compat="no_conflicts")
+        if original_index and self.previous_parameter_study is not None:
+            raise RuntimeError("The original index and previous parameter study features are mutually incompatible.")
+        elif (original_index and self.previous_parameter_study is None) and not numpy.allclose(self._samples, self.parameter_study.to_dataframe().to_numpy()):
+            raise ValueError("The original index was requested but the sample order was not preserved. This is an internal logic error. Please contact the developers.")
+        elif original_index and self.previous_parameter_study is None:
+            original_index_range = range(0, self.parameter_study[_hash_coordinate_key].size)
+            self.parameter_study = self.parameter_study.assign_coords({_original_coordinate_key: ('set_hash', original_index_range)})
         self._merge_set_names_array()
+        if _original_coordinate_key in self.parameter_study.keys():
+            self.parameter_study = self.parameter_study.set_coords(_original_coordinate_key)
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
     def _parameter_study_to_numpy(self) -> numpy.ndarray:
