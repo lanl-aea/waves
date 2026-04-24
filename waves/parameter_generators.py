@@ -1365,8 +1365,8 @@ class SALibSampler(ParameterGenerator, ABC):
     enable more sample-analyze method pairs for sensitivity analysis, but is not yet compatible with parameter study
     merge behaviors like the :class:`waves.parameter_generators.CatenationStudy` or the ``previous_parameter_study``
     argument. The following sample-analyze pairs are tested for compatibility with the WAVES ``original_index``
-    behavior. See the examples at the end of the class documentation for a demonstration of the ``original_index``
-    argument and sorting behaviors.
+    behavior. See the example at the end of the class documentation for a demonstration of the ``original_index``
+    sorting behavior.
 
     * fast_sampler: fast, delta, discrepancy, pawn, rbd_fast, rsa
     * finite_diff: dgsm, delta, discrepance, pawn, rbd_fast, rsa
