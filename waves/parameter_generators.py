@@ -63,6 +63,8 @@ class ParameterGenerator(ABC):
     :param overwrite: Overwrite existing output files
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
+    :param original_index: Assign a coordinate to track the original sample index order. Incompatible with merging
+        parameter studies and previous parameter study behaviors.
 
     :var self.parameter_study: The final parameter study XArray Dataset object
 
@@ -71,6 +73,7 @@ class ParameterGenerator(ABC):
     :raises waves.exceptions.APIError: If an unknown output file type is requested
     :raises RuntimeError: If a previous parameter study file is specified and missing, and
         ``require_previous_parameter_study`` is ``True``
+    :raises RuntimeError: If both the ``original_index`` and ``previous_parameter_study`` are specified.
     """
 
     def __init__(
@@ -84,6 +87,7 @@ class ParameterGenerator(ABC):
         require_previous_parameter_study: bool = _settings._default_require_previous_parameter_study,
         overwrite: bool = _settings._default_overwrite,
         write_meta: bool = _settings._default_write_meta_flag,
+        original_index: bool = False,
         **kwargs,
     ) -> None:
         self._parameter_schema = parameter_schema
@@ -99,6 +103,10 @@ class ParameterGenerator(ABC):
         self._require_previous_parameter_study = require_previous_parameter_study
         self._overwrite = overwrite
         self._write_meta_flag = write_meta
+        if original_index and previous_parameter_study is not None:
+            raise RuntimeError("The original index and previous parameter study features are mutually incompatible.")
+        else:
+            self._original_index = original_index
 
         if self._output_file_template is not None and self._output_file is not None:
             raise MutuallyExclusiveError(
@@ -194,6 +202,10 @@ class ParameterGenerator(ABC):
     def write_meta(self) -> bool:
         return self._write_meta_flag
 
+    @property
+    def original_index(self) -> bool:
+        return self._original_index
+
     @abstractmethod
     def _validate(self) -> None:
         """Process parameter study input to verify schema.
@@ -244,7 +256,7 @@ class ParameterGenerator(ABC):
         self._samples = _convert_numpy_to_builtin(self._samples)
         self._create_set_hashes()
         self._create_set_names()
-        self._create_parameter_study()
+        self._create_parameter_study(original_index=self.original_index)
         if self._previous_parameter_study is not None and self._previous_parameter_study.is_file():
             self._merge_parameter_studies()
         self._verify_generated_parameter_study()
@@ -1979,6 +1991,7 @@ def _merge_parameter_studies(studies: list[xarray.Dataset], template: string.Tem
     :return: parameter study xarray Dataset
 
     :raises RuntimeError: if fewer than two parameter studies are in the input parameter `studies`
+    :raises RuntimeError: If any study contains the ``original_index`` coordinate or data variable.
     """
     if len(studies) < 2:
         raise RuntimeError("Not enough parameter studies provided for merge operation")
