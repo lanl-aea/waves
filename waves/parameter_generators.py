@@ -1982,6 +1982,10 @@ def _merge_parameter_studies(studies: list[xarray.Dataset], template: string.Tem
     """
     if len(studies) < 2:
         raise RuntimeError("Not enough parameter studies provided for merge operation")
+    if any([_original_coordinate_key in study.keys() for study in studies]):
+        raise RuntimeError(
+            f"The '{_original_coordinate_key}' coordinate is incompatible with merging parameter studies"
+        )
 
     # Swap dimensions from the set name to the set hash to merge identical sets
     swap_to_hash_index = {_set_coordinate_key: _hash_coordinate_key}
