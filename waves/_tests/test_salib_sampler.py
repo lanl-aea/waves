@@ -339,7 +339,7 @@ class TestSALibSampler:
             ).set_coords("set_hash"),
             does_not_raise,
         ),
-        "morris: good schema 5x2": (
+        "morris: good schema 5x2, non-unique samples and original index request": (
             "morris",
             {
                 "N": 5,
@@ -1258,8 +1258,8 @@ class TestSALibSampler:
                 for key in test_generate.parameter_study:
                     assert test_generate.parameter_study[key].dtype == numpy.float64
                 # Verify that the parameter set name creation method was called
-                # TODO: _set_names is an ordered object (dictionary). Fix test to compare dictionary-to-dictionary instead
-                # of implied consistency according to value order.
+                # TODO: _set_names is an ordered object (dictionary). Fix test to compare dictionary-to-dictionary
+                # instead of implied consistency according to value order.
                 assert list(test_generate._set_names.values()) == list(expected_dataset[_set_coordinate_key].to_numpy())
 
     merge_test = {

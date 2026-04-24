@@ -2805,10 +2805,10 @@ class TestParameterGenerator:
         with does_not_raise:
             generator = DummyGenerator({})
             generator._create_parameter_study(original_index=True)
-        with (
+        with (  # noqa: PT012
             pytest.raises(
                 RuntimeError,
-                match=r"The original index and previous parameter study features are mutually incompatible\."
+                match=r"The original index and previous parameter study features are mutually incompatible\.",
             ),
         ):
             generator = DummyGenerator({})
