@@ -2102,6 +2102,35 @@ def test_open_parameter_study() -> None:
 class TestParameterGenerator:
     """Class for testing ABC ParameterGenerator."""
 
+    original_index_schema_cases = {
+        "default": ({}, does_not_raise),
+        "only original index": ({}, does_not_raise),
+        "only previous parameter study": ({"previous_parameter_study": "dummy.h5"}, does_not_raise),
+        "both original index and previous parameter study": (
+            {"previous_parameter_study": "dummy.h5", "original_index": True},
+            pytest.raises(
+                MutuallyExclusiveError,
+                match=r"The original index and previous parameter study features are mutually incompatible\.",
+            ),
+        ),
+    }
+
+    @pytest.mark.parametrize(
+        ("generator_kwargs", "outcome"),
+        original_index_schema_cases.values(),
+        ids=original_index_schema_cases.keys(),
+    )
+    def test_original_index_mutually_exclusive_behavior(
+        self, generator_kwargs: dict, outcome: contextlib.nullcontext | pytest.RaisesExc
+    ) -> None:
+        with (
+            outcome,
+            patch("pathlib.Path.is_file", return_value=True),
+            patch("waves.parameter_generators.ParameterGenerator._validate"),
+            patch("waves.parameter_generators.ParameterGenerator._generate"),
+        ):
+            DummyGenerator({}, **generator_kwargs)
+
     property_parameter_schema_cases = {"schema": ({"parameter_1": [1]}, {"parameter_1": [1]})}
 
     @pytest.mark.parametrize(
