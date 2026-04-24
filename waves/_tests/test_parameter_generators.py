@@ -1025,7 +1025,7 @@ merge_parameter_studies_cases.update(
                         },
                     },
                     seed=42,
-                    original_index=True
+                    original_index=True,
                 ).parameter_study,
                 parameter_generators.SALibSampler(
                     "latin",
@@ -1038,7 +1038,7 @@ merge_parameter_studies_cases.update(
                         },
                     },
                     seed=42,
-                    original_index=True
+                    original_index=True,
                 ).parameter_study,
             ],
             None,
