@@ -141,7 +141,9 @@ skip_salib_analyze_incompatibility = (
         pytest.param("latin", "hdmr", True, marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
         pytest.param("latin", "rbd_fast", True),
         pytest.param("morris", "delta", True, marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
-        pytest.param("morris", "discrepancy", True, marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
+        pytest.param(
+            "morris", "discrepancy", True, marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]
+        ),
         pytest.param("morris", "hdmr", True, marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
         pytest.param("morris", "pawn", True, marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
         pytest.param("morris", "rbd_fast", True, marks=[pytest.mark.skip(reason=skip_salib_analyze_incompatibility)]),
@@ -172,10 +174,18 @@ def test_salib_analyze(sample_method: str, analyze_method: str, original_index: 
 
     # Samples and dependent calculation: WAVES+SALib
     generator = waves.parameter_generators.SALibSampler(
-        sample_method, {"problem": problem, "N": sample_count}, seed=seed, original_index=original_index
+        sample_method,
+        {"problem": problem, "N": sample_count},
+        seed=seed,
+        original_index=original_index,
     )
     if original_index:
-        waves_parameters = generator.parameter_study.sortby("original_index").to_dataframe().drop(columns=["set_hash", "original_index"]).to_numpy()
+        waves_parameters = (
+            generator.parameter_study.sortby("original_index")
+            .to_dataframe()
+            .drop(columns=["set_hash", "original_index"])
+            .to_numpy()
+        )
         numpy.testing.assert_allclose(salib_parameters, waves_parameters)
     else:
         waves_parameters = generator.parameter_study.to_dataframe().drop(columns=["set_hash"]).to_numpy()

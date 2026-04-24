@@ -1485,7 +1485,7 @@ class SALibSampler(ParameterGenerator, ABC):
        >>> waves_samples = parameter_generator.parameter_study.swap_dims({"set_name": "original_index"}).sortby("original_index").drop_vars(["set_hash", "set_name"]).to_dataframe().to_numpy()
        >>> numpy.allclose(waves_samples, salib_samples)
        True
-    """
+    """  # noqa: E501
 
     def __init__(self, sampler_class: str, *args, **kwargs) -> None:
         self._sampler_class = sampler_class
