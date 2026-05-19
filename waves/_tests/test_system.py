@@ -606,6 +606,8 @@ require_third_party_system_tests: list = [
             # Skipping on installation (e.g. rattler-build or actually installed) to preserve the in-repo tests.
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/1009
             pytest.mark.skipif(installed, reason="Quinoa fails in the rattler-build environment"),
+            # TODO: Remove CI skip after Quinoa team fixes AEA RHEL behavior
+            pytest.mark.skipif(testing_ci_user, reason="Quinoa installation broken on AEA RHEL9 CI servers"),
             # TODO: Remove HPC skip after Quinoa team fixes HPC behavior
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/1002
             pytest.mark.skipif(testing_hpc, reason="Quinoa fails on HPC"),
