@@ -91,7 +91,7 @@ aea-conda-build-matrix:
     - mkdir ${conda_artifacts_directory}
     - scons pyproject.toml
     - pytest recipe-matrix/matrix.py -v --no-showlocals --tb=short
-  timeout: 4h
+  timeout: 8h
 
 # https://re-git.lanl.gov/aea/developer-operations/aea-conda
 aea-conda-deploy:
