@@ -1,7 +1,9 @@
 """Run the conda-recipe build against a matrix of dependencies."""
 
 import copy
+import functools
 import itertools
+import operator
 import os
 import pathlib
 import string
@@ -26,10 +28,18 @@ package_versions = {
     "scons": ["4.6", "4.7", "4.8", "4.9", "4.10"],
 }
 test_matrix = pandas.DataFrame(list(itertools.product(*package_versions.values())), columns=package_versions.keys())
-test_matrix = test_matrix[~((test_matrix['python'] == "3.13") & (test_matrix['scons'] == "4.6"))]
-test_matrix = test_matrix[~((test_matrix['python'] == "3.14") & (test_matrix['scons'] == "4.6"))]
-test_matrix = test_matrix[~((test_matrix['python'] == "3.14") & (test_matrix['scons'] == "4.7"))]
-test_matrix = test_matrix[~((test_matrix['python'] == "3.14") & (test_matrix['scons'] == "4.8"))]
+remove_cases = [
+    {"python": "3.13", "scons": "4.6"},
+    {"python": "3.14", "scons": "4.6"},
+    {"python": "3.14", "scons": "4.7"},
+    {"python": "3.14", "scons": "4.8"},
+]
+remove_index = []
+for case in remove_cases:
+    conditions = [test_matrix[package] == version for package, version in case.items()]
+    remove_index.append(functools.reduce(operator.and_, conditions))
+remove_index = functools.reduce(operator.or_, remove_index)
+test_matrix = test_matrix[~remove_index]
 test_matrix = test_matrix.reset_index(drop=True)
 test_identifiers = ["-".join(f"{column}{value}" for column, value in row._asdict().items()) for row in test_matrix.itertuples(index=False)]
 
