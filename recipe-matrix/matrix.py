@@ -52,7 +52,7 @@ def test_matrix(request: pytest.FixtureRequest, python_version: str, scons_versi
     )
     subprocess.check_output(
         command,
-        env=environment,
+        env=test_environment,
         cwd=repository_directory,
         text=True,
         shell=True,
