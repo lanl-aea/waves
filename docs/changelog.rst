@@ -19,6 +19,7 @@ Enhancements
   :class:`waves.parameter_generators.CatenationStudy` and the ``previous_parameter_study`` argument. See the
   :class:`waves.parameter_generators.SALibSampler` for usage and caveats (:issue:`1014`, :merge:`1312`). By `Kyle
   Brindley`_.
+- Support files in list-table syntax in the Sphinx scanner (:issue:`1018`, :merge:`1315`). By `Kyle Brindley`_.
 
 ******************
 1.4.2 (2026-04-23)
