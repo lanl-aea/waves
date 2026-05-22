@@ -116,7 +116,6 @@ author_list = [
 ]
 author_latex = r" \and ".join(author_list)
 latex_project_name = project_name.replace("_", "-")
-documentation_source_dir = pathlib.Path("docs")
 modsim_package_dir = pathlib.Path("modsim_package")
 test_source_dir = "modsim_package/tests"
 # The shared cache should be hardcoded to point to the project's shared cache on a shared file system
@@ -188,7 +187,7 @@ env.Alias("environment", environment_target)
 # Project documentation
 SConscript(
     "docs/docs.scons",
-    variant_dir=build_directory / documentation_source_dir,
+    variant_dir=build_directory / "docs",
     exports={"env": env, "project_variables": project_variables},
 )
 
