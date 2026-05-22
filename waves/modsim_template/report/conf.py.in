@@ -16,7 +16,7 @@ copyright = f"2022-{datetime.date.today().year} Triad National Security, LLC. Al
 rst_prolog = f".. |PROJECT| replace:: {project.upper()}\n.. |project| replace:: {project}\n.. include:: targets.txt"
 
 # -- General configuration ---------------------------------------------------
-master_doc = "index"
+root_doc = "index"
 
 # Add any Sphinx extension module names here, as strings.
 extensions = ["sphinxcontrib.bibtex"]
@@ -48,5 +48,5 @@ latex_elements = {
     "maketitle": f"\\newcommand\\sphinxbackoftitlepage{{{copyright_latex}}}\\sphinxmaketitle",
 }
 latex_documents = [
-    (master_doc, latex_basename, None, author_latex, "howto"),
+    (root_doc, latex_basename, None, author_latex, "howto"),
 ]
