@@ -2742,6 +2742,8 @@ sphinx_scanner_input = {
     "bibliography directive": (".. figure:: dummy.bib", ["dummy.bib"]),
     "no match": (".. notsuppored:: notsupported.txt", []),
     "indented": (".. only:: html\n\n   .. include:: dummy.txt", ["dummy.txt"]),
+    "list table": ("   * - .. figure:: dummy.png", ["dummy.png"]),
+    "list table 2": ("     - .. figure:: dummy.png", ["dummy.png"]),
     "one match multiline": (".. include:: dummy.txt\n.. notsuppored:: notsupported.txt", ["dummy.txt"]),
     "three match multiline": (
         ".. include:: dummy.txt\n.. figure:: dummy.png\n.. bibliography:: dummy.bib",
