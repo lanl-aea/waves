@@ -186,21 +186,17 @@ env.Alias("environment", environment_target)
 
 # Add documentation target(s)
 # Project documentation
-documentation_build_directory = build_directory / documentation_source_dir
 SConscript(
-    documentation_source_dir / "SConscript",
-    variant_dir=documentation_build_directory,
+    "docs/docs.scons",
+    variant_dir=build_directory / documentation_source_dir,
     exports={"env": env, "project_variables": project_variables},
 )
 
 # Analysis report
-report_dir = pathlib.Path("report")
-report_build_directory = build_directory / report_dir
 SConscript(
-    report_dir / "SConscript",
-    variant_dir=report_build_directory,
+    "docs/report.scons",
+    variant_dir=build_directory / "report",
     exports={"env": env, "project_variables": project_variables},
-    duplicate=True,
 )
 
 # Define parameter generators
