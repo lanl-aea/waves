@@ -3,6 +3,7 @@ channels:
   - nodefaults
 
 dependencies:
+  - pandas
   - pytest >=6
   - rattler-build >=0.62
   - scons >=4.6
