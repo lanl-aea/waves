@@ -2739,7 +2739,7 @@ sphinx_scanner_input = {
     "literalinclude directive": (".. literalinclude:: dummy.txt", ["dummy.txt"]),
     "image directive": (".. image:: dummy.png", ["dummy.png"]),
     "figure directive": (".. figure:: dummy.png", ["dummy.png"]),
-    "bibliography directive": (".. figure:: dummy.bib", ["dummy.bib"]),
+    "bibliography directive": (".. bibliography:: dummy.bib", ["dummy.bib"]),
     "no match": (".. notsuppored:: notsupported.txt", []),
     "indented": (".. only:: html\n\n   .. include:: dummy.txt", ["dummy.txt"]),
     "list table": ("   * - .. figure:: dummy.png", ["dummy.png"]),
