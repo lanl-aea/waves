@@ -11,10 +11,6 @@ Requires the following ``SConscript(..., exports={})``
 * ``project_variables`` - The project variables for use in Sphinx documentation parameters
 """
 
-import pathlib
-
-import waves
-
 # Inherit the parent construction environment
 Import(["env", "project_variables"])
 
@@ -57,7 +53,7 @@ report_files = [
 
 # PDF Report build task
 targets = [f"latex/{project_variables['report_pdf']}"]
-sources = report_files 
+sources = report_files
 report.extend(
     env.SphinxPDF(
         target=targets,
