@@ -32,8 +32,12 @@
     - conda env export
     # texlive module setting LC_ALL breaks Abaqus 2025
     - unset LC_ALL
+    # Redirect temporary and cache directories to the Gitlab-CI job directory
+    - export PYTEST_ADDOPTS="--basetemp=${PWD}/pytest-temp"
+    - export RATTLER_CACHE_DIR="${PWD}/rattler-cache"
+    - export MPLCONFIGDIR="${PWD}/matplotlib"
   after_script:
-    - rm -r $PWD/env $PWD/pkgs || true
+    - rm -r $PWD/env $PWD/pkgs $PWD/pytest-temp $PWD/rattler-cache $PWD/matplotlib|| true
 
 .win-job-environment: &win-job-environment
   variables:
@@ -69,6 +73,10 @@
     - conda activate $prefix
     - conda info
     - python -c "import getpass; print(getpass.getuser())"
+    # Redirect temporary and cache directories to the Gitlab-CI job directory
+    - $env:PYTEST_ADDOPTS="--basetemp=$temporary_directory\pytest-temp"
+    - export RATTLER_CACHE_DIR="$temporary_directory\rattler-cache"
+    - export MPLCONFIGDIR="$temporary_directory\matplotlib"
   after_script:
     - if ([string]::IsNullOrEmpty($CI_JOB_ID)) { exit 1 }
     - Write-Output $CI_JOB_ID
