@@ -24,7 +24,7 @@ report = []
 # Copy project files required by the documentation
 copy_files = [
     ("README.txt", "#/README.rst"),
-    ("conf.py.in", "#/report/conf.py.in.report"),
+    ("conf.py.in", "#/docs/conf.py.in.report"),
 ]
 for target, source in copy_files:
     report.extend(
@@ -44,40 +44,20 @@ report.extend(
 )
 
 # Copy documentation source files re-used in the report
-documentation_abspath = env["documentation_abspath"]
-report_copy_list = [
-    documentation_abspath / "nominal.rst",
-    documentation_abspath / "project_brief.txt",
-    documentation_abspath / "zreferences.rst",
-    documentation_abspath / "references.bib",
-    documentation_abspath / "targets.txt",
-    documentation_abspath / "simulation_description.txt",
-    documentation_abspath / "simulation_description_short.txt",
-    documentation_abspath / "simulation_material.txt",
-    documentation_abspath / "rectangle_schematic.png",
-    documentation_abspath / "stress_strain_comparison.png",
-    documentation_abspath / "theory.txt",
-    documentation_abspath / "mesh_convergence.rst",
-    documentation_abspath / "mesh_convergence_stress.png",
-    documentation_abspath / "mesh_convergence_conclusions.txt",
-    documentation_abspath / "nominal_conclusions.txt",
+report_files = [
+    "conf.py",
+    "report.rst",
+    "nominal.rst",
+    "zreferences.rst",
+    "references.bib",
+    "mesh_convergence.rst",
+    # Found in conf.py, which is not scanned for implicit dependencies
+    "targets.txt",
 ]
-report_copy_list = [pathlib.Path(source_file) for source_file in report_copy_list]
-# Call waves copy_substfile directly as a function instead of a pseudo-builder.  Required to help the Sphinx scanner and
-# SCons find ``build/report/README.txt`` instead of looking for ``docs/README.txt``.
-report.extend(
-    waves.scons_extensions.copy_substfile(
-        Environment(),
-        report_copy_list,
-        substitution_dictionary=env.SubstitutionSyntax(
-            project_variables,
-        ),
-    )
-)
 
 # PDF Report build task
 targets = [f"latex/{project_variables['report_pdf']}"]
-sources = ["report.rst"] + [source_file.name.rstrip(".in") for source_file in report_copy_list]
+sources = report_files 
 report.extend(
     env.SphinxPDF(
         target=targets,
