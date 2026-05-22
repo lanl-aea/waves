@@ -21,6 +21,8 @@ Enhancements
   Brindley`_.
 - Support scanning for files in directives from unordered list and list-table syntax in the Sphinx scanner
   (:issue:`1018`, :merge:`1315`). By `Kyle Brindley`_.
+- Simplify the modsim template report workflow definition by co-locating in the documentation source directory. By `Kyle
+  Brindley`_.
 
 Internal Changes
 ================
