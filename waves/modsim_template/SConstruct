@@ -192,7 +192,7 @@ SConscript(
 report_dir = pathlib.Path("report")
 report_build_directory = build_directory / report_dir
 SConscript(
-    report_dir / "SConscript",
+    report_dir / "report.scons",
     variant_dir=report_build_directory,
     exports={"env": env, "project_variables": project_variables},
     duplicate=True,
