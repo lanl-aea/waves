@@ -20,6 +20,12 @@ Enhancements
   :class:`waves.parameter_generators.SALibSampler` for usage and caveats (:issue:`1014`, :merge:`1312`). By `Kyle
   Brindley`_.
 
+Internal Changes
+================
+- Manage cache behavior and environment changes in rattler-build on the CI servers. By `Kyle Brindley`_.
+- Enable parallel safe rattler-build matrix for testing version combinations of Python and key dependencies. By `Kyle
+  Brindley`_.
+
 ******************
 1.4.2 (2026-04-23)
 ******************
