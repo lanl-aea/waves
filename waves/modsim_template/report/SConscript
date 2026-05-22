@@ -21,19 +21,12 @@ Import(["env", "project_variables"])
 # Set empty workflow list
 report = []
 
-# Perform variable substitution on Sphinx configuration file
-report.extend(
-    env.Substfile(
-        "conf.py.in",
-        SUBST_DICT=env.SubstitutionSyntax(project_variables),
-    )
-)
-
-# Copy project root files required by the documentation
-root_files = [
+# Copy project files required by the documentation
+copy_files = [
     ("README.txt", "#/README.rst"),
+    ("conf.py.in", "#/report/conf.py.in.report"),
 ]
-for target, source in root_files:
+for target, source in copy_files:
     report.extend(
         env.Command(
             target=[target],
@@ -41,6 +34,14 @@ for target, source in root_files:
             action=Copy("$TARGET", "$SOURCE", False),
         )
     )
+
+# Perform variable substitution on Sphinx configuration file
+report.extend(
+    env.Substfile(
+        "conf.py.in",
+        SUBST_DICT=env.SubstitutionSyntax(project_variables),
+    )
+)
 
 # Copy documentation source files re-used in the report
 documentation_abspath = env["documentation_abspath"]
