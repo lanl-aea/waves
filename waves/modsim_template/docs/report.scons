@@ -6,7 +6,6 @@ Requires the following ``SConscript(..., exports={})``
 * ``env`` - The SCons construction environment with the following required keys
 
   * ``SPHINX_BUILD`` - String path for the Sphinx build executable
-  * ``documentation_abspath`` - String absolute path to the modsim HTML documentation source files
 
 * ``project_variables`` - The project variables for use in Sphinx documentation parameters
 """
@@ -67,3 +66,7 @@ env.Alias("regression", report)
 # Collector alias to build the PDF report
 parent_directory = Dir(".").srcnode().name
 env.Alias(parent_directory, report)
+
+if not env["SPHINX_BUILD"]:
+    print("Program 'sphinx-build' was not found in construction environment. Ignoring Sphinx target(s)")
+    Ignore([".", "report"], report)
