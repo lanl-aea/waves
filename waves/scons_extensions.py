@@ -2906,19 +2906,48 @@ def abaqus_input_scanner() -> SCons.Scanner.Scanner:
 
 
 def sphinx_scanner() -> SCons.Scanner.Scanner:
-    """SCons scanner that searches for directives.
+    """SCons scanner that adds sources for included files by directive.
 
-    * ``.. include::``
-    * ``.. literalinclude::``
-    * ``.. image::``
-    * ``.. figure::``
-    * ``.. bibliography::``
+    Returns files from directives
 
-    inside ``.rst`` and ``.txt`` files
+    * ``.. include:: file.extension``
+    * ``.. literalinclude:: file.extension``
+    * ``.. image:: file.extension``
+    * ``.. figure:: file.extension``
+    * ``.. bibliography:: file.extension``
+
+    inside ``.rst`` and ``.txt`` files. Searchs for directives with leading white space and inside unordered list
+    syntax.
+
+    .. code-block:: rst
+
+       .. include:: file.txt
+
+    .. code-block:: rst
+
+       .. only:: html
+
+          .. include:: file.txt
+
+    .. code-block:: rst
+
+       * .. figure:: figure.png
+
+         - .. figure:: subfigure.png
+
+    .. code-block:: rst
+
+       .. list-table:: title
+
+          * .. figure:: figure.png
+
+            - .. figure:: subfigure.png
 
     :return: Sphinx source file dependency Scanner
     """
-    return _custom_scanner(r"^\s*\.\. (?:include|literalinclude|image|figure|bibliography)::\s*(.+)$", [".rst", ".txt"])
+    return _custom_scanner(
+        r"^[\s\*-]*\.\. (?:include|literalinclude|image|figure|bibliography)::\s*(.+)$", [".rst", ".txt"]
+    )
 
 
 def sphinx_build(
