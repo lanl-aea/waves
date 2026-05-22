@@ -2918,7 +2918,9 @@ def sphinx_scanner() -> SCons.Scanner.Scanner:
 
     :return: Sphinx source file dependency Scanner
     """
-    return _custom_scanner(r"^\s*\.\. (?:include|literalinclude|image|figure|bibliography)::\s*(.+)$", [".rst", ".txt"])
+    return _custom_scanner(
+        r"^[\s\*-]*\.\. (?:include|literalinclude|image|figure|bibliography)::\s*(.+)$", [".rst", ".txt"]
+    )
 
 
 def sphinx_build(

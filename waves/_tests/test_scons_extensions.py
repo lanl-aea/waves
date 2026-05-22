@@ -2735,18 +2735,20 @@ def test_abaqus_input_scanner(content: str, expected_dependencies: list[str]) ->
 
 sphinx_scanner_input = {
     # Test name, content, expected_dependencies
-    "include directive": (".. include:: dummy.txt", ["dummy.txt"]),
-    "literalinclude directive": (".. literalinclude:: dummy.txt", ["dummy.txt"]),
-    "image directive": (".. image:: dummy.png", ["dummy.png"]),
-    "figure directive": (".. figure:: dummy.png", ["dummy.png"]),
-    "bibliography directive": (".. bibliography:: dummy.bib", ["dummy.bib"]),
-    "no match": (".. notsuppored:: notsupported.txt", []),
-    "indented": (".. only:: html\n\n   .. include:: dummy.txt", ["dummy.txt"]),
-    "list table": ("   * - .. figure:: dummy.png", ["dummy.png"]),
-    "list table 2": ("     - .. figure:: dummy.png", ["dummy.png"]),
-    "one match multiline": (".. include:: dummy.txt\n.. notsuppored:: notsupported.txt", ["dummy.txt"]),
+    "include directive": (r".. include:: dummy.txt", ["dummy.txt"]),
+    "literalinclude directive": (r".. literalinclude:: dummy.txt", ["dummy.txt"]),
+    "image directive": (r".. image:: dummy.png", ["dummy.png"]),
+    "figure directive": (r".. figure:: dummy.png", ["dummy.png"]),
+    "bibliography directive": (r".. bibliography:: dummy.bib", ["dummy.bib"]),
+    "no match": (r".. notsuppored:: notsupported.txt", []),
+    "indented": (r".. only:: html" + "\n\n" + r"   .. include:: dummy.txt", ["dummy.txt"]),
+    "list table": (
+        r".. list-table:: title" + "\n" + r"   * - .. figure:: dummy1.png" + "\n" + "     - .. figure:: dummy2.png",
+        ["dummy1.png", "dummy2.png"],
+    ),
+    "one match multiline": (r".. include:: dummy.txt" + "\n" + r".. notsuppored:: notsupported.txt", ["dummy.txt"]),
     "three match multiline": (
-        ".. include:: dummy.txt\n.. figure:: dummy.png\n.. bibliography:: dummy.bib",
+        r".. include:: dummy.txt" + "\n" + r".. figure:: dummy.png" + "\n" + r".. bibliography:: dummy.bib",
         ["dummy.txt", "dummy.png", "dummy.bib"],
     ),
 }
