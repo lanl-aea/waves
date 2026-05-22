@@ -2742,6 +2742,10 @@ sphinx_scanner_input = {
     "bibliography directive": (r".. bibliography:: dummy.bib", ["dummy.bib"]),
     "no match": (r".. notsuppored:: notsupported.txt", []),
     "indented": (r".. only:: html" + "\n\n" + r"   .. include:: dummy.txt", ["dummy.txt"]),
+    "unordered list": (
+        r"* .. figure:: dummy1.png" + "\n\n" + "  - .. figure:: dummy2.png",
+        ["dummy1.png", "dummy2.png"],
+    ),
     "list table": (
         r".. list-table:: title" + "\n" + r"   * - .. figure:: dummy1.png" + "\n" + "     - .. figure:: dummy2.png",
         ["dummy1.png", "dummy2.png"],
