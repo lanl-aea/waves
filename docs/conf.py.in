@@ -66,10 +66,10 @@ rst_prolog = (
 )
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 if tags.has("man"):
-    master_doc = "man_index"
-    include_patterns = [f"{master_doc}.rst"]
+    root_doc = "man_index"
+    include_patterns = [f"{root_doc}.rst"]
 else:
-    master_doc = "index"
+    root_doc = "index"
     exclude_patterns.append("man_*.rst")
 
 
@@ -166,11 +166,11 @@ latex_elements = {
     "maketitle": maketitle,
 }
 latex_documents = [
-    (master_doc, latex_basename, _project_name.upper(), author_latex, "manual"),
+    (root_doc, latex_basename, _project_name.upper(), author_latex, "manual"),
 ]
 
 # -- Options for manual page output ---------------------------------------
-man_pages = [(master_doc, project.lower(), _project_name, [author_manpage], 1)]
+man_pages = [(root_doc, project.lower(), _project_name, [author_manpage], 1)]
 
 # Copy button settings
 copybutton_prompt_text = r">>> |> |\.\.\. |\$ |\+(?!\+)|PS > "

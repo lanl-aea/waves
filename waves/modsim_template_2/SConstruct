@@ -116,7 +116,6 @@ author_list = [
 ]
 author_latex = r" \and ".join(author_list)
 latex_project_name = project_name.replace("_", "-")
-documentation_source_dir = pathlib.Path("docs")
 modsim_package_dir = pathlib.Path("modsim_package")
 test_source_dir = "modsim_package/tests"
 # The shared cache should be hardcoded to point to the project's shared cache on a shared file system
@@ -131,7 +130,6 @@ project_variables = {
     "author_latex": author_latex,
     "documentation_pdf": f"{latex_project_name}-{version}.pdf",
     "report_pdf": f"{latex_project_name}-{version}-report.pdf",
-    "documentation_abspath": project_directory / documentation_source_dir,
     "test_source_abspath": project_directory / test_source_dir,
     "parameter_study_build_abspath": parameter_study_build_directory.resolve(),
 }
@@ -186,21 +184,17 @@ env.Alias("environment", environment_target)
 
 # Add documentation target(s)
 # Project documentation
-documentation_build_directory = build_directory / documentation_source_dir
 SConscript(
-    documentation_source_dir / "SConscript",
-    variant_dir=documentation_build_directory,
+    "docs/docs.scons",
+    variant_dir=build_directory / "docs",
     exports={"env": env, "project_variables": project_variables},
 )
 
 # Analysis report
-report_dir = pathlib.Path("report")
-report_build_directory = build_directory / report_dir
 SConscript(
-    report_dir / "SConscript",
-    variant_dir=report_build_directory,
+    "docs/report.scons",
+    variant_dir=build_directory / "report",
     exports={"env": env, "project_variables": project_variables},
-    duplicate=True,
 )
 
 # Define parameter generators

@@ -1,0 +1,72 @@
+#! /usr/bin/env python
+"""Configure modsim_template report workflow.
+
+Requires the following ``SConscript(..., exports={})``
+
+* ``env`` - The SCons construction environment with the following required keys
+
+  * ``SPHINX_BUILD`` - String path for the Sphinx build executable
+
+* ``project_variables`` - The project variables for use in Sphinx documentation parameters
+"""
+
+# Inherit the parent construction environment
+Import(["env", "project_variables"])
+
+# Set empty workflow list
+report = []
+
+# Copy project files required by the documentation
+copy_files = [
+    ("README.txt", "#/README.rst"),
+    ("conf.py.in", "#/docs/conf.py.in.report"),
+]
+for target, source in copy_files:
+    report.extend(
+        env.Command(
+            target=[target],
+            source=[source],
+            action=Copy("$TARGET", "$SOURCE", False),
+        )
+    )
+
+# Perform variable substitution on Sphinx configuration file
+report.extend(
+    env.Substfile(
+        "conf.py.in",
+        SUBST_DICT=env.SubstitutionSyntax(project_variables),
+    )
+)
+
+# Copy documentation source files re-used in the report
+report_files = [
+    "conf.py",
+    "report.rst",
+    "nominal.rst",
+    "zreferences.rst",
+    "references.bib",
+    "mesh_convergence.rst",
+    # Found in conf.py, which is not scanned for implicit dependencies
+    "targets.txt",
+]
+
+# PDF Report build task
+targets = [f"latex/{project_variables['report_pdf']}"]
+sources = report_files
+report.extend(
+    env.SphinxPDF(
+        target=targets,
+        source=sources,
+    )
+)
+env.Clean(report, [Dir("latex"), *sources])
+env.Alias("report", report)
+env.Alias("regression", report)
+
+# Collector alias to build the PDF report
+parent_directory = Dir(".").srcnode().name
+env.Alias(parent_directory, report)
+
+if not env["SPHINX_BUILD"]:
+    print("Program 'sphinx-build' was not found in construction environment. Ignoring Sphinx target(s)")
+    Ignore([".", "report"], report)
