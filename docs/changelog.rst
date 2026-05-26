@@ -29,6 +29,7 @@ Internal Changes
 - Manage cache behavior and environment changes in rattler-build on the CI servers. By `Kyle Brindley`_.
 - Enable parallel safe rattler-build matrix for testing version combinations of Python and key dependencies. By `Kyle
   Brindley`_.
+- Skip visualize unit tests with frequent intermittent false negatives on Windows. By `Kyle Brindley`_.
 
 ******************
 1.4.2 (2026-04-23)

@@ -13,7 +13,6 @@ available substitutions.
 """
 
 import copy
-import getpass
 import importlib
 import inspect
 import os
@@ -29,7 +28,7 @@ from unittest.mock import Mock, patch
 import pytest
 
 from waves import _WAVES_CLI_COMMAND, _settings, _utilities
-from waves._tests.common import platform_check
+from waves._tests.common import check_ci_user, platform_check
 
 MODULE_NAME = pathlib.Path(__file__).stem
 PACKAGE_PARENT_PATH = _settings._project_root_abspath.parent
@@ -40,32 +39,6 @@ testing_windows, root_fs, testing_macos = platform_check()
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
 testing_hpc = shutil.which("sbatch") is not None
 python_313_or_above = sys.version_info >= (3, 13)
-
-
-# TODO: Remove user check when Windows CI server Gitlab-Runner account has access to the Abaqus license server
-# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
-def check_ci_user() -> bool:
-    user = getpass.getuser().lower()
-    return "pn2606796" in user or user == "gitlab-runner"
-
-
-test_check_ci_user_cases = {
-    "windows ci user": ("PN2606796$", True),
-    "windows ci user without trailing service account character": ("PN2606796", True),
-    "macos ci user": ("gitlab-runner", True),
-    "player character": ("roppenheimer", False),
-}
-
-
-@pytest.mark.parametrize(
-    ("mock_user", "expected"),
-    test_check_ci_user_cases.values(),
-    ids=test_check_ci_user_cases.keys(),
-)
-def test_check_ci_user(mock_user: str, expected: bool) -> None:
-    with patch("getpass.getuser", return_value=mock_user):
-        testing_ci_user = check_ci_user()
-    assert testing_ci_user is expected
 
 
 def check_installed(package_name: str = "waves") -> bool:
