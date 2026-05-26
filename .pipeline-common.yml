@@ -32,12 +32,13 @@
     - conda env export
     # texlive module setting LC_ALL breaks Abaqus 2025
     - unset LC_ALL
-    # Redirect temporary and cache directories to the Gitlab-CI job directory
-    - export PYTEST_ADDOPTS="--basetemp=${PWD}/pytest-temp"
-    - export RATTLER_CACHE_DIR="${PWD}/rattler-cache"
-    - export MPLCONFIGDIR="${PWD}/matplotlib"
+    # Set cache directories for some common Python packages
+    - cache_directories="${PWD}/cache"
+    - export MPLCONFIGDIR="${cache_directories}/matplotlib"
+    - export RATTLER_CACHE_DIR="${cache_directories}/rattler"
+    - export PYTEST_ADDOPTS="--basetemp=${cache_directories}/pytest-temp"
   after_script:
-    - rm -r $PWD/env $PWD/pkgs $PWD/pytest-temp $PWD/rattler-cache $PWD/matplotlib || true
+    - rm -r $PWD/env $PWD/pkgs $PWD/cache || true
 
 .win-job-environment: &win-job-environment
   variables:
@@ -73,11 +74,11 @@
     - conda activate $prefix
     - conda info
     - python -c "import getpass; print(getpass.getuser())"
-    # Redirect temporary and cache directories to the Gitlab-CI job directory
-    - New-Item -ItemType Directory -Path $temporary_directory\pytest-temp
-    - $env:PYTEST_ADDOPTS="--basetemp=$temporary_directory\pytest-temp"
-    - $env:RATTLER_CACHE_DIR="$temporary_directory\rattler-cache"
-    - $env:MPLCONFIGDIR="$temporary_directory\matplotlib"
+    # Set cache directories for some common Python packages
+    - $cache_directories="$temporary_directory\cache"
+    - $env:PYTEST_ADDOPTS="--basetemp=$cache_directories\pytest-temp"
+    - $env:MPLCONFIGDIR="$cache_directories\matplotlib"
+    - $env:RATTLER_CACHE_DIR="$cache_directories\rattler"
   after_script:
     - if ([string]::IsNullOrEmpty($CI_JOB_ID)) { exit 1 }
     - Write-Output $CI_JOB_ID

@@ -19,8 +19,6 @@ default:
     - shell
     - aea
     - linux
-    # TODO: remove server specific tag when all CI servers run as expected
-    - sstbigbird
 
 aea-developer-test:
   extends:
