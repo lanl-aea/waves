@@ -83,6 +83,8 @@ tests:
         - sphinx-argparse
         - sphinx-book-theme
         - sphinxcontrib-bibtex
+        - if: win
+          then: tk
 
 about:
   license: BSD-3-Clause
