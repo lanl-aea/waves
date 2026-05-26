@@ -35,6 +35,7 @@ test_check_ci_user_cases = {
     "windows ci user": ("PN2606796$", True),
     "windows ci user without trailing service account character": ("PN2606796", True),
     "macos ci user": ("gitlab-runner", True),
+    "aea rhel ci user": ("aea_service", True),
     "player character": ("roppenheimer", False),
 }
 

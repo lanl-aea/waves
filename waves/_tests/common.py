@@ -28,7 +28,7 @@ def platform_check() -> tuple[bool, str, bool]:
 
 def check_ci_user() -> bool:
     user = getpass.getuser().lower()
-    return "pn2606796" in user or user == "gitlab-runner"
+    return "pn2606796" in user or user == "gitlab-runner" or user == "aea_service"
 
 
 def consistent_hash_parameter_check(
