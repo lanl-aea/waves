@@ -1,3 +1,4 @@
+import getpass
 import pathlib
 import platform
 from unittest.mock import patch
@@ -23,6 +24,11 @@ def platform_check() -> tuple[bool, str, bool]:
     if platform.system().lower() == "darwin":
         testing_macos = True
     return testing_windows, root_fs, testing_macos
+
+
+def check_ci_user() -> bool:
+    user = getpass.getuser().lower()
+    return "pn2606796" in user or user == "gitlab-runner"
 
 
 def consistent_hash_parameter_check(
