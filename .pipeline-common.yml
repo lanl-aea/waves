@@ -38,7 +38,7 @@
     - export RATTLER_CACHE_DIR="${PWD}/rattler-cache"
     - export MPLCONFIGDIR="${PWD}/matplotlib"
   after_script:
-    - rm -r $PWD/env $PWD/pkgs $PWD/pytest-temp $PWD/rattler-cache $PWD/matplotlib|| true
+    - rm -r $PWD/env $PWD/pkgs $PWD/pytest-temp $PWD/rattler-cache $PWD/matplotlib || true
 
 .win-job-environment: &win-job-environment
   variables:
@@ -77,8 +77,8 @@
     # Redirect temporary and cache directories to the Gitlab-CI job directory
     - New-Item -ItemType Directory -Path $temporary_directory\pytest-temp
     - $env:PYTEST_ADDOPTS="--basetemp=$temporary_directory\pytest-temp"
-    - export RATTLER_CACHE_DIR="$temporary_directory\rattler-cache"
-    - export MPLCONFIGDIR="$temporary_directory\matplotlib"
+    - $env:RATTLER_CACHE_DIR="$temporary_directory\rattler-cache"
+    - $env:MPLCONFIGDIR="$temporary_directory\matplotlib"
   after_script:
     - if ([string]::IsNullOrEmpty($CI_JOB_ID)) { exit 1 }
     - Write-Output $CI_JOB_ID
