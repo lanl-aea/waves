@@ -7,8 +7,12 @@ import subprocess
 import pytest
 
 from waves import _utilities
+from waves._tests.common import platform_check
 
 does_not_raise = contextlib.nullcontext()
+testing_windows, root_fs, testing_macos = platform_check()
+
+pytestmark = pytest.mark.skipif(testing_windows, reason="Non-windows shell tests", allow_module_level=True)
 
 sh = shutil.which("sh")
 bash = shutil.which("bash")
