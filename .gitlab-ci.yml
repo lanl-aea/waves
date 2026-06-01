@@ -29,7 +29,6 @@ aea-developer-test:
     abaqus_command_prefix: "/apps/abaqus/Commands"
     cubit_command_prefix: "/apps"
   artifacts:
-    expire_in: '2 hrs'
     paths:
       - build/pytest/coverage
       - build/docs/html-internal
@@ -60,7 +59,6 @@ aea-conda-build-internal:
     recipe_directory: "recipe-internal"
     rattler_build_extra_options: "--env-isolation conda-build"
   artifacts:
-    expire_in: '2 hrs'
     paths:
       - conda-bld/noarch/waves-*-*.conda
 
@@ -117,7 +115,6 @@ aea-pip-build:
   variables:
     environment_file: "pip-build.yml"
   artifacts:
-    expire_in: '2 hrs'
     paths:
       - build/dist/waves-*.tar.gz
       - build/dist/waves-*.whl
