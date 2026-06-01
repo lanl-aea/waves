@@ -232,7 +232,7 @@ CI configuration file. The current command may be found as
 
    $ output_folder='conda-bld'
    $ mkdir ${output_folder}
-   $ VERSION=$(python -m setuptools_scm) conda build recipe --channel conda-forge --no-anaconda-upload --output-folder ${output_folder}
+   $ VERSION=$(python -m setuptools_scm) rattler-build build --recipe recipe --channel conda-forge --output-dir conda-bld
 
 A second recipe that bundles the LANL internally linked documentation is found in ``waves/recipe-internal`` and can be
 built similarly by replacing ``recipe`` with ``recipe-internal`` in the above command.

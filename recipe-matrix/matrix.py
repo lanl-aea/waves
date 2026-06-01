@@ -13,7 +13,7 @@ import pandas
 import pytest
 
 environment = os.environ.copy()
-OUTPUT_FOLDER = "--output-folder ${conda_build_artifacts}" if "conda_build_artifacts" in environment else ""
+OUTPUT_FOLDER = "--output-dir ${conda_build_artifacts}" if "conda_build_artifacts" in environment else ""
 repository_directory = pathlib.Path(os.path.realpath(__file__)).parent.parent
 
 command_template = string.Template(
