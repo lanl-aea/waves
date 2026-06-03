@@ -259,6 +259,7 @@ find_program_input = {
     ),
 }
 
+
 @pytest.mark.parametrize(
     ("names", "kwargs", "checkprog_side_effect", "first_found_path"),
     find_program_input.values(),
@@ -289,14 +290,14 @@ def test_find_program(
         program = env.FindProgram(names, **kwargs)
     assert program == first_found_path
 
-# Simple test matrix: (command, kwargs, expected_shell, expected_cache, expected_overwrite)
+
 @pytest.mark.parametrize(
     ("command", "kwargs", "expected_shell", "expected_cache", "expected_overwrite"),
     [
         ("source /etc/profile", {}, "bash", None, False),
         ("conda activate test_env", {"shell": "zsh", "cache": "/tmp", "overwrite_cache": True}, "zsh", "/tmp", True),
     ],
-    ids=["defaults", "custom_values"]
+    ids=["defaults", "custom_values"],
 )
 def test_waves_shell_environment_init(
     command: str,
@@ -306,16 +307,20 @@ def test_waves_shell_environment_init(
     expected_overwrite: bool,
 ) -> None:
     with patch("waves.scons_extensions.shell_environment") as mock_shell_env:
-        env = WAVESShellEnvironment(command=command, **kwargs)
-
-        # Verify that the subclass correctly forwarded parameters to the utility function
-        mock_shell_env.assert_called_once_with(
-            env,
+        env = WAVESShellEnvironment(  # noqa: F841
             command=command,
-            shell=expected_shell,
-            cache=expected_cache,
-            overwrite_cache=expected_overwrite,
+            shell=kwargs.get("shell", "bash"),
+            cache=kwargs.get("cache"),
+            overwrite_cache=kwargs.get("overwrite_cache", False)
         )
+
+        mock_shell_env.assert_called_once_with(
+            command,
+            expected_shell,
+            expected_cache,
+            expected_overwrite,
+        )
+
 
 @pytest.mark.parametrize(
     ("names", "kwargs", "checkprog_side_effect", "first_found_path"),

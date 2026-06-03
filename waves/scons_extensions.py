@@ -5374,16 +5374,14 @@ class WAVESShellEnvironment(WAVESEnvironment):
             **kwargs: Keyword arguments passed to WAVESEnvironment.
 
         """
-        kwargs.pop("command", None)
-
         super().__init__(*args, **kwargs)
 
+        # Call the module function directly, passing 'self' as the first positional argument
         waves.scons_extensions.shell_environment(
-            self,
-            command=command,
-            shell=shell,
-            cache=cache,
-            overwrite_cache=overwrite_cache,
+            command,
+            shell,
+            cache,
+            overwrite_cache,
         )
 
 
