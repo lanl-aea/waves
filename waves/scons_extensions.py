@@ -19,7 +19,6 @@ import SCons.Scanner
 import SCons.Script
 from SCons.Script.SConscript import SConsEnvironment
 
-import waves
 from waves import _WAVES_CLI_COMMAND, _settings, _utilities, parameter_generators
 
 _exclude_from_namespace = set(globals().keys())
@@ -5352,36 +5351,28 @@ class WAVESEnvironment(SConsEnvironment):
 
 
 class WAVESShellEnvironment(WAVESEnvironment):
-    """Subclass of WAVESEnvironment that automatically calls waves.scons_extensions.shell_environment."""
+    """Initializes a shell environment before inheriting the builders/scanners/methods from the WAVESEnvironment.
+
+    Subclass of WAVESEnvironment that automatically calls and initializes the waves.scons_extensions.shell_environment.
+
+    :param command: the shell command to execute
+    :param shell: the shell to use when executing command by absolute or relative path
+    :param cache: absolute or relative path to read/write a shell environment dictionary. Will be written as YAML
+        formatted file regardless of extension.
+    :param overwrite_cache: Ignore previously cached files if they exist.
+    """
 
     def __init__(
         self,
         command: str,
-        *args,
         shell: str = "bash",
         cache: str | None = None,
         overwrite_cache: bool = False,
+        *args,
         **kwargs,
     ) -> None:
-        """Initialize the shell environment.
-
-        Args:
-            command: The command string to run in the shell.
-            *args: Positional arguments passed to WAVESEnvironment.
-            shell: The shell executable type.
-            cache: The cache directory or identifier.
-            overwrite_cache: Boolean flag to overwrite cached entries.
-            **kwargs: Keyword arguments passed to WAVESEnvironment.
-
-        """
         super().__init__(*args, **kwargs)
-
-        waves.scons_extensions.shell_environment(
-            command,
-            shell,
-            cache,
-            overwrite_cache,
-        )
+        shell_environment(command, shell, cache, overwrite_cache)
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace

@@ -27,7 +27,6 @@ from waves._settings import (
     _stdout_extension,
 )
 from waves._tests.common import platform_check
-from waves.scons_extensions import WAVESShellEnvironment
 
 does_not_raise = contextlib.nullcontext()
 
@@ -93,6 +92,23 @@ test_convert_to_pathlib_list_cases = {
             pathlib.Path("/one.txt").resolve(),
             scons_test_root_directory / "one.txt",
         ],
+    ),
+}
+
+waves_init_test_cases = {
+    "defaults": (
+        "source /etc/profile",
+        {},
+        "bash",
+        None,
+        False,
+    ),
+    "custom_values": (
+        "conda activate test_env",
+        {"shell": "zsh", "cache": "/tmp", "overwrite_cache": True},
+        "zsh",
+        "/tmp",
+        True,
     ),
 }
 
@@ -291,13 +307,11 @@ def test_find_program(
     assert program == first_found_path
 
 
+@pytest.mark.skipif(testing_windows, reason="BASH shell specific function incompatible with Windows")
 @pytest.mark.parametrize(
     ("command", "kwargs", "expected_shell", "expected_cache", "expected_overwrite"),
-    [
-        ("source /etc/profile", {}, "bash", None, False),
-        ("conda activate test_env", {"shell": "zsh", "cache": "/tmp", "overwrite_cache": True}, "zsh", "/tmp", True),
-    ],
-    ids=["defaults", "custom_values"],
+    waves_init_test_cases.values(),
+    ids=waves_init_test_cases.keys(),
 )
 def test_waves_shell_environment_init(
     command: str,
@@ -307,12 +321,7 @@ def test_waves_shell_environment_init(
     expected_overwrite: bool,
 ) -> None:
     with patch("waves.scons_extensions.shell_environment") as mock_shell_env:
-        env = WAVESShellEnvironment(  # noqa: F841
-            command=command,
-            shell=kwargs.get("shell", "bash"),
-            cache=kwargs.get("cache"),
-            overwrite_cache=kwargs.get("overwrite_cache", False),
-        )
+        scons_extensions.WAVESShellEnvironment(command, **kwargs)
 
         mock_shell_env.assert_called_once_with(
             command,
