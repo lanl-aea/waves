@@ -5376,7 +5376,6 @@ class WAVESShellEnvironment(WAVESEnvironment):
         """
         super().__init__(*args, **kwargs)
 
-        # Call the module function directly, passing 'self' as the first positional argument
         waves.scons_extensions.shell_environment(
             command,
             shell,

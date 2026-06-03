@@ -311,7 +311,7 @@ def test_waves_shell_environment_init(
             command=command,
             shell=kwargs.get("shell", "bash"),
             cache=kwargs.get("cache"),
-            overwrite_cache=kwargs.get("overwrite_cache", False)
+            overwrite_cache=kwargs.get("overwrite_cache", False),
         )
 
         mock_shell_env.assert_called_once_with(
