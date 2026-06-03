@@ -11,8 +11,6 @@ import shutil
 import sys
 import typing
 
-import waves
-
 import SCons.Builder
 import SCons.Defaults
 import SCons.Environment
@@ -21,6 +19,7 @@ import SCons.Scanner
 import SCons.Script
 from SCons.Script.SConscript import SConsEnvironment
 
+import waves
 from waves import _WAVES_CLI_COMMAND, _settings, _utilities, parameter_generators
 
 _exclude_from_namespace = set(globals().keys())
@@ -5350,7 +5349,8 @@ class WAVESEnvironment(SConsEnvironment):
             shared_cache_override=shared_cache_override,
             **kwargs,
         )
-    
+
+
 class WAVESShellEnvironment(WAVESEnvironment):
     """Subclass of WAVESEnvironment that automatically calls waves.scons_extensions.shell_environment."""
 
@@ -5372,7 +5372,10 @@ class WAVESShellEnvironment(WAVESEnvironment):
             cache: The cache directory or identifier.
             overwrite_cache: Boolean flag to overwrite cached entries.
             **kwargs: Keyword arguments passed to WAVESEnvironment.
+
         """
+        kwargs.pop("command", None)
+
         super().__init__(*args, **kwargs)
 
         waves.scons_extensions.shell_environment(
@@ -5382,6 +5385,7 @@ class WAVESShellEnvironment(WAVESEnvironment):
             cache=cache,
             overwrite_cache=overwrite_cache,
         )
+
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace
 __all__ = [name for name in _module_objects if not name.startswith("_")]

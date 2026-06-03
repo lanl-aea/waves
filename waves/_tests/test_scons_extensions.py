@@ -13,7 +13,6 @@ import pytest
 import SCons.Node.FS
 
 from waves import _utilities, parameter_generators, scons_extensions
-from waves.scons_extensions import WAVESShellEnvironment 
 from waves._settings import (
     _abaqus_common_extensions,
     _abaqus_environment_extension,
@@ -28,6 +27,7 @@ from waves._settings import (
     _stdout_extension,
 )
 from waves._tests.common import platform_check
+from waves.scons_extensions import WAVESShellEnvironment
 
 does_not_raise = contextlib.nullcontext()
 
