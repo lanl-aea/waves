@@ -392,7 +392,10 @@ def warn_only_once(function: collections.abc.Callable) -> collections.abc.Callab
 
 
 def _get_abaqus_restart_extensions(
-    solver: typing.Literal["standard", "explicit"], processes: int = 1
+    solver: typing.Literal["standard", "explicit"],
+    processes: int = 1,
+    abaqus_standard_restart_extensions: tuple[str] = _settings._abaqus_standard_restart_extensions,
+    abaqus_explicit_restart_extensions: tuple[str] = _settings._abaqus_explicit_restart_extensions,
 ) -> tuple[str, ...]:
     """Determine Abaqus restart files based on solver type and number of MPI processes.
 
@@ -400,10 +403,10 @@ def _get_abaqus_restart_extensions(
     :param processes: Number of MPI processes used to run the Abaqus job.
     """
     if solver.lower() == "explicit":
-        restart_files = list(_settings._abaqus_explicit_restart_extensions)
+        restart_files = list(abaqus_explicit_restart_extensions)
     elif solver.lower() == "standard":
         # Cast to list to allow modification
-        restart_files = list(_settings._abaqus_standard_restart_extensions)
+        restart_files = list(abaqus_standard_restart_extensions)
         if processes > 1:
             # Drop .mdl and .stt. Add {.mdl,.stt}.[0..N-1] starting from the original extension index.
             for extension in (".mdl", ".stt"):

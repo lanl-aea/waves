@@ -2039,21 +2039,39 @@ class AbaqusPseudoBuilder:
     :param override_cpus: Override the task-specific default number of CPUs. This kwarg value is most useful if
         propagated from a user-specified option at execution time. If None, Abaqus Pseudo-Builder tasks will use the
         task-specific default.
+    :param datacheck_extensions: The extensions to use in a target list for datacheck jobs
+    :param standard_extensions: The extensions to use in the target list for standard analysis ``job``
+    :param standard_restart_extensions: The extensions to use in the target list for standard analysis restart ``job``
+        and in the source list for standard analysis restart ``oldjob``.
+    :param explicit_extensions: The extensions to use in the target list for explicit analysis ``job``
+    :param explicit_restart_extensions: The extensions to use in the target list for explicit analysis restart ``job``
+        and in the source list for explicit analysis restart ``oldjob``.
 
     .. warning::
+
         You must use an AbaqusSolver Builder generated from
-        :meth:`waves.scons_extensions.abaqus_solver_builder_factory`.
-        Using the non-builder-factory :meth:`waves.scons_extensions.abaqus_solver` (i.e. a Builder that does not use the
-        ``program_options`` kwarg) is not supported.
+        :meth:`waves.scons_extensions.abaqus_solver_builder_factory`.  Using the non-builder-factory
+        :meth:`waves.scons_extensions.abaqus_solver` (i.e. a Builder that does not use the ``program_options`` kwarg) is
+        not supported.
     """
 
     def __init__(
         self,
         builder: SCons.Builder.Builder,
         override_cpus: int | None = None,
+        datacheck_extensions: tuple[str] = _settings.abaqus_datacheck_extensions,
+        standard_extensions: tuple[str] = =waves._settings._abaqus_standard_extensions,
+        standard_restart_extensions: tuple[str] = waves._settings._abaqus_standard_restart_extensions,
+        explicit_extensions: tuple[str] = waves._settings._abaqus_explicit_extensions,
+        explicit_restart_extensions: tuple[str] = waves._settings._abaqus_explicit_restart_extensions,
     ) -> None:
         self.builder = builder
         self.override_cpus = override_cpus
+        self.datacheck_extensions = datacheck_extensions
+        self.standard_extensions = standard_extensions
+        self.standard_restart_extensions = standard_restart_extensions
+        self.explicit_extensions = explicit_extensions
+        self.explicit_restart_extensions = explicit_restart_extensions
 
     # TODO: address Explicit-specific restart files: ['abq', 'pac', 'sel']
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/821
@@ -2072,6 +2090,8 @@ class AbaqusPseudoBuilder:
         extra_sources: list[str] | None = None,
         extra_targets: list[str] | None = None,
         extra_options: str = "",
+        job_type: typing.Literal["datacheck", "standard", "explicit"] = "standard",
+        oldjob_type: typing.Literal["standard", "explicit"] = "standard",
         **kwargs,
     ) -> SCons.Node.NodeList:
         """SCons Pseudo-Builder for running Abaqus jobs.
@@ -2202,6 +2222,7 @@ class AbaqusPseudoBuilder:
 
             env.Abaqus(job='simulation_1', cpus=4)
         """
+
         # Initialize with empty arguments for AbaqusSolver builder
         sources: list[str] = []
         targets: list[str] = []
@@ -2220,7 +2241,18 @@ class AbaqusPseudoBuilder:
         # Include input file as first source. Root input file *must* be first file is sources list.
         sources.insert(0, inp)
 
-        targets.extend([f"{job}{extension}" for extension in _settings._abaqus_standard_extensions])
+        # Build expected extensions by solver [standard, explicit] and phase option [analysis, datacheck, ...]
+        # Assume standard/analysis and explicit/analysis solver/phase combination unless a non-default phase is chosen.
+        target_extensions = []
+        if job_type.lower() == "datacheck":
+            target_extensions = self.datacheck_extensions
+        elif job_type.lower() == "standard":
+            target_extensions = self.standard_extensions
+        elif job_type.lower() == "explicit":
+            target_extensions = self.explicit_extensions
+        else:
+            raise ValueError("``job_type`` must be one of ``datacheck``, ``standard``, or ``explicit``")
+        targets.extend([f"{job}{extension}" for extension in target_extensions])
 
         # Always allow user to override CPUs with CLI option and exclude CPUs from build signature
         current_cpus = self.override_cpus or cpus
@@ -2259,7 +2291,7 @@ class AbaqusPseudoBuilder:
             # Add old job targets to source list
             for job_name, num_restart_files in zip(oldjob, oldjob_restart_file_count, strict=True):
                 oldjob_extensions = _utilities._get_abaqus_restart_extensions(
-                    solver="standard",
+                    solver=oldjob_type,
                     processes=num_restart_files,
                 )
                 sources.extend([f"{job_name}{extension}" for extension in oldjob_extensions])
@@ -2268,7 +2300,7 @@ class AbaqusPseudoBuilder:
         if write_restart:
             # TODO: address Explicit-specific restart files: ['abq', 'pac', 'sel']
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/821
-            restart_extensions = _utilities._get_abaqus_restart_extensions(solver="standard", processes=processes)
+            restart_extensions = _utilities._get_abaqus_restart_extensions(solver=job_type, processes=processes)
             targets.extend([f"{job}{extension}" for extension in restart_extensions])
 
         # If user subroutine is specified, add user subroutine to sources
