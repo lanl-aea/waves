@@ -2059,11 +2059,11 @@ class AbaqusPseudoBuilder:
         self,
         builder: SCons.Builder.Builder,
         override_cpus: int | None = None,
-        datacheck_extensions: tuple[str] = _settings.abaqus_datacheck_extensions,
-        standard_extensions: tuple[str] = _settings._abaqus_standard_extensions,
-        standard_restart_extensions: tuple[str] = _settings._abaqus_standard_restart_extensions,
-        explicit_extensions: tuple[str] = _settings._abaqus_explicit_extensions,
-        explicit_restart_extensions: tuple[str] = _settings._abaqus_explicit_restart_extensions,
+        datacheck_extensions: typing.Iterable[str] = _settings._abaqus_datacheck_extensions,
+        standard_extensions: typing.Iterable[str] = _settings._abaqus_standard_extensions,
+        standard_restart_extensions: typing.Iterable[str] = _settings._abaqus_standard_restart_extensions,
+        explicit_extensions: typing.Iterable[str] = _settings._abaqus_explicit_extensions,
+        explicit_restart_extensions: typing.Iterable[str] = _settings._abaqus_explicit_restart_extensions,
     ) -> None:
         self.builder = builder
         self.override_cpus = override_cpus
@@ -2242,7 +2242,7 @@ class AbaqusPseudoBuilder:
 
         # Build expected extensions by solver [standard, explicit] and phase option [analysis, datacheck, ...]
         # Assume standard/analysis and explicit/analysis solver/phase combination unless a non-default phase is chosen.
-        target_extensions = []
+        target_extensions: typing.Iterable[str] = []
         if job_type.lower() == "datacheck":
             target_extensions = self.datacheck_extensions
         elif job_type.lower() == "standard":
