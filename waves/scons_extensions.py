@@ -2060,10 +2060,10 @@ class AbaqusPseudoBuilder:
         builder: SCons.Builder.Builder,
         override_cpus: int | None = None,
         datacheck_extensions: tuple[str] = _settings.abaqus_datacheck_extensions,
-        standard_extensions: tuple[str] = =waves._settings._abaqus_standard_extensions,
-        standard_restart_extensions: tuple[str] = waves._settings._abaqus_standard_restart_extensions,
-        explicit_extensions: tuple[str] = waves._settings._abaqus_explicit_extensions,
-        explicit_restart_extensions: tuple[str] = waves._settings._abaqus_explicit_restart_extensions,
+        standard_extensions: tuple[str] = _settings._abaqus_standard_extensions,
+        standard_restart_extensions: tuple[str] = _settings._abaqus_standard_restart_extensions,
+        explicit_extensions: tuple[str] = _settings._abaqus_explicit_extensions,
+        explicit_restart_extensions: tuple[str] = _settings._abaqus_explicit_restart_extensions,
     ) -> None:
         self.builder = builder
         self.override_cpus = override_cpus
@@ -2222,7 +2222,6 @@ class AbaqusPseudoBuilder:
 
             env.Abaqus(job='simulation_1', cpus=4)
         """
-
         # Initialize with empty arguments for AbaqusSolver builder
         sources: list[str] = []
         targets: list[str] = []
@@ -2303,7 +2302,8 @@ class AbaqusPseudoBuilder:
             # TODO: address Explicit-specific restart files: ['abq', 'pac', 'sel']
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/821
             restart_extensions = _utilities._get_abaqus_restart_extensions(
-                solver=job_type, processes=processes
+                solver=job_type,
+                processes=processes,
                 standard_restart_extensions=self.standard_restart_extensions,
                 explicit_restart_extensions=self.explicit_restart_extensions,
             )
