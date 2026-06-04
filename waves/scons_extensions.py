@@ -2293,6 +2293,8 @@ class AbaqusPseudoBuilder:
                 oldjob_extensions = _utilities._get_abaqus_restart_extensions(
                     solver=oldjob_type,
                     processes=num_restart_files,
+                    standard_restart_extensions=self.standard_restart_extensions,
+                    explicit_restart_extensions=self.explicit_restart_extensions,
                 )
                 sources.extend([f"{job_name}{extension}" for extension in oldjob_extensions])
 
@@ -2300,7 +2302,11 @@ class AbaqusPseudoBuilder:
         if write_restart:
             # TODO: address Explicit-specific restart files: ['abq', 'pac', 'sel']
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/821
-            restart_extensions = _utilities._get_abaqus_restart_extensions(solver=job_type, processes=processes)
+            restart_extensions = _utilities._get_abaqus_restart_extensions(
+                solver=job_type, processes=processes
+                standard_restart_extensions=self.standard_restart_extensions,
+                explicit_restart_extensions=self.explicit_restart_extensions,
+            )
             targets.extend([f"{job}{extension}" for extension in restart_extensions])
 
         # If user subroutine is specified, add user subroutine to sources
