@@ -442,25 +442,25 @@ get_abaqus_job_extensions_cases = {
         "standard", False, 1, (".odb", ".dat", ".msg", ".com", ".prt", ".sta"), does_not_raise,
     ),
     "standard_analysis_norestart_mpi": (
-        "standard", False, 2, (".odb", ".dat", ".msg", ".msg1", ".com", ".prt", ".sta"), does_not_raise,
+        "standard", False, 2, (".odb", ".dat", ".msg", ".msg.1", ".com", ".prt", ".sta"), does_not_raise,
     ),
     "standard_analysis_restart_nompi": (
         "standard", True, 1, (".odb", ".dat", ".msg", ".com", ".prt", ".sta", ".mdl", ".res", ".sim", ".stt"), does_not_raise,
     ),
     "standard_analysis_restart_mpi": (
-        "standard", True, 2, (".odb", ".dat", ".msg", ".msg1", ".com", ".prt", ".sta", ".mdl0", ".mdl1", ".res", ".sim", ".stt0", ".stt1"), does_not_raise,
+        "standard", True, 2, (".odb", ".dat", ".msg", ".msg.1", ".com", ".prt", ".sta", ".mdl0", ".mdl1", ".res", ".sim", ".stt0", ".stt1"), does_not_raise,
     ),
     "standard_datacheck_norestart_nompi": (
         "standard_datacheck", False, 1, (".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt"), does_not_raise,
     ),
     "standard_datacheck_norestart_mpi": (
-        "standard_datacheck", False, 2, (".odb", ".dat", ".msg", ".msg1", ".com", ".prt", ".023", ".mdl", ".sim", ".stt"), does_not_raise,
+        "standard_datacheck", False, 2, (".odb", ".dat", ".msg", ".msg.1", ".com", ".prt", ".023", ".mdl", ".sim", ".stt"), does_not_raise,
     ),
     "standard_datacheck_restart_nompi": (
         "standard_datacheck", True, 1, (".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".res", ".sim", ".stt"), does_not_raise,
     ),
     "standard_datacheck_restart_mpi": (
-        "standard_datacheck", True, 2, (".odb", ".dat", ".msg", ".msg1", ".com", ".prt", ".023", ".mdl", ".res", ".sim", ".stt"), does_not_raise,
+        "standard_datacheck", True, 2, (".odb", ".dat", ".msg", ".msg.1", ".com", ".prt", ".023", ".mdl", ".res", ".sim", ".stt"), does_not_raise,
     ),
     "explicit_analysis_norestart_nompi": (
         "explicit", False, 1, (".odb", ".dat", ".msg", ".com", ".prt", ".sta", ".abq", ".mdl", ".pac", ".res", ".sel", ".stt"), does_not_raise,
@@ -478,13 +478,13 @@ get_abaqus_job_extensions_cases = {
         "explicit_datacheck", False, 1, (".odb", ".dat", ".msg", ".com", ".prt", ".sta", ".abq", ".mdl", ".pac", ".res", ".sel", ".stt"), does_not_raise,
     ),
     "explicit_datacheck_norestart_mpi": (
-        "explicit_datacheck", False, 2, (".odb", ".dat", ".msg1", ".msg2", ".com", ".prt", ".sta", ".abq", ".mdl", ".pac", ".res", ".sel", ".stt"), does_not_raise,
+        "explicit_datacheck", False, 2, (".odb", ".dat", ".msg.1", ".msg.2", ".com", ".prt", ".sta", ".abq", ".mdl", ".pac", ".res", ".sel", ".stt"), does_not_raise,
     ),
     "explicit_datacheck_restart_nompi": (
         "explicit_datacheck", True, 1, (".odb", ".dat", ".msg", ".com", ".prt", ".sta", ".abq", ".mdl", ".pac", ".res", ".sel", ".stt"), does_not_raise,
     ),
     "explicit_datacheck_restart_mpi": (
-        "explicit_datacheck", True, 2, (".odb", ".dat", ".msg1", ".msg2", ".com", ".prt", ".sta", ".abq", ".mdl", ".pac", ".res", ".sel", ".stt"), does_not_raise,
+        "explicit_datacheck", True, 2, (".odb", ".dat", ".msg.1", ".msg.2", ".com", ".prt", ".sta", ".abq", ".mdl", ".pac", ".res", ".sel", ".stt"), does_not_raise,
     ),
 }
 
