@@ -2249,7 +2249,13 @@ class AbaqusPseudoBuilder:
         # Build expected extensions by solver [standard, explicit] and phase option [analysis, datacheck, ...]
         # Assume standard/analysis and explicit/analysis solver/phase combination unless a non-default phase is chosen.
         target_extensions = _utilities._get_abaqus_job_extensions(
-            job_type=job_type, processes=processes, write_restart=write_restart
+            job_type=job_type,
+            processes=processes,
+            write_restart=write_restart,
+            standard_analysis_extensions=self.standard_analysis_extensions,
+            standard_datacheck_extensions=self.standard_datacheck_extensions,
+            explicit_analysis_extensions=self.explicit_analysis_extensions,
+            explicit_datacheck_extensions=self.explicit_datacheck_extensions,
         )
         targets.extend([f"{job}{extension}" for extension in target_extensions])
 

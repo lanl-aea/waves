@@ -439,32 +439,76 @@ def test_warn_only_once() -> None:
 
 get_abaqus_job_extensions_cases = {
     "standard_analysis_norestart_nompi": (
-        "standard", False, 1, (".odb", ".dat", ".msg", ".com", ".prt", ".sta"),
+        "standard", False, 1, (".odb", ".dat", ".msg", ".com", ".prt", ".sta"), does_not_raise,
     ),
-    "standard_analysis_norestart_mpi": (),
-        "standard", False, 2, (".odb", ".dat", ".msg", ".msg1", ".com", ".prt", ".sta"),
-    "standard_analysis_restart_nompi": (),
-        "standard", True, 1, (".odb", ".dat", ".msg", ".com", ".prt", ".sta", ".mdl", ".res", ".sim", ".stt"),
-    "standard_analysis_restart_mpi": (),
-        "standard", True, 2, (".odb", ".dat", ".msg", ".msg1", ".com", ".prt", ".sta", ".mdl0", ".mdl1", ".res", ".sim", ".stt0", ".stt1"),
+    "standard_analysis_norestart_mpi": (
+        "standard", False, 2, (".odb", ".dat", ".msg", ".msg1", ".com", ".prt", ".sta"), does_not_raise,
+    ),
+    "standard_analysis_restart_nompi": (
+        "standard", True, 1, (".odb", ".dat", ".msg", ".com", ".prt", ".sta", ".mdl", ".res", ".sim", ".stt"), does_not_raise,
+    ),
+    "standard_analysis_restart_mpi": (
+        "standard", True, 2, (".odb", ".dat", ".msg", ".msg1", ".com", ".prt", ".sta", ".mdl0", ".mdl1", ".res", ".sim", ".stt0", ".stt1"), does_not_raise,
+    ),
     "standard_datacheck_norestart_nompi": (
-        "standard_datacheck", False, 1, (".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt"),
+        "standard_datacheck", False, 1, (".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt"), does_not_raise,
     ),
-    "standard_datacheck_norestart_mpi": (),
-        "standard_datacheck", False, 2, (".odb", ".dat", ".msg", ".msg1", ".com", ".prt", ".023", ".mdl", ".sim", ".stt"),
-    "standard_datacheck_restart_nompi": (),
-        "standard_datacheck", True, 1, (".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".res", ".sim", ".stt"),
-    "standard_datacheck_restart_mpi": (),
-        "standard_datacheck", True, 2, (".odb", ".dat", ".msg", ".msg1", ".com", ".prt", ".023", ".mdl", ".res", ".sim", ".stt"),
-    "explicit_analysis_norestart_nompi": (),
-    "explicit_analysis_norestart_mpi": (),
-    "explicit_analysis_restart_nompi": (),
-    "explicit_analysis_restart_mpi": (),
-    "explicit_datacheck_norestart_nompi": (),
-    "explicit_datacheck_norestart_mpi": (),
-    "explicit_datacheck_restart_nompi": (),
-    "explicit_datacheck_restart_mpi": (),
+    "standard_datacheck_norestart_mpi": (
+        "standard_datacheck", False, 2, (".odb", ".dat", ".msg", ".msg1", ".com", ".prt", ".023", ".mdl", ".sim", ".stt"), does_not_raise,
+    ),
+    "standard_datacheck_restart_nompi": (
+        "standard_datacheck", True, 1, (".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".res", ".sim", ".stt"), does_not_raise,
+    ),
+    "standard_datacheck_restart_mpi": (
+        "standard_datacheck", True, 2, (".odb", ".dat", ".msg", ".msg1", ".com", ".prt", ".023", ".mdl", ".res", ".sim", ".stt"), does_not_raise,
+    ),
+    "explicit_analysis_norestart_nompi": (
+        "explicit", False, 1, (".odb", ".dat", ".msg", ".com", ".prt", ".sta", ".abq", ".mdl", ".pac", ".res", ".sel", ".stt"), does_not_raise,
+    ),
+    "explicit_analysis_norestart_mpi": (
+        "explicit", False, 2, (".odb", ".dat", ".msg", ".com", ".prt", ".sta", ".abq", ".mdl", ".pac", ".res", ".sel", ".stt"), does_not_raise,
+    ),
+    "explicit_analysis_restart_nompi": (
+        "explicit", True, 1, (".odb", ".dat", ".msg", ".com", ".prt", ".sta", ".abq", ".mdl", ".pac", ".res", ".sel", ".stt"), does_not_raise,
+    ),
+    "explicit_analysis_restart_mpi": (
+        "explicit", True, 2, (".odb", ".dat", ".msg", ".com", ".prt", ".sta", ".abq", ".mdl", ".pac", ".res", ".sel", ".stt"), does_not_raise,
+    ),
+    "explicit_datacheck_norestart_nompi": (
+        "explicit", False, 1, (".odb", ".dat", ".msg", ".com", ".prt", ".sta", ".abq", ".mdl", ".pac", ".res", ".sel", ".stt"), does_not_raise,
+    ),
+    "explicit_datacheck_norestart_mpi": (
+        "explicit", False, 2, (".odb", ".dat", ".msg1", ".msg2", ".com", ".prt", ".sta", ".abq", ".mdl", ".pac", ".res", ".sel", ".stt"), does_not_raise,
+    ),
+    "explicit_datacheck_restart_nompi": (
+        "explicit", True, 1, (".odb", ".dat", ".msg", ".com", ".prt", ".sta", ".abq", ".mdl", ".pac", ".res", ".sel", ".stt"), does_not_raise,
+    ),
+    "explicit_datacheck_restart_mpi": (
+        "explicit", True, 2, (".odb", ".dat", ".msg1", ".msg2", ".com", ".prt", ".sta", ".abq", ".mdl", ".pac", ".res", ".sel", ".stt"), does_not_raise,
+    ),
 }
+
+
+@pytest.mark.parametrize(
+    ("job_type", "write_restart", "processes", "expected", "outcome"),
+    get_abaqus_job_extensions_cases.values(),
+    ids=get_abaqus_job_extensions_cases.keys(),
+)
+def test_get_abaqus_job_extensions(
+    job_type: str,
+    write_restart: bool,
+    processes: int,
+    expected: tuple[str] | None,
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
+    with outcome:
+        # Test cases include intentional bad argument types. Do not perform static type checks.
+        extensions = _utilities._get_abaqus_job_extensions(
+            job_type=job_type,  # type: ignore[arg-type]
+            processes=processes,
+            write_restart=write_restart,
+        )
+        assert sorted(extensions) == sorted(expected)
 
 
 get_abaqus_restart_extensions_input = {
