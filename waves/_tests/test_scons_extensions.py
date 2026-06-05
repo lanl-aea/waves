@@ -15,10 +15,10 @@ import SCons.Node.FS
 from waves import _utilities, parameter_generators, scons_extensions
 from waves._settings import (
     _abaqus_common_extensions,
-    _abaqus_standard_datacheck_extensions,
     _abaqus_environment_extension,
     _abaqus_explicit_analysis_extensions,
     _abaqus_standard_analysis_extensions,
+    _abaqus_standard_datacheck_extensions,
     _cd_action_prefix,
     _redirect_action_suffix,
     _redirect_environment_suffix,
@@ -1510,32 +1510,56 @@ def test_abaqus_solver_emitter_factory(factory_kwargs: dict) -> None:
 abaqus_solver_emitter_factory_emitters_cases: dict[str, tuple] = {
     "datacheck defaults": (
         "abaqus_datacheck_emitter",
-        {"suffixes": _abaqus_standard_datacheck_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
+        {
+            "suffixes": _abaqus_standard_datacheck_extensions,
+            "appending_suffixes": None,
+            "stdout_extension": _stdout_extension,
+        },
         {},
     ),
     "datacheck no defaults": (
         "abaqus_datacheck_emitter",
-        {"suffixes": _abaqus_standard_datacheck_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
+        {
+            "suffixes": _abaqus_standard_datacheck_extensions,
+            "appending_suffixes": None,
+            "stdout_extension": _stdout_extension,
+        },
         {"suffixes": (".suffixes",), "appending_suffixes": (".appending",), "stdout_extension": ".out"},
     ),
     "explicit defaults": (
         "abaqus_explicit_emitter",
-        {"suffixes": _abaqus_explicit_analysis_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
+        {
+            "suffixes": _abaqus_explicit_analysis_extensions,
+            "appending_suffixes": None,
+            "stdout_extension": _stdout_extension,
+        },
         {},
     ),
     "explicit no defaults": (
         "abaqus_explicit_emitter",
-        {"suffixes": _abaqus_explicit_analysis_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
+        {
+            "suffixes": _abaqus_explicit_analysis_extensions,
+            "appending_suffixes": None,
+            "stdout_extension": _stdout_extension,
+        },
         {"suffixes": (".suffixes",), "appending_suffixes": (".appending",), "stdout_extension": ".out"},
     ),
     "standard defaults": (
         "abaqus_standard_emitter",
-        {"suffixes": _abaqus_standard_analysis_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
+        {
+            "suffixes": _abaqus_standard_analysis_extensions,
+            "appending_suffixes": None,
+            "stdout_extension": _stdout_extension,
+        },
         {},
     ),
     "standard no defaults": (
         "abaqus_standard_emitter",
-        {"suffixes": _abaqus_standard_analysis_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
+        {
+            "suffixes": _abaqus_standard_analysis_extensions,
+            "appending_suffixes": None,
+            "stdout_extension": _stdout_extension,
+        },
         {"suffixes": (".suffixes",), "appending_suffixes": (".appending",), "stdout_extension": ".out"},
     ),
 }
@@ -1678,7 +1702,9 @@ abaqus_pseudobuilder_input = {
         ["job.inp"],
         [
             f"job{ext}"
-            for ext in (_abaqus_standard_analysis_extensions + _utilities._get_abaqus_restart_extensions(solver="standard"))
+            for ext in (
+                _abaqus_standard_analysis_extensions + _utilities._get_abaqus_restart_extensions(solver="standard")
+            )
         ],
         " -double both $(-cpus 1$)",
         {"job": "job"},
@@ -1731,7 +1757,9 @@ abaqus_pseudobuilder_input = {
         + ["user.f", "extra.inp"],
         [
             f"job{ext}"
-            for ext in (_abaqus_standard_analysis_extensions + _utilities._get_abaqus_restart_extensions(solver="standard"))
+            for ext in (
+                _abaqus_standard_analysis_extensions + _utilities._get_abaqus_restart_extensions(solver="standard")
+            )
         ]
         + ["extra.odb"],
         " -double constraint $(-cpus 2$) -oldjob oldjob -user user.f --extra-opt",
@@ -1746,7 +1774,8 @@ abaqus_pseudobuilder_input = {
         [
             f"job{ext}"
             for ext in (
-                _abaqus_standard_analysis_extensions + _utilities._get_abaqus_restart_extensions(solver="standard", processes=1)
+                _abaqus_standard_analysis_extensions
+                + _utilities._get_abaqus_restart_extensions(solver="standard", processes=1)
             )
         ],
         " -double both $(-cpus 1$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
@@ -1761,7 +1790,8 @@ abaqus_pseudobuilder_input = {
         [
             f"job{ext}"
             for ext in (
-                _abaqus_standard_analysis_extensions + _utilities._get_abaqus_restart_extensions(solver="standard", processes=2)
+                _abaqus_standard_analysis_extensions
+                + _utilities._get_abaqus_restart_extensions(solver="standard", processes=2)
             )
         ],
         " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
@@ -1783,7 +1813,8 @@ abaqus_pseudobuilder_input = {
         [
             f"job{ext}"
             for ext in (
-                _abaqus_standard_analysis_extensions + _utilities._get_abaqus_restart_extensions(solver="standard", processes=2)
+                _abaqus_standard_analysis_extensions
+                + _utilities._get_abaqus_restart_extensions(solver="standard", processes=2)
             )
         ],
         " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
@@ -1805,7 +1836,8 @@ abaqus_pseudobuilder_input = {
         [
             f"job{ext}"
             for ext in (
-                _abaqus_standard_analysis_extensions + _utilities._get_abaqus_restart_extensions(solver="standard", processes=2)
+                _abaqus_standard_analysis_extensions
+                + _utilities._get_abaqus_restart_extensions(solver="standard", processes=2)
             )
         ],
         " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
@@ -1849,7 +1881,8 @@ abaqus_pseudobuilder_input = {
         [
             f"job{ext}"
             for ext in (
-                _abaqus_standard_analysis_extensions + _utilities._get_abaqus_restart_extensions(solver="standard", processes=2)
+                _abaqus_standard_analysis_extensions
+                + _utilities._get_abaqus_restart_extensions(solver="standard", processes=2)
             )
         ],
         " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",

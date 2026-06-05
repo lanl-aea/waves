@@ -9,13 +9,40 @@ _project_name = f"{_project_name_short} Analysis for Verified Engineering Simula
 # SCons extensions
 _abaqus_environment_file = "abaqus_v6.env"
 _abaqus_environment_extension = f".{_abaqus_environment_file}"
-_abaqus_common_extensions =             (".odb", ".dat", ".msg", ".com", ".prt")
-_abaqus_standard_analysis_extensions =  (".odb", ".dat", ".msg", ".com", ".prt", ".sta")
-_abaqus_standard_datacheck_extensions = (".odb", ".dat", ".msg", ".com", ".prt",         ".023",         ".mdl",         ".sim", ".stt")
-_abaqus_standard_restart_extensions =   (".odb",                         ".prt",                         ".mdl",         ".sim", ".stt", ".res")
-_abaqus_explicit_analysis_extensions =  (".odb", ".dat", ".msg", ".com", ".prt", ".sta",         ".abq", ".mdl", ".pac",         ".stt", ".res", ".sel")
-_abaqus_explicit_datacheck_extensions = (".odb", ".dat", ".msg", ".com", ".prt", ".sta",         ".abq", ".mdl", ".pac", ".sim", ".stt", ".res", ".sel")
-_abaqus_explicit_restart_extensions =   (".odb",                         ".prt",                 ".abq", ".mdl", ".pac",         ".stt", ".res", ".sel")
+_abaqus_common_extensions = (".odb", ".dat", ".msg", ".com", ".prt")
+_abaqus_standard_analysis_extensions = (".odb", ".dat", ".msg", ".com", ".prt", ".sta")
+_abaqus_standard_datacheck_extensions = (".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt")
+_abaqus_standard_restart_extensions = (".odb", ".prt", ".mdl", ".sim", ".stt", ".res")
+_abaqus_explicit_analysis_extensions = (
+    ".odb",
+    ".dat",
+    ".msg",
+    ".com",
+    ".prt",
+    ".sta",
+    ".abq",
+    ".mdl",
+    ".pac",
+    ".stt",
+    ".res",
+    ".sel",
+)
+_abaqus_explicit_datacheck_extensions = (
+    ".odb",
+    ".dat",
+    ".msg",
+    ".com",
+    ".prt",
+    ".sta",
+    ".abq",
+    ".mdl",
+    ".pac",
+    ".sim",
+    ".stt",
+    ".res",
+    ".sel",
+)
+_abaqus_explicit_restart_extensions = (".odb", ".prt", ".abq", ".mdl", ".pac", ".stt", ".res", ".sel")
 _matlab_environment_extension = ".matlab.env"
 _sbatch_wrapper_options = "--wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap"
 _sierra_environment_extension = ".env"
