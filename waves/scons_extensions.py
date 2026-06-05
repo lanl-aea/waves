@@ -2059,18 +2059,20 @@ class AbaqusPseudoBuilder:
         self,
         builder: SCons.Builder.Builder,
         override_cpus: int | None = None,
-        datacheck_extensions: typing.Iterable[str] = _settings._abaqus_standard_datacheck_extensions,
-        standard_extensions: typing.Iterable[str] = _settings._abaqus_standard_analysis_extensions,
+        standard_analysis_extensions: typing.Iterable[str] = _settings._abaqus_standard_analysis_extensions,
+        standard_datacheck_extensions: typing.Iterable[str] = _settings._abaqus_standard_datacheck_extensions,
         standard_restart_extensions: typing.Iterable[str] = _settings._abaqus_standard_restart_extensions,
-        explicit_extensions: typing.Iterable[str] = _settings._abaqus_explicit_analysis_extensions,
+        explicit_analysis_extensions: typing.Iterable[str] = _settings._abaqus_explicit_analysis_extensions,
+        explicit_datacheck_extensions: typing.Iterable[str] = _settings._abaqus_explicit_datacheck_extensions,
         explicit_restart_extensions: typing.Iterable[str] = _settings._abaqus_explicit_restart_extensions,
     ) -> None:
         self.builder = builder
         self.override_cpus = override_cpus
-        self.datacheck_extensions = datacheck_extensions
-        self.standard_extensions = standard_extensions
+        self.standard_analysis_extensions = standard_analysis_extensions
+        self.standard_datacheck_extensions = standard_datacheck_extensions
         self.standard_restart_extensions = standard_restart_extensions
-        self.explicit_extensions = explicit_extensions
+        self.explicit_analysis_extensions = explicit_analysis_extensions
+        self.explicit_datacheck_extensions = explicit_datacheck_extensions
         self.explicit_restart_extensions = explicit_restart_extensions
 
     # TODO: address Explicit-specific restart files: ['abq', 'pac', 'sel']
@@ -2090,8 +2092,8 @@ class AbaqusPseudoBuilder:
         extra_sources: list[str] | None = None,
         extra_targets: list[str] | None = None,
         extra_options: str = "",
-        job_type: typing.Literal["datacheck", "standard", "explicit"] = "standard",
-        oldjob_type: typing.Literal["standard", "explicit"] = "standard",
+        job_type: typing.Literal["standard", "standard_datacheck", "explicit", "explicit_datacheck"] = "standard",
+        oldjob_type: typing.Literal["standard", "standard_datacheck", "explicit", "explicit_datacheck"] = "standard",
         **kwargs,
     ) -> SCons.Node.NodeList:
         """SCons Pseudo-Builder for running Abaqus jobs.
@@ -2243,14 +2245,19 @@ class AbaqusPseudoBuilder:
         # Build expected extensions by solver [standard, explicit] and phase option [analysis, datacheck, ...]
         # Assume standard/analysis and explicit/analysis solver/phase combination unless a non-default phase is chosen.
         target_extensions: typing.Iterable[str] = []
-        if job_type.lower() == "datacheck":
-            target_extensions = self.datacheck_extensions
-        elif job_type.lower() == "standard":
-            target_extensions = self.standard_extensions
+        if job_type.lower() == "standard":
+            target_extensions = self.standard_analysis_extensions
+        elif job_type.lower() == "standard_datacheck":
+            target_extensions = self.standard_datacheck_extensions
         elif job_type.lower() == "explicit":
-            target_extensions = self.explicit_extensions
+            target_extensions = self.explicit_analysis_extensions
+        elif job_type.lower() == "explicit_datacheck":
+            target_extensions = self.explicit_datacheck_extensions
         else:
-            raise ValueError("``job_type`` must be one of ``datacheck``, ``standard``, or ``explicit``")
+            raise ValueError(
+                "``job_type`` must be one of ``standard``, ``standard_datacheck``,"
+                " ``explicit``, or ``explicit_datacheck``"
+            )
         targets.extend([f"{job}{extension}" for extension in target_extensions])
 
         # Always allow user to override CPUs with CLI option and exclude CPUs from build signature
