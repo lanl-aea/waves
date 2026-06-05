@@ -1469,7 +1469,7 @@ def _abaqus_datacheck_solver_emitter(
     target: list, source: list, env: SCons.Environment.Environment
 ) -> tuple[list, list]:
     """Emit the datacheck specific extensions with :meth:`waves.scons_extensions._abaqus_solver_emitter`."""
-    return _abaqus_solver_emitter(target, source, env, _settings._abaqus_datacheck_extensions)
+    return _abaqus_solver_emitter(target, source, env, _settings._abaqus_standard_datacheck_extensions)
 
 
 def abaqus_solver(
@@ -1725,7 +1725,7 @@ def abaqus_datacheck_emitter(
     target: list,
     source: list,
     env: SCons.Environment.Environment,
-    suffixes: typing.Iterable[str] = _settings._abaqus_datacheck_extensions,
+    suffixes: typing.Iterable[str] = _settings._abaqus_standard_datacheck_extensions,
     appending_suffixes: typing.Iterable[str] | None = None,
     stdout_extension: str = _settings._stdout_extension,
 ) -> tuple[list, list]:
@@ -2059,7 +2059,7 @@ class AbaqusPseudoBuilder:
         self,
         builder: SCons.Builder.Builder,
         override_cpus: int | None = None,
-        datacheck_extensions: typing.Iterable[str] = _settings._abaqus_datacheck_extensions,
+        datacheck_extensions: typing.Iterable[str] = _settings._abaqus_standard_datacheck_extensions,
         standard_extensions: typing.Iterable[str] = _settings._abaqus_standard_extensions,
         standard_restart_extensions: typing.Iterable[str] = _settings._abaqus_standard_restart_extensions,
         explicit_extensions: typing.Iterable[str] = _settings._abaqus_explicit_extensions,

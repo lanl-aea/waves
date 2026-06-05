@@ -15,7 +15,7 @@ import SCons.Node.FS
 from waves import _utilities, parameter_generators, scons_extensions
 from waves._settings import (
     _abaqus_common_extensions,
-    _abaqus_datacheck_extensions,
+    _abaqus_standard_datacheck_extensions,
     _abaqus_environment_extension,
     _abaqus_explicit_extensions,
     _abaqus_standard_extensions,
@@ -527,7 +527,7 @@ def check_abaqus_solver_targets(nodes: SCons.Node.NodeList, solver: str | None, 
     elif solver == "explicit":
         expected_suffixes.extend(_abaqus_explicit_extensions)
     elif solver == "datacheck":
-        expected_suffixes.extend(_abaqus_datacheck_extensions)
+        expected_suffixes.extend(_abaqus_standard_datacheck_extensions)
     else:
         expected_suffixes.extend(_abaqus_common_extensions)
     suffixes = [str(node).split(stem)[-1] for node in nodes]
@@ -1510,12 +1510,12 @@ def test_abaqus_solver_emitter_factory(factory_kwargs: dict) -> None:
 abaqus_solver_emitter_factory_emitters_cases: dict[str, tuple] = {
     "datacheck defaults": (
         "abaqus_datacheck_emitter",
-        {"suffixes": _abaqus_datacheck_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
+        {"suffixes": _abaqus_standard_datacheck_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
         {},
     ),
     "datacheck no defaults": (
         "abaqus_datacheck_emitter",
-        {"suffixes": _abaqus_datacheck_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
+        {"suffixes": _abaqus_standard_datacheck_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
         {"suffixes": (".suffixes",), "appending_suffixes": (".appending",), "stdout_extension": ".out"},
     ),
     "explicit defaults": (
