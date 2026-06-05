@@ -437,6 +437,36 @@ def test_warn_only_once() -> None:
         assert len(warning_output) == 1
 
 
+get_abaqus_job_extensions_cases = {
+    "standard_analysis_norestart_nompi": (
+        "standard", False, 1, (".odb", ".dat", ".msg", ".com", ".prt", ".sta"),
+    ),
+    "standard_analysis_norestart_mpi": (),
+        "standard", False, 2, (".odb", ".dat", ".msg", ".msg1", ".com", ".prt", ".sta"),
+    "standard_analysis_restart_nompi": (),
+        "standard", True, 1, (".odb", ".dat", ".msg", ".com", ".prt", ".sta", ".mdl", ".res", ".sim", ".stt"),
+    "standard_analysis_restart_mpi": (),
+        "standard", True, 2, (".odb", ".dat", ".msg", ".msg1", ".com", ".prt", ".sta", ".mdl0", ".mdl1", ".res", ".sim", ".stt0", ".stt1"),
+    "standard_datacheck_norestart_nompi": (
+        "standard_datacheck", False, 1, (".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt"),
+    ),
+    "standard_datacheck_norestart_mpi": (),
+        "standard_datacheck", False, 2, (".odb", ".dat", ".msg", ".msg1", ".com", ".prt", ".023", ".mdl", ".sim", ".stt"),
+    "standard_datacheck_restart_nompi": (),
+        "standard_datacheck", True, 1, (".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".res", ".sim", ".stt"),
+    "standard_datacheck_restart_mpi": (),
+        "standard_datacheck", True, 2, (".odb", ".dat", ".msg", ".msg1", ".com", ".prt", ".023", ".mdl", ".res", ".sim", ".stt"),
+    "explicit_analysis_norestart_nompi": (),
+    "explicit_analysis_norestart_mpi": (),
+    "explicit_analysis_restart_nompi": (),
+    "explicit_analysis_restart_mpi": (),
+    "explicit_datacheck_norestart_nompi": (),
+    "explicit_datacheck_norestart_mpi": (),
+    "explicit_datacheck_restart_nompi": (),
+    "explicit_datacheck_restart_mpi": (),
+}
+
+
 get_abaqus_restart_extensions_input = {
     "standard_1": (
         "standard",
