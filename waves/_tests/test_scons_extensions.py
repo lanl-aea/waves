@@ -97,18 +97,18 @@ test_convert_to_pathlib_list_cases = {
 
 waves_init_test_cases = {
     "defaults": (
-        "source /etc/profile",
+        "my_command",
+        "bash",
+        "/tmp",
+        True,
         {},
+    ),
+    "custom_values": (
+        "my_command",
         "bash",
         None,
         False,
-    ),
-    "custom_values": (
-        "conda activate test_env",
-        {"shell": "zsh", "cache": "/tmp", "overwrite_cache": True},
-        "zsh",
-        "/tmp",
-        True,
+        {"action": "run"},
     ),
 }
 
@@ -309,26 +309,45 @@ def test_find_program(
 
 @pytest.mark.skipif(testing_windows, reason="BASH shell specific function incompatible with Windows")
 @pytest.mark.parametrize(
-    ("command", "kwargs", "expected_shell", "expected_cache", "expected_overwrite"),
+    ("command", "expected_shell", "expected_cache", "expected_overwrite", "kwargs"),
     waves_init_test_cases.values(),
     ids=waves_init_test_cases.keys(),
 )
 def test_waves_shell_environment_init(
     command: str,
-    kwargs: dict,
     expected_shell: str,
     expected_cache: str | None,
     expected_overwrite: bool,
+    kwargs: dict,
 ) -> None:
-    with patch("waves.scons_extensions.shell_environment") as mock_shell_env:
-        scons_extensions.WAVESShellEnvironment(command, **kwargs)
+    with patch("waves.scons_extensions.shell_environment") as mock_shell_environment:
+        mocked_return_env = {"ENV": {"PATH": "/usr/bin", "SHELL_VAR": "extracted"}}
+        mock_shell_environment.return_value = mocked_return_env
 
-        mock_shell_env.assert_called_once_with(
+        passed_env = {"CUSTOM_VAR": "value", "PATH": "/custom/bin"}
+
+        env_with_input = scons_extensions.WAVESShellEnvironment(
             command,
-            expected_shell,
-            expected_cache,
-            expected_overwrite,
+            shell=expected_shell,
+            cache=expected_cache,
+            overwrite_cache=expected_overwrite,
+            environment=passed_env,
+            **kwargs,
         )
+        assert env_with_input["ENV"]["SHELL_VAR"] == "extracted"
+        assert env_with_input["ENV"]["CUSTOM_VAR"] == "value"
+        assert env_with_input["ENV"]["PATH"] == "/custom/bin"
+
+        mock_shell_environment.reset_mock()
+        env_without_input = scons_extensions.WAVESShellEnvironment(
+            command,
+            shell=expected_shell,
+            cache=expected_cache,
+            overwrite_cache=expected_overwrite,
+            **kwargs,
+        )
+        assert env_without_input["ENV"]["SHELL_VAR"] == "extracted"
+        assert env_without_input["ENV"]["PATH"] == "/usr/bin"
 
 
 @pytest.mark.parametrize(

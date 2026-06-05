@@ -5356,23 +5356,36 @@ class WAVESShellEnvironment(WAVESEnvironment):
     Subclass of WAVESEnvironment that automatically calls and initializes the waves.scons_extensions.shell_environment.
 
     :param command: the shell command to execute
+    :param *args: Positional arguments passed to WAVESEnvironment.
     :param shell: the shell to use when executing command by absolute or relative path
     :param cache: absolute or relative path to read/write a shell environment dictionary. Will be written as YAML
         formatted file regardless of extension.
     :param overwrite_cache: Ignore previously cached files if they exist.
+    :param **kwargs: Keyword arguments passed to WAVESEnvironment.
     """
 
     def __init__(
         self,
         command: str,
+        *args,
         shell: str = "bash",
         cache: str | None = None,
         overwrite_cache: bool = False,
-        *args,
+        environment: dict | None = None,
         **kwargs,
     ) -> None:
+        passed_env = environment if environment is not None else {}
+        kwargs["ENV"] = passed_env
         super().__init__(*args, **kwargs)
-        shell_environment(command, shell, cache, overwrite_cache)
+
+        scons_env = shell_environment(command, shell, cache, overwrite_cache).get("ENV", {})
+
+        if "ENV" in self and isinstance(self["ENV"], dict):
+            self["ENV"].update(scons_env)
+            self["ENV"].update(passed_env)
+        else:
+            scons_env.update(passed_env)
+            self["ENV"] = scons_env
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace
