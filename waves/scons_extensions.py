@@ -2135,6 +2135,10 @@ class AbaqusPseudoBuilder:
         :param extra_targets: Additional targets to supply to builder.
         :param extra_options: Additional Abaqus options to supply to builder. Should not include any Abaqus options
             available as kwargs, e.g. cpus, oldjob, user, input, job.
+        :param job_type: The solver/phase combination of the current job:
+            standard[/analysis], standard_datacheck, explicit[/analysis], explicit_datacheck
+        :param oldjob_type: The solver/phase combination of the previous job:
+            standard[/analysis], standard_datacheck, explicit[/analysis], explicit_datacheck
         :param kwargs: Any additional kwargs are passed through to the builder.
 
         :returns: All targets associated with Abaqus simulation.
@@ -2244,20 +2248,9 @@ class AbaqusPseudoBuilder:
 
         # Build expected extensions by solver [standard, explicit] and phase option [analysis, datacheck, ...]
         # Assume standard/analysis and explicit/analysis solver/phase combination unless a non-default phase is chosen.
-        target_extensions: typing.Iterable[str] = []
-        if job_type.lower() == "standard":
-            target_extensions = self.standard_analysis_extensions
-        elif job_type.lower() == "standard_datacheck":
-            target_extensions = self.standard_datacheck_extensions
-        elif job_type.lower() == "explicit":
-            target_extensions = self.explicit_analysis_extensions
-        elif job_type.lower() == "explicit_datacheck":
-            target_extensions = self.explicit_datacheck_extensions
-        else:
-            raise ValueError(
-                "``job_type`` must be one of ``standard``, ``standard_datacheck``,"
-                " ``explicit``, or ``explicit_datacheck``"
-            )
+        target_extensions = _utilities._get_abaqus_job_extensions(
+            job_type=job_type, processes=processes, write_restart=write_restart
+        )
         targets.extend([f"{job}{extension}" for extension in target_extensions])
 
         # Always allow user to override CPUs with CLI option and exclude CPUs from build signature

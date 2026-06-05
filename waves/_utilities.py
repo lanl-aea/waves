@@ -391,6 +391,59 @@ def warn_only_once(function: collections.abc.Callable) -> collections.abc.Callab
     return wrapper
 
 
+def _get_abaqus_job_extensions(
+    job_type: typing.Literal["standard", "standard_datacheck", "explicit", "explicit_datacheck"] = "standard",
+    processes: int = 1,
+    write_restart = False,
+) -> tuple[str, ...]:
+    """Determine Abaqus job files based on solver/phase type and number of MPI processes.
+
+    :param job_type: The solver/phase combination of the current job:
+        standard[/analysis], standard_datacheck, explicit[/analysis], explicit_datacheck
+    :param processes: Number of MPI processes used to run the Abaqus job.
+    :param write_restart: If True, add restart files to target list. This is required if you want to use these
+        restart files for a restart job.
+
+    :return: job target files
+    """
+    job_type = job_type.lower()
+    if job_type == "standard":
+        target_extensions = list(self.standard_analysis_extensions)
+    elif job_type == "standard_datacheck":
+        target_extensions = list(self.standard_datacheck_extensions)
+    elif job_type == "explicit":
+        target_extensions = list(self.explicit_analysis_extensions)
+    elif job_type == "explicit_datacheck":
+        target_extensions = list(self.explicit_datacheck_extensions)
+    else:
+        raise ValueError(
+            "``job_type`` must be one of ``standard``, ``standard_datacheck``, ``explicit``, or ``explicit_datacheck``"
+        )
+
+    if "standard" in job_type and processes > 1:
+        # Abaqus Standard counts message file as [.msg, .msg1, .msg2, ...]
+        target_extensions.extend([".msg{process}" for process in range(1:processes)])
+
+    if job_type == "standard" and write_restart and processes > 1:
+        # Abaqus Standard/analysis with restart and MPI counts .mdl/.stt files as [.ext0, .ext1, ext2, ...]
+        for extension in (".mdl", ".stt"):
+            extension_index = restart_files.index(extension)
+            target_extensions.pop(extension_index)
+            target_extensions[extension_index:extension_index] = [
+                f"{extension}.{process}" for process in range(0, processes)
+            ]
+
+    if job_type == "explicit_datacheck" and processes > 1:
+        # Abaqus Explicit/datacheck with MPI counts message file as [.msg0, .msg1, .msg2, ...]
+        extension_index = restart_files.index(".msg")
+        target_extensions.pop(extension_index)
+        target_extensions[extension_index:extension_index] = [
+            f".msg.{process}" for process in range(0, processes)
+        ]
+
+    return tuple(target_extensions)
+
+
 def _get_abaqus_restart_extensions(
     solver: typing.Literal["standard", "explicit"],
     processes: int = 1,
@@ -401,6 +454,8 @@ def _get_abaqus_restart_extensions(
 
     :param solver: Abaqus solver.
     :param processes: Number of MPI processes used to run the Abaqus job.
+
+    :return: restart specific files
     """
     if solver.lower() == "explicit":
         restart_files = list(explicit_restart_extensions)
