@@ -1455,14 +1455,14 @@ def _abaqus_standard_solver_emitter(
     target: list, source: list, env: SCons.Environment.Environment
 ) -> tuple[list, list]:
     """Emit the standard specific extensions with :meth:`waves.scons_extensions._abaqus_solver_emitter`."""
-    return _abaqus_solver_emitter(target, source, env, _settings._abaqus_standard_extensions)
+    return _abaqus_solver_emitter(target, source, env, _settings._abaqus_standard_analysis_extensions)
 
 
 def _abaqus_explicit_solver_emitter(
     target: list, source: list, env: SCons.Environment.Environment
 ) -> tuple[list, list]:
     """Emit the explicit specific extensions with :meth:`waves.scons_extensions._abaqus_solver_emitter`."""
-    return _abaqus_solver_emitter(target, source, env, _settings._abaqus_explicit_extensions)
+    return _abaqus_solver_emitter(target, source, env, _settings._abaqus_explicit_analysis_extensions)
 
 
 def _abaqus_datacheck_solver_emitter(
@@ -1795,7 +1795,7 @@ def abaqus_explicit_emitter(
     target: list,
     source: list,
     env: SCons.Environment.Environment,
-    suffixes: typing.Iterable[str] = _settings._abaqus_explicit_extensions,
+    suffixes: typing.Iterable[str] = _settings._abaqus_explicit_analysis_extensions,
     appending_suffixes: typing.Iterable[str] | None = None,
     stdout_extension: str = _settings._stdout_extension,
 ) -> tuple[list, list]:
@@ -1865,7 +1865,7 @@ def abaqus_standard_emitter(
     target: list,
     source: list,
     env: SCons.Environment.Environment,
-    suffixes: typing.Iterable[str] = _settings._abaqus_standard_extensions,
+    suffixes: typing.Iterable[str] = _settings._abaqus_standard_analysis_extensions,
     appending_suffixes: typing.Iterable[str] | None = None,
     stdout_extension: str = _settings._stdout_extension,
 ) -> tuple[list, list]:
@@ -2060,9 +2060,9 @@ class AbaqusPseudoBuilder:
         builder: SCons.Builder.Builder,
         override_cpus: int | None = None,
         datacheck_extensions: typing.Iterable[str] = _settings._abaqus_standard_datacheck_extensions,
-        standard_extensions: typing.Iterable[str] = _settings._abaqus_standard_extensions,
+        standard_extensions: typing.Iterable[str] = _settings._abaqus_standard_analysis_extensions,
         standard_restart_extensions: typing.Iterable[str] = _settings._abaqus_standard_restart_extensions,
-        explicit_extensions: typing.Iterable[str] = _settings._abaqus_explicit_extensions,
+        explicit_extensions: typing.Iterable[str] = _settings._abaqus_explicit_analysis_extensions,
         explicit_restart_extensions: typing.Iterable[str] = _settings._abaqus_explicit_restart_extensions,
     ) -> None:
         self.builder = builder
