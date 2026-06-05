@@ -428,14 +428,12 @@ def _get_abaqus_job_extensions(
         # Abaqus Standard counts message file as [.msg, .msg1, .msg2, ...]
         target_extensions.extend([".msg{process}" for process in range(1, processes)])
 
-    if job_type == "standard" and write_restart and processes > 1:
+    if (job_type == "standard" and write_restart and processes == 1) or (job_type == "standard_datacheck"):
+        target_extensions.extend([".mdl", ".stt"])
+    elif job_type == "standard" and write_restart and processes > 1:
         # Abaqus Standard/analysis with restart and MPI counts .mdl/.stt files as [.ext0, .ext1, ext2, ...]
         for extension in (".mdl", ".stt"):
-            extension_index = restart_files.index(extension)
-            target_extensions.pop(extension_index)
-            target_extensions[extension_index:extension_index] = [
-                f"{extension}.{process}" for process in range(0, processes)
-            ]
+            target_extensions.extend([f"{extension}.{process}" for process in range(0, processes)])
 
     if job_type == "explicit_datacheck" and processes > 1:
         # Abaqus Explicit/datacheck with MPI counts message file as [.msg0, .msg1, .msg2, ...]
