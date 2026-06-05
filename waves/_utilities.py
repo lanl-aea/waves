@@ -437,7 +437,7 @@ def _get_abaqus_job_extensions(
 
     if job_type == "explicit_datacheck" and processes > 1:
         # Abaqus Explicit/datacheck with MPI counts message file as [.msg0, .msg1, .msg2, ...]
-        extension_index = restart_files.index(".msg")
+        extension_index = target_extensions.index(".msg")
         target_extensions.pop(extension_index)
         target_extensions[extension_index:extension_index] = [
             f".msg.{process}" for process in range(0, processes)
