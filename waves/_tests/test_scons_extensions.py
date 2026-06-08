@@ -1814,8 +1814,7 @@ abaqus_pseudobuilder_input = {
         [
             f"job{ext}"
             for ext in (
-                _abaqus_standard_analysis_extensions
-                + _utilities._get_abaqus_restart_extensions(job_type="standard", processes=2)
+                _utilities._get_abaqus_job_extensions(job_type="standard", processes=2, write_restart=True)
             )
         ],
         " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
@@ -1833,12 +1832,14 @@ abaqus_pseudobuilder_input = {
             "oldjob_restart_file_count": 2,
         },
         ["job.inp"]
-        + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard", processes=2)],
+        + [
+            f"oldjob{ext}"
+            for ext in _utilities._get_abaqus_restart_extensions(job_type="standard", processes=2)
+        ],
         [
             f"job{ext}"
             for ext in (
-                _abaqus_standard_analysis_extensions
-                + _utilities._get_abaqus_restart_extensions(job_type="standard", processes=2)
+                _utilities._get_abaqus_job_extensions(job_type="standard", processes=2, write_restart=True)
             )
         ],
         " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
@@ -1881,9 +1882,7 @@ abaqus_pseudobuilder_input = {
         + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard", processes=1)],
         [
             f"job{ext}"
-            for ext in (
-                _utilities._get_abaqus_job_extensions(job_type="standard", processes=2, write_restart=True)
-            )
+            for ext in (_utilities._get_abaqus_job_extensions(job_type="standard", processes=2, write_restart=True))
         ],
         " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
         {"job": "job"},
