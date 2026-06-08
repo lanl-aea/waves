@@ -448,7 +448,7 @@ get_abaqus_job_extensions_cases = {
         "standard", True, 1, (".odb", ".dat", ".msg", ".com", ".prt", ".sta", ".mdl", ".res", ".sim", ".stt"), does_not_raise,
     ),
     "standard_analysis_restart_mpi": (
-        "standard", True, 2, (".odb", ".dat", ".msg", ".msg.1", ".com", ".prt", ".sta", ".mdl0", ".mdl1", ".res", ".sim", ".stt0", ".stt1"), does_not_raise,
+        "standard", True, 2, (".odb", ".dat", ".msg", ".msg.1", ".com", ".prt", ".sta", ".mdl.0", ".mdl.1", ".res", ".sim", ".stt.0", ".stt.1"), does_not_raise,
     ),
     "standard_datacheck_norestart_nompi": (
         "standard_datacheck", False, 1, (".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt"), does_not_raise,
