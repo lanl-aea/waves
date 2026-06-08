@@ -42,7 +42,7 @@ _abaqus_explicit_datacheck_extensions = (
     ".res",
     ".sel",
 )
-_abaqus_explicit_restart_extensions = (".odb", ".prt", ".abq", ".mdl", ".pac", ".stt", ".res", ".sel")
+_abaqus_explicit_restart_extensions = (".odb", ".prt", ".mdl", ".stt", ".res", ".abq", ".pac", ".sel")
 _matlab_environment_extension = ".matlab.env"
 _sbatch_wrapper_options = "--wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap"
 _sierra_environment_extension = ".env"
