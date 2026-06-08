@@ -442,9 +442,7 @@ def _get_abaqus_job_extensions(
         # Abaqus Explicit/datacheck with MPI counts message file as [.msg.1, .msg.2, .msg.3, ...]
         extension_index = target_extensions.index(".msg")
         target_extensions.pop(extension_index)
-        target_extensions[extension_index:extension_index] = [
-            f".msg.{process}" for process in range(1, processes + 1)
-        ]
+        target_extensions[extension_index:extension_index] = [f".msg.{process}" for process in range(1, processes + 1)]
 
     return tuple(target_extensions)
 
