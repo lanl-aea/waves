@@ -1859,8 +1859,8 @@ abaqus_pseudobuilder_input = {
     "indivisible_cpus": (
         {},
         {"job": "job", "cpus": 3, "processes": 2},
-        ["job.inp"],
-        [f"job{ext}" for ext in _abaqus_standard_analysis_extensions],
+        None,
+        None,
         "",
         {"job": "job"},
         pytest.raises(ValueError, match="Number of CPUs '3' is indivisible by the number of MPI processes '2'"),
@@ -1868,8 +1868,8 @@ abaqus_pseudobuilder_input = {
     "indivisible_override_cpus": (
         {"override_cpus": 3},
         {"job": "job", "cpus": 2, "processes": 2},
-        ["job.inp"],
-        [f"job{ext}" for ext in _abaqus_standard_analysis_extensions],
+        None,
+        None,
         "",
         {"job": "job"},
         pytest.raises(ValueError, match="Number of CPUs '3' is indivisible by the number of MPI processes '2'"),
@@ -1882,8 +1882,7 @@ abaqus_pseudobuilder_input = {
         [
             f"job{ext}"
             for ext in (
-                _abaqus_standard_analysis_extensions
-                + _utilities._get_abaqus_restart_extensions(job_type="standard", processes=2)
+                _utilities._get_abaqus_job_extensions(job_type="standard", processes=2, write_restart=True)
             )
         ],
         " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
@@ -1893,10 +1892,8 @@ abaqus_pseudobuilder_input = {
     "mismatched_oldjob_lengths": (
         {},
         {"job": "job", "oldjob": ["oldjob_1", "oldjob_2"], "oldjob_restart_file_count": [1]},
-        ["job.inp"]
-        + [f"oldjob_1{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard", processes=1)]
-        + [f"oldjob_2{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard", processes=2)],
-        [f"job{ext}" for ext in _abaqus_standard_analysis_extensions],
+        None,
+        None,
         " -double both $(-cpus 1$)",
         {"job": "job"},
         pytest.raises(ValueError, match="The length of ``oldjob_restart_file_count`` and ``oldjob`` do not match"),
@@ -1912,8 +1909,8 @@ abaqus_pseudobuilder_input = {
 def test_abaqus_pseudo_builder(
     class_kwargs: dict[str, typing.Any],
     call_kwargs: dict[str, typing.Any],
-    sources: list[str],
-    targets: list[str],
+    sources: list[str] | None,
+    targets: list[str] | None,
     options: str,
     builder_kwargs: dict[str, typing.Any],
     outcome: contextlib.nullcontext | pytest.RaisesExc,
