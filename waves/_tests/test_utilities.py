@@ -437,6 +437,159 @@ def test_warn_only_once() -> None:
         assert len(warning_output) == 1
 
 
+test_transform_abaqus_extensions_cases = {
+    "Abaqus/Standard .notfound 1": ([".not", ".same"], ".notfound", 1, {}, [".not", ".same"]),
+    "Abaqus/Standard .notfound 2": ([".not", ".same"], ".notfound", 2, {}, [".not", ".same"]),
+    "Abaqus/Standard .notfound 11": ([".not", ".same"], ".notfound", 11, {}, [".not", ".same"]),
+    "Abaqus/Standard .msg 1": ([".not", ".msg", ".same"], ".msg", 1, {}, [".not", ".msg", ".same"]),
+    "Abaqus/Standard .msg 2": ([".not", ".msg", ".same"], ".msg", 2, {}, [".not", ".msg", ".msg.1", ".same"]),
+    "Abaqus/Standard .msg 11": (
+        [".not", ".msg", ".same"],
+        ".msg",
+        11,
+        {},
+        [
+            ".not",
+            ".msg",
+            ".msg.1",
+            ".msg.2",
+            ".msg.3",
+            ".msg.4",
+            ".msg.5",
+            ".msg.6",
+            ".msg.7",
+            ".msg.8",
+            ".msg.9",
+            ".msg.10",
+            ".same",
+        ],
+    ),
+    "Abaqus/Standard restart .mdl 1": (
+        [".not", ".mdl", ".same"],
+        ".mdl",
+        1,
+        {"zero_index": 0},
+        [".not", ".mdl", ".same"],
+    ),
+    "Abaqus/Standard restart .mdl 2": (
+        [".not", ".mdl", ".same"],
+        ".mdl",
+        2,
+        {"zero_index": 0},
+        [".not", ".mdl.0", ".mdl.1", ".same"],
+    ),
+    "Abaqus/Standard restart .mdl 11": (
+        [".not", ".mdl", ".same"],
+        ".mdl",
+        11,
+        {"zero_index": 0},
+        [
+            ".not",
+            ".mdl.0",
+            ".mdl.1",
+            ".mdl.2",
+            ".mdl.3",
+            ".mdl.4",
+            ".mdl.5",
+            ".mdl.6",
+            ".mdl.7",
+            ".mdl.8",
+            ".mdl.9",
+            ".mdl.10",
+            ".same",
+        ],
+    ),
+    "Abaqus/Standard restart .stt 1": (
+        [".not", ".stt", ".same"],
+        ".stt",
+        1,
+        {"zero_index": 0},
+        [".not", ".stt", ".same"],
+    ),
+    "Abaqus/Standard restart .stt 2": (
+        [".not", ".stt", ".same"],
+        ".stt",
+        2,
+        {"zero_index": 0},
+        [".not", ".stt.0", ".stt.1", ".same"],
+    ),
+    "Abaqus/Standard restart .stt 11": (
+        [".not", ".stt", ".same"],
+        ".stt",
+        11,
+        {"zero_index": 0},
+        [
+            ".not",
+            ".stt.0",
+            ".stt.1",
+            ".stt.2",
+            ".stt.3",
+            ".stt.4",
+            ".stt.5",
+            ".stt.6",
+            ".stt.7",
+            ".stt.8",
+            ".stt.9",
+            ".stt.10",
+            ".same",
+        ],
+    ),
+    "Abaqus/Explicit datacheck .msg 1": (
+        [".not", ".msg", ".same"],
+        ".msg",
+        1,
+        {"zero_index": 1},
+        [".not", ".msg", ".same"],
+    ),
+    "Abaqus/Explicit datacheck .msg 2": (
+        [".not", ".msg", ".same"],
+        ".msg",
+        2,
+        {"zero_index": 1},
+        [".not", ".msg.1", ".msg.2", ".same"],
+    ),
+    "Abaqus/Explicit datacheck .msg 11": (
+        [".not", ".msg", ".same"],
+        ".msg",
+        11,
+        {"zero_index": 1},
+        [
+            ".not",
+            ".msg.1",
+            ".msg.2",
+            ".msg.3",
+            ".msg.4",
+            ".msg.5",
+            ".msg.6",
+            ".msg.7",
+            ".msg.8",
+            ".msg.9",
+            ".msg.10",
+            ".msg.11",
+            ".same",
+        ],
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("target_extensions", "transform_extension", "processes", "kwargs", "expected"),
+    test_transform_abaqus_extensions_cases.values(),
+    ids=test_transform_abaqus_extensions_cases.keys(),
+)
+def test_transform_abaqus_extensions(
+    target_extensions: typing.Iterable[str],
+    transform_extension: str,
+    processes: int | None,
+    kwargs: dict,
+    expected: tuple[str, ...],
+) -> None:
+    output_extensions = _utilities._transform_abaqus_extensions(
+        target_extensions, transform_extension, processes, **kwargs
+    )
+    assert output_extensions == expected
+
+
 get_abaqus_job_extensions_cases = {
     "standard_analysis_norestart_nompi": (
         "standard",

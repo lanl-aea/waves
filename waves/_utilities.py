@@ -391,6 +391,37 @@ def warn_only_once(function: collections.abc.Callable) -> collections.abc.Callab
     return wrapper
 
 
+def _transform_abaqus_extensions(
+    target_extensions: typing.Iterable[str],
+    transform_extension: str,
+    processes: int | None = None,
+    zero_index: typing.Literal[0, 1] | None = None,
+) -> list[str]:
+    """Return a list of Abaqus extensions with MPI count suffixes on the transformed extension.
+
+    :param target_extensions: the input list of extensions
+    :param transform_extension: the extension to transform
+    :param zero_index: the suffix to use for the first MPI file
+
+       * ``None`` for an empty string for Abaqus/Standard and ``.msg`` extension: ``.msg``, ``msg.1``, ``.msg.2``
+       * Use ``".0"`` for Abaqus/Standard restart MPI jobs and ``.mdl``, ``.stt`` extensions: ``.mdl.0``, ``.mdl.1``,
+         ``.mdl.2``
+       * Use ``".1"`` for Abaqus/Explicit datacheck MPI jobs with ``.msg`` extension: ``.msg.1``, ``.msg.2``, ``.msg.3``
+    """
+    target_extensions = list(target_extensions)
+    starting_index = 0 if zero_index is None else zero_index
+    if transform_extension in target_extensions and processes is not None and processes > 1:
+        extension_index = target_extensions.index(transform_extension)
+        target_extensions.pop(extension_index)
+        replacement_extensions = [
+            f"{transform_extension}.{process}" for process in range(starting_index, processes + starting_index)
+        ]
+        if zero_index is None:
+            replacement_extensions[0] = transform_extension
+        target_extensions[extension_index:extension_index] = replacement_extensions
+    return target_extensions
+
+
 def _get_abaqus_job_extensions(
     job_type: typing.Literal["standard", "standard_datacheck", "explicit", "explicit_datacheck"] = "standard",
     processes: int | None = None,
@@ -438,27 +469,14 @@ def _get_abaqus_job_extensions(
         )
 
     if "standard" in job_type and processes > 1:
-        # Abaqus Standard counts message file as [.msg, .msg.1, .msg.2, ...]
-        extension_index = target_extensions.index(".msg")
-        target_extensions.pop(extension_index)
-        target_extensions[extension_index:extension_index] = [".msg"] + [
-            f".msg.{process}" for process in range(1, processes)
-        ]
+        target_extensions = _transform_abaqus_extensions(target_extensions, ".msg", processes, zero_index=None)
 
     if job_type == "standard" and write_restart and processes > 1:
-        # Abaqus Standard/analysis with restart and MPI counts .mdl/.stt files as [.ext.0, .ext.1, ext.2, ...]
-        for extension in (".mdl", ".stt"):
-            extension_index = target_extensions.index(extension)
-            target_extensions.pop(extension_index)
-            target_extensions[extension_index:extension_index] = [
-                f"{extension}.{process}" for process in range(0, processes)
-            ]
+        target_extensions = _transform_abaqus_extensions(target_extensions, ".mdl", processes, zero_index=0)
+        target_extensions = _transform_abaqus_extensions(target_extensions, ".stt", processes, zero_index=0)
 
     if job_type == "explicit_datacheck" and processes > 1:
-        # Abaqus Explicit/datacheck with MPI counts message file as [.msg.1, .msg.2, .msg.3, ...]
-        extension_index = target_extensions.index(".msg")
-        target_extensions.pop(extension_index)
-        target_extensions[extension_index:extension_index] = [f".msg.{process}" for process in range(1, processes + 1)]
+        target_extensions = _transform_abaqus_extensions(target_extensions, ".msg", processes, zero_index=1)
 
     return tuple(target_extensions)
 
@@ -485,13 +503,8 @@ def _get_abaqus_restart_extensions(
         # Cast to list to allow modification
         restart_files = list(standard_restart_extensions)
         if processes > 1:
-            # Abaqus Standard/analysis with restart and MPI counts .mdl/.stt files as [.ext.0, .ext.1, ext.2, ...]
-            for extension in (".mdl", ".stt"):
-                extension_index = restart_files.index(extension)
-                restart_files.pop(extension_index)
-                restart_files[extension_index:extension_index] = [
-                    f"{extension}.{process}" for process in range(0, processes)
-                ]
+            restart_files = _transform_abaqus_extensions(restart_files, ".mdl", processes, zero_index=0)
+            restart_files = _transform_abaqus_extensions(restart_files, ".stt", processes, zero_index=0)
     else:
         raise ValueError(
             "``job_type`` must be one of ``standard``, ``standard_datacheck``, ``explicit``, or ``explicit_datacheck``"
