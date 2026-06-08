@@ -411,11 +411,11 @@ def _get_abaqus_job_extensions(
     :return: job target files
     """
     if job_type == "standard" and not write_restart:
-        target_extensions = [".odb", ".dat", ".com", ".msg", ".prt", ".sta"]
+        target_extensions = list(standard_analysis_extensions)
     elif job_type == "standard" and write_restart:
         target_extensions = [".odb", ".dat", ".com", ".msg", ".prt", ".sta", ".mdl", ".res", ".sim", ".stt"]
     elif job_type == "standard_datacheck" and not write_restart:
-        target_extensions = [".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt"]
+        target_extensions = list(standard_datacheck_extensions)
     elif job_type == "standard_datacheck" and write_restart:
         target_extensions = [".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".res", ".sim", ".stt"]
     elif "explicit" in job_type:
