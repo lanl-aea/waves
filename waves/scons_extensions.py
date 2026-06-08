@@ -1462,7 +1462,7 @@ def _abaqus_explicit_solver_emitter(
     target: list, source: list, env: SCons.Environment.Environment
 ) -> tuple[list, list]:
     """Emit the explicit specific extensions with :meth:`waves.scons_extensions._abaqus_solver_emitter`."""
-    return _abaqus_solver_emitter(target, source, env, _settings._abaqus_explicit_analysis_extensions)
+    return _abaqus_solver_emitter(target, source, env, _settings._abaqus_explicit_extensions)
 
 
 def _abaqus_datacheck_solver_emitter(
@@ -1795,7 +1795,7 @@ def abaqus_explicit_emitter(
     target: list,
     source: list,
     env: SCons.Environment.Environment,
-    suffixes: typing.Iterable[str] = _settings._abaqus_explicit_analysis_extensions,
+    suffixes: typing.Iterable[str] = _settings._abaqus_explicit_extensions,
     appending_suffixes: typing.Iterable[str] | None = None,
     stdout_extension: str = _settings._stdout_extension,
 ) -> tuple[list, list]:
@@ -2039,13 +2039,13 @@ class AbaqusPseudoBuilder:
     :param override_cpus: Override the task-specific default number of CPUs. This kwarg value is most useful if
         propagated from a user-specified option at execution time. If None, Abaqus Pseudo-Builder tasks will use the
         task-specific default.
-    :param datacheck_extensions: The extensions to use in a target list for datacheck jobs
-    :param standard_extensions: The extensions to use in the target list for standard analysis ``job``
-    :param standard_restart_extensions: The extensions to use in the target list for standard analysis restart ``job``
-        and in the source list for standard analysis restart ``oldjob``.
-    :param explicit_extensions: The extensions to use in the target list for explicit analysis ``job``
-    :param explicit_restart_extensions: The extensions to use in the target list for explicit analysis restart ``job``
-        and in the source list for explicit analysis restart ``oldjob``.
+    :param standard_analysis_extensions: The extensions to use in the target list for standard analysis ``job``
+    :param standard_datacheck_extensions: The extensions to use in a target list for standard datacheck ``job``
+    :param standard_restart_extensions: The extra extensions to use in the target list for standard analysis restart
+        ``job`` and in the source list for standard analysis restart ``oldjob``.
+    :param explicit_extensions: The extensions to use in the target list for all explicit jobs
+    :param explicit_restart_extensions: The extensions to use in the source list for explicit analysis restart
+        ``oldjob``.
 
     .. warning::
 
@@ -2062,8 +2062,7 @@ class AbaqusPseudoBuilder:
         standard_analysis_extensions: typing.Iterable[str] = _settings._abaqus_standard_analysis_extensions,
         standard_datacheck_extensions: typing.Iterable[str] = _settings._abaqus_standard_datacheck_extensions,
         standard_restart_extensions: typing.Iterable[str] = _settings._abaqus_standard_restart_extensions,
-        explicit_analysis_extensions: typing.Iterable[str] = _settings._abaqus_explicit_analysis_extensions,
-        explicit_datacheck_extensions: typing.Iterable[str] = _settings._abaqus_explicit_datacheck_extensions,
+        explicit_extensions: typing.Iterable[str] = _settings._abaqus_explicit_extensions,
         explicit_restart_extensions: typing.Iterable[str] = _settings._abaqus_explicit_restart_extensions,
     ) -> None:
         self.builder = builder
@@ -2071,12 +2070,9 @@ class AbaqusPseudoBuilder:
         self.standard_analysis_extensions = standard_analysis_extensions
         self.standard_datacheck_extensions = standard_datacheck_extensions
         self.standard_restart_extensions = standard_restart_extensions
-        self.explicit_analysis_extensions = explicit_analysis_extensions
-        self.explicit_datacheck_extensions = explicit_datacheck_extensions
+        self.explicit_extensions = explicit_extensions
         self.explicit_restart_extensions = explicit_restart_extensions
 
-    # TODO: address Explicit-specific restart files: ['abq', 'pac', 'sel']
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/821
     def __call__(
         self,
         env: SCons.Environment.Environment,  # noqa: ARG002
@@ -2254,8 +2250,8 @@ class AbaqusPseudoBuilder:
             write_restart=write_restart,
             standard_analysis_extensions=self.standard_analysis_extensions,
             standard_datacheck_extensions=self.standard_datacheck_extensions,
-            explicit_analysis_extensions=self.explicit_analysis_extensions,
-            explicit_datacheck_extensions=self.explicit_datacheck_extensions,
+            standard_restart_extensions=self.standard_restart_extensions,
+            explicit_extensions=self.explicit_extensions,
         )
         targets.extend([f"{job}{extension}" for extension in target_extensions])
 
@@ -2302,18 +2298,6 @@ class AbaqusPseudoBuilder:
                     explicit_restart_extensions=self.explicit_restart_extensions,
                 )
                 sources.extend([f"{job_name}{extension}" for extension in oldjob_extensions])
-
-        # If writing restart files, add restart files to targets
-        if write_restart:
-            # TODO: address Explicit-specific restart files: ['abq', 'pac', 'sel']
-            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/821
-            restart_extensions = _utilities._get_abaqus_restart_extensions(
-                solver=job_type,
-                processes=processes,
-                standard_restart_extensions=self.standard_restart_extensions,
-                explicit_restart_extensions=self.explicit_restart_extensions,
-            )
-            targets.extend([f"{job}{extension}" for extension in restart_extensions])
 
         # If user subroutine is specified, add user subroutine to sources
         if user:

@@ -13,21 +13,7 @@ _abaqus_common_extensions = (".odb", ".dat", ".msg", ".com", ".prt")
 _abaqus_standard_analysis_extensions = (".odb", ".dat", ".msg", ".com", ".prt", ".sta")
 _abaqus_standard_datacheck_extensions = (".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt")
 _abaqus_standard_restart_extensions = (".odb", ".prt", ".mdl", ".sim", ".stt", ".res")
-_abaqus_explicit_analysis_extensions = (
-    ".odb",
-    ".dat",
-    ".msg",
-    ".com",
-    ".prt",
-    ".sta",
-    ".abq",
-    ".mdl",
-    ".pac",
-    ".stt",
-    ".res",
-    ".sel",
-)
-_abaqus_explicit_datacheck_extensions = (
+_abaqus_explicit_extensions = (
     ".odb",
     ".dat",
     ".msg",
