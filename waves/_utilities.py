@@ -394,7 +394,7 @@ def warn_only_once(function: collections.abc.Callable) -> collections.abc.Callab
 def _get_abaqus_job_extensions(
     job_type: typing.Literal["standard", "standard_datacheck", "explicit", "explicit_datacheck"] = "standard",
     processes: int = 1,
-    write_restart = False,
+    write_restart: bool = False,
     standard_analysis_extensions: typing.Iterable[str] = _settings._abaqus_standard_analysis_extensions,
     standard_datacheck_extensions: typing.Iterable[str] = _settings._abaqus_standard_datacheck_extensions,
     explicit_analysis_extensions: typing.Iterable[str] = _settings._abaqus_explicit_analysis_extensions,
@@ -410,7 +410,6 @@ def _get_abaqus_job_extensions(
 
     :return: job target files
     """
-    job_type = job_type.lower()
     if job_type == "standard":
         target_extensions = list(standard_analysis_extensions)
     elif job_type == "standard_datacheck":

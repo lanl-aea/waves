@@ -37,7 +37,6 @@ _abaqus_explicit_datacheck_extensions = (
     ".abq",
     ".mdl",
     ".pac",
-    ".sim",
     ".stt",
     ".res",
     ".sel",
