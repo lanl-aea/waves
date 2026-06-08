@@ -564,6 +564,19 @@ get_abaqus_job_extensions_cases = {
         (".odb", ".dat", ".msg.1", ".msg.2", ".com", ".prt", ".sta", ".abq", ".mdl", ".pac", ".res", ".sel", ".stt"),
         does_not_raise,
     ),
+    "bad job type": (
+        "stahnduurd",
+        False,
+        None,
+        None,
+        pytest.raises(
+            ValueError,
+            match=(
+                "``job_type`` must be one of ``standard``, ``standard_datacheck``, ``explicit``, or"
+                " ``explicit_datacheck``"
+            )
+        )
+    ),
 }
 
 
@@ -669,7 +682,13 @@ get_abaqus_restart_extensions_input = {
         "stahnduurd",
         2,
         None,
-        pytest.raises(ValueError, match="``job_type`` must be one of ``standard``, ``standard_datacheck``, ``explicit``, or ``explicit_datacheck``"),
+        pytest.raises(
+            ValueError,
+            match=(
+                "``job_type`` must be one of ``standard``, ``standard_datacheck``, ``explicit``, or"
+                " ``explicit_datacheck``"
+            )
+        )
     ),
 }
 
