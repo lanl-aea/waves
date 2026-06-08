@@ -574,8 +574,8 @@ get_abaqus_job_extensions_cases = {
             match=(
                 "``job_type`` must be one of ``standard``, ``standard_datacheck``, ``explicit``, or"
                 " ``explicit_datacheck``"
-            )
-        )
+            ),
+        ),
     ),
 }
 
@@ -687,8 +687,8 @@ get_abaqus_restart_extensions_input = {
             match=(
                 "``job_type`` must be one of ``standard``, ``standard_datacheck``, ``explicit``, or"
                 " ``explicit_datacheck``"
-            )
-        )
+            ),
+        ),
     ),
 }
 
