@@ -410,14 +410,16 @@ def _get_abaqus_job_extensions(
 
     :return: job target files
     """
-    if job_type == "standard":
-        target_extensions = list(standard_analysis_extensions)
-    elif job_type == "standard_datacheck":
-        target_extensions = list(standard_datacheck_extensions)
-    elif job_type == "explicit":
+    if job_type == "standard" and not write_restart:
+        target_extensions = [".odb", ".dat", ".com", ".msg", ".prt", ".sta"]
+    elif job_type == "standard" and write_restart:
+        target_extensions = [".odb", ".dat", ".com", ".msg", ".prt", ".sta", ".mdl", ".res", ".sim", ".stt"]
+    elif job_type == "standard_datacheck" and not write_restart:
+        target_extensions = [".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt"]
+    elif job_type == "standard_datacheck" and write_restart:
+        target_extensions = [".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".res", ".sim", ".stt"]
+    elif "explicit" in job_type:
         target_extensions = list(explicit_analysis_extensions)
-    elif job_type == "explicit_datacheck":
-        target_extensions = list(explicit_datacheck_extensions)
     else:
         raise ValueError(
             "``job_type`` must be one of ``standard``, ``standard_datacheck``, ``explicit``, or ``explicit_datacheck``"
@@ -427,12 +429,7 @@ def _get_abaqus_job_extensions(
         # Abaqus Standard counts message file as [.msg, .msg.1, .msg.2, ...]
         target_extensions.extend([".msg.{process}" for process in range(1, processes)])
 
-    if "standard" in job_type and write_restart:
-        target_extensions.append(".res")
-
-    if (job_type == "standard" and write_restart and processes == 1) or (job_type == "standard_datacheck"):
-        target_extensions.extend([".mdl", ".sim", ".stt"])
-    elif job_type == "standard" and write_restart and processes > 1:
+    if job_type == "standard" and write_restart and processes > 1:
         # Abaqus Standard/analysis with restart and MPI counts .mdl/.stt files as [.ext.0, .ext.1, ext.2, ...]
         target_extensions.append(".sim")
         for extension in (".mdl", ".stt"):
