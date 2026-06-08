@@ -657,25 +657,25 @@ get_abaqus_restart_extensions_input = {
     "explicit_1": (
         "explicit",
         1,
-        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"),
+        (".odb", ".prt", ".mdl", ".stt", ".res", ".abq", ".pac", ".sel"),
         does_not_raise,
     ),
     "EXPLICIT_1": (
         "EXPLICIT",
         1,
-        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"),
+        (".odb", ".prt", ".mdl", ".stt", ".res", ".abq", ".pac", ".sel"),
         does_not_raise,
     ),
     "explicit_2": (
         "explicit",
         2,
-        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"),
+        (".odb", ".prt", ".mdl", ".stt", ".res", ".abq", ".pac", ".sel"),
         does_not_raise,
     ),
     "explicit_11": (
         "explicit",
         11,
-        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"),
+        (".odb", ".prt", ".mdl", ".stt", ".res", ".abq", ".pac", ".sel"),
         does_not_raise,
     ),
     "stahnduurd": (
