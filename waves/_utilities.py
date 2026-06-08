@@ -439,7 +439,9 @@ def _get_abaqus_job_extensions(
 
     if "standard" in job_type and processes > 1:
         # Abaqus Standard counts message file as [.msg, .msg.1, .msg.2, ...]
-        target_extensions.extend([f".msg.{process}" for process in range(1, processes)])
+        extension_index = target_extensions.index(".msg")
+        target_extensions.pop(extension_index)
+        target_extensions[extension_index:extension_index] = [".msg"] + [f".msg.{process}" for process in range(1, processes)]
 
     if job_type == "standard" and write_restart and processes > 1:
         # Abaqus Standard/analysis with restart and MPI counts .mdl/.stt files as [.ext.0, .ext.1, ext.2, ...]
