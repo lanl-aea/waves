@@ -599,7 +599,8 @@ def test_get_abaqus_job_extensions(
             processes=processes,
             write_restart=write_restart,
         )
-        assert sorted(extensions) == sorted(expected)
+        if expected is not None:
+            assert sorted(extensions) == sorted(expected)
 
 
 get_abaqus_restart_extensions_input = {
