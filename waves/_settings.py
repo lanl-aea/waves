@@ -13,6 +13,10 @@ _abaqus_common_extensions = (".odb", ".dat", ".msg", ".com", ".prt")
 _abaqus_standard_analysis_extensions = (".odb", ".dat", ".msg", ".com", ".prt", ".sta")
 _abaqus_standard_datacheck_extensions = (".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt")
 _abaqus_standard_restart_extensions = (".odb", ".prt", ".mdl", ".sim", ".stt", ".res")
+# VVV DO NOT USE IN NEW CODE AFTER WAVESv1.4.3 VVV
+# Only used to avoid breaking changes in the otherwise deprecated ``abaqus_solver`` builder
+_abaqus_explicit_extensions_deprecated = (".odb", ".dat", ".msg", ".com", ".prt", ".sta")
+# ^^^ DO NOT USE IN NEW CODE AFTER WAVESv1.4.3 ^^^
 _abaqus_explicit_extensions = (
     ".odb",
     ".dat",

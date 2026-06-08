@@ -1462,7 +1462,7 @@ def _abaqus_explicit_solver_emitter(
     target: list, source: list, env: SCons.Environment.Environment
 ) -> tuple[list, list]:
     """Emit the explicit specific extensions with :meth:`waves.scons_extensions._abaqus_solver_emitter`."""
-    return _abaqus_solver_emitter(target, source, env, _settings._abaqus_explicit_extensions)
+    return _abaqus_solver_emitter(target, source, env, _settings._abaqus_explicit_extensions_deprecated)
 
 
 def _abaqus_datacheck_solver_emitter(

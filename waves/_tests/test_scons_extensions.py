@@ -17,6 +17,7 @@ from waves._settings import (
     _abaqus_common_extensions,
     _abaqus_environment_extension,
     _abaqus_explicit_extensions,
+    _abaqus_explicit_extensions_deprecated,
     _abaqus_standard_analysis_extensions,
     _abaqus_standard_datacheck_extensions,
     _cd_action_prefix,
@@ -525,7 +526,7 @@ def check_abaqus_solver_targets(nodes: SCons.Node.NodeList, solver: str | None, 
     elif solver == "standard":
         expected_suffixes.extend(_abaqus_standard_analysis_extensions)
     elif solver == "explicit":
-        expected_suffixes.extend(_abaqus_explicit_extensions)
+        expected_suffixes.extend(_abaqus_explicit_extensions_deprecated)
     elif solver == "datacheck":
         expected_suffixes.extend(_abaqus_standard_datacheck_extensions)
     else:
