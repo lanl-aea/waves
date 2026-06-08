@@ -446,9 +446,6 @@ def _get_abaqus_job_extensions(
 
     :return: job target files
     """
-    if processes is None:
-        processes = 1
-
     if job_type == "standard" and not write_restart:
         target_extensions = list(standard_analysis_extensions)
     elif job_type == "standard" and write_restart:
@@ -468,14 +465,14 @@ def _get_abaqus_job_extensions(
             "``job_type`` must be one of ``standard``, ``standard_datacheck``, ``explicit``, or ``explicit_datacheck``"
         )
 
-    if "standard" in job_type and processes > 1:
+    if "standard" in job_type:
         target_extensions = _transform_abaqus_extensions(target_extensions, ".msg", processes, zero_index=None)
 
-    if job_type == "standard" and write_restart and processes > 1:
+    if job_type == "standard" and write_restart:
         target_extensions = _transform_abaqus_extensions(target_extensions, ".mdl", processes, zero_index=0)
         target_extensions = _transform_abaqus_extensions(target_extensions, ".stt", processes, zero_index=0)
 
-    if job_type == "explicit_datacheck" and processes > 1:
+    if job_type == "explicit_datacheck":
         target_extensions = _transform_abaqus_extensions(target_extensions, ".msg", processes, zero_index=1)
 
     return tuple(target_extensions)
@@ -502,9 +499,8 @@ def _get_abaqus_restart_extensions(
     elif "standard" in job_type.lower():
         # Cast to list to allow modification
         restart_files = list(standard_restart_extensions)
-        if processes > 1:
-            restart_files = _transform_abaqus_extensions(restart_files, ".mdl", processes, zero_index=0)
-            restart_files = _transform_abaqus_extensions(restart_files, ".stt", processes, zero_index=0)
+        restart_files = _transform_abaqus_extensions(restart_files, ".mdl", processes, zero_index=0)
+        restart_files = _transform_abaqus_extensions(restart_files, ".stt", processes, zero_index=0)
     else:
         raise ValueError(
             "``job_type`` must be one of ``standard``, ``standard_datacheck``, ``explicit``, or ``explicit_datacheck``"
