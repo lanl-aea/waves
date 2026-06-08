@@ -407,6 +407,11 @@ def _get_abaqus_job_extensions(
     :param processes: Number of MPI processes used to run the Abaqus job.
     :param write_restart: If True, add restart files to target list. This is required if you want to use these
         restart files for a restart job.
+    :param standard_analysis_extensions: The extensions to use in the target list for standard analysis ``job``
+    :param standard_datacheck_extensions: The extensions to use in a target list for standard datacheck ``job``
+    :param standard_restart_extensions: The extra extensions to use in the target list for standard analysis restart
+        ``job`` and in the source list for standard analysis restart ``oldjob``.
+    :param explicit_extensions: The extensions to use in the target list for all explicit jobs
 
     :return: job target files
     """
@@ -455,33 +460,38 @@ def _get_abaqus_job_extensions(
 
 
 def _get_abaqus_restart_extensions(
-    solver: typing.Literal["standard", "explicit"],
+    job_type: typing.Literal["standard", "standard_datacheck", "explicit", "explicit_datacheck"] = "standard",
     processes: int = 1,
     standard_restart_extensions: typing.Iterable[str] = _settings._abaqus_standard_restart_extensions,
     explicit_restart_extensions: typing.Iterable[str] = _settings._abaqus_explicit_restart_extensions,
 ) -> tuple[str, ...]:
     """Determine Abaqus restart files based on solver type and number of MPI processes.
 
-    :param solver: Abaqus solver.
+    :param job_type: The solver/phase combination of the current job:
+        standard[/analysis], standard_datacheck, explicit[/analysis], explicit_datacheck
     :param processes: Number of MPI processes used to run the Abaqus job.
+    :param standard_restart_extensions: The extensions to use in standard restart
+    :param explicit_restart_extensions: The extensions to use in explicit restart
 
     :return: restart specific files
     """
-    if solver.lower() == "explicit":
+    if "explicit" in job_type.lower():
         restart_files = list(explicit_restart_extensions)
-    elif solver.lower() == "standard":
+    elif "standard" in job_type.lower():
         # Cast to list to allow modification
         restart_files = list(standard_restart_extensions)
         if processes > 1:
-            # Drop .mdl and .stt. Add {.mdl,.stt}.[0..N-1] starting from the original extension index.
+            # Abaqus Standard/analysis with restart and MPI counts .mdl/.stt files as [.ext.0, .ext.1, ext.2, ...]
             for extension in (".mdl", ".stt"):
                 extension_index = restart_files.index(extension)
                 restart_files.pop(extension_index)
                 restart_files[extension_index:extension_index] = [
-                    f".{extension}.{process}" for process in range(0, processes)
+                    f"{extension}.{process}" for process in range(0, processes)
                 ]
     else:
-        raise ValueError(f"Unknown solver type: '{solver}'")
+        raise ValueError(
+            "``job_type`` must be one of ``standard``, ``standard_datacheck``, ``explicit``, or ``explicit_datacheck``"
+        )
     # Cast to tuple for consistency with settings constants
     return tuple(restart_files)
 

@@ -2292,7 +2292,7 @@ class AbaqusPseudoBuilder:
             # Add old job targets to source list
             for job_name, num_restart_files in zip(oldjob, oldjob_restart_file_count, strict=True):
                 oldjob_extensions = _utilities._get_abaqus_restart_extensions(
-                    solver=oldjob_type,
+                    job_type=oldjob_type,
                     processes=num_restart_files,
                     standard_restart_extensions=self.standard_restart_extensions,
                     explicit_restart_extensions=self.explicit_restart_extensions,
