@@ -669,18 +669,18 @@ get_abaqus_restart_extensions_input = {
         "stahnduurd",
         2,
         None,
-        pytest.raises(ValueError, match="Unknown solver type: 'stahnduurd'"),
+        pytest.raises(ValueError, match="``job_type`` must be one of ``standard``, ``standard_datacheck``, ``explicit``, or ``explicit_datacheck``"),
     ),
 }
 
 
 @pytest.mark.parametrize(
-    ("solver", "processes", "expected", "outcome"),
+    ("job_type", "processes", "expected", "outcome"),
     get_abaqus_restart_extensions_input.values(),
     ids=get_abaqus_restart_extensions_input.keys(),
 )
 def test_get_abaqus_restart_extensions(
-    solver: str,
+    job_type: str,
     processes: int,
     expected: tuple[str] | None,
     outcome: contextlib.nullcontext | pytest.RaisesExc,
@@ -688,7 +688,7 @@ def test_get_abaqus_restart_extensions(
     with outcome:
         # Test cases include intentional bad argument types. Do not perform static type checks.
         extensions = _utilities._get_abaqus_restart_extensions(
-            solver=solver,  # type: ignore[arg-type]
+            job_type=job_type,  # type: ignore[arg-type]
             processes=processes,
         )
         assert extensions == expected
