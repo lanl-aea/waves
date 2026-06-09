@@ -609,7 +609,7 @@ get_abaqus_job_extensions_cases = {
         "standard",
         True,
         1,
-        (".odb", ".dat", ".msg", ".com", ".prt", ".sta", ".mdl", ".res", ".sim", ".stt"),
+        (".odb", ".dat", ".msg", ".com", ".prt", ".sta", ".mdl", ".res", ".stt"),
         does_not_raise,
     ),
     "standard_analysis_restart_mpi": (
@@ -627,7 +627,6 @@ get_abaqus_job_extensions_cases = {
             ".mdl.0",
             ".mdl.1",
             ".res",
-            ".sim",
             ".stt.0",
             ".stt.1",
         ),
@@ -760,19 +759,19 @@ get_abaqus_restart_extensions_input = {
     "standard_1": (
         "standard",
         1,
-        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res"),
+        (".odb", ".prt", ".mdl", ".stt", ".res"),
         does_not_raise,
     ),
     "STANDARD_1": (
         "STANDARD",
         1,
-        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res"),
+        (".odb", ".prt", ".mdl", ".stt", ".res"),
         does_not_raise,
     ),
     "standard_2": (
         "standard",
         2,
-        (".odb", ".prt", ".mdl.0", ".mdl.1", ".sim", ".stt.0", ".stt.1", ".res"),
+        (".odb", ".prt", ".mdl.0", ".mdl.1", ".stt.0", ".stt.1", ".res"),
         does_not_raise,
     ),
     "standard_11": (
@@ -792,7 +791,6 @@ get_abaqus_restart_extensions_input = {
             ".mdl.8",
             ".mdl.9",
             ".mdl.10",
-            ".sim",
             ".stt.0",
             ".stt.1",
             ".stt.2",
