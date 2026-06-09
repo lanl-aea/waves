@@ -2088,8 +2088,8 @@ class AbaqusPseudoBuilder:
         extra_sources: list[str] | None = None,
         extra_targets: list[str] | None = None,
         extra_options: str = "",
-        job_type: typing.Literal["standard", "standard_datacheck", "explicit", "explicit_datacheck"] = "standard",
-        oldjob_type: typing.Literal["standard", "standard_datacheck", "explicit", "explicit_datacheck"] = "standard",
+        job_type: _settings._abaqus_job_type_typing = "standard",
+        oldjob_type: _settings._abaqus_job_type_typing | list[_settings._abaqus_job_type_typing] = "standard",
         **kwargs,
     ) -> SCons.Node.NodeList:
         """SCons Pseudo-Builder for running Abaqus jobs.
@@ -2114,8 +2114,8 @@ class AbaqusPseudoBuilder:
             For Abaqus Standard jobs, the number of restart files (specifically .mdl and .stt) will be determined by the
             number of MPI processes the job used. For example, an Abaqus Standard job on 2 MPI processes will not output
             a ``.mdl`` file, but will produce ``.mdl.0`` and ``.mdl.1`` files. When restarting/importing that Abaqus
-            Standard job, specify ``oldjob_restart_file_count = 2``. Abaqus Explicit restart files are not affected by
-            the number of MPI processes and ``oldjob_restart_file_count = 1`` should be specified when
+            Standard job, specify ``oldjob_restart_file_count = 2``. Abaqus Explicit analysis restart files are not
+            affected by the number of MPI processes and ``oldjob_restart_file_count = 1`` may be specified when
             restarting/importing from an Abaqus Explicit job. If ``oldjob`` is a single Abaqus job, specify a single
             integer. If ``oldjob`` is a list of Abaqus jobs, specify a list of integers for job-specific restart files
             or a single integer to be applied to all old jobs.
@@ -2130,6 +2130,9 @@ class AbaqusPseudoBuilder:
             standard[/analysis], standard_datacheck, explicit[/analysis], explicit_datacheck
         :param oldjob_type: The solver/phase combination of the previous job:
             standard[/analysis], standard_datacheck, explicit[/analysis], explicit_datacheck
+            If ``oldjob`` is a single Abaqus job, specify a single integer. If ``oldjob`` is a list of Abaqus jobs,
+            specify a list of integers for job-specific restart files or a single integer to be applied to all old jobs.
+
         :param kwargs: Any additional kwargs are passed through to the builder.
 
         :returns: All targets associated with Abaqus simulation.
@@ -2274,6 +2277,7 @@ class AbaqusPseudoBuilder:
             # Ensure oldjob is a list of str
             if isinstance(oldjob, str):
                 oldjob = [oldjob]
+            oldjob = list(oldjob)
             # If a single old job is specified, add "-oldjob" to the Abaqus command
             if len(oldjob) == 1:
                 options += f" -oldjob {oldjob[0]}"
@@ -2284,10 +2288,18 @@ class AbaqusPseudoBuilder:
             # Check oldjob_restart_file_count is same length as oldjob
             if len(oldjob) != len(oldjob_restart_file_count):
                 raise ValueError("The length of ``oldjob_restart_file_count`` and ``oldjob`` do not match.")
+            # Ensure oldjob_type is list of str
+            if isinstance(oldjob_type, str):
+                oldjob_type = [oldjob_type] * len(oldjob)
+            if len(oldjob) != len(oldjob_type):
+                raise ValueError("The length of ``oldjob_type`` and ``oldjob`` do not match.")
+            # Check oldjob_type is same length as oldjob
             # Add old job targets to source list
-            for job_name, num_restart_files in zip(oldjob, oldjob_restart_file_count, strict=True):
+            for job_name, job_type, num_restart_files in zip(
+                oldjob, oldjob_type, oldjob_restart_file_count, strict=True
+            ):
                 oldjob_extensions = _utilities._get_abaqus_restart_extensions(
-                    job_type=oldjob_type,
+                    job_type=job_type,
                     processes=num_restart_files,
                     standard_restart_extensions=self.standard_restart_extensions,
                     explicit_restart_extensions=self.explicit_restart_extensions,

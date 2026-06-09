@@ -9,6 +9,7 @@ _project_name = f"{_project_name_short} Analysis for Verified Engineering Simula
 # SCons extensions
 _abaqus_environment_file = "abaqus_v6.env"
 _abaqus_environment_extension = f".{_abaqus_environment_file}"
+_abaqus_job_type_typing = typing.Literal["standard", "standard_datacheck", "explicit", "explicit_datacheck"]
 _abaqus_common_extensions = (".odb", ".dat", ".msg", ".com", ".prt")
 _abaqus_standard_analysis_extensions = (".odb", ".dat", ".msg", ".com", ".prt", ".sta")
 _abaqus_standard_datacheck_extensions = (".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt")

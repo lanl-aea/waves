@@ -426,7 +426,7 @@ def _transform_abaqus_extensions(
 
 
 def _get_abaqus_job_extensions(
-    job_type: typing.Literal["standard", "standard_datacheck", "explicit", "explicit_datacheck"] = "standard",
+    job_type: _settings._abaqus_job_type_typing = "standard",
     processes: int | None = None,
     write_restart: bool = False,
     standard_analysis_extensions: typing.Iterable[str] = _settings._abaqus_standard_analysis_extensions,
@@ -482,7 +482,7 @@ def _get_abaqus_job_extensions(
 
 
 def _get_abaqus_restart_extensions(
-    job_type: typing.Literal["standard", "standard_datacheck", "explicit", "explicit_datacheck"] = "standard",
+    job_type: _settings._abaqus_job_type_typing = "standard",
     processes: int | None = None,
     standard_restart_extensions: typing.Iterable[str] = _settings._abaqus_standard_restart_extensions,
     explicit_restart_extensions: typing.Iterable[str] = _settings._abaqus_explicit_restart_extensions,
