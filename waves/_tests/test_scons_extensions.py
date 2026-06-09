@@ -1961,6 +1961,72 @@ abaqus_pseudobuilder_input = {
         {"job": "job"},
         does_not_raise,
     ),
+    "oldjob_restart_file_count_1 standard-standard": (
+        {},
+        {
+            "job": "job",
+            "oldjob": "oldjob",
+            "cpus": 2,
+            "processes": 2,
+            "write_restart": True,
+            "oldjob_restart_file_count": 1,
+            "job_type": "standard",
+            "oldjob_type": "standard",
+        },
+        ["job.inp"]
+        + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard", processes=1)],
+        [
+            f"job{ext}"
+            for ext in (_utilities._get_abaqus_job_extensions(job_type="standard", processes=2, write_restart=True))
+        ],
+        " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "oldjob_restart_file_count_1 standard-explicit": (
+        {},
+        {
+            "job": "job",
+            "oldjob": "oldjob",
+            "cpus": 2,
+            "processes": 2,
+            "write_restart": True,
+            "oldjob_restart_file_count": 1,
+            "job_type": "explicit",
+            "oldjob_type": "standard",
+        },
+        ["job.inp"]
+        + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard", processes=1)],
+        [
+            f"job{ext}"
+            for ext in (_utilities._get_abaqus_job_extensions(job_type="explicit", processes=2, write_restart=True))
+        ],
+        " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "oldjob_restart_file_count_1 explicit-explicit": (
+        {},
+        {
+            "job": "job",
+            "oldjob": "oldjob",
+            "cpus": 2,
+            "processes": 2,
+            "write_restart": True,
+            "oldjob_restart_file_count": 1,
+            "job_type": "explicit",
+            "oldjob_type": "explicit",
+        },
+        ["job.inp"]
+        + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="explicit", processes=1)],
+        [
+            f"job{ext}"
+            for ext in (_utilities._get_abaqus_job_extensions(job_type="explicit", processes=2, write_restart=True))
+        ],
+        " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
+        {"job": "job"},
+        does_not_raise,
+    ),
     "oldjob_restart_file_count_2": (
         {},
         {
@@ -2008,6 +2074,23 @@ abaqus_pseudobuilder_input = {
         {"job": "job"},
         does_not_raise,
     ),
+    "oldjob_restart_file_count_list standard/explicit-explicit": (
+        {},
+        {
+            "job": "job",
+            "oldjob": ["oldjob_1", "oldjob_2"],
+            "oldjob_restart_file_count": [1, 2],
+            "job_type": "explicit",
+            "oldjob_type": ["standard", "explicit"]
+        },
+        ["job.inp"]
+        + [f"oldjob_1{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard", processes=1)]
+        + [f"oldjob_2{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="explicit", processes=2)],
+        [f"job{ext}" for ext in _abaqus_explicit_extensions],
+        " -double both $(-cpus 1$)",
+        {"job": "job"},
+        does_not_raise,
+    ),
     "indivisible_cpus": (
         {},
         {"job": "job", "cpus": 3, "processes": 2},
@@ -2047,6 +2130,15 @@ abaqus_pseudobuilder_input = {
         " -double both $(-cpus 1$)",
         {"job": "job"},
         pytest.raises(ValueError, match="The length of ``oldjob_restart_file_count`` and ``oldjob`` do not match"),
+    ),
+    "mismatched_oldjob_type_lengths": (
+        {},
+        {"job": "job", "oldjob": ["oldjob_1", "oldjob_2"], "oldjob_type": ["standard"]},
+        None,
+        None,
+        " -double both $(-cpus 1$)",
+        {"job": "job"},
+        pytest.raises(ValueError, match="The length of ``oldjob_type`` and ``oldjob`` do not match"),
     ),
 }
 
