@@ -3905,17 +3905,29 @@ test_waves_shell_environment_cases = {
         {"thing1": "a", "thing2": "shouldnotbereplaced"},
     ),
     "no cache": (
-        {"cache": None, "overwrite_cache": False, "ENV": {"thing1": "shouldbereplaced", "thing2": "shouldnotbereplaced"}},
+        {
+            "cache": None,
+            "overwrite_cache": False,
+            "ENV": {"thing1": "shouldbereplaced", "thing2": "shouldnotbereplaced"},
+        },
         {"thing1": "a"},
         {"thing1": "a", "thing2": "shouldnotbereplaced"},
     ),
     "cache": (
-        {"cache": "dummy.yaml", "overwrite_cache": False, "ENV": {"thing1": "shouldbereplaced", "thing2": "shouldnotbereplaced"}},
+        {
+            "cache": "dummy.yaml",
+            "overwrite_cache": False,
+            "ENV": {"thing1": "shouldbereplaced", "thing2": "shouldnotbereplaced"},
+        },
         {"thing1": "a"},
         {"thing1": "a", "thing2": "shouldnotbereplaced"},
     ),
     "cache overwrite": (
-        {"cache": "dummy.yaml", "overwrite_cache": True, "ENV": {"thing1": "shouldbereplaced", "thing2": "shouldnotbereplaced"}},
+        {
+            "cache": "dummy.yaml",
+            "overwrite_cache": True,
+            "ENV": {"thing1": "shouldbereplaced", "thing2": "shouldnotbereplaced"},
+        },
         {"thing1": "a"},
         {"thing1": "a", "thing2": "shouldnotbereplaced"},
     ),
@@ -3927,9 +3939,7 @@ test_waves_shell_environment_cases = {
     test_waves_shell_environment_cases.values(),
     ids=test_waves_shell_environment_cases.keys(),
 )
-def test_waves_shell_environment(
-    kwargs: dict, shell_environment: dict, expected_environment: dict[str, str]
-) -> None:
+def test_waves_shell_environment(kwargs: dict, shell_environment: dict, expected_environment: dict[str, str]) -> None:
     expected_kwargs = {
         "shell": "bash",
         "cache": None,
