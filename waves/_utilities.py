@@ -480,7 +480,7 @@ def _get_abaqus_job_extensions(
 
 def _get_abaqus_restart_extensions(
     job_type: typing.Literal["standard", "standard_datacheck", "explicit", "explicit_datacheck"] = "standard",
-    processes: int = 1,
+    processes: int | None = None,
     standard_restart_extensions: typing.Iterable[str] = _settings._abaqus_standard_restart_extensions,
     explicit_restart_extensions: typing.Iterable[str] = _settings._abaqus_explicit_restart_extensions,
 ) -> tuple[str, ...]:
