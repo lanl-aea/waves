@@ -1000,7 +1000,7 @@ def test_substitution_syntax(substitution_dictionary: dict, keyword_arguments: d
     assert output_dictionary == expected_dictionary
 
 
-shell_environment = {
+test_shell_environment_cases = {
     "default kwargs": (
         {},
         {"thing1": "a"},
@@ -1027,8 +1027,8 @@ shell_environment = {
 @pytest.mark.skipif(testing_windows, reason="BASH shell specific function incompatible with Windows")
 @pytest.mark.parametrize(
     ("kwargs", "expected_environment"),
-    shell_environment.values(),
-    ids=shell_environment.keys(),
+    test_shell_environment_cases.values(),
+    ids=test_shell_environment_cases.keys(),
 )
 def test_shell_environment(kwargs: dict, expected_environment: dict[str, str]) -> None:
     expected_kwargs = {
