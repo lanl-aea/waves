@@ -408,7 +408,7 @@ def test_add_cubit(
             program = env.AddCubit(names, prepend=prepend, **kwargs)
             assert_logic(program, env, original_path, index)
 
-        # Test WAVESEnvironment method
+        # Test WAVESEnvironment and WAVESShellEnvironment method
         waves_env = scons_extensions.WAVESEnvironment()
         with patch("waves._utilities.cache_environment"):
             waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
@@ -1005,16 +1005,13 @@ def test_substitution_syntax(substitution_dictionary: dict, keyword_arguments: d
     output_dictionary = env.SubstitutionSyntax(substitution_dictionary, **keyword_arguments)
     assert output_dictionary == expected_dictionary
 
-    # Test WAVESEnvironment method
-    env = scons_extensions.WAVESEnvironment()
-    output_dictionary = env.SubstitutionSyntax(substitution_dictionary, **keyword_arguments)
-    assert output_dictionary == expected_dictionary
-
-    # Test WAVESShellEnvironment method
+    # Test WAVESEnvironment and WAVESShellEnvironment method
+    waves_env = scons_extensions.WAVESEnvironment()
     with patch("waves._utilities.cache_environment"):
-        env = scons_extensions.WAVESShellEnvironment("dummy_command")
-    output_dictionary = env.SubstitutionSyntax(substitution_dictionary, **keyword_arguments)
-    assert output_dictionary == expected_dictionary
+        waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
+    for env in (waves_env, waves_shell_env):
+        output_dictionary = env.SubstitutionSyntax(substitution_dictionary, **keyword_arguments)
+        assert output_dictionary == expected_dictionary
 
 
 test_shell_environment_cases = {
@@ -2230,18 +2227,14 @@ def test_copy_substfile(source_list: list[str | pathlib.Path], expected_list: li
     target_files = [str(target) for target in target_list]
     assert target_files == expected_list
 
-    # Test the WAVESEnvironment method
-    env = scons_extensions.WAVESEnvironment()
-    target_list = env.CopySubstfile(source_list, {})
-    target_files = [str(target) for target in target_list]
-    assert target_files == expected_list
-
-    # Test the WAVESShellEnvironment method
+    # Test the WAVESEnvironment and WAVESShellEnvironment method
+    waves_env = scons_extensions.WAVESEnvironment()
     with patch("waves._utilities.cache_environment"):
-        env = scons_extensions.WAVESShellEnvironment("dummy_command")
-    target_list = env.CopySubstfile(source_list, {})
-    target_files = [str(target) for target in target_list]
-    assert target_files == expected_list
+        waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
+    for env in (waves_env, waves_shell_env):
+        target_list = env.CopySubstfile(source_list, {})
+        target_files = [str(target) for target in target_list]
+        assert target_files == expected_list
 
 
 build_subdirectory_input = {
@@ -3301,16 +3294,19 @@ def test_parameter_study_sconscript(
         env.ParameterStudySConscript(*args, **kwargs)
         mock_sconscript.assert_called_once_with(*args, **expected)
 
-    # Test WAVESEnvironment method
-    env = scons_extensions.WAVESEnvironment()
+    # Test WAVESEnvironment and WAVESShellEnvironment method
+    waves_env = scons_extensions.WAVESEnvironment()
+    with patch("waves._utilities.cache_environment"):
+        waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
     # Git commit 7a95cef7: Normally you expect something like ``patch("SCons.Script.SConscript.SConsEnvironment...")``
     # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
-    with (
-        patch("waves.scons_extensions.SConsEnvironment.SConscript") as mock_sconscript,
-        outcome,
-    ):
-        env.ParameterStudySConscript(*args, **kwargs)
-        mock_sconscript.assert_called_once_with(*args, **expected)
+    for env in (waves_env, waves_shell_env):
+        with (
+            patch("waves.scons_extensions.SConsEnvironment.SConscript") as mock_sconscript,
+            outcome,
+        ):
+            env.ParameterStudySConscript(*args, **kwargs)
+            mock_sconscript.assert_called_once_with(*args, **expected)
 
 
 parameter_study_write_cases: dict[str, tuple] = {
@@ -3367,10 +3363,13 @@ def test_parameter_study_write(
         targets = env.ParameterStudyWrite(parameter_generator, **kwargs)
         assert [str(target) for target in targets] == expected
 
-    env = scons_extensions.WAVESEnvironment()
-    with outcome:
-        targets = env.ParameterStudyWrite(parameter_generator, **kwargs)
-        assert [str(target) for target in targets] == expected
+    waves_env = scons_extensions.WAVESEnvironment()
+    with patch("waves._utilities.cache_environment"):
+        waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
+    for env in (waves_env, waves_shell_env):
+        with outcome:
+            targets = env.ParameterStudyWrite(parameter_generator, **kwargs)
+            assert [str(target) for target in targets] == expected
 
 
 test_qoi_pseudo_builder_cases: dict[str, tuple] = {
@@ -3648,9 +3647,12 @@ def test_waves_environment_attributes(kwargs: dict[str, str]) -> None:
         "ACTION_SUFFIX": "> ${TARGETS[-1].abspath} 2>&1",
     }
     expected_attributes.update(**kwargs)
-    env = scons_extensions.WAVESEnvironment(**kwargs)
-    for key, value in expected_attributes.items():
-        assert env[key] == value
+    waves_env = scons_extensions.WAVESEnvironment(**kwargs)
+    with patch("waves._utilities.cache_environment"):
+        waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command", **kwargs)
+    for env in (waves_env, waves_shell_env):
+        for key, value in expected_attributes.items():
+            assert env[key] == value
 
 
 waves_environment_methods = {
@@ -3720,11 +3722,14 @@ waves_environment_methods = {
     ids=waves_environment_methods.keys(),
 )
 def test_waves_environment_methods(method: str, function: str, args: tuple, kwargs: dict) -> None:
-    env = scons_extensions.WAVESEnvironment()
-    attribute = getattr(env, method)
-    with patch(f"waves.scons_extensions.{function}") as mock_function:
-        attribute(*args, **kwargs)
-        mock_function.assert_called_once_with(env, *args, **kwargs)
+    waves_env = scons_extensions.WAVESEnvironment()
+    with patch("waves._utilities.cache_environment"):
+        waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
+    for env in (waves_env, waves_shell_env):
+        attribute = getattr(env, method)
+        with patch(f"waves.scons_extensions.{function}") as mock_function:
+            attribute(*args, **kwargs)
+            mock_function.assert_called_once_with(env, *args, **kwargs)
 
 
 waves_environment_builders = {
@@ -3856,30 +3861,35 @@ waves_environment_builders = {
     ids=waves_environment_builders.keys(),
 )
 def test_waves_environment_builders(builder: str, factory: str, factory_kwargs: dict[str, str]) -> None:
-    env = scons_extensions.WAVESEnvironment()
-
     args = ["arg1"]
     kwargs = {"kwarg1": "value1"}
     target = [f"{builder}.target"]
     source = [f"{builder}.source"]
-    mock_builder = unittest.mock.Mock()
 
-    attribute = getattr(env, builder)
-    with patch(f"waves.scons_extensions.{factory}", return_value=mock_builder) as mock_factory:
-        attribute(target, source, *args, **kwargs)
-        mock_factory.assert_called_once_with(**factory_kwargs)
-        mock_builder.assert_called_once_with(env, *args, target=target, source=source, **kwargs)
+    waves_env = scons_extensions.WAVESEnvironment()
+    with patch("waves._utilities.cache_environment"):
+        waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
+    for env in (waves_env, waves_shell_env):
+        mock_builder = unittest.mock.Mock()
+        attribute = getattr(env, builder)
+        with patch(f"waves.scons_extensions.{factory}", return_value=mock_builder) as mock_factory:
+            attribute(target, source, *args, **kwargs)
+            mock_factory.assert_called_once_with(**factory_kwargs)
+            mock_builder.assert_called_once_with(env, *args, target=target, source=source, **kwargs)
 
 
 def test_waves_environment_abaqus_pseudo_builder() -> None:
-    env = scons_extensions.WAVESEnvironment()
-
     args = ["arg1"]
     kwargs = {"kwarg1": "value1"}
-    with patch("waves.scons_extensions.AbaqusPseudoBuilder.__call__") as mock_call:
-        # Ignore type checks on a mock argument pass-through test
-        env.AbaqusPseudoBuilder("job", *args, **kwargs)  # type: ignore[arg-type]
-        mock_call.assert_called_once_with(env, "job", *args, **kwargs)
+
+    waves_env = scons_extensions.WAVESEnvironment()
+    with patch("waves._utilities.cache_environment"):
+        waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
+    for env in (waves_env, waves_shell_env):
+        with patch("waves.scons_extensions.AbaqusPseudoBuilder.__call__") as mock_call:
+            # Ignore type checks on a mock argument pass-through test
+            env.AbaqusPseudoBuilder("job", *args, **kwargs)  # type: ignore[arg-type]
+            mock_call.assert_called_once_with(env, "job", *args, **kwargs)
 
 
 test_waves_shell_environment_init_cases = {
