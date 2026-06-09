@@ -391,29 +391,123 @@ def warn_only_once(function: collections.abc.Callable) -> collections.abc.Callab
     return wrapper
 
 
+def _transform_abaqus_extensions(
+    target_extensions: typing.Iterable[str],
+    transform_extension: str,
+    processes: int | None = None,
+    zero_index: typing.Literal[0, 1] | None = None,
+) -> list[str]:
+    """Return a list of Abaqus extensions with MPI count suffixes on the transformed extension.
+
+    :param target_extensions: the input list of extensions
+    :param transform_extension: the extension to transform
+    :param zero_index: the suffix to use for the first MPI file
+
+       * ``None`` for an empty string for Abaqus/Standard and ``.msg`` extension: ``.msg``, ``msg.1``, ``.msg.2``
+       * Use ``".0"`` for Abaqus/Standard restart MPI jobs and ``.mdl``, ``.stt`` extensions: ``.mdl.0``, ``.mdl.1``,
+         ``.mdl.2``
+       * Use ``".1"`` for Abaqus/Explicit datacheck MPI jobs with ``.msg`` extension: ``.msg.1``, ``.msg.2``, ``.msg.3``
+    """
+    if isinstance(target_extensions, (str, bytes, bytearray)):
+        target_extensions = [target_extensions]
+    else:
+        target_extensions = list(target_extensions)
+    starting_index = 0 if zero_index is None else zero_index
+    if transform_extension in target_extensions and processes is not None and processes > 1:
+        extension_index = target_extensions.index(transform_extension)
+        target_extensions.pop(extension_index)
+        replacement_extensions = [
+            f"{transform_extension}.{process}" for process in range(starting_index, processes + starting_index)
+        ]
+        if zero_index is None:
+            replacement_extensions[0] = transform_extension
+        target_extensions[extension_index:extension_index] = replacement_extensions
+    return target_extensions
+
+
+def _get_abaqus_job_extensions(
+    job_type: _settings._abaqus_job_type_typing = "standard",
+    processes: int | None = None,
+    write_restart: bool = False,
+    standard_analysis_extensions: typing.Iterable[str] = _settings._abaqus_standard_analysis_extensions,
+    standard_datacheck_extensions: typing.Iterable[str] = _settings._abaqus_standard_datacheck_extensions,
+    standard_restart_extensions: typing.Iterable[str] = _settings._abaqus_standard_restart_extensions,
+    explicit_extensions: typing.Iterable[str] = _settings._abaqus_explicit_extensions,
+) -> tuple[str, ...]:
+    """Determine Abaqus job files based on solver/phase type and number of MPI processes.
+
+    :param job_type: The solver/phase combination of the current job:
+        standard[/analysis], standard_datacheck, explicit[/analysis], explicit_datacheck
+    :param processes: Number of MPI processes used to run the Abaqus job.
+    :param write_restart: If True, add restart files to target list. This is required if you want to use these
+        restart files for a restart job.
+    :param standard_analysis_extensions: The extensions to use in the target list for standard analysis ``job``
+    :param standard_datacheck_extensions: The extensions to use in a target list for standard datacheck ``job``
+    :param standard_restart_extensions: The extra extensions to use in the target list for standard analysis restart
+        ``job`` and in the source list for standard analysis restart ``oldjob``.
+    :param explicit_extensions: The extensions to use in the target list for all explicit jobs
+
+    :return: job target files
+    """
+    if job_type == "standard" and not write_restart:
+        target_extensions = list(standard_analysis_extensions)
+    elif job_type == "standard" and write_restart:
+        target_extensions = list(standard_analysis_extensions) + [
+            extension for extension in standard_restart_extensions if extension not in standard_analysis_extensions
+        ]
+    elif job_type == "standard_datacheck" and not write_restart:
+        target_extensions = list(standard_datacheck_extensions)
+    elif job_type == "standard_datacheck" and write_restart:
+        target_extensions = list(standard_datacheck_extensions) + [
+            extension for extension in standard_restart_extensions if extension not in standard_datacheck_extensions
+        ]
+    elif "explicit" in job_type:
+        target_extensions = list(explicit_extensions)
+    else:
+        raise ValueError(
+            "``job_type`` must be one of ``standard``, ``standard_datacheck``, ``explicit``, or ``explicit_datacheck``"
+        )
+
+    if "standard" in job_type:
+        target_extensions = _transform_abaqus_extensions(target_extensions, ".msg", processes, zero_index=None)
+
+    if job_type == "standard" and write_restart:
+        target_extensions = _transform_abaqus_extensions(target_extensions, ".mdl", processes, zero_index=0)
+        target_extensions = _transform_abaqus_extensions(target_extensions, ".stt", processes, zero_index=0)
+
+    if job_type == "explicit_datacheck":
+        target_extensions = _transform_abaqus_extensions(target_extensions, ".msg", processes, zero_index=1)
+
+    return tuple(target_extensions)
+
+
 def _get_abaqus_restart_extensions(
-    solver: typing.Literal["standard", "explicit"], processes: int = 1
+    job_type: _settings._abaqus_job_type_typing = "standard",
+    processes: int | None = None,
+    standard_restart_extensions: typing.Iterable[str] = _settings._abaqus_standard_restart_extensions,
+    explicit_restart_extensions: typing.Iterable[str] = _settings._abaqus_explicit_restart_extensions,
 ) -> tuple[str, ...]:
     """Determine Abaqus restart files based on solver type and number of MPI processes.
 
-    :param solver: Abaqus solver.
+    :param job_type: The solver/phase combination of the current job:
+        standard[/analysis], standard_datacheck, explicit[/analysis], explicit_datacheck
     :param processes: Number of MPI processes used to run the Abaqus job.
+    :param standard_restart_extensions: The extensions to use in standard restart
+    :param explicit_restart_extensions: The extensions to use in explicit restart
+
+    :return: restart specific files
     """
-    if solver.lower() == "explicit":
-        restart_files = list(_settings._abaqus_explicit_restart_extensions)
-    elif solver.lower() == "standard":
+    if "explicit" in job_type.lower():
+        restart_files = list(explicit_restart_extensions)
+    elif "standard" in job_type.lower():
         # Cast to list to allow modification
-        restart_files = list(_settings._abaqus_standard_restart_extensions)
-        if processes > 1:
-            # Drop .mdl and .stt. Add {.mdl,.stt}.[0..N-1] starting from the original extension index.
-            for extension in (".mdl", ".stt"):
-                extension_index = restart_files.index(extension)
-                restart_files.pop(extension_index)
-                restart_files[extension_index:extension_index] = [
-                    f"{extension}.{process}" for process in range(0, processes)
-                ]
+        restart_files = list(standard_restart_extensions)
+        restart_files = _transform_abaqus_extensions(restart_files, ".mdl", processes, zero_index=0)
+        restart_files = _transform_abaqus_extensions(restart_files, ".stt", processes, zero_index=0)
     else:
-        raise ValueError(f"Unknown solver type: '{solver}'")
+        raise ValueError(
+            "``job_type`` must be one of ``standard``, ``standard_datacheck``, ``explicit``, or ``explicit_datacheck``"
+        )
     # Cast to tuple for consistency with settings constants
     return tuple(restart_files)
 

@@ -437,23 +437,341 @@ def test_warn_only_once() -> None:
         assert len(warning_output) == 1
 
 
+test_transform_abaqus_extensions_cases = {
+    "Abaqus/Standard .notfound 1": ([".not", ".same"], ".notfound", 1, {}, [".not", ".same"]),
+    "Abaqus/Standard .notfound 2": ([".not", ".same"], ".notfound", 2, {}, [".not", ".same"]),
+    "Abaqus/Standard .notfound 11": ([".not", ".same"], ".notfound", 11, {}, [".not", ".same"]),
+    "Abaqus/Standard .msg 1": ([".not", ".msg", ".same"], ".msg", 1, {}, [".not", ".msg", ".same"]),
+    "Abaqus/Standard .msg 2": ([".not", ".msg", ".same"], ".msg", 2, {}, [".not", ".msg", ".msg.1", ".same"]),
+    "Abaqus/Standard .msg 11": (
+        [".not", ".msg", ".same"],
+        ".msg",
+        11,
+        {},
+        [
+            ".not",
+            ".msg",
+            ".msg.1",
+            ".msg.2",
+            ".msg.3",
+            ".msg.4",
+            ".msg.5",
+            ".msg.6",
+            ".msg.7",
+            ".msg.8",
+            ".msg.9",
+            ".msg.10",
+            ".same",
+        ],
+    ),
+    "Abaqus/Standard restart .mdl 1": (
+        [".not", ".mdl", ".same"],
+        ".mdl",
+        1,
+        {"zero_index": 0},
+        [".not", ".mdl", ".same"],
+    ),
+    "Abaqus/Standard restart .mdl 2": (
+        [".not", ".mdl", ".same"],
+        ".mdl",
+        2,
+        {"zero_index": 0},
+        [".not", ".mdl.0", ".mdl.1", ".same"],
+    ),
+    "Abaqus/Standard restart .mdl 11": (
+        [".not", ".mdl", ".same"],
+        ".mdl",
+        11,
+        {"zero_index": 0},
+        [
+            ".not",
+            ".mdl.0",
+            ".mdl.1",
+            ".mdl.2",
+            ".mdl.3",
+            ".mdl.4",
+            ".mdl.5",
+            ".mdl.6",
+            ".mdl.7",
+            ".mdl.8",
+            ".mdl.9",
+            ".mdl.10",
+            ".same",
+        ],
+    ),
+    "Abaqus/Standard restart .stt 1": (
+        [".not", ".stt", ".same"],
+        ".stt",
+        1,
+        {"zero_index": 0},
+        [".not", ".stt", ".same"],
+    ),
+    "Abaqus/Standard restart .stt 2": (
+        [".not", ".stt", ".same"],
+        ".stt",
+        2,
+        {"zero_index": 0},
+        [".not", ".stt.0", ".stt.1", ".same"],
+    ),
+    "Abaqus/Standard restart .stt 11": (
+        [".not", ".stt", ".same"],
+        ".stt",
+        11,
+        {"zero_index": 0},
+        [
+            ".not",
+            ".stt.0",
+            ".stt.1",
+            ".stt.2",
+            ".stt.3",
+            ".stt.4",
+            ".stt.5",
+            ".stt.6",
+            ".stt.7",
+            ".stt.8",
+            ".stt.9",
+            ".stt.10",
+            ".same",
+        ],
+    ),
+    "Abaqus/Explicit datacheck .msg 1": (
+        [".not", ".msg", ".same"],
+        ".msg",
+        1,
+        {"zero_index": 1},
+        [".not", ".msg", ".same"],
+    ),
+    "Abaqus/Explicit datacheck .msg 2": (
+        [".not", ".msg", ".same"],
+        ".msg",
+        2,
+        {"zero_index": 1},
+        [".not", ".msg.1", ".msg.2", ".same"],
+    ),
+    "Abaqus/Explicit datacheck .msg 11": (
+        [".not", ".msg", ".same"],
+        ".msg",
+        11,
+        {"zero_index": 1},
+        [
+            ".not",
+            ".msg.1",
+            ".msg.2",
+            ".msg.3",
+            ".msg.4",
+            ".msg.5",
+            ".msg.6",
+            ".msg.7",
+            ".msg.8",
+            ".msg.9",
+            ".msg.10",
+            ".msg.11",
+            ".same",
+        ],
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("target_extensions", "transform_extension", "processes", "kwargs", "expected"),
+    test_transform_abaqus_extensions_cases.values(),
+    ids=test_transform_abaqus_extensions_cases.keys(),
+)
+def test_transform_abaqus_extensions(
+    target_extensions: typing.Iterable[str],
+    transform_extension: str,
+    processes: int | None,
+    kwargs: dict,
+    expected: tuple[str, ...],
+) -> None:
+    output_extensions = _utilities._transform_abaqus_extensions(
+        target_extensions, transform_extension, processes, **kwargs
+    )
+    assert output_extensions == expected
+
+
+get_abaqus_job_extensions_cases = {
+    "standard_analysis_norestart_nompi": (
+        "standard",
+        False,
+        1,
+        (".odb", ".dat", ".msg", ".com", ".prt", ".sta"),
+        does_not_raise,
+    ),
+    "standard_analysis_norestart_mpi": (
+        "standard",
+        False,
+        2,
+        (".odb", ".dat", ".msg", ".msg.1", ".com", ".prt", ".sta"),
+        does_not_raise,
+    ),
+    "standard_analysis_restart_nompi": (
+        "standard",
+        True,
+        1,
+        (".odb", ".dat", ".msg", ".com", ".prt", ".sta", ".mdl", ".res", ".stt"),
+        does_not_raise,
+    ),
+    "standard_analysis_restart_mpi": (
+        "standard",
+        True,
+        2,
+        (
+            ".odb",
+            ".dat",
+            ".msg",
+            ".msg.1",
+            ".com",
+            ".prt",
+            ".sta",
+            ".mdl.0",
+            ".mdl.1",
+            ".res",
+            ".stt.0",
+            ".stt.1",
+        ),
+        does_not_raise,
+    ),
+    "standard_datacheck_norestart_nompi": (
+        "standard_datacheck",
+        False,
+        1,
+        (".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt"),
+        does_not_raise,
+    ),
+    "standard_datacheck_norestart_mpi": (
+        "standard_datacheck",
+        False,
+        2,
+        (".odb", ".dat", ".msg", ".msg.1", ".com", ".prt", ".023", ".mdl", ".sim", ".stt"),
+        does_not_raise,
+    ),
+    "standard_datacheck_restart_nompi": (
+        "standard_datacheck",
+        True,
+        1,
+        (".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".res", ".sim", ".stt"),
+        does_not_raise,
+    ),
+    "standard_datacheck_restart_mpi": (
+        "standard_datacheck",
+        True,
+        2,
+        (".odb", ".dat", ".msg", ".msg.1", ".com", ".prt", ".023", ".mdl", ".res", ".sim", ".stt"),
+        does_not_raise,
+    ),
+    "explicit_analysis_norestart_nompi": (
+        "explicit",
+        False,
+        1,
+        (".odb", ".dat", ".msg", ".com", ".prt", ".sta", ".abq", ".mdl", ".pac", ".res", ".sel", ".stt"),
+        does_not_raise,
+    ),
+    "explicit_analysis_norestart_mpi": (
+        "explicit",
+        False,
+        2,
+        (".odb", ".dat", ".msg", ".com", ".prt", ".sta", ".abq", ".mdl", ".pac", ".res", ".sel", ".stt"),
+        does_not_raise,
+    ),
+    "explicit_analysis_restart_nompi": (
+        "explicit",
+        True,
+        1,
+        (".odb", ".dat", ".msg", ".com", ".prt", ".sta", ".abq", ".mdl", ".pac", ".res", ".sel", ".stt"),
+        does_not_raise,
+    ),
+    "explicit_analysis_restart_mpi": (
+        "explicit",
+        True,
+        2,
+        (".odb", ".dat", ".msg", ".com", ".prt", ".sta", ".abq", ".mdl", ".pac", ".res", ".sel", ".stt"),
+        does_not_raise,
+    ),
+    "explicit_datacheck_norestart_nompi": (
+        "explicit_datacheck",
+        False,
+        1,
+        (".odb", ".dat", ".msg", ".com", ".prt", ".sta", ".abq", ".mdl", ".pac", ".res", ".sel", ".stt"),
+        does_not_raise,
+    ),
+    "explicit_datacheck_norestart_mpi": (
+        "explicit_datacheck",
+        False,
+        2,
+        (".odb", ".dat", ".msg.1", ".msg.2", ".com", ".prt", ".sta", ".abq", ".mdl", ".pac", ".res", ".sel", ".stt"),
+        does_not_raise,
+    ),
+    "explicit_datacheck_restart_nompi": (
+        "explicit_datacheck",
+        True,
+        1,
+        (".odb", ".dat", ".msg", ".com", ".prt", ".sta", ".abq", ".mdl", ".pac", ".res", ".sel", ".stt"),
+        does_not_raise,
+    ),
+    "explicit_datacheck_restart_mpi": (
+        "explicit_datacheck",
+        True,
+        2,
+        (".odb", ".dat", ".msg.1", ".msg.2", ".com", ".prt", ".sta", ".abq", ".mdl", ".pac", ".res", ".sel", ".stt"),
+        does_not_raise,
+    ),
+    "bad job type": (
+        "stahnduurd",
+        False,
+        None,
+        None,
+        pytest.raises(
+            ValueError,
+            match=(
+                "``job_type`` must be one of ``standard``, ``standard_datacheck``, ``explicit``, or"
+                " ``explicit_datacheck``"
+            ),
+        ),
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("job_type", "write_restart", "processes", "expected", "outcome"),
+    get_abaqus_job_extensions_cases.values(),
+    ids=get_abaqus_job_extensions_cases.keys(),
+)
+def test_get_abaqus_job_extensions(
+    job_type: str,
+    write_restart: bool,
+    processes: int,
+    expected: tuple[str] | None,
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
+    with outcome:
+        # Test cases include intentional bad argument types. Do not perform static type checks.
+        extensions = _utilities._get_abaqus_job_extensions(
+            job_type=job_type,  # type: ignore[arg-type]
+            processes=processes,
+            write_restart=write_restart,
+        )
+        if expected is not None:
+            assert sorted(extensions) == sorted(expected)
+
+
 get_abaqus_restart_extensions_input = {
     "standard_1": (
         "standard",
         1,
-        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res"),
+        (".odb", ".prt", ".mdl", ".stt", ".res"),
         does_not_raise,
     ),
     "STANDARD_1": (
         "STANDARD",
         1,
-        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res"),
+        (".odb", ".prt", ".mdl", ".stt", ".res"),
         does_not_raise,
     ),
     "standard_2": (
         "standard",
         2,
-        (".odb", ".prt", ".mdl.0", ".mdl.1", ".sim", ".stt.0", ".stt.1", ".res"),
+        (".odb", ".prt", ".mdl.0", ".mdl.1", ".stt.0", ".stt.1", ".res"),
         does_not_raise,
     ),
     "standard_11": (
@@ -473,7 +791,6 @@ get_abaqus_restart_extensions_input = {
             ".mdl.8",
             ".mdl.9",
             ".mdl.10",
-            ".sim",
             ".stt.0",
             ".stt.1",
             ".stt.2",
@@ -492,43 +809,49 @@ get_abaqus_restart_extensions_input = {
     "explicit_1": (
         "explicit",
         1,
-        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"),
+        (".odb", ".prt", ".mdl", ".stt", ".res", ".abq", ".pac", ".sel"),
         does_not_raise,
     ),
     "EXPLICIT_1": (
         "EXPLICIT",
         1,
-        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"),
+        (".odb", ".prt", ".mdl", ".stt", ".res", ".abq", ".pac", ".sel"),
         does_not_raise,
     ),
     "explicit_2": (
         "explicit",
         2,
-        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"),
+        (".odb", ".prt", ".mdl", ".stt", ".res", ".abq", ".pac", ".sel"),
         does_not_raise,
     ),
     "explicit_11": (
         "explicit",
         11,
-        (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel"),
+        (".odb", ".prt", ".mdl", ".stt", ".res", ".abq", ".pac", ".sel"),
         does_not_raise,
     ),
     "stahnduurd": (
         "stahnduurd",
         2,
         None,
-        pytest.raises(ValueError, match="Unknown solver type: 'stahnduurd'"),
+        pytest.raises(
+            ValueError,
+            match=(
+                "``job_type`` must be one of ``standard``, ``standard_datacheck``, ``explicit``, or"
+                " ``explicit_datacheck``"
+            ),
+        ),
     ),
 }
 
 
 @pytest.mark.parametrize(
-    ("solver", "processes", "expected", "outcome"),
+    ("job_type", "processes", "expected", "outcome"),
     get_abaqus_restart_extensions_input.values(),
     ids=get_abaqus_restart_extensions_input.keys(),
 )
 def test_get_abaqus_restart_extensions(
-    solver: str,
+    job_type: str,
     processes: int,
     expected: tuple[str] | None,
     outcome: contextlib.nullcontext | pytest.RaisesExc,
@@ -536,7 +859,7 @@ def test_get_abaqus_restart_extensions(
     with outcome:
         # Test cases include intentional bad argument types. Do not perform static type checks.
         extensions = _utilities._get_abaqus_restart_extensions(
-            solver=solver,  # type: ignore[arg-type]
+            job_type=job_type,  # type: ignore[arg-type]
             processes=processes,
         )
         assert extensions == expected

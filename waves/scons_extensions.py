@@ -1455,21 +1455,21 @@ def _abaqus_standard_solver_emitter(
     target: list, source: list, env: SCons.Environment.Environment
 ) -> tuple[list, list]:
     """Emit the standard specific extensions with :meth:`waves.scons_extensions._abaqus_solver_emitter`."""
-    return _abaqus_solver_emitter(target, source, env, _settings._abaqus_standard_extensions)
+    return _abaqus_solver_emitter(target, source, env, _settings._abaqus_standard_analysis_extensions)
 
 
 def _abaqus_explicit_solver_emitter(
     target: list, source: list, env: SCons.Environment.Environment
 ) -> tuple[list, list]:
     """Emit the explicit specific extensions with :meth:`waves.scons_extensions._abaqus_solver_emitter`."""
-    return _abaqus_solver_emitter(target, source, env, _settings._abaqus_explicit_extensions)
+    return _abaqus_solver_emitter(target, source, env, _settings._abaqus_explicit_extensions_deprecated)
 
 
 def _abaqus_datacheck_solver_emitter(
     target: list, source: list, env: SCons.Environment.Environment
 ) -> tuple[list, list]:
     """Emit the datacheck specific extensions with :meth:`waves.scons_extensions._abaqus_solver_emitter`."""
-    return _abaqus_solver_emitter(target, source, env, _settings._abaqus_datacheck_extensions)
+    return _abaqus_solver_emitter(target, source, env, _settings._abaqus_standard_datacheck_extensions)
 
 
 def abaqus_solver(
@@ -1725,7 +1725,7 @@ def abaqus_datacheck_emitter(
     target: list,
     source: list,
     env: SCons.Environment.Environment,
-    suffixes: typing.Iterable[str] = _settings._abaqus_datacheck_extensions,
+    suffixes: typing.Iterable[str] = _settings._abaqus_standard_datacheck_extensions,
     appending_suffixes: typing.Iterable[str] | None = None,
     stdout_extension: str = _settings._stdout_extension,
 ) -> tuple[list, list]:
@@ -1865,7 +1865,7 @@ def abaqus_standard_emitter(
     target: list,
     source: list,
     env: SCons.Environment.Environment,
-    suffixes: typing.Iterable[str] = _settings._abaqus_standard_extensions,
+    suffixes: typing.Iterable[str] = _settings._abaqus_standard_analysis_extensions,
     appending_suffixes: typing.Iterable[str] | None = None,
     stdout_extension: str = _settings._stdout_extension,
 ) -> tuple[list, list]:
@@ -2039,24 +2039,40 @@ class AbaqusPseudoBuilder:
     :param override_cpus: Override the task-specific default number of CPUs. This kwarg value is most useful if
         propagated from a user-specified option at execution time. If None, Abaqus Pseudo-Builder tasks will use the
         task-specific default.
+    :param standard_analysis_extensions: The extensions to use in the target list for standard analysis ``job``
+    :param standard_datacheck_extensions: The extensions to use in a target list for standard datacheck ``job``
+    :param standard_restart_extensions: The extra extensions to use in the target list for standard analysis restart
+        ``job`` and in the source list for standard analysis restart ``oldjob``.
+    :param explicit_extensions: The extensions to use in the target list for all explicit jobs
+    :param explicit_restart_extensions: The extensions to use in the source list for explicit analysis restart
+        ``oldjob``.
 
     .. warning::
+
         You must use an AbaqusSolver Builder generated from
-        :meth:`waves.scons_extensions.abaqus_solver_builder_factory`.
-        Using the non-builder-factory :meth:`waves.scons_extensions.abaqus_solver` (i.e. a Builder that does not use the
-        ``program_options`` kwarg) is not supported.
+        :meth:`waves.scons_extensions.abaqus_solver_builder_factory`.  Using the non-builder-factory
+        :meth:`waves.scons_extensions.abaqus_solver` (i.e. a Builder that does not use the ``program_options`` kwarg) is
+        not supported.
     """
 
     def __init__(
         self,
         builder: SCons.Builder.Builder,
         override_cpus: int | None = None,
+        standard_analysis_extensions: typing.Iterable[str] = _settings._abaqus_standard_analysis_extensions,
+        standard_datacheck_extensions: typing.Iterable[str] = _settings._abaqus_standard_datacheck_extensions,
+        standard_restart_extensions: typing.Iterable[str] = _settings._abaqus_standard_restart_extensions,
+        explicit_extensions: typing.Iterable[str] = _settings._abaqus_explicit_extensions,
+        explicit_restart_extensions: typing.Iterable[str] = _settings._abaqus_explicit_restart_extensions,
     ) -> None:
         self.builder = builder
         self.override_cpus = override_cpus
+        self.standard_analysis_extensions = standard_analysis_extensions
+        self.standard_datacheck_extensions = standard_datacheck_extensions
+        self.standard_restart_extensions = standard_restart_extensions
+        self.explicit_extensions = explicit_extensions
+        self.explicit_restart_extensions = explicit_restart_extensions
 
-    # TODO: address Explicit-specific restart files: ['abq', 'pac', 'sel']
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/821
     def __call__(
         self,
         env: SCons.Environment.Environment,  # noqa: ARG002
@@ -2072,17 +2088,14 @@ class AbaqusPseudoBuilder:
         extra_sources: list[str] | None = None,
         extra_targets: list[str] | None = None,
         extra_options: str = "",
+        job_type: _settings._abaqus_job_type_typing = "standard",
+        oldjob_type: _settings._abaqus_job_type_typing | list[_settings._abaqus_job_type_typing] = "standard",
         **kwargs,
     ) -> SCons.Node.NodeList:
         """SCons Pseudo-Builder for running Abaqus jobs.
 
         This SCons Pseudo-Builder wraps the WAVES Abaqus builders to automatically adjust the Abaqus command, sources
         list, and target list when specifying restart jobs and user subroutines.
-
-        .. note::
-            Restart files that are only used by Abaqus/Explicit (i.e. ``.abq``, ``.pac``, and ``.sel``) are not
-            currently added to the source and target lists when specifying ``oldjob`` or ``write_restart``. Use
-            ``extra_sources`` and ``extra_targets`` to manually add them when needed.
 
         :param job: Abaqus job name *without* file extension.
         :param inp: Abaqus input file name *with* file extension. Defaults to ``job``.inp.
@@ -2101,8 +2114,8 @@ class AbaqusPseudoBuilder:
             For Abaqus Standard jobs, the number of restart files (specifically .mdl and .stt) will be determined by the
             number of MPI processes the job used. For example, an Abaqus Standard job on 2 MPI processes will not output
             a ``.mdl`` file, but will produce ``.mdl.0`` and ``.mdl.1`` files. When restarting/importing that Abaqus
-            Standard job, specify ``oldjob_restart_file_count = 2``. Abaqus Explicit restart files are not affected by
-            the number of MPI processes and ``oldjob_restart_file_count = 1`` should be specified when
+            Standard job, specify ``oldjob_restart_file_count = 2``. Abaqus Explicit analysis restart files are not
+            affected by the number of MPI processes and ``oldjob_restart_file_count = 1`` may be specified when
             restarting/importing from an Abaqus Explicit job. If ``oldjob`` is a single Abaqus job, specify a single
             integer. If ``oldjob`` is a list of Abaqus jobs, specify a list of integers for job-specific restart files
             or a single integer to be applied to all old jobs.
@@ -2113,6 +2126,13 @@ class AbaqusPseudoBuilder:
         :param extra_targets: Additional targets to supply to builder.
         :param extra_options: Additional Abaqus options to supply to builder. Should not include any Abaqus options
             available as kwargs, e.g. cpus, oldjob, user, input, job.
+        :param job_type: The solver/phase combination of the current job:
+            standard[/analysis], standard_datacheck, explicit[/analysis], explicit_datacheck
+        :param oldjob_type: The solver/phase combination of the previous job:
+            standard[/analysis], standard_datacheck, explicit[/analysis], explicit_datacheck
+            If ``oldjob`` is a single Abaqus job, specify a single integer. If ``oldjob`` is a list of Abaqus jobs,
+            specify a list of integers for job-specific restart files or a single integer to be applied to all old jobs.
+
         :param kwargs: Any additional kwargs are passed through to the builder.
 
         :returns: All targets associated with Abaqus simulation.
@@ -2220,7 +2240,18 @@ class AbaqusPseudoBuilder:
         # Include input file as first source. Root input file *must* be first file is sources list.
         sources.insert(0, inp)
 
-        targets.extend([f"{job}{extension}" for extension in _settings._abaqus_standard_extensions])
+        # Build expected extensions by solver [standard, explicit] and phase option [analysis, datacheck, ...]
+        # Assume standard/analysis and explicit/analysis solver/phase combination unless a non-default phase is chosen.
+        target_extensions = _utilities._get_abaqus_job_extensions(
+            job_type=job_type,
+            processes=processes,
+            write_restart=write_restart,
+            standard_analysis_extensions=self.standard_analysis_extensions,
+            standard_datacheck_extensions=self.standard_datacheck_extensions,
+            standard_restart_extensions=self.standard_restart_extensions,
+            explicit_extensions=self.explicit_extensions,
+        )
+        targets.extend([f"{job}{extension}" for extension in target_extensions])
 
         # Always allow user to override CPUs with CLI option and exclude CPUs from build signature
         current_cpus = self.override_cpus or cpus
@@ -2246,6 +2277,7 @@ class AbaqusPseudoBuilder:
             # Ensure oldjob is a list of str
             if isinstance(oldjob, str):
                 oldjob = [oldjob]
+            oldjob = list(oldjob)
             # If a single old job is specified, add "-oldjob" to the Abaqus command
             if len(oldjob) == 1:
                 options += f" -oldjob {oldjob[0]}"
@@ -2256,20 +2288,23 @@ class AbaqusPseudoBuilder:
             # Check oldjob_restart_file_count is same length as oldjob
             if len(oldjob) != len(oldjob_restart_file_count):
                 raise ValueError("The length of ``oldjob_restart_file_count`` and ``oldjob`` do not match.")
+            # Ensure oldjob_type is list of str
+            if isinstance(oldjob_type, str):
+                oldjob_type = [oldjob_type] * len(oldjob)
+            if len(oldjob) != len(oldjob_type):
+                raise ValueError("The length of ``oldjob_type`` and ``oldjob`` do not match.")
+            # Check oldjob_type is same length as oldjob
             # Add old job targets to source list
-            for job_name, num_restart_files in zip(oldjob, oldjob_restart_file_count, strict=True):
+            for job_name, job_type, num_restart_files in zip(
+                oldjob, oldjob_type, oldjob_restart_file_count, strict=True
+            ):
                 oldjob_extensions = _utilities._get_abaqus_restart_extensions(
-                    solver="standard",
+                    job_type=job_type,
                     processes=num_restart_files,
+                    standard_restart_extensions=self.standard_restart_extensions,
+                    explicit_restart_extensions=self.explicit_restart_extensions,
                 )
                 sources.extend([f"{job_name}{extension}" for extension in oldjob_extensions])
-
-        # If writing restart files, add restart files to targets
-        if write_restart:
-            # TODO: address Explicit-specific restart files: ['abq', 'pac', 'sel']
-            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/821
-            restart_extensions = _utilities._get_abaqus_restart_extensions(solver="standard", processes=processes)
-            targets.extend([f"{job}{extension}" for extension in restart_extensions])
 
         # If user subroutine is specified, add user subroutine to sources
         if user:

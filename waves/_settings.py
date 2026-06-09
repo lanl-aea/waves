@@ -9,12 +9,30 @@ _project_name = f"{_project_name_short} Analysis for Verified Engineering Simula
 # SCons extensions
 _abaqus_environment_file = "abaqus_v6.env"
 _abaqus_environment_extension = f".{_abaqus_environment_file}"
+_abaqus_job_type_typing = typing.Literal["standard", "standard_datacheck", "explicit", "explicit_datacheck"]
 _abaqus_common_extensions = (".odb", ".dat", ".msg", ".com", ".prt")
-_abaqus_datacheck_extensions = (".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt")
-_abaqus_explicit_extensions = (".odb", ".dat", ".msg", ".com", ".prt", ".sta")
-_abaqus_explicit_restart_extensions = (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel")
-_abaqus_standard_extensions = (".odb", ".dat", ".msg", ".com", ".prt", ".sta")
-_abaqus_standard_restart_extensions = (".odb", ".prt", ".mdl", ".sim", ".stt", ".res")
+_abaqus_standard_analysis_extensions = (".odb", ".dat", ".msg", ".com", ".prt", ".sta")
+_abaqus_standard_datacheck_extensions = (".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt")
+_abaqus_standard_restart_extensions = (".odb", ".prt", ".mdl", ".stt", ".res")
+# VVV DO NOT USE IN NEW CODE AFTER WAVESv1.4.3 VVV
+# Only used to avoid breaking changes in the otherwise deprecated ``abaqus_solver`` builder
+_abaqus_explicit_extensions_deprecated = (".odb", ".dat", ".msg", ".com", ".prt", ".sta")
+# ^^^ DO NOT USE IN NEW CODE AFTER WAVESv1.4.3 ^^^
+_abaqus_explicit_extensions = (
+    ".odb",
+    ".dat",
+    ".msg",
+    ".com",
+    ".prt",
+    ".sta",
+    ".abq",
+    ".mdl",
+    ".pac",
+    ".stt",
+    ".res",
+    ".sel",
+)
+_abaqus_explicit_restart_extensions = (".odb", ".prt", ".mdl", ".stt", ".res", ".abq", ".pac", ".sel")
 _matlab_environment_extension = ".matlab.env"
 _sbatch_wrapper_options = "--wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap"
 _sierra_environment_extension = ".env"
