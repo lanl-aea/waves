@@ -289,6 +289,15 @@ def test_find_program(
         program = env.FindProgram(names, **kwargs)
     assert program == first_found_path
 
+    # Test WAVESShellEnvironment method
+    with (
+        patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+        patch("waves._utilities.cache_environment"),
+    ):
+        env = scons_extensions.WAVESShellEnvironment("dummy_command")
+        program = env.FindProgram(names, **kwargs)
+    assert program == first_found_path
+
 
 @pytest.mark.parametrize(
     ("names", "kwargs", "checkprog_side_effect", "first_found_path"),
