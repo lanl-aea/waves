@@ -5354,7 +5354,8 @@ class WAVESShellEnvironment(WAVESEnvironment):
     """Initializes a shell environment before inheriting the builders/scanners/methods from :class:`WAVESEnvironment`.
 
     Subclass of :class:`waves.scons_extensions.WAVESEnvironment` that automatically calls and initializes the
-    :meth:`waves.scons_extensions.shell_environment`.
+    :meth:`waves.scons_extensions.shell_environment`. The shell ``command`` environment will override any environment
+    variables passed with the SCons construction environment ``ENV`` keyword argument.
 
     :param command: the shell command to execute
     :param args: Positional arguments passed to :class:`waves.scons_extensions.WAVESEnvironment`.
