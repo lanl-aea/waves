@@ -3649,7 +3649,7 @@ def test_waves_environment_attributes(kwargs: dict[str, str]) -> None:
     expected_attributes.update(**kwargs)
     waves_env = scons_extensions.WAVESEnvironment(**kwargs)
     with patch("waves._utilities.cache_environment"):
-        waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command", **kwargs)
+        waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command", **kwargs)  # type: ignore[arg-type]
     for env in (waves_env, waves_shell_env):
         for key, value in expected_attributes.items():
             assert env[key] == value
