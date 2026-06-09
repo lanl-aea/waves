@@ -1044,6 +1044,12 @@ def test_shell_environment(kwargs: dict, expected_environment: dict[str, str]) -
     # Check that the expected dictionary is a subset of the SCons construction environment
     assert all(env["ENV"].get(key, None) == value for key, value in expected_environment.items())
 
+    with patch("waves._utilities.cache_environment", return_value=expected_environment) as cache_environment:
+        env = scons_extensions.WAVESShellEnvironment("dummy", **kwargs)
+        cache_environment.assert_called_once_with("dummy", **expected_kwargs, verbose=True)
+    # Check that the expected dictionary is a subset of the SCons construction environment
+    assert all(env["ENV"].get(key, None) == value for key, value in expected_environment.items())
+
 
 prefix = f"{_cd_action_prefix}"
 suffix = "suffix"
