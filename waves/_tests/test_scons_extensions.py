@@ -284,19 +284,13 @@ def test_find_program(
     assert program == first_found_path
 
     # Test WAVESEnvironment method
-    env = scons_extensions.WAVESEnvironment()
-    with patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect):
-        program = env.FindProgram(names, **kwargs)
-    assert program == first_found_path
-
-    # Test WAVESShellEnvironment method
-    with (
-        patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
-        patch("waves._utilities.cache_environment"),
-    ):
-        env = scons_extensions.WAVESShellEnvironment("dummy_command")
-        program = env.FindProgram(names, **kwargs)
-    assert program == first_found_path
+    waves_env = scons_extensions.WAVESEnvironment()
+    with patch("waves._utilities.cache_environment"):
+        waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
+    for env in (waves_env, waves_shell_env):
+        with patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect):
+            program = env.FindProgram(names, **kwargs)
+        assert program == first_found_path
 
 
 @pytest.mark.parametrize(
@@ -344,24 +338,17 @@ def test_add_program(
             program = env.AddProgram(names, prepend=prepend, **kwargs)
             assert_logic(program, env, original_path, index)
 
-        # Test WAVESEnvironment method
-        env = scons_extensions.WAVESEnvironment()
+        # Test WAVESEnvironment and WAVESShellEnvironment method
+        waves_env = scons_extensions.WAVESEnvironment()
+        with patch("waves._utilities.cache_environment"):
+            waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
         original_path = env["ENV"]["PATH"]
-        with (
-            patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
-        ):
-            program = env.AddProgram(names, prepend=prepend, **kwargs)
-            assert_logic(program, env, original_path, index)
-
-        # Test WAVESShellEnvironment method
-        original_path = env["ENV"]["PATH"]
-        with (
-            patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
-            patch("waves._utilities.cache_environment"),
-        ):
-            env = scons_extensions.WAVESShellEnvironment("dummy_command")
-            program = env.AddProgram(names, prepend=prepend, **kwargs)
-            assert_logic(program, env, original_path, index)
+        for env in (waves_env, waves_shell_env):
+            with (
+                patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+            ):
+                program = env.AddProgram(names, prepend=prepend, **kwargs)
+                assert_logic(program, env, original_path, index)
 
 
 @pytest.mark.parametrize(
@@ -1031,7 +1018,7 @@ def test_substitution_syntax(substitution_dictionary: dict, keyword_arguments: d
     output_dictionary = env.SubstitutionSyntax(substitution_dictionary, **keyword_arguments)
     assert output_dictionary == expected_dictionary
 
-    # Test WAVESEnvironment method
+    # Test WAVESShellEnvironment method
     with patch("waves._utilities.cache_environment"):
         env = scons_extensions.WAVESShellEnvironment("dummy_command")
     output_dictionary = env.SubstitutionSyntax(substitution_dictionary, **keyword_arguments)
@@ -2257,6 +2244,13 @@ def test_copy_substfile(source_list: list[str | pathlib.Path], expected_list: li
     target_files = [str(target) for target in target_list]
     assert target_files == expected_list
 
+    # Test the WAVESShellEnvironment method
+    with patch("waves._utilities.cache_environment"):
+        env = scons_extensions.WAVESShellEnvironment("dummy_command")
+    target_list = env.CopySubstfile(source_list, {})
+    target_files = [str(target) for target in target_list]
+    assert target_files == expected_list
+
 
 build_subdirectory_input = {
     "no target": ([], pathlib.Path()),
@@ -3204,18 +3198,21 @@ def test_parameter_study_task(
     check_action_string(nodes, node_count, action_count, expected_string)
     assert [pathlib.Path(str(node)) for node in nodes] == [pathlib.Path(node) for node in expected_targets]
 
-    # Test the WAVESEnvironment method
-    env = scons_extensions.WAVESEnvironment()
-    nodes = env.ParameterStudyTask(
-        env.PythonScript,
-        *args,
-        source=["python_script.py"],
-        script_options="",
-        study=study,
-        **kwargs,
-    )
-    check_action_string(nodes, node_count, action_count, expected_string)
-    assert [pathlib.Path(str(node)) for node in nodes] == [pathlib.Path(node) for node in expected_targets]
+    # Test the WAVESEnvironment and WAVESSHellEnvironment methods
+    waves_env = scons_extensions.WAVESEnvironment()
+    with patch("waves._utilities.cache_environment"):
+        waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
+    for env in (waves_env, waves_shell_env):
+        nodes = env.ParameterStudyTask(
+            env.PythonScript,
+            *args,
+            source=["python_script.py"],
+            script_options="",
+            study=study,
+            **kwargs,
+        )
+        check_action_string(nodes, node_count, action_count, expected_string)
+        assert [pathlib.Path(str(node)) for node in nodes] == [pathlib.Path(node) for node in expected_targets]
 
 
 cartesian_product = parameter_generators.CartesianProduct(
