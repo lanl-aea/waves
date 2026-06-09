@@ -290,7 +290,7 @@ def test_find_program(
     assert program == first_found_path
 
 
-waves_init_test_cases = {
+test_waves_shell_environment_init_cases = {
     "defaults": (
         "my_command",
         "bash",
@@ -311,8 +311,8 @@ waves_init_test_cases = {
 @pytest.mark.skipif(testing_windows, reason="BASH shell specific function incompatible with Windows")
 @pytest.mark.parametrize(
     ("command", "expected_shell", "expected_cache", "expected_overwrite", "kwargs"),
-    waves_init_test_cases.values(),
-    ids=waves_init_test_cases.keys(),
+    test_waves_shell_environment_init_cases.values(),
+    ids=test_waves_shell_environment_init_cases.keys(),
 )
 def test_waves_shell_environment_init(
     command: str,
