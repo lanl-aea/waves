@@ -1038,7 +1038,6 @@ test_shell_environment_cases = {
 }
 
 
-@pytest.mark.skipif(testing_windows, reason="BASH shell specific function incompatible with Windows")
 @pytest.mark.parametrize(
     ("kwargs", "expected_environment"),
     test_shell_environment_cases.values(),
@@ -3892,62 +3891,55 @@ def test_waves_environment_abaqus_pseudo_builder() -> None:
             mock_call.assert_called_once_with(env, "job", *args, **kwargs)
 
 
-test_waves_shell_environment_init_cases = {
-    "defaults": (
-        "my_command",
-        "bash",
-        "/tmp",
-        True,
-        {},
+# NOTE: update when the ``test_shell_environment_cases`` are updated
+# Should match case-for-case with an added ``ENV`` keyword argument and updated ``expected_environment``
+test_waves_shell_environment_cases = {
+    "default kwargs": (
+        {"ENV": {"thing1": "shouldbereplaced", "thing2": "shouldnotbereplaced"}},
+        {"thing1": "a"},
+        {"thing1": "a", "thing2": "shouldnotbereplaced"},
     ),
-    "custom_values": (
-        "my_command",
-        "bash",
-        None,
-        False,
-        {"action": "run"},
+    "different shell": (
+        {"shell": "different shell", "ENV": {"thing1": "shouldbereplaced", "thing2": "shouldnotbereplaced"}},
+        {"thing1": "a"},
+        {"thing1": "a", "thing2": "shouldnotbereplaced"},
+    ),
+    "no cache": (
+        {"cache": None, "overwrite_cache": False, "ENV": {"thing1": "shouldbereplaced", "thing2": "shouldnotbereplaced"}},
+        {"thing1": "a"},
+        {"thing1": "a", "thing2": "shouldnotbereplaced"},
+    ),
+    "cache": (
+        {"cache": "dummy.yaml", "overwrite_cache": False, "ENV": {"thing1": "shouldbereplaced", "thing2": "shouldnotbereplaced"}},
+        {"thing1": "a"},
+        {"thing1": "a", "thing2": "shouldnotbereplaced"},
+    ),
+    "cache overwrite": (
+        {"cache": "dummy.yaml", "overwrite_cache": True, "ENV": {"thing1": "shouldbereplaced", "thing2": "shouldnotbereplaced"}},
+        {"thing1": "a"},
+        {"thing1": "a", "thing2": "shouldnotbereplaced"},
     ),
 }
 
 
-@pytest.mark.skipif(testing_windows, reason="BASH shell specific function incompatible with Windows")
 @pytest.mark.parametrize(
-    ("command", "expected_shell", "expected_cache", "expected_overwrite", "kwargs"),
-    test_waves_shell_environment_init_cases.values(),
-    ids=test_waves_shell_environment_init_cases.keys(),
+    ("kwargs", "shell_environment", "expected_environment"),
+    test_waves_shell_environment_cases.values(),
+    ids=test_waves_shell_environment_cases.keys(),
 )
-def test_waves_shell_environment_init(
-    command: str,
-    expected_shell: str,
-    expected_cache: str | None,
-    expected_overwrite: bool,
-    kwargs: dict,
+def test_waves_shell_environment(
+    kwargs: dict, shell_environment: dict, expected_environment: dict[str, str]
 ) -> None:
-    with patch("waves.scons_extensions.shell_environment") as mock_shell_environment:
-        mocked_return_env = {"ENV": {"PATH": "/usr/bin", "SHELL_VAR": "extracted"}}
-        mock_shell_environment.return_value = mocked_return_env
+    expected_kwargs = {
+        "shell": "bash",
+        "cache": None,
+        "overwrite_cache": False,
+    }
+    expected_kwargs.update(kwargs)
+    expected_kwargs.pop("ENV")
 
-        passed_env = {"CUSTOM_VAR": "value", "PATH": "/custom/bin"}
-
-        env_with_input = scons_extensions.WAVESShellEnvironment(
-            command,
-            shell=expected_shell,
-            cache=expected_cache,
-            overwrite_cache=expected_overwrite,
-            environment=passed_env,
-            **kwargs,
-        )
-        assert env_with_input["ENV"]["SHELL_VAR"] == "extracted"
-        assert env_with_input["ENV"]["CUSTOM_VAR"] == "value"
-        assert env_with_input["ENV"]["PATH"] == "/custom/bin"
-
-        mock_shell_environment.reset_mock()
-        env_without_input = scons_extensions.WAVESShellEnvironment(
-            command,
-            shell=expected_shell,
-            cache=expected_cache,
-            overwrite_cache=expected_overwrite,
-            **kwargs,
-        )
-        assert env_without_input["ENV"]["SHELL_VAR"] == "extracted"
-        assert env_without_input["ENV"]["PATH"] == "/usr/bin"
+    with patch("waves._utilities.cache_environment", return_value=shell_environment) as cache_environment:
+        env = scons_extensions.WAVESShellEnvironment("dummy", **kwargs)
+        cache_environment.assert_called_once_with("dummy", **expected_kwargs, verbose=True)
+    # Check that the expected dictionary is a subset of the SCons construction environment
+    assert all(env["ENV"].get(key, None) == value for key, value in expected_environment.items())
