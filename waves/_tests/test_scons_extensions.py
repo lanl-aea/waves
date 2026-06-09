@@ -353,6 +353,16 @@ def test_add_program(
             program = env.AddProgram(names, prepend=prepend, **kwargs)
             assert_logic(program, env, original_path, index)
 
+        # Test WAVESShellEnvironment method
+        original_path = env["ENV"]["PATH"]
+        with (
+            patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+            patch("waves._utilities.cache_environment"),
+        ):
+            env = scons_extensions.WAVESShellEnvironment("dummy_command")
+            program = env.AddProgram(names, prepend=prepend, **kwargs)
+            assert_logic(program, env, original_path, index)
+
 
 @pytest.mark.parametrize(
     ("names", "kwargs", "checkprog_side_effect", "first_found_path"),
