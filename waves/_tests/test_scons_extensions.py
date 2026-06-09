@@ -95,23 +95,6 @@ test_convert_to_pathlib_list_cases = {
     ),
 }
 
-waves_init_test_cases = {
-    "defaults": (
-        "my_command",
-        "bash",
-        "/tmp",
-        True,
-        {},
-    ),
-    "custom_values": (
-        "my_command",
-        "bash",
-        None,
-        False,
-        {"action": "run"},
-    ),
-}
-
 
 @pytest.mark.parametrize(
     ("items", "expected"),
@@ -305,6 +288,24 @@ def test_find_program(
     with patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect):
         program = env.FindProgram(names, **kwargs)
     assert program == first_found_path
+
+
+waves_init_test_cases = {
+    "defaults": (
+        "my_command",
+        "bash",
+        "/tmp",
+        True,
+        {},
+    ),
+    "custom_values": (
+        "my_command",
+        "bash",
+        None,
+        False,
+        {"action": "run"},
+    ),
+}
 
 
 @pytest.mark.skipif(testing_windows, reason="BASH shell specific function incompatible with Windows")
