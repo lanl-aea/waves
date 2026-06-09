@@ -408,7 +408,10 @@ def _transform_abaqus_extensions(
          ``.mdl.2``
        * Use ``".1"`` for Abaqus/Explicit datacheck MPI jobs with ``.msg`` extension: ``.msg.1``, ``.msg.2``, ``.msg.3``
     """
-    target_extensions = list(target_extensions)
+    if isinstance(target_extensions, (str, bytes, bytearray)):
+        target_extensions = [target_extensions]
+    else:
+        target_extensions = list(target_extensions)
     starting_index = 0 if zero_index is None else zero_index
     if transform_extension in target_extensions and processes is not None and processes > 1:
         extension_index = target_extensions.index(transform_extension)
