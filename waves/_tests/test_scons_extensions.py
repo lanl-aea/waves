@@ -1981,6 +1981,22 @@ abaqus_pseudobuilder_input = {
         {"job": "job"},
         does_not_raise,
     ),
+    "oldjob_restart_file_count_2 custom extension": (
+        {"standard_analysis_extensions": (".odb", ".ext"), "standard_restart_extensions": (".odb", ".ext")},
+        {
+            "job": "job",
+            "oldjob": "oldjob",
+            "cpus": 2,
+            "processes": 2,
+            "write_restart": True,
+            "oldjob_restart_file_count": 2,
+        },
+        ["job.inp", "oldjob.odb", "oldjob.ext"],
+        ["job.odb", "job.ext"],
+        " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
+        {"job": "job"},
+        does_not_raise,
+    ),
     "oldjob_restart_file_count_list": (
         {},
         {"job": "job", "oldjob": ["oldjob_1", "oldjob_2"], "oldjob_restart_file_count": [1, 2]},
