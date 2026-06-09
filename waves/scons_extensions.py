@@ -5372,21 +5372,17 @@ class WAVESShellEnvironment(WAVESEnvironment):
         shell: str = "bash",
         cache: str | None = None,
         overwrite_cache: bool = False,
-        environment: dict | None = None,
         **kwargs,
     ) -> None:
-        passed_env = environment if environment is not None else {}
-        kwargs["ENV"] = passed_env
         super().__init__(*args, **kwargs)
-
-        scons_env = shell_environment(command, shell, cache, overwrite_cache).get("ENV", {})
-
-        if "ENV" in self and isinstance(self["ENV"], dict):
-            self["ENV"].update(scons_env)
-            self["ENV"].update(passed_env)
-        else:
-            scons_env.update(passed_env)
-            self["ENV"] = scons_env
+        shell_environment = _utilities.cache_environment(
+            command,
+            shell=shell,
+            cache=cache,
+            overwrite_cache=overwrite_cache,
+            verbose=True,
+        )
+        self["ENV"].update(shell_environment)
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace
