@@ -490,9 +490,11 @@ def test_add_cubit_python() -> None:
     env = SCons.Environment.Environment()
     env.AddMethod(scons_extensions.add_cubit_python, "AddCubitPython")
     waves_env = scons_extensions.WAVESEnvironment()
+    with patch("waves._utilities.cache_environment"):
+        waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
     cubit_bin = "/path/to/cubit/bin/"
     cubit_python = "/path/to/cubit/bin/python"
-    for environment in [env, waves_env]:
+    for environment in [env, waves_env, waves_shell_env]:
         # Cubit Python not found mocked by add_program
         with (
             patch("waves._utilities.find_cubit_python"),
