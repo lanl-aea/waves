@@ -431,6 +431,17 @@ def test_add_cubit(
             program = env.AddCubit(names, prepend=prepend, **kwargs)
             assert_logic(program, env, original_path, index)
 
+        # Test WAVESShellEnvironment method
+        original_path = env["ENV"]["PATH"]
+        with (
+            patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return),
+            patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+            patch("waves._utilities.cache_environment"),
+        ):
+            env = scons_extensions.WAVESShellEnvironment("dummy_command")
+            program = env.AddCubit(names, prepend=prepend, **kwargs)
+            assert_logic(program, env, original_path, index)
+
 
 def test_add_cubit_python() -> None:
     # Test function style interface
