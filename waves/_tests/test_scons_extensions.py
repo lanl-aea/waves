@@ -2081,7 +2081,7 @@ abaqus_pseudobuilder_input = {
             "oldjob": ["oldjob_1", "oldjob_2"],
             "oldjob_restart_file_count": [1, 2],
             "job_type": "explicit",
-            "oldjob_type": ["standard", "explicit"]
+            "oldjob_type": ["standard", "explicit"],
         },
         ["job.inp"]
         + [f"oldjob_1{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard", processes=1)]
