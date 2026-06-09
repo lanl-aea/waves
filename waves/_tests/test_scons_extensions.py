@@ -1758,8 +1758,52 @@ abaqus_pseudobuilder_input = {
         {"job": "job"},
         does_not_raise,
     ),
+    "oldjob_str standard": (
+        {},
+        {"job": "job", "oldjob": "oldjob", "oldjob_type": "standard"},
+        ["job.inp"] + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard")],
+        [f"job{ext}" for ext in _abaqus_standard_analysis_extensions],
+        " -double both $(-cpus 1$) -oldjob oldjob",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "oldjob_str standard_datacheck": (
+        {},
+        {"job": "job", "oldjob": "oldjob", "oldjob_type": "standard_datacheck"},
+        ["job.inp"]
+        + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard_datacheck")],
+        [f"job{ext}" for ext in _abaqus_standard_analysis_extensions],
+        " -double both $(-cpus 1$) -oldjob oldjob",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "oldjob_str explicit": (
+        {},
+        {"job": "job", "oldjob": "oldjob", "oldjob_type": "explicit"},
+        ["job.inp"] + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="explicit")],
+        [f"job{ext}" for ext in _abaqus_standard_analysis_extensions],
+        " -double both $(-cpus 1$) -oldjob oldjob",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "oldjob_str explicit_datacheck": (
+        {},
+        {"job": "job", "oldjob": "oldjob", "oldjob_type": "explicit_datacheck"},
+        ["job.inp"]
+        + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="explicit_datacheck")],
+        [f"job{ext}" for ext in _abaqus_standard_analysis_extensions],
+        " -double both $(-cpus 1$) -oldjob oldjob",
+        {"job": "job"},
+        does_not_raise,
+    ),
     "oldjob_str custom extensions": (
-        {"standard_analysis_extensions": (".odb", ".ext"), "standard_restart_extensions": (".odb", ".restart",)},
+        {
+            "standard_analysis_extensions": (".odb", ".ext"),
+            "standard_restart_extensions": (
+                ".odb",
+                ".restart",
+            ),
+        },
         {"job": "job", "oldjob": "oldjob"},
         ["job.inp", "oldjob.odb", "oldjob.restart"],
         ["job.odb", "job.ext"],
@@ -1797,7 +1841,13 @@ abaqus_pseudobuilder_input = {
         does_not_raise,
     ),
     "write restart custom extensions": (
-        {"standard_analysis_extensions": (".odb", ".ext"), "standard_restart_extensions": (".odb", ".restart",)},
+        {
+            "standard_analysis_extensions": (".odb", ".ext"),
+            "standard_restart_extensions": (
+                ".odb",
+                ".restart",
+            ),
+        },
         {"job": "job", "write_restart": True},
         ["job.inp"],
         ["job.odb", "job.ext", "job.restart"],
