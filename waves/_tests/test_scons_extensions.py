@@ -283,7 +283,7 @@ def test_find_program(
         program = env.FindProgram(names, **kwargs)
     assert program == first_found_path
 
-    # Test WAVESEnvironment method
+    # Test WAVESEnvironment and WAVESShellEnvironment method
     waves_env = scons_extensions.WAVESEnvironment()
     with patch("waves._utilities.cache_environment"):
         waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
@@ -409,25 +409,17 @@ def test_add_cubit(
             assert_logic(program, env, original_path, index)
 
         # Test WAVESEnvironment method
-        env = scons_extensions.WAVESEnvironment()
+        waves_env = scons_extensions.WAVESEnvironment()
+        with patch("waves._utilities.cache_environment"):
+            waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
         original_path = env["ENV"]["PATH"]
-        with (
-            patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return),
-            patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
-        ):
-            program = env.AddCubit(names, prepend=prepend, **kwargs)
-            assert_logic(program, env, original_path, index)
-
-        # Test WAVESShellEnvironment method
-        original_path = env["ENV"]["PATH"]
-        with (
-            patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return),
-            patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
-            patch("waves._utilities.cache_environment"),
-        ):
-            env = scons_extensions.WAVESShellEnvironment("dummy_command")
-            program = env.AddCubit(names, prepend=prepend, **kwargs)
-            assert_logic(program, env, original_path, index)
+        for env in (waves_env, waves_shell_env):
+            with (
+                patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return),
+                patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+            ):
+                program = env.AddCubit(names, prepend=prepend, **kwargs)
+                assert_logic(program, env, original_path, index)
 
 
 def test_add_cubit_python() -> None:
