@@ -19,6 +19,7 @@ build:
   script:
     env:
       SETUPTOOLS_SCM_PRETEND_VERSION: ${{ version }}
+      TMPDIR: ${{ env.get("TMPDIR", default="") }}
     content:
       - if: unix
         then: scons install --prefix=${PREFIX}
