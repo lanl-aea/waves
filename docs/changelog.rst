@@ -18,6 +18,8 @@ Enhancements
   with-MPI/without-MPI in the Abaqus PseudoBuilder (:issue:`821`, :issue:`989`, :merge:`1319`). By `Kyle Brindley`_.
 - More complete target emitter for ``abaqus_explicit_emitter`` and ``AbaqusExplicit`` builder (:issue:`821`, :issue:`989`,
   :merge:`1319`). By `Kyle Brindley`_.
+- Allow initialization of a shell command environment with the WAVES builders (:issue:`1019`, :merge:`1318`). By `Erica
+  Hinrichs`_ and `Kyle Brindley`_.
 
 ******************
 1.4.3 (2026-05-26)

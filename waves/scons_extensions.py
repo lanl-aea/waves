@@ -5350,5 +5350,41 @@ class WAVESEnvironment(SConsEnvironment):
         )
 
 
+class WAVESShellEnvironment(WAVESEnvironment):
+    """Initializes a shell environment before inheriting the builders/scanners/methods from :class:`WAVESEnvironment`.
+
+    Subclass of :class:`waves.scons_extensions.WAVESEnvironment` that automatically calls and initializes the
+    :meth:`waves.scons_extensions.shell_environment`. The shell ``command`` environment will override any environment
+    variables passed with the SCons construction environment ``ENV`` keyword argument.
+
+    :param command: the shell command to execute
+    :param args: Positional arguments passed to :class:`waves.scons_extensions.WAVESEnvironment`.
+    :param shell: the shell to use when executing command by absolute or relative path
+    :param cache: absolute or relative path to read/write a shell environment dictionary. Will be written as YAML
+        formatted file regardless of extension.
+    :param overwrite_cache: Ignore previously cached files if they exist.
+    :param kwargs: Keyword arguments passed to :class:`waves.scons_extensions.WAVESEnvironment`.
+    """
+
+    def __init__(
+        self,
+        command: str,
+        *args,
+        shell: str = "bash",
+        cache: str | None = None,
+        overwrite_cache: bool = False,
+        **kwargs,
+    ) -> None:
+        super().__init__(*args, **kwargs)
+        shell_environment = _utilities.cache_environment(
+            command,
+            shell=shell,
+            cache=cache,
+            overwrite_cache=overwrite_cache,
+            verbose=True,
+        )
+        self["ENV"].update(shell_environment)
+
+
 _module_objects = set(globals().keys()) - _exclude_from_namespace
 __all__ = [name for name in _module_objects if not name.startswith("_")]
