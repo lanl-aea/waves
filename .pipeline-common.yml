@@ -38,7 +38,7 @@
     - export RATTLER_CACHE_DIR="${TMPDIR}/rattler"
     - export PYTEST_ADDOPTS="--basetemp=${TMPDIR}/pytest-temp"
   after_script:
-    - rm -r ${TMPDIR} || true
+    - rm -r ${PWD}/tmp || true
 
 .win-job-environment: &win-job-environment
   variables:
