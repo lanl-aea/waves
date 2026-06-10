@@ -14,8 +14,9 @@
     - echo ${environment_file}
     - if [[ -z ${environment_file} ]]; then exit 1; fi
     # Common job variables
-    - prefix="$PWD/env"
-    - conda_pkgs_dirs="$PWD/pkgs"
+    - export TMPDIR=${PWD}/tmp
+    - prefix="${TMPDIR}/env"
+    - conda_pkgs_dirs="${TMPDIR}/pkgs"
     - echo ${prefix}
     - echo ${conda_pkgs_dirs}
     - if [[ -z ${prefix} ]]; then exit 1; fi
@@ -33,12 +34,11 @@
     # texlive module setting LC_ALL breaks Abaqus 2025
     - unset LC_ALL
     # Set cache directories for some common Python packages
-    - cache_directories="${PWD}/cache"
-    - export MPLCONFIGDIR="${cache_directories}/matplotlib"
-    - export RATTLER_CACHE_DIR="${cache_directories}/rattler"
-    - export PYTEST_ADDOPTS="--basetemp=${cache_directories}/pytest-temp"
+    - export MPLCONFIGDIR="${TMPDIR}/matplotlib"
+    - export RATTLER_CACHE_DIR="${TMPDIR}/rattler"
+    - export PYTEST_ADDOPTS="--basetemp=${TMPDIR}/pytest-temp"
   after_script:
-    - rm -r $PWD/env $PWD/pkgs $PWD/cache || true
+    - rm -r ${TMPDIR} || true
 
 .win-job-environment: &win-job-environment
   variables:
