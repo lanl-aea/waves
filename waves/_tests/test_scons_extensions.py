@@ -1038,6 +1038,13 @@ test_shell_environment_cases = {
 }
 
 
+@pytest.mark.skipif(
+    testing_windows,
+    reason=(
+        "Trace bad initiation through the correct way to instantiate an SCons environment outside of an SConscript"
+        " file."
+    ),
+)
 @pytest.mark.parametrize(
     ("kwargs", "expected_environment"),
     test_shell_environment_cases.values(),
@@ -3934,6 +3941,13 @@ test_waves_shell_environment_cases = {
 }
 
 
+@pytest.mark.skipif(
+    testing_windows,
+    reason=(
+        "Trace bad initiation through the correct way to instantiate an SCons environment outside of an SConscript"
+        " file."
+    ),
+)
 @pytest.mark.parametrize(
     ("kwargs", "shell_environment", "expected_environment"),
     test_waves_shell_environment_cases.values(),
