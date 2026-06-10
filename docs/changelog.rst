@@ -21,6 +21,11 @@ Enhancements
 - Allow initialization of a shell command environment with the WAVES builders (:issue:`1019`, :merge:`1318`). By `Erica
   Hinrichs`_ and `Kyle Brindley`_.
 
+Internal Changes
+================
+- Set ``TMPDIR`` on \*nix CI servers to redirect all build artifacts to the CI working directory for more robust
+  cleanup. By `Kyle Brindley`_.
+
 ******************
 1.4.3 (2026-05-26)
 ******************
