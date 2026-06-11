@@ -14,6 +14,7 @@ from waves.exceptions import SchemaValidationError
 from waves.parameter_generators import SALibSampler
 
 does_not_raise = contextlib.nullcontext()
+does_not_warn = contextlib.nullcontext()
 testing_windows, root_fs, testing_macos = platform_check()
 
 
@@ -338,6 +339,7 @@ class TestSALibSampler:
                 }
             ).set_coords("set_hash"),
             does_not_raise,
+            pytest.warns(UserWarning, match="Removing non-unique samples from the parameter study."),
         ),
         "morris: good schema 5x2, non-unique samples and original index request": (
             "morris",
@@ -352,6 +354,7 @@ class TestSALibSampler:
             {"seed": 42, "original_index": True},
             None,
             pytest.raises(RuntimeError, match=r"Sampler resulted in non-unique samples,"),
+            does_not_warn,
         ),
         "latin: good schema 2x1": (
             "latin",
@@ -382,6 +385,7 @@ class TestSALibSampler:
                 }
             ).set_coords("set_hash"),
             does_not_raise,
+            does_not_warn,
         ),
         "latin: good schema 2x1, original index": (
             "latin",
@@ -416,6 +420,7 @@ class TestSALibSampler:
                 }
             ).set_coords(["set_hash", "original_index"]),
             does_not_raise,
+            does_not_warn,
         ),
         "sobol: good schema 1x2": (
             "sobol",
@@ -460,6 +465,7 @@ class TestSALibSampler:
                 }
             ).set_coords("set_hash"),
             does_not_raise,
+            does_not_warn,
         ),
         "finite diff: good schema 1x3": (
             "finite_diff",
@@ -513,6 +519,7 @@ class TestSALibSampler:
                 }
             ).set_coords("set_hash"),
             does_not_raise,
+            does_not_warn,
         ),
         "fast sampler: good schema 65x1 (linux)": pytest.param(
             "fast_sampler",
@@ -741,6 +748,7 @@ class TestSALibSampler:
                 }
             ).set_coords("set_hash"),
             does_not_raise,
+            does_not_warn,
             marks=[
                 pytest.mark.skipif(
                     testing_windows or testing_macos,
@@ -975,6 +983,7 @@ class TestSALibSampler:
                 }
             ).set_coords("set_hash"),
             does_not_raise,
+            does_not_warn,
             marks=[
                 pytest.mark.skipif(
                     not testing_windows,
@@ -1217,6 +1226,7 @@ class TestSALibSampler:
                 }
             ).set_coords("set_hash"),
             does_not_raise,
+            does_not_warn,
             marks=[
                 pytest.mark.skipif(
                     not testing_macos,
@@ -1227,7 +1237,7 @@ class TestSALibSampler:
     }
 
     @pytest.mark.parametrize(
-        ("sampler", "parameter_schema", "kwargs", "expected_dataset", "outcome"),
+        ("sampler", "parameter_schema", "kwargs", "expected_dataset", "outcome", "warning"),
         generate_input.values(),
         ids=generate_input.keys(),
     )
@@ -1238,6 +1248,7 @@ class TestSALibSampler:
         kwargs: dict,
         expected_dataset: xarray.Dataset,
         outcome: contextlib.nullcontext | pytest.RaisesExc,
+        warning: contextlib.nullcontext | pytest.WarningsRecorder,
     ) -> None:
         dtype_variants = [float, int, numpy.float32, numpy.float64, numpy.int64, numpy.int32, numpy.int16, numpy.int8]
         parameter_schema_dtype_variants = [
@@ -1251,7 +1262,7 @@ class TestSALibSampler:
             for dtype in dtype_variants
         ]
         for schema in parameter_schema_dtype_variants:
-            with outcome:
+            with outcome, warning:
                 test_generate = SALibSampler(sampler, schema, **kwargs)
                 xarray.testing.assert_allclose(test_generate.parameter_study, expected_dataset)
                 # Check for type preservation

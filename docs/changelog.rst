@@ -8,6 +8,11 @@ Changelog
 1.5.0 (unreleased)
 ******************
 
+Internal Changes
+================
+- Unit test the warnings message for SALibSampler when SALib produces non-unique parameter sets (:issue:`1016`,
+  :merge:`1321`). By `Kyle Brindley`_.
+
 ******************
 1.4.4 (2026-06-11)
 ******************
