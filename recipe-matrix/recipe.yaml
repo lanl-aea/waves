@@ -19,6 +19,9 @@ build:
     env:
       SETUPTOOLS_SCM_PRETEND_VERSION: ${{ version }}
       TMPDIR: ${{ env.get("TMPDIR", default="") }}
+      # TODO: Remove when rattler-build patches the SYSTEMROOT environment variable
+      # https://github.com/prefix-dev/rattler-build/issues/2555
+      SYSTEMROOT: ${{ env.get("SYSTEMROOT", default="") }}
     content:
       - if: unix
         then: scons install --prefix=${PREFIX}
