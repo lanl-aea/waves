@@ -22,6 +22,7 @@ build:
       # TODO: Remove when rattler-build patches the SYSTEMROOT environment variable
       # https://github.com/prefix-dev/rattler-build/issues/2555
       SYSTEMROOT: ${{ env.get("SYSTEMROOT", default="") }}
+      WINDIR: ${{ env.get("WINDIR", default="") }}  # Required by matplotlib
     content:
       - if: unix
         then: scons install --prefix=${PREFIX}
