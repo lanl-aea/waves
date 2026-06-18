@@ -5,7 +5,7 @@ channels:
 dependencies:
   - pandas
   - pytest >=6
-  - rattler-build >=0.62
+  - rattler-build >=0.66.2
   - scons >=4.6
   - setuptools >=77
   - setuptools_scm >=8
