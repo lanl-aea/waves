@@ -836,6 +836,13 @@ class CartesianProduct(ParameterGenerator):
         """Validate the Cartesian Product parameter schema. Executed by class initiation."""
         if not isinstance(self._parameter_schema, dict):
             raise SchemaValidationError("parameter_schema must be a dictionary")
+
+        for key, value in self._parameter_schema.items():
+            if not isinstance(value, (list, tuple, set)):
+                self._parameter_schema[key] = [value]
+            else:
+                self._parameter_schema[key] = value
+
         # TODO: Settle on an input file schema and validation library
         self._parameter_names = list(self._parameter_schema.keys())
         # List, sets, and tuples are the supported PyYAML iterables that will support expected behavior
@@ -1021,6 +1028,13 @@ class OneAtATime(ParameterGenerator):
         """Validate the One-at-a-Time parameter schema. Executed by class initiation."""
         if not isinstance(self._parameter_schema, dict):
             raise SchemaValidationError("parameter_schema must be a dictionary")
+
+        for key, value in self._parameter_schema.items():
+            if not isinstance(value, (list, tuple, set)):
+                self._parameter_schema[key] = [value]
+            else:
+                self._parameter_schema[key] = value
+
         self._parameter_names = list(self._parameter_schema.keys())
         # List and tuples are the supported PyYAML ordered iterables that will support expected behavior
         for name in self._parameter_names:
