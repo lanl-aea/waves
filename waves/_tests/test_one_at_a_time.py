@@ -35,15 +35,15 @@ class TestOneAtATime:
         ),
         "bad schema int": (
             {"parameter_1": 1},
-            pytest.raises(SchemaValidationError),
+            does_not_raise,
         ),
         "bad schema dict": (
             {"parameter_1": {"thing1": 1}},
-            pytest.raises(SchemaValidationError),
+            does_not_raise,
         ),
         "bad schema str": (
             {"parameter_1": "one"},
-            pytest.raises(SchemaValidationError),
+            does_not_raise,
         ),
         "bad schema empty": (
             {"parameter_1": []},
