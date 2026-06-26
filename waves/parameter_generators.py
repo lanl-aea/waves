@@ -772,8 +772,9 @@ class CartesianProduct(ParameterGenerator):
 
     :param parameter_schema: The YAML loaded parameter study schema dictionary - ``{parameter_name: schema value}``
         CartesianProduct expects "schema value" to be an iterable. For example, when read from a YAML file "schema
-        value" will be a Python list. Each parameter's values must have a consistent data type, but data type may vary
-        between parameters.
+        value" will typically be a Python list. If a scalar value (such as a single integer or string) is provided,
+        it will automatically be wrapped in a single-element list (e.g., ``2`` becomes ``[2]``). Each parameter's
+        values must have a consistent data type, but data type may vary between parameters.
     :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
         parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
         relative path template. May contain the ``@number`` set number placeholder in the file basename but not in the
@@ -960,8 +961,9 @@ class OneAtATime(ParameterGenerator):
 
     :param parameter_schema: The YAML loaded parameter study schema dictionary - ``{parameter_name: schema value}``
         OneAtATime expects "schema value" to be an ordered iterable. For example, when read from a YAML file "schema
-        value" will be a Python list. Each parameter's values must have a consistent data type, but data type may vary
-        between parameters.
+        value" will typically be a Python list. If a scalar value (such as a single integer or string) is provided,
+        it will automatically be wrapped in a single-element list (e.g., ``2`` becomes ``[2]``). Each parameter's
+        values must have a consistent data type, but data type may vary between parameters.
     :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
         parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
         relative path template. May contain the ``@number`` set number placeholder in the file basename but not in the
