@@ -483,6 +483,7 @@ propagate_parameter_space_cases = {
             parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_2": [2]}).parameter_study,
         ],
+        {},
         parameter_generators.OneAtATime({"parameter_1": [1], "parameter_2": [2]}).parameter_study,
         {"parameter_1": numpy.int64, "parameter_2": numpy.int64},
         True,
@@ -493,6 +494,7 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [True]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_2": [False]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct({"parameter_1": [True], "parameter_2": [False]}).parameter_study,
         {"parameter_1": numpy.bool_, "parameter_2": numpy.bool_},
         True,
@@ -503,6 +505,7 @@ propagate_parameter_space_cases = {
             parameter_generators.OneAtATime({"parameter_1": ["a"]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_2": ["a"]}).parameter_study,
         ],
+        {},
         parameter_generators.OneAtATime({"parameter_1": ["a"], "parameter_2": ["a"]}).parameter_study,
         {"parameter_1": numpy.dtype("U1"), "parameter_2": numpy.dtype("U1")},
         True,
@@ -513,6 +516,7 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_2": [2.0, 3.0]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0], "parameter_2": [2.0, 3.0]}).parameter_study,
         {"parameter_1": numpy.float64, "parameter_2": numpy.float64},
         True,
@@ -523,6 +527,7 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_2": [False]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct({"parameter_1": [1, 2], "parameter_2": [False]}).parameter_study,
         {"parameter_1": numpy.int64, "parameter_2": numpy.bool_},
         True,
@@ -533,6 +538,7 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_2": [3.0, 4.0]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}).parameter_study,
         {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
         True,
@@ -543,6 +549,7 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1.0]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_2": ["a", "b"]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct({"parameter_1": [1.0], "parameter_2": ["a", "b"]}).parameter_study,
         {"parameter_1": numpy.float64, "parameter_2": numpy.dtype("U1")},
         True,
@@ -553,6 +560,7 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0, 3.0]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_2": ["a", "b", "c"]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct(
             {"parameter_1": [1.0, 2.0, 3.0], "parameter_2": ["a", "b", "c"]}
         ).parameter_study,
@@ -565,6 +573,7 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [3.0, 2.0, 1.0]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_2": ["c", "b", "a"]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct(
             {"parameter_1": [1.0, 2.0, 3.0], "parameter_2": ["a", "b", "c"]}
         ).parameter_study,
@@ -577,6 +586,7 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_2": ["a", "b"], "parameter_3": [5, 10]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct(
             {"parameter_1": [1.0, 2.0], "parameter_2": ["a", "b"], "parameter_3": [5, 10]}
         ).parameter_study,
@@ -589,6 +599,7 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [2.0, 1.0]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_2": ["b", "a"], "parameter_3": [5, 10]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct(
             {"parameter_1": [1.0, 2.0], "parameter_2": ["a", "b"], "parameter_3": [5, 10]}
         ).parameter_study,
@@ -601,6 +612,7 @@ propagate_parameter_space_cases = {
             parameter_generators.OneAtATime({"parameter_1": [1.0, 2.0]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_2": ["a"], "parameter_3": [5]}).parameter_study,
         ],
+        {},
         parameter_generators.OneAtATime(
             {"parameter_1": [1.0, 2.0], "parameter_2": ["a"], "parameter_3": [5]}
         ).parameter_study,
@@ -613,6 +625,7 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0], "parameter_3": [True]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_2": ["a", "b"]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct(
             {
                 "parameter_1": [1.0, 2.0],
@@ -629,6 +642,7 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0], "parameter_4": [True]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_2": ["a", "b"], "parameter_3": [3, 4]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct(
             {
                 "parameter_1": [1.0, 2.0],
@@ -651,6 +665,7 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0, 3.0]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_2": ["a", "b"], "parameter_3": [3, 4]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct(
             {
                 "parameter_1": [1.0, 2.0, 3.0],
@@ -671,6 +686,7 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_2": ["a", "b"], "parameter_3": [3, 4]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0, 3.0]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct(
             {
                 "parameter_1": [1.0, 2.0, 3.0],
@@ -686,16 +702,28 @@ propagate_parameter_space_cases = {
         True,
         does_not_raise,
     ),
+    "propagate one parameter: int, set name template": (
+        [
+            parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
+            parameter_generators.OneAtATime({"parameter_2": [2]}).parameter_study,
+        ],
+        {"template": _utilities._AtSignTemplate("set@number")},
+        parameter_generators.OneAtATime({"parameter_1": [1], "parameter_2": [2]}).parameter_study,
+        {"parameter_1": numpy.int64, "parameter_2": numpy.int64},
+        True,
+        does_not_raise,
+    ),
 }
 
 
 @pytest.mark.parametrize(
-    ("studies", "expected_study", "expected_types", "propagate_space", "outcome"),
+    ("studies", "kwargs", "expected_study", "expected_types", "propagate_space", "outcome"),
     propagate_parameter_space_cases.values(),
     ids=propagate_parameter_space_cases.keys(),
 )
 def test_propagate_parameter_space(
     studies: list[xarray.Dataset],
+    kwargs: dict,
     expected_study: xarray.Dataset,
     expected_types: dict[str, type],
     propagate_space: bool,  # noqa: ARG001, placeholder argument for test case compatibility with downstream functions
@@ -705,6 +733,7 @@ def test_propagate_parameter_space(
 
     :param studies: list of N number of parameter study Xarray datasets to merge, where the first study in the list is
         the base study
+    :param kwargs: the function keyword arguments
     :param expected_study: Xarray dataset
     :param expected_types: dictionary with parameter names as the keys and numpy types as values
     :param propagate_space: boolean indicating if parameter space propagation is used to construct the output study
@@ -713,7 +742,7 @@ def test_propagate_parameter_space(
     study_base, study_other = studies
     with outcome:
         try:
-            propagated_study = parameter_generators._propagate_parameter_space(study_base, study_other)
+            propagated_study = parameter_generators._propagate_parameter_space(study_base, study_other, **kwargs)
             for key, parameter_type in expected_types.items():
                 assert propagated_study[key].dtype == parameter_type
             xarray.testing.assert_identical(propagated_study, expected_study)
@@ -728,6 +757,7 @@ merge_parameter_space_cases = {
             parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
         ],
+        {},
         parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
         {"parameter_1": numpy.int64},
         False,
@@ -738,6 +768,7 @@ merge_parameter_space_cases = {
             parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_1": [2]}).parameter_study,
         ],
+        {},
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
@@ -763,6 +794,7 @@ merge_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1.0]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_1": [2.0]}).parameter_study,
         ],
+        {},
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
@@ -788,6 +820,7 @@ merge_parameter_space_cases = {
             parameter_generators.OneAtATime({"parameter_1": [True]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_1": [False]}).parameter_study,
         ],
+        {},
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
@@ -813,6 +846,7 @@ merge_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_1": [2.0]}).parameter_study,
         ],
+        {},
         None,
         None,
         None,
@@ -823,6 +857,7 @@ merge_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_1": [True]}).parameter_study,
         ],
+        {},
         None,
         None,
         None,
@@ -833,6 +868,7 @@ merge_parameter_space_cases = {
             parameter_generators.OneAtATime({"parameter_1": [1.0]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_1": [True]}).parameter_study,
         ],
+        {},
         None,
         None,
         None,
@@ -850,6 +886,7 @@ merge_parameter_space_cases = {
                 {"parameter_1": [1, 2], "parameter_2": [3.0, 5.0], "parameter_3": ["a"]}
             ).parameter_study,
         ],
+        {},
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
@@ -914,6 +951,7 @@ merge_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1], "parameter_2": [True]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_1": [2], "parameter_2": [False]}).parameter_study,
         ],
+        {},
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
@@ -949,6 +987,7 @@ merge_parameter_space_cases = {
                 {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}
             ).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct(
             {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}
         ).parameter_study,
@@ -960,12 +999,13 @@ merge_parameter_space_cases = {
 
 
 @pytest.mark.parametrize(
-    ("studies", "expected_study", "expected_types", "propagate_space", "outcome"),
+    ("studies", "kwargs", "expected_study", "expected_types", "propagate_space", "outcome"),
     merge_parameter_space_cases.values(),
     ids=merge_parameter_space_cases.keys(),
 )
 def test_merge_parameter_space(
     studies: list[xarray.Dataset],
+    kwargs: dict,
     expected_study: xarray.Dataset,
     expected_types: dict[str, type],
     propagate_space: bool,
@@ -975,6 +1015,7 @@ def test_merge_parameter_space(
 
     :param studies: list of N number of parameter study Xarray datasets to merge, where the first study in the list is
         the base study
+    :param kwargs: the function keyword arguments
     :param expected_study: Xarray dataset
     :param expected_types: dictionary with parameter names as the keys and numpy types as values
     :param propagate_space: boolean indicating if parameter space propagation is used to construct the output study.
@@ -985,7 +1026,7 @@ def test_merge_parameter_space(
             swap_to_hash_index = {_settings._set_coordinate_key: _settings._hash_coordinate_key}
             swap_to_set_index = {_settings._hash_coordinate_key: _settings._set_coordinate_key}
             studies = [study.swap_dims(swap_to_hash_index) for study in studies]
-            merged_study = parameter_generators._merge_parameter_space(studies)
+            merged_study = parameter_generators._merge_parameter_space(studies, **kwargs)
             merged_study = merged_study.swap_dims(swap_to_set_index)
             for key, parameter_type in expected_types.items():
                 assert merged_study[key].dtype == parameter_type
@@ -1007,6 +1048,7 @@ merge_parameter_studies_cases.update(
     {
         "too few parameter studies input": (
             [parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study],
+            {},
             None,
             None,
             None,
@@ -1041,6 +1083,7 @@ merge_parameter_studies_cases.update(
                     original_index=True,
                 ).parameter_study,
             ],
+            {},
             None,
             None,
             None,
@@ -1053,6 +1096,7 @@ merge_parameter_studies_cases.update(
                 parameter_generators.OneAtATime({"parameter_1": [1.0]}).parameter_study,
                 parameter_generators.OneAtATime({"parameter_1": [2.0], "parameter_2": [3]}).parameter_study,
             ],
+            {},
             None,
             None,
             None,
@@ -1064,6 +1108,7 @@ merge_parameter_studies_cases.update(
                 parameter_generators.CartesianProduct({"parameter_1": [2]}).parameter_study,
                 parameter_generators.CartesianProduct({"parameter_2": [3.0, 4.0]}).parameter_study,
             ],
+            {},
             parameter_generators.CartesianProduct({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}).parameter_study,
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
             True,
@@ -1076,6 +1121,7 @@ merge_parameter_studies_cases.update(
                 parameter_generators.CartesianProduct({"parameter_1": ["b"]}).parameter_study,
                 parameter_generators.CartesianProduct({"parameter_2": [False]}).parameter_study,
             ],
+            {},
             parameter_generators.CartesianProduct(
                 {"parameter_1": ["a", "b"], "parameter_2": [True, False]}
             ).parameter_study,
@@ -1089,6 +1135,7 @@ merge_parameter_studies_cases.update(
                 parameter_generators.CartesianProduct({"parameter_2": [True, False]}).parameter_study,
                 parameter_generators.CartesianProduct({"parameter_3": [1.0, 2.0]}).parameter_study,
             ],
+            {},
             parameter_generators.CartesianProduct(
                 {"parameter_1": [1, 2], "parameter_2": [True, False], "parameter_3": [1.0, 2.0]}
             ).parameter_study,
@@ -1102,6 +1149,7 @@ merge_parameter_studies_cases.update(
                 parameter_generators.OneAtATime({"parameter_2": [2.0]}).parameter_study,
                 parameter_generators.OneAtATime({"parameter_1": [2, 3]}).parameter_study,
             ],
+            {},
             parameter_generators.CartesianProduct({"parameter_1": [1, 2, 3], "parameter_2": [2.0]}).parameter_study,
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
             True,
@@ -1112,12 +1160,13 @@ merge_parameter_studies_cases.update(
 
 
 @pytest.mark.parametrize(
-    ("studies", "expected_study", "expected_types", "propagate_space", "outcome"),
+    ("studies", "kwargs", "expected_study", "expected_types", "propagate_space", "outcome"),
     merge_parameter_studies_cases.values(),
     ids=merge_parameter_studies_cases.keys(),
 )
 def test_merge_parameter_studies(
     studies: list[xarray.Dataset],
+    kwargs: dict,
     expected_study: xarray.Dataset,
     expected_types: dict[str, type],
     propagate_space: bool | None,
@@ -1127,6 +1176,7 @@ def test_merge_parameter_studies(
 
     :param studies: list of N number of parameter study Xarray datasets to merge, where the first study in the list is
         the base study
+    :param kwargs: the function keyword arguments
     :param expected_study: Xarray dataset
     :param expected_types: dictionary with parameter names as the keys and numpy types as values
     :param propagate_space: boolean indicating if parameter space propagation is used to construct the output study
@@ -1134,7 +1184,7 @@ def test_merge_parameter_studies(
     """
     with outcome:
         try:
-            merged_study = parameter_generators._merge_parameter_studies(studies)
+            merged_study = parameter_generators._merge_parameter_studies(studies, **kwargs)
             for key, parameter_type in expected_types.items():
                 assert merged_study[key].dtype == parameter_type
             xarray.testing.assert_identical(merged_study, expected_study)
