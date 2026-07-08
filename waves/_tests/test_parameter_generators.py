@@ -753,7 +753,7 @@ def test_propagate_parameter_space(
             pass
 
 
-merge_parameter_space_cases = {
+merge_parameter_space_cases: dict = {
     "concatenate along one parameter: unchanged": (
         [
             parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
