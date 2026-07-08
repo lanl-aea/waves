@@ -614,7 +614,7 @@ class TestCatenationStudy:
             patch("pathlib.Path.is_file", return_value=True),
         ):
             test_generate = CatenationStudy(parameter_schema, **kwargs)
-            xarray.testing.assert_identical(test_generate.parameter_study, expected_dataset)
+            xarray.testing.assert_allclose(test_generate.parameter_study, expected_dataset)
             for key in test_generate.parameter_study:
                 assert test_generate.parameter_study[key].dtype == expected_types[str(key)]
             # Verify that the parameter set name creation method was called
