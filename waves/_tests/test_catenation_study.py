@@ -11,7 +11,7 @@ import xarray
 
 from waves._settings import _allowable_output_file_typing, _hash_coordinate_key, _set_coordinate_key
 from waves.exceptions import SchemaValidationError
-from waves.parameter_generators import CartesianProduct, CatenationStudy, CustomStudy, OneAtATime
+from waves.parameter_generators import CartesianProduct, CatenationStudy, CustomStudy, LatinHypercube, OneAtATime
 
 does_not_raise = contextlib.nullcontext()
 
@@ -528,6 +528,72 @@ class TestCatenationStudy:
             ).set_coords(_hash_coordinate_key),
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
         ),
+        "CartesianProduct and LatinHypercube": (
+            {
+                "1": (CartesianProduct, {"parameter_1": [1], "parameter_2": ["a"]}),
+                "2": (
+                    LatinHypercube,
+                    {
+                        "num_simulations": 4,
+                        "parameter_3": {"distribution": "norm", "loc": 50, "scale": 1},
+                        "parameter_4": {"distribution": "skewnorm", "a": 4, "loc": 30, "scale": 2},
+                    },
+                ),
+            },
+            {"set_name_template": "set@number", "seed": 42},
+            None,
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1, 1, 1, 1],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["set0", "set1", "set2", "set3"], dims=_set_coordinate_key
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        ["a", "a", "a", "a"],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["set0", "set1", "set2", "set3"], dims=_set_coordinate_key
+                            )
+                        },
+                    ),
+                    "parameter_3": xarray.DataArray(
+                        [50.6021284, 49.49423549, 48.1926071, 50.87684681],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["set0", "set1", "set2", "set3"], dims=_set_coordinate_key
+                            )
+                        },
+                    ),
+                    "parameter_4": xarray.DataArray(
+                        [32.33056027, 30.26038226, 31.59773274, 30.76707769],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["set0", "set1", "set2", "set3"], dims=_set_coordinate_key
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "1c42b17c9a439b3544925052fb72dd6b",
+                            "b14757e25406dd783c3898c20374d626",
+                            "e9742b6faaae2c4ccafa29cb4318e292",
+                            "f65dfa669d5444d9c6757b6791f838da",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {
+                "parameter_1": numpy.int64,
+                "parameter_2": numpy.dtype("U1"),
+                "parameter_3": numpy.float64,
+                "parameter_4": numpy.float64,
+            },
+        ),
     }
 
     @pytest.mark.parametrize(
@@ -548,7 +614,7 @@ class TestCatenationStudy:
             patch("pathlib.Path.is_file", return_value=True),
         ):
             test_generate = CatenationStudy(parameter_schema, **kwargs)
-            xarray.testing.assert_identical(test_generate.parameter_study, expected_dataset)
+            xarray.testing.assert_allclose(test_generate.parameter_study, expected_dataset)
             for key in test_generate.parameter_study:
                 assert test_generate.parameter_study[key].dtype == expected_types[str(key)]
             # Verify that the parameter set name creation method was called
