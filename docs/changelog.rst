@@ -8,6 +8,15 @@ Changelog
 1.5.0 (unreleased)
 ******************
 
+******************
+1.4.5 (unreleased)
+******************
+
+Bug fixes
+=========
+- Preserve set name templates in CatenationStudy when merging disparate parameter spaces (:issue:`1021`, :merge:`1324`).
+  By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Unit test the warnings message for SALibSampler when SALib produces non-unique parameter sets (:issue:`1016`,
