@@ -1964,7 +1964,9 @@ def _assess_parameter_spaces(studies: list[xarray.Dataset]) -> dict[str, list[xa
     return parameter_spaces
 
 
-def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.Dataset) -> xarray.Dataset:
+def _propagate_parameter_space(
+    study_base: xarray.Dataset, study_other: xarray.Dataset, template: string.Template | None = None
+) -> xarray.Dataset:
     """Propagate unique parameters from a new study into the base study, creating a new study using CustomStudy.
 
     Assumes that the parameter studies do not share any parameters. The incoming studies should have set name as the
@@ -1976,9 +1978,14 @@ def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.D
     :param study_base: A :class:`ParameterGenerator` parameter study Xarray Dataset
     :param study_other: A :class:`ParameterGenerator` parameter study Xarray Dataset with unique parameters compared
         to `study_base`
+    :param template: parameter set naming :class:`string.Template`. If none is provided, fetch the default template
+        using the ``@`` delimiter from the WAVES settings.
 
     :return: :class:`CustomStudy` parameter study xarray Dataset
     """
+    if template is None:
+        template = _utilities._AtSignTemplate(_settings._default_set_name_template)
+
     # Calculate parameter sets (ROWS) in the samples matrix
     num_parameter_sets_base = len(study_base[_set_coordinate_key])
     num_parameter_sets_other = len(study_other[_set_coordinate_key])
@@ -2021,7 +2028,7 @@ def _propagate_parameter_space(study_base: xarray.Dataset, study_other: xarray.D
         "parameter_samples": propagated_study_samples,
         "parameter_names": propagated_study_parameters.flatten(),
     }
-    propagated_study = CustomStudy(parameter_schema).parameter_study
+    propagated_study = CustomStudy(parameter_schema, set_name_template=template.template).parameter_study
     return propagated_study
 
 
@@ -2102,7 +2109,7 @@ def _merge_parameter_studies(studies: list[xarray.Dataset], template: string.Tem
     studies = [study.swap_dims(swap_to_set_index) for study in merged_parameter_spaces]
     study_combined = studies.pop(0)
     for study_other in studies:
-        study_combined = _propagate_parameter_space(study_combined, study_other)
+        study_combined = _propagate_parameter_space(study_combined, study_other, template=template)
 
     return study_combined
 
