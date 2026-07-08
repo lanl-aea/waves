@@ -708,7 +708,9 @@ propagate_parameter_space_cases = {
             parameter_generators.OneAtATime({"parameter_2": [2]}).parameter_study,
         ],
         {"template": _utilities._AtSignTemplate("set@number")},
-        parameter_generators.OneAtATime({"parameter_1": [1], "parameter_2": [2]}).parameter_study,
+        parameter_generators.OneAtATime(
+            {"parameter_1": [1], "parameter_2": [2]}, set_name_template="set@number"
+        ).parameter_study,
         {"parameter_1": numpy.int64, "parameter_2": numpy.int64},
         True,
         does_not_raise,
