@@ -22,8 +22,8 @@ class TestCatenationStudy:
     validate_input = {
         "good schema": (
             {
-                "1": (CartesianProduct, {"parameter_1": [1, 2], "parameter_2": ["a", "b"]}),
-                "2": (OneAtATime, {"parameter_1": [5, 7], "parameter_2": ["x", "y"]}),
+                "1": CartesianProduct({"parameter_1": [1, 2], "parameter_2": ["a", "b"]}),
+                "2": OneAtATime({"parameter_1": [5, 7], "parameter_2": ["x", "y"]}),
             },
             does_not_raise,
         ),
@@ -31,28 +31,16 @@ class TestCatenationStudy:
             "not a dictionary",
             pytest.raises(SchemaValidationError),
         ),
-        "bad schema: not a tuple": (
-            {"1": "not a tuple"},
-            pytest.raises(SchemaValidationError),
-        ),
         "bad schema: too few entries": (
-            {"1": (CartesianProduct, {"parameter_1": [1]})},
+            {"1": CartesianProduct({"parameter_1": [1]})},
             pytest.raises(SchemaValidationError),
         ),
-        "bad tuple entry: too few items": (
-            {"1": ({"parameter_1": [1]}), "2": (CartesianProduct, {"parameter_1": [2]})},
+        "bad entry: tuple instead of ParameterGenerator": (
+            {"1": (CartesianProduct({"parameter_1": [1]}),), "2": CartesianProduct({"parameter_1": [2]})},
             pytest.raises(SchemaValidationError),
         ),
-        "bad tuple entry: too many items": (
-            {"1": (CartesianProduct, {"parameter_1": [1]}, "extra"), "2": (CartesianProduct, {"parameter_1": [2]})},
-            pytest.raises(SchemaValidationError),
-        ),
-        "bad generator: not a parameter generator": (
-            {"1": ("not a generator", {"parameter_1": [2]}), "2": (CartesianProduct, {"parameter_1": [2]})},
-            pytest.raises(SchemaValidationError),
-        ),
-        "bad sub-schema: not a dictionary": (
-            {"1": (CartesianProduct, [[2]]), "2": (CartesianProduct, {"parameter_1": [2]})},
+        "bad entry: not a ParameterGenerator": (
+            {"1": {"parameter_1": [1]}, "2": CartesianProduct({"parameter_1": [2]})},
             pytest.raises(SchemaValidationError),
         ),
     }
@@ -72,7 +60,7 @@ class TestCatenationStudy:
 
     generate_io = {
         "one parameter": (
-            {"1": (CartesianProduct, {"parameter_1": [1]}), "2": (CartesianProduct, {"parameter_1": [2]})},
+            {"1": CartesianProduct({"parameter_1": [1]}), "2": CartesianProduct({"parameter_1": [2]})},
             {},
             None,
             xarray.Dataset(
@@ -95,8 +83,8 @@ class TestCatenationStudy:
         ),
         "one parameter mixed length strings": (
             {
-                "1": (CartesianProduct, {"parameter_1": ["one"]}),
-                "2": (CartesianProduct, {"parameter_1": ["two", "many"]}),
+                "1": CartesianProduct({"parameter_1": ["one"]}),
+                "2": CartesianProduct({"parameter_1": ["two", "many"]}),
             },
             {},
             None,
@@ -124,8 +112,8 @@ class TestCatenationStudy:
         ),
         "one parameter random keys": (
             {
-                "study 1": (CartesianProduct, {"parameter_1": [1]}),
-                "another study": (CartesianProduct, {"parameter_1": [2]}),
+                "study 1": CartesianProduct({"parameter_1": [1]}),
+                "another study": CartesianProduct({"parameter_1": [2]}),
             },
             {},
             None,
@@ -166,7 +154,7 @@ class TestCatenationStudy:
             {"parameter_1": numpy.int64},
         ),
         "one parameter custom template no placeholder": (
-            {"1": (CartesianProduct, {"parameter_1": [1]}), "2": (CartesianProduct, {"parameter_1": [2]})},
+            {"1": CartesianProduct({"parameter_1": [1]}), "2": CartesianProduct({"parameter_1": [2]})},
             {"set_name_template": "set"},
             None,
             xarray.Dataset(
@@ -185,8 +173,8 @@ class TestCatenationStudy:
         ),
         "two parameter merge": (
             {
-                "1": (OneAtATime, {"parameter_1": [1], "parameter_2": ["a"]}),
-                "2": (OneAtATime, {"parameter_1": [2], "parameter_2": ["b"]}),
+                "1": OneAtATime({"parameter_1": [1], "parameter_2": ["a"]}),
+                "2": OneAtATime({"parameter_1": [2], "parameter_2": ["b"]}),
             },
             {},
             None,
@@ -220,7 +208,7 @@ class TestCatenationStudy:
             {"parameter_1": numpy.int64, "parameter_2": numpy.dtype("U1")},
         ),
         "two parameter propagate": (
-            {"1": (CartesianProduct, {"parameter_1": [1, 2]}), "2": (CartesianProduct, {"parameter_2": ["a", "b"]})},
+            {"1": CartesianProduct({"parameter_1": [1, 2]}), "2": CartesianProduct({"parameter_2": ["a", "b"]})},
             {},
             None,
             xarray.Dataset(
@@ -257,7 +245,7 @@ class TestCatenationStudy:
             {"parameter_1": numpy.int64, "parameter_2": numpy.dtype("U1")},
         ),
         "mixed generators ints and floats": (
-            {"1": (CartesianProduct, {"parameter_1": [1, 2]}), "2": (OneAtATime, {"parameter_2": [3.0, 4.0]})},
+            {"1": CartesianProduct({"parameter_1": [1, 2]}), "2": OneAtATime({"parameter_2": [3.0, 4.0]})},
             {},
             None,
             xarray.Dataset(
@@ -295,8 +283,8 @@ class TestCatenationStudy:
         ),
         "mixed generators mixed parameters": (
             {
-                "1": (OneAtATime, {"parameter_1": [1], "parameter_2": [3.0, 5.0]}),
-                "2": (CartesianProduct, {"parameter_1": [2], "parameter_2": [4.0]}),
+                "1": OneAtATime({"parameter_1": [1], "parameter_2": [3.0, 5.0]}),
+                "2": CartesianProduct({"parameter_1": [2], "parameter_2": [4.0]}),
             },
             {},
             None,
@@ -332,9 +320,9 @@ class TestCatenationStudy:
         ),
         "mixed generators three generators": (
             {
-                "1": (OneAtATime, {"parameter_1": [1], "parameter_2": [3.0, 5.0]}),
-                "2": (CartesianProduct, {"parameter_1": [2], "parameter_2": [4.0]}),
-                "3": (OneAtATime, {"parameter_3": ["a"]}),
+                "1": OneAtATime({"parameter_1": [1], "parameter_2": [3.0, 5.0]}),
+                "2": CartesianProduct({"parameter_1": [2], "parameter_2": [4.0]}),
+                "3": OneAtATime({"parameter_3": ["a"]}),
             },
             {},
             None,
@@ -378,15 +366,13 @@ class TestCatenationStudy:
         ),
         "custom studies": (
             {
-                "1": (
-                    CustomStudy,
+                "1": CustomStudy(
                     {
                         "parameter_samples": numpy.array([[5, 1.0], [6, 2.0]], dtype=object),
                         "parameter_names": numpy.array(["parameter_1", "parameter_2"]),
                     },
                 ),
-                "2": (
-                    CustomStudy,
+                "2": CustomStudy(
                     {
                         "parameter_samples": numpy.array([[1, 3.0], [2, 4.0]], dtype=object),
                         "parameter_names": numpy.array(["parameter_1", "parameter_2"]),
@@ -429,14 +415,14 @@ class TestCatenationStudy:
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
         ),
         "previous study one parameter cartesian product": (
-            {"1": (CartesianProduct, {"parameter_1": [3]}), "2": (CartesianProduct, {"parameter_1": [4]})},
+            {"1": CartesianProduct({"parameter_1": [3]}), "2": CartesianProduct({"parameter_1": [4]})},
             {"previous_parameter_study": "dummy_path.h5"},
             CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
             CartesianProduct({"parameter_1": [1, 2, 3, 4]}).parameter_study,
             {"parameter_1": numpy.int64},
         ),
         "previous study two shared parameters cartesian product": (
-            {"1": (CartesianProduct, {"parameter_1": [5]}), "2": (CartesianProduct, {"parameter_2": [7.0]})},
+            {"1": CartesianProduct({"parameter_1": [5]}), "2": CartesianProduct({"parameter_2": [7.0]})},
             {"previous_parameter_study": "dummy_path.h5"},
             CartesianProduct({"parameter_1": [1], "parameter_2": [3.0]}).parameter_study,
             xarray.Dataset(
@@ -466,14 +452,14 @@ class TestCatenationStudy:
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
         ),
         "previous study two different parameters cartesian product": (
-            {"1": (CartesianProduct, {"parameter_2": [3.0]}), "2": (CartesianProduct, {"parameter_2": [4.0]})},
+            {"1": CartesianProduct({"parameter_2": [3.0]}), "2": CartesianProduct({"parameter_2": [4.0]})},
             {"previous_parameter_study": "dummy_path.h5"},
             CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
             CartesianProduct({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}).parameter_study,
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
         ),
         "previous study two shared parameters mixed generators": (
-            {"1": (CartesianProduct, {"parameter_1": [5, 6]}), "2": (CartesianProduct, {"parameter_2": [7.0, 8.0]})},
+            {"1": CartesianProduct({"parameter_1": [5, 6]}), "2": CartesianProduct({"parameter_2": [7.0, 8.0]})},
             {"previous_parameter_study": "dummy_path.h5"},
             OneAtATime({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}).parameter_study,
             xarray.Dataset(
@@ -530,9 +516,8 @@ class TestCatenationStudy:
         ),
         "CartesianProduct and LatinHypercube": (
             {
-                "1": (CartesianProduct, {"parameter_1": [1], "parameter_2": ["a"]}),
-                "2": (
-                    LatinHypercube,
+                "1": CartesianProduct({"parameter_1": [1], "parameter_2": ["a"]}),
+                "2": LatinHypercube(
                     {
                         "num_simulations": 4,
                         "parameter_3": {"distribution": "norm", "loc": 50, "scale": 1},
@@ -624,7 +609,7 @@ class TestCatenationStudy:
 
     write_yaml = {
         "one parameter yaml": (
-            {"1": (CartesianProduct, {"parameter_1": [1]}), "2": (CartesianProduct, {"parameter_1": [2]})},
+            {"1": CartesianProduct({"parameter_1": [1]}), "2": CartesianProduct({"parameter_1": [2]})},
             "out",
             None,
             "yaml",
@@ -632,7 +617,7 @@ class TestCatenationStudy:
             [call("parameter_1: 1\n"), call("parameter_1: 2\n")],
         ),
         "two parameter propagate yaml": (
-            {"1": (CartesianProduct, {"parameter_1": [1, 2]}), "2": (CartesianProduct, {"parameter_2": ["a", "b"]})},
+            {"1": CartesianProduct({"parameter_1": [1, 2]}), "2": CartesianProduct({"parameter_2": ["a", "b"]})},
             "out",
             None,
             "yaml",
@@ -645,7 +630,7 @@ class TestCatenationStudy:
             ],
         ),
         "mixed generators ints and floats yaml": (
-            {"1": (CartesianProduct, {"parameter_1": [1, 2]}), "2": (OneAtATime, {"parameter_2": [3.0, 4.0]})},
+            {"1": CartesianProduct({"parameter_1": [1, 2]}), "2": OneAtATime({"parameter_2": [3.0, 4.0]})},
             "out",
             None,
             "yaml",
@@ -658,7 +643,7 @@ class TestCatenationStudy:
             ],
         ),
         "two parameter propagate yaml: bools and ints": (
-            {"1": (CartesianProduct, {"parameter_1": [1, 2]}), "2": (CartesianProduct, {"parameter_2": [True, False]})},
+            {"1": CartesianProduct({"parameter_1": [1, 2]}), "2": CartesianProduct({"parameter_2": [True, False]})},
             "out",
             None,
             "yaml",
@@ -671,7 +656,7 @@ class TestCatenationStudy:
             ],
         ),
         "one parameter one file yaml": (
-            {"1": (CartesianProduct, {"parameter_1": [1]}), "2": (CartesianProduct, {"parameter_1": [2]})},
+            {"1": CartesianProduct({"parameter_1": [1]}), "2": CartesianProduct({"parameter_1": [2]})},
             None,
             "parameter_study.yaml",
             "yaml",
@@ -679,7 +664,7 @@ class TestCatenationStudy:
             [call("parameter_set0:\n  parameter_1: 1\nparameter_set1:\n  parameter_1: 2\n")],
         ),
         "two parameter propagate one file yaml": (
-            {"1": (CartesianProduct, {"parameter_1": [1, 2]}), "2": (CartesianProduct, {"parameter_2": ["a", "b"]})},
+            {"1": CartesianProduct({"parameter_1": [1, 2]}), "2": CartesianProduct({"parameter_2": ["a", "b"]})},
             None,
             "parameter_study.yaml",
             "yaml",
@@ -694,7 +679,7 @@ class TestCatenationStudy:
             ],
         ),
         "two parameter one file yaml: bools and ints": (
-            {"1": (CartesianProduct, {"parameter_1": [1, 2]}), "2": (CartesianProduct, {"parameter_2": [True, False]})},
+            {"1": CartesianProduct({"parameter_1": [1, 2]}), "2": CartesianProduct({"parameter_2": [True, False]})},
             None,
             "parameter_study.yaml",
             "yaml",
@@ -745,23 +730,23 @@ class TestCatenationStudy:
 
     parameter_study_to_dict = {
         "ints": (
-            {"1": (CartesianProduct, {"ints": [1]}), "2": (CartesianProduct, {"ints": [2]})},
+            {"1": CartesianProduct({"ints": [1]}), "2": CartesianProduct({"ints": [2]})},
             {"parameter_set0": {"ints": 1}, "parameter_set1": {"ints": 2}},
         ),
         "floats": (
-            {"1": (OneAtATime, {"floats": [10.0]}), "2": (OneAtATime, {"floats": [20.0]})},
+            {"1": OneAtATime({"floats": [10.0]}), "2": OneAtATime({"floats": [20.0]})},
             {"parameter_set0": {"floats": 10.0}, "parameter_set1": {"floats": 20.0}},
         ),
         "strings": (
-            {"1": (CartesianProduct, {"strings": ["a"]}), "2": (CartesianProduct, {"strings": ["b"]})},
+            {"1": CartesianProduct({"strings": ["a"]}), "2": CartesianProduct({"strings": ["b"]})},
             {"parameter_set0": {"strings": "a"}, "parameter_set1": {"strings": "b"}},
         ),
         "bools": (
-            {"1": (CartesianProduct, {"bools": [False]}), "2": (CartesianProduct, {"bools": [True]})},
+            {"1": CartesianProduct({"bools": [False]}), "2": CartesianProduct({"bools": [True]})},
             {"parameter_set0": {"bools": False}, "parameter_set1": {"bools": True}},
         ),
         "mixed ints, float": (
-            {"1": (OneAtATime, {"ints": [1]}), "2": (CartesianProduct, {"floats": [10.0]})},
+            {"1": OneAtATime({"ints": [1]}), "2": CartesianProduct({"floats": [10.0]})},
             {"parameter_set0": {"ints": 1, "floats": 10.0}},
         ),
     }
