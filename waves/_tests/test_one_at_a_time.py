@@ -29,21 +29,21 @@ class TestOneAtATime:
             {"parameter_1": ["one", "two", "many"]},
             does_not_raise,
         ),
+        "scaler valued parameter int": (
+            {"parameter_1": 1},
+            does_not_raise,
+        ),
+        "scaler valued parameter str": (
+            {"parameter_1": "one"},
+            does_not_raise,
+        ),
         "not a dict": (
             "not a dict",
             pytest.raises(SchemaValidationError),
         ),
-        "bad schema int": (
-            {"parameter_1": 1},
-            does_not_raise,
-        ),
         "bad schema dict": (
             {"parameter_1": {"thing1": 1}},
-            does_not_raise,
-        ),
-        "bad schema str": (
-            {"parameter_1": "one"},
-            does_not_raise,
+            pytest.raises(SchemaValidationError),
         ),
         "bad schema empty": (
             {"parameter_1": []},
@@ -51,6 +51,14 @@ class TestOneAtATime:
         ),
         "bad schema set": (
             {"parameter_1": {1, 2}},
+            pytest.raises(SchemaValidationError),
+        ),
+        "bad schema type": (
+            {"parameter_1": numpy.int64(42)},
+            pytest.raises(SchemaValidationError),
+        ),
+        "bad schema complex": (
+            {"parameter_1": 3 + 4j},
             pytest.raises(SchemaValidationError),
         ),
     }

@@ -840,7 +840,10 @@ class CartesianProduct(ParameterGenerator):
 
         for key, value in self._parameter_schema.items():
             if not isinstance(value, (list, tuple, set)):
-                self._parameter_schema[key] = [value]
+                if numpy.isscalar(value) and isinstance(value, (int, float, str, bool)):
+                    self._parameter_schema[key] = [value]
+                else:
+                    raise SchemaValidationError("parameters must be scalar valued integers, floats, strings, or booleans")
             else:
                 self._parameter_schema[key] = value
 
@@ -1033,7 +1036,10 @@ class OneAtATime(ParameterGenerator):
 
         for key, value in self._parameter_schema.items():
             if not isinstance(value, (list, tuple, set)):
-                self._parameter_schema[key] = [value]
+                if numpy.isscalar(value) and isinstance(value, (int, float, str, bool)):
+                    self._parameter_schema[key] = [value]
+                else:
+                    raise SchemaValidationError("parameters must be scalar valued integers, floats, strings, or booleans")
             else:
                 self._parameter_schema[key] = value
 
