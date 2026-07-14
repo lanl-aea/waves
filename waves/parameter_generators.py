@@ -843,7 +843,9 @@ class CartesianProduct(ParameterGenerator):
                 if numpy.isscalar(value):
                     self._parameter_schema[key] = [value]
                 else:
-                    raise SchemaValidationError("Parameters must be a sequence of scalar values or a supported scalar value")  # noqa: E501
+                    raise SchemaValidationError(
+                        "Parameters must be a sequence of scalar values or a supported scalar value"
+                    )
             else:
                 self._parameter_schema[key] = value
 
@@ -1039,7 +1041,9 @@ class OneAtATime(ParameterGenerator):
                 if numpy.isscalar(value):
                     self._parameter_schema[key] = [value]
                 else:
-                    raise SchemaValidationError("Parameters must be a sequence of scalar values or a supported scalar value")  # noqa: E501
+                    raise SchemaValidationError(
+                        "Parameters must be a sequence of scalar values or a supported scalar value"
+                    )
             else:
                 self._parameter_schema[key] = value
 
