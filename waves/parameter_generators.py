@@ -1625,11 +1625,9 @@ class CatenationStudy(ParameterGenerator):
 
     Parameters in each study must be scalar valued integers, floats, strings, or booleans.
 
-    :param parameter_schema: dictionary of key:value pairs. The keys are not used. Each value should be a tuple of
-        length two. The first item in each tuple is the generator method (`waves.scons_extensions.CartesianProduct`,
-        `waves.scons_extensions.LatinHypercube`, etc.). The second item of each tuple is a dictionary of the parameter
-        schema for that parameter generator method. Each dictionary of each parameter generator method follows standard
-        schema formatting for that method.
+    :param parameter_schema: dictionary of key:value pairs. The keys are not used. Each value should be an instantiated
+        :class:`waves.parameter_generators.ParameterGenerator`, e.g. `waves.scons_extensions.CartesianProduct`,
+        `waves.scons_extensions.LatinHypercube`, etc.
     :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
         parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
         relative path template. May contain the ``@number`` set number placeholder in the file basename but not in the
@@ -1665,21 +1663,20 @@ class CatenationStudy(ParameterGenerator):
 
         * Parameter schema is not a dictionary
         * Parameter schema does not contain multiple key:value entries
-        * Parameter schema values of key:value entries are not tuples
-        * Parameter schema tuple values are not a length of two
-        * Parameter schema tuple values' first item is not a parameter generator object
-        * Parameter schema tuple values' second item is not a dictionary
+        * Parameter schema values of key:value entries are not :class:`waves.parameter_generators.ParameterGenerator`
+          classes
 
     Example:
 
     .. code-block::
 
        >>> import waves
-       >>> parameter_schema = {
-       ...     "1": (waves.parameter_generators.CartesianProduct, {'parameter_1': [1, 2], 'parameter_2': ['a', 'b']}),
-       ...     "2": (waves.parameter_generators.OneAtATime, {'parameter_1': [5, 7], 'parameter_2': ['x', 'y']}),
+       >>> parameter_generator = waves.parameter_generators.CatenationStudy(
+       ...     {
+       ...         "1": waves.parameter_generators.CartesianProduct({'parameter_1': [1, 2], 'parameter_2': ['a', 'b']}),
+       ...         "2": waves.parameter_generators.OneAtATime({'parameter_1': [5, 7], 'parameter_2': ['x', 'y']}),
        ...     }
-       >>> parameter_generator = waves.parameter_generators.CatenationStudy(parameter_schema)
+       ... )
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
        Dimensions:       (set_name: 7)
@@ -1699,40 +1696,15 @@ class CatenationStudy(ParameterGenerator):
         if len(self._parameter_schema) < 2:
             raise SchemaValidationError("Input dictionary must have at least two key:value entries")
         for entry in self._parameter_schema.values():
-            if not isinstance(entry, tuple):
-                raise SchemaValidationError("Each value of a key:value entry must be a tuple")
-            if len(entry) != 2:
+            if not isinstance(entry, ParameterGenerator):
                 raise SchemaValidationError(
-                    "Each tuple must contain exactly two elements, the generator and the schema as the first and second"
-                    " items, respectively"
+                    "Each value of a key:value entry must be a ``waves.parameter_generators.ParameterGenerator`` class"
                 )
-            if not (isinstance(entry[0], type) and issubclass(entry[0], ParameterGenerator)):
-                raise SchemaValidationError("The first item of each tuple must be a parameter generator object")
-            if not isinstance(entry[1], dict):
-                raise SchemaValidationError("The second item of each tuple must contain the schema as a dictionary")
         return
 
-    def _generate(self, **kwargs) -> None:
+    def _generate(self, **kwargs) -> None:  # noqa: ARG002
         """Generate the parameter studies and combine them."""
-        if self._output_file_template is not None:
-            output_file_template_string = self._output_file_template.template
-        else:
-            output_file_template_string = None
-
-        studies = [
-            generator(
-                schema,
-                output_file_template=output_file_template_string,
-                output_file=self._output_file,
-                output_file_type=self._output_file_type,
-                set_name_template=self._set_name_template.template,
-                overwrite=self._overwrite,
-                write_meta=self._write_meta_flag,
-                **kwargs,
-            ).parameter_study
-            for generator, schema in self._parameter_schema.values()
-        ]
-
+        studies = [generator.parameter_study for generator in self._parameter_schema.values()]
         self.parameter_study = _merge_parameter_studies(studies, self._set_name_template)
         self.parameter_study = self.parameter_study.sortby(_set_coordinate_key)
         # Do work normally performed by super()._generate(). Must re-calculate semi-private variables

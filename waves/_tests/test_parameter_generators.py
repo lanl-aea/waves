@@ -681,6 +681,28 @@ propagate_parameter_space_cases = {
         True,
         does_not_raise,
     ),
+    "propagate four parameter sets into three sets, set name template": (
+        [
+            parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0, 3.0]}).parameter_study,
+            parameter_generators.CartesianProduct({"parameter_2": ["a", "b"], "parameter_3": [3, 4]}).parameter_study,
+        ],
+        {"template": _utilities._AtSignTemplate("set@number")},
+        parameter_generators.CartesianProduct(
+            {
+                "parameter_1": [1.0, 2.0, 3.0],
+                "parameter_2": ["a", "b"],
+                "parameter_3": [3, 4],
+            },
+            set_name_template="set@number",
+        ).parameter_study,
+        {
+            "parameter_1": numpy.float64,
+            "parameter_2": numpy.dtype("U1"),
+            "parameter_3": numpy.int64,
+        },
+        True,
+        does_not_raise,
+    ),
     "propagate three parameter sets into four sets": (
         [
             parameter_generators.CartesianProduct({"parameter_2": ["a", "b"], "parameter_3": [3, 4]}).parameter_study,
@@ -702,10 +724,45 @@ propagate_parameter_space_cases = {
         True,
         does_not_raise,
     ),
+    "propagate three parameter sets into four sets, set name template": (
+        [
+            parameter_generators.CartesianProduct({"parameter_2": ["a", "b"], "parameter_3": [3, 4]}).parameter_study,
+            parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0, 3.0]}).parameter_study,
+        ],
+        {"template": _utilities._AtSignTemplate("set@number")},
+        parameter_generators.CartesianProduct(
+            {
+                "parameter_1": [1.0, 2.0, 3.0],
+                "parameter_2": ["a", "b"],
+                "parameter_3": [3, 4],
+            },
+            set_name_template="set@number",
+        ).parameter_study,
+        {
+            "parameter_1": numpy.float64,
+            "parameter_2": numpy.dtype("U1"),
+            "parameter_3": numpy.int64,
+        },
+        True,
+        does_not_raise,
+    ),
     "propagate one parameter: int, set name template": (
         [
             parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_2": [2]}).parameter_study,
+        ],
+        {"template": _utilities._AtSignTemplate("set@number")},
+        parameter_generators.OneAtATime(
+            {"parameter_1": [1], "parameter_2": [2]}, set_name_template="set@number"
+        ).parameter_study,
+        {"parameter_1": numpy.int64, "parameter_2": numpy.int64},
+        True,
+        does_not_raise,
+    ),
+    "propagate one parameter: int, set name template, mixed original set names": (
+        [
+            parameter_generators.OneAtATime({"parameter_1": [1]}, set_name_template="first@number").parameter_study,
+            parameter_generators.OneAtATime({"parameter_2": [2]}, set_name_template="second@number").parameter_study,
         ],
         {"template": _utilities._AtSignTemplate("set@number")},
         parameter_generators.OneAtATime(
@@ -1115,6 +1172,38 @@ merge_parameter_studies_cases.update(
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
             True,
             does_not_raise,
+        ),
+        "merge and propagate: three studies, two parameter spaces - int/float, mismatched template request": (
+            [
+                parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
+                parameter_generators.CartesianProduct({"parameter_1": [2]}).parameter_study,
+                parameter_generators.CartesianProduct({"parameter_2": [3.0, 4.0]}).parameter_study,
+            ],
+            {"template": _utilities._AtSignTemplate("set@number")},
+            None,
+            {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
+            True,
+            pytest.raises(
+                RuntimeError,
+                match=r"Could not fill merged parameter set names. Does the parameter set naming convention match?",
+            ),
+        ),
+        "merge and propagate: three studies, two parameter spaces - int/float, mismatched original set name template": (
+            [
+                parameter_generators.CartesianProduct(
+                    {"parameter_1": [1]}, set_name_template="set@number"
+                ).parameter_study,
+                parameter_generators.CartesianProduct({"parameter_1": [2]}).parameter_study,
+                parameter_generators.CartesianProduct({"parameter_2": [3.0, 4.0]}).parameter_study,
+            ],
+            {},
+            None,
+            {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
+            True,
+            pytest.raises(
+                RuntimeError,
+                match=r"Could not fill merged parameter set names. Does the parameter set naming convention match?",
+            ),
         ),
         "merge and propagate: four studies, two parameter spaces - string/bool": (
             [

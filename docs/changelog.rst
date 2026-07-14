@@ -8,6 +8,15 @@ Changelog
 1.5.0 (unreleased)
 ******************
 
+Breaking changes
+================
+- Accept entire ParameterGenerator class objects in CatenationStudy API. Required to preserve generator-specific
+  positional and keyword arguments (:issue:`1022`, :merge:`1325`). By `Kyle Brindley`_.
+
+Bug fixes
+=========
+- Respect original parameter generator keyword arguments in CatenationStudy (:issue:`1022`, :merge:`1325`). By `Kyle Brindley`_.
+
 ******************
 1.4.5 (2026-07-08)
 ******************
