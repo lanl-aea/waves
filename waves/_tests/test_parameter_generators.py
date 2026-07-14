@@ -3127,12 +3127,63 @@ class TestParameterDistributions:
 
 
 test__new_write_cases = {
-    "CartesianProduct STDOUT": (
+    "CartesianProduct: STDOUT": (
         parameter_generators.CartesianProduct({"parameter_1": [1]}),
         {},
         "parameter_set0:\n  parameter_1: 1\n",
         None,
         None,
+    ),
+    "CartesianProduct: output file, default type": (
+        parameter_generators.CartesianProduct({"parameter_1": [1]}),
+        {"output_file": pathlib.Path("output.h5")},
+        None,
+        xarray.Dataset(
+            {
+                "parameter_1": xarray.DataArray(
+                    [1],
+                    coords={
+                        "set_name": xarray.DataArray(
+                            ["parameter_set0"], dims=["set_name"],
+                        )
+                    },
+                ),
+                "set_hash": xarray.DataArray(
+                    ["1661dcd0bf4761d25471c1cf5514ceae"], dims="set_hash",
+                ),
+
+            },
+        ),
+        None,
+    ),
+    "CartesianProduct: output file, H5": (
+        parameter_generators.CartesianProduct({"parameter_1": [1]}),
+        {"output_file": pathlib.Path("output.h5"), "output_file_type": "h5"},
+        None,
+        xarray.Dataset(
+            {
+                "parameter_1": xarray.DataArray(
+                    [1],
+                    coords={
+                        "set_name": xarray.DataArray(
+                            ["parameter_set0"], dims=["set_name"],
+                        )
+                    },
+                ),
+                "set_hash": xarray.DataArray(
+                    ["1661dcd0bf4761d25471c1cf5514ceae"], dims="set_hash",
+                ),
+
+            },
+        ),
+        None,
+    ),
+    "CartesianProduct: output file, YAML": (
+        parameter_generators.CartesianProduct({"parameter_1": [1]}),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
+        None,
+        None,
+        "parameter_set0:\n  parameter_1: 1\n",
     ),
 }
 
@@ -3151,10 +3202,11 @@ def test__new_write(
 ) -> None:
     if sum([thing is not None for thing in (expected_stdout, expected_to_netcdf, expected_write)]) > 1:
         raise ValueError("Do not pass more than one expected output")
-    # TODO: mock all and sequential file open
     with (
         patch("sys.stdout.write") as mock_stdout,
         patch("xarray.Dataset.to_netcdf") as mock_to_netcdf,
+        # TODO: mock all and sequential file open
+        patch("pathlib.Path.is_file", return_value=False),
         patch("pathlib.Path.open", mock_open()) as mock_file,
     ):
         parameter_generators._new_write(generator, **kwargs)
@@ -3168,7 +3220,7 @@ def test__new_write(
         else:
             mock_to_netcdf.assert_not_called()
         if expected_write is not None:
-            mock_file().mock_write.assert_called_once_with(expected_write)
+            mock_file().write.assert_called_once_with(expected_write)
         else:
             mock_file().assert_not_called()
 
