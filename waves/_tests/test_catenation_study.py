@@ -796,7 +796,10 @@ class TestCatenationStudy:
 
     write_yaml = {
         "one parameter yaml": (
-            {"1": CartesianProduct({"parameter_1": [1]}), "2": CartesianProduct({"parameter_1": [2]})},
+            {
+                "1": CartesianProduct({"parameter_1": [1]}, output_file_template="out"),
+                "2": CartesianProduct({"parameter_1": [2]}, output_file_template="out"),
+            },
             "out",
             None,
             "yaml",
