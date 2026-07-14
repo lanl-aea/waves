@@ -125,6 +125,7 @@ class TestCatenationStudy:
                 }
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64},
+            does_not_raise,
         ),
         "one parameter mixed length strings": (
             {
@@ -154,6 +155,7 @@ class TestCatenationStudy:
                 }
             ).set_coords("set_hash"),
             {"parameter_1": numpy.dtype("U4")},
+            does_not_raise,
         ),
         "one parameter random keys": (
             {
@@ -179,9 +181,24 @@ class TestCatenationStudy:
                 }
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64},
+            does_not_raise,
+        ),
+        "one parameter custom template, does not match original studies": (
+            {"1": CartesianProduct({"parameter_1": [1]}), "2": CartesianProduct({"parameter_1": [2]})},
+            {"set_name_template": "set@number"},
+            None,
+            None,
+            None,
+            pytest.raises(
+                RuntimeError,
+                match=r"Could not fill merged parameter set names. Does the parameter set naming convention match?",
+            ),
         ),
         "one parameter custom template": (
-            {"1": CartesianProduct({"parameter_1": [1]}), "2": CartesianProduct({"parameter_1": [2]})},
+            {
+                "1": CartesianProduct({"parameter_1": [1]}, set_name_template="set@number"),
+                "2": CartesianProduct({"parameter_1": [2]}, set_name_template="set@number"),
+            },
             {"set_name_template": "set@number"},
             None,
             xarray.Dataset(
@@ -197,9 +214,24 @@ class TestCatenationStudy:
                 }
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64},
+            does_not_raise,
+        ),
+        "one parameter custom template no placeholder, mismatched against original study": (
+            {"1": CartesianProduct({"parameter_1": [1]}), "2": CartesianProduct({"parameter_1": [2]})},
+            {"set_name_template": "set"},
+            None,
+            None,
+            None,
+            pytest.raises(
+                RuntimeError,
+                match=r"Could not fill merged parameter set names. Does the parameter set naming convention match?",
+            ),
         ),
         "one parameter custom template no placeholder": (
-            {"1": CartesianProduct({"parameter_1": [1]}), "2": CartesianProduct({"parameter_1": [2]})},
+            {
+                "1": CartesianProduct({"parameter_1": [1]}, set_name_template="set"),
+                "2": CartesianProduct({"parameter_1": [2]}, set_name_template="set"),
+            },
             {"set_name_template": "set"},
             None,
             xarray.Dataset(
@@ -215,6 +247,7 @@ class TestCatenationStudy:
                 }
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64},
+            does_not_raise,
         ),
         "two parameter merge": (
             {
@@ -251,6 +284,7 @@ class TestCatenationStudy:
                 }
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64, "parameter_2": numpy.dtype("U1")},
+            does_not_raise,
         ),
         "two parameter propagate": (
             {"1": CartesianProduct({"parameter_1": [1, 2]}), "2": CartesianProduct({"parameter_2": ["a", "b"]})},
@@ -288,6 +322,7 @@ class TestCatenationStudy:
                 }
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64, "parameter_2": numpy.dtype("U1")},
+            does_not_raise,
         ),
         "mixed generators ints and floats": (
             {"1": CartesianProduct({"parameter_1": [1, 2]}), "2": OneAtATime({"parameter_2": [3.0, 4.0]})},
@@ -325,6 +360,7 @@ class TestCatenationStudy:
                 }
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
+            does_not_raise,
         ),
         "mixed generators mixed parameters": (
             {
@@ -362,6 +398,7 @@ class TestCatenationStudy:
                 }
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
+            does_not_raise,
         ),
         "mixed generators three generators": (
             {
@@ -408,6 +445,7 @@ class TestCatenationStudy:
                 }
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.dtype("U1")},
+            does_not_raise,
         ),
         "custom studies": (
             {
@@ -458,6 +496,7 @@ class TestCatenationStudy:
                 }
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
+            does_not_raise,
         ),
         "previous study one parameter cartesian product": (
             {"1": CartesianProduct({"parameter_1": [3]}), "2": CartesianProduct({"parameter_1": [4]})},
@@ -465,6 +504,7 @@ class TestCatenationStudy:
             CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
             CartesianProduct({"parameter_1": [1, 2, 3, 4]}).parameter_study,
             {"parameter_1": numpy.int64},
+            does_not_raise,
         ),
         "previous study two shared parameters cartesian product": (
             {"1": CartesianProduct({"parameter_1": [5]}), "2": CartesianProduct({"parameter_2": [7.0]})},
@@ -495,6 +535,7 @@ class TestCatenationStudy:
                 }
             ).set_coords(_hash_coordinate_key),
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
+            does_not_raise,
         ),
         "previous study two different parameters cartesian product": (
             {"1": CartesianProduct({"parameter_2": [3.0]}), "2": CartesianProduct({"parameter_2": [4.0]})},
@@ -502,6 +543,7 @@ class TestCatenationStudy:
             CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
             CartesianProduct({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}).parameter_study,
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
+            does_not_raise,
         ),
         "previous study two shared parameters mixed generators": (
             {"1": CartesianProduct({"parameter_1": [5, 6]}), "2": CartesianProduct({"parameter_2": [7.0, 8.0]})},
@@ -558,6 +600,7 @@ class TestCatenationStudy:
                 }
             ).set_coords(_hash_coordinate_key),
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
+            does_not_raise,
         ),
         "CartesianProduct and LatinHypercube": (
             {
@@ -624,6 +667,7 @@ class TestCatenationStudy:
                 "parameter_3": numpy.float64,
                 "parameter_4": numpy.float64,
             },
+            does_not_raise,
         ),
         "salib/scipy sobol samplers": (
             {
@@ -718,11 +762,12 @@ class TestCatenationStudy:
                 "parameter_1": numpy.float64,
                 "parameter_2": numpy.float64,
             },
+            does_not_raise,
         ),
     }
 
     @pytest.mark.parametrize(
-        ("parameter_schema", "kwargs", "previous_study", "expected_dataset", "expected_types"),
+        ("parameter_schema", "kwargs", "previous_study", "expected_dataset", "expected_types", "outcome"),
         generate_io.values(),
         ids=generate_io.keys(),
     )
@@ -733,8 +778,10 @@ class TestCatenationStudy:
         previous_study: xarray.Dataset | None,
         expected_dataset: xarray.Dataset,
         expected_types: dict[str, type],
+        outcome: contextlib.nullcontext | pytest.RaisesExc
     ) -> None:
         with (
+            outcome,
             patch("waves.parameter_generators._open_parameter_study", return_value=previous_study),
             patch("pathlib.Path.is_file", return_value=True),
         ):

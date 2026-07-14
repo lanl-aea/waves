@@ -1185,12 +1185,14 @@ merge_parameter_studies_cases.update(
             True,
             pytest.raises(
                 RuntimeError,
-                match=r"Could not fill merged parameter set names. Does the parameter set naming convention match?"
+                match=r"Could not fill merged parameter set names. Does the parameter set naming convention match?",
             ),
         ),
         "merge and propagate: three studies, two parameter spaces - int/float, mismatched original set name template": (
             [
-                parameter_generators.CartesianProduct({"parameter_1": [1]}, set_name_template="set@number").parameter_study,
+                parameter_generators.CartesianProduct(
+                    {"parameter_1": [1]}, set_name_template="set@number"
+                ).parameter_study,
                 parameter_generators.CartesianProduct({"parameter_1": [2]}).parameter_study,
                 parameter_generators.CartesianProduct({"parameter_2": [3.0, 4.0]}).parameter_study,
             ],
@@ -1200,7 +1202,7 @@ merge_parameter_studies_cases.update(
             True,
             pytest.raises(
                 RuntimeError,
-                match=r"Could not fill merged parameter set names. Does the parameter set naming convention match?"
+                match=r"Could not fill merged parameter set names. Does the parameter set naming convention match?",
             ),
         ),
         "merge and propagate: four studies, two parameter spaces - string/bool": (

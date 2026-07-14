@@ -1702,7 +1702,7 @@ class CatenationStudy(ParameterGenerator):
                 )
         return
 
-    def _generate(self, **kwargs) -> None:
+    def _generate(self, **kwargs) -> None:  # noqa: ARG002
         """Generate the parameter studies and combine them."""
         studies = [generator.parameter_study for generator in self._parameter_schema.values()]
         self.parameter_study = _merge_parameter_studies(studies, self._set_name_template)
