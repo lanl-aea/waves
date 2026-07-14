@@ -3144,14 +3144,15 @@ test__new_write_cases = {
                     [1],
                     coords={
                         "set_name": xarray.DataArray(
-                            ["parameter_set0"], dims=["set_name"],
+                            ["parameter_set0"],
+                            dims=["set_name"],
                         )
                     },
                 ),
                 "set_hash": xarray.DataArray(
-                    ["1661dcd0bf4761d25471c1cf5514ceae"], dims="set_hash",
+                    ["1661dcd0bf4761d25471c1cf5514ceae"],
+                    dims="set_hash",
                 ),
-
             },
         ),
         None,
@@ -3166,14 +3167,15 @@ test__new_write_cases = {
                     [1],
                     coords={
                         "set_name": xarray.DataArray(
-                            ["parameter_set0"], dims=["set_name"],
+                            ["parameter_set0"],
+                            dims=["set_name"],
                         )
                     },
                 ),
                 "set_hash": xarray.DataArray(
-                    ["1661dcd0bf4761d25471c1cf5514ceae"], dims="set_hash",
+                    ["1661dcd0bf4761d25471c1cf5514ceae"],
+                    dims="set_hash",
                 ),
-
             },
         ),
         None,

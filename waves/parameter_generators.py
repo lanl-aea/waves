@@ -2222,7 +2222,7 @@ def _new_write(
         write = False
         if output_file_type == "h5":
             with xarray.open_dataset(output_file, engine="h5netcdf") as existing_dataset:
-                if not generator.parameter_study.equals(existing_dataset):
+                if not existing_dataset.equals(generator.parameter_study):
                     write = True
             if write:
                 generator.parameter_study.drop_encoding().to_netcdf(
@@ -2231,7 +2231,7 @@ def _new_write(
         elif output_file_type == "yaml":
             with output_file.open(mode="r") as existing_file:
                 existing_dictionary = yaml.safe_load(existing_file)
-                if existing_yaml_object != generator.parameter_study_to_dict():
+                if existing_dictionary != generator.parameter_study_to_dict():
                     write = True
             if write:
                 with output_file.open(mode="w") as outfile:
