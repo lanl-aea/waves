@@ -715,6 +715,19 @@ propagate_parameter_space_cases = {
         True,
         does_not_raise,
     ),
+    "propagate one parameter: int, set name template, mixed original set names": (
+        [
+            parameter_generators.OneAtATime({"parameter_1": [1]}, set_name_template="first@number").parameter_study,
+            parameter_generators.OneAtATime({"parameter_2": [2]}, set_name_template="second@number").parameter_study,
+        ],
+        {"template": _utilities._AtSignTemplate("set@number")},
+        parameter_generators.OneAtATime(
+            {"parameter_1": [1], "parameter_2": [2]}, set_name_template="set@number"
+        ).parameter_study,
+        {"parameter_1": numpy.int64, "parameter_2": numpy.int64},
+        True,
+        does_not_raise,
+    ),
 }
 
 
