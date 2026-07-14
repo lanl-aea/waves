@@ -1173,13 +1173,28 @@ merge_parameter_studies_cases.update(
             True,
             does_not_raise,
         ),
-        "merge and propagate: three studies, two parameter spaces - int/float, mismatched set name template request": (
+        "merge and propagate: three studies, two parameter spaces - int/float, mismatched template request": (
             [
                 parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
                 parameter_generators.CartesianProduct({"parameter_1": [2]}).parameter_study,
                 parameter_generators.CartesianProduct({"parameter_2": [3.0, 4.0]}).parameter_study,
             ],
             {"template": _utilities._AtSignTemplate("set@number")},
+            None,
+            {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
+            True,
+            pytest.raises(
+                RuntimeError,
+                match=r"Could not fill merged parameter set names. Does the parameter set naming convention match?"
+            ),
+        ),
+        "merge and propagate: three studies, two parameter spaces - int/float, mismatched original set name template": (
+            [
+                parameter_generators.CartesianProduct({"parameter_1": [1]}, set_name_template="set@number").parameter_study,
+                parameter_generators.CartesianProduct({"parameter_1": [2]}).parameter_study,
+                parameter_generators.CartesianProduct({"parameter_2": [3.0, 4.0]}).parameter_study,
+            ],
+            {},
             None,
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
             True,
