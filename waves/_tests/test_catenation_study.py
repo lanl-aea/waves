@@ -568,9 +568,10 @@ class TestCatenationStudy:
                         "parameter_3": {"distribution": "norm", "loc": 50, "scale": 1},
                         "parameter_4": {"distribution": "skewnorm", "a": 4, "loc": 30, "scale": 2},
                     },
+                    seed=42,
                 ),
             },
-            {"set_name_template": "set@number", "seed": 42},
+            {"set_name_template": "set@number"},
             None,
             xarray.Dataset(
                 {
