@@ -61,14 +61,12 @@ class TestCatenationStudy:
                 ),
             ),
         ),
-        "salib/scipy sobol samplers": (
+        "CartesianProduct nominal and SALib sobol": (
             {
-                "1": ScipySampler(
-                    "Sobol",
+                "1": CartesianProduct(
                     {
-                        "num_simulations": 5,
-                        "parameter_1": {"distribution": "uniform", "loc": 0, "scale": 10},
-                        "parameter_2": {"distribution": "uniform", "loc": 2, "scale": 3},
+                        "parameter_1": [1],
+                        "parameter_2": [2],
                     },
                     seed=42,
                 ),
