@@ -86,6 +86,27 @@ class TestCatenationStudy:
             },
             does_not_raise,
         ),
+        "CartesianProduct nominal and Scipy sobol": (
+            {
+                "1": CartesianProduct(
+                    {
+                        "parameter_1": [1],
+                        "parameter_2": [2],
+                    },
+                    seed=42,
+                ),
+                "2": ScipySampler(
+                    "Sobol",
+                    {
+                        "num_simulations": 5,
+                        "parameter_3": {"distribution": "uniform", "loc": 0, "scale": 10},
+                        "parameter_4": {"distribution": "uniform", "loc": 2, "scale": 3},
+                    },
+                    seed=42,
+                ),
+            },
+            does_not_raise,
+        ),
     }
 
     @pytest.mark.parametrize(
@@ -746,6 +767,109 @@ class TestCatenationStudy:
                             "81490dd4c2ee92e7cf2c6871be136ace",
                             "924311e5f1c09d2072e35310260810e6",
                             "f68a6a8b5adce836c7c1f4b1c4efeb76",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {
+                "parameter_1": numpy.int64,
+                "parameter_2": numpy.int64,
+                "parameter_3": numpy.float64,
+                "parameter_4": numpy.float64,
+            },
+            does_not_raise,
+        ),
+        "CartesianProduct nominal and Scipy sobol": (
+            {
+                "1": CartesianProduct(
+                    {
+                        "parameter_1": [1],
+                        "parameter_2": [2],
+                    },
+                    seed=42,
+                ),
+                "2": ScipySampler(
+                    "Sobol",
+                    {
+                        "num_simulations": 5,
+                        "parameter_3": {"distribution": "uniform", "loc": 0, "scale": 10},
+                        "parameter_4": {"distribution": "uniform", "loc": 2, "scale": 3},
+                    },
+                    seed=42,
+                ),
+            },
+            {},
+            None,
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1, 1, 1, 1, 1],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [2, 2, 2, 2, 2],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_3": xarray.DataArray(
+                        [5.6453192, 0.35047322, 4.31029474, 9.61578793, 2.38067276],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_4": xarray.DataArray(
+                        [3.79350291, 2.07952781, 4.44310392, 2.93422983, 3.91909283],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "4a286f385ea87a96cccfc87c92b45463",
+                            "6a6bf32dcd3c8c3139c44f4303bfbd81",
+                            "a7f8d3dccac4e39f3b289467e71ce092",
+                            "e039db21d6fe77b7d67e5827c769dc07",
+                            "ff508abe2b3ed1685ebd15164e6209ec",
                         ],
                         dims=_set_coordinate_key,
                     ),
