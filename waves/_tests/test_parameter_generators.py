@@ -3126,6 +3126,53 @@ class TestParameterDistributions:
             assert test_distributions.parameter_distributions[parameter_name].kwds == expected_kwds
 
 
+test__new_write_cases = {
+    "CartesianProduct STDOUT": (
+        parameter_generators.CartesianProduct({"parameter_1": [1]}),
+        {},
+        "parameter_set0:\n  parameter_1: 1\n",
+        None,
+        None,
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("generator", "kwargs", "expected_stdout", "expected_to_netcdf", "expected_write"),
+    test__new_write_cases.values(),
+    ids=test__new_write_cases.keys(),
+)
+def test__new_write(
+    generator: parameter_generators.ParameterGenerator,
+    kwargs: dict,
+    expected_stdout: str | None,
+    expected_to_netcdf: xarray.Dataset | None,
+    expected_write: str | None,
+) -> None:
+    if sum([thing is not None for thing in (expected_stdout, expected_to_netcdf, expected_write)]) > 1:
+        raise ValueError("Do not pass more than one expected output")
+    # TODO: mock all and sequential file open
+    with (
+        patch("sys.stdout.write") as mock_stdout,
+        patch("xarray.Dataset.to_netcdf") as mock_to_netcdf,
+        patch("pathlib.Path.open", mock_open()) as mock_file,
+    ):
+        parameter_generators._new_write(generator, **kwargs)
+        if expected_stdout is not None:
+            mock_stdout.assert_called_once_with(expected_stdout)
+        else:
+            mock_stdout.assert_not_called()
+        if expected_to_netcdf is not None:
+            # TODO: figure out how to assert the dataset that was written
+            mock_to_netcdf.assert_called_once()
+        else:
+            mock_to_netcdf.assert_not_called()
+        if expected_write is not None:
+            mock_file().mock_write.assert_called_once_with(expected_write)
+        else:
+            mock_file().assert_not_called()
+
+
 class DummyGenerator(parameter_generators.ParameterGenerator):
     def _validate(self) -> None:
         self._parameter_names = ["parameter_1"]
