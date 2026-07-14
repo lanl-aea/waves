@@ -35,6 +35,32 @@ class TestCatenationStudy:
             },
             does_not_raise,
         ),
+        "not a dictionary": (
+            "not a dictionary",
+            pytest.raises(SchemaValidationError, match=r"Input must be a dictionary"),
+        ),
+        "bad schema: too few entries": (
+            {"1": CartesianProduct({"parameter_1": [1]})},
+            pytest.raises(SchemaValidationError, match=r"Input dictionary must have at least two key:value entries"),
+        ),
+        "bad entry: tuple instead of ParameterGenerator": (
+            {"1": (CartesianProduct({"parameter_1": [1]}),), "2": CartesianProduct({"parameter_1": [2]})},
+            pytest.raises(
+                SchemaValidationError,
+                match=(
+                    r"Each value of a key:value entry must be a ``waves.parameter_generators.ParameterGenerator`` class"
+                ),
+            ),
+        ),
+        "bad entry: not a ParameterGenerator": (
+            {"1": {"parameter_1": [1]}, "2": CartesianProduct({"parameter_1": [2]})},
+            pytest.raises(
+                SchemaValidationError,
+                match=(
+                    r"Each value of a key:value entry must be a ``waves.parameter_generators.ParameterGenerator`` class"
+                ),
+            ),
+        ),
         "salib/scipy sobol samplers": (
             {
                 "1": ScipySampler(
@@ -61,32 +87,6 @@ class TestCatenationStudy:
                 ),
             },
             does_not_raise,
-        ),
-        "not a dictionary": (
-            "not a dictionary",
-            pytest.raises(SchemaValidationError, match=r"Input must be a dictionary"),
-        ),
-        "bad schema: too few entries": (
-            {"1": CartesianProduct({"parameter_1": [1]})},
-            pytest.raises(SchemaValidationError, match=r"Input dictionary must have at least two key:value entries"),
-        ),
-        "bad entry: tuple instead of ParameterGenerator": (
-            {"1": (CartesianProduct({"parameter_1": [1]}),), "2": CartesianProduct({"parameter_1": [2]})},
-            pytest.raises(
-                SchemaValidationError,
-                match=(
-                    r"Each value of a key:value entry must be a ``waves.parameter_generators.ParameterGenerator`` class"
-                ),
-            ),
-        ),
-        "bad entry: not a ParameterGenerator": (
-            {"1": {"parameter_1": [1]}, "2": CartesianProduct({"parameter_1": [2]})},
-            pytest.raises(
-                SchemaValidationError,
-                match=(
-                    r"Each value of a key:value entry must be a ``waves.parameter_generators.ParameterGenerator`` class"
-                ),
-            ),
         ),
     }
 
