@@ -744,7 +744,7 @@ class TestCatenationStudy:
                         },
                     ),
                     "parameter_3": xarray.DataArray(
-                        [0.61282553, 0.61282553,-0.13794105,  -0.13794105],
+                        [0.61282553, 0.61282553, -0.13794105, -0.13794105],
                         coords={
                             _set_coordinate_key: xarray.DataArray(
                                 ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
@@ -897,7 +897,7 @@ class TestCatenationStudy:
         previous_study: xarray.Dataset | None,
         expected_dataset: xarray.Dataset,
         expected_types: dict[str, type],
-        outcome: contextlib.nullcontext | pytest.RaisesExc
+        outcome: contextlib.nullcontext | pytest.RaisesExc,
     ) -> None:
         with (
             outcome,
