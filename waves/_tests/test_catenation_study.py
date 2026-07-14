@@ -669,21 +669,19 @@ class TestCatenationStudy:
             },
             does_not_raise,
         ),
-        "salib/scipy sobol samplers": (
+        "CartesianProduct nominal and SALib sobol": (
             {
-                "1": ScipySampler(
-                    "Sobol",
+                "1": CartesianProduct(
                     {
-                        "num_simulations": 5,
-                        "parameter_1": {"distribution": "uniform", "loc": 0, "scale": 10},
-                        "parameter_2": {"distribution": "uniform", "loc": 2, "scale": 3},
+                        "parameter_1": [1],
+                        "parameter_2": [2],
                     },
                     seed=42,
                 ),
                 "2": SALibSampler(
                     "sobol",
                     {
-                        "N": 4,
+                        "N": 1,
                         "problem": {
                             "num_vars": 2,
                             "names": ["parameter_3", "parameter_4"],
@@ -699,7 +697,7 @@ class TestCatenationStudy:
             xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
-                        [4.31029474, 9.61578793, 0.35047322, 5.6453192, 2.38067276],
+                        [1, 1, 1, 1],
                         coords={
                             _set_coordinate_key: xarray.DataArray(
                                 [
@@ -707,14 +705,13 @@ class TestCatenationStudy:
                                     "parameter_set1",
                                     "parameter_set2",
                                     "parameter_set3",
-                                    "parameter_set4",
                                 ],
                                 dims=_set_coordinate_key,
                             )
                         },
                     ),
                     "parameter_2": xarray.DataArray(
-                        [4.44310392, 2.93422983, 2.07952781, 3.79350291, 3.91909283],
+                        [2, 2, 2, 2],
                         coords={
                             _set_coordinate_key: xarray.DataArray(
                                 [
@@ -722,14 +719,13 @@ class TestCatenationStudy:
                                     "parameter_set1",
                                     "parameter_set2",
                                     "parameter_set3",
-                                    "parameter_set4",
                                 ],
                                 dims=_set_coordinate_key,
                             )
                         },
                     ),
                     "parameter_3": xarray.DataArray(
-                        [-0.13794105, 0.61282553, 0.61282553, -0.13794105],
+                        [0.61282553, 0.61282553,-0.13794105,  -0.13794105],
                         coords={
                             _set_coordinate_key: xarray.DataArray(
                                 ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
@@ -748,19 +744,20 @@ class TestCatenationStudy:
                     ),
                     "set_hash": xarray.DataArray(
                         [
-                            "0f9510490d521d7fa85154245288622e",
-                            "2f71fbb34825f6fc651a9cdddce1adc8",
-                            "4444a85f48a564a2c2e3ba3666b9967b",
-                            "4c861fec1563e21bf1598d06dbe97dc7",
-                            "658dfb19c773f5b3db9cf61a1d301668",
+                            "6ea43bd843e46e403a8a6c55ce5e5293",
+                            "81490dd4c2ee92e7cf2c6871be136ace",
+                            "924311e5f1c09d2072e35310260810e6",
+                            "f68a6a8b5adce836c7c1f4b1c4efeb76",
                         ],
                         dims=_set_coordinate_key,
                     ),
                 }
             ).set_coords("set_hash"),
             {
-                "parameter_1": numpy.float64,
-                "parameter_2": numpy.float64,
+                "parameter_1": numpy.int64,
+                "parameter_2": numpy.int64,
+                "parameter_3": numpy.float64,
+                "parameter_4": numpy.float64,
             },
             does_not_raise,
         ),
