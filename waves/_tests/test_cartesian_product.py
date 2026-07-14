@@ -37,20 +37,20 @@ class TestCartesianProduct:
             {"parameter_1": "one"},
             does_not_raise,
         ),
+        "test all scalars valued parameters": (
+            {"parameter_1": 1, "parameter_2": "two", "parameter_3": True},
+            does_not_raise,
+        ),
+        "test mixed scalars and lists": (
+            {"parameter_1": 1, "parameter_2": [1, 2]},
+            does_not_raise,
+        ),
         "not a dict": (
             "not a dict",
             pytest.raises(SchemaValidationError),
         ),
         "bad schema dict": (
             {"parameter_1": {"thing1": 1}},
-            pytest.raises(SchemaValidationError),
-        ),
-        "bad schema type": (
-            {"parameter_1": numpy.int64(42)},
-            pytest.raises(SchemaValidationError),
-        ),
-        "bad schema complex": (
-            {"parameter_1": 3 + 4j},
             pytest.raises(SchemaValidationError),
         ),
     }
