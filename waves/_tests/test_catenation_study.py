@@ -11,7 +11,15 @@ import xarray
 
 from waves._settings import _allowable_output_file_typing, _hash_coordinate_key, _set_coordinate_key
 from waves.exceptions import SchemaValidationError
-from waves.parameter_generators import CartesianProduct, CatenationStudy, CustomStudy, LatinHypercube, OneAtATime
+from waves.parameter_generators import (
+    CartesianProduct,
+    CatenationStudy,
+    CustomStudy,
+    LatinHypercube,
+    OneAtATime,
+    SALibSampler,
+    ScipySampler,
+)
 
 does_not_raise = contextlib.nullcontext()
 
@@ -24,6 +32,33 @@ class TestCatenationStudy:
             {
                 "1": CartesianProduct({"parameter_1": [1, 2], "parameter_2": ["a", "b"]}),
                 "2": OneAtATime({"parameter_1": [5, 7], "parameter_2": ["x", "y"]}),
+            },
+            does_not_raise,
+        ),
+        "salib/scipy sobol samplers": (
+            {
+                "1": ScipySampler(
+                    "Sobol",
+                    {
+                        "num_simulations": 5,
+                        "parameter_1": {"distribution": "uniform", "loc": 0, "scale": 10},
+                        "parameter_2": {"distribution": "uniform", "loc": 2, "scale": 3},
+                    },
+                    seed=42,
+                ),
+                "2": SALibSampler(
+                    "sobol",
+                    {
+                        "N": 1,
+                        "problem": {
+                            "num_vars": 2,
+                            "names": ["parameter_3", "parameter_4"],
+                            "bounds": [[-1, 1], [-2, 2]],
+                        },
+                    },
+                    calc_second_order=False,
+                    seed=42,
+                ),
             },
             does_not_raise,
         ),
@@ -587,6 +622,100 @@ class TestCatenationStudy:
                 "parameter_2": numpy.dtype("U1"),
                 "parameter_3": numpy.float64,
                 "parameter_4": numpy.float64,
+            },
+        ),
+        "salib/scipy sobol samplers": (
+            {
+                "1": ScipySampler(
+                    "Sobol",
+                    {
+                        "num_simulations": 5,
+                        "parameter_1": {"distribution": "uniform", "loc": 0, "scale": 10},
+                        "parameter_2": {"distribution": "uniform", "loc": 2, "scale": 3},
+                    },
+                    seed=42,
+                ),
+                "2": SALibSampler(
+                    "sobol",
+                    {
+                        "N": 4,
+                        "problem": {
+                            "num_vars": 2,
+                            "names": ["parameter_3", "parameter_4"],
+                            "bounds": [[-1, 1], [-2, 2]],
+                        },
+                    },
+                    calc_second_order=False,
+                    seed=42,
+                ),
+            },
+            {},
+            None,
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [4.31029474, 9.61578793, 0.35047322, 5.6453192, 2.38067276],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [4.44310392, 2.93422983, 2.07952781, 3.79350291, 3.91909283],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_3": xarray.DataArray(
+                        [-0.13794105, 0.61282553, 0.61282553, -0.13794105],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_4": xarray.DataArray(
+                        [-1.78617326, 1.25747189, -1.78617326, 1.25747189],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "0f9510490d521d7fa85154245288622e",
+                            "2f71fbb34825f6fc651a9cdddce1adc8",
+                            "4444a85f48a564a2c2e3ba3666b9967b",
+                            "4c861fec1563e21bf1598d06dbe97dc7",
+                            "658dfb19c773f5b3db9cf61a1d301668",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {
+                "parameter_1": numpy.float64,
+                "parameter_2": numpy.float64,
             },
         ),
     }
