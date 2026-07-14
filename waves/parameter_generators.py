@@ -1704,25 +1704,7 @@ class CatenationStudy(ParameterGenerator):
 
     def _generate(self, **kwargs) -> None:
         """Generate the parameter studies and combine them."""
-        if self._output_file_template is not None:
-            output_file_template_string = self._output_file_template.template
-        else:
-            output_file_template_string = None
-
-        studies = [
-            generator.__class__(
-                generator.parameter_schema,
-                output_file_template=output_file_template_string,
-                output_file=self._output_file,
-                output_file_type=self._output_file_type,
-                set_name_template=self._set_name_template.template,
-                overwrite=self._overwrite,
-                write_meta=self._write_meta_flag,
-                **kwargs,
-            ).parameter_study
-            for generator in self._parameter_schema.values()
-        ]
-
+        studies = [generator.parameter_study for generator in self._parameter_schema.values()]
         self.parameter_study = _merge_parameter_studies(studies, self._set_name_template)
         self.parameter_study = self.parameter_study.sortby(_set_coordinate_key)
         # Do work normally performed by super()._generate(). Must re-calculate semi-private variables
