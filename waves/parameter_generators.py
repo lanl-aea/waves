@@ -2173,5 +2173,49 @@ def _convert_numpy_to_builtin(samples: numpy.ndarray) -> numpy.ndarray:
     return numpy.array(converted_flat, dtype=object).reshape(samples.shape)
 
 
+def _new_write(
+    generator: ParameterGenerator,
+    output_file: pathlib.Path | None = None,
+    output_directory: pathlib.Path | None = None,
+    output_file_type: typing.Literal["h5", "yaml"] = "h5",
+    overwrite: bool = False,
+    dry_run: bool = False,
+) -> None:
+    """Write the parameter study to STDOUT or a file(s).
+
+    If no output file or directory is specified, print the parameter study as a YAML formatted dictionary to STDOUT.
+
+    :param output_file: Write a single parameter study file at this absolute or relative path.
+    :param output_directory: Write one output file per parameter set in the directory at this absolute or relative
+        path. Filenames are based on the set name and output file type,
+        ``{output_directory}/{set_name}.{output_file_type}``.
+    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param overwrite: Overwrite existing output files
+    :param dry_run: Print contents of new or overwritten parameter study output file(s) to STDOUT and exit.
+    """
+    if output_file is not None and output_directory is not None:
+        raise MutuallyExclusiveError(
+            "The options 'output_directory' and 'output_file' are mutually exclusive. Please specify one or the other."
+        )
+    allowable_output_file_types = ("h5", "yaml")
+    if output_file_type not in allowable_output_file_types:
+        raise ChoicesError(
+            f"Unsupported 'output_file_type': '{output_file_type}'. "
+            f"The 'output_file_type' must be one of {allowable_output_file_types}"
+        )
+    if output_file is None and output_directory is None:
+        sys.stdout.write(yaml.safe_dump(generator.parameter_study_to_dict()))
+    if (output_file is not None and not output_file.is_file()) or (
+        output_file is not None and output_file.is_file() and overwrite
+    ):
+        if output_file_type == "h5":
+            generator.parameter_study.drop_encoding().to_netcdf(
+                path=output_file, mode="w", format="NETCDF4", engine="h5netcdf"
+            )
+        elif output_file_type == "yaml":
+            with output_file.open(mode="w") as outfile:
+                outfile.write(yaml.dump(generator.parameter_study_to_dict()))
+
+
 _module_objects = set(globals().keys()) - _exclude_from_namespace
 __all__ = [name for name in _module_objects if not name.startswith("_")]
