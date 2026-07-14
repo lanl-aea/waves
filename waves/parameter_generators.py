@@ -2203,8 +2203,10 @@ def _new_write(
             f"Unsupported 'output_file_type': '{output_file_type}'. "
             f"The 'output_file_type' must be one of {allowable_output_file_types}"
         )
+    # Unconditionally writing to STDOUT
     if output_file is None and output_directory is None:
         sys.stdout.write(yaml.safe_dump(generator.parameter_study_to_dict()))
+    # Unconditionally write a single file
     if (output_file is not None and not output_file.is_file()) or (
         output_file is not None and output_file.is_file() and overwrite
     ):
@@ -2215,6 +2217,29 @@ def _new_write(
         elif output_file_type == "yaml":
             with output_file.open(mode="w") as outfile:
                 outfile.write(yaml.dump(generator.parameter_study_to_dict()))
+    # Conditionally write a single file
+    elif output_file is not None and output_file.is_file() and not overwrite:
+        write = False
+        if output_file_type == "h5":
+            with xarray.open_dataset(output_file, engine="h5netcdf") as existing_dataset:
+                if not generator.parameter_study.equals(existing_dataset):
+                    write = True
+            if write:
+                generator.parameter_study.drop_encoding().to_netcdf(
+                    path=output_file, mode="w", format="NETCDF4", engine="h5netcdf"
+                )
+        elif output_file_type == "yaml":
+            with output_file.open(mode="r") as existing_file:
+                existing_dictionary = yaml.safe_load(existing_file)
+                if existing_yaml_object != generator.parameter_study_to_dict():
+                    write = True
+            if write:
+                with output_file.open(mode="w") as outfile:
+                    outfile.write(yaml.dump(generator.parameter_study_to_dict()))
+    # Conditionally write a single file to STDOUT (dry-run)
+    # Unconditionally write multiple files
+    # Conditionally write multiple files
+    # Conditionally write multiple files to STDOUT (dry-run)
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace
