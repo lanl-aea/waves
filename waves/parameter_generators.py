@@ -2185,6 +2185,9 @@ def _new_write(
 
     If no output file or directory is specified, print the parameter study as a YAML formatted dictionary to STDOUT.
 
+    If output file(s) already exist, compare the file data against the current paraemter study and only overwrite if the
+    contents are different. If overwrite is specified, always write the output file(s).
+
     :param output_file: Write a single parameter study file at this absolute or relative path.
     :param output_directory: Write one output file per parameter set in the directory at this absolute or relative
         path. Filenames are based on the set name and output file type,
@@ -2239,7 +2242,7 @@ def _new_write(
     for output, content in work.items():
         if dry_run:
             output_text = yaml.safe_dump(content) if isinstance(content, dict) else f"{parameter_study_object}\n"
-            sys.stdout.write(f"{output_file.resolve()}\n{output_text}")
+            sys.stdout.write(f"{output_file}\n{output_text}")
         elif isinstance(content, xarray.Dataset):
             content.drop_encoding().to_netcdf(
                 path=output, mode="w", format="NETCDF4", engine="h5netcdf"
