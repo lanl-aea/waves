@@ -3174,7 +3174,7 @@ def test__return_parameter_study_files(
     outcome: contextlib.nullcontext | pytest.RaisesExc,
 ) -> None:
     with outcome:
-        parameter_generator._return_parameter_study_files(generator, **kwargs)
+        parameter_generators._return_parameter_study_files(generator, **kwargs)
 
 
 def test__identify_parameter_study_files_to_write() -> None:
