@@ -2177,7 +2177,7 @@ def _return_parameter_study_files(
     generator: ParameterGenerator,
     output_file: pathlib.Path | None = None,
     output_directory: pathlib.Path | None = None,
-    output_file_type: typing.Literal["h5", "yaml"] = "h5",
+    output_file_type: _settings._allowable_output_file_typing = "h5",
 ) -> dict[pathlib.Path, dict | xarray.Dataset]:
     # Argument validation
     if output_file is not None and output_directory is not None:
@@ -2186,11 +2186,10 @@ def _return_parameter_study_files(
         )
     elif output_file is None and output_directory is None:
         raise APIError("One of 'output_directory' or 'output_file' must be specified.")
-    allowable_output_file_types = ("h5", "yaml")
-    if output_file_type not in allowable_output_file_types:
+    if output_file_type not in _settings._allowable_output_file_types:
         raise ChoicesError(
             f"Unsupported 'output_file_type': '{output_file_type}'. "
-            f"The 'output_file_type' must be one of {allowable_output_file_types}"
+            f"The 'output_file_type' must be one of {_settings._allowable_output_file_types}"
         )
     # Build output file/content associations
     if output_file is not None and output_file_type == "h5":
