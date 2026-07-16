@@ -3202,6 +3202,90 @@ test__return_parameter_study_files_cases = {
         },
         does_not_raise,
     ),
+    "CartesianProduct, output file, H5": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": "output.h5", "output_file_type": "h5"},
+        {
+            "output.h5": xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2, 1],
+                        coords={"set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])},
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                        dims="set_name",
+                    ),
+                },
+            ).set_coords("set_hash"),
+        },
+        does_not_raise,
+    ),
+    "CartesianProduct, output file, YAML": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": "output.h5", "output_file_type": "yaml"},
+        {"output.h5": {"parameter_set0": {"parameter_1": 2}, "parameter_set1": {"parameter_1": 1}}},
+        does_not_raise,
+    ),
+    "CartesianProduct, output directory, default output file type": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_directory": pathlib.Path("directory")},
+        {
+            pathlib.Path("directory") / "parameter_set0.h5": xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2],
+                        coords={"set_name": xarray.DataArray(["parameter_set0"], dims=["set_name"])},
+                    ),
+                    "set_hash": xarray.DataArray(["0b588b6a82c1d3d3d19fda304f940342"], dims="set_name"),
+                },
+            ).set_coords("set_hash"),
+            pathlib.Path("directory") / "parameter_set1.h5": xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1],
+                        coords={"set_name": xarray.DataArray(["parameter_set1"], dims=["set_name"])},
+                    ),
+                    "set_hash": xarray.DataArray(["1661dcd0bf4761d25471c1cf5514ceae"], dims="set_name"),
+                },
+            ).set_coords("set_hash"),
+        },
+        does_not_raise,
+    ),
+    "CartesianProduct, output directory, H5": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_directory": pathlib.Path("directory"), "output_file_type": "h5"},
+        {
+            pathlib.Path("directory") / "parameter_set0.h5": xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2],
+                        coords={"set_name": xarray.DataArray(["parameter_set0"], dims=["set_name"])},
+                    ),
+                    "set_hash": xarray.DataArray(["0b588b6a82c1d3d3d19fda304f940342"], dims="set_name"),
+                },
+            ).set_coords("set_hash"),
+            pathlib.Path("directory") / "parameter_set1.h5": xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1],
+                        coords={"set_name": xarray.DataArray(["parameter_set1"], dims=["set_name"])},
+                    ),
+                    "set_hash": xarray.DataArray(["1661dcd0bf4761d25471c1cf5514ceae"], dims="set_name"),
+                },
+            ).set_coords("set_hash"),
+        },
+        does_not_raise,
+    ),
+    "CartesianProduct, output file, YAML": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_directory": pathlib.Path("directory"), "output_file_type": "yaml"},
+        {
+            pathlib.Path("directory") / "parameter_set0.yaml": {"parameter_1": 2},
+            pathlib.Path("directory") / "parameter_set1.yaml": {"parameter_1": 1}
+        },
+        does_not_raise,
+    ),
 }
 
 
@@ -3374,10 +3458,7 @@ test__new_write_cases = {
                     "parameter_1": xarray.DataArray(
                         [2],
                         coords={
-                            "set_name": xarray.DataArray(
-                                ["parameter_set0"],
-                                dims=["set_name"],
-                            )
+                            "set_name": xarray.DataArray(["parameter_set0"], dims=["set_name"]),
                         },
                     ),
                     "set_hash": xarray.DataArray(["0b588b6a82c1d3d3d19fda304f940342"], dims="set_name"),
