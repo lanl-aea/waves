@@ -2330,7 +2330,7 @@ def _new_write(
     )
     # Ignore output files that already have the correct data
     if overwrite:
-        parameter_study_files_to_write = {key: value for key, value in parameter_study_files}
+        parameter_study_files_to_write = dict(parameter_study_files)
     else:
         parameter_study_files_to_write = _return_parameter_study_files_to_write(parameter_study_files)
     # Write files
