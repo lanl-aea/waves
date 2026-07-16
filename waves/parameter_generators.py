@@ -2307,18 +2307,17 @@ def _new_write(
             output_directory / f"{set_name}.{output_file_type}": subset
             for set_name, subset in generator.parameter_study_to_dict.items()
         }
-    meta_file_list = list(parameter_study_files.keys())
     # Ignore output files that already have the correct data
     if overwrite:
         skip_files = []
     else:
         skip_files = _identify_parameter_study_files_to_skip(parameter_study_files)
-    for path in skip_files:
-        parameter_study_files.pop(path)
+    keep_files = set(parameter_study_files.keys()) - set(skip_files)
+    parameter_study_files_to_write = {output: parameter_study_files[output] for output in keep_files}
     # Write files
-    _write_parameter_study_files(parameter_study_files, dry_run=dry_run)
+    _write_parameter_study_files(parameter_study_files_to_write, dry_run=dry_run)
     if meta_file is not None:
-        meta_file_contents = "".join([f"{path.resolve()}\n" for path in meta_file_list])
+        meta_file_contents = "".join([f"{path.resolve()}\n" for path in parameter_study_files])
         _write_parameter_study_meta_file(meta_file, meta_file_contents, overwrite=overwrite)
 
 
