@@ -3163,19 +3163,13 @@ test__return_parameter_study_files_cases = {
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {},
         None,
-        pytest.raises(
-            APIError,
-            match=r"One of 'output_directory' or 'output_file' must be specified."
-        ),
+        pytest.raises(APIError, match=r"One of 'output_directory' or 'output_file' must be specified."),
     ),
     "APIError must have one of output directory/file": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_file": None, "output_directory": None},
         None,
-        pytest.raises(
-            APIError,
-            match=r"One of 'output_directory' or 'output_file' must be specified."
-        ),
+        pytest.raises(APIError, match=r"One of 'output_directory' or 'output_file' must be specified."),
     ),
     "unsupported output file type": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
@@ -3188,6 +3182,27 @@ test__return_parameter_study_files_cases = {
                 r" The 'output_file_type' must be one of \('h5', 'yaml'\)."
             ),
         ),
+    ),
+    "CartesianProduct, output file, default output file type": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": "output.h5"},
+        {
+            "output.h5": xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2, 1],
+                        coords={
+                            "set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                        dims="set_name",
+                    ),
+                },
+            ).set_coords("set_hash"),
+        },
+        does_not_raise,
     ),
 }
 
@@ -3204,7 +3219,13 @@ def test__return_parameter_study_files(
     outcome: contextlib.nullcontext | pytest.RaisesExc,
 ) -> None:
     with outcome:
-        parameter_generators._return_parameter_study_files(generator, **kwargs)
+        parameter_study_files = parameter_generators._return_parameter_study_files(generator, **kwargs)
+        assert expected.keys() == parameter_study_files.keys()
+        for key, expected_value in expected.items():
+            if isinstance(expected_value, xarray.Dataset):
+                xarray.testing.assert_identical(expected_value, parameter_study_files[key])
+            else:
+                assert expected_value == parameter_study_files[key]
 
 
 def test__identify_parameter_study_files_to_write() -> None:
@@ -3277,18 +3298,15 @@ test__new_write_cases = {
                     "parameter_1": xarray.DataArray(
                         [2, 1],
                         coords={
-                            "set_name": xarray.DataArray(
-                                ["parameter_set0", "parameter_set1"],
-                                dims=["set_name"],
-                            )
+                            "set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])
                         },
                     ),
                     "set_hash": xarray.DataArray(
                         ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
-                        dims="set_hash",
+                        dims="set_name",
                     ),
                 },
-            ),
+            ).set_coords("set_hash"),
         ],
         None,
         does_not_raise,
@@ -3303,35 +3321,23 @@ test__new_write_cases = {
                     "parameter_1": xarray.DataArray(
                         [2],
                         coords={
-                            "set_name": xarray.DataArray(
-                                ["parameter_set0"],
-                                dims=["set_name"],
-                            )
+                            "set_name": xarray.DataArray(["parameter_set0"], dims=["set_name"]),
                         },
                     ),
-                    "set_hash": xarray.DataArray(
-                        ["0b588b6a82c1d3d3d19fda304f940342"],
-                        dims="set_hash",
-                    ),
+                    "set_hash": xarray.DataArray(["0b588b6a82c1d3d3d19fda304f940342"], dims="set_name"),
                 },
-            ),
+            ).set_coords("set_hash"),
             xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
                         [1],
                         coords={
-                            "set_name": xarray.DataArray(
-                                ["parameter_set1"],
-                                dims=["set_name"],
-                            )
+                            "set_name": xarray.DataArray(["parameter_set1"], dims=["set_name"]),
                         },
                     ),
-                    "set_hash": xarray.DataArray(
-                        ["1661dcd0bf4761d25471c1cf5514ceae"],
-                        dims="set_hash",
-                    ),
+                    "set_hash": xarray.DataArray(["1661dcd0bf4761d25471c1cf5514ceae"], dims="set_name"),
                 },
-            ),
+            ).set_coords("set_hash"),
         ],
         None,
         does_not_raise,
@@ -3354,10 +3360,10 @@ test__new_write_cases = {
                     ),
                     "set_hash": xarray.DataArray(
                         ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
-                        dims="set_hash",
+                        dims="set_name",
                     ),
                 },
-            ),
+            ).set_coords("set_hash"),
         ],
         None,
         does_not_raise,
@@ -3380,10 +3386,10 @@ test__new_write_cases = {
                     ),
                     "set_hash": xarray.DataArray(
                         ["0b588b6a82c1d3d3d19fda304f940342"],
-                        dims="set_hash",
+                        dims="set_name",
                     ),
                 },
-            ),
+            ).set_coords("set_hash"),
             xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
@@ -3397,10 +3403,10 @@ test__new_write_cases = {
                     ),
                     "set_hash": xarray.DataArray(
                         ["1661dcd0bf4761d25471c1cf5514ceae"],
-                        dims="set_hash",
+                        dims="set_name",
                     ),
                 },
-            ),
+            ).set_coords("set_hash"),
         ],
         None,
         does_not_raise,
