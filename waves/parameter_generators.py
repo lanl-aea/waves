@@ -2180,6 +2180,7 @@ def _new_write(
     output_file_type: typing.Literal["h5", "yaml"] = "h5",
     overwrite: bool = False,
     dry_run: bool = False,
+    meta_file: pathlib.Path | None = None,
 ) -> None:
     """Write the parameter study to STDOUT or a file(s).
 
@@ -2201,6 +2202,8 @@ def _new_write(
         raise MutuallyExclusiveError(
             "The options 'output_directory' and 'output_file' are mutually exclusive. Please specify one or the other."
         )
+    if meta_file is not None and (output_file is None and output_directory is None):
+        raise APIError("The option 'met_file' requires one, but not both, of 'output_directory' or 'output_file'.")
     allowable_output_file_types = ("h5", "yaml")
     if output_file_type not in allowable_output_file_types:
         raise ChoicesError(
@@ -2226,9 +2229,10 @@ def _new_write(
             output_directory / f"{set_name}.{output_file_type}": subset
             for set_name, subset in generator.parameter_study_to_dict.items()
         }
+    meta_file_list = list(work.keys())
     # Ignore output files that already have the correct data
     if not overwrite:
-        for output in list(work.keys()):
+        for output in meta_file_list:
             if output.is_file() and output_file_type == "h5":
                 with xarray.open_dataset(output_file, engine="h5netcdf") as existing_dataset:
                     if existing_dataset.equals(generator.parameter_study):
@@ -2255,6 +2259,16 @@ def _new_write(
                 f"Not a dry run and unknown content type '{type(content)}'."
                 " This is an internal bug, please contact the developers."
             )
+    if meta_file is not None:
+        meta_file_contents = "".join([f"{path.resolve()}\n" for path in meta_file_list])
+        if meta_file.is_file():
+            with meta_file.open() as infile:
+                existing_file_content = infile.read()
+        else:
+            existing_file_content = None
+        if existing_file_content != meta_file_contents:
+            with meta_file.open("w") as outfile:
+                outfile.write(meta_file_contents)
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace
