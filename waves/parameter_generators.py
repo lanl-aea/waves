@@ -2193,6 +2193,7 @@ def _new_write(
     :param overwrite: Overwrite existing output files
     :param dry_run: Print contents of new or overwritten parameter study output file(s) to STDOUT and exit.
     """
+    # Argument validation
     if output_file is not None and output_directory is not None:
         raise MutuallyExclusiveError(
             "The options 'output_directory' and 'output_file' are mutually exclusive. Please specify one or the other."
@@ -2203,43 +2204,54 @@ def _new_write(
             f"Unsupported 'output_file_type': '{output_file_type}'. "
             f"The 'output_file_type' must be one of {allowable_output_file_types}"
         )
-    # Unconditionally writing to STDOUT
+    # If no output is requested, write to STDOUT and return
     if output_file is None and output_directory is None:
         sys.stdout.write(yaml.safe_dump(generator.parameter_study_to_dict()))
-    # Unconditionally write a single file
-    if (output_file is not None and not output_file.is_file()) or (
-        output_file is not None and output_file.is_file() and overwrite
-    ):
-        if output_file_type == "h5":
-            generator.parameter_study.drop_encoding().to_netcdf(
-                path=output_file, mode="w", format="NETCDF4", engine="h5netcdf"
+        return
+    # Deterimine what files to write
+    if output_file is not None and output_file_type == "h5":
+        work = {output_file: generator.parameter_study}
+    elif output_file is not None and output_file_type == "yaml":
+        work = {output_file: generator.parameter_study_to_dict()}
+    elif output_directory is not None and output_file_type == "h5":
+        work = {
+            output_directory / f"{set_name}.{output_file_type}": subset
+            for set_name, subset in generator.parameter_study.groupby(_set_coordinate)
+        }
+    elif output_directory is not None and output_file_type == "yaml":
+        work = {
+            output_directory / f"{set_name}.{output_file_type}": subset
+            for set_name, subset in generator.parameter_study_to_dict.items()
+        }
+    # Ignore output files that already have the correct data
+    if not overwrite:
+        for output in list(work.keys()):
+            if output.is_file() and output_file_type == "h5":
+                with xarray.open_dataset(output_file, engine="h5netcdf") as existing_dataset:
+                    if existing_dataset.equals(generator.parameter_study):
+                        work.pop(output)
+            if output.is_file() and output_file_type == "yaml":
+                with output_file.open(mode="r") as existing_file:
+                    existing_dictionary = yaml.safe_load(existing_file)
+                if existing_dictionary == work[output]:
+                    work.pop(output)
+    # Write files
+    for output, content in work.items():
+        if dry_run:
+            output_text = yaml.safe_dump(content) if isinstance(content, dict) else f"{parameter_study_object}\n"
+            sys.stdout.write(f"{output_file.resolve()}\n{output_text}")
+        elif isinstance(content, xarray.Dataset):
+            content.drop_encoding().to_netcdf(
+                path=output, mode="w", format="NETCDF4", engine="h5netcdf"
             )
-        elif output_file_type == "yaml":
+        elif isinstance(content, dict):
             with output_file.open(mode="w") as outfile:
-                outfile.write(yaml.dump(generator.parameter_study_to_dict()))
-    # Conditionally write a single file
-    elif output_file is not None and output_file.is_file() and not overwrite:
-        write = False
-        if output_file_type == "h5":
-            with xarray.open_dataset(output_file, engine="h5netcdf") as existing_dataset:
-                if not existing_dataset.equals(generator.parameter_study):
-                    write = True
-            if write:
-                generator.parameter_study.drop_encoding().to_netcdf(
-                    path=output_file, mode="w", format="NETCDF4", engine="h5netcdf"
-                )
-        elif output_file_type == "yaml":
-            with output_file.open(mode="r") as existing_file:
-                existing_dictionary = yaml.safe_load(existing_file)
-                if existing_dictionary != generator.parameter_study_to_dict():
-                    write = True
-            if write:
-                with output_file.open(mode="w") as outfile:
-                    outfile.write(yaml.dump(generator.parameter_study_to_dict()))
-    # Conditionally write a single file to STDOUT (dry-run)
-    # Unconditionally write multiple files
-    # Conditionally write multiple files
-    # Conditionally write multiple files to STDOUT (dry-run)
+                outfile.write(yaml.dump(content))
+        else:
+            raise ValueError(
+                f"Not a dry run and unknown content type '{type(content)}'."
+                " This is an internal bug, please contact the developers."
+            )
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace
