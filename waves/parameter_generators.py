@@ -2173,6 +2173,33 @@ def _convert_numpy_to_builtin(samples: numpy.ndarray) -> numpy.ndarray:
     return numpy.array(converted_flat, dtype=object).reshape(samples.shape)
 
 
+def _identify_parameter_study_files_to_skip(
+    parameter_study_files: dict[pathlib.Path, dict | xarray.Dataset],
+) -> list[pathlib.Path]:
+    """Return a list of parameter study files that exist and whose contents have not changed.
+
+    :param parmater_study_files: dictionary of ``{path: content}`` pairs
+    :raises ValueError: if any content is not a dictionary or xarray Dataset.
+    """
+    if any(not isinstance(content, (dict, xarray.Dataset)) for content in parameter_study_files.values()):
+        raise ValueError(
+            "Parameter study file content must be a dictionary or xarray Dataset."
+            " This is likely an internal bug. Please contact the developers."
+        )
+    skip_files = []
+    for output, content in parameter_study_files.items():
+        if output.is_file() and isinstance(content, xarray.Dataset):
+            with xarray.open_dataset(output, engine="h5netcdf") as existing_dataset:
+                if existing_dataset.equals(parameter_study_files[output]):
+                    skip_files.append(output)
+        if output.is_file() and isinstance(content, dict):
+            with output.open(mode="r") as existing_file:
+                existing_dictionary = yaml.safe_load(existing_file)
+            if existing_dictionary == parameter_study_files[output]:
+                skip_files.append(output)
+    return skip_files
+
+
 def _write_parameter_study_files(
     parameter_study_files: dict[pathlib.Path, dict | xarray.Dataset],
     dry_run: bool = False,
@@ -2282,17 +2309,12 @@ def _new_write(
         }
     meta_file_list = list(parameter_study_files.keys())
     # Ignore output files that already have the correct data
-    if not overwrite:
-        for output in meta_file_list:
-            if output.is_file() and output_file_type == "h5":
-                with xarray.open_dataset(output_file, engine="h5netcdf") as existing_dataset:
-                    if existing_dataset.equals(parameter_study_files[output]):
-                        parameter_study_files.pop(output)
-            if output.is_file() and output_file_type == "yaml":
-                with output_file.open(mode="r") as existing_file:
-                    existing_dictionary = yaml.safe_load(existing_file)
-                if existing_dictionary == parameter_study_files[output]:
-                    parameter_study_files.pop(output)
+    if overwrite:
+        skip_files = []
+    else:
+        skip_files = _identify_parameter_study_files_to_skip(parameter_study_files)
+    for path in skip_files:
+        parameter_study_files.pop(path)
     # Write files
     _write_parameter_study_files(parameter_study_files, dry_run=dry_run)
     if meta_file is not None:
