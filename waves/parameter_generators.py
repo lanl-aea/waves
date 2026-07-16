@@ -2301,7 +2301,7 @@ def _new_write(
     If output file(s) already exist, compare the file data against the current paraemter study and only overwrite if the
     contents are different. If overwrite is specified, always write the output file(s).
 
-    A meta file can be written to aid
+    A meta file can be written to aid with build systems that require an explicit file list for target creation.
 
     :param output_file: Write a single parameter study file at this absolute or relative path.
     :param output_directory: Write one output file per parameter set in the directory at this absolute or relative
@@ -2313,10 +2313,12 @@ def _new_write(
     :param meta_file: Write a meta file at this absolute or relative path containing the parameter set file names, one
         per line. Useful for command line execution with build systems that require an explicit file list for target
         creation.
+
+    :raises APIError: if ``meta_file`` is specified by neither ``output_directory`` nor ``output_file`` is specified.
     """
     # Argument validation
     if meta_file is not None and (output_file is None and output_directory is None):
-        raise APIError("The option 'met_file' requires one, but not both, of 'output_directory' or 'output_file'.")
+        raise APIError("The option 'meta_file' requires one of 'output_directory' or 'output_file'.")
     # If no output is requested, write to STDOUT and return
     if output_file is None and output_directory is None:
         sys.stdout.write(yaml.safe_dump(generator.parameter_study_to_dict()))

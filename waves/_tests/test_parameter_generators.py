@@ -11,7 +11,7 @@ import pytest
 import xarray
 
 from waves import _settings, _utilities, parameter_generators
-from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
+from waves.exceptions import APIError, ChoicesError, MutuallyExclusiveError, SchemaValidationError
 
 does_not_raise = contextlib.nullcontext()
 
@@ -3126,13 +3126,61 @@ class TestParameterDistributions:
             assert test_distributions.parameter_distributions[parameter_name].kwds == expected_kwds
 
 
+class DummyGenerator(parameter_generators.ParameterGenerator):
+    def _validate(self) -> None:
+        self._parameter_names = ["parameter_1"]
+
+    def _generate(self, sets: int = 1, **kwargs) -> None:
+        """Generate float samples for all parameters. Value matches parameter set index."""
+        parameter_count = len(self._parameter_names)
+        self._samples = numpy.ones((sets, parameter_count))
+        for row in range(sets):
+            self._samples[row, :] = self._samples[row, :] * row
+        super()._generate(**kwargs)
+
+
+class ParameterDistributions(parameter_generators._ScipyGenerator):
+    _sampler_class = "dummy"
+
+    def _generate(self, **kwargs) -> None:
+        pass
+
+
+def test__return_parameter_study_files() -> None:
+    pass
+
+
+def test__identify_parameter_study_files_to_write() -> None:
+    pass
+
+
+def test__write_parameter_study_files() -> None:
+    pass
+
+
+def test__write_parameter_study_meta_file() -> None:
+    pass
+
+
 test__new_write_cases = {
+    "meta file without output directory/file": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"meta_file": "meta_file.txt"},
+        None,
+        None,
+        None,
+        pytest.raises(
+            APIError,
+            match=r"The option 'meta_file' requires one of 'output_directory' or 'output_file'.",
+        ),
+    ),
     "CartesianProduct: STDOUT": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {},
         ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
         None,
         None,
+        does_not_raise,
     ),
     "CartesianProduct: output file, default type": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
@@ -3158,6 +3206,7 @@ test__new_write_cases = {
             ),
         ],
         None,
+        does_not_raise,
     ),
     "CartesianProduct: output directory, default type": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
@@ -3200,6 +3249,7 @@ test__new_write_cases = {
             ),
         ],
         None,
+        does_not_raise,
     ),
     "CartesianProduct: output file, H5": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
@@ -3225,6 +3275,7 @@ test__new_write_cases = {
             ),
         ],
         None,
+        does_not_raise,
     ),
     "CartesianProduct: output directory, H5": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
@@ -3267,6 +3318,7 @@ test__new_write_cases = {
             ),
         ],
         None,
+        does_not_raise,
     ),
     "CartesianProduct: output file, YAML": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
@@ -3274,6 +3326,7 @@ test__new_write_cases = {
         None,
         None,
         ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+        does_not_raise,
     ),
     "CartesianProduct: output file, YAML, dry run": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
@@ -3281,6 +3334,7 @@ test__new_write_cases = {
         ["output.yaml\nparameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
         None,
         None,
+        does_not_raise,
     ),
     "CartesianProduct: output directory, YAML": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
@@ -3288,6 +3342,7 @@ test__new_write_cases = {
         None,
         None,
         ["parameter_1: 2\n", "parameter_1: 1\n"],
+        does_not_raise,
     ),
     "CartesianProduct: output directory, YAML, dry run": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
@@ -3298,12 +3353,13 @@ test__new_write_cases = {
         ],
         None,
         None,
+        does_not_raise,
     ),
 }
 
 
 @pytest.mark.parametrize(
-    ("generator", "kwargs", "expected_stdout", "expected_to_netcdf", "expected_write"),
+    ("generator", "kwargs", "expected_stdout", "expected_to_netcdf", "expected_write", "outcome"),
     test__new_write_cases.values(),
     ids=test__new_write_cases.keys(),
 )
@@ -3313,10 +3369,12 @@ def test__new_write(
     expected_stdout: list[str] | None,
     expected_to_netcdf: list[xarray.Dataset] | None,
     expected_write: list[str] | None,
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
 ) -> None:
     if sum([thing is not None for thing in (expected_stdout, expected_to_netcdf, expected_write)]) > 1:
         raise ValueError("Do not pass more than one expected output")
     with (
+        outcome,
         patch("sys.stdout.write") as mock_stdout,
         patch("xarray.Dataset.to_netcdf") as mock_to_netcdf,
         # TODO: mock all and sequential file open
@@ -3339,23 +3397,3 @@ def test__new_write(
         else:
             assert mock_file().write.call_count == len(expected_write)
             mock_file().write.assert_has_calls([call(item) for item in expected_write])
-
-
-class DummyGenerator(parameter_generators.ParameterGenerator):
-    def _validate(self) -> None:
-        self._parameter_names = ["parameter_1"]
-
-    def _generate(self, sets: int = 1, **kwargs) -> None:
-        """Generate float samples for all parameters. Value matches parameter set index."""
-        parameter_count = len(self._parameter_names)
-        self._samples = numpy.ones((sets, parameter_count))
-        for row in range(sets):
-            self._samples[row, :] = self._samples[row, :] * row
-        super()._generate(**kwargs)
-
-
-class ParameterDistributions(parameter_generators._ScipyGenerator):
-    _sampler_class = "dummy"
-
-    def _generate(self, **kwargs) -> None:
-        pass
