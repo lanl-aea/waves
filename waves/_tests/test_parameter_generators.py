@@ -3336,6 +3336,20 @@ test__return_parameter_study_files_to_write_cases = {
         },
         does_not_raise,
     ),
+    "preexisting files, single file, dataset, same content": (
+        {
+            pathlib.Path("output.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1, 2], coords={"set_name": ["set0", "set1"]})}
+            ),
+        },
+        [True],
+        xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1, 2], coords={"set_name": ["set0", "set1"]})}
+        ),
+        None,
+        {},
+        does_not_raise,
+    ),
     "no preexisting files, two files, datasets": (
         {
             pathlib.Path("set0.h5"): xarray.Dataset(
