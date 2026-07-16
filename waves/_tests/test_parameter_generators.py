@@ -3323,7 +3323,7 @@ test__return_parameter_study_files_to_write_cases = {
     "no preexisting files, single file, dataset": (
         {
             pathlib.Path("output.h5"): xarray.Dataset(
-                {"parameter_1": xarray.DataArray([1, 2], coords={"set_name": ["set0", "set1"]})
+                {"parameter_1": xarray.DataArray([1, 2], coords={"set_name": ["set0", "set1"]})}
             ),
         },
         [False],
@@ -3331,7 +3331,7 @@ test__return_parameter_study_files_to_write_cases = {
         None,
         {
             pathlib.Path("output.h5"): xarray.Dataset(
-                {"parameter_1": xarray.DataArray([1, 2], coords={"set_name": ["set0", "set1"]})
+                {"parameter_1": xarray.DataArray([1, 2], coords={"set_name": ["set0", "set1"]})}
             ),
         },
         does_not_raise,
@@ -3339,10 +3339,10 @@ test__return_parameter_study_files_to_write_cases = {
     "no preexisting files, two files, datasets": (
         {
             pathlib.Path("set0.h5"): xarray.Dataset(
-                {"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})
+                {"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}
             ),
             pathlib.Path("set1.h5"): xarray.Dataset(
-                {"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})
+                {"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}
             ),
         },
         [False, False],
@@ -3350,10 +3350,10 @@ test__return_parameter_study_files_to_write_cases = {
         None,
         {
             pathlib.Path("set0.h5"): xarray.Dataset(
-                {"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})
+                {"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}
             ),
             pathlib.Path("set1.h5"): xarray.Dataset(
-                {"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})
+                {"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}
             ),
         },
         does_not_raise,
