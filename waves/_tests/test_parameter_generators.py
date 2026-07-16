@@ -3319,8 +3319,52 @@ def test__return_parameter_study_files(
                 assert expected_value == parameter_study_files[key]
 
 
-def test__identify_parameter_study_files_to_write() -> None:
-    pass
+test__return_parameter_study_files_to_write_cases = {
+    "no preexisting files, single file, dataset": (
+        {pathlib.Path("output.h5"): xarray.Dataset()},
+        [False],
+        None,
+        None,
+        {pathlib.Path("output.h5"): xarray.Dataset()},
+        does_not_raise,
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    (
+        "parameter_study_files",
+        "is_file_side_effects",
+        "open_dataset_side_effects",
+        "safe_load_side_effects",
+        "expected",
+        "outcome"
+    ),
+    test__return_parameter_study_files_to_write_cases.values(),
+    ids=test__return_parameter_study_files_to_write_cases.keys(),
+)
+def test__return_parameter_study_files_to_write(
+    parameter_study_files: dict[pathlib.Path, dict | xarray.Dataset],
+    is_file_side_effects: list[bool],
+    open_dataset_side_effects: list[xarray.Dataset] | None,
+    safe_load_side_effects: list[dict] | None,
+    expected: dict[pathlib.Path, dict | xarray.Dataset],
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
+    with (
+        outcome,
+        patch("pathlib.Path.is_file", side_effect=is_file_side_effects),
+        patch("xarray.open_dataset", side_effect=open_dataset_side_effects),
+        patch("pathlib.Path.open", mock_open()),
+        patch("yaml.safe_load", side_effect=safe_load_side_effects),
+    ):
+        result = parameter_generators._return_parameter_study_files_to_write(parameter_study_files)
+        assert result.keys() == expected.keys()
+        for key, expected_value in expected.items():
+            if isinstance(expected_value, xarray.Dataset):
+                xarray.testing.assert_identical(expected_value, result[key])
+            else:
+                assert expected_value == result[key]
 
 
 def test__write_parameter_study_files() -> None:

@@ -2210,10 +2210,10 @@ def _return_parameter_study_files(
     return parameter_study_files
 
 
-def _identify_parameter_study_files_to_write(
+def _return_parameter_study_files_to_write(
     parameter_study_files: dict[pathlib.Path, dict | xarray.Dataset],
-) -> list[pathlib.Path]:
-    """Return a list of parameter study files that do not exist or whose contents have changed.
+) -> dict[pathlib.Path, dict | xarray.Dataset]:
+    """Return a dictionary of parameter study files that do not exist or whose contents have changed.
 
     :param parmater_study_files: dictionary of ``{path: content}`` pairs
 
@@ -2224,19 +2224,19 @@ def _identify_parameter_study_files_to_write(
             "Parameter study file content must be a dictionary or xarray Dataset."
             " This is likely an internal bug. Please contact the developers."
         )
-    write_files = []
+    write_files = {}
     for output, content in parameter_study_files.items():
         if not output.is_file():
-            write_files.append(output)
+            write_files[output] = content
         elif output.is_file() and isinstance(content, xarray.Dataset):
             with xarray.open_dataset(output, engine="h5netcdf") as existing_dataset:
                 if not existing_dataset.equals(content):
-                    write_files.append(output)
+                    write_files[output] = content
         elif output.is_file() and isinstance(content, dict):
             with output.open(mode="r") as existing_file:
                 existing_dictionary = yaml.safe_load(existing_file)
             if existing_dictionary != content:
-                write_files.append(output)
+                write_files[output] = content
     return write_files
 
 
@@ -2330,10 +2330,9 @@ def _new_write(
     )
     # Ignore output files that already have the correct data
     if overwrite:
-        write_files = list(parameter_study_files.keys())
+        parameter_study_files_to_write = {key: value for key, value in parameter_study_files}
     else:
-        write_files = _identify_parameter_study_files_to_write(parameter_study_files)
-    parameter_study_files_to_write = {output: parameter_study_files[output] for output in write_files}
+        parameter_study_files_to_write = _return_parameter_study_files_to_write(parameter_study_files)
     # Write files
     _write_parameter_study_files(parameter_study_files_to_write, dry_run=dry_run)
     if meta_file is not None:
