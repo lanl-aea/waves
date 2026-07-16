@@ -2266,7 +2266,7 @@ def _new_write(
             )
     if meta_file is not None:
         meta_file_contents = "".join([f"{path.resolve()}\n" for path in meta_file_list])
-        if meta_file.is_file():
+        if meta_file.is_file() and not overwrite:
             with meta_file.open() as infile:
                 existing_file_content = infile.read()
         else:
