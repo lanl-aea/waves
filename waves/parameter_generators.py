@@ -2196,9 +2196,7 @@ def _write_parameter_study_files(
             output_text = yaml.safe_dump(content) if isinstance(content, dict) else f"{content}\n"
             sys.stdout.write(f"{output}\n{output_text}")
         elif isinstance(content, xarray.Dataset):
-            content.drop_encoding().to_netcdf(
-                path=output, mode="w", format="NETCDF4", engine="h5netcdf"
-            )
+            content.drop_encoding().to_netcdf(path=output, mode="w", format="NETCDF4", engine="h5netcdf")
         elif isinstance(content, dict):
             with output.open(mode="w") as outfile:
                 outfile.write(yaml.dump(content))
