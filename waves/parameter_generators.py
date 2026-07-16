@@ -2228,11 +2228,11 @@ def _return_parameter_study_files_to_write(
     for output, content in parameter_study_files.items():
         if not output.is_file():
             write_files[output] = content
-        elif output.is_file() and isinstance(content, xarray.Dataset):
+        elif isinstance(content, xarray.Dataset):
             with xarray.open_dataset(output, engine="h5netcdf") as existing_dataset:
                 if not existing_dataset.equals(content):
                     write_files[output] = content
-        elif output.is_file() and isinstance(content, dict):
+        elif isinstance(content, dict):
             with output.open(mode="r") as existing_file:
                 existing_dictionary = yaml.safe_load(existing_file)
             if existing_dictionary != content:

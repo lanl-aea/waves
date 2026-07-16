@@ -3343,9 +3343,11 @@ test__return_parameter_study_files_to_write_cases = {
             ),
         },
         [True],
-        xarray.Dataset(
+        [
+            xarray.Dataset(
                 {"parameter_1": xarray.DataArray([1, 2], coords={"set_name": ["set0", "set1"]})}
-        ),
+            ),
+        ],
         None,
         {},
         does_not_raise,
@@ -3366,6 +3368,80 @@ test__return_parameter_study_files_to_write_cases = {
             pathlib.Path("set0.h5"): xarray.Dataset(
                 {"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}
             ),
+            pathlib.Path("set1.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}
+            ),
+        },
+        does_not_raise,
+    ),
+    "preexisting files, two files, datasets, same content": (
+        {
+            pathlib.Path("set0.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}
+            ),
+            pathlib.Path("set1.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}
+            ),
+        },
+        [True, True],
+        [
+            xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}
+            ),
+            xarray.Dataset(
+                {"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}
+            ),
+        ],
+        None,
+        {},
+        does_not_raise,
+    ),
+    "preexisting files, two files, datasets, first content differs": (
+        {
+            pathlib.Path("set0.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}
+            ),
+            pathlib.Path("set1.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}
+            ),
+        },
+        [True, True],
+        [
+            xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1.1], coords={"set_name": ["set0"]})}
+            ),
+            xarray.Dataset(
+                {"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}
+            ),
+        ],
+        None,
+        {
+            pathlib.Path("set0.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}
+            ),
+        },
+        does_not_raise,
+    ),
+    "preexisting files, two files, datasets, second content differs": (
+        {
+            pathlib.Path("set0.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}
+            ),
+            pathlib.Path("set1.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}
+            ),
+        },
+        [True, True],
+        [
+            xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}
+            ),
+            xarray.Dataset(
+                {"parameter_1": xarray.DataArray([2.2], coords={"set_name": ["set1"]})}
+            ),
+        ],
+        None,
+        {
             pathlib.Path("set1.h5"): xarray.Dataset(
                 {"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}
             ),
