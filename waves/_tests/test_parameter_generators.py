@@ -4,7 +4,7 @@ import contextlib
 import pathlib
 import string
 import typing
-from unittest.mock import mock_open, patch
+from unittest.mock import mock_open, patch, call
 
 import numpy
 import pytest
@@ -3130,7 +3130,7 @@ test__new_write_cases = {
     "CartesianProduct: STDOUT": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {},
-        "parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n",
+        ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
         None,
         None,
     ),
@@ -3138,46 +3138,50 @@ test__new_write_cases = {
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_file": pathlib.Path("output.h5")},
         None,
-        xarray.Dataset(
-            {
-                "parameter_1": xarray.DataArray(
-                    [2, 1],
-                    coords={
-                        "set_name": xarray.DataArray(
-                            ["parameter_set0", "parameter_set1"],
-                            dims=["set_name"],
-                        )
-                    },
-                ),
-                "set_hash": xarray.DataArray(
-                    ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
-                    dims="set_hash",
-                ),
-            },
-        ),
+        [
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2, 1],
+                        coords={
+                            "set_name": xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=["set_name"],
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                        dims="set_hash",
+                    ),
+                },
+            ),
+        ],
         None,
     ),
     "CartesianProduct: output file, H5": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_file": pathlib.Path("output.h5"), "output_file_type": "h5"},
         None,
-        xarray.Dataset(
-            {
-                "parameter_1": xarray.DataArray(
-                    [2, 1],
-                    coords={
-                        "set_name": xarray.DataArray(
-                            ["parameter_set0", "parameter_set1"],
-                            dims=["set_name"],
-                        )
-                    },
-                ),
-                "set_hash": xarray.DataArray(
-                    ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
-                    dims="set_hash",
-                ),
-            },
-        ),
+        [
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2, 1],
+                        coords={
+                            "set_name": xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=["set_name"],
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                        dims="set_hash",
+                    ),
+                },
+            ),
+        ],
         None,
     ),
     "CartesianProduct: output file, YAML": (
@@ -3185,7 +3189,7 @@ test__new_write_cases = {
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
         None,
         None,
-        "parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n",
+        ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
     ),
 }
 
@@ -3198,9 +3202,9 @@ test__new_write_cases = {
 def test__new_write(
     generator: parameter_generators.ParameterGenerator,
     kwargs: dict,
-    expected_stdout: str | None,
-    expected_to_netcdf: xarray.Dataset | None,
-    expected_write: str | None,
+    expected_stdout: list[str] | None,
+    expected_to_netcdf: list[xarray.Dataset] | None,
+    expected_write: list[str] | None,
 ) -> None:
     if sum([thing is not None for thing in (expected_stdout, expected_to_netcdf, expected_write)]) > 1:
         raise ValueError("Do not pass more than one expected output")
@@ -3212,19 +3216,21 @@ def test__new_write(
         patch("pathlib.Path.open", mock_open()) as mock_file,
     ):
         parameter_generators._new_write(generator, **kwargs)
-        if expected_stdout is not None:
-            mock_stdout.assert_called_once_with(expected_stdout)
-        else:
+        if expected_stdout is None:
             mock_stdout.assert_not_called()
-        if expected_to_netcdf is not None:
-            # TODO: figure out how to assert the dataset that was written
-            mock_to_netcdf.assert_called_once()
         else:
+            mock_stdout.call_count == len(expected_stdout)
+            mock_stdout.assert_has_calls([call(item) for item in expected_stdout])
+        if expected_to_netcdf is None:
             mock_to_netcdf.assert_not_called()
-        if expected_write is not None:
-            mock_file().write.assert_called_once_with(expected_write)
         else:
+            # TODO: figure out how to assert the dataset that was written
+            mock_to_netcdf.call_count == len(expected_to_netcdf)
+        if expected_write is None:
             mock_file().assert_not_called()
+        else:
+            mock_file().write.call_count == len(expected_write)
+            mock_file().write.assert_has_calls([call(item) for item in expected_write])
 
 
 class DummyGenerator(parameter_generators.ParameterGenerator):
