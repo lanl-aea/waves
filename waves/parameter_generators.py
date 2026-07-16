@@ -2186,7 +2186,7 @@ def _write_parameter_study_files(
 
     :raises ValueError: if any content is not a dictionary or xarray Dataset.
     """
-    if any([not isinstance(content, (dict, xarray.Dataset)) for content in parameter_study_files.values()]):
+    if any(not isinstance(content, (dict, xarray.Dataset)) for content in parameter_study_files.values()):
         raise ValueError(
             "Parameter study file content must be a dictionary or xarray Dataset."
             " This is likely an internal bug. Please contact the developers."
