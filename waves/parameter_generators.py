@@ -2189,6 +2189,8 @@ def _new_write(
     If output file(s) already exist, compare the file data against the current paraemter study and only overwrite if the
     contents are different. If overwrite is specified, always write the output file(s).
 
+    A meta file can be written to aid
+
     :param output_file: Write a single parameter study file at this absolute or relative path.
     :param output_directory: Write one output file per parameter set in the directory at this absolute or relative
         path. Filenames are based on the set name and output file type,
@@ -2196,6 +2198,9 @@ def _new_write(
     :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param overwrite: Overwrite existing output files
     :param dry_run: Print contents of new or overwritten parameter study output file(s) to STDOUT and exit.
+    :param write_meta: Write a meta file at this absolute or relative path containing the parameter set file names, one
+        per line. Useful for command line execution with build systems that require an explicit file list for target
+        creation.
     """
     # Argument validation
     if output_file is not None and output_directory is not None:
