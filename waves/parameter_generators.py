@@ -2286,7 +2286,7 @@ def _new_write(
         for output in meta_file_list:
             if output.is_file() and output_file_type == "h5":
                 with xarray.open_dataset(output_file, engine="h5netcdf") as existing_dataset:
-                    if existing_dataset.equals(generator.parameter_study):
+                    if existing_dataset.equals(parameter_study_files[output]):
                         parameter_study_files.pop(output)
             if output.is_file() and output_file_type == "yaml":
                 with output_file.open(mode="r") as existing_file:
