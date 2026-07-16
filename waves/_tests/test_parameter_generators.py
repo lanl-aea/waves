@@ -3146,6 +3146,26 @@ class ParameterDistributions(parameter_generators._ScipyGenerator):
         pass
 
 
+test__return_parameter_study_files_cases = {
+    "MutuallyExclusiveError": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": "output.h5", "output_directory": "directory"},
+        None,
+        pytest.raises(
+            MutuallyExclusiveError,
+            match=(
+                r"The options 'output_directory' and 'output_file' are mutually exclusive."
+                " Please specify one or the other."
+        ),
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("generator", "kwargs", "expected", "outcome"),
+    test__return_parameter_study_files_cases.values(),
+    ids=test__return_parameter_study_files_cases.keys(),
+)
 def test__return_parameter_study_files() -> None:
     pass
 
@@ -3163,6 +3183,19 @@ def test__write_parameter_study_meta_file() -> None:
 
 
 test__new_write_cases = {
+    "MutuallyExclusiveError": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": "output.h5", "output_directory": "directory"},
+        None,
+        None,
+        None,
+        pytest.raises(
+            MutuallyExclusiveError,
+            match=(
+                r"The options 'output_directory' and 'output_file' are mutually exclusive."
+                " Please specify one or the other."
+        ),
+    ),
     "meta file without output directory/file": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"meta_file": "meta_file.txt"},
@@ -3210,7 +3243,7 @@ test__new_write_cases = {
     ),
     "CartesianProduct: output directory, default type": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
-        {"output_directory": pathlib.Path("output_directory")},
+        {"output_directory": pathlib.Path("directory")},
         None,
         [
             xarray.Dataset(
@@ -3279,7 +3312,7 @@ test__new_write_cases = {
     ),
     "CartesianProduct: output directory, H5": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
-        {"output_directory": pathlib.Path("output_directory"), "output_file_type": "h5"},
+        {"output_directory": pathlib.Path("directory"), "output_file_type": "h5"},
         None,
         [
             xarray.Dataset(
