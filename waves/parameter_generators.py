@@ -2173,12 +2173,50 @@ def _convert_numpy_to_builtin(samples: numpy.ndarray) -> numpy.ndarray:
     return numpy.array(converted_flat, dtype=object).reshape(samples.shape)
 
 
-def _identify_parameter_study_files_to_skip(
+def _return_parameter_study_files(
+    generator: ParameterGenerator,
+    output_file: pathlib.Path | None = None,
+    output_directory: pathlib.Path | None = None,
+    output_file_type: typing.Literal["h5", "yaml"] = "h5",
+) -> dict[pathlib.Path, dict | xarray.Dataset]:
+    # Argument validation
+    if output_file is not None and output_directory is not None:
+        raise MutuallyExclusiveError(
+            "The options 'output_directory' and 'output_file' are mutually exclusive. Please specify one or the other."
+        )
+    elif output_file is None and output_directory is None:
+        raise APIError("One of 'output_directory' or 'output_file' must be specified.")
+    allowable_output_file_types = ("h5", "yaml")
+    if output_file_type not in allowable_output_file_types:
+        raise ChoicesError(
+            f"Unsupported 'output_file_type': '{output_file_type}'. "
+            f"The 'output_file_type' must be one of {allowable_output_file_types}"
+        )
+    # Build output file/content associations
+    if output_file is not None and output_file_type == "h5":
+        parameter_study_files = {output_file: generator.parameter_study}
+    elif output_file is not None and output_file_type == "yaml":
+        parameter_study_files = {output_file: generator.parameter_study_to_dict()}
+    elif output_directory is not None and output_file_type == "h5":
+        parameter_study_files = {
+            output_directory / f"{set_name}.{output_file_type}": subset
+            for set_name, subset in generator.parameter_study.groupby(_settings._set_coordinate)
+        }
+    elif output_directory is not None and output_file_type == "yaml":
+        parameter_study_files = {
+            output_directory / f"{set_name}.{output_file_type}": subset
+            for set_name, subset in generator.parameter_study_to_dict.items()
+        }
+    return parameter_study_files
+
+
+def _identify_parameter_study_files_to_write(
     parameter_study_files: dict[pathlib.Path, dict | xarray.Dataset],
 ) -> list[pathlib.Path]:
-    """Return a list of parameter study files that exist and whose contents have not changed.
+    """Return a list of parameter study files that do not exist or whose contents have changed.
 
     :param parmater_study_files: dictionary of ``{path: content}`` pairs
+
     :raises ValueError: if any content is not a dictionary or xarray Dataset.
     """
     if any(not isinstance(content, (dict, xarray.Dataset)) for content in parameter_study_files.values()):
@@ -2186,18 +2224,20 @@ def _identify_parameter_study_files_to_skip(
             "Parameter study file content must be a dictionary or xarray Dataset."
             " This is likely an internal bug. Please contact the developers."
         )
-    skip_files = []
+    write_files = []
     for output, content in parameter_study_files.items():
+        if not output.is_file():
+            write_files.append(output)
         if output.is_file() and isinstance(content, xarray.Dataset):
             with xarray.open_dataset(output, engine="h5netcdf") as existing_dataset:
-                if existing_dataset.equals(parameter_study_files[output]):
-                    skip_files.append(output)
+                if not existing_dataset.equals(parameter_study_files[output]):
+                    write_files.append(output)
         if output.is_file() and isinstance(content, dict):
             with output.open(mode="r") as existing_file:
                 existing_dictionary = yaml.safe_load(existing_file)
-            if existing_dictionary == parameter_study_files[output]:
-                skip_files.append(output)
-    return skip_files
+            if existing_dictionary != parameter_study_files[output]:
+                write_files.append(output)
+    return write_files
 
 
 def _write_parameter_study_files(
@@ -2276,44 +2316,22 @@ def _new_write(
         creation.
     """
     # Argument validation
-    if output_file is not None and output_directory is not None:
-        raise MutuallyExclusiveError(
-            "The options 'output_directory' and 'output_file' are mutually exclusive. Please specify one or the other."
-        )
     if meta_file is not None and (output_file is None and output_directory is None):
         raise APIError("The option 'met_file' requires one, but not both, of 'output_directory' or 'output_file'.")
-    allowable_output_file_types = ("h5", "yaml")
-    if output_file_type not in allowable_output_file_types:
-        raise ChoicesError(
-            f"Unsupported 'output_file_type': '{output_file_type}'. "
-            f"The 'output_file_type' must be one of {allowable_output_file_types}"
-        )
     # If no output is requested, write to STDOUT and return
     if output_file is None and output_directory is None:
         sys.stdout.write(yaml.safe_dump(generator.parameter_study_to_dict()))
         return
-    # Deterimine what files to write
-    if output_file is not None and output_file_type == "h5":
-        parameter_study_files = {output_file: generator.parameter_study}
-    elif output_file is not None and output_file_type == "yaml":
-        parameter_study_files = {output_file: generator.parameter_study_to_dict()}
-    elif output_directory is not None and output_file_type == "h5":
-        parameter_study_files = {
-            output_directory / f"{set_name}.{output_file_type}": subset
-            for set_name, subset in generator.parameter_study.groupby(_settings._set_coordinate)
-        }
-    elif output_directory is not None and output_file_type == "yaml":
-        parameter_study_files = {
-            output_directory / f"{set_name}.{output_file_type}": subset
-            for set_name, subset in generator.parameter_study_to_dict.items()
-        }
+    # Build output file/content associations
+    parameter_study_files = _return_parameter_study_files(
+        generator, output_file=output_file, output_directory=output_directory, output_file_type=output_file_type
+    )
     # Ignore output files that already have the correct data
     if overwrite:
-        skip_files = []
+        write_files = list(parameter_study_files.keys())
     else:
-        skip_files = _identify_parameter_study_files_to_skip(parameter_study_files)
-    keep_files = set(parameter_study_files.keys()) - set(skip_files)
-    parameter_study_files_to_write = {output: parameter_study_files[output] for output in keep_files}
+        write_files = _identify_parameter_study_files_to_write(parameter_study_files)
+    parameter_study_files_to_write = {output: parameter_study_files[output] for output in write_files}
     # Write files
     _write_parameter_study_files(parameter_study_files_to_write, dry_run=dry_run)
     if meta_file is not None:
