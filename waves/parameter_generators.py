@@ -24,7 +24,7 @@ import yaml
 
 from waves import _settings, _utilities
 from waves._settings import _hash_coordinate_key, _original_coordinate_key, _set_coordinate_key
-from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
+from waves.exceptions import APIError, ChoicesError, MutuallyExclusiveError, SchemaValidationError
 
 _exclude_from_namespace = set(globals().keys())
 
@@ -2193,7 +2193,7 @@ def _write_parameter_study_files(
         )
     for output, content in parameter_study_files.items():
         if dry_run:
-            output_text = yaml.safe_dump(content) if isinstance(content, dict) else f"{parameter_study_object}\n"
+            output_text = yaml.safe_dump(content) if isinstance(content, dict) else f"{content}\n"
             sys.stdout.write(f"{output}\n{output_text}")
         elif isinstance(content, xarray.Dataset):
             content.drop_encoding().to_netcdf(
@@ -2275,7 +2275,7 @@ def _new_write(
     elif output_directory is not None and output_file_type == "h5":
         parameter_study_files = {
             output_directory / f"{set_name}.{output_file_type}": subset
-            for set_name, subset in generator.parameter_study.groupby(_set_coordinate)
+            for set_name, subset in generator.parameter_study.groupby(_settings._set_coordinate)
         }
     elif output_directory is not None and output_file_type == "yaml":
         parameter_study_files = {
