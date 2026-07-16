@@ -3282,7 +3282,7 @@ test__return_parameter_study_files_cases = {
         {"output_directory": pathlib.Path("directory"), "output_file_type": "yaml"},
         {
             pathlib.Path("directory") / "parameter_set0.yaml": {"parameter_1": 2},
-            pathlib.Path("directory") / "parameter_set1.yaml": {"parameter_1": 1}
+            pathlib.Path("directory") / "parameter_set1.yaml": {"parameter_1": 1},
         },
         does_not_raise,
     ),
@@ -3291,7 +3291,7 @@ test__return_parameter_study_files_cases = {
         {"output_directory": pathlib.Path("directory"), "output_file_type": "yaml"},
         {
             pathlib.Path("directory") / "set0.yaml": {"parameter_1": 2},
-            pathlib.Path("directory") / "set1.yaml": {"parameter_1": 1}
+            pathlib.Path("directory") / "set1.yaml": {"parameter_1": 1},
         },
         does_not_raise,
     ),
