@@ -2173,8 +2173,35 @@ def _convert_numpy_to_builtin(samples: numpy.ndarray) -> numpy.ndarray:
     return numpy.array(converted_flat, dtype=object).reshape(samples.shape)
 
 
-def _write_parameter_study_files() -> None:
-    pass
+def _write_parameter_study_files(
+    parameter_study_files: dict[pathlib.Path, dict | xarray.Dataset],
+    dry_run: bool = False,
+) -> None:
+    """Write the parameter study files or print to STDOUT.
+
+    Prints the file name that would be written followed by its content when dry run is True.
+
+    :param parmater_study_files: dictionary of ``{path: content}`` pairs
+    :param dry_run: Print contents of new or overwritten parameter study output file(s) to STDOUT and exit.
+
+    :raises ValueError: if any content is not a dictionary or xarray Dataset.
+    """
+    if any([not isinstance(content, (dict, xarray.Dataset)) for content in parameter_study_files.values()]):
+        raise ValueError(
+            "Parameter study file content must be a dictionary or xarray Dataset."
+            " This is likely an internal bug. Please contact the developers."
+        )
+    for output, content in parameter_study_files.items():
+        if dry_run:
+            output_text = yaml.safe_dump(content) if isinstance(content, dict) else f"{parameter_study_object}\n"
+            sys.stdout.write(f"{output}\n{output_text}")
+        elif isinstance(content, xarray.Dataset):
+            content.drop_encoding().to_netcdf(
+                path=output, mode="w", format="NETCDF4", engine="h5netcdf"
+            )
+        elif isinstance(content, dict):
+            with output.open(mode="w") as outfile:
+                outfile.write(yaml.dump(content))
 
 
 def _write_parameter_study_meta_file(meta_file: pathlib.Path, meta_file_contents: str, overwrite: bool = False) -> None:
@@ -2242,49 +2269,34 @@ def _new_write(
         return
     # Deterimine what files to write
     if output_file is not None and output_file_type == "h5":
-        work = {output_file: generator.parameter_study}
+        parameter_study_files = {output_file: generator.parameter_study}
     elif output_file is not None and output_file_type == "yaml":
-        work = {output_file: generator.parameter_study_to_dict()}
+        parameter_study_files = {output_file: generator.parameter_study_to_dict()}
     elif output_directory is not None and output_file_type == "h5":
-        work = {
+        parameter_study_files = {
             output_directory / f"{set_name}.{output_file_type}": subset
             for set_name, subset in generator.parameter_study.groupby(_set_coordinate)
         }
     elif output_directory is not None and output_file_type == "yaml":
-        work = {
+        parameter_study_files = {
             output_directory / f"{set_name}.{output_file_type}": subset
             for set_name, subset in generator.parameter_study_to_dict.items()
         }
-    meta_file_list = list(work.keys())
+    meta_file_list = list(parameter_study_files.keys())
     # Ignore output files that already have the correct data
     if not overwrite:
         for output in meta_file_list:
             if output.is_file() and output_file_type == "h5":
                 with xarray.open_dataset(output_file, engine="h5netcdf") as existing_dataset:
                     if existing_dataset.equals(generator.parameter_study):
-                        work.pop(output)
+                        parameter_study_files.pop(output)
             if output.is_file() and output_file_type == "yaml":
                 with output_file.open(mode="r") as existing_file:
                     existing_dictionary = yaml.safe_load(existing_file)
-                if existing_dictionary == work[output]:
-                    work.pop(output)
+                if existing_dictionary == parameter_study_files[output]:
+                    parameter_study_files.pop(output)
     # Write files
-    for output, content in work.items():
-        if dry_run:
-            output_text = yaml.safe_dump(content) if isinstance(content, dict) else f"{parameter_study_object}\n"
-            sys.stdout.write(f"{output_file}\n{output_text}")
-        elif isinstance(content, xarray.Dataset):
-            content.drop_encoding().to_netcdf(
-                path=output, mode="w", format="NETCDF4", engine="h5netcdf"
-            )
-        elif isinstance(content, dict):
-            with output_file.open(mode="w") as outfile:
-                outfile.write(yaml.dump(content))
-        else:
-            raise ValueError(
-                f"Not a dry run and unknown content type '{type(content)}'."
-                " This is an internal bug, please contact the developers."
-            )
+    _write_parameter_study_files(parameter_study_files, dry_run=dry_run)
     if meta_file is not None:
         meta_file_contents = "".join([f"{path.resolve()}\n" for path in meta_file_list])
         _write_parameter_study_meta_file(meta_file, meta_file_contents, overwrite=overwrite)
