@@ -3156,6 +3156,7 @@ test__return_parameter_study_files_cases = {
             match=(
                 r"The options 'output_directory' and 'output_file' are mutually exclusive."
                 " Please specify one or the other."
+            ),
         ),
     ),
 }
@@ -3166,7 +3167,12 @@ test__return_parameter_study_files_cases = {
     test__return_parameter_study_files_cases.values(),
     ids=test__return_parameter_study_files_cases.keys(),
 )
-def test__return_parameter_study_files() -> None:
+def test__return_parameter_study_files(
+    generator: parameter_generators.ParameterGenerator,
+    kwargs: dict,
+    expected: dict[pathlib.Path, dict | xarray.Dataset],
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
     pass
 
 
@@ -3194,6 +3200,7 @@ test__new_write_cases = {
             match=(
                 r"The options 'output_directory' and 'output_file' are mutually exclusive."
                 " Please specify one or the other."
+            ),
         ),
     ),
     "meta file without output directory/file": (
