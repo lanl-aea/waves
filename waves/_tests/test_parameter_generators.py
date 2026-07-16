@@ -3128,29 +3128,29 @@ class TestParameterDistributions:
 
 test__new_write_cases = {
     "CartesianProduct: STDOUT": (
-        parameter_generators.CartesianProduct({"parameter_1": [1]}),
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {},
-        "parameter_set0:\n  parameter_1: 1\n",
+        "parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n",
         None,
         None,
     ),
     "CartesianProduct: output file, default type": (
-        parameter_generators.CartesianProduct({"parameter_1": [1]}),
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_file": pathlib.Path("output.h5")},
         None,
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
-                    [1],
+                    [2, 1],
                     coords={
                         "set_name": xarray.DataArray(
-                            ["parameter_set0"],
+                            ["parameter_set0", "parameter_set1"],
                             dims=["set_name"],
                         )
                     },
                 ),
                 "set_hash": xarray.DataArray(
-                    ["1661dcd0bf4761d25471c1cf5514ceae"],
+                    ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
                     dims="set_hash",
                 ),
             },
@@ -3158,22 +3158,22 @@ test__new_write_cases = {
         None,
     ),
     "CartesianProduct: output file, H5": (
-        parameter_generators.CartesianProduct({"parameter_1": [1]}),
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_file": pathlib.Path("output.h5"), "output_file_type": "h5"},
         None,
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
-                    [1],
+                    [2, 1],
                     coords={
                         "set_name": xarray.DataArray(
-                            ["parameter_set0"],
+                            ["parameter_set0", "parameter_set1"],
                             dims=["set_name"],
                         )
                     },
                 ),
                 "set_hash": xarray.DataArray(
-                    ["1661dcd0bf4761d25471c1cf5514ceae"],
+                    ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
                     dims="set_hash",
                 ),
             },
@@ -3181,11 +3181,11 @@ test__new_write_cases = {
         None,
     ),
     "CartesianProduct: output file, YAML": (
-        parameter_generators.CartesianProduct({"parameter_1": [1]}),
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
         None,
         None,
-        "parameter_set0:\n  parameter_1: 1\n",
+        "parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n",
     ),
 }
 
