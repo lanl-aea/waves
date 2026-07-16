@@ -2192,6 +2192,7 @@ def _return_parameter_study_files(
             f"The 'output_file_type' must be one of {_settings._allowable_output_file_types}."
         )
     # Build output file/content associations
+    parameter_study_files: dict[pathlib.Path, dict | xarray.Dataset]
     if output_file is not None and output_file_type == "h5":
         parameter_study_files = {output_file: generator.parameter_study}
     elif output_file is not None and output_file_type == "yaml":
@@ -2229,12 +2230,12 @@ def _identify_parameter_study_files_to_write(
             write_files.append(output)
         if output.is_file() and isinstance(content, xarray.Dataset):
             with xarray.open_dataset(output, engine="h5netcdf") as existing_dataset:
-                if not existing_dataset.equals(parameter_study_files[output]):
+                if not existing_dataset.equals(content):
                     write_files.append(output)
         if output.is_file() and isinstance(content, dict):
             with output.open(mode="r") as existing_file:
                 existing_dictionary = yaml.safe_load(existing_file)
-            if existing_dictionary != parameter_study_files[output]:
+            if existing_dictionary != content:
                 write_files.append(output)
     return write_files
 
