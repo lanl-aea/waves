@@ -2173,6 +2173,27 @@ def _convert_numpy_to_builtin(samples: numpy.ndarray) -> numpy.ndarray:
     return numpy.array(converted_flat, dtype=object).reshape(samples.shape)
 
 
+def _write_parameter_study_files() -> None:
+    pass
+
+
+def _write_parameter_study_meta_file(meta_file: pathlib.Path, meta_file_contents: str, overwrite: bool = False) -> None:
+    """Write the parameter study meta file if the contents have changed.
+
+    :param meta_file: Write a meta file at this absolute or relative path.
+    :param meta_file_contents: The parameter set file names, one per line.
+    :param overwrite: Overwrite existing meta file
+    """
+    if meta_file.is_file() and not overwrite:
+        with meta_file.open() as infile:
+            existing_file_content = infile.read()
+    else:
+        existing_file_content = None
+    if existing_file_content != meta_file_contents:
+        with meta_file.open("w") as outfile:
+            outfile.write(meta_file_contents)
+
+
 def _new_write(
     generator: ParameterGenerator,
     output_file: pathlib.Path | None = None,
@@ -2198,7 +2219,7 @@ def _new_write(
     :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param overwrite: Overwrite existing output files
     :param dry_run: Print contents of new or overwritten parameter study output file(s) to STDOUT and exit.
-    :param write_meta: Write a meta file at this absolute or relative path containing the parameter set file names, one
+    :param meta_file: Write a meta file at this absolute or relative path containing the parameter set file names, one
         per line. Useful for command line execution with build systems that require an explicit file list for target
         creation.
     """
@@ -2266,14 +2287,7 @@ def _new_write(
             )
     if meta_file is not None:
         meta_file_contents = "".join([f"{path.resolve()}\n" for path in meta_file_list])
-        if meta_file.is_file() and not overwrite:
-            with meta_file.open() as infile:
-                existing_file_content = infile.read()
-        else:
-            existing_file_content = None
-        if existing_file_content != meta_file_contents:
-            with meta_file.open("w") as outfile:
-                outfile.write(meta_file_contents)
+        _write_parameter_study_meta_file(meta_file, meta_file_contents, overwrite=overwrite)
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace
