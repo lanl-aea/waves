@@ -3277,7 +3277,7 @@ test__return_parameter_study_files_cases = {
         },
         does_not_raise,
     ),
-    "CartesianProduct, output file, YAML": (
+    "CartesianProduct, output directory, YAML": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_directory": pathlib.Path("directory"), "output_file_type": "yaml"},
         {
