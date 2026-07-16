@@ -3173,7 +3173,8 @@ def test__return_parameter_study_files(
     expected: dict[pathlib.Path, dict | xarray.Dataset],
     outcome: contextlib.nullcontext | pytest.RaisesExc,
 ) -> None:
-    pass
+    with outcome:
+        parameter_generator._return_parameter_study_files(generator, **kwargs)
 
 
 def test__identify_parameter_study_files_to_write() -> None:
