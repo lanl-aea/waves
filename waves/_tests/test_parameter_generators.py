@@ -3159,6 +3159,15 @@ test__return_parameter_study_files_cases = {
             ),
         ),
     ),
+    "APIError must have one of output directory/file": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {},
+        None,
+        pytest.raises(
+            APIError,
+            match=r"One of 'output_directory' or 'output_file' must be specified."
+        ),
+    ),
 }
 
 
