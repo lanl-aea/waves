@@ -4,7 +4,7 @@ import contextlib
 import pathlib
 import string
 import typing
-from unittest.mock import mock_open, patch, call
+from unittest.mock import call, mock_open, patch
 
 import numpy
 import pytest
@@ -3327,17 +3327,17 @@ def test__new_write(
         if expected_stdout is None:
             mock_stdout.assert_not_called()
         else:
-            mock_stdout.call_count == len(expected_stdout)
+            assert mock_stdout.call_count == len(expected_stdout)
             mock_stdout.assert_has_calls([call(item) for item in expected_stdout])
         if expected_to_netcdf is None:
             mock_to_netcdf.assert_not_called()
         else:
             # TODO: figure out how to assert the dataset that was written
-            mock_to_netcdf.call_count == len(expected_to_netcdf)
+            assert mock_to_netcdf.call_count == len(expected_to_netcdf)
         if expected_write is None:
             mock_file().assert_not_called()
         else:
-            mock_file().write.call_count == len(expected_write)
+            assert mock_file().write.call_count == len(expected_write)
             mock_file().write.assert_has_calls([call(item) for item in expected_write])
 
 
