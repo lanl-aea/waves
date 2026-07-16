@@ -3344,9 +3344,7 @@ test__return_parameter_study_files_to_write_cases = {
         },
         [True],
         [
-            xarray.Dataset(
-                {"parameter_1": xarray.DataArray([1, 2], coords={"set_name": ["set0", "set1"]})}
-            ),
+            xarray.Dataset({"parameter_1": xarray.DataArray([1, 2], coords={"set_name": ["set0", "set1"]})}),
         ],
         None,
         {},
@@ -3385,12 +3383,8 @@ test__return_parameter_study_files_to_write_cases = {
         },
         [True, True],
         [
-            xarray.Dataset(
-                {"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}
-            ),
-            xarray.Dataset(
-                {"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}
-            ),
+            xarray.Dataset({"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}),
+            xarray.Dataset({"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}),
         ],
         None,
         {},
@@ -3407,12 +3401,8 @@ test__return_parameter_study_files_to_write_cases = {
         },
         [True, True],
         [
-            xarray.Dataset(
-                {"parameter_1": xarray.DataArray([1.1], coords={"set_name": ["set0"]})}
-            ),
-            xarray.Dataset(
-                {"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}
-            ),
+            xarray.Dataset({"parameter_1": xarray.DataArray([1.1], coords={"set_name": ["set0"]})}),
+            xarray.Dataset({"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}),
         ],
         None,
         {
@@ -3433,12 +3423,8 @@ test__return_parameter_study_files_to_write_cases = {
         },
         [True, True],
         [
-            xarray.Dataset(
-                {"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}
-            ),
-            xarray.Dataset(
-                {"parameter_1": xarray.DataArray([2.2], coords={"set_name": ["set1"]})}
-            ),
+            xarray.Dataset({"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}),
+            xarray.Dataset({"parameter_1": xarray.DataArray([2.2], coords={"set_name": ["set1"]})}),
         ],
         None,
         {
@@ -3458,7 +3444,7 @@ test__return_parameter_study_files_to_write_cases = {
         "open_dataset_side_effects",
         "safe_load_side_effects",
         "expected",
-        "outcome"
+        "outcome",
     ),
     test__return_parameter_study_files_to_write_cases.values(),
     ids=test__return_parameter_study_files_to_write_cases.keys(),
