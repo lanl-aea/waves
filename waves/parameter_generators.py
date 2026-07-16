@@ -2199,12 +2199,12 @@ def _return_parameter_study_files(
     elif output_directory is not None and output_file_type == "h5":
         parameter_study_files = {
             output_directory / f"{set_name}.{output_file_type}": subset
-            for set_name, subset in generator.parameter_study.groupby(_settings._set_coordinate)
+            for set_name, subset in generator.parameter_study.groupby(_settings._set_coordinate_key)
         }
     elif output_directory is not None and output_file_type == "yaml":
         parameter_study_files = {
             output_directory / f"{set_name}.{output_file_type}": subset
-            for set_name, subset in generator.parameter_study_to_dict.items()
+            for set_name, subset in generator.parameter_study_to_dict().items()
         }
     return parameter_study_files
 
