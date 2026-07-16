@@ -2189,7 +2189,7 @@ def _return_parameter_study_files(
     if output_file_type not in _settings._allowable_output_file_types:
         raise ChoicesError(
             f"Unsupported 'output_file_type': '{output_file_type}'. "
-            f"The 'output_file_type' must be one of {_settings._allowable_output_file_types}"
+            f"The 'output_file_type' must be one of {_settings._allowable_output_file_types}."
         )
     # Build output file/content associations
     if output_file is not None and output_file_type == "h5":

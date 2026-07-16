@@ -3155,17 +3155,38 @@ test__return_parameter_study_files_cases = {
             MutuallyExclusiveError,
             match=(
                 r"The options 'output_directory' and 'output_file' are mutually exclusive."
-                " Please specify one or the other."
+                r" Please specify one or the other."
             ),
         ),
     ),
-    "APIError must have one of output directory/file": (
+    "no kwargs, APIError must have one of output directory/file": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {},
         None,
         pytest.raises(
             APIError,
             match=r"One of 'output_directory' or 'output_file' must be specified."
+        ),
+    ),
+    "APIError must have one of output directory/file": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": None, "output_directory": None},
+        None,
+        pytest.raises(
+            APIError,
+            match=r"One of 'output_directory' or 'output_file' must be specified."
+        ),
+    ),
+    "unsupported output file type": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": "output.h5", "output_file_type": "notsupported"},
+        None,
+        pytest.raises(
+            ChoicesError,
+            match=(
+                r"Unsupported 'output_file_type': 'notsupported'."
+                r" The 'output_file_type' must be one of \('h5', 'yaml'\)."
+            ),
         ),
     ),
 }
@@ -3209,7 +3230,21 @@ test__new_write_cases = {
             MutuallyExclusiveError,
             match=(
                 r"The options 'output_directory' and 'output_file' are mutually exclusive."
-                " Please specify one or the other."
+                r" Please specify one or the other."
+            ),
+        ),
+    ),
+    "unsupported output file type": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": "output.h5", "output_file_type": "notsupported"},
+        None,
+        None,
+        None,
+        pytest.raises(
+            ChoicesError,
+            match=(
+                r"Unsupported 'output_file_type': 'notsupported'."
+                r" The 'output_file_type' must be one of \('h5', 'yaml'\)."
             ),
         ),
     ),
