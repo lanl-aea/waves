@@ -3734,8 +3734,40 @@ def test__write_parameter_study_files(
             mock_file().write.assert_has_calls([call(item) for item in expected_write])
 
 
-def test__write_parameter_study_meta_file() -> None:
-    pass
+test__write_parameter_study_meta_file_cases = {
+    "file does not exist": (
+        pathlib.Path("meta_file.txt"),
+        "contents of meta file",
+        {},
+        False,
+        None,
+        "contents of meta file",
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("meta_file", "meta_file_contents", "kwargs", "mock_is_file", "mock_read", "expected_write"),
+    test__write_parameter_study_meta_file_cases.values(),
+    ids=test__write_parameter_study_meta_file_cases.keys(),
+)
+def test__write_parameter_study_meta_file(
+    meta_file: pathlib.Path,
+    meta_file_contents: str,
+    kwargs: dict,
+    mock_is_file: bool,
+    mock_read: str,
+    expected_write: str | None,
+) -> None:
+    with (
+        patch("pathlib.Path.is_file", return_value=mock_is_file),
+        patch("pathlib.Path.open", mock_open(read_data=mock_read)) as mock_file,
+    ):
+        parameter_generators._write_parameter_study_meta_file(meta_file, meta_file_contents, **kwargs)
+        if expected_write is None:
+            mock_file().write.assert_not_called()
+        else:
+            mock_file().write.assert_called_once_with(meta_file_contents)
 
 
 test__new_write_cases = {
