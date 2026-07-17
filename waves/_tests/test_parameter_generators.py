@@ -3758,8 +3758,8 @@ test__new_write_cases = {
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_directory": pathlib.Path("directory"), "output_file_type": "yaml", "dry_run": True},
         [
-            f"{pathlib.Path('directory')}/parameter_set0.yaml\nparameter_1: 2\n",
-            f"{pathlib.Path('directory')}/parameter_set1.yaml\nparameter_1: 1\n",
+            f"{pathlib.Path('directory') / 'parameter_set0.yaml'}\nparameter_1: 2\n",
+            f"{pathlib.Path('directory') / 'parameter_set1.yaml'}\nparameter_1: 1\n",
         ],
         None,
         None,
