@@ -3819,7 +3819,7 @@ def test__write_parameter_study_meta_file(
             mock_file().write.assert_called_once_with(meta_file_contents)
 
 
-test__new_write_cases = {
+test__write_cases = {
     "MutuallyExclusiveError": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_file": "output.h5", "output_directory": "directory"},
@@ -4309,10 +4309,10 @@ test__new_write_cases = {
         "expected_write_meta_file_contents",
         "outcome",
     ),
-    test__new_write_cases.values(),
-    ids=test__new_write_cases.keys(),
+    test__write_cases.values(),
+    ids=test__write_cases.keys(),
 )
-def test__new_write(
+def test__write(
     generator: parameter_generators.ParameterGenerator,
     kwargs: dict,
     expected_stdout: list[str] | None,
@@ -4331,7 +4331,7 @@ def test__new_write(
         patch("pathlib.Path.open", mock_open()) as mock_file,
         patch("waves.parameter_generators._write_parameter_study_meta_file") as mock_write_meta_file,
     ):
-        parameter_generators._new_write(generator, **kwargs)
+        parameter_generators._write(generator, **kwargs)
         if expected_stdout is None:
             mock_stdout.assert_not_called()
         else:
