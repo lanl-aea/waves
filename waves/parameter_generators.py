@@ -2179,6 +2179,19 @@ def _return_parameter_study_files(
     output_directory: pathlib.Path | None = None,
     output_file_type: _settings._allowable_output_file_typing = "h5",
 ) -> dict[pathlib.Path, dict | xarray.Dataset]:
+    """Return parameter study file/contents associations.
+
+    :param generator: A :class:`waves.parameter_generators.ParameterGenerator` parameter generator
+    :param output_file: Write a single parameter study file at this absolute or relative path.
+    :param output_directory: Write one output file per parameter set in the directory at this absolute or relative
+        path. Filenames are based on the set name and output file type,
+        ``{output_directory}/{set_name}.{output_file_type}``.
+    :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
+
+    :raises MutuallyExclusiveError: if both 'output_directory' and 'output_file' are requested
+    :raises APIError: if neither 'output_directory' nor 'output_file' are requested
+    :raises ChoicesError: if the 'output_file_type' is not one of 'h5' or 'yaml'
+    """
     # Argument validation
     if output_file is not None and output_directory is not None:
         raise MutuallyExclusiveError(
@@ -2304,6 +2317,7 @@ def _new_write(
 
     A meta file can be written to aid with build systems that require an explicit file list for target creation.
 
+    :param generator: A :class:`waves.parameter_generators.ParameterGenerator` parameter generator
     :param output_file: Write a single parameter study file at this absolute or relative path.
     :param output_directory: Write one output file per parameter set in the directory at this absolute or relative
         path. Filenames are based on the set name and output file type,
@@ -2315,7 +2329,9 @@ def _new_write(
         per line. Useful for command line execution with build systems that require an explicit file list for target
         creation.
 
-    :raises APIError: if ``meta_file`` is specified by neither ``output_directory`` nor ``output_file`` is specified.
+    :raises MutuallyExclusiveError: if both 'output_directory' and 'output_file' are requested
+    :raises ChoicesError: if the 'output_file_type' is not one of 'h5' or 'yaml'
+    :raises APIError: if 'meta_file' is specified by neither 'output_directory' nor 'output_file' is specified.
     """
     # Argument validation
     if meta_file is not None and (output_file is None and output_directory is None):
