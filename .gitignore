@@ -80,3 +80,6 @@ coverage*.xml
 # Pytest
 .coverage*
 htmlcov
+
+# Visual studio
+.vs
