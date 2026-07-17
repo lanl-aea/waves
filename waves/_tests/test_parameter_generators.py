@@ -3588,6 +3588,14 @@ test__write_parameter_study_files_cases = {
         ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
         does_not_raise,
     )
+    "output file, dict, dry-run": (
+        {pathlib.Path("output.yaml"): {"parameter_set0": {"parameter_1": 2}, "parameter_set1": {"parameter_1": 1}}},
+        {},
+        ["output.yaml\nparameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+        None,
+        None,
+        does_not_raise,
+    )
 }
 
 
