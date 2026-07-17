@@ -4085,7 +4085,7 @@ test__new_write_cases = {
             ).set_coords("set_hash"),
         ],
         None,
-        f"{pathlib.Path('/directory/parameter_set0.h5')}\n{pathlib.Path('/directory/parameter_set1.h5')}\n",
+        f"{pathlib.Path('/directory/parameter_set0.h5').resolve()}\n{pathlib.Path('/directory/parameter_set1.h5').resolve()}\n",
         does_not_raise,
     ),
     "CartesianProduct: output file, H5": (
