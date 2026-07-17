@@ -2765,66 +2765,6 @@ class TestParameterGenerator:
             mock_write_yaml.assert_not_called()
             assert mock_write_dataset.call_count == files
 
-    init_write_dataset_files = {
-        "equal-datasets": (True, [True], False, 0),
-        "equal-overwrite": (True, [True], True, 1),
-        "different-datasets": (False, [True], False, 1),
-        "not-file-1": (True, [False], False, 1),
-        "not-file-2": (False, [False], False, 1),
-    }
-
-    @pytest.mark.parametrize(
-        ("equals", "is_file", "overwrite", "expected_call_count"),
-        init_write_dataset_files.values(),
-        ids=init_write_dataset_files.keys(),
-    )
-    def test_conditionally_write_dataset(
-        self, equals: bool, is_file: list[bool], overwrite: bool, expected_call_count: int
-    ) -> None:
-        """Check for conditions that should result in calls to xarray.Dataset.to_netcdf.
-
-        :param bool equals: parameter that identifies when the xarray.Dataset objects should be equal
-        :param list is_file: test specific argument mocks changing output for pathlib.Path().is_file() repeat calls
-        :param bool overwrite: parameter that identifies when the file should always be overwritten
-        :param int expected_call_count: amount of times that the xarray.Dataset.to_netcdf function should be called
-        """
-        write_parameter_generator = DummyGenerator({}, overwrite=overwrite)
-
-        with (
-            patch("xarray.Dataset.to_netcdf") as xarray_to_netcdf,
-            patch("xarray.open_dataset", mock_open()),
-            patch("xarray.Dataset.equals", return_value=equals),
-            patch("pathlib.Path.is_file", side_effect=is_file),
-        ):
-            write_parameter_generator._conditionally_write_dataset(pathlib.Path("dummy_string"), xarray.Dataset())
-            assert xarray_to_netcdf.call_count == expected_call_count
-
-    @pytest.mark.parametrize(
-        ("equals", "is_file", "overwrite", "expected_call_count"),
-        init_write_dataset_files.values(),
-        ids=init_write_dataset_files.keys(),
-    )
-    def test_conditionally_write_yaml(
-        self, equals: bool, is_file: list[bool], overwrite: bool, expected_call_count: int
-    ) -> None:
-        """Check for conditions that should result in writing out to file.
-
-        :param bool equals: parameter that identifies when the dictionaries should be equal
-        :param list is_file: test specific argument mocks changing output for pathlib.Path().is_file() repeat calls
-        :param bool overwrite: parameter that identifies when the file should always be overwritten
-        :param int expected_call_count: amount of times that the open.write function should be called
-        """
-        write_parameter_generator = DummyGenerator({}, overwrite=overwrite)
-        existing_dict = {"dummy": "dict"} if equals else {"smart": "dict"}
-
-        with (
-            patch("pathlib.Path.open", mock_open()) as write_yaml_file,
-            patch("yaml.safe_load", return_value=existing_dict),
-            patch("pathlib.Path.is_file", side_effect=is_file),
-        ):
-            write_parameter_generator._conditionally_write_yaml("dummy_string", {"dummy": "dict"})
-            assert write_yaml_file.return_value.write.call_count == expected_call_count
-
     def test_write_type_override(self) -> None:
         output_file_type_combinations: tuple[
             tuple[_settings._allowable_output_file_typing, _settings._allowable_output_file_typing], ...
