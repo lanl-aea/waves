@@ -301,7 +301,7 @@ class ParameterGenerator(ABC):
         :raises MutuallyExclusiveError: if both 'output_directory' and 'output_file' are requested
         :raises ChoicesError: if the 'output_file_type' is not one of 'h5' or 'yaml'
         :raises APIError: if 'meta_file' is specified by neither 'output_directory' nor 'output_file' is specified.
-        """
+        """  # noqa: E501
         if output_file is None:
             output_file = self.output_file
         if output_directory is None:
