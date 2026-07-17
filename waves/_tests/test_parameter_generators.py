@@ -3320,6 +3320,20 @@ def test__return_parameter_study_files(
 
 
 test__return_parameter_study_files_to_write_cases = {
+    "ValueError not dictionary or xarray": (
+        {pathlib.Path("output.h5"): ["parameter_1"]},
+        [False],
+        None,
+        None,
+        None,
+        pytest.raises(
+            ValueError,
+            match=(
+                "Parameter study file content must be a dictionary or xarray Dataset."
+                " This is likely an internal bug. Please contact the developers."
+            ),
+        ),
+    ),
     "no preexisting files, single file, dataset": (
         {
             pathlib.Path("output.h5"): xarray.Dataset(
