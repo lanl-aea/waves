@@ -2753,7 +2753,7 @@ class TestParameterGenerator:
             # TODO: assert called with the correct objects or continue refactoring _write
             with (
                 patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-                patch("waves.parameter_generators.ParameterGenerator._write") as mock_private_write,
+                patch("waves.parameter_generators._write") as mock_private_write,
             ):
                 write_parameter_generator.write()
                 mock_private_write.assert_called_once()

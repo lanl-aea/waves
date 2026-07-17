@@ -305,7 +305,7 @@ class ParameterGenerator(ABC):
         if output_file is None:
             output_file = self.output_file
         if output_directory is None:
-            output_directory = self.output_directory
+            output_directory = self._output_directory
         if output_file_type is None:
             output_file_type = self.output_file_type
         if overwrite is not self.overwrite:
