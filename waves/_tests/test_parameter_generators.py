@@ -3449,9 +3449,7 @@ test__return_parameter_study_files_to_write_cases = {
         does_not_raise,
     ),
     "no preexisting files, single file, dict": (
-        {
-            pathlib.Path("output.yaml"): {"parameter_set0": {"parameter_1": 1}, "parameter_set1": {"parameter_1": 2}}
-        },
+        {pathlib.Path("output.yaml"): {"parameter_set0": {"parameter_1": 1}, "parameter_set1": {"parameter_1": 2}}},
         [False],
         None,
         None,
@@ -3461,14 +3459,10 @@ test__return_parameter_study_files_to_write_cases = {
         does_not_raise,
     ),
     "preexisting files, single file, dict, same content": (
-        {
-            pathlib.Path("output.yaml"): {"parameter_set0": {"parameter_1": 1}, "parameter_set1": {"parameter_1": 2}}
-        },
+        {pathlib.Path("output.yaml"): {"parameter_set0": {"parameter_1": 1}, "parameter_set1": {"parameter_1": 2}}},
         [True],
         None,
-        [
-            {"parameter_set0": {"parameter_1": 1}, "parameter_set1": {"parameter_1": 2}}
-        ],
+        [{"parameter_set0": {"parameter_1": 1}, "parameter_set1": {"parameter_1": 2}}],
         {},
         does_not_raise,
     ),
