@@ -2679,8 +2679,6 @@ class TestParameterGenerator:
         )
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_yaml") as mock_write_yaml,
-            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_dataset") as mock_write_dataset,
             patch("sys.stdout.write") as stdout_write,
             patch("pathlib.Path.is_file", side_effect=is_file),
         ):
@@ -2698,8 +2696,6 @@ class TestParameterGenerator:
         )
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_yaml") as mock_write_yaml,
-            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_dataset") as mock_write_dataset,
             patch("sys.stdout.write") as stdout_write,
             patch("pathlib.Path.is_file", side_effect=is_file),
         ):
@@ -2735,8 +2731,6 @@ class TestParameterGenerator:
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta"),
             patch("sys.stdout.write") as stdout_write,
-            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_yaml") as mock_write_yaml,
-            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_dataset") as mock_write_dataset,
             patch("pathlib.Path.is_file", side_effect=is_file),
             patch("pathlib.Path.mkdir"),
         ):
@@ -2755,8 +2749,6 @@ class TestParameterGenerator:
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta"),
             patch("sys.stdout.write") as stdout_write,
-            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_yaml") as mock_write_yaml,
-            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_dataset") as mock_write_dataset,
             patch("pathlib.Path.is_file", side_effect=is_file),
             patch("pathlib.Path.mkdir"),
         ):
@@ -2775,12 +2767,10 @@ class TestParameterGenerator:
                 "yaml": (
                     write_parameter_generator.parameter_study_to_dict(),
                     write_parameter_generator.parameter_study_to_dict().items(),
-                    write_parameter_generator._conditionally_write_yaml,
                 ),
                 "h5": (
                     write_parameter_generator.parameter_study,
                     write_parameter_generator.parameter_study.groupby(_settings._set_coordinate_key),
-                    write_parameter_generator._conditionally_write_dataset,
                 ),
             }
             instantiated_arguments = private_write_arguments[instantiated_type]
