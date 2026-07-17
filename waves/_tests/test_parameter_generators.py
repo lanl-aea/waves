@@ -3725,7 +3725,7 @@ def test__write_parameter_study_files(
         if expected_to_netcdf is None:
             mock_to_netcdf.assert_not_called()
         else:
-            # TODO: figure out how to assert the dataset that was written
+            # TODO: figure out how to assert the dataset/output association
             assert mock_to_netcdf.call_count == len(expected_to_netcdf)
         if expected_write is None:
             mock_file().assert_not_called()
@@ -4285,7 +4285,6 @@ def test__new_write(
         outcome,
         patch("sys.stdout.write") as mock_stdout,
         patch("xarray.Dataset.to_netcdf") as mock_to_netcdf,
-        # TODO: mock all and sequential file open
         patch("pathlib.Path.is_file", return_value=False),
         patch("pathlib.Path.open", mock_open()) as mock_file,
         patch("waves.parameter_generators._write_parameter_study_meta_file") as mock_write_meta_file,
@@ -4299,7 +4298,7 @@ def test__new_write(
         if expected_to_netcdf is None:
             mock_to_netcdf.assert_not_called()
         else:
-            # TODO: figure out how to assert the dataset that was written
+            # TODO: figure out how to assert the dataset/output association
             assert mock_to_netcdf.call_count == len(expected_to_netcdf)
         if expected_write is None:
             mock_file().assert_not_called()
