@@ -3580,6 +3580,38 @@ test__write_parameter_study_files_cases = {
             ),
         ),
     ),
+    "output file, dataset": (
+        {
+            pathlib.Path("output.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1, 2], coords={"set_name": ["set0", "set1"]})}
+            ),
+        },
+        {},
+        None,
+        [
+            xarray.Dataset({"parameter_1": xarray.DataArray([1, 2], coords={"set_name": ["set0", "set1"]})}),
+        ],
+        None,
+        does_not_raise,
+    ),
+    "output files, dataset": (
+        {
+            pathlib.Path("set0.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}
+            ),
+            pathlib.Path("set1.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}
+            ),
+        },
+        {},
+        None,
+        [
+            xarray.Dataset({"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}),
+            xarray.Dataset({"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}),
+        ],
+        None,
+        does_not_raise,
+    ),
     "output file, dict": (
         {pathlib.Path("output.yaml"): {"parameter_set0": {"parameter_1": 2}, "parameter_set1": {"parameter_1": 1}}},
         {},
