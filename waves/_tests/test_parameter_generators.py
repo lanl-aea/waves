@@ -3594,6 +3594,22 @@ test__write_parameter_study_files_cases = {
         None,
         does_not_raise,
     ),
+    "output file, dataset, dry run": (
+        {
+            pathlib.Path("output.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1, 2], coords={"set_name": ["set0", "set1"]})}
+            ),
+        },
+        {"dry_run": True},
+        [
+            "output.h5\n"
+            + str(xarray.Dataset({"parameter_1": xarray.DataArray([1, 2], coords={"set_name": ["set0", "set1"]})}))
+            + "\n",
+        ],
+        None,
+        None,
+        does_not_raise,
+    ),
     "output files, dataset": (
         {
             pathlib.Path("set0.h5"): xarray.Dataset(
@@ -3609,6 +3625,28 @@ test__write_parameter_study_files_cases = {
             xarray.Dataset({"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}),
             xarray.Dataset({"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}),
         ],
+        None,
+        does_not_raise,
+    ),
+    "output files, dataset, dry run": (
+        {
+            pathlib.Path("set0.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}
+            ),
+            pathlib.Path("set1.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}
+            ),
+        },
+        {"dry_run": True},
+        [
+            "set0.h5\n"
+            + str(xarray.Dataset({"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}))
+            + "\n",
+            "set1.h5\n"
+            + str(xarray.Dataset({"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}))
+            + "\n",
+        ],
+        None,
         None,
         does_not_raise,
     ),
