@@ -322,7 +322,7 @@ class ParameterGenerator(ABC):
 
         # Deprecate the ParameterGenerator write_meta API and method
         # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1024
-        if self.write_meta and self._output_directory is not None:
+        if self.write_meta:
             self._write_meta()
 
     def _scons_write(self, target: list, source: list, env: SCons.Environment.Environment) -> None:  # noqa: ARG002
@@ -353,7 +353,14 @@ class ParameterGenerator(ABC):
         """
         set_files = [pathlib.Path(set_name) for set_name in self.parameter_study.coords[_set_coordinate_key].values]
         # Always overwrite the meta data file to ensure that *all* parameter file names are included.
-        with self._output_directory / _settings._parameter_study_meta_file as meta_file:
+        if self._output_directory is not None:
+            output_directory = self._output_directory
+        elif self.output_file is not None:
+            output_directory = self.output_file.parent
+        else:
+            output_directory = pathlib.Path()
+        meta_file_path = output_directory / _settings._parameter_study_meta_file
+        with meta_file_path.open("w") as meta_file:
             if self._output_file:
                 meta_file.write(f"{self._output_file.resolve()}\n")
             else:
