@@ -2291,7 +2291,7 @@ class TestParameterGenerator:
         assert generator.parameter_schema == expected_value
 
     property_output_file_template_cases = {
-        "no arg": ({}, _settings._default_output_file_template),
+        "no arg": ({}, _utilities._AtSignTemplate(_settings._default_set_name_template)),
         "custom": (
             {"output_file_template": "custom"},
             _utilities._AtSignTemplate(f"custom{_settings._template_placeholder}"),
