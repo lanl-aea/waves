@@ -3580,6 +3580,14 @@ test__write_parameter_study_files_cases = {
             ),
         ),
     ),
+    "output file, dict": (
+        {pathlib.Path("output.yaml"): {"parameter_set0": {"parameter_1": 2}, "parameter_set1": {"parameter_1": 1}}},
+        {},
+        None,
+        None,
+        ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+        does_not_raise,
+    )
 }
 
 
@@ -3604,12 +3612,12 @@ def test__write_parameter_study_files(
     ):
         parameter_generators._write_parameter_study_files(parameter_study_files, **kwargs)
         if expected_stdout is None:
-            expected_stdout.assert_not_called()
+            mock_stdout.assert_not_called()
         else:
             assert mock_stdout.call_count == len(expected_stdout)
             mock_stdout.assert_has_calls([call(item) for item in expected_stdout])
         if expected_to_netcdf is None:
-            expected_to_netcdf.assert_not_called()
+            mock_to_netcdf.assert_not_called()
         else:
             # TODO: figure out how to assert the dataset that was written
             assert mock_to_netcdf.call_count == len(expected_to_netcdf)
