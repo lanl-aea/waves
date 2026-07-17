@@ -139,20 +139,18 @@ class ParameterGenerator(ABC):
                 "Please specify one or the other."
             )
         if output_file_template is not None:
-            output_file_template_string = output_file_template.safe_substitute()
-            if _settings._template_placeholder not in output_file_template_string:
+            if _settings._template_placeholder not in output_file_template.template:
                 output_file_template = _utilities._AtSignTemplate(
-                    f"{output_file_template_string}{_settings._template_placeholder}"
+                    f"{output_file_template.template}{_settings._template_placeholder}"
                 )
             self._set_name_template = output_file_template
-            self._output_directory = pathlib.Path(self._set_name_template.safe_substitute()).parent
+            self._output_directory = pathlib.Path(self._set_name_template.template).parent
         # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1023
         # TODO: ^^^ Remove uses of output_file_template in favor of set_name_template and ``write(output_directory=)``
         else:
-            set_name_template_string = self._set_name_template.safe_substitute()
-            if _settings._template_placeholder not in set_name_template_string:
+            if _settings._template_placeholder not in self._set_name_template.template:
                 self._set_name_template = _utilities._AtSignTemplate(
-                    f"{set_name_template_string}{_settings._template_placeholder}"
+                    f"{self._set_name_template.template}{_settings._template_placeholder}"
                 )
             self._output_directory = None
 

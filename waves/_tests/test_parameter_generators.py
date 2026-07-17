@@ -2514,70 +2514,43 @@ class TestParameterGenerator:
             for parameter in set_value:
                 assert type(set_samples[set_name][parameter]) is type(set_value[parameter])
 
-    templates: dict[str, tuple] = {
-        "no template": ({}, None, None, ["parameter_set0"]),
-        "file template": ({}, "out", None, ["out0"]),
-        "set template": ({}, None, "out@number", ["out0"]),
-        "set template, no placeholder": ({}, None, "out", ["out0"]),
-        "set template, overridden": ({}, "out", "overridden", ["out0"]),
+    test_set_names_cases: dict[str, tuple] = {
+        "no template": ({}, ["parameter_set0"]),
+        "file template": ({"output_file_template": "out"}, ["out0"]),
+        "set template": ({"set_name_template": "out@number"}, ["out0"]),
+        "set template, no placeholder": ({"set_name_template": "out"}, ["out0"]),
+        "set template, overridden": ({"output_file_template": "out", "set_name_template": "overridden"}, ["out0"]),
     }
 
     @pytest.mark.parametrize(
-        ("schema", "file_template", "set_template", "expected"),
-        templates.values(),
-        ids=templates.keys(),
+        ("kwargs", "expected"),
+        test_set_names_cases.values(),
+        ids=test_set_names_cases.keys(),
     )
-    def test_set_names(
-        self, schema: dict, file_template: str | None, set_template: str | None, expected: list[str]
-    ) -> None:
+    def test_set_names(self, kwargs: dict, expected: list[str]) -> None:
         """Check the generated parameter set names against template arguments.
 
-        :param str schema: placeholder string standing in for the schema read from an input file
-        :param str file_template: user supplied string to be used as a template for output file names
-        :param str set_template: user supplied string to be used as a template for parameter names
+        :param kwargs: the output_name_template and set_name_template keyword arguments
         :param list expected: list of expected parameter name strings
         """
-        if not set_template:
-            template_generator = DummyGenerator(schema, output_file_template=file_template, sets=1)
-        else:
-            template_generator = DummyGenerator(
-                schema, output_file_template=file_template, set_name_template=set_template, sets=1
-            )
+        template_generator = DummyGenerator({}, **kwargs, sets=1)
         assert list(template_generator._set_names.values()) == expected
         assert list(template_generator.parameter_study[_settings._set_coordinate_key].values) == expected
 
     @pytest.mark.parametrize(
-        ("schema", "file_template", "set_template", "expected"),
-        templates.values(),
-        ids=templates.keys(),
+        ("kwargs", "expected"),
+        test_set_names_cases.values(),
+        ids=test_set_names_cases.keys(),
     )
-    def test_merge_parameter_studies(
-        self, schema: dict, file_template: str | None, set_template: str | None, expected: list[str]
-    ) -> None:
+    def test_merge_parameter_studies(self, kwargs: dict, expected: list[str]) -> None:
         """Check the generated parameter set names against template arguments after a merge operation.
 
-        :param str schema: placeholder string standing in for the schema read from an input file
-        :param str file_template: user supplied string to be used as a template for output file names
-        :param str set_template: user supplied string to be used as a template for parameter names
+        :param kwargs: the output_name_template and set_name_template keyword arguments
         :param list expected: list of expected parameter name strings
         """
         mock_previous_study_name = "dummy_study.h5"
-        if not set_template:
-            mock_previous_study = DummyGenerator(schema, output_file_template=file_template, sets=1).parameter_study
-            template_generator = DummyGenerator(
-                schema, output_file_template=file_template, previous_parameter_study=mock_previous_study_name, sets=1
-            )
-        else:
-            mock_previous_study = DummyGenerator(
-                schema, output_file_template=file_template, set_name_template=set_template, sets=1
-            ).parameter_study
-            template_generator = DummyGenerator(
-                schema,
-                output_file_template=file_template,
-                set_name_template=set_template,
-                previous_parameter_study=mock_previous_study_name,
-                sets=1,
-            )
+        mock_previous_study = DummyGenerator({}, **kwargs, sets=1).parameter_study
+        template_generator = DummyGenerator({}, **kwargs, previous_parameter_study=mock_previous_study_name, sets=1)
         with patch("waves.parameter_generators._open_parameter_study", return_value=mock_previous_study):
             assert list(template_generator._set_names.values()) == expected
             assert list(template_generator.parameter_study[_settings._set_coordinate_key].values) == expected
