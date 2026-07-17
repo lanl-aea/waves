@@ -3448,6 +3448,90 @@ test__return_parameter_study_files_to_write_cases = {
         },
         does_not_raise,
     ),
+    "no preexisting files, single file, dict": (
+        {
+            pathlib.Path("output.yaml"): {"parameter_set0": {"parameter_1": 1}, "parameter_set1": {"parameter_1": 2}}
+        },
+        [False],
+        None,
+        None,
+        {
+            pathlib.Path("output.yaml"): {"parameter_set0": {"parameter_1": 1}, "parameter_set1": {"parameter_1": 2}},
+        },
+        does_not_raise,
+    ),
+    "preexisting files, single file, dict, same content": (
+        {
+            pathlib.Path("output.yaml"): {"parameter_set0": {"parameter_1": 1}, "parameter_set1": {"parameter_1": 2}}
+        },
+        [True],
+        None,
+        [
+            {"parameter_set0": {"parameter_1": 1}, "parameter_set1": {"parameter_1": 2}}
+        ],
+        {},
+        does_not_raise,
+    ),
+    "no preexisting files, two files, dict": (
+        {
+            pathlib.Path("set0.yaml"): {"parameter_1": 1},
+            pathlib.Path("set1.yaml"): {"parameter_1": 2},
+        },
+        [False, False],
+        None,
+        None,
+        {
+            pathlib.Path("set0.yaml"): {"parameter_1": 1},
+            pathlib.Path("set1.yaml"): {"parameter_1": 2},
+        },
+        does_not_raise,
+    ),
+    "preexisting files, two files, dict, same content": (
+        {
+            pathlib.Path("set0.yaml"): {"parameter_1": 1},
+            pathlib.Path("set1.yaml"): {"parameter_1": 2},
+        },
+        [True, True],
+        None,
+        [
+            {"parameter_1": 1},
+            {"parameter_1": 2},
+        ],
+        {},
+        does_not_raise,
+    ),
+    "preexisting files, two files, dict, first content differs": (
+        {
+            pathlib.Path("set0.yaml"): {"parameter_1": 1},
+            pathlib.Path("set1.yaml"): {"parameter_1": 2},
+        },
+        [True, True],
+        None,
+        [
+            {"parameter_1": 1.1},
+            {"parameter_1": 2},
+        ],
+        {
+            pathlib.Path("set0.yaml"): {"parameter_1": 1},
+        },
+        does_not_raise,
+    ),
+    "preexisting files, two files, dict, second content differs": (
+        {
+            pathlib.Path("set0.yaml"): {"parameter_1": 1},
+            pathlib.Path("set1.yaml"): {"parameter_1": 2},
+        },
+        [True, True],
+        None,
+        [
+            {"parameter_1": 1},
+            {"parameter_1": 2.2},
+        ],
+        {
+            pathlib.Path("set1.yaml"): {"parameter_1": 2},
+        },
+        does_not_raise,
+    ),
 }
 
 
