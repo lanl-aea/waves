@@ -3906,6 +3906,28 @@ test__new_write_cases = {
         None,
         does_not_raise,
     ),
+    "CartesianProduct: output file, default type, meta file": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": pathlib.Path("/output.h5"), "meta_file": pathlib.Path("output.txt")},
+        None,
+        [
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2, 1],
+                        coords={"set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])},
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                        dims="set_name",
+                    ),
+                },
+            ).set_coords("set_hash"),
+        ],
+        None,
+        f"{pathlib.Path('/output.h5').resolve()}\n",
+        does_not_raise,
+    ),
     "CartesianProduct: output file, default type, dry run": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_file": pathlib.Path("output.h5"), "dry_run": True},
@@ -4032,6 +4054,38 @@ test__new_write_cases = {
         None,
         None,
         None,
+        does_not_raise,
+    ),
+    "CartesianProduct: output directory, default type, meta file": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_directory": pathlib.Path("/directory"), "meta_file": pathlib.Path("directory/output.txt")},
+        None,
+        [
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2],
+                        coords={
+                            "set_name": xarray.DataArray(["parameter_set0"], dims=["set_name"]),
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(["0b588b6a82c1d3d3d19fda304f940342"], dims="set_name"),
+                },
+            ).set_coords("set_hash"),
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1],
+                        coords={
+                            "set_name": xarray.DataArray(["parameter_set1"], dims=["set_name"]),
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(["1661dcd0bf4761d25471c1cf5514ceae"], dims="set_name"),
+                },
+            ).set_coords("set_hash"),
+        ],
+        None,
+        f"{pathlib.Path('/directory/parameter_set0.h5')}\n{pathlib.Path('/directory/parameter_set1.h5')}\n",
         does_not_raise,
     ),
     "CartesianProduct: output file, H5": (
@@ -4256,7 +4310,4 @@ def test__new_write(
             mock_write_meta_file.assert_not_called()
         else:
             mock_write_meta_file.assert_called_once()
-            import pdb
-
-            pdb.set_trace()
             assert mock_write_meta_file.call_args[0][1] == expected_write_meta_file_contents
