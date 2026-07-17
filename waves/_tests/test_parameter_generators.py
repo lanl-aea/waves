@@ -3565,8 +3565,59 @@ def test__return_parameter_study_files_to_write(
                 assert expected_value == result[key]
 
 
-def test__write_parameter_study_files() -> None:
-    pass
+test__write_parameter_study_files_cases = {
+    "ValueError not dictionary or xarray": (
+        {pathlib.Path("output.h5"): ["parameter_1"]},
+        {},
+        None,
+        None,
+        None,
+        pytest.raises(
+            ValueError,
+            match=(
+                r"Parameter study file content must be a dictionary or xarray Dataset."
+                r" This is likely an internal bug. Please contact the developers."
+            ),
+        ),
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("parameter_study_files", "kwargs", "expected_stdout", "expected_to_netcdf", "expected_write", "outcome"),
+    test__write_parameter_study_files_cases.values(),
+    ids=test__write_parameter_study_files_cases.keys(),
+)
+def test__write_parameter_study_files(
+    parameter_study_files: dict[pathlib.Path, dict | xarray.Dataset],
+    kwargs: dict,
+    expected_stdout: list[str] | None,
+    expected_to_netcdf: list[xarray.Dataset] | None,
+    expected_write: list[str] | None,
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
+    with (
+        outcome,
+        patch("sys.stdout.write") as mock_stdout,
+        patch("xarray.Dataset.to_netcdf") as mock_to_netcdf,
+        patch("pathlib.Path.open", mock_open()) as mock_file,
+    ):
+        parameter_generators._write_parameter_study_files(parameter_study_files, **kwargs)
+        if expected_stdout is None:
+            expected_stdout.assert_not_called()
+        else:
+            assert mock_stdout.call_count == len(expected_stdout)
+            mock_stdout.assert_has_calls([call(item) for item in expected_stdout])
+        if expected_to_netcdf is None:
+            expected_to_netcdf.assert_not_called()
+        else:
+            # TODO: figure out how to assert the dataset that was written
+            assert mock_to_netcdf.call_count == len(expected_to_netcdf)
+        if expected_write is None:
+            mock_file().assert_not_called()
+        else:
+            assert mock_file().write.call_count == len(expected_write)
+            mock_file().write.assert_has_calls([call(item) for item in expected_write])
 
 
 def test__write_parameter_study_meta_file() -> None:
