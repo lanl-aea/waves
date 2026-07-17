@@ -2811,7 +2811,7 @@ class TestParameterGenerator:
         write_parameter_generator = DummyGenerator({})
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-            patch("waves.parameter_generators.ParameterGenerator._write") as mock_private_write,
+            patch("waves.parameter_generators._write") as mock_private_write,
             pytest.raises(ChoicesError),
         ):
             # Specifically testing bad argument type handling. Ignore static type check.
@@ -2824,7 +2824,7 @@ class TestParameterGenerator:
         write_parameter_generator._provided_output_file_template = True
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta") as mock_write_meta,
-            patch("waves.parameter_generators.ParameterGenerator._write") as mock_private_write,
+            patch("waves.parameter_generators._write") as mock_private_write,
         ):
             write_parameter_generator.write()
             mock_write_meta.assert_called_once()
@@ -3654,6 +3654,7 @@ def test__write_parameter_study_files(
         patch("sys.stdout.write") as mock_stdout,
         patch("xarray.Dataset.to_netcdf") as mock_to_netcdf,
         patch("pathlib.Path.open", mock_open()) as mock_file,
+        patch("pathlib.Path.mkdir"),
     ):
         parameter_generators._write_parameter_study_files(parameter_study_files, **kwargs)
         if expected_stdout is None:
@@ -3741,6 +3742,7 @@ def test__write_parameter_study_meta_file(
     with (
         patch("pathlib.Path.is_file", return_value=mock_is_file),
         patch("pathlib.Path.open", mock_open(read_data=mock_read)) as mock_file,
+        patch("pathlib.Path.mkdir"),
     ):
         parameter_generators._write_parameter_study_meta_file(meta_file, meta_file_contents, **kwargs)
         if expected_write is None:
@@ -4260,6 +4262,7 @@ def test__write(
         patch("pathlib.Path.is_file", return_value=False),
         patch("pathlib.Path.open", mock_open()) as mock_file,
         patch("waves.parameter_generators._write_parameter_study_meta_file") as mock_write_meta_file,
+        patch("pathlib.Path.mkdir"),
     ):
         parameter_generators._write(generator, **kwargs)
         if expected_stdout is None:
