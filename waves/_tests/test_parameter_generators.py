@@ -2488,14 +2488,6 @@ class TestParameterGenerator:
             scons_write._scons_write([], [], env)
         mock_write.assert_called_once_with(**expected_kwargs)
 
-    templates: dict[str, tuple] = {
-        "no template": ({}, None, None, ["parameter_set0"]),
-        "file template": ({}, "out", None, ["out0"]),
-        "set template": ({}, None, "out@number", ["out0"]),
-        "set template, no placeholder": ({}, None, "out", ["out0"]),
-        "set template, overridden": ({}, "out", "overridden", ["out0"]),
-    }
-
     def test_merge_parameter_studies_with_missing_previous_parameter_study(self) -> None:
         # Test exception on missing previous parameter study attribute
         dummy_generator = DummyGenerator({})
@@ -2521,6 +2513,14 @@ class TestParameterGenerator:
             assert set_value == set_samples[set_name]
             for parameter in set_value:
                 assert type(set_samples[set_name][parameter]) is type(set_value[parameter])
+
+    templates: dict[str, tuple] = {
+        "no template": ({}, None, None, ["parameter_set0"]),
+        "file template": ({}, "out", None, ["out0"]),
+        "set template": ({}, None, "out@number", ["out0"]),
+        "set template, no placeholder": ({}, None, "out", ["out0"]),
+        "set template, overridden": ({}, "out", "overridden", ["out0"]),
+    }
 
     @pytest.mark.parametrize(
         ("schema", "file_template", "set_template", "expected"),
