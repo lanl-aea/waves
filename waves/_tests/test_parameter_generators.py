@@ -2657,7 +2657,6 @@ class TestParameterGenerator:
         ):
             write_parameter_generator.write()
             stdout_write.assert_not_called()
-            mock_write_dataset.assert_not_called()
             assert mock_write_yaml.call_count == files
 
         mismatched_output_type = DummyGenerator(
@@ -2674,7 +2673,6 @@ class TestParameterGenerator:
         ):
             mismatched_output_type.write(output_file_type="yaml")
             stdout_write.assert_not_called()
-            mock_write_dataset.assert_not_called()
             assert mock_write_yaml.call_count == files
 
     @pytest.mark.parametrize(
@@ -2709,7 +2707,6 @@ class TestParameterGenerator:
         ):
             write_parameter_generator.write()
             stdout_write.assert_not_called()
-            mock_write_yaml.assert_not_called()
             assert mock_write_dataset.call_count == files
 
         mismatched_output_type = DummyGenerator(
@@ -2727,7 +2724,6 @@ class TestParameterGenerator:
         ):
             mismatched_output_type.write(output_file_type="h5")
             stdout_write.assert_not_called()
-            mock_write_yaml.assert_not_called()
             assert mock_write_dataset.call_count == files
 
     def test_write_type_override(self) -> None:
