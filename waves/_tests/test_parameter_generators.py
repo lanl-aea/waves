@@ -3751,6 +3751,38 @@ test__write_parameter_study_meta_file_cases = {
         None,
         "contents of meta file",
     ),
+    "file does exist, same contents": (
+        pathlib.Path("meta_file.txt"),
+        "contents of meta file",
+        {},
+        True,
+        "contents of meta file",
+        None,
+    ),
+    "file does exist, same contents, overwrite": (
+        pathlib.Path("meta_file.txt"),
+        "contents of meta file",
+        {"overwrite": True},
+        True,
+        "contents of meta file",
+        "contents of meta file",
+    ),
+    "file does exist, different contents": (
+        pathlib.Path("meta_file.txt"),
+        "contents of meta file",
+        {},
+        True,
+        "different contents of meta file",
+        "contents of meta file",
+    ),
+    "file does exist, different contents, overwrite": (
+        pathlib.Path("meta_file.txt"),
+        "contents of meta file",
+        {"overwrite": True},
+        True,
+        "different contents of meta file",
+        "contents of meta file",
+    ),
 }
 
 
