@@ -3743,6 +3743,14 @@ test__write_parameter_study_meta_file_cases = {
         None,
         "contents of meta file",
     ),
+    "file does not exist, overwrite": (
+        pathlib.Path("meta_file.txt"),
+        "contents of meta file",
+        {"overwrite": True},
+        False,
+        None,
+        "contents of meta file",
+    ),
 }
 
 
