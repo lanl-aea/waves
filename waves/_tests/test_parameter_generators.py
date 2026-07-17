@@ -3295,6 +3295,15 @@ test__return_parameter_study_files_cases = {
         },
         does_not_raise,
     ),
+    "CartesianProduct, output file, YAML, path-like set name template": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="set@number/study"),
+        {"output_directory": pathlib.Path("directory"), "output_file_type": "yaml"},
+        {
+            pathlib.Path("directory/set0/study.yaml"): {"parameter_1": 2},
+            pathlib.Path("directory/set1/study.yaml"): {"parameter_1": 1},
+        },
+        does_not_raise,
+    ),
 }
 
 
@@ -4252,6 +4261,39 @@ test__new_write_cases = {
         None,
         None,
         None,
+        does_not_raise,
+    ),
+    "CartesianProduct: output directory, YAML, pathlike set name template": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="set@number/study"),
+        {"output_directory": pathlib.Path("directory"), "output_file_type": "yaml"},
+        None,
+        None,
+        ["parameter_1: 2\n", "parameter_1: 1\n"],
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct: output directory, YAML, dry run, pathlike set name template": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="set@number/study"),
+        {"output_directory": pathlib.Path("directory"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('directory') / 'set0/study.yaml'}\nparameter_1: 2\n",
+            f"{pathlib.Path('directory') / 'set1/study.yaml'}\nparameter_1: 1\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct: output directory, YAML, meta file, pathlike set name template": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="set@number/study"),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "meta_file": "meta.txt"},
+        None,
+        None,
+        ["parameter_1: 2\n", "parameter_1: 1\n"],
+        (
+            f"{pathlib.Path('/directory/set0/study.yaml').resolve()}\n"
+            f"{pathlib.Path('/directory/set1/study.yaml').resolve()}\n"
+        ),
         does_not_raise,
     ),
 }
