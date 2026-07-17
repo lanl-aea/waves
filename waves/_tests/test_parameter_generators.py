@@ -3817,6 +3817,7 @@ test__new_write_cases = {
         None,
         None,
         None,
+        None,
         pytest.raises(
             MutuallyExclusiveError,
             match=(
@@ -3828,6 +3829,7 @@ test__new_write_cases = {
     "unsupported output file type": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_file": "output.h5", "output_file_type": "notsupported"},
+        None,
         None,
         None,
         None,
@@ -3845,6 +3847,7 @@ test__new_write_cases = {
         None,
         None,
         None,
+        None,
         pytest.raises(
             APIError,
             match=r"The option 'meta_file' requires one of 'output_directory' or 'output_file'.",
@@ -3854,6 +3857,7 @@ test__new_write_cases = {
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {},
         ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+        None,
         None,
         None,
         does_not_raise,
@@ -3876,6 +3880,29 @@ test__new_write_cases = {
                 },
             ).set_coords("set_hash"),
         ],
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct: output file, default type, overwrite": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": pathlib.Path("output.h5"), "overwrite": True},
+        None,
+        [
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2, 1],
+                        coords={"set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])},
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                        dims="set_name",
+                    ),
+                },
+            ).set_coords("set_hash"),
+        ],
+        None,
         None,
         does_not_raise,
     ),
@@ -3902,6 +3929,35 @@ test__new_write_cases = {
             )
             + "\n",
         ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct: output file, default type, dry run, overwrite": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": pathlib.Path("output.h5"), "dry_run": True, "overwrite": True},
+        [
+            "output.h5\n"
+            + str(
+                xarray.Dataset(
+                    {
+                        "parameter_1": xarray.DataArray(
+                            [2, 1],
+                            coords={
+                                "set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])
+                            },
+                        ),
+                        "set_hash": xarray.DataArray(
+                            ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                            dims="set_name",
+                        ),
+                    },
+                ).set_coords("set_hash")
+            )
+            + "\n",
+        ],
+        None,
         None,
         None,
         does_not_raise,
@@ -3934,6 +3990,7 @@ test__new_write_cases = {
                 },
             ).set_coords("set_hash"),
         ],
+        None,
         None,
         does_not_raise,
     ),
@@ -3974,6 +4031,7 @@ test__new_write_cases = {
         ],
         None,
         None,
+        None,
         does_not_raise,
     ),
     "CartesianProduct: output file, H5": (
@@ -4000,6 +4058,7 @@ test__new_write_cases = {
             ).set_coords("set_hash"),
         ],
         None,
+        None,
         does_not_raise,
     ),
     "CartesianProduct: output file, H5, dry run": (
@@ -4025,6 +4084,7 @@ test__new_write_cases = {
             )
             + "\n",
         ],
+        None,
         None,
         None,
         does_not_raise,
@@ -4057,6 +4117,7 @@ test__new_write_cases = {
                 },
             ).set_coords("set_hash"),
         ],
+        None,
         None,
         does_not_raise,
     ),
@@ -4097,6 +4158,7 @@ test__new_write_cases = {
         ],
         None,
         None,
+        None,
         does_not_raise,
     ),
     "CartesianProduct: output file, YAML": (
@@ -4105,12 +4167,14 @@ test__new_write_cases = {
         None,
         None,
         ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+        None,
         does_not_raise,
     ),
     "CartesianProduct: output file, YAML, dry run": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
         ["output.yaml\nparameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+        None,
         None,
         None,
         does_not_raise,
@@ -4121,6 +4185,7 @@ test__new_write_cases = {
         None,
         None,
         ["parameter_1: 2\n", "parameter_1: 1\n"],
+        None,
         does_not_raise,
     ),
     "CartesianProduct: output directory, YAML, dry run": (
@@ -4132,13 +4197,22 @@ test__new_write_cases = {
         ],
         None,
         None,
+        None,
         does_not_raise,
     ),
 }
 
 
 @pytest.mark.parametrize(
-    ("generator", "kwargs", "expected_stdout", "expected_to_netcdf", "expected_write", "outcome"),
+    (
+        "generator",
+        "kwargs",
+        "expected_stdout",
+        "expected_to_netcdf",
+        "expected_write",
+        "expected_write_meta_file_contents",
+        "outcome",
+    ),
     test__new_write_cases.values(),
     ids=test__new_write_cases.keys(),
 )
@@ -4148,6 +4222,7 @@ def test__new_write(
     expected_stdout: list[str] | None,
     expected_to_netcdf: list[xarray.Dataset] | None,
     expected_write: list[str] | None,
+    expected_write_meta_file_contents: str | None,
     outcome: contextlib.nullcontext | pytest.RaisesExc,
 ) -> None:
     if sum([thing is not None for thing in (expected_stdout, expected_to_netcdf, expected_write)]) > 1:
@@ -4159,6 +4234,7 @@ def test__new_write(
         # TODO: mock all and sequential file open
         patch("pathlib.Path.is_file", return_value=False),
         patch("pathlib.Path.open", mock_open()) as mock_file,
+        patch("waves.parameter_generators._write_parameter_study_meta_file") as mock_write_meta_file,
     ):
         parameter_generators._new_write(generator, **kwargs)
         if expected_stdout is None:
@@ -4176,3 +4252,11 @@ def test__new_write(
         else:
             assert mock_file().write.call_count == len(expected_write)
             mock_file().write.assert_has_calls([call(item) for item in expected_write])
+        if expected_write_meta_file_contents is None:
+            mock_write_meta_file.assert_not_called()
+        else:
+            mock_write_meta_file.assert_called_once()
+            import pdb
+
+            pdb.set_trace()
+            assert mock_write_meta_file.call_args[0][1] == expected_write_meta_file_contents
