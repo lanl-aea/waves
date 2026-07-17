@@ -273,7 +273,7 @@ class ParameterGenerator(ABC):
         self,
         output_file: pathlib.Path | None = None,
         output_directory: pathlib.Path | None = None,
-        output_file_type: _settings._allowable_output_file_typing = "h5",
+        output_file_type: _settings._allowable_output_file_typing | None = None,
         overwrite: bool = False,
         dry_run: bool = False,
         meta_file: pathlib.Path | None = None,

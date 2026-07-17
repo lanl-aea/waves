@@ -2777,15 +2777,21 @@ class TestParameterGenerator:
 
     def test_write_exception(self) -> None:
         """Calling a non-supported format string should raise an exception."""
-        write_parameter_generator = DummyGenerator({})
+        write_parameter_generator = DummyGenerator({}, output_file="dummy.h5")
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-            patch("waves.parameter_generators._write") as mock_private_write,
+            patch("sys.stdout.write") as mock_stdout,
+            patch("pathlib.Path.mkdir") as mock_mkdir,
+            patch("xarray.Dataset.to_netcdf") as mock_to_netcdf,
+            patch("pathlib.Path.open", mock_open()) as mock_file,
             pytest.raises(ChoicesError),
         ):
             # Specifically testing bad argument type handling. Ignore static type check.
             write_parameter_generator.write(output_file_type="unsupported")  # type: ignore[arg-type]
-        mock_private_write.assert_not_called()
+        mock_stdout.assert_not_called()
+        mock_mkdir.assert_not_called()
+        mock_to_netcdf.assert_not_called()
+        mock_file.assert_not_called()
 
     def test_write_call_to_write_meta(self) -> None:
         write_parameter_generator = DummyGenerator({})
