@@ -3596,6 +3596,34 @@ test__write_parameter_study_files_cases = {
         None,
         does_not_raise,
     ),
+    "output files, dict": (
+        {
+            pathlib.Path("directory") / "parameter_set0.yaml": {"parameter_1": 2},
+            pathlib.Path("directory") / "parameter_set1.yaml": {"parameter_1": 1},
+        },
+        {},
+        None,
+        None,
+        [
+            "parameter_1: 2\n",
+            "parameter_1: 1\n",
+        ],
+        does_not_raise,
+    ),
+    "output files, dict, dry-run": (
+        {
+            pathlib.Path("directory") / "parameter_set0.yaml": {"parameter_1": 2},
+            pathlib.Path("directory") / "parameter_set1.yaml": {"parameter_1": 1},
+        },
+        {"dry_run": True},
+        [
+            f"{pathlib.Path('directory') / 'parameter_set0.yaml'}\nparameter_1: 2\n",
+            f"{pathlib.Path('directory') / 'parameter_set1.yaml'}\nparameter_1: 1\n",
+        ],
+        None,
+        None,
+        does_not_raise,
+    ),
 }
 
 
