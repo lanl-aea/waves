@@ -3329,8 +3329,8 @@ test__return_parameter_study_files_to_write_cases = {
         pytest.raises(
             ValueError,
             match=(
-                "Parameter study file content must be a dictionary or xarray Dataset."
-                " This is likely an internal bug. Please contact the developers."
+                r"Parameter study file content must be a dictionary or xarray Dataset."
+                r" This is likely an internal bug. Please contact the developers."
             ),
         ),
     ),
