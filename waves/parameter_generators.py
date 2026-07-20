@@ -302,7 +302,7 @@ class ParameterGenerator(ABC):
         :param output_directory: Write one output file per parameter set in the directory at this absolute or relative
             path. Filenames are based on the set name and output file type,
             ``{output_directory}/{set_name}.{output_file_type}``.
-    :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
+        :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
         :param overwrite: Overwrite existing output files
         :param dry_run: Print contents of new or overwritten parameter study output file(s) to STDOUT and exit.
         :param meta_file: Write a meta file at this absolute or relative path containing the parameter set file names, one
