@@ -2793,6 +2793,8 @@ class TestParameterGenerator:
         mock_to_netcdf.assert_not_called()
         mock_file.assert_not_called()
 
+    # Deprecate the ParameterGenerator write_meta API and method
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1024
     def test_write_call_to_write_meta(self) -> None:
         write_parameter_generator = DummyGenerator({})
         write_parameter_generator._write_meta_flag = True
@@ -2805,6 +2807,8 @@ class TestParameterGenerator:
             mock_write_meta.assert_called_once()
             mock_private_write.assert_called_once()
 
+    # Deprecate the ParameterGenerator write_meta API and method
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1024
     def test_write_meta(self) -> None:
         write_meta_parameter_generator = DummyGenerator({})
         with (
