@@ -4956,7 +4956,10 @@ test_class_write_cases.update(
                 {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.yaml"), output_file_type="yaml"
             ),
             {"output_file": pathlib.Path("different.yaml"), "dry_run": True},
-            [f"{pathlib.Path('different.yaml')}\nparameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+            [
+                f"{pathlib.Path('different.yaml')}\n"
+                "parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"
+            ],
             None,
             None,
             None,
