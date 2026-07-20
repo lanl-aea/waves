@@ -537,22 +537,6 @@ class TestCustomStudy:
             assert test_merge2._set_hashes == test_merge2.parameter_study[_hash_coordinate_key].values.tolist()
 
     test_write_yaml_cases = {
-        "one parameter yaml": (
-            {"parameter_names": ["a"], "parameter_samples": numpy.array([[1], [2]], dtype=object)},
-            "out",
-            None,
-            "yaml",
-            2,
-            [call("a: 2\n"), call("a: 1\n")],
-        ),
-        "two parameter yaml": (
-            {"parameter_names": ["a", "b"], "parameter_samples": numpy.array([[1, 2.0], [3, 4.5]], dtype=object)},
-            "out",
-            None,
-            "yaml",
-            2,
-            [call("a: 1\nb: 2.0\n"), call("a: 3\nb: 4.5\n")],
-        ),
         "one parameter one file yaml": (
             {"parameter_names": ["a"], "parameter_samples": numpy.array([[1], [2]], dtype=object)},
             None,

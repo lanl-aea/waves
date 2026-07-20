@@ -4046,6 +4046,33 @@ test__write_cases = {
         None,
         does_not_raise,
     ),
+    "CustomStudy two parameters: output directory, YAML": (
+        parameter_generators.CustomStudy(
+            {"parameter_names": ["a", "b"], "parameter_samples": numpy.array([[1, 3.0], [2, 4.5]], dtype=object)},
+            set_name_template="out",
+        ),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
+        None,
+        None,
+        ["a: 2\nb: 4.5\n", "a: 1\nb: 3.0\n"],
+        None,
+        does_not_raise,
+    ),
+    "CustomStudy two parameters: output directory, YAML, dry run": (
+        parameter_generators.CustomStudy(
+            {"parameter_names": ["a", "b"], "parameter_samples": numpy.array([[1, 3.0], [2, 4.5]], dtype=object)},
+            set_name_template="out",
+        ),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('/directory/out0.yaml')}\na: 2\nb: 4.5\n",
+            f"{pathlib.Path('/directory/out1.yaml')}\na: 1\nb: 3.0\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
 }
 
 
