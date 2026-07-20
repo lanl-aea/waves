@@ -2029,7 +2029,7 @@ def _return_parameter_study_files(
     generator: ParameterGenerator,
     output_file: pathlib.Path | None = None,
     output_directory: pathlib.Path | None = None,
-    output_file_type: _settings._allowable_output_file_typing = "h5",
+    output_file_type: _settings._allowable_output_file_typing = _settings._default_output_file_type_api,
 ) -> dict[pathlib.Path, dict | xarray.Dataset]:
     """Return parameter study file/contents associations.
 
@@ -2158,7 +2158,7 @@ def _write(
     generator: ParameterGenerator,
     output_file: pathlib.Path | None = None,
     output_directory: pathlib.Path | None = None,
-    output_file_type: _settings._allowable_output_file_typing = "h5",
+    output_file_type: _settings._allowable_output_file_typing = _settings._default_output_file_type_api,
     overwrite: bool = False,
     dry_run: bool = False,
     meta_file: pathlib.Path | None = None,
