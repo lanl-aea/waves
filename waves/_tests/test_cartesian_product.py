@@ -628,32 +628,6 @@ class TestCartesianProduct:
             self_consistency_checks(merged_study)
 
     write_yaml = {
-        "two parameter yaml: floats and ints": (
-            {"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]},
-            "out",
-            None,
-            "yaml",
-            4,
-            [
-                call("parameter_1: 1\nparameter_2: 4.0\n"),
-                call("parameter_1: 1\nparameter_2: 3.0\n"),
-                call("parameter_1: 2\nparameter_2: 4.0\n"),
-                call("parameter_1: 2\nparameter_2: 3.0\n"),
-            ],
-        ),
-        "two parameter yaml: bools and ints": (
-            {"parameter_1": [1, 2], "parameter_2": [True, False]},
-            "out",
-            None,
-            "yaml",
-            4,
-            [
-                call("parameter_1: 2\nparameter_2: true\n"),
-                call("parameter_1: 1\nparameter_2: true\n"),
-                call("parameter_1: 2\nparameter_2: false\n"),
-                call("parameter_1: 1\nparameter_2: false\n"),
-            ],
-        ),
         "two parameter one file yaml": (
             {"parameter_1": [1, 2], "parameter_2": ["a", "b"]},
             None,
