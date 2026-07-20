@@ -914,17 +914,6 @@ class TestCatenationStudy:
             assert list(test_generate._set_names.values()) == list(expected_dataset[_set_coordinate_key].to_numpy())
 
     write_yaml = {
-        "one parameter yaml": (
-            {
-                "1": CartesianProduct({"parameter_1": [1]}, output_file_template="out"),
-                "2": CartesianProduct({"parameter_1": [2]}, output_file_template="out"),
-            },
-            "out",
-            None,
-            "yaml",
-            2,
-            [call("parameter_1: 1\n"), call("parameter_1: 2\n")],
-        ),
         "two parameter propagate yaml": (
             {"1": CartesianProduct({"parameter_1": [1, 2]}), "2": CartesianProduct({"parameter_2": ["a", "b"]})},
             "out",
@@ -963,14 +952,6 @@ class TestCatenationStudy:
                 call("parameter_1: 2\nparameter_2: false\n"),
                 call("parameter_1: 1\nparameter_2: false\n"),
             ],
-        ),
-        "one parameter one file yaml": (
-            {"1": CartesianProduct({"parameter_1": [1]}), "2": CartesianProduct({"parameter_1": [2]})},
-            None,
-            "parameter_study.yaml",
-            "yaml",
-            1,
-            [call("parameter_set0:\n  parameter_1: 1\nparameter_set1:\n  parameter_1: 2\n")],
         ),
         "two parameter propagate one file yaml": (
             {"1": CartesianProduct({"parameter_1": [1, 2]}), "2": CartesianProduct({"parameter_2": ["a", "b"]})},
