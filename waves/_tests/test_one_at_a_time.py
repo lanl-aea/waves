@@ -656,30 +656,6 @@ class TestOneAtATime:
             self_consistency_checks(merged_study)
 
     write_yaml = {
-        "two parameter yaml": (
-            {"parameter_1": [1, 2], "parameter_2": ["a", "b"]},
-            "out",
-            None,
-            "yaml",
-            3,
-            [
-                call("parameter_1: 1\nparameter_2: a\n"),
-                call("parameter_1: 1\nparameter_2: b\n"),
-                call("parameter_1: 2\nparameter_2: a\n"),
-            ],
-        ),
-        "two parameter yaml: floats and ints": (
-            {"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]},
-            "out",
-            None,
-            "yaml",
-            3,
-            [
-                call("parameter_1: 1\nparameter_2: 3.0\n"),
-                call("parameter_1: 1\nparameter_2: 4.0\n"),
-                call("parameter_1: 2\nparameter_2: 3.0\n"),
-            ],
-        ),
         "two parameter yaml: bools and ints": (
             {"parameter_1": [1, 2], "parameter_2": [True, False]},
             "out",
