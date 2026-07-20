@@ -4039,6 +4039,26 @@ test__write_cases = {
         None,
         does_not_raise,
     ),
+    # TODO: VVV Remove uses of output_file_template in favor of set_name_template and ``write(output_directory=)``
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1023
+    "CartesianProduct two parameters: output directory, YAML, output file template, dry run": (
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2], "parameter_2": ["a", "b"]}, output_file_template="out"
+        ),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('/directory/out0.yaml')}\nparameter_1: 1\nparameter_2: a\n",
+            f"{pathlib.Path('/directory/out1.yaml')}\nparameter_1: 1\nparameter_2: b\n",
+            f"{pathlib.Path('/directory/out2.yaml')}\nparameter_1: 2\nparameter_2: b\n",
+            f"{pathlib.Path('/directory/out3.yaml')}\nparameter_1: 2\nparameter_2: a\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1023
+    # TODO: ^^^ Remove uses of output_file_template in favor of set_name_template and ``write(output_directory=)``
     "CartesianProduct two parameters floats/ints: output directory, YAML, set name template": (
         parameter_generators.CartesianProduct(
             {"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}, set_name_template="out"
