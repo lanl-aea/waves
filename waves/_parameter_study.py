@@ -65,7 +65,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "-t",
         "--output-file-type",
-        default=_settings._default_output_file_type_cli,
+        default="yaml",
         choices=_settings._allowable_output_file_types,
         help="Output file type (default: %(default)s)",
     )
