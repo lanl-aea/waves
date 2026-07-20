@@ -4361,6 +4361,32 @@ test__write_cases = {
         None,
         does_not_raise,
     ),
+    "OneAtATime two parameters int/bool: output directory, YAML, set name template": (
+        parameter_generators.OneAtATime({"parameter_1": [1, 2], "parameter_2": [True, False]}, set_name_template="out"),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
+        None,
+        None,
+        [
+            "parameter_1: 1\nparameter_2: true\n",
+            "parameter_1: 2\nparameter_2: true\n",
+            "parameter_1: 1\nparameter_2: false\n",
+        ],
+        None,
+        does_not_raise,
+    ),
+    "OneAtATime two parameters int/bool: output directory, YAML, set name template, dry run": (
+        parameter_generators.OneAtATime({"parameter_1": [1, 2], "parameter_2": [True, False]}, set_name_template="out"),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('/directory/out0.yaml')}\nparameter_1: 1\nparameter_2: true\n",
+            f"{pathlib.Path('/directory/out1.yaml')}\nparameter_1: 2\nparameter_2: true\n",
+            f"{pathlib.Path('/directory/out2.yaml')}\nparameter_1: 1\nparameter_2: false\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
 }
 
 
