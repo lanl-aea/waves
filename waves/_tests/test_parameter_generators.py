@@ -2564,7 +2564,6 @@ class TestParameterGenerator:
     def test_write_call_to_write_meta(self) -> None:
         write_parameter_generator = DummyGenerator({})
         write_parameter_generator._write_meta_flag = True
-        write_parameter_generator._provided_output_file_template = True
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta") as mock_write_meta,
             patch("waves.parameter_generators._write") as mock_private_write,

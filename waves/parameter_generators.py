@@ -138,6 +138,7 @@ class ParameterGenerator(ABC):
                 "The options 'output_file_template' and 'output_file' are mutually exclusive. "
                 "Please specify one or the other."
             )
+        self._output_directory: pathlib.Path | None
         if output_file_template is not None:
             if _settings._template_placeholder not in output_file_template.template:
                 output_file_template = _utilities._AtSignTemplate(
