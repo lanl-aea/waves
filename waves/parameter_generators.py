@@ -100,9 +100,16 @@ class ParameterGenerator(ABC):
         )
         self._require_previous_parameter_study = require_previous_parameter_study
         self._overwrite = overwrite
-        # Deprecate the ParameterGenerator write_meta API and method
+        # TODO: VVV Deprecate the ParameterGenerator write_meta API and method
         # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1024
         self._write_meta_flag = write_meta
+        if self._write_meta_flag is True:
+            warnings.warn(
+                "The write_meta attribute will be removed in a future version."
+                " Please use the ParameterGenerator.write(meta_file) API instead."
+            )
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1024
+        # TODO: ^^^ Deprecate the ParameterGenerator write_meta API and method
         if original_index and previous_parameter_study is not None:
             raise MutuallyExclusiveError(
                 "The original index and previous parameter study features are mutually incompatible."
@@ -207,8 +214,14 @@ class ParameterGenerator(ABC):
     def overwrite(self) -> bool:
         return self._overwrite
 
+    # TODO: Deprecate the ParameterGenerator write_meta API and method
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1024
     @property
     def write_meta(self) -> bool:
+        warnings.warn(
+            "The write_meta attribute will be removed in a future version."
+            " Please use the ParameterGenerator.write(meta_file) API instead."
+        )
         return self._write_meta_flag
 
     @property
