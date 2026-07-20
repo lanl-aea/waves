@@ -4327,7 +4327,9 @@ test_class_write_cases.update(
                     {
                         "parameter_1": xarray.DataArray(
                             [2, 1],
-                            coords={"set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])},
+                            coords={
+                                "set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])
+                            },
                         ),
                         "set_hash": xarray.DataArray(
                             ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
@@ -4360,7 +4362,9 @@ test_class_write_cases.update(
                     {
                         "parameter_1": xarray.DataArray(
                             [2, 1],
-                            coords={"set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])},
+                            coords={
+                                "set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])
+                            },
                         ),
                         "set_hash": xarray.DataArray(
                             ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
@@ -4453,6 +4457,7 @@ test_class_write_cases.update(
         ),
     }
 )
+
 
 @pytest.mark.parametrize(
     (
