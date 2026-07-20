@@ -35,29 +35,29 @@ def get_parser() -> argparse.ArgumentParser:
     # Mutually exclusive output file options
     output_file_group = parser.add_mutually_exclusive_group()
     output_file_group.add_argument(
-        "-o",
-        "--output-file-template",
-        default=_settings._default_output_file_template,
-        dest="OUTPUT_FILE_TEMPLATE",
-        help=(
-            "Output file template. May contain pathseps for an absolute or relative "
-            f"path template. May contain the ``{_settings._template_placeholder}`` "
-            "set number placeholder in the file basename but not in the path. "
-            "If the placeholder is not found, it will be "
-            "appended to the template string. Output files are overwritten if the "
-            "content of the file has changed or if ``overwrite`` is True "
-            "(default: %(default)s)"
-        ),
-    )
-    output_file_group.add_argument(
         "-f",
         "--output-file",
+        type=pathlib.Path,
         default=_settings._default_output_file,
         dest="OUTPUT_FILE",
         help=(
-            "Output file name. May contain pathseps for an absolute or relative path. "
+            "Write a single parameter study file at this absolute or relative path. "
             "Output file is overwritten if the content of the file has changed or if "
             "``overwrite`` is True (default: %(default)s)"
+        ),
+    )
+    output_file_group.add_argument(
+        "-o",
+        "--output-directory",
+        type=pathlib.Path,
+        default=None,
+        dest="OUTPUT_DIRECTORY",
+        help=(
+            "Write one output file per parameter set in the directory at this absolute or relative"
+            " path. Filenames are based on the set name and output file type,"
+            " ``{output_directory}/{set_name}.{output_file_type}``."
+            " Output file is overwritten if the content of the file has changed or if "
+            " ``overwrite`` is True (default: %(default)s)"
         ),
     )
 
@@ -81,6 +81,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "-p",
         "--previous-parameter-study",
+        type=pathlib.Path,
         default=_settings._default_previous_parameter_study,
         dest="PREVIOUS_PARAMETER_STUDY",
         help=(
@@ -104,12 +105,10 @@ def get_parser() -> argparse.ArgumentParser:
         help="Print contents of new parameter study output files to STDOUT and exit (default: %(default)s)",
     )
     parser.add_argument(
-        "--write-meta",
-        action="store_true",
-        help=(
-            "Write a meta file named 'parameter_study_meta.txt' containing the parameter set file names "
-            "(default: %(default)s)"
-        ),
+        "--meta-file",
+        type=pathlib.Path,
+        dest="META_FILE",
+        help=("Write a meta file containing the parameter set file absolute path(s) (default: %(default)s)"),
     )
 
     return parser
@@ -140,28 +139,32 @@ def read_parameter_schema(input_file: str | pathlib.Path | io.TextIOWrapper | No
 def main(
     subcommand: str,
     input_file: str | pathlib.Path | io.TextIOWrapper | None,
-    output_file_template: str | None = _settings._default_output_file_template,
-    output_file: str | None = _settings._default_output_file,
-    output_file_type: _settings._allowable_output_file_typing = _settings._default_output_file_type_cli,
+    output_file: str | None = None,
+    output_directory: str | None = None,
+    output_file_type: _settings._allowable_output_file_typing = "yaml",
     set_name_template: str = _settings._default_set_name_template,
-    previous_parameter_study: str | None = _settings._default_previous_parameter_study,
-    require_previous_parameter_study: bool = _settings._default_require_previous_parameter_study,
-    overwrite: bool = _settings._default_overwrite,
-    dry_run: bool = _settings._default_dry_run,
-    write_meta: bool = _settings._default_write_meta_flag,
+    previous_parameter_study: str | None = None,
+    require_previous_parameter_study: bool = False,
+    overwrite: bool = False,
+    dry_run: bool = False,
+    meta_file: str | None = None,
 ) -> None:
     """Build parameter studies.
 
     :param str subcommand: parameter study type to build
     :param str input_file: path to YAML formatted parameter study schema file
-    :param str output_file_template: output file template name
-    :param str output_file: relative or absolute output file path
-    :param str output_file_type: yaml or h5
+    :param output_file: Write a single parameter study file at this absolute or relative path.
+    :param output_directory: Write one output file per parameter set in the directory at this absolute or relative
+        path. Filenames are based on the set name and output file type,
+        ``{output_directory}/{set_name}.{output_file_type}``.
+    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param str set_name_template: parameter set name string template. May contain '@number' for the set number.
     :param str previous_parameter_study: relative or absolute path to previous parameter study file
-    :param bool overwrite: overwrite all existing parameter set file(s)
-    :param bool dry_run: print what files would have been written, but do no work
-    :param bool write_meta: write a meta file name 'parameter_study_meta.txt' containing the parameter set file path(s)
+    :param overwrite: Overwrite existing output files
+    :param dry_run: Print contents of new or overwritten parameter study output file(s) to STDOUT and exit.
+    :param meta_file: Write a meta file at this absolute or relative path containing the parameter set file names, one
+        per line. Useful for command line execution with build systems that require an explicit file list for target
+        creation.
     """
     try:
         parameter_schema = read_parameter_schema(input_file)
@@ -180,18 +183,20 @@ def main(
     }
     parameter_generator = available_parameter_generators[subcommand](  # type: ignore[abstract]
         parameter_schema,
-        output_file_template=output_file_template,
-        output_file=output_file,
-        output_file_type=output_file_type,
         set_name_template=set_name_template,
         previous_parameter_study=previous_parameter_study,
         require_previous_parameter_study=require_previous_parameter_study,
-        overwrite=overwrite,
-        write_meta=write_meta,
     )
 
     # Build the parameter study.
-    parameter_generator.write(dry_run=dry_run)
+    parameter_generator.write(
+        output_file=output_file,
+        output_directory=output_directory,
+        output_file_type=output_file_type,
+        overwrite=overwrite,
+        dry_run=dry_run,
+        meta_file=meta_file,
+    )
 
 
 # Limit help() and 'from module import *' behavior to the module's public API
