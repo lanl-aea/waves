@@ -139,27 +139,27 @@ def read_parameter_schema(input_file: str | pathlib.Path | io.TextIOWrapper | No
 def main(
     subcommand: str,
     input_file: str | pathlib.Path | io.TextIOWrapper | None,
-    output_file: str | None = None,
-    output_directory: str | None = None,
+    output_file: pathlib.Path | None = None,
+    output_directory: pathlib.Path | None = None,
     output_file_type: _settings._allowable_output_file_typing = "yaml",
     set_name_template: str = _settings._default_set_name_template,
-    previous_parameter_study: str | None = None,
+    previous_parameter_study: pathlib.Path | None = None,
     require_previous_parameter_study: bool = False,
     overwrite: bool = False,
     dry_run: bool = False,
-    meta_file: str | None = None,
+    meta_file: pathlib.Path | None = None,
 ) -> None:
     """Build parameter studies.
 
-    :param str subcommand: parameter study type to build
-    :param str input_file: path to YAML formatted parameter study schema file
+    :param subcommand: parameter study type to build
+    :param input_file: path to YAML formatted parameter study schema file
     :param output_file: Write a single parameter study file at this absolute or relative path.
     :param output_directory: Write one output file per parameter set in the directory at this absolute or relative
         path. Filenames are based on the set name and output file type,
         ``{output_directory}/{set_name}.{output_file_type}``.
     :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
-    :param str set_name_template: parameter set name string template. May contain '@number' for the set number.
-    :param str previous_parameter_study: relative or absolute path to previous parameter study file
+    :param set_name_template: parameter set name string template. May contain '@number' for the set number.
+    :param previous_parameter_study: relative or absolute path to previous parameter study file
     :param overwrite: Overwrite existing output files
     :param dry_run: Print contents of new or overwritten parameter study output file(s) to STDOUT and exit.
     :param meta_file: Write a meta file at this absolute or relative path containing the parameter set file names, one
