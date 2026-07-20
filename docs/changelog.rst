@@ -12,6 +12,9 @@ Breaking changes
 ================
 - Accept entire ParameterGenerator class objects in CatenationStudy API. Required to preserve generator-specific
   positional and keyword arguments (:issue:`1022`, :merge:`1325`). By `Kyle Brindley`_.
+- Change the parameter study CLI options ``--output-file-template`` to ``--output-directory`` and ``--write-meta`` flag
+  to ``--meta-file`` argument. Change driven by improved clarity in internal implementation and ease of testing. By
+  `Kyle Brindley`_.
 
 Bug fixes
 =========
