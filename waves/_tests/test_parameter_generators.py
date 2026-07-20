@@ -1,6 +1,7 @@
 """Test ParameterGenerator Abstract Base Class."""
 
 import contextlib
+import copy
 import pathlib
 import string
 import typing
@@ -3804,6 +3805,15 @@ test__write_cases = {
         None,
         does_not_raise,
     ),
+    "CartesianProduct (class init): output file, default type": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5")),
+        {},
+        ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
     "CartesianProduct: output file, default type, overwrite": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_file": pathlib.Path("output.h5"), "overwrite": True},
@@ -3822,6 +3832,17 @@ test__write_cases = {
                 },
             ).set_coords("set_hash"),
         ],
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct (class init): output file, default type, overwrite": (
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5"), overwrite=True
+        ),
+        {},
+        ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+        None,
         None,
         None,
         does_not_raise,
@@ -4266,6 +4287,60 @@ def test__write(
             assert mock_write_meta_file.call_args[0][1] == expected_write_meta_file_contents
 
 
+# In the class method, the generator attributes are not ignored. Override the ``(class init)`` test cases where the
+# generator attributes are respected.
+test_class_write_cases = copy.deepcopy(test__write_cases)
+test_class_write_cases.update(
+    {
+        "CartesianProduct (class init): output file, default type": (
+            parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5")),
+            {},
+            None,
+            [
+                xarray.Dataset(
+                    {
+                        "parameter_1": xarray.DataArray(
+                            [2, 1],
+                            coords={"set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])},
+                        ),
+                        "set_hash": xarray.DataArray(
+                            ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                            dims="set_name",
+                        ),
+                    },
+                ).set_coords("set_hash"),
+            ],
+            None,
+            None,
+            does_not_raise,
+        ),
+    "CartesianProduct (class init): output file, default type, overwrite": (
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5"), overwrite=True
+        ),
+        {},
+        None,
+        [
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2, 1],
+                        coords={"set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])},
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                        dims="set_name",
+                    ),
+                },
+            ).set_coords("set_hash"),
+        ],
+        None,
+        None,
+        does_not_raise,
+    ),
+    }
+)
+
 @pytest.mark.parametrize(
     (
         "generator",
@@ -4276,8 +4351,8 @@ def test__write(
         "expected_write_meta_file_contents",
         "outcome",
     ),
-    test__write_cases.values(),
-    ids=test__write_cases.keys(),
+    test_class_write_cases.values(),
+    ids=test_class_write_cases.keys(),
 )
 def test_class_write(
     generator: parameter_generators.ParameterGenerator,
