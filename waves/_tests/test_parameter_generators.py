@@ -4019,7 +4019,29 @@ test__write_cases = {
         ),
         does_not_raise,
     ),
-    "CustomStudy: output directory, YAML": (
+    "CustomStudy: output file, YAML": (
+        parameter_generators.CustomStudy(
+            {"parameter_names": ["a"], "parameter_samples": numpy.array([[1], [2]], dtype=object)},
+        ),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
+        None,
+        None,
+        ["parameter_set0:\n  a: 2\nparameter_set1:\n  a: 1\n"],
+        None,
+        does_not_raise,
+    ),
+    "CustomStudy: output file, YAML, dry run": (
+        parameter_generators.CustomStudy(
+            {"parameter_names": ["a"], "parameter_samples": numpy.array([[1], [2]], dtype=object)},
+        ),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
+        [f"{pathlib.Path('output.yaml')}\nparameter_set0:\n  a: 2\nparameter_set1:\n  a: 1\n"],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CustomStudy: output directory, YAML, set name template": (
         parameter_generators.CustomStudy(
             {"parameter_names": ["a"], "parameter_samples": numpy.array([[1], [2]], dtype=object)},
             set_name_template="out",
@@ -4031,7 +4053,7 @@ test__write_cases = {
         None,
         does_not_raise,
     ),
-    "CustomStudy: output directory, YAML, dry run": (
+    "CustomStudy: output directory, YAML, set name template, dry run": (
         parameter_generators.CustomStudy(
             {"parameter_names": ["a"], "parameter_samples": numpy.array([[1], [2]], dtype=object)},
             set_name_template="out",
@@ -4046,7 +4068,7 @@ test__write_cases = {
         None,
         does_not_raise,
     ),
-    "CustomStudy two parameters: output directory, YAML": (
+    "CustomStudy two parameters: output directory, YAML, set name template": (
         parameter_generators.CustomStudy(
             {"parameter_names": ["a", "b"], "parameter_samples": numpy.array([[1, 3.0], [2, 4.5]], dtype=object)},
             set_name_template="out",
@@ -4058,7 +4080,7 @@ test__write_cases = {
         None,
         does_not_raise,
     ),
-    "CustomStudy two parameters: output directory, YAML, dry run": (
+    "CustomStudy two parameters: output directory, YAML, set name template, dry run": (
         parameter_generators.CustomStudy(
             {"parameter_names": ["a", "b"], "parameter_samples": numpy.array([[1, 3.0], [2, 4.5]], dtype=object)},
             set_name_template="out",
