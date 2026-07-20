@@ -4940,6 +4940,28 @@ test_class_write_cases.update(
             None,
             does_not_raise,
         ),
+        "CartesianProduct (class init): output file, YAML, dry run": (
+            parameter_generators.CartesianProduct(
+                {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.yaml"), output_file_type="yaml"
+            ),
+            {"dry_run": True},
+            [f"{pathlib.Path('output.yaml')}\nparameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+            None,
+            None,
+            None,
+            does_not_raise,
+        ),
+        "CartesianProduct (class init): output file (overridden), YAML, dry run": (
+            parameter_generators.CartesianProduct(
+                {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.yaml"), output_file_type="yaml"
+            ),
+            {"output_file": pathlib.Path("different.yaml"), "dry_run": True},
+            [f"{pathlib.Path('different.yaml')}\nparameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+            None,
+            None,
+            None,
+            does_not_raise,
+        ),
         "CartesianProduct (class init): output file, YAML (overridden)": (
             parameter_generators.CartesianProduct(
                 {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.yaml"), output_file_type="yaml"
