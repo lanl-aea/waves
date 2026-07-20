@@ -4264,3 +4264,59 @@ def test__write(
         else:
             mock_write_meta_file.assert_called_once()
             assert mock_write_meta_file.call_args[0][1] == expected_write_meta_file_contents
+
+
+@pytest.mark.parametrize(
+    (
+        "generator",
+        "kwargs",
+        "expected_stdout",
+        "expected_to_netcdf",
+        "expected_write",
+        "expected_write_meta_file_contents",
+        "outcome",
+    ),
+    test__write_cases.values(),
+    ids=test__write_cases.keys(),
+)
+def test_class_write(
+    generator: parameter_generators.ParameterGenerator,
+    kwargs: dict,
+    expected_stdout: list[str] | None,
+    expected_to_netcdf: list[xarray.Dataset] | None,
+    expected_write: list[str] | None,
+    expected_write_meta_file_contents: str | None,
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
+    if sum([thing is not None for thing in (expected_stdout, expected_to_netcdf, expected_write)]) > 1:
+        raise ValueError("Do not pass more than one expected output")
+    with (
+        outcome,
+        patch("sys.stdout.write") as mock_stdout,
+        patch("xarray.Dataset.to_netcdf") as mock_to_netcdf,
+        patch("pathlib.Path.is_file", return_value=False),
+        patch("pathlib.Path.open", mock_open()) as mock_file,
+        patch("waves.parameter_generators._write_parameter_study_meta_file") as mock_write_meta_file,
+        patch("pathlib.Path.mkdir"),
+    ):
+        generator.write(**kwargs)
+        if expected_stdout is None:
+            mock_stdout.assert_not_called()
+        else:
+            assert mock_stdout.call_count == len(expected_stdout)
+            mock_stdout.assert_has_calls([call(item) for item in expected_stdout])
+        if expected_to_netcdf is None:
+            mock_to_netcdf.assert_not_called()
+        else:
+            # TODO: figure out how to assert the dataset/output association
+            assert mock_to_netcdf.call_count == len(expected_to_netcdf)
+        if expected_write is None:
+            mock_file().assert_not_called()
+        else:
+            assert mock_file().write.call_count == len(expected_write)
+            mock_file().write.assert_has_calls([call(item) for item in expected_write])
+        if expected_write_meta_file_contents is None:
+            mock_write_meta_file.assert_not_called()
+        else:
+            mock_write_meta_file.assert_called_once()
+            assert mock_write_meta_file.call_args[0][1] == expected_write_meta_file_contents
