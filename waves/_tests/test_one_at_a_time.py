@@ -2,14 +2,13 @@
 
 import contextlib
 import typing
-import unittest
-from unittest.mock import call, mock_open, patch
+from unittest.mock import patch
 
 import numpy
 import pytest
 import xarray
 
-from waves._settings import _allowable_output_file_typing, _set_coordinate_key
+from waves._settings import _set_coordinate_key
 from waves._tests.common import consistent_hash_parameter_check, merge_samplers, self_consistency_checks
 from waves.exceptions import SchemaValidationError
 from waves.parameter_generators import OneAtATime
