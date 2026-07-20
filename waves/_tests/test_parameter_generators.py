@@ -4470,10 +4470,7 @@ test__write_cases = {
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
         None,
         None,
-        [
-            "out0:\n  parameter_1: 1\n"
-            "out1:\n  parameter_1: 2\n"
-        ],
+        ["out0:\n  parameter_1: 1\nout1:\n  parameter_1: 2\n"],
         None,
         does_not_raise,
     ),
@@ -4486,11 +4483,7 @@ test__write_cases = {
             set_name_template="out",
         ),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
-        [
-            f"{pathlib.Path('output.yaml')}\n"
-            "out0:\n  parameter_1: 1\n"
-            "out1:\n  parameter_1: 2\n"
-        ],
+        [f"{pathlib.Path('output.yaml')}\nout0:\n  parameter_1: 1\nout1:\n  parameter_1: 2\n"],
         None,
         None,
         None,
