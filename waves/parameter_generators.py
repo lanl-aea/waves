@@ -54,8 +54,6 @@ class ParameterGenerator(ABC):
         the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param require_previous_parameter_study: Raise a ``RuntimeError`` if the previous parameter study file is missing.
     :param overwrite: Overwrite existing output files
-    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
-        Useful for command line execution with build systems that require an explicit file list for target creation.
     :param original_index: Assign a coordinate to track the original sample index order. Incompatible with merging
         parameter studies and previous parameter study behaviors.
 
@@ -85,9 +83,6 @@ class ParameterGenerator(ABC):
         previous_parameter_study: str | pathlib.Path | None = _settings._default_previous_parameter_study,
         require_previous_parameter_study: bool = _settings._default_require_previous_parameter_study,
         overwrite: bool = _settings._default_overwrite,
-        # Deprecate the ParameterGenerator write_meta API and method
-        # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1024
-        write_meta: bool = _settings._default_write_meta_flag,
         original_index: bool = False,
         **kwargs,
     ) -> None:
@@ -100,16 +95,6 @@ class ParameterGenerator(ABC):
         )
         self._require_previous_parameter_study = require_previous_parameter_study
         self._overwrite = overwrite
-        # TODO: VVV Deprecate the ParameterGenerator write_meta API and method
-        # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1024
-        self._write_meta_flag = write_meta
-        if self._write_meta_flag is True:
-            warnings.warn(
-                "The write_meta attribute will be removed in a future version."
-                " Please use the ParameterGenerator.write(meta_file) API instead."
-            )
-        # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1024
-        # TODO: ^^^ Deprecate the ParameterGenerator write_meta API and method
         if original_index and previous_parameter_study is not None:
             raise MutuallyExclusiveError(
                 "The original index and previous parameter study features are mutually incompatible."
@@ -130,6 +115,16 @@ class ParameterGenerator(ABC):
             else:
                 warnings.warn(message)
 
+        # TODO: VVV Deprecate the ParameterGenerator write_meta API and method
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1024
+        if "write_meta" in kwargs:
+            warnings.warn(
+                "The write_meta attribute will be removed in a future version."
+                " Please use the ParameterGenerator.write(meta_file) API instead."
+            )
+            self._write_meta_flag = kwargs.pop("write_meta")
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1024
+        # TODO: ^^^ Deprecate the ParameterGenerator write_meta API and method
         # TODO: VVV Remove uses of output_file_template in favor of set_name_template and ``write(output_directory=)``
         # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1023
         # Override set name template if output name template is provided. Append set number placeholder if missing
@@ -711,8 +706,6 @@ class CartesianProduct(ParameterGenerator):
         the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param require_previous_parameter_study: Raise a ``RuntimeError`` if the previous parameter study file is missing.
     :param overwrite: Overwrite existing output files
-    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
-        Useful for command line execution with build systems that require an explicit file list for target creation.
 
     :var self.parameter_study: The final parameter study XArray Dataset object
 
@@ -791,8 +784,6 @@ class LatinHypercube(_ScipyGenerator):
         the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param require_previous_parameter_study: Raise a ``RuntimeError`` if the previous parameter study file is missing.
     :param overwrite: Overwrite existing output files
-    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
-        Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
 
     :var self.parameter_distributions: A dictionary mapping parameter names to the `scipy.stats`_ distribution
@@ -878,8 +869,6 @@ class OneAtATime(ParameterGenerator):
         the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param require_previous_parameter_study: Raise a ``RuntimeError`` if the previous parameter study file is missing.
     :param overwrite: Overwrite existing output files
-    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
-        Useful for command line execution with build systems that require an explicit file list for target creation.
 
     :var self.parameter_study: The final parameter study XArray Dataset object
 
@@ -993,8 +982,6 @@ class CustomStudy(ParameterGenerator):
         the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param require_previous_parameter_study: Raise a ``RuntimeError`` if the previous parameter study file is missing.
     :param overwrite: Overwrite existing output files
-    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
-        Useful for command line execution with build systems that require an explicit file list for target creation.
 
     :var self.parameter_study: The final parameter study XArray Dataset object
 
@@ -1089,8 +1076,6 @@ class SobolSequence(_ScipyGenerator):
         previous and current study are identical. If the parameter spaces are unique, the current study will propagate
         the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param overwrite: Overwrite existing output files
-    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
-        Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
 
     :var self.parameter_distributions: A dictionary mapping parameter names to the ``scipy.stats`` distribution
@@ -1181,8 +1166,6 @@ class ScipySampler(_ScipyGenerator):
         previous and current study are identical. If the parameter spaces are unique, the current study will propagate
         the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param overwrite: Overwrite existing output files
-    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
-        Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
 
     :var self.parameter_distributions: A dictionary mapping parameter names to the ``scipy.stats`` distribution
@@ -1315,8 +1298,8 @@ class SALibSampler(ParameterGenerator, ABC):
         previous and current study are identical. If the parameter spaces are unique, the current study will propagate
         the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param overwrite: Overwrite existing output files
-    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
-        Useful for command line execution with build systems that require an explicit file list for target creation.
+    :param original_index: Assign a coordinate to track the original sample index order. Incompatible with merging
+        parameter studies and previous parameter study behaviors.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
 
     :var self.parameter_study: The final parameter study XArray Dataset object
@@ -1516,8 +1499,6 @@ class CatenationStudy(ParameterGenerator):
         the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param require_previous_parameter_study: Raise a ``RuntimeError`` if the previous parameter study file is missing.
     :param overwrite: Overwrite existing output files
-    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
-        Useful for command line execution with build systems that require an explicit file list for target creation.
 
     :var self.parameter_study: The final merged parameter study XArray Dataset object
 
