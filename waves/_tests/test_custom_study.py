@@ -1,13 +1,13 @@
 """Test CustomStudy Class."""
 
 import contextlib
-from unittest.mock import call, mock_open, patch
+from unittest.mock import patch
 
 import numpy
 import pytest
 import xarray
 
-from waves._settings import _allowable_output_file_typing, _hash_coordinate_key, _set_coordinate_key
+from waves._settings import _hash_coordinate_key, _set_coordinate_key
 from waves._tests.common import merge_samplers
 from waves.exceptions import SchemaValidationError
 from waves.parameter_generators import CustomStudy

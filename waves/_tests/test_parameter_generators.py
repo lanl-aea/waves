@@ -3975,7 +3975,9 @@ test__write_cases = {
         does_not_raise,
     ),
     "CartesianProduct two parameters: output file, YAML, set name template": (
-        parameter_generators.CartesianProduct({"parameter_1": [1, 2], "parameter_2": ["a", "b"]}, set_name_template="out"),
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2], "parameter_2": ["a", "b"]}, set_name_template="out"
+        ),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
         None,
         None,
@@ -3989,7 +3991,9 @@ test__write_cases = {
         does_not_raise,
     ),
     "CartesianProduct two parameters: output file, YAML, set name template, dry run": (
-        parameter_generators.CartesianProduct({"parameter_1": [1, 2], "parameter_2": ["a", "b"]}, set_name_template="out"),
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2], "parameter_2": ["a", "b"]}, set_name_template="out"
+        ),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
         [
             f"{pathlib.Path('output.yaml')}\n"
@@ -4004,7 +4008,9 @@ test__write_cases = {
         does_not_raise,
     ),
     "CartesianProduct two parameters: output directory, YAML, set name template": (
-        parameter_generators.CartesianProduct({"parameter_1": [1, 2], "parameter_2": ["a", "b"]}, set_name_template="out"),
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2], "parameter_2": ["a", "b"]}, set_name_template="out"
+        ),
         {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
         None,
         None,
@@ -4018,7 +4024,9 @@ test__write_cases = {
         does_not_raise,
     ),
     "CartesianProduct two parameters: output directory, YAML, set name template, dry run": (
-        parameter_generators.CartesianProduct({"parameter_1": [1, 2], "parameter_2": ["a", "b"]}, set_name_template="out"),
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2], "parameter_2": ["a", "b"]}, set_name_template="out"
+        ),
         {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
         [
             f"{pathlib.Path('/directory/out0.yaml')}\nparameter_1: 1\nparameter_2: a\n",
@@ -4032,7 +4040,9 @@ test__write_cases = {
         does_not_raise,
     ),
     "CartesianProduct two parameters floats/ints: output directory, YAML, set name template": (
-        parameter_generators.CartesianProduct({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}, set_name_template="out"),
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}, set_name_template="out"
+        ),
         {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
         None,
         None,
@@ -4046,7 +4056,9 @@ test__write_cases = {
         does_not_raise,
     ),
     "CartesianProduct two parameters floats/ints: output directory, YAML, set name template, dry run": (
-        parameter_generators.CartesianProduct({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}, set_name_template="out"),
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}, set_name_template="out"
+        ),
         {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
         [
             f"{pathlib.Path('/directory/out0.yaml')}\nparameter_1: 1\nparameter_2: 4.0\n",
@@ -4060,7 +4072,9 @@ test__write_cases = {
         does_not_raise,
     ),
     "CartesianProduct two parameters bools/ints: output file, YAML, set name template": (
-        parameter_generators.CartesianProduct({"parameter_1": [1, 2], "parameter_2": [True, False]}, set_name_template="out"),
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2], "parameter_2": [True, False]}, set_name_template="out"
+        ),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
         None,
         None,
@@ -4074,7 +4088,9 @@ test__write_cases = {
         does_not_raise,
     ),
     "CartesianProduct two parameters bools/ints: output file, YAML, set name template, dry run": (
-        parameter_generators.CartesianProduct({"parameter_1": [1, 2], "parameter_2": [True, False]}, set_name_template="out"),
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2], "parameter_2": [True, False]}, set_name_template="out"
+        ),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
         [
             f"{pathlib.Path('output.yaml')}\n"
@@ -4089,7 +4105,9 @@ test__write_cases = {
         does_not_raise,
     ),
     "CartesianProduct two parameters bools/ints: output directory, YAML, set name template": (
-        parameter_generators.CartesianProduct({"parameter_1": [1, 2], "parameter_2": [True, False]}, set_name_template="out"),
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2], "parameter_2": [True, False]}, set_name_template="out"
+        ),
         {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
         None,
         None,
@@ -4103,7 +4121,9 @@ test__write_cases = {
         does_not_raise,
     ),
     "CartesianProduct two parameters bools/ints: output directory, YAML, set name template, dry run": (
-        parameter_generators.CartesianProduct({"parameter_1": [1, 2], "parameter_2": [True, False]}, set_name_template="out"),
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2], "parameter_2": [True, False]}, set_name_template="out"
+        ),
         {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
         [
             f"{pathlib.Path('/directory/out0.yaml')}\nparameter_1: 2\nparameter_2: true\n",
