@@ -3783,6 +3783,16 @@ test__write_cases = {
         None,
         does_not_raise,
     ),
+    # Module function ignores class attributes
+    "CartesianProduct (class init): output file, default type": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5")),
+        {},
+        ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
     "CartesianProduct: output file, default type": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_file": pathlib.Path("output.h5")},
@@ -3805,8 +3815,11 @@ test__write_cases = {
         None,
         does_not_raise,
     ),
-    "CartesianProduct (class init): output file, default type": (
-        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5")),
+    # Module function ignores class attributes
+    "CartesianProduct (class init): output file, default type, overwrite": (
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5"), overwrite=True
+        ),
         {},
         ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
         None,
@@ -3832,17 +3845,6 @@ test__write_cases = {
                 },
             ).set_coords("set_hash"),
         ],
-        None,
-        None,
-        does_not_raise,
-    ),
-    "CartesianProduct (class init): output file, default type, overwrite": (
-        parameter_generators.CartesianProduct(
-            {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5"), overwrite=True
-        ),
-        {},
-        ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
-        None,
         None,
         None,
         does_not_raise,
@@ -4029,6 +4031,18 @@ test__write_cases = {
         f"{pathlib.Path('/directory/parameter_set0.h5').resolve()}\n{pathlib.Path('/directory/parameter_set1.h5').resolve()}\n",
         does_not_raise,
     ),
+    # Module function ignores class attributes
+    "CartesianProduct (class init): output file, H5": (
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5"), output_file_type="h5"
+        ),
+        {},
+        ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
     "CartesianProduct: output file, H5": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_file": pathlib.Path("output.h5"), "output_file_type": "h5"},
@@ -4151,6 +4165,18 @@ test__write_cases = {
             )
             + "\n",
         ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    # Module function ignores class attributes
+    "CartesianProduct (class init): output file, YAML": (
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.yaml"), output_file_type="yaml"
+        ),
+        {},
+        ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
         None,
         None,
         None,
@@ -4314,27 +4340,67 @@ test_class_write_cases.update(
             None,
             does_not_raise,
         ),
-    "CartesianProduct (class init): output file, default type, overwrite": (
+        "CartesianProduct (class init): output file, default type, overwrite": (
+            parameter_generators.CartesianProduct(
+                {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5"), overwrite=True
+            ),
+            {},
+            None,
+            [
+                xarray.Dataset(
+                    {
+                        "parameter_1": xarray.DataArray(
+                            [2, 1],
+                            coords={"set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])},
+                        ),
+                        "set_hash": xarray.DataArray(
+                            ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                            dims="set_name",
+                        ),
+                    },
+                ).set_coords("set_hash"),
+            ],
+            None,
+            None,
+            does_not_raise,
+        ),
+        "CartesianProduct (class init): output file, H5": (
+            parameter_generators.CartesianProduct(
+                {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5"), output_file_type="h5"
+            ),
+            {},
+            None,
+            [
+                xarray.Dataset(
+                    {
+                        "parameter_1": xarray.DataArray(
+                            [2, 1],
+                            coords={
+                                "set_name": xarray.DataArray(
+                                    ["parameter_set0", "parameter_set1"],
+                                    dims=["set_name"],
+                                )
+                            },
+                        ),
+                        "set_hash": xarray.DataArray(
+                            ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                            dims="set_name",
+                        ),
+                    },
+                ).set_coords("set_hash"),
+            ],
+            None,
+            None,
+            does_not_raise,
+        ),
+    "CartesianProduct (class init): output file, YAML": (
         parameter_generators.CartesianProduct(
-            {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5"), overwrite=True
+            {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.yaml"), output_file_type="yaml"
         ),
         {},
         None,
-        [
-            xarray.Dataset(
-                {
-                    "parameter_1": xarray.DataArray(
-                        [2, 1],
-                        coords={"set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])},
-                    ),
-                    "set_hash": xarray.DataArray(
-                        ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
-                        dims="set_name",
-                    ),
-                },
-            ).set_coords("set_hash"),
-        ],
         None,
+        ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
         None,
         does_not_raise,
     ),
