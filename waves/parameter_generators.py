@@ -123,6 +123,8 @@ class ParameterGenerator(ABC):
                 " Please use the ParameterGenerator.write(meta_file) API instead."
             )
             self._write_meta_flag = kwargs.pop("write_meta")
+        else:
+            self._write_meta_flag = False
         # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1024
         # TODO: ^^^ Deprecate the ParameterGenerator write_meta API and method
         # TODO: VVV Remove uses of output_file_template in favor of set_name_template and ``write(output_directory=)``
