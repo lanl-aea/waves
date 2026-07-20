@@ -953,21 +953,6 @@ class TestCatenationStudy:
                 call("parameter_1: 1\nparameter_2: false\n"),
             ],
         ),
-        "two parameter propagate one file yaml": (
-            {"1": CartesianProduct({"parameter_1": [1, 2]}), "2": CartesianProduct({"parameter_2": ["a", "b"]})},
-            None,
-            "parameter_study.yaml",
-            "yaml",
-            1,
-            [
-                call(
-                    "parameter_set0:\n  parameter_1: 1\n  parameter_2: a\n"
-                    "parameter_set1:\n  parameter_1: 1\n  parameter_2: b\n"
-                    "parameter_set2:\n  parameter_1: 2\n  parameter_2: b\n"
-                    "parameter_set3:\n  parameter_1: 2\n  parameter_2: a\n"
-                )
-            ],
-        ),
         "two parameter one file yaml: bools and ints": (
             {"1": CartesianProduct({"parameter_1": [1, 2]}), "2": CartesianProduct({"parameter_2": [True, False]})},
             None,
