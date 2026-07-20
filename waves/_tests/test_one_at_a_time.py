@@ -656,14 +656,6 @@ class TestOneAtATime:
             self_consistency_checks(merged_study)
 
     write_yaml = {
-        "one parameter yaml": (
-            {"parameter_1": [1, 2]},
-            "out",
-            None,
-            "yaml",
-            2,
-            [call("parameter_1: 1\n"), call("parameter_1: 2\n")],
-        ),
         "two parameter yaml": (
             {"parameter_1": [1, 2], "parameter_2": ["a", "b"]},
             "out",
