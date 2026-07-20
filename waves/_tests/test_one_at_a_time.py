@@ -655,56 +655,6 @@ class TestOneAtATime:
             consistent_hash_parameter_check(original_study, merged_study)
             self_consistency_checks(merged_study)
 
-    write_yaml = {
-        "two parameter one file yaml: bools": (
-            {"parameter_1": [1, 2], "parameter_2": [True, False]},
-            None,
-            "parameter_study.yaml",
-            "yaml",
-            1,
-            [
-                call(
-                    "parameter_set0:\n  parameter_1: 1\n  parameter_2: true\n"
-                    "parameter_set1:\n  parameter_1: 2\n  parameter_2: true\n"
-                    "parameter_set2:\n  parameter_1: 1\n  parameter_2: false\n"
-                )
-            ],
-        ),
-    }
-
-    @pytest.mark.parametrize(
-        ("parameter_schema", "output_file_template", "output_file", "output_type", "file_count", "expected_calls"),
-        write_yaml.values(),
-        ids=write_yaml.keys(),
-    )
-    def test_write_yaml(
-        self,
-        parameter_schema: dict,
-        output_file_template: str | None,
-        output_file: str | None,
-        output_type: _allowable_output_file_typing,
-        file_count: int,
-        expected_calls: list[unittest.mock._Call],
-    ) -> None:
-        with (
-            patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-            patch("pathlib.Path.open", mock_open()) as mock_file,
-            patch("xarray.Dataset.to_netcdf") as xarray_to_netcdf,
-            patch("sys.stdout.write") as stdout_write,
-            patch("pathlib.Path.is_file", return_value=False),
-        ):
-            test_write_yaml = OneAtATime(
-                parameter_schema,
-                output_file_template=output_file_template,
-                output_file=output_file,
-                output_file_type=output_type,
-            )
-            test_write_yaml.write()
-            stdout_write.assert_not_called()
-            xarray_to_netcdf.assert_not_called()
-            assert mock_file.call_count == file_count
-            mock_file().write.assert_has_calls(expected_calls, any_order=False)
-
     parameter_study_to_dict = {
         "ints": (
             {"ints": [1, 2]},
