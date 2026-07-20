@@ -45,7 +45,7 @@ class ParameterGenerator(ABC):
     :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
         Output file is overwritten if the content of the file has changed or if ``overwrite`` is True.
-    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
     :param set_name_template: Parameter set name template.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
@@ -302,7 +302,7 @@ class ParameterGenerator(ABC):
         :param output_directory: Write one output file per parameter set in the directory at this absolute or relative
             path. Filenames are based on the set name and output file type,
             ``{output_directory}/{set_name}.{output_file_type}``.
-        :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
         :param overwrite: Overwrite existing output files
         :param dry_run: Print contents of new or overwritten parameter study output file(s) to STDOUT and exit.
         :param meta_file: Write a meta file at this absolute or relative path containing the parameter set file names, one
@@ -699,7 +699,7 @@ class CartesianProduct(ParameterGenerator):
     :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
         Output file is overwritten if the content of the file has changed or if ``overwrite`` is True.
-    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
@@ -777,7 +777,7 @@ class LatinHypercube(_ScipyGenerator):
     :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
         Output file is overwritten if the content of the file has changed or if ``overwrite`` is True.
-    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
@@ -862,7 +862,7 @@ class OneAtATime(ParameterGenerator):
     :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
         Output file is overwritten if the content of the file has changed or if ``overwrite`` is True.
-    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
@@ -975,7 +975,7 @@ class CustomStudy(ParameterGenerator):
     :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
         Output file is overwritten if the content of the file has changed or if ``overwrite`` is True.
-    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
@@ -1070,7 +1070,7 @@ class SobolSequence(_ScipyGenerator):
     :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
         Output file is overwritten if the content of the file has changed or if ``overwrite`` is True.
-    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
@@ -1160,7 +1160,7 @@ class ScipySampler(_ScipyGenerator):
     :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
         Output file is overwritten if the content of the file has changed or if ``overwrite`` is True.
-    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
@@ -1292,7 +1292,7 @@ class SALibSampler(ParameterGenerator, ABC):
     :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
         Output file is overwritten if the content of the file has changed or if ``overwrite`` is True.
-    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
@@ -1492,7 +1492,7 @@ class CatenationStudy(ParameterGenerator):
     :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
         Output file is overwritten if the content of the file has changed or if ``overwrite`` is True.
-    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
@@ -2177,7 +2177,7 @@ def _write(
     :param output_directory: Write one output file per parameter set in the directory at this absolute or relative
         path. Filenames are based on the set name and output file type,
         ``{output_directory}/{set_name}.{output_file_type}``.
-    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
     :param overwrite: Overwrite existing output files
     :param dry_run: Print contents of new or overwritten parameter study output file(s) to STDOUT and exit.
     :param meta_file: Write a meta file at this absolute or relative path containing the parameter set file names, one
