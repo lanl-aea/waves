@@ -914,19 +914,6 @@ class TestCatenationStudy:
             assert list(test_generate._set_names.values()) == list(expected_dataset[_set_coordinate_key].to_numpy())
 
     write_yaml = {
-        "two parameter propagate yaml": (
-            {"1": CartesianProduct({"parameter_1": [1, 2]}), "2": CartesianProduct({"parameter_2": ["a", "b"]})},
-            "out",
-            None,
-            "yaml",
-            4,
-            [
-                call("parameter_1: 1\nparameter_2: a\n"),
-                call("parameter_1: 1\nparameter_2: b\n"),
-                call("parameter_1: 2\nparameter_2: b\n"),
-                call("parameter_1: 2\nparameter_2: a\n"),
-            ],
-        ),
         "mixed generators ints and floats yaml": (
             {"1": CartesianProduct({"parameter_1": [1, 2]}), "2": OneAtATime({"parameter_2": [3.0, 4.0]})},
             "out",

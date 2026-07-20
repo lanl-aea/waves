@@ -4573,6 +4573,46 @@ test__write_cases = {
         None,
         does_not_raise,
     ),
+    "CatenationStudy two parameters int/str: output directory, YAML, set name template": (
+        parameter_generators.CatenationStudy(
+            {
+                "1": parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="out"),
+                "2": parameter_generators.CartesianProduct({"parameter_2": ["a", "b"]}, set_name_template="out"),
+            },
+            set_name_template="out",
+        ),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
+        None,
+        None,
+        [
+            "parameter_1: 1\nparameter_2: a\n",
+            "parameter_1: 1\nparameter_2: b\n",
+            "parameter_1: 2\nparameter_2: b\n",
+            "parameter_1: 2\nparameter_2: a\n",
+        ],
+        None,
+        does_not_raise,
+    ),
+    "CatenationStudy two parameters int/str: output directory, YAML, set name template, dry run": (
+        parameter_generators.CatenationStudy(
+            {
+                "1": parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="out"),
+                "2": parameter_generators.CartesianProduct({"parameter_2": ["a", "b"]}, set_name_template="out"),
+            },
+            set_name_template="out",
+        ),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('/directory/out0.yaml')}\nparameter_1: 1\nparameter_2: a\n",
+            f"{pathlib.Path('/directory/out1.yaml')}\nparameter_1: 1\nparameter_2: b\n",
+            f"{pathlib.Path('/directory/out2.yaml')}\nparameter_1: 2\nparameter_2: b\n",
+            f"{pathlib.Path('/directory/out3.yaml')}\nparameter_1: 2\nparameter_2: a\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
 }
 
 
