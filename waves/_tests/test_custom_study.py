@@ -1,13 +1,13 @@
 """Test CustomStudy Class."""
 
 import contextlib
-from unittest.mock import call, mock_open, patch
+from unittest.mock import patch
 
 import numpy
 import pytest
 import xarray
 
-from waves._settings import _allowable_output_file_typing, _hash_coordinate_key, _set_coordinate_key
+from waves._settings import _hash_coordinate_key, _set_coordinate_key
 from waves._tests.common import merge_samplers
 from waves.exceptions import SchemaValidationError
 from waves.parameter_generators import CustomStudy
@@ -535,71 +535,3 @@ class TestCustomStudy:
                 == test_merge2.parameter_study[_set_coordinate_key].values.tolist()
             )
             assert test_merge2._set_hashes == test_merge2.parameter_study[_hash_coordinate_key].values.tolist()
-
-    test_write_yaml_cases = {
-        "one parameter yaml": (
-            {"parameter_names": ["a"], "parameter_samples": numpy.array([[1], [2]], dtype=object)},
-            "out",
-            None,
-            "yaml",
-            2,
-            [call("a: 2\n"), call("a: 1\n")],
-        ),
-        "two parameter yaml": (
-            {"parameter_names": ["a", "b"], "parameter_samples": numpy.array([[1, 2.0], [3, 4.5]], dtype=object)},
-            "out",
-            None,
-            "yaml",
-            2,
-            [call("a: 1\nb: 2.0\n"), call("a: 3\nb: 4.5\n")],
-        ),
-        "one parameter one file yaml": (
-            {"parameter_names": ["a"], "parameter_samples": numpy.array([[1], [2]], dtype=object)},
-            None,
-            "parameter_study.yaml",
-            "yaml",
-            1,
-            [call("parameter_set0:\n  a: 2\nparameter_set1:\n  a: 1\n")],
-        ),
-        "two parameter one file yaml": (
-            {"parameter_names": ["a", "b"], "parameter_samples": numpy.array([[1, 2.0], [3, 4.5]], dtype=object)},
-            None,
-            "parameter_study.yaml",
-            "yaml",
-            1,
-            [call("parameter_set0:\n  a: 1\n  b: 2.0\nparameter_set1:\n  a: 3\n  b: 4.5\n")],
-        ),
-    }
-
-    @pytest.mark.parametrize(
-        ("parameter_schema", "output_file_template", "output_file", "output_type", "file_count", "expected_calls"),
-        test_write_yaml_cases.values(),
-        ids=test_write_yaml_cases.keys(),
-    )
-    def test_write_yaml(
-        self,
-        parameter_schema: dict,
-        output_file_template: str | None,
-        output_file: str | None,
-        output_type: _allowable_output_file_typing,
-        file_count: int,
-        expected_calls: int,
-    ) -> None:
-        with (
-            patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-            patch("pathlib.Path.open", mock_open()) as mock_file,
-            patch("xarray.Dataset.to_netcdf") as xarray_to_netcdf,
-            patch("sys.stdout.write") as stdout_write,
-            patch("pathlib.Path.is_file", return_value=False),
-        ):
-            test_write_yaml = CustomStudy(
-                parameter_schema,
-                output_file_template=output_file_template,
-                output_file=output_file,
-                output_file_type=output_type,
-            )
-            test_write_yaml.write()
-            stdout_write.assert_not_called()
-            xarray_to_netcdf.assert_not_called()
-            assert mock_file.call_count == file_count
-            mock_file().write.assert_has_calls(expected_calls, any_order=False)

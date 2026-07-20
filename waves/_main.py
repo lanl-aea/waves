@@ -69,15 +69,15 @@ def main() -> None:
             _parameter_study.main(
                 args.subcommand,
                 args.INPUT_FILE,
-                output_file_template=args.OUTPUT_FILE_TEMPLATE,
                 output_file=args.OUTPUT_FILE,
+                output_directory=args.OUTPUT_DIRECTORY,
                 output_file_type=args.output_file_type,
                 set_name_template=args.SET_NAME_TEMPLATE,
                 previous_parameter_study=args.PREVIOUS_PARAMETER_STUDY,
                 require_previous_parameter_study=args.require_previous_parameter_study,
                 overwrite=args.overwrite,
                 dry_run=args.dry_run,
-                write_meta=args.write_meta,
+                meta_file=args.META_FILE,
             )
         elif args.subcommand == "print_study":
             _print_study.main(args.PARAMETER_STUDY_FILE)

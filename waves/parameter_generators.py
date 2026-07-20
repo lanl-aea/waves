@@ -24,7 +24,7 @@ import yaml
 
 from waves import _settings, _utilities
 from waves._settings import _hash_coordinate_key, _original_coordinate_key, _set_coordinate_key
-from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
+from waves.exceptions import APIError, ChoicesError, MutuallyExclusiveError, SchemaValidationError
 
 _exclude_from_namespace = set(globals().keys())
 
@@ -42,18 +42,11 @@ class ParameterGenerator(ABC):
 
     :param parameter_schema: The YAML loaded parameter study schema dictionary, e.g.
         ``{parameter_name: schema_value}``.  Validated on class instantiation.
-    :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
-        parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
-        relative path template. May contain the ``@number`` set number placeholder in the file basename but not in the
-        path. If the placeholder is not found it will be appended to the template string. Output files are overwritten
-        if the content of the file has changed or if ``overwrite`` is True. ``output_file_template`` and ``output_file``
-        are mutually exclusive.
     :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
-        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
-        and ``output_file_template`` are mutually exclusive.
-    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
-    :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
+        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True.
+    :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
+    :param set_name_template: Parameter set name template.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
         Set name to content associations of the previous study are preserved when the parameter spaces between the
@@ -61,8 +54,6 @@ class ParameterGenerator(ABC):
         the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param require_previous_parameter_study: Raise a ``RuntimeError`` if the previous parameter study file is missing.
     :param overwrite: Overwrite existing output files
-    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
-        Useful for command line execution with build systems that require an explicit file list for target creation.
     :param original_index: Assign a coordinate to track the original sample index order. Incompatible with merging
         parameter studies and previous parameter study behaviors.
 
@@ -86,21 +77,16 @@ class ParameterGenerator(ABC):
     def __init__(
         self,
         parameter_schema: dict,
-        output_file_template: str | None = _settings._default_output_file_template,
         output_file: str | pathlib.Path | None = _settings._default_output_file,
         output_file_type: _settings._allowable_output_file_typing = _settings._default_output_file_type_api,
         set_name_template: str = _settings._default_set_name_template,
         previous_parameter_study: str | pathlib.Path | None = _settings._default_previous_parameter_study,
         require_previous_parameter_study: bool = _settings._default_require_previous_parameter_study,
         overwrite: bool = _settings._default_overwrite,
-        write_meta: bool = _settings._default_write_meta_flag,
         original_index: bool = False,
         **kwargs,
     ) -> None:
         self._parameter_schema = parameter_schema
-        self._output_file_template = (
-            _utilities._AtSignTemplate(output_file_template) if output_file_template is not None else None
-        )
         self._output_file = pathlib.Path(output_file) if output_file is not None else None
         self._output_file_type = output_file_type
         self._set_name_template = _utilities._AtSignTemplate(set_name_template)
@@ -109,19 +95,12 @@ class ParameterGenerator(ABC):
         )
         self._require_previous_parameter_study = require_previous_parameter_study
         self._overwrite = overwrite
-        self._write_meta_flag = write_meta
         if original_index and previous_parameter_study is not None:
             raise MutuallyExclusiveError(
                 "The original index and previous parameter study features are mutually incompatible."
             )
         else:
             self._original_index = original_index
-
-        if self._output_file_template is not None and self._output_file is not None:
-            raise MutuallyExclusiveError(
-                "The options 'output_file_template' and 'output_file' are mutually exclusive. "
-                "Please specify one or the other."
-            )
 
         if self._output_file_type not in _settings._allowable_output_file_types:
             raise ChoicesError(
@@ -136,29 +115,49 @@ class ParameterGenerator(ABC):
             else:
                 warnings.warn(message)
 
+        # TODO: VVV Deprecate the ParameterGenerator write_meta API and method
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1024
+        if "write_meta" in kwargs:
+            warnings.warn(
+                "The write_meta attribute will be removed in a future version."
+                " Please use the ParameterGenerator.write(meta_file) API instead."
+            )
+            self._write_meta_flag = kwargs.pop("write_meta")
+        else:
+            self._write_meta_flag = False
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1024
+        # TODO: ^^^ Deprecate the ParameterGenerator write_meta API and method
+        # TODO: VVV Remove uses of output_file_template in favor of set_name_template and ``write(output_directory=)``
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1023
         # Override set name template if output name template is provided. Append set number placeholder if missing
-        self._provided_output_file_template = False
-        if self._output_file_template is not None:
-            self._provided_output_file_template = True
-            output_file_template_string = self._output_file_template.safe_substitute()
-            if _settings._template_placeholder not in output_file_template_string:
-                self._output_file_template = _utilities._AtSignTemplate(
-                    f"{output_file_template_string}{_settings._template_placeholder}"
-                )
-            self._set_name_template = self._output_file_template
+        if "output_file_template" in kwargs:
+            warnings.warn(
+                "The output_file_template argument will be removed in a future version. Please use set_name_template."
+            )
+            output_file_template = _utilities._AtSignTemplate(kwargs.pop("output_file_template"))
         else:
-            set_name_template_string = self._set_name_template.safe_substitute()
-            if _settings._template_placeholder not in set_name_template_string:
+            output_file_template = None
+        if output_file_template is not None and self._output_file is not None:
+            raise MutuallyExclusiveError(
+                "The options 'output_file_template' and 'output_file' are mutually exclusive. "
+                "Please specify one or the other."
+            )
+        self._output_directory: pathlib.Path | None
+        if output_file_template is not None:
+            if _settings._template_placeholder not in output_file_template.template:
+                output_file_template = _utilities._AtSignTemplate(
+                    f"{output_file_template.template}{_settings._template_placeholder}"
+                )
+            self._set_name_template = output_file_template
+            self._output_directory = pathlib.Path(self._set_name_template.template).parent
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1023
+        # TODO: ^^^ Remove uses of output_file_template in favor of set_name_template and ``write(output_directory=)``
+        else:
+            if _settings._template_placeholder not in self._set_name_template.template:
                 self._set_name_template = _utilities._AtSignTemplate(
-                    f"{set_name_template_string}{_settings._template_placeholder}"
+                    f"{self._set_name_template.template}{_settings._template_placeholder}"
                 )
-
-        # Infer output directory from output file template if provided. Set to PWD otherwise.
-        if self._output_file_template is not None:
-            self._output_directory = pathlib.Path(self._output_file_template.safe_substitute()).parent
-        else:
-            self._output_directory = pathlib.Path.cwd()
-        self._parameter_study_meta_file = self._output_directory / _settings._parameter_study_meta_file
+            self._output_directory = None
 
         # Help mypy determine types of attributes set in semi-private function calls
         # TODO: make these return values from _validate and assign directly in __init__?
@@ -179,9 +178,14 @@ class ParameterGenerator(ABC):
     def parameter_schema(self) -> dict:
         return self._parameter_schema
 
+    # TODO: Remove uses of output_file_template in favor of set_name_template and ``write(output_directory=)``
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1023
     @property
     def output_file_template(self) -> string.Template | None:
-        return self._output_file_template
+        warnings.warn(
+            "The output_file_template attribute will be removed in a future version. Please use set_name_template."
+        )
+        return self._set_name_template
 
     @property
     def output_file(self) -> pathlib.Path | None:
@@ -207,8 +211,14 @@ class ParameterGenerator(ABC):
     def overwrite(self) -> bool:
         return self._overwrite
 
+    # TODO: Deprecate the ParameterGenerator write_meta API and method
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1024
     @property
     def write_meta(self) -> bool:
+        warnings.warn(
+            "The write_meta attribute will be removed in a future version."
+            " Please use the ParameterGenerator.write(meta_file) API instead."
+        )
         return self._write_meta_flag
 
     @property
@@ -272,66 +282,59 @@ class ParameterGenerator(ABC):
 
     def write(
         self,
+        output_file: pathlib.Path | None = None,
+        output_directory: pathlib.Path | None = None,
         output_file_type: _settings._allowable_output_file_typing | None = None,
-        dry_run: bool = _settings._default_dry_run,
+        overwrite: bool = False,
+        dry_run: bool = False,
+        meta_file: pathlib.Path | None = None,
     ) -> None:
-        """Write the parameter study to STDOUT or an output file.
+        """Write the parameter study to STDOUT or a file(s).
 
-        Writes to STDOUT by default. Requires non-default ``output_file_template`` or ``output_file`` specification to
-        write to files.
+        If no output file or directory is specified, print the parameter study as a YAML formatted dictionary to STDOUT.
 
-        If printing to STDOUT, print all parameter sets together. If printing to files, overwrite when contents of
-        existing files have changed. If overwrite is specified, overwrite all parameter set files.
-        If a dry run is requested print file-content associations for files that would have been written.
+        If output file(s) already exist, compare the file data against the current parameter study and only overwrite if the
+        contents are different. If overwrite is specified, always write the output file(s).
 
-        Writes parameter set files in YAML syntax by default. Output formatting is controlled by
-        ``output_file_type``.
+        A meta file can be written to aid with build systems that require an explicit file list for target creation.
 
-        .. code-block::
+        :param output_file: Write a single parameter study file at this absolute or relative path.
+        :param output_directory: Write one output file per parameter set in the directory at this absolute or relative
+            path. Filenames are based on the set name and output file type,
+            ``{output_directory}/{set_name}.{output_file_type}``.
+        :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
+        :param overwrite: Overwrite existing output files
+        :param dry_run: Print contents of new or overwritten parameter study output file(s) to STDOUT and exit.
+        :param meta_file: Write a meta file at this absolute or relative path containing the parameter set file names, one
+            per line. Useful for command line execution with build systems that require an explicit file list for target
+            creation.
 
-           parameter_1: 1
-           parameter_2: a
-
-        :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
-        :param dry_run: Print contents of new parameter study output files to STDOUT and exit
-
-        :raises waves.exceptions.ChoicesError: If an unsupported output file type is requested
-        """
+        :raises MutuallyExclusiveError: if both 'output_directory' and 'output_file' are requested
+        :raises ChoicesError: if the 'output_file_type' is not one of 'h5' or 'yaml'
+        :raises APIError: if 'meta_file' is specified by neither 'output_directory' nor 'output_file' is specified.
+        """  # noqa: E501
+        if output_file is None:
+            output_file = self.output_file
+        if output_directory is None:
+            output_directory = self._output_directory
         if output_file_type is None:
-            output_file_type = self._output_file_type
-
-        self._output_directory.mkdir(parents=True, exist_ok=True)
-
-        if self._write_meta_flag and self._provided_output_file_template:
-            self._write_meta()
-
-        # Remove (or refactor away) from these complex types
-        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/812
-        parameter_study_object: dict | xarray.Dataset
-        parameter_study_iterator: collections.abc.ItemsView | xarray.core.groupby.DatasetGroupBy
-        conditional_write_function: (
-            collections.abc.Callable[[pathlib.Path, dict], None]
-            | collections.abc.Callable[[pathlib.Path, xarray.Dataset], None]
-        )
-        if output_file_type == "h5":
-            parameter_study_object = self.parameter_study
-            parameter_study_iterator = parameter_study_object.groupby(_set_coordinate_key)
-            conditional_write_function = self._conditionally_write_dataset
-        elif output_file_type == "yaml":
-            parameter_study_object = self.parameter_study_to_dict()
-            parameter_study_iterator = parameter_study_object.items()
-            conditional_write_function = self._conditionally_write_yaml
-        else:
-            raise ChoicesError(
-                f"Unsupported 'output_file_type': '{self._output_file_type}. "
-                f"The 'output_file_type' must be one of {_settings._allowable_output_file_types}"
-            )
-        self._write(
-            parameter_study_object,
-            parameter_study_iterator,
-            conditional_write_function,
+            output_file_type = self.output_file_type
+        if overwrite is not self.overwrite:
+            warnings.warn("API argument overwrite does not match ParameterGenerator.overwrite. Using API behavior.")
+        _write(
+            self,
+            output_file=output_file,
+            output_directory=output_directory,
+            output_file_type=output_file_type,
+            overwrite=overwrite,
             dry_run=dry_run,
+            meta_file=meta_file,
         )
+
+        # Deprecate the ParameterGenerator write_meta API and method
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1024
+        if self.write_meta:
+            self._write_meta()
 
     def _scons_write(self, target: list, source: list, env: SCons.Environment.Environment) -> None:  # noqa: ARG002
         """`SCons Python build function`_ wrapper for the parameter generator's write() function.
@@ -351,96 +354,8 @@ class ParameterGenerator(ABC):
             kwargs.update({"output_file_type": env["output_file_type"]})
         self.write(**kwargs)
 
-    # Consolidate (or refactor away) the complex write/_write logic
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/812
-    def _write(
-        self,
-        parameter_study_object: dict | xarray.Dataset,
-        parameter_study_iterator: collections.abc.ItemsView | xarray.core.groupby.DatasetGroupBy,
-        conditional_write_function: (
-            collections.abc.Callable[[pathlib.Path, dict], None]
-            | collections.abc.Callable[[pathlib.Path, xarray.Dataset], None]
-        ),
-        dry_run: bool = _settings._default_dry_run,
-    ) -> None:
-        """Write parameter study formatted output to STDOUT, separate set files, or a single file.
-
-        Behavior as specified in :meth:`waves.parameter_generators.ParameterGenerator.write`
-        """
-        # If no output file template is provided, printing to stdout or single file. Prepend set names.
-        if not self._provided_output_file_template:
-            # If no output file template is provided, printing to stdout or a single file
-            output_text = (
-                yaml.safe_dump(parameter_study_object)
-                if isinstance(parameter_study_object, dict)
-                else f"{parameter_study_object}\n"
-            )
-            if self._output_file and not dry_run:
-                # Remove (or refactor away) from this static type checking skip
-                # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/812
-                conditional_write_function(self._output_file, parameter_study_object)  # type: ignore[arg-type]
-            elif self._output_file and dry_run:
-                sys.stdout.write(f"{self._output_file.resolve()}\n{output_text}")
-            else:
-                sys.stdout.write(output_text)
-        # If output file template is provided, writing to parameter set files
-        else:
-            for set_file, parameters in parameter_study_iterator:
-                set_path = pathlib.Path(set_file)
-                text = yaml.safe_dump(parameters) if isinstance(parameters, dict) else f"{parameters}\n"
-                if self._overwrite or not set_path.is_file():
-                    # If dry run is specified, print the files that would have been written to stdout
-                    if dry_run:
-                        sys.stdout.write(f"{set_path.resolve()}\n{text}")
-                    else:
-                        # Remove (or refactor away) from this static type checking skip
-                        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/812
-                        conditional_write_function(set_path, parameters)  # type: ignore[arg-type]
-
-    def _conditionally_write_dataset(
-        self,
-        existing_parameter_study: pathlib.Path,
-        parameter_study: xarray.Dataset,
-    ) -> None:
-        """Write NetCDF file over previous study if the datasets have changed or self._overwrite is True.
-
-        :param existing_parameter_study: A relative or absolute file path to a previously created parameter
-            study Xarray Dataset
-        :param parameter_study: Parameter study xarray dataset
-        """
-        write = True
-        if not self._overwrite and existing_parameter_study.is_file():
-            with xarray.open_dataset(existing_parameter_study, engine="h5netcdf") as existing_dataset:
-                if parameter_study.equals(existing_dataset):
-                    write = False
-        if write:
-            existing_parameter_study.parent.mkdir(parents=True, exist_ok=True)
-            parameter_study.drop_encoding().to_netcdf(
-                path=existing_parameter_study, mode="w", format="NETCDF4", engine="h5netcdf"
-            )
-
-    def _conditionally_write_yaml(
-        self,
-        output_file: str | pathlib.Path,
-        parameter_dictionary: dict,
-    ) -> None:
-        """Write YAML file over previous study if the datasets have changed or self._overwrite is True.
-
-        :param output_file: A relative or absolute file path to the output YAML file
-        :param parameter_dictionary: dictionary containing parameter set data
-        """
-        write = True
-        if not self._overwrite and pathlib.Path(output_file).is_file():
-            # FIXME: simplify class API/attributes type handling to avoid the explict type cast
-            with pathlib.Path(output_file).open(mode="r") as existing_file:
-                existing_yaml_object = yaml.safe_load(existing_file)
-                if existing_yaml_object == parameter_dictionary:
-                    write = False
-        if write:
-            # FIXME: simplify class API/attributes type handling to avoid the explict type cast
-            with pathlib.Path(output_file).open(mode="w") as outfile:
-                outfile.write(yaml.dump(parameter_dictionary))
-
+    # Deprecate the ParameterGenerator write_meta API and method
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1024
     def _write_meta(self) -> None:
         """Write the parameter study meta data file.
 
@@ -449,7 +364,14 @@ class ParameterGenerator(ABC):
         """
         set_files = [pathlib.Path(set_name) for set_name in self.parameter_study.coords[_set_coordinate_key].values]
         # Always overwrite the meta data file to ensure that *all* parameter file names are included.
-        with self._parameter_study_meta_file.open(mode="w") as meta_file:
+        if self._output_directory is not None:
+            output_directory = self._output_directory
+        elif self.output_file is not None:
+            output_directory = self.output_file.parent
+        else:
+            output_directory = pathlib.Path()
+        meta_file_path = output_directory / _settings._parameter_study_meta_file
+        with meta_file_path.open("w") as meta_file:
             if self._output_file:
                 meta_file.write(f"{self._output_file.resolve()}\n")
             else:
@@ -774,17 +696,10 @@ class CartesianProduct(ParameterGenerator):
         CartesianProduct expects "schema value" to be an iterable. For example, when read from a YAML file "schema
         value" will be a Python list. Each parameter's values must have a consistent data type, but data type may vary
         between parameters.
-    :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
-        parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
-        relative path template. May contain the ``@number`` set number placeholder in the file basename but not in the
-        path. If the placeholder is not found it will be appended to the template string. Output files are overwritten
-        if the content of the file has changed or if ``overwrite`` is True. ``output_file_template`` and ``output_file``
-        are mutually exclusive.
     :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
-        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
-        and ``output_file_template`` are mutually exclusive.
-    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True.
+    :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
@@ -793,8 +708,6 @@ class CartesianProduct(ParameterGenerator):
         the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param require_previous_parameter_study: Raise a ``RuntimeError`` if the previous parameter study file is missing.
     :param overwrite: Overwrite existing output files
-    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
-        Useful for command line execution with build systems that require an explicit file list for target creation.
 
     :var self.parameter_study: The final parameter study XArray Dataset object
 
@@ -861,17 +774,10 @@ class LatinHypercube(_ScipyGenerator):
     :param parameter_schema: The YAML loaded parameter study schema dictionary - ``{parameter_name: schema value}``
         LatinHypercube expects "schema value" to be a dictionary with a strict structure and several required keys.
         Validated on class instantiation.
-    :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
-        parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
-        relative path template. May contain the ``@number`` set number placeholder in the file basename but not in the
-        path. If the placeholder is not found it will be appended to the template string. Output files are overwritten
-        if the content of the file has changed or if ``overwrite`` is True. ``output_file_template`` and ``output_file``
-        are mutually exclusive.
     :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
-        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
-        and ``output_file_template`` are mutually exclusive.
-    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True.
+    :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
@@ -880,8 +786,6 @@ class LatinHypercube(_ScipyGenerator):
         the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param require_previous_parameter_study: Raise a ``RuntimeError`` if the previous parameter study file is missing.
     :param overwrite: Overwrite existing output files
-    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
-        Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
 
     :var self.parameter_distributions: A dictionary mapping parameter names to the `scipy.stats`_ distribution
@@ -955,17 +859,10 @@ class OneAtATime(ParameterGenerator):
         OneAtATime expects "schema value" to be an ordered iterable. For example, when read from a YAML file "schema
         value" will be a Python list. Each parameter's values must have a consistent data type, but data type may vary
         between parameters.
-    :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
-        parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
-        relative path template. May contain the ``@number`` set number placeholder in the file basename but not in the
-        path. If the placeholder is not found it will be appended to the template string. Output files are overwritten
-        if the content of the file has changed or if ``overwrite`` is True. ``output_file_template`` and ``output_file``
-        are mutually exclusive.
     :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
-        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
-        and ``output_file_template`` are mutually exclusive.
-    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True.
+    :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
@@ -974,8 +871,6 @@ class OneAtATime(ParameterGenerator):
         the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param require_previous_parameter_study: Raise a ``RuntimeError`` if the previous parameter study file is missing.
     :param overwrite: Overwrite existing output files
-    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
-        Useful for command line execution with build systems that require an explicit file list for target creation.
 
     :var self.parameter_study: The final parameter study XArray Dataset object
 
@@ -1077,17 +972,10 @@ class CustomStudy(ParameterGenerator):
         `parameter_samples` array with mixed type (e.g. string and floats) use `dtype=object` to preserve the mixed
         types and avoid casting all values to a common type (e.g. all your floats will become strings). Each parameter's
         values must have a consistent data type, but data type may vary between parameters.
-    :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
-        parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
-        relative path template. May contain the ``@number`` set number placeholder in the file basename but not in the
-        path. If the placeholder is not found it will be appended to the template string. Output files are overwritten
-        if the content of the file has changed or if ``overwrite`` is True. ``output_file_template`` and ``output_file``
-        are mutually exclusive.
     :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
-        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
-        and ``output_file_template`` are mutually exclusive.
-    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True.
+    :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
@@ -1096,8 +984,6 @@ class CustomStudy(ParameterGenerator):
         the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param require_previous_parameter_study: Raise a ``RuntimeError`` if the previous parameter study file is missing.
     :param overwrite: Overwrite existing output files
-    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
-        Useful for command line execution with build systems that require an explicit file list for target creation.
 
     :var self.parameter_study: The final parameter study XArray Dataset object
 
@@ -1181,17 +1067,10 @@ class SobolSequence(_ScipyGenerator):
     :param parameter_schema: The YAML loaded parameter study schema dictionary - ``{parameter_name: schema value}``
         SobolSequence expects "schema value" to be a dictionary with a strict structure and several required keys.
         Validated on class instantiation.
-    :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
-        parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
-        relative path template. May contain the ``@number`` set number placeholder in the file basename but not in the
-        path. If the placeholder is not found it will be appended to the template string. Output files are overwritten
-        if the content of the file has changed or if ``overwrite`` is True. ``output_file_template`` and ``output_file``
-        are mutually exclusive.
     :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
-        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
-        and ``output_file_template`` are mutually exclusive.
-    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True.
+    :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
@@ -1199,8 +1078,6 @@ class SobolSequence(_ScipyGenerator):
         previous and current study are identical. If the parameter spaces are unique, the current study will propagate
         the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param overwrite: Overwrite existing output files
-    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
-        Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
 
     :var self.parameter_distributions: A dictionary mapping parameter names to the ``scipy.stats`` distribution
@@ -1280,17 +1157,10 @@ class ScipySampler(_ScipyGenerator):
     :param parameter_schema: The YAML loaded parameter study schema dictionary - ``{parameter_name: schema value}``
         ScipySampler expects "schema value" to be a dictionary with a strict structure and several required keys.
         Validated on class instantiation.
-    :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
-        parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
-        relative path template. May contain the ``@number`` set number placeholder in the file basename but not in the
-        path. If the placeholder is not found it will be appended to the template string. Output files are overwritten
-        if the content of the file has changed or if ``overwrite`` is True. ``output_file_template`` and ``output_file``
-        are mutually exclusive.
     :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
-        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
-        and ``output_file_template`` are mutually exclusive.
-    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True.
+    :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
@@ -1298,8 +1168,6 @@ class ScipySampler(_ScipyGenerator):
         previous and current study are identical. If the parameter spaces are unique, the current study will propagate
         the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param overwrite: Overwrite existing output files
-    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
-        Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
 
     :var self.parameter_distributions: A dictionary mapping parameter names to the ``scipy.stats`` distribution
@@ -1421,17 +1289,10 @@ class SALibSampler(ParameterGenerator, ABC):
     :param parameter_schema: The YAML loaded parameter study schema dictionary - ``{parameter_name: schema value}``
         SALibSampler expects "schema value" to be a dictionary with a strict structure and several required keys.
         Validated on class instantiation.
-    :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
-        parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
-        relative path template. May contain the ``@number`` set number placeholder in the file basename but not in the
-        path. If the placeholder is not found it will be appended to the template string. Output files are overwritten
-        if the content of the file has changed or if ``overwrite`` is True. ``output_file_template`` and ``output_file``
-        are mutually exclusive.
     :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
-        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
-        and ``output_file_template`` are mutually exclusive.
-    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True.
+    :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
@@ -1439,8 +1300,8 @@ class SALibSampler(ParameterGenerator, ABC):
         previous and current study are identical. If the parameter spaces are unique, the current study will propagate
         the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param overwrite: Overwrite existing output files
-    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
-        Useful for command line execution with build systems that require an explicit file list for target creation.
+    :param original_index: Assign a coordinate to track the original sample index order. Incompatible with merging
+        parameter studies and previous parameter study behaviors.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
 
     :var self.parameter_study: The final parameter study XArray Dataset object
@@ -1628,17 +1489,10 @@ class CatenationStudy(ParameterGenerator):
     :param parameter_schema: dictionary of key:value pairs. The keys are not used. Each value should be an instantiated
         :class:`waves.parameter_generators.ParameterGenerator`, e.g. `waves.scons_extensions.CartesianProduct`,
         `waves.scons_extensions.LatinHypercube`, etc.
-    :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
-        parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
-        relative path template. May contain the ``@number`` set number placeholder in the file basename but not in the
-        path. If the placeholder is not found it will be appended to the template string. Output files are overwritten
-        if the content of the file has changed or if ``overwrite`` is True. ``output_file_template`` and ``output_file``
-        are mutually exclusive.
     :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
-        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
-        and ``output_file_template`` are mutually exclusive.
-    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True.
+    :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset. If a previous parameter study exists, it is merged into the current study upon generation.
@@ -1647,8 +1501,6 @@ class CatenationStudy(ParameterGenerator):
         the parameter spaces to resolve them. This will break set name to content associations of the previous study.
     :param require_previous_parameter_study: Raise a ``RuntimeError`` if the previous parameter study file is missing.
     :param overwrite: Overwrite existing output files
-    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
-        Useful for command line execution with build systems that require an explicit file list for target creation.
 
     :var self.parameter_study: The final merged parameter study XArray Dataset object
 
@@ -2171,6 +2023,192 @@ def _convert_numpy_to_builtin(samples: numpy.ndarray) -> numpy.ndarray:
             f"Either a loss of precision would occur, a cast to string differs, or no valid Python type exists."
         )
     return numpy.array(converted_flat, dtype=object).reshape(samples.shape)
+
+
+def _return_parameter_study_files(
+    generator: ParameterGenerator,
+    output_file: pathlib.Path | None = None,
+    output_directory: pathlib.Path | None = None,
+    output_file_type: _settings._allowable_output_file_typing = _settings._default_output_file_type_api,
+) -> dict[pathlib.Path, dict | xarray.Dataset]:
+    """Return parameter study file/contents associations.
+
+    :param generator: A :class:`waves.parameter_generators.ParameterGenerator` parameter generator
+    :param output_file: Write a single parameter study file at this absolute or relative path.
+    :param output_directory: Write one output file per parameter set in the directory at this absolute or relative
+        path. Filenames are based on the set name and output file type,
+        ``{output_directory}/{set_name}.{output_file_type}``.
+    :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
+
+    :raises MutuallyExclusiveError: if both 'output_directory' and 'output_file' are requested
+    :raises APIError: if neither 'output_directory' nor 'output_file' are requested
+    :raises ChoicesError: if the 'output_file_type' is not one of 'h5' or 'yaml'
+    """
+    # Argument validation
+    if output_file is not None and output_directory is not None:
+        raise MutuallyExclusiveError(
+            "The options 'output_directory' and 'output_file' are mutually exclusive. Please specify one or the other."
+        )
+    elif output_file is None and output_directory is None:
+        raise APIError("One of 'output_directory' or 'output_file' must be specified.")
+    if output_file_type not in _settings._allowable_output_file_types:
+        raise ChoicesError(
+            f"Unsupported 'output_file_type': '{output_file_type}'. "
+            f"The 'output_file_type' must be one of {_settings._allowable_output_file_types}."
+        )
+    # Build output file/content associations
+    parameter_study_files: dict[pathlib.Path, dict | xarray.Dataset]
+    if output_file is not None and output_file_type == "h5":
+        parameter_study_files = {output_file: generator.parameter_study}
+    elif output_file is not None and output_file_type == "yaml":
+        parameter_study_files = {output_file: generator.parameter_study_to_dict()}
+    elif output_directory is not None and output_file_type == "h5":
+        parameter_study_files = {
+            output_directory / f"{set_name}.{output_file_type}": subset
+            for set_name, subset in generator.parameter_study.groupby(_settings._set_coordinate_key)
+        }
+    elif output_directory is not None and output_file_type == "yaml":
+        parameter_study_files = {
+            output_directory / f"{set_name}.{output_file_type}": subset
+            for set_name, subset in generator.parameter_study_to_dict().items()
+        }
+    return parameter_study_files
+
+
+def _return_parameter_study_files_to_write(
+    parameter_study_files: dict[pathlib.Path, dict | xarray.Dataset],
+) -> dict[pathlib.Path, dict | xarray.Dataset]:
+    """Return a dictionary of parameter study files that do not exist or whose contents have changed.
+
+    :param parmater_study_files: dictionary of ``{path: content}`` pairs
+
+    :raises ValueError: if any content is not a dictionary or xarray Dataset.
+    """
+    if any(not isinstance(content, (dict, xarray.Dataset)) for content in parameter_study_files.values()):
+        raise ValueError(
+            "Parameter study file content must be a dictionary or xarray Dataset."
+            " This is likely an internal bug. Please contact the developers."
+        )
+    write_files = {}
+    for output, content in parameter_study_files.items():
+        if not output.is_file():
+            write_files[output] = content
+        elif isinstance(content, xarray.Dataset):
+            with xarray.open_dataset(output, engine="h5netcdf") as existing_dataset:
+                if not existing_dataset.equals(content):
+                    write_files[output] = content
+        elif isinstance(content, dict):
+            with output.open(mode="r") as existing_file:
+                existing_dictionary = yaml.safe_load(existing_file)
+            if existing_dictionary != content:
+                write_files[output] = content
+    return write_files
+
+
+def _write_parameter_study_files(
+    parameter_study_files: dict[pathlib.Path, dict | xarray.Dataset],
+    dry_run: bool = False,
+) -> None:
+    """Write the parameter study files or print to STDOUT.
+
+    Prints the file name that would be written followed by its content when dry run is True.
+
+    :param parmater_study_files: dictionary of ``{path: content}`` pairs
+    :param dry_run: Print contents of new or overwritten parameter study output file(s) to STDOUT and exit.
+
+    :raises ValueError: if any content is not a dictionary or xarray Dataset.
+    """
+    if any(not isinstance(content, (dict, xarray.Dataset)) for content in parameter_study_files.values()):
+        raise ValueError(
+            "Parameter study file content must be a dictionary or xarray Dataset."
+            " This is likely an internal bug. Please contact the developers."
+        )
+    for output, content in parameter_study_files.items():
+        if dry_run:
+            output_text = yaml.safe_dump(content) if isinstance(content, dict) else f"{content}\n"
+            sys.stdout.write(f"{output}\n{output_text}")
+        elif isinstance(content, xarray.Dataset):
+            output.parent.mkdir(parents=True, exist_ok=True)
+            content.drop_encoding().to_netcdf(path=output, mode="w", format="NETCDF4", engine="h5netcdf")
+        elif isinstance(content, dict):
+            output.parent.mkdir(parents=True, exist_ok=True)
+            with output.open(mode="w") as outfile:
+                outfile.write(yaml.dump(content))
+
+
+def _write_parameter_study_meta_file(meta_file: pathlib.Path, meta_file_contents: str, overwrite: bool = False) -> None:
+    """Write the parameter study meta file if the contents have changed.
+
+    :param meta_file: Write a meta file at this absolute or relative path.
+    :param meta_file_contents: The parameter set file names, one per line.
+    :param overwrite: Overwrite existing meta file
+    """
+    if meta_file.is_file() and not overwrite:
+        with meta_file.open() as infile:
+            existing_file_content = infile.read()
+    else:
+        existing_file_content = None
+    if existing_file_content != meta_file_contents:
+        meta_file.parent.mkdir(parents=True, exist_ok=True)
+        with meta_file.open("w") as outfile:
+            outfile.write(meta_file_contents)
+
+
+def _write(
+    generator: ParameterGenerator,
+    output_file: pathlib.Path | None = None,
+    output_directory: pathlib.Path | None = None,
+    output_file_type: _settings._allowable_output_file_typing = _settings._default_output_file_type_api,
+    overwrite: bool = False,
+    dry_run: bool = False,
+    meta_file: pathlib.Path | None = None,
+) -> None:
+    """Write the parameter study to STDOUT or a file(s).
+
+    If no output file or directory is specified, print the parameter study as a YAML formatted dictionary to STDOUT.
+
+    If output file(s) already exist, compare the file data against the current parameter study and only overwrite if the
+    contents are different. If overwrite is specified, always write the output file(s).
+
+    A meta file can be written to aid with build systems that require an explicit file list for target creation.
+
+    :param generator: A :class:`waves.parameter_generators.ParameterGenerator` parameter generator
+    :param output_file: Write a single parameter study file at this absolute or relative path.
+    :param output_directory: Write one output file per parameter set in the directory at this absolute or relative
+        path. Filenames are based on the set name and output file type,
+        ``{output_directory}/{set_name}.{output_file_type}``.
+    :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
+    :param overwrite: Overwrite existing output files
+    :param dry_run: Print contents of new or overwritten parameter study output file(s) to STDOUT and exit.
+    :param meta_file: Write a meta file at this absolute or relative path containing the parameter set file names, one
+        per line. Useful for command line execution with build systems that require an explicit file list for target
+        creation.
+
+    :raises MutuallyExclusiveError: if both 'output_directory' and 'output_file' are requested
+    :raises ChoicesError: if the 'output_file_type' is not one of 'h5' or 'yaml'
+    :raises APIError: if 'meta_file' is specified by neither 'output_directory' nor 'output_file' is specified.
+    """
+    # Argument validation
+    if meta_file is not None and (output_file is None and output_directory is None):
+        raise APIError("The option 'meta_file' requires one of 'output_directory' or 'output_file'.")
+    # If no output is requested, write to STDOUT and return
+    if output_file is None and output_directory is None:
+        sys.stdout.write(yaml.safe_dump(generator.parameter_study_to_dict()))
+        return
+    # Build output file/content associations
+    parameter_study_files = _return_parameter_study_files(
+        generator, output_file=output_file, output_directory=output_directory, output_file_type=output_file_type
+    )
+    # Ignore output files that already have the correct data
+    if overwrite:
+        parameter_study_files_to_write = dict(parameter_study_files)
+    else:
+        parameter_study_files_to_write = _return_parameter_study_files_to_write(parameter_study_files)
+    # Write files
+    _write_parameter_study_files(parameter_study_files_to_write, dry_run=dry_run)
+    if meta_file is not None:
+        meta_file_contents = "".join([f"{path.resolve()}\n" for path in parameter_study_files])
+        _write_parameter_study_meta_file(meta_file, meta_file_contents, overwrite=overwrite)
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace

@@ -2,14 +2,13 @@
 
 import contextlib
 import typing
-import unittest
-from unittest.mock import call, mock_open, patch
+from unittest.mock import patch
 
 import numpy
 import pytest
 import xarray
 
-from waves._settings import _allowable_output_file_typing, _hash_coordinate_key, _set_coordinate_key
+from waves._settings import _hash_coordinate_key, _set_coordinate_key
 from waves.exceptions import SchemaValidationError
 from waves.parameter_generators import (
     CartesianProduct,
@@ -912,130 +911,6 @@ class TestCatenationStudy:
             # TODO: _set_names is an ordered object (dictionary). Fix test to compare dictionary-to-dictionary instead
             #  of implied consistency according to value order.
             assert list(test_generate._set_names.values()) == list(expected_dataset[_set_coordinate_key].to_numpy())
-
-    write_yaml = {
-        "one parameter yaml": (
-            {
-                "1": CartesianProduct({"parameter_1": [1]}, output_file_template="out"),
-                "2": CartesianProduct({"parameter_1": [2]}, output_file_template="out"),
-            },
-            "out",
-            None,
-            "yaml",
-            2,
-            [call("parameter_1: 1\n"), call("parameter_1: 2\n")],
-        ),
-        "two parameter propagate yaml": (
-            {"1": CartesianProduct({"parameter_1": [1, 2]}), "2": CartesianProduct({"parameter_2": ["a", "b"]})},
-            "out",
-            None,
-            "yaml",
-            4,
-            [
-                call("parameter_1: 1\nparameter_2: a\n"),
-                call("parameter_1: 1\nparameter_2: b\n"),
-                call("parameter_1: 2\nparameter_2: b\n"),
-                call("parameter_1: 2\nparameter_2: a\n"),
-            ],
-        ),
-        "mixed generators ints and floats yaml": (
-            {"1": CartesianProduct({"parameter_1": [1, 2]}), "2": OneAtATime({"parameter_2": [3.0, 4.0]})},
-            "out",
-            None,
-            "yaml",
-            4,
-            [
-                call("parameter_1: 1\nparameter_2: 4.0\n"),
-                call("parameter_1: 1\nparameter_2: 3.0\n"),
-                call("parameter_1: 2\nparameter_2: 4.0\n"),
-                call("parameter_1: 2\nparameter_2: 3.0\n"),
-            ],
-        ),
-        "two parameter propagate yaml: bools and ints": (
-            {"1": CartesianProduct({"parameter_1": [1, 2]}), "2": CartesianProduct({"parameter_2": [True, False]})},
-            "out",
-            None,
-            "yaml",
-            4,
-            [
-                call("parameter_1: 2\nparameter_2: true\n"),
-                call("parameter_1: 1\nparameter_2: true\n"),
-                call("parameter_1: 2\nparameter_2: false\n"),
-                call("parameter_1: 1\nparameter_2: false\n"),
-            ],
-        ),
-        "one parameter one file yaml": (
-            {"1": CartesianProduct({"parameter_1": [1]}), "2": CartesianProduct({"parameter_1": [2]})},
-            None,
-            "parameter_study.yaml",
-            "yaml",
-            1,
-            [call("parameter_set0:\n  parameter_1: 1\nparameter_set1:\n  parameter_1: 2\n")],
-        ),
-        "two parameter propagate one file yaml": (
-            {"1": CartesianProduct({"parameter_1": [1, 2]}), "2": CartesianProduct({"parameter_2": ["a", "b"]})},
-            None,
-            "parameter_study.yaml",
-            "yaml",
-            1,
-            [
-                call(
-                    "parameter_set0:\n  parameter_1: 1\n  parameter_2: a\n"
-                    "parameter_set1:\n  parameter_1: 1\n  parameter_2: b\n"
-                    "parameter_set2:\n  parameter_1: 2\n  parameter_2: b\n"
-                    "parameter_set3:\n  parameter_1: 2\n  parameter_2: a\n"
-                )
-            ],
-        ),
-        "two parameter one file yaml: bools and ints": (
-            {"1": CartesianProduct({"parameter_1": [1, 2]}), "2": CartesianProduct({"parameter_2": [True, False]})},
-            None,
-            "parameter_study.yaml",
-            "yaml",
-            1,
-            [
-                call(
-                    "parameter_set0:\n  parameter_1: 2\n  parameter_2: true\n"
-                    "parameter_set1:\n  parameter_1: 1\n  parameter_2: true\n"
-                    "parameter_set2:\n  parameter_1: 2\n  parameter_2: false\n"
-                    "parameter_set3:\n  parameter_1: 1\n  parameter_2: false\n"
-                )
-            ],
-        ),
-    }
-
-    @pytest.mark.parametrize(
-        ("parameter_schema", "output_file_template", "output_file", "output_type", "file_count", "expected_calls"),
-        write_yaml.values(),
-        ids=write_yaml.keys(),
-    )
-    def test_write_yaml(
-        self,
-        parameter_schema: dict[str, tuple],
-        output_file_template: str | None,
-        output_file: str | None,
-        output_type: _allowable_output_file_typing,
-        file_count: int,
-        expected_calls: list[unittest.mock._Call],
-    ) -> None:
-        with (
-            patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-            patch("pathlib.Path.open", mock_open()) as mock_file,
-            patch("xarray.Dataset.to_netcdf") as xarray_to_netcdf,
-            patch("sys.stdout.write") as stdout_write,
-            patch("pathlib.Path.is_file", return_value=False),
-        ):
-            test_write_yaml = CatenationStudy(
-                parameter_schema,
-                output_file_template=output_file_template,
-                output_file=output_file,
-                output_file_type=output_type,
-            )
-            test_write_yaml.write()
-            stdout_write.assert_not_called()
-            xarray_to_netcdf.assert_not_called()
-            assert mock_file.call_count == file_count
-            mock_file().write.assert_has_calls(expected_calls, any_order=False)
 
     parameter_study_to_dict = {
         "ints": (

@@ -12,10 +12,24 @@ Breaking changes
 ================
 - Accept entire ParameterGenerator class objects in CatenationStudy API. Required to preserve generator-specific
   positional and keyword arguments (:issue:`1022`, :merge:`1325`). By `Kyle Brindley`_.
+- Change the parameter study CLI options ``--output-file-template`` to ``--output-directory`` and ``--write-meta`` flag
+  to ``--meta-file`` argument. Change driven by improved clarity in internal implementation and ease of testing. By
+  `Kyle Brindley`_.
 
 Bug fixes
 =========
 - Respect original parameter generator keyword arguments in CatenationStudy (:issue:`1022`, :merge:`1325`). By `Kyle Brindley`_.
+
+Enhancements
+============
+- Explicit ParameterGenerator write method API with full control over output file handling. Allows users to control
+  output files at write time instead of at parameter study configure time. Will enable a more flexible SCons
+  Pseudo-builder API with enhanced target file output control in the future. By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Refactor the parameter generator write behavior for clarity in internal implementation, improved testing, and
+  opportunity to define self-consistent behavior for an explicit write API. By `Kyle Brindley`_.
 
 ******************
 1.4.5 (2026-07-08)
