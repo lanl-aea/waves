@@ -90,10 +90,9 @@ mesh_convergence_parameter_generator = waves.parameter_generators.CartesianProdu
         "global_seed": [1.0, 0.5, 0.25, 0.125],
         "displacement": [-0.01],
     },
-    output_file=mesh_convergence_parameter_study_file,
     previous_parameter_study=mesh_convergence_parameter_study_file,
 )
-mesh_convergence_parameter_generator.write()
+mesh_convergence_parameter_generator.write(output_file=mesh_convergence_parameter_study_file)
 
 # Add workflow(s)
 workflow_configurations = [

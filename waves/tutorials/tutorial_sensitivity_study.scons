@@ -46,11 +46,10 @@ datacheck = []
 parameter_generator = waves.parameter_generators.SALibSampler(
     "sobol",
     parameter_schema(),
-    output_file=parameter_study_file,
     previous_parameter_study=parameter_study_file,
     **kwargs,
 )
-parameter_generator.write()
+parameter_generator.write(output_file=parameter_study_file)
 
 # Comment used in tutorial code snippets: marker-3
 
