@@ -7,6 +7,7 @@ import string
 import typing
 from unittest.mock import call, mock_open, patch
 
+import SCons.Node.FS
 import numpy
 import pytest
 import xarray
@@ -15,6 +16,9 @@ from waves import _settings, _utilities, parameter_generators
 from waves.exceptions import APIError, ChoicesError, MutuallyExclusiveError, SchemaValidationError
 
 does_not_raise = contextlib.nullcontext()
+
+# Test setup and helper functions
+file_system = SCons.Node.FS.FS()
 
 
 set_hashes = {
@@ -2472,21 +2476,33 @@ class TestParameterGenerator:
             DummyGenerator({})
 
     scons_write_cases = {
-        "no kwargs": ({}, {}),
-        "output file type": ({"output_file_type": "h5"}, {"output_file_type": "h5"}),
-        "unused keyword argument": ({"unused": "should not show up in call"}, {}),
+        "no kwargs": (
+            [file_system.File("/dummy.target")],
+            {},
+            {"output_file": str(pathlib.Path("/dummy.target").resolve())},
+        ),
+        "output file type": (
+            [file_system.File("/dummy.target")],
+            {"output_file_type": "h5"},
+            {"output_file": str(pathlib.Path("/dummy.target").resolve()), "output_file_type": "h5"},
+        ),
+        "unused keyword argument": (
+            [file_system.File("/dummy.target")],
+            {"unused": "should not show up in call"},
+            {"output_file": str(pathlib.Path("/dummy.target").resolve())},
+        ),
     }
 
     @pytest.mark.parametrize(
-        ("env", "expected_kwargs"),
+        ("target", "env", "expected_kwargs"),
         scons_write_cases.values(),
         ids=scons_write_cases.keys(),
     )
-    def test_scons_write(self, env: dict, expected_kwargs: dict) -> None:
+    def test_scons_write(self, target: list, env: dict, expected_kwargs: dict) -> None:
         scons_write = DummyGenerator({})
         with patch("waves.parameter_generators.ParameterGenerator.write") as mock_write:
             # Fake an SCons environment with a dictionary. SCons environment object not required for unit testing
-            scons_write._scons_write([], [], env)
+            scons_write._scons_write(target, [], env)
         mock_write.assert_called_once_with(**expected_kwargs)
 
     def test_merge_parameter_studies_with_missing_previous_parameter_study(self) -> None:
