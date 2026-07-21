@@ -4191,7 +4191,7 @@ def parameter_study_write(
     if output_file is None and output_directory is None:
         raise RuntimeError("One of 'output_file' or 'output_directory' is required")
     output_files = parameter_generators._return_parameter_study_files(
-        generator,
+        parameter_generator,
         output_file=output_file,
         output_directory=output_directory,
         output_file_type=output_file_type,
@@ -4986,7 +4986,13 @@ class WAVESEnvironment(SConsEnvironment):
 
         :raises RuntimeError: if neither 'output_file' nor 'output_directory' is provided
         """
-        return parameter_study_write(self, parameter_generator, **kwargs)
+        return parameter_study_write(
+            self,
+            parameter_generator,
+            output_file=output_file,
+            output_directory=output_directory,
+            output_file_type=output_file_type,
+        )
 
     def FirstTargetBuilder(self, target: list, source: list, *args, **kwargs) -> SCons.Node.NodeList:  # noqa: N802
         """Define tasks with the builder returned by :meth:`waves.scons_extensions.first_target_builder_factory`.
