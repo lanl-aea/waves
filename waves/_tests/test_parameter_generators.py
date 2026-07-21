@@ -7,9 +7,9 @@ import string
 import typing
 from unittest.mock import call, mock_open, patch
 
-import SCons.Node.FS
 import numpy
 import pytest
+import SCons.Node.FS
 import xarray
 
 from waves import _settings, _utilities, parameter_generators
