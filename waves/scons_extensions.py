@@ -4151,7 +4151,9 @@ def parameter_study_sconscript(
 def parameter_study_write(
     env: SCons.Environment.Environment,
     parameter_generator: parameter_generators.ParameterGenerator,
-    **kwargs,
+    output_file: str | pathlib.Path | None = None,
+    output_directory: str | pathlib.Path | None = None,
+    output_file_type: _settings._allowable_output_file_typing = _settings._default_output_file_type_api,
 ) -> SCons.Node.NodeList:
     """Pseudo-builder to write a parameter generator's parameter study file.
 
@@ -4174,24 +4176,32 @@ def parameter_study_write(
        env.ParameterStudyWrite(parameter_generator)
 
     :param parameter_generator: WAVES ParameterGenerator class
-    :param kwargs: All other keyword arguments are passed directly to the
-        :meth:`waves.parameter_generators.ParameterGenerator.write` method.
+    :param output_file: Write a single parameter study file at this absolute or relative path.
+    :param output_directory: Write one output file per parameter set in the directory at this absolute or relative
+        path. Filenames are based on the set name and output file type,
+        ``{output_directory}/{set_name}.{output_file_type}``.
+    :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
 
     :return: SCons NodeList of target nodes
+
+    :raises RuntimeError: if neither 'output_file' nor 'output_directory' is provided
     """
     import yaml
 
-    # TODO: Refactor write/output file logic to avoid duplication here
-    if parameter_generator.output_file is not None:
-        output_files = [parameter_generator.output_file]
-    else:
-        output_files = list(parameter_generator.parameter_study[_settings._set_coordinate_key].values)
+    if output_file is None and output_directory is None:
+        raise RuntimeError("One of 'output_file' or 'output_directory' is required")
+    output_files = parameter_generators._return_parameter_study_files(
+        generator,
+        output_file=output_file,
+        output_directory=output_directory,
+        output_file_type=output_file_type,
+    ).keys()
 
     targets = env.Command(
         target=output_files,
         source=[env.Value(yaml.dump(parameter_generator.parameter_study.to_dict()))],
         action=[SCons.Action.Action(parameter_generator._scons_write, varlist=["output_file_type"])],
-        **kwargs,
+        output_file_type=output_file_type,
     )
 
     return targets
