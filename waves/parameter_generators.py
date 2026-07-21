@@ -351,9 +351,9 @@ class ParameterGenerator(ABC):
         """
         kwargs = {}
         if len(target) == 1:
-            kwargs.update("output_file": target[0].abspath)
+            kwargs.update({"output_file": target[0].abspath})
         elif len(target) > 1:
-            kwargs.update("output_directory": target[0].parent.abspath)
+            kwargs.update({"output_directory": target[0].parent.abspath})
         else:
             raise RuntimeError(
                 "At least one target must be specified. This may be an internal bug. Please contact the developers."
