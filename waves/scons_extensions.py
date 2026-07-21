@@ -4952,7 +4952,9 @@ class WAVESEnvironment(SConsEnvironment):
     def ParameterStudyWrite(  # noqa: N802
         self,
         parameter_generator: parameter_generators.ParameterGenerator,
-        **kwargs,
+        output_file: str | pathlib.Path | None = None,
+        output_directory: str | pathlib.Path | None = None,
+        output_file_type: _settings._allowable_output_file_typing = _settings._default_output_file_type_api,
     ) -> SCons.Node.NodeList:
         """Pseudo-builder to write a parameter generator's parameter study file.
 
@@ -4974,10 +4976,15 @@ class WAVESEnvironment(SConsEnvironment):
            env.ParameterStudyWrite(parameter_generator)
 
         :param parameter_generator: WAVES ParameterGenerator class
-        :param kwargs: All other keyword arguments are passed directly to the
-            :meth:`waves.parameter_generators.ParameterGenerator.write` method.
+        :param output_file: Write a single parameter study file at this absolute or relative path.
+        :param output_directory: Write one output file per parameter set in the directory at this absolute or relative
+            path. Filenames are based on the set name and output file type,
+            ``{output_directory}/{set_name}.{output_file_type}``.
+        :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
 
         :return: SCons NodeList of target nodes
+
+        :raises RuntimeError: if neither 'output_file' nor 'output_directory' is provided
         """
         return parameter_study_write(self, parameter_generator, **kwargs)
 
