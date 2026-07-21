@@ -41,7 +41,6 @@ datacheck = []
 # Parameter Study with Sobol Sequence
 parameter_generator = waves.parameter_generators.SobolSequence(
     parameter_schema(),
-    output_file=parameter_study_file,
     previous_parameter_study=parameter_study_file,
     **kwargs,
 )
@@ -170,12 +169,11 @@ def write_parameter_study(target: list, source: list, env: SCons.Environment.Env
         new_schema["num_simulations"] = set_count + 2
         new_generator = waves.parameter_generators.SobolSequence(
             new_schema,
-            output_file=parameter_study_file,
             **kwargs,
         )
-        new_generator.write()
+        new_generator.write(output_file=parameter_study_file)
     else:
-        parameter_generator.write()
+        parameter_generator.write(output_file=parameter_study_file)
     return None
 
 
