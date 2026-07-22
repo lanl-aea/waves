@@ -8,11 +8,11 @@ env.AddMethod(waves.scons_extensions.parameter_study_write, "ParameterStudyWrite
 schema = {"one": [1, 2]}
 one_file = waves.parameter_generators.CartesianProduct(
     schema,
-    output_file="build/one_file.h5",
+    output_file="one_file.h5",
 )
 two_file = waves.parameter_generators.CartesianProduct(
     schema,
-    set_name_template="build/two_file@number.h5",
+    set_name_template="two_file@number.h5",
 )
 
 env.ParameterStudyWrite(
@@ -20,6 +20,7 @@ env.ParameterStudyWrite(
 )
 env.ParameterStudyWrite(
     two_file,
+    output_directory="build",
 )
 
 # Remove the duplicate parameter generator when the write API allows output file name overrides
@@ -30,7 +31,7 @@ one_file = waves.parameter_generators.CartesianProduct(
 )
 two_file = waves.parameter_generators.CartesianProduct(
     schema,
-    set_name_template="build/two_file@number.yaml",
+    set_name_template="two_file@number.yaml",
 )
 
 yaml = env.ParameterStudyWrite(
@@ -39,5 +40,6 @@ yaml = env.ParameterStudyWrite(
 )
 yaml = env.ParameterStudyWrite(
     two_file,
+    output_directory="build",
     output_file_type="yaml",
 )
