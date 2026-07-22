@@ -349,10 +349,21 @@ class ParameterGenerator(ABC):
         :param source: The source file list of SCons.Node.FS.File objects
         :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
         """
-        kwargs = {}
+        if len(target) == 1:
+            output_file = pathlib.Path(target[0].abspath)
+            output_directory = None
+        elif len(target) > 1:
+            output_file = None
+            output_directory = pathlib.Path(target[0].dir.abspath)
+        else:
+            raise RuntimeError(
+                "At least one target must be specified. This may be an internal bug. Please contact the developers."
+            )
         if "output_file_type" in env:
-            kwargs.update({"output_file_type": env["output_file_type"]})
-        self.write(**kwargs)
+            output_file_type = env["output_file_type"]
+        else:
+            output_file_type = None
+        self.write(output_file=output_file, output_directory=output_directory, output_file_type=output_file_type)
 
     # Deprecate the ParameterGenerator write_meta API and method
     # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1024
@@ -2085,21 +2096,25 @@ def _return_parameter_study_files(
             f"The 'output_file_type' must be one of {_settings._allowable_output_file_types}."
         )
     # Build output file/content associations
-    parameter_study_files: dict[pathlib.Path, dict | xarray.Dataset]
+    parameter_study_files: dict[pathlib.Path, dict | xarray.Dataset] = {}
     if output_file is not None and output_file_type == "h5":
         parameter_study_files = {output_file: generator.parameter_study}
     elif output_file is not None and output_file_type == "yaml":
         parameter_study_files = {output_file: generator.parameter_study_to_dict()}
     elif output_directory is not None and output_file_type == "h5":
-        parameter_study_files = {
-            output_directory / f"{set_name}.{output_file_type}": subset
-            for set_name, subset in generator.parameter_study.groupby(_settings._set_coordinate_key)
-        }
+        for set_name, xarray_subset in generator.parameter_study.groupby(_settings._set_coordinate_key):
+            if set_name.endswith(output_file_type):
+                filename = f"{set_name}"
+            else:
+                filename = f"{set_name}.{output_file_type}"
+            parameter_study_files[output_directory / filename] = xarray_subset
     elif output_directory is not None and output_file_type == "yaml":
-        parameter_study_files = {
-            output_directory / f"{set_name}.{output_file_type}": subset
-            for set_name, subset in generator.parameter_study_to_dict().items()
-        }
+        for set_name, dict_subset in generator.parameter_study_to_dict().items():
+            if set_name.endswith(output_file_type):
+                filename = set_name
+            else:
+                filename = f"{set_name}.{output_file_type}"
+            parameter_study_files[output_directory / filename] = dict_subset
     return parameter_study_files
 
 

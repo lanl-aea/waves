@@ -6,13 +6,40 @@ env = Environment()
 env.AddMethod(waves.scons_extensions.parameter_study_write, "ParameterStudyWrite")
 
 schema = {"one": [1, 2]}
+# Use the builder API to determine file names
+generator = waves.parameter_generators.CartesianProduct(
+    schema,
+)
+env.ParameterStudyWrite(
+    generator,
+    output_file="build/api/api.h5",
+)
+env.ParameterStudyWrite(
+    generator,
+    output_directory="build/api",
+)
+env.ParameterStudyWrite(
+    generator,
+    output_file="build/api/api.yaml",
+    output_file_type="yaml",
+)
+env.ParameterStudyWrite(
+    generator,
+    output_directory="build/api",
+    output_file_type="yaml",
+)
+
+# Use the builder API to determine file names and the SConscript call to determine directories
+env.SConscript("SConscript", variant_dir="build/sconscript", exports={"env": env, "generator": generator})
+
+# Use the class attributes to determine file names, H5
 one_file = waves.parameter_generators.CartesianProduct(
     schema,
-    output_file="build/one_file.h5",
+    output_file="build/attribute/one_file.h5",
 )
 two_file = waves.parameter_generators.CartesianProduct(
     schema,
-    output_file_template="build/two_file@number.h5",
+    set_name_template="two_file@number.h5",
 )
 
 env.ParameterStudyWrite(
@@ -20,17 +47,17 @@ env.ParameterStudyWrite(
 )
 env.ParameterStudyWrite(
     two_file,
+    output_directory="build/attribute",
 )
 
-# Remove the duplicate parameter generator when the write API allows output file name overrides
-# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/634
+# Use the class attributes to determine file names, YAML
 one_file = waves.parameter_generators.CartesianProduct(
     schema,
-    output_file="build/one_file.yaml",
+    output_file="build/attribute/one_file.yaml",
 )
 two_file = waves.parameter_generators.CartesianProduct(
     schema,
-    output_file_template="build/two_file@number.yaml",
+    set_name_template="two_file@number.yaml",
 )
 
 yaml = env.ParameterStudyWrite(
@@ -39,5 +66,6 @@ yaml = env.ParameterStudyWrite(
 )
 yaml = env.ParameterStudyWrite(
     two_file,
+    output_directory="build/attribute",
     output_file_type="yaml",
 )

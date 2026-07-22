@@ -9,12 +9,16 @@ from unittest.mock import call, mock_open, patch
 
 import numpy
 import pytest
+import SCons.Node.FS
 import xarray
 
 from waves import _settings, _utilities, parameter_generators
 from waves.exceptions import APIError, ChoicesError, MutuallyExclusiveError, SchemaValidationError
 
 does_not_raise = contextlib.nullcontext()
+
+# Test setup and helper functions
+file_system = SCons.Node.FS.FS()
 
 
 set_hashes = {
@@ -2472,21 +2476,72 @@ class TestParameterGenerator:
             DummyGenerator({})
 
     scons_write_cases = {
-        "no kwargs": ({}, {}),
-        "output file type": ({"output_file_type": "h5"}, {"output_file_type": "h5"}),
-        "unused keyword argument": ({"unused": "should not show up in call"}, {}),
+        "no kwargs": (
+            [file_system.File("/dummy.h5")],
+            {},
+            {
+                "output_file": pathlib.Path("/dummy.h5").resolve(),
+                "output_directory": None,
+                "output_file_type": None,
+            },
+        ),
+        "no kwargs, more than one target": (
+            [file_system.File("/directory/dummy.h51"), file_system.File("/directory/dummy.h52")],
+            {},
+            {
+                "output_file": None,
+                "output_directory": pathlib.Path("/directory").resolve(),
+                "output_file_type": None,
+            },
+        ),
+        "output file type, H5": (
+            [file_system.File("/dummy.h5")],
+            {"output_file_type": "h5"},
+            {
+                "output_file": pathlib.Path("/dummy.h5").resolve(),
+                "output_directory": None,
+                "output_file_type": "h5",
+            },
+        ),
+        "output file type, YAML": (
+            [file_system.File("/dummy.yaml")],
+            {"output_file_type": "yaml"},
+            {
+                "output_file": pathlib.Path("/dummy.yaml").resolve(),
+                "output_directory": None,
+                "output_file_type": "yaml",
+            },
+        ),
+        "output file type, more than one target, YAML": (
+            [file_system.File("/directory/dummy.yaml1"), file_system.File("/directory/dummy.yaml2")],
+            {"output_file_type": "yaml"},
+            {
+                "output_file": None,
+                "output_directory": pathlib.Path("/directory").resolve(),
+                "output_file_type": "yaml",
+            },
+        ),
+        "unused keyword argument": (
+            [file_system.File("/dummy.h5")],
+            {"unused": "should not show up in call"},
+            {
+                "output_file": pathlib.Path("/dummy.h5").resolve(),
+                "output_directory": None,
+                "output_file_type": None,
+            },
+        ),
     }
 
     @pytest.mark.parametrize(
-        ("env", "expected_kwargs"),
+        ("target", "env", "expected_kwargs"),
         scons_write_cases.values(),
         ids=scons_write_cases.keys(),
     )
-    def test_scons_write(self, env: dict, expected_kwargs: dict) -> None:
+    def test_scons_write(self, target: list, env: dict, expected_kwargs: dict) -> None:
         scons_write = DummyGenerator({})
         with patch("waves.parameter_generators.ParameterGenerator.write") as mock_write:
             # Fake an SCons environment with a dictionary. SCons environment object not required for unit testing
-            scons_write._scons_write([], [], env)
+            scons_write._scons_write(target, [], env)
         mock_write.assert_called_once_with(**expected_kwargs)
 
     def test_merge_parameter_studies_with_missing_previous_parameter_study(self) -> None:
@@ -2969,8 +3024,26 @@ test__return_parameter_study_files_cases = {
         },
         does_not_raise,
     ),
+    "CartesianProduct, output file, YAML, set name template with extension": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="set@number.yaml"),
+        {"output_directory": pathlib.Path("directory"), "output_file_type": "yaml"},
+        {
+            pathlib.Path("directory") / "set0.yaml": {"parameter_1": 2},
+            pathlib.Path("directory") / "set1.yaml": {"parameter_1": 1},
+        },
+        does_not_raise,
+    ),
     "CartesianProduct, output file, YAML, path-like set name template": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="set@number/study"),
+        {"output_directory": pathlib.Path("directory"), "output_file_type": "yaml"},
+        {
+            pathlib.Path("directory/set0/study.yaml"): {"parameter_1": 2},
+            pathlib.Path("directory/set1/study.yaml"): {"parameter_1": 1},
+        },
+        does_not_raise,
+    ),
+    "CartesianProduct, output file, YAML, path-like set name template with extension": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="set@number/study.yaml"),
         {"output_directory": pathlib.Path("directory"), "output_file_type": "yaml"},
         {
             pathlib.Path("directory/set0/study.yaml"): {"parameter_1": 2},

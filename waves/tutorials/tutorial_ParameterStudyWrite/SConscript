@@ -1,0 +1,22 @@
+#! /usr/bin/env python
+
+Import("env", "generator")
+
+env.ParameterStudyWrite(
+    generator,
+    output_file="api.h5",
+)
+env.ParameterStudyWrite(
+    generator,
+    output_directory=Dir("."),
+)
+env.ParameterStudyWrite(
+    generator,
+    output_file="api.yaml",
+    output_file_type="yaml",
+)
+env.ParameterStudyWrite(
+    generator,
+    output_directory=Dir("."),
+    output_file_type="yaml",
+)

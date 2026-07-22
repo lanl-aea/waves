@@ -27,6 +27,9 @@ Enhancements
   Pseudo-builder API with enhanced target file output control in the future. By `Kyle Brindley`_.
 - Accept scalar valued parameter values in CartesianProduct and OneAtATime parameter generators (:issue:`1007`,
   :merge:`1323`). By `Erica Hinrichs`_.
+- Enable output control in the ParameterStudyWrite Pseudo-builder directly. No longer necessary to resolve the absolute
+  path of a parameter study at instantiation. Now possible to resolve output file paths with respect to SCons task
+  definition (:issue:`634`, :merge:`1328`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
