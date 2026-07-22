@@ -50,11 +50,21 @@ class TestCartesianProduct:
         ),
         "not a dict": (
             "not a dict",
-            pytest.raises(SchemaValidationError),
+            pytest.raises(SchemaValidationError, match=r"parameter_schema must be a dictionary"),
         ),
         "bad schema dict": (
             {"parameter_1": {"thing1": 1}},
-            pytest.raises(SchemaValidationError),
+            pytest.raises(
+                SchemaValidationError,
+                match=r"Parmeters must be a sequence of scalar values or a supported scalar value"
+            ),
+        ),
+        "bad schema empty": (
+            {"parameter_1": []},
+            pytest.raises(
+                SchemaValidationError,
+                match=r"Parmeters must be a sequence of scalar values or a supported scalar value"
+            ),
         ),
     }
 
