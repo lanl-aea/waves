@@ -12,7 +12,7 @@ one_file = waves.parameter_generators.CartesianProduct(
 )
 two_file = waves.parameter_generators.CartesianProduct(
     schema,
-    output_file_template="build/two_file@number.h5",
+    set_name_template="build/two_file@number.h5",
 )
 
 env.ParameterStudyWrite(
@@ -30,7 +30,7 @@ one_file = waves.parameter_generators.CartesianProduct(
 )
 two_file = waves.parameter_generators.CartesianProduct(
     schema,
-    output_file_template="build/two_file@number.yaml",
+    set_name_template="build/two_file@number.yaml",
 )
 
 yaml = env.ParameterStudyWrite(
