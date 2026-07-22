@@ -349,18 +349,21 @@ class ParameterGenerator(ABC):
         :param source: The source file list of SCons.Node.FS.File objects
         :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
         """
-        kwargs = {}
         if len(target) == 1:
-            kwargs.update({"output_file": pathlib.Path(target[0].abspath)})
+            output_file = pathlib.Path(target[0].abspath)
+            output_directory = None
         elif len(target) > 1:
-            kwargs.update({"output_directory": pathlib.Path(target[0].dir.abspath)})
+            output_file = None
+            output_directory = pathlib.Path(target[0].dir.abspath)
         else:
             raise RuntimeError(
                 "At least one target must be specified. This may be an internal bug. Please contact the developers."
             )
         if "output_file_type" in env:
-            kwargs.update({"output_file_type": env["output_file_type"]})
-        self.write(**kwargs)
+            output_file_type = env["output_file_type"]
+        else:
+            output_file_type = None
+        self.write(output_file=output_file, output_directory=output_directory, output_file_type=output_file_type)
 
     # Deprecate the ParameterGenerator write_meta API and method
     # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1024
