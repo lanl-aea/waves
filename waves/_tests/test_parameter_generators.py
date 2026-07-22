@@ -3000,6 +3000,15 @@ test__return_parameter_study_files_cases = {
         },
         does_not_raise,
     ),
+    "CartesianProduct, output file, YAML, set name template with extension": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="set@number.yaml"),
+        {"output_directory": pathlib.Path("directory"), "output_file_type": "yaml"},
+        {
+            pathlib.Path("directory") / "set0.yaml": {"parameter_1": 2},
+            pathlib.Path("directory") / "set1.yaml": {"parameter_1": 1},
+        },
+        does_not_raise,
+    ),
     "CartesianProduct, output file, YAML, path-like set name template": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="set@number/study"),
         {"output_directory": pathlib.Path("directory"), "output_file_type": "yaml"},
