@@ -351,9 +351,9 @@ class ParameterGenerator(ABC):
         """
         kwargs = {}
         if len(target) == 1:
-            kwargs.update({"output_file": target[0].abspath})
+            kwargs.update({"output_file": pathlib.Path(target[0].abspath)})
         elif len(target) > 1:
-            kwargs.update({"output_directory": target[0].dir.abspath})
+            kwargs.update({"output_directory": pathlib.Path(target[0].dir.abspath)})
         else:
             raise RuntimeError(
                 "At least one target must be specified. This may be an internal bug. Please contact the developers."
@@ -2101,7 +2101,7 @@ def _return_parameter_study_files(
     elif output_directory is not None and output_file_type == "h5":
         for set_name, xarray_subset in generator.parameter_study.groupby(_settings._set_coordinate_key):
             if set_name.endswith(output_file_type):
-                filename = set_name
+                filename = f"{set_name}"
             else:
                 filename = f"{set_name}.{output_file_type}"
             parameter_study_files[output_directory / filename] = xarray_subset
