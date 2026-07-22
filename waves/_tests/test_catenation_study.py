@@ -2,16 +2,23 @@
 
 import contextlib
 import typing
-import unittest
-from unittest.mock import call, mock_open, patch
+from unittest.mock import patch
 
 import numpy
 import pytest
 import xarray
 
-from waves._settings import _allowable_output_file_typing, _hash_coordinate_key, _set_coordinate_key
+from waves._settings import _hash_coordinate_key, _set_coordinate_key
 from waves.exceptions import SchemaValidationError
-from waves.parameter_generators import CartesianProduct, CatenationStudy, CustomStudy, OneAtATime
+from waves.parameter_generators import (
+    CartesianProduct,
+    CatenationStudy,
+    CustomStudy,
+    LatinHypercube,
+    OneAtATime,
+    SALibSampler,
+    ScipySampler,
+)
 
 does_not_raise = contextlib.nullcontext()
 
@@ -22,38 +29,82 @@ class TestCatenationStudy:
     validate_input = {
         "good schema": (
             {
-                "1": (CartesianProduct, {"parameter_1": [1, 2], "parameter_2": ["a", "b"]}),
-                "2": (OneAtATime, {"parameter_1": [5, 7], "parameter_2": ["x", "y"]}),
+                "1": CartesianProduct({"parameter_1": [1, 2], "parameter_2": ["a", "b"]}),
+                "2": OneAtATime({"parameter_1": [5, 7], "parameter_2": ["x", "y"]}),
             },
             does_not_raise,
         ),
         "not a dictionary": (
             "not a dictionary",
-            pytest.raises(SchemaValidationError),
-        ),
-        "bad schema: not a tuple": (
-            {"1": "not a tuple"},
-            pytest.raises(SchemaValidationError),
+            pytest.raises(SchemaValidationError, match=r"Input must be a dictionary"),
         ),
         "bad schema: too few entries": (
-            {"1": (CartesianProduct, {"parameter_1": [1]})},
-            pytest.raises(SchemaValidationError),
+            {"1": CartesianProduct({"parameter_1": [1]})},
+            pytest.raises(SchemaValidationError, match=r"Input dictionary must have at least two key:value entries"),
         ),
-        "bad tuple entry: too few items": (
-            {"1": ({"parameter_1": [1]}), "2": (CartesianProduct, {"parameter_1": [2]})},
-            pytest.raises(SchemaValidationError),
+        "bad entry: tuple instead of ParameterGenerator": (
+            {"1": (CartesianProduct({"parameter_1": [1]}),), "2": CartesianProduct({"parameter_1": [2]})},
+            pytest.raises(
+                SchemaValidationError,
+                match=(
+                    r"Each value of a key:value entry must be a ``waves.parameter_generators.ParameterGenerator`` class"
+                ),
+            ),
         ),
-        "bad tuple entry: too many items": (
-            {"1": (CartesianProduct, {"parameter_1": [1]}, "extra"), "2": (CartesianProduct, {"parameter_1": [2]})},
-            pytest.raises(SchemaValidationError),
+        "bad entry: not a ParameterGenerator": (
+            {"1": {"parameter_1": [1]}, "2": CartesianProduct({"parameter_1": [2]})},
+            pytest.raises(
+                SchemaValidationError,
+                match=(
+                    r"Each value of a key:value entry must be a ``waves.parameter_generators.ParameterGenerator`` class"
+                ),
+            ),
         ),
-        "bad generator: not a parameter generator": (
-            {"1": ("not a generator", {"parameter_1": [2]}), "2": (CartesianProduct, {"parameter_1": [2]})},
-            pytest.raises(SchemaValidationError),
+        "CartesianProduct nominal and SALib sobol": (
+            {
+                "1": CartesianProduct(
+                    {
+                        "parameter_1": [1],
+                        "parameter_2": [2],
+                    },
+                    seed=42,
+                ),
+                "2": SALibSampler(
+                    "sobol",
+                    {
+                        "N": 1,
+                        "problem": {
+                            "num_vars": 2,
+                            "names": ["parameter_3", "parameter_4"],
+                            "bounds": [[-1, 1], [-2, 2]],
+                        },
+                    },
+                    calc_second_order=False,
+                    seed=42,
+                ),
+            },
+            does_not_raise,
         ),
-        "bad sub-schema: not a dictionary": (
-            {"1": (CartesianProduct, [[2]]), "2": (CartesianProduct, {"parameter_1": [2]})},
-            pytest.raises(SchemaValidationError),
+        "CartesianProduct nominal and Scipy sobol": (
+            {
+                "1": CartesianProduct(
+                    {
+                        "parameter_1": [1],
+                        "parameter_2": [2],
+                    },
+                    seed=42,
+                ),
+                "2": ScipySampler(
+                    "Sobol",
+                    {
+                        "num_simulations": 5,
+                        "parameter_3": {"distribution": "uniform", "loc": 0, "scale": 10},
+                        "parameter_4": {"distribution": "uniform", "loc": 2, "scale": 3},
+                    },
+                    seed=42,
+                ),
+            },
+            does_not_raise,
         ),
     }
 
@@ -72,7 +123,7 @@ class TestCatenationStudy:
 
     generate_io = {
         "one parameter": (
-            {"1": (CartesianProduct, {"parameter_1": [1]}), "2": (CartesianProduct, {"parameter_1": [2]})},
+            {"1": CartesianProduct({"parameter_1": [1]}), "2": CartesianProduct({"parameter_1": [2]})},
             {},
             None,
             xarray.Dataset(
@@ -92,11 +143,12 @@ class TestCatenationStudy:
                 }
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64},
+            does_not_raise,
         ),
         "one parameter mixed length strings": (
             {
-                "1": (CartesianProduct, {"parameter_1": ["one"]}),
-                "2": (CartesianProduct, {"parameter_1": ["two", "many"]}),
+                "1": CartesianProduct({"parameter_1": ["one"]}),
+                "2": CartesianProduct({"parameter_1": ["two", "many"]}),
             },
             {},
             None,
@@ -121,11 +173,12 @@ class TestCatenationStudy:
                 }
             ).set_coords("set_hash"),
             {"parameter_1": numpy.dtype("U4")},
+            does_not_raise,
         ),
         "one parameter random keys": (
             {
-                "study 1": (CartesianProduct, {"parameter_1": [1]}),
-                "another study": (CartesianProduct, {"parameter_1": [2]}),
+                "study 1": CartesianProduct({"parameter_1": [1]}),
+                "another study": CartesianProduct({"parameter_1": [2]}),
             },
             {},
             None,
@@ -146,9 +199,24 @@ class TestCatenationStudy:
                 }
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64},
+            does_not_raise,
+        ),
+        "one parameter custom template, does not match original studies": (
+            {"1": CartesianProduct({"parameter_1": [1]}), "2": CartesianProduct({"parameter_1": [2]})},
+            {"set_name_template": "set@number"},
+            None,
+            None,
+            None,
+            pytest.raises(
+                RuntimeError,
+                match=r"Could not fill merged parameter set names. Does the parameter set naming convention match?",
+            ),
         ),
         "one parameter custom template": (
-            {"1": (CartesianProduct, {"parameter_1": [1]}), "2": (CartesianProduct, {"parameter_1": [2]})},
+            {
+                "1": CartesianProduct({"parameter_1": [1]}, set_name_template="set@number"),
+                "2": CartesianProduct({"parameter_1": [2]}, set_name_template="set@number"),
+            },
             {"set_name_template": "set@number"},
             None,
             xarray.Dataset(
@@ -164,9 +232,24 @@ class TestCatenationStudy:
                 }
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64},
+            does_not_raise,
+        ),
+        "one parameter custom template no placeholder, mismatched against original study": (
+            {"1": CartesianProduct({"parameter_1": [1]}), "2": CartesianProduct({"parameter_1": [2]})},
+            {"set_name_template": "set"},
+            None,
+            None,
+            None,
+            pytest.raises(
+                RuntimeError,
+                match=r"Could not fill merged parameter set names. Does the parameter set naming convention match?",
+            ),
         ),
         "one parameter custom template no placeholder": (
-            {"1": (CartesianProduct, {"parameter_1": [1]}), "2": (CartesianProduct, {"parameter_1": [2]})},
+            {
+                "1": CartesianProduct({"parameter_1": [1]}, set_name_template="set"),
+                "2": CartesianProduct({"parameter_1": [2]}, set_name_template="set"),
+            },
             {"set_name_template": "set"},
             None,
             xarray.Dataset(
@@ -182,11 +265,12 @@ class TestCatenationStudy:
                 }
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64},
+            does_not_raise,
         ),
         "two parameter merge": (
             {
-                "1": (OneAtATime, {"parameter_1": [1], "parameter_2": ["a"]}),
-                "2": (OneAtATime, {"parameter_1": [2], "parameter_2": ["b"]}),
+                "1": OneAtATime({"parameter_1": [1], "parameter_2": ["a"]}),
+                "2": OneAtATime({"parameter_1": [2], "parameter_2": ["b"]}),
             },
             {},
             None,
@@ -218,9 +302,10 @@ class TestCatenationStudy:
                 }
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64, "parameter_2": numpy.dtype("U1")},
+            does_not_raise,
         ),
         "two parameter propagate": (
-            {"1": (CartesianProduct, {"parameter_1": [1, 2]}), "2": (CartesianProduct, {"parameter_2": ["a", "b"]})},
+            {"1": CartesianProduct({"parameter_1": [1, 2]}), "2": CartesianProduct({"parameter_2": ["a", "b"]})},
             {},
             None,
             xarray.Dataset(
@@ -255,9 +340,10 @@ class TestCatenationStudy:
                 }
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64, "parameter_2": numpy.dtype("U1")},
+            does_not_raise,
         ),
         "mixed generators ints and floats": (
-            {"1": (CartesianProduct, {"parameter_1": [1, 2]}), "2": (OneAtATime, {"parameter_2": [3.0, 4.0]})},
+            {"1": CartesianProduct({"parameter_1": [1, 2]}), "2": OneAtATime({"parameter_2": [3.0, 4.0]})},
             {},
             None,
             xarray.Dataset(
@@ -292,11 +378,12 @@ class TestCatenationStudy:
                 }
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
+            does_not_raise,
         ),
         "mixed generators mixed parameters": (
             {
-                "1": (OneAtATime, {"parameter_1": [1], "parameter_2": [3.0, 5.0]}),
-                "2": (CartesianProduct, {"parameter_1": [2], "parameter_2": [4.0]}),
+                "1": OneAtATime({"parameter_1": [1], "parameter_2": [3.0, 5.0]}),
+                "2": CartesianProduct({"parameter_1": [2], "parameter_2": [4.0]}),
             },
             {},
             None,
@@ -329,12 +416,13 @@ class TestCatenationStudy:
                 }
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
+            does_not_raise,
         ),
         "mixed generators three generators": (
             {
-                "1": (OneAtATime, {"parameter_1": [1], "parameter_2": [3.0, 5.0]}),
-                "2": (CartesianProduct, {"parameter_1": [2], "parameter_2": [4.0]}),
-                "3": (OneAtATime, {"parameter_3": ["a"]}),
+                "1": OneAtATime({"parameter_1": [1], "parameter_2": [3.0, 5.0]}),
+                "2": CartesianProduct({"parameter_1": [2], "parameter_2": [4.0]}),
+                "3": OneAtATime({"parameter_3": ["a"]}),
             },
             {},
             None,
@@ -375,18 +463,17 @@ class TestCatenationStudy:
                 }
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.dtype("U1")},
+            does_not_raise,
         ),
         "custom studies": (
             {
-                "1": (
-                    CustomStudy,
+                "1": CustomStudy(
                     {
                         "parameter_samples": numpy.array([[5, 1.0], [6, 2.0]], dtype=object),
                         "parameter_names": numpy.array(["parameter_1", "parameter_2"]),
                     },
                 ),
-                "2": (
-                    CustomStudy,
+                "2": CustomStudy(
                     {
                         "parameter_samples": numpy.array([[1, 3.0], [2, 4.0]], dtype=object),
                         "parameter_names": numpy.array(["parameter_1", "parameter_2"]),
@@ -427,16 +514,18 @@ class TestCatenationStudy:
                 }
             ).set_coords("set_hash"),
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
+            does_not_raise,
         ),
         "previous study one parameter cartesian product": (
-            {"1": (CartesianProduct, {"parameter_1": [3]}), "2": (CartesianProduct, {"parameter_1": [4]})},
+            {"1": CartesianProduct({"parameter_1": [3]}), "2": CartesianProduct({"parameter_1": [4]})},
             {"previous_parameter_study": "dummy_path.h5"},
             CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
             CartesianProduct({"parameter_1": [1, 2, 3, 4]}).parameter_study,
             {"parameter_1": numpy.int64},
+            does_not_raise,
         ),
         "previous study two shared parameters cartesian product": (
-            {"1": (CartesianProduct, {"parameter_1": [5]}), "2": (CartesianProduct, {"parameter_2": [7.0]})},
+            {"1": CartesianProduct({"parameter_1": [5]}), "2": CartesianProduct({"parameter_2": [7.0]})},
             {"previous_parameter_study": "dummy_path.h5"},
             CartesianProduct({"parameter_1": [1], "parameter_2": [3.0]}).parameter_study,
             xarray.Dataset(
@@ -464,16 +553,18 @@ class TestCatenationStudy:
                 }
             ).set_coords(_hash_coordinate_key),
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
+            does_not_raise,
         ),
         "previous study two different parameters cartesian product": (
-            {"1": (CartesianProduct, {"parameter_2": [3.0]}), "2": (CartesianProduct, {"parameter_2": [4.0]})},
+            {"1": CartesianProduct({"parameter_2": [3.0]}), "2": CartesianProduct({"parameter_2": [4.0]})},
             {"previous_parameter_study": "dummy_path.h5"},
             CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
             CartesianProduct({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}).parameter_study,
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
+            does_not_raise,
         ),
         "previous study two shared parameters mixed generators": (
-            {"1": (CartesianProduct, {"parameter_1": [5, 6]}), "2": (CartesianProduct, {"parameter_2": [7.0, 8.0]})},
+            {"1": CartesianProduct({"parameter_1": [5, 6]}), "2": CartesianProduct({"parameter_2": [7.0, 8.0]})},
             {"previous_parameter_study": "dummy_path.h5"},
             OneAtATime({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}).parameter_study,
             xarray.Dataset(
@@ -527,11 +618,274 @@ class TestCatenationStudy:
                 }
             ).set_coords(_hash_coordinate_key),
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
+            does_not_raise,
+        ),
+        "CartesianProduct and LatinHypercube": (
+            {
+                "1": CartesianProduct({"parameter_1": [1], "parameter_2": ["a"]}),
+                "2": LatinHypercube(
+                    {
+                        "num_simulations": 4,
+                        "parameter_3": {"distribution": "norm", "loc": 50, "scale": 1},
+                        "parameter_4": {"distribution": "skewnorm", "a": 4, "loc": 30, "scale": 2},
+                    },
+                    seed=42,
+                ),
+            },
+            {"set_name_template": "set@number"},
+            None,
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1, 1, 1, 1],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["set0", "set1", "set2", "set3"], dims=_set_coordinate_key
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        ["a", "a", "a", "a"],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["set0", "set1", "set2", "set3"], dims=_set_coordinate_key
+                            )
+                        },
+                    ),
+                    "parameter_3": xarray.DataArray(
+                        [50.6021284, 49.49423549, 48.1926071, 50.87684681],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["set0", "set1", "set2", "set3"], dims=_set_coordinate_key
+                            )
+                        },
+                    ),
+                    "parameter_4": xarray.DataArray(
+                        [32.33056027, 30.26038226, 31.59773274, 30.76707769],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["set0", "set1", "set2", "set3"], dims=_set_coordinate_key
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "1c42b17c9a439b3544925052fb72dd6b",
+                            "b14757e25406dd783c3898c20374d626",
+                            "e9742b6faaae2c4ccafa29cb4318e292",
+                            "f65dfa669d5444d9c6757b6791f838da",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {
+                "parameter_1": numpy.int64,
+                "parameter_2": numpy.dtype("U1"),
+                "parameter_3": numpy.float64,
+                "parameter_4": numpy.float64,
+            },
+            does_not_raise,
+        ),
+        "CartesianProduct nominal and SALib sobol": (
+            {
+                "1": CartesianProduct(
+                    {
+                        "parameter_1": [1],
+                        "parameter_2": [2],
+                    },
+                    seed=42,
+                ),
+                "2": SALibSampler(
+                    "sobol",
+                    {
+                        "N": 1,
+                        "problem": {
+                            "num_vars": 2,
+                            "names": ["parameter_3", "parameter_4"],
+                            "bounds": [[-1, 1], [-2, 2]],
+                        },
+                    },
+                    calc_second_order=False,
+                    seed=42,
+                ),
+            },
+            {},
+            None,
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1, 1, 1, 1],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [2, 2, 2, 2],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_3": xarray.DataArray(
+                        [0.61282553, 0.61282553, -0.13794105, -0.13794105],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_4": xarray.DataArray(
+                        [-1.78617326, 1.25747189, -1.78617326, 1.25747189],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "6ea43bd843e46e403a8a6c55ce5e5293",
+                            "81490dd4c2ee92e7cf2c6871be136ace",
+                            "924311e5f1c09d2072e35310260810e6",
+                            "f68a6a8b5adce836c7c1f4b1c4efeb76",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {
+                "parameter_1": numpy.int64,
+                "parameter_2": numpy.int64,
+                "parameter_3": numpy.float64,
+                "parameter_4": numpy.float64,
+            },
+            does_not_raise,
+        ),
+        "CartesianProduct nominal and Scipy sobol": (
+            {
+                "1": CartesianProduct(
+                    {
+                        "parameter_1": [1],
+                        "parameter_2": [2],
+                    },
+                    seed=42,
+                ),
+                "2": ScipySampler(
+                    "Sobol",
+                    {
+                        "num_simulations": 5,
+                        "parameter_3": {"distribution": "uniform", "loc": 0, "scale": 10},
+                        "parameter_4": {"distribution": "uniform", "loc": 2, "scale": 3},
+                    },
+                    seed=42,
+                ),
+            },
+            {},
+            None,
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1, 1, 1, 1, 1],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [2, 2, 2, 2, 2],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_3": xarray.DataArray(
+                        [5.6453192, 0.35047322, 4.31029474, 9.61578793, 2.38067276],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_4": xarray.DataArray(
+                        [3.79350291, 2.07952781, 4.44310392, 2.93422983, 3.91909283],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "4a286f385ea87a96cccfc87c92b45463",
+                            "6a6bf32dcd3c8c3139c44f4303bfbd81",
+                            "a7f8d3dccac4e39f3b289467e71ce092",
+                            "e039db21d6fe77b7d67e5827c769dc07",
+                            "ff508abe2b3ed1685ebd15164e6209ec",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {
+                "parameter_1": numpy.int64,
+                "parameter_2": numpy.int64,
+                "parameter_3": numpy.float64,
+                "parameter_4": numpy.float64,
+            },
+            does_not_raise,
         ),
     }
 
     @pytest.mark.parametrize(
-        ("parameter_schema", "kwargs", "previous_study", "expected_dataset", "expected_types"),
+        ("parameter_schema", "kwargs", "previous_study", "expected_dataset", "expected_types", "outcome"),
         generate_io.values(),
         ids=generate_io.keys(),
     )
@@ -542,13 +896,15 @@ class TestCatenationStudy:
         previous_study: xarray.Dataset | None,
         expected_dataset: xarray.Dataset,
         expected_types: dict[str, type],
+        outcome: contextlib.nullcontext | pytest.RaisesExc,
     ) -> None:
         with (
+            outcome,
             patch("waves.parameter_generators._open_parameter_study", return_value=previous_study),
             patch("pathlib.Path.is_file", return_value=True),
         ):
             test_generate = CatenationStudy(parameter_schema, **kwargs)
-            xarray.testing.assert_identical(test_generate.parameter_study, expected_dataset)
+            xarray.testing.assert_allclose(test_generate.parameter_study, expected_dataset)
             for key in test_generate.parameter_study:
                 assert test_generate.parameter_study[key].dtype == expected_types[str(key)]
             # Verify that the parameter set name creation method was called
@@ -556,146 +912,25 @@ class TestCatenationStudy:
             #  of implied consistency according to value order.
             assert list(test_generate._set_names.values()) == list(expected_dataset[_set_coordinate_key].to_numpy())
 
-    write_yaml = {
-        "one parameter yaml": (
-            {"1": (CartesianProduct, {"parameter_1": [1]}), "2": (CartesianProduct, {"parameter_1": [2]})},
-            "out",
-            None,
-            "yaml",
-            2,
-            [call("parameter_1: 1\n"), call("parameter_1: 2\n")],
-        ),
-        "two parameter propagate yaml": (
-            {"1": (CartesianProduct, {"parameter_1": [1, 2]}), "2": (CartesianProduct, {"parameter_2": ["a", "b"]})},
-            "out",
-            None,
-            "yaml",
-            4,
-            [
-                call("parameter_1: 1\nparameter_2: a\n"),
-                call("parameter_1: 1\nparameter_2: b\n"),
-                call("parameter_1: 2\nparameter_2: b\n"),
-                call("parameter_1: 2\nparameter_2: a\n"),
-            ],
-        ),
-        "mixed generators ints and floats yaml": (
-            {"1": (CartesianProduct, {"parameter_1": [1, 2]}), "2": (OneAtATime, {"parameter_2": [3.0, 4.0]})},
-            "out",
-            None,
-            "yaml",
-            4,
-            [
-                call("parameter_1: 1\nparameter_2: 4.0\n"),
-                call("parameter_1: 1\nparameter_2: 3.0\n"),
-                call("parameter_1: 2\nparameter_2: 4.0\n"),
-                call("parameter_1: 2\nparameter_2: 3.0\n"),
-            ],
-        ),
-        "two parameter propagate yaml: bools and ints": (
-            {"1": (CartesianProduct, {"parameter_1": [1, 2]}), "2": (CartesianProduct, {"parameter_2": [True, False]})},
-            "out",
-            None,
-            "yaml",
-            4,
-            [
-                call("parameter_1: 2\nparameter_2: true\n"),
-                call("parameter_1: 1\nparameter_2: true\n"),
-                call("parameter_1: 2\nparameter_2: false\n"),
-                call("parameter_1: 1\nparameter_2: false\n"),
-            ],
-        ),
-        "one parameter one file yaml": (
-            {"1": (CartesianProduct, {"parameter_1": [1]}), "2": (CartesianProduct, {"parameter_1": [2]})},
-            None,
-            "parameter_study.yaml",
-            "yaml",
-            1,
-            [call("parameter_set0:\n  parameter_1: 1\nparameter_set1:\n  parameter_1: 2\n")],
-        ),
-        "two parameter propagate one file yaml": (
-            {"1": (CartesianProduct, {"parameter_1": [1, 2]}), "2": (CartesianProduct, {"parameter_2": ["a", "b"]})},
-            None,
-            "parameter_study.yaml",
-            "yaml",
-            1,
-            [
-                call(
-                    "parameter_set0:\n  parameter_1: 1\n  parameter_2: a\n"
-                    "parameter_set1:\n  parameter_1: 1\n  parameter_2: b\n"
-                    "parameter_set2:\n  parameter_1: 2\n  parameter_2: b\n"
-                    "parameter_set3:\n  parameter_1: 2\n  parameter_2: a\n"
-                )
-            ],
-        ),
-        "two parameter one file yaml: bools and ints": (
-            {"1": (CartesianProduct, {"parameter_1": [1, 2]}), "2": (CartesianProduct, {"parameter_2": [True, False]})},
-            None,
-            "parameter_study.yaml",
-            "yaml",
-            1,
-            [
-                call(
-                    "parameter_set0:\n  parameter_1: 2\n  parameter_2: true\n"
-                    "parameter_set1:\n  parameter_1: 1\n  parameter_2: true\n"
-                    "parameter_set2:\n  parameter_1: 2\n  parameter_2: false\n"
-                    "parameter_set3:\n  parameter_1: 1\n  parameter_2: false\n"
-                )
-            ],
-        ),
-    }
-
-    @pytest.mark.parametrize(
-        ("parameter_schema", "output_file_template", "output_file", "output_type", "file_count", "expected_calls"),
-        write_yaml.values(),
-        ids=write_yaml.keys(),
-    )
-    def test_write_yaml(
-        self,
-        parameter_schema: dict[str, tuple],
-        output_file_template: str | None,
-        output_file: str | None,
-        output_type: _allowable_output_file_typing,
-        file_count: int,
-        expected_calls: list[unittest.mock._Call],
-    ) -> None:
-        with (
-            patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-            patch("pathlib.Path.open", mock_open()) as mock_file,
-            patch("xarray.Dataset.to_netcdf") as xarray_to_netcdf,
-            patch("sys.stdout.write") as stdout_write,
-            patch("pathlib.Path.is_file", return_value=False),
-        ):
-            test_write_yaml = CatenationStudy(
-                parameter_schema,
-                output_file_template=output_file_template,
-                output_file=output_file,
-                output_file_type=output_type,
-            )
-            test_write_yaml.write()
-            stdout_write.assert_not_called()
-            xarray_to_netcdf.assert_not_called()
-            assert mock_file.call_count == file_count
-            mock_file().write.assert_has_calls(expected_calls, any_order=False)
-
     parameter_study_to_dict = {
         "ints": (
-            {"1": (CartesianProduct, {"ints": [1]}), "2": (CartesianProduct, {"ints": [2]})},
+            {"1": CartesianProduct({"ints": [1]}), "2": CartesianProduct({"ints": [2]})},
             {"parameter_set0": {"ints": 1}, "parameter_set1": {"ints": 2}},
         ),
         "floats": (
-            {"1": (OneAtATime, {"floats": [10.0]}), "2": (OneAtATime, {"floats": [20.0]})},
+            {"1": OneAtATime({"floats": [10.0]}), "2": OneAtATime({"floats": [20.0]})},
             {"parameter_set0": {"floats": 10.0}, "parameter_set1": {"floats": 20.0}},
         ),
         "strings": (
-            {"1": (CartesianProduct, {"strings": ["a"]}), "2": (CartesianProduct, {"strings": ["b"]})},
+            {"1": CartesianProduct({"strings": ["a"]}), "2": CartesianProduct({"strings": ["b"]})},
             {"parameter_set0": {"strings": "a"}, "parameter_set1": {"strings": "b"}},
         ),
         "bools": (
-            {"1": (CartesianProduct, {"bools": [False]}), "2": (CartesianProduct, {"bools": [True]})},
+            {"1": CartesianProduct({"bools": [False]}), "2": CartesianProduct({"bools": [True]})},
             {"parameter_set0": {"bools": False}, "parameter_set1": {"bools": True}},
         ),
         "mixed ints, float": (
-            {"1": (OneAtATime, {"ints": [1]}), "2": (CartesianProduct, {"floats": [10.0]})},
+            {"1": OneAtATime({"ints": [1]}), "2": CartesianProduct({"floats": [10.0]})},
             {"parameter_set0": {"ints": 1, "floats": 10.0}},
         ),
     }

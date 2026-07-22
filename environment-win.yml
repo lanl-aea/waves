@@ -5,7 +5,6 @@ channels:
 dependencies:
   - calculix
   - ccx2paraview >=3.2
-  - conda-build
   - h5netcdf
   - h5py
   - matplotlib-base
@@ -21,7 +20,7 @@ dependencies:
   - python-build
   - python-gmsh
   - pyyaml
-  - rattler-build >=0.66.2
+  - rattler-build >=0.66.2,<0.68.0
   - ruff
   - salib >=1.5.1
   - scipy >=1

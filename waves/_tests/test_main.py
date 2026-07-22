@@ -7,7 +7,7 @@ from unittest.mock import Mock, mock_open, patch
 
 import pytest
 
-from waves import _main, _settings, exceptions
+from waves import _main, exceptions
 
 does_not_raise = contextlib.nullcontext()
 
@@ -107,30 +107,206 @@ def test_main() -> None:
 
 
 parameter_study_args = {
-    "cartesian product": ("cartesian_product", "CartesianProduct", None, None, None),
-    "custom study": ("custom_study", "CustomStudy", None, None, None),
-    "latin hypercube": ("latin_hypercube", "LatinHypercube", None, None, None),
-    "sobol sequence": ("sobol_sequence", "SobolSequence", None, None, None),
-    "one at a time": ("one_at_a_time", "OneAtATime", None, None, None),
-    "output file template": ("cartesian_product", "CartesianProduct", "output_file_template", "-o", "dummy_template"),
-    "output file": ("custom_study", "CustomStudy", "output_file", "-f", "dummy_file.txt"),
-    "output file type": ("latin_hypercube", "LatinHypercube", "output_file_type", "-t", "h5"),
-    "set name template": ("sobol_sequence", "SobolSequence", "set_name_template", "-s", "@number"),
+    "cartesian product": (
+        "cartesian_product",
+        "CartesianProduct",
+        None,
+        None,
+        None,
+        {
+            "output_file": None,
+            "output_directory": None,
+            "output_file_type": "yaml",
+            "overwrite": False,
+            "dry_run": False,
+            "meta_file": None,
+        },
+    ),
+    "custom study": (
+        "custom_study",
+        "CustomStudy",
+        None,
+        None,
+        None,
+        {
+            "output_file": None,
+            "output_directory": None,
+            "output_file_type": "yaml",
+            "overwrite": False,
+            "dry_run": False,
+            "meta_file": None,
+        },
+    ),
+    "latin hypercube": (
+        "latin_hypercube",
+        "LatinHypercube",
+        None,
+        None,
+        None,
+        {
+            "output_file": None,
+            "output_directory": None,
+            "output_file_type": "yaml",
+            "overwrite": False,
+            "dry_run": False,
+            "meta_file": None,
+        },
+    ),
+    "sobol sequence": (
+        "sobol_sequence",
+        "SobolSequence",
+        None,
+        None,
+        None,
+        {
+            "output_file": None,
+            "output_directory": None,
+            "output_file_type": "yaml",
+            "overwrite": False,
+            "dry_run": False,
+            "meta_file": None,
+        },
+    ),
+    "one at a time": (
+        "one_at_a_time",
+        "OneAtATime",
+        None,
+        None,
+        None,
+        {
+            "output_file": None,
+            "output_directory": None,
+            "output_file_type": "yaml",
+            "overwrite": False,
+            "dry_run": False,
+            "meta_file": None,
+        },
+    ),
+    "output directory": (
+        "cartesian_product",
+        "CartesianProduct",
+        "output_directory",
+        "-o",
+        "dummy_directory",
+        {
+            "output_file": None,
+            "output_directory": pathlib.Path("dummy_directory"),
+            "output_file_type": "yaml",
+            "overwrite": False,
+            "dry_run": False,
+            "meta_file": None,
+        },
+    ),
+    "output file": (
+        "custom_study",
+        "CustomStudy",
+        "output_file",
+        "-f",
+        "dummy_file.txt",
+        {
+            "output_file": pathlib.Path("dummy_file.txt"),
+            "output_directory": None,
+            "output_file_type": "yaml",
+            "overwrite": False,
+            "dry_run": False,
+            "meta_file": None,
+        },
+    ),
+    "output file type": (
+        "latin_hypercube",
+        "LatinHypercube",
+        "output_file_type",
+        "-t",
+        "h5",
+        {
+            "output_file": None,
+            "output_directory": None,
+            "output_file_type": "h5",
+            "overwrite": False,
+            "dry_run": False,
+            "meta_file": None,
+        },
+    ),
+    "set name template": (
+        "sobol_sequence",
+        "SobolSequence",
+        "set_name_template",
+        "-s",
+        "@number",
+        {
+            "output_file": None,
+            "output_directory": None,
+            "output_file_type": "yaml",
+            "overwrite": False,
+            "dry_run": False,
+            "meta_file": None,
+        },
+    ),
     "previous parameter study": (
         "cartesian_product",
         "CartesianProduct",
         "previous_parameter_study",
         "-p",
         "dummy_file.txt",
+        {
+            "output_file": None,
+            "output_directory": None,
+            "output_file_type": "yaml",
+            "overwrite": False,
+            "dry_run": False,
+            "meta_file": None,
+        },
     ),
-    "overwrite": ("custom_study", "CustomStudy", "overwrite", "--overwrite", True),
-    "dry run": ("latin_hypercube", "LatinHypercube", "dry_run", "--dry-run", True),
-    "write meta": ("sobol_sequence", "SobolSequence", "write_meta", "--write-meta", True),
+    "overwrite": (
+        "custom_study",
+        "CustomStudy",
+        "overwrite",
+        "--overwrite",
+        True,
+        {
+            "output_file": None,
+            "output_directory": None,
+            "output_file_type": "yaml",
+            "overwrite": True,
+            "dry_run": False,
+            "meta_file": None,
+        },
+    ),
+    "dry run": (
+        "latin_hypercube",
+        "LatinHypercube",
+        "dry_run",
+        "--dry-run",
+        True,
+        {
+            "output_file": None,
+            "output_directory": None,
+            "output_file_type": "yaml",
+            "overwrite": False,
+            "dry_run": True,
+            "meta_file": None,
+        },
+    ),
+    "write meta": (
+        "sobol_sequence",
+        "SobolSequence",
+        "meta_file",
+        "--meta-file",
+        "meta_file.txt",
+        {
+            "output_file": None,
+            "output_directory": None,
+            "output_file_type": "yaml",
+            "overwrite": False,
+            "dry_run": False,
+            "meta_file": pathlib.Path("meta_file.txt"),
+        },
+    ),
 }
 
 
 @pytest.mark.parametrize(
-    ("subcommand", "class_name", "argument", "option", "argument_value"),
+    ("subcommand", "class_name", "argument", "option", "argument_value", "expected_write_kwargs"),
     parameter_study_args.values(),
     ids=list(parameter_study_args.keys()),
 )
@@ -140,6 +316,7 @@ def test_parameter_study(
     argument: str,
     option: str,
     argument_value: typing.Any,  # noqa: ANN401, the argument type really might be an arbitrary type
+    expected_write_kwargs: dict,
 ) -> None:
     # Help/usage. Should not raise
     with (
@@ -167,8 +344,15 @@ def test_parameter_study(
     ):
         _main.main()
         mock_generator.assert_called_once()
-        if argument and argument != "dry_run":
+        if argument and argument == "previous_parameter_study":
+            assert mock_generator.call_args.kwargs[argument] == pathlib.Path(argument_value)
+        elif argument and argument not in [
+            "output_file",
+            "output_directory",
+            "output_file_type",
+            "overwrite",
+            "dry_run",
+            "meta_file",
+        ]:
             assert mock_generator.call_args.kwargs[argument] == argument_value
-            mock_instantiation.write.assert_called_once_with(dry_run=_settings._default_dry_run)
-        elif argument and argument == "dry_run":
-            mock_instantiation.write.assert_called_once_with(dry_run=argument_value)
+        mock_instantiation.write.assert_called_once_with(**expected_write_kwargs)

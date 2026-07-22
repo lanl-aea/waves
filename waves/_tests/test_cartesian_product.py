@@ -1,15 +1,14 @@
 """Test CartesianProduct Class."""
 
 import contextlib
-import unittest
-from unittest.mock import call, mock_open, patch
+from unittest.mock import patch
 
 import numpy
 import pytest
 import xarray
 
 from waves import parameter_generators
-from waves._settings import _allowable_output_file_typing, _set_coordinate_key
+from waves._settings import _set_coordinate_key
 from waves._tests.common import consistent_hash_parameter_check, merge_samplers, self_consistency_checks
 from waves.exceptions import SchemaValidationError
 from waves.parameter_generators import CartesianProduct
@@ -874,127 +873,6 @@ class TestCartesianProduct:
                 assert merged_study.parameter_study[key].dtype == expected_types[str(key)]
             consistent_hash_parameter_check(original_study, merged_study)
             self_consistency_checks(merged_study)
-
-    write_yaml = {
-        "one parameter yaml": (
-            {"parameter_1": [1, 2]},
-            "out",
-            None,
-            "yaml",
-            2,
-            [call("parameter_1: 2\n"), call("parameter_1: 1\n")],
-        ),
-        "two parameter yaml": (
-            {"parameter_1": [1, 2], "parameter_2": ["a", "b"]},
-            "out",
-            None,
-            "yaml",
-            4,
-            [
-                call("parameter_1: 1\nparameter_2: a\n"),
-                call("parameter_1: 1\nparameter_2: b\n"),
-                call("parameter_1: 2\nparameter_2: b\n"),
-                call("parameter_1: 2\nparameter_2: a\n"),
-            ],
-        ),
-        "two parameter yaml: floats and ints": (
-            {"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]},
-            "out",
-            None,
-            "yaml",
-            4,
-            [
-                call("parameter_1: 1\nparameter_2: 4.0\n"),
-                call("parameter_1: 1\nparameter_2: 3.0\n"),
-                call("parameter_1: 2\nparameter_2: 4.0\n"),
-                call("parameter_1: 2\nparameter_2: 3.0\n"),
-            ],
-        ),
-        "two parameter yaml: bools and ints": (
-            {"parameter_1": [1, 2], "parameter_2": [True, False]},
-            "out",
-            None,
-            "yaml",
-            4,
-            [
-                call("parameter_1: 2\nparameter_2: true\n"),
-                call("parameter_1: 1\nparameter_2: true\n"),
-                call("parameter_1: 2\nparameter_2: false\n"),
-                call("parameter_1: 1\nparameter_2: false\n"),
-            ],
-        ),
-        "one parameter one file yaml": (
-            {"parameter_1": [1, 2]},
-            None,
-            "parameter_study.yaml",
-            "yaml",
-            1,
-            [call("parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n")],
-        ),
-        "two parameter one file yaml": (
-            {"parameter_1": [1, 2], "parameter_2": ["a", "b"]},
-            None,
-            "parameter_study.yaml",
-            "yaml",
-            1,
-            [
-                call(
-                    "parameter_set0:\n  parameter_1: 1\n  parameter_2: a\n"
-                    "parameter_set1:\n  parameter_1: 1\n  parameter_2: b\n"
-                    "parameter_set2:\n  parameter_1: 2\n  parameter_2: b\n"
-                    "parameter_set3:\n  parameter_1: 2\n  parameter_2: a\n"
-                )
-            ],
-        ),
-        "two parameter one file yaml: bools": (
-            {"parameter_1": [1, 2], "parameter_2": [True, False]},
-            None,
-            "parameter_study.yaml",
-            "yaml",
-            1,
-            [
-                call(
-                    "parameter_set0:\n  parameter_1: 2\n  parameter_2: true\n"
-                    "parameter_set1:\n  parameter_1: 1\n  parameter_2: true\n"
-                    "parameter_set2:\n  parameter_1: 2\n  parameter_2: false\n"
-                    "parameter_set3:\n  parameter_1: 1\n  parameter_2: false\n"
-                )
-            ],
-        ),
-    }
-
-    @pytest.mark.parametrize(
-        ("parameter_schema", "output_file_template", "output_file", "output_type", "file_count", "expected_calls"),
-        write_yaml.values(),
-        ids=write_yaml.keys(),
-    )
-    def test_write_yaml(
-        self,
-        parameter_schema: dict,
-        output_file_template: str | None,
-        output_file: str | None,
-        output_type: _allowable_output_file_typing,
-        file_count: int,
-        expected_calls: list[unittest.mock._Call],
-    ) -> None:
-        with (
-            patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-            patch("pathlib.Path.open", mock_open()) as mock_file,
-            patch("xarray.Dataset.to_netcdf") as xarray_to_netcdf,
-            patch("sys.stdout.write") as stdout_write,
-            patch("pathlib.Path.is_file", return_value=False),
-        ):
-            test_write_yaml = CartesianProduct(
-                parameter_schema,
-                output_file_template=output_file_template,
-                output_file=output_file,
-                output_file_type=output_type,
-            )
-            test_write_yaml.write()
-            stdout_write.assert_not_called()
-            xarray_to_netcdf.assert_not_called()
-            assert mock_file.call_count == file_count
-            mock_file().write.assert_has_calls(expected_calls, any_order=False)
 
     parameter_study_to_dict = {
         "ints": (

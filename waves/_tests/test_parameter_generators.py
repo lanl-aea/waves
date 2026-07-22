@@ -1,17 +1,18 @@
 """Test ParameterGenerator Abstract Base Class."""
 
 import contextlib
+import copy
 import pathlib
 import string
 import typing
-from unittest.mock import mock_open, patch
+from unittest.mock import call, mock_open, patch
 
 import numpy
 import pytest
 import xarray
 
 from waves import _settings, _utilities, parameter_generators
-from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
+from waves.exceptions import APIError, ChoicesError, MutuallyExclusiveError, SchemaValidationError
 
 does_not_raise = contextlib.nullcontext()
 
@@ -483,6 +484,7 @@ propagate_parameter_space_cases = {
             parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_2": [2]}).parameter_study,
         ],
+        {},
         parameter_generators.OneAtATime({"parameter_1": [1], "parameter_2": [2]}).parameter_study,
         {"parameter_1": numpy.int64, "parameter_2": numpy.int64},
         True,
@@ -493,6 +495,7 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [True]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_2": [False]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct({"parameter_1": [True], "parameter_2": [False]}).parameter_study,
         {"parameter_1": numpy.bool_, "parameter_2": numpy.bool_},
         True,
@@ -503,6 +506,7 @@ propagate_parameter_space_cases = {
             parameter_generators.OneAtATime({"parameter_1": ["a"]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_2": ["a"]}).parameter_study,
         ],
+        {},
         parameter_generators.OneAtATime({"parameter_1": ["a"], "parameter_2": ["a"]}).parameter_study,
         {"parameter_1": numpy.dtype("U1"), "parameter_2": numpy.dtype("U1")},
         True,
@@ -513,6 +517,7 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_2": [2.0, 3.0]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0], "parameter_2": [2.0, 3.0]}).parameter_study,
         {"parameter_1": numpy.float64, "parameter_2": numpy.float64},
         True,
@@ -523,6 +528,7 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_2": [False]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct({"parameter_1": [1, 2], "parameter_2": [False]}).parameter_study,
         {"parameter_1": numpy.int64, "parameter_2": numpy.bool_},
         True,
@@ -533,6 +539,7 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1, 2]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_2": [3.0, 4.0]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}).parameter_study,
         {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
         True,
@@ -543,6 +550,7 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1.0]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_2": ["a", "b"]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct({"parameter_1": [1.0], "parameter_2": ["a", "b"]}).parameter_study,
         {"parameter_1": numpy.float64, "parameter_2": numpy.dtype("U1")},
         True,
@@ -553,6 +561,7 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0, 3.0]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_2": ["a", "b", "c"]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct(
             {"parameter_1": [1.0, 2.0, 3.0], "parameter_2": ["a", "b", "c"]}
         ).parameter_study,
@@ -565,6 +574,7 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [3.0, 2.0, 1.0]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_2": ["c", "b", "a"]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct(
             {"parameter_1": [1.0, 2.0, 3.0], "parameter_2": ["a", "b", "c"]}
         ).parameter_study,
@@ -577,6 +587,7 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_2": ["a", "b"], "parameter_3": [5, 10]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct(
             {"parameter_1": [1.0, 2.0], "parameter_2": ["a", "b"], "parameter_3": [5, 10]}
         ).parameter_study,
@@ -589,6 +600,7 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [2.0, 1.0]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_2": ["b", "a"], "parameter_3": [5, 10]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct(
             {"parameter_1": [1.0, 2.0], "parameter_2": ["a", "b"], "parameter_3": [5, 10]}
         ).parameter_study,
@@ -601,6 +613,7 @@ propagate_parameter_space_cases = {
             parameter_generators.OneAtATime({"parameter_1": [1.0, 2.0]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_2": ["a"], "parameter_3": [5]}).parameter_study,
         ],
+        {},
         parameter_generators.OneAtATime(
             {"parameter_1": [1.0, 2.0], "parameter_2": ["a"], "parameter_3": [5]}
         ).parameter_study,
@@ -613,6 +626,7 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0], "parameter_3": [True]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_2": ["a", "b"]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct(
             {
                 "parameter_1": [1.0, 2.0],
@@ -629,6 +643,7 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0], "parameter_4": [True]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_2": ["a", "b"], "parameter_3": [3, 4]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct(
             {
                 "parameter_1": [1.0, 2.0],
@@ -651,12 +666,35 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0, 3.0]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_2": ["a", "b"], "parameter_3": [3, 4]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct(
             {
                 "parameter_1": [1.0, 2.0, 3.0],
                 "parameter_2": ["a", "b"],
                 "parameter_3": [3, 4],
             }
+        ).parameter_study,
+        {
+            "parameter_1": numpy.float64,
+            "parameter_2": numpy.dtype("U1"),
+            "parameter_3": numpy.int64,
+        },
+        True,
+        does_not_raise,
+    ),
+    "propagate four parameter sets into three sets, set name template": (
+        [
+            parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0, 3.0]}).parameter_study,
+            parameter_generators.CartesianProduct({"parameter_2": ["a", "b"], "parameter_3": [3, 4]}).parameter_study,
+        ],
+        {"template": _utilities._AtSignTemplate("set@number")},
+        parameter_generators.CartesianProduct(
+            {
+                "parameter_1": [1.0, 2.0, 3.0],
+                "parameter_2": ["a", "b"],
+                "parameter_3": [3, 4],
+            },
+            set_name_template="set@number",
         ).parameter_study,
         {
             "parameter_1": numpy.float64,
@@ -671,6 +709,7 @@ propagate_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_2": ["a", "b"], "parameter_3": [3, 4]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0, 3.0]}).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct(
             {
                 "parameter_1": [1.0, 2.0, 3.0],
@@ -686,16 +725,65 @@ propagate_parameter_space_cases = {
         True,
         does_not_raise,
     ),
+    "propagate three parameter sets into four sets, set name template": (
+        [
+            parameter_generators.CartesianProduct({"parameter_2": ["a", "b"], "parameter_3": [3, 4]}).parameter_study,
+            parameter_generators.CartesianProduct({"parameter_1": [1.0, 2.0, 3.0]}).parameter_study,
+        ],
+        {"template": _utilities._AtSignTemplate("set@number")},
+        parameter_generators.CartesianProduct(
+            {
+                "parameter_1": [1.0, 2.0, 3.0],
+                "parameter_2": ["a", "b"],
+                "parameter_3": [3, 4],
+            },
+            set_name_template="set@number",
+        ).parameter_study,
+        {
+            "parameter_1": numpy.float64,
+            "parameter_2": numpy.dtype("U1"),
+            "parameter_3": numpy.int64,
+        },
+        True,
+        does_not_raise,
+    ),
+    "propagate one parameter: int, set name template": (
+        [
+            parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
+            parameter_generators.OneAtATime({"parameter_2": [2]}).parameter_study,
+        ],
+        {"template": _utilities._AtSignTemplate("set@number")},
+        parameter_generators.OneAtATime(
+            {"parameter_1": [1], "parameter_2": [2]}, set_name_template="set@number"
+        ).parameter_study,
+        {"parameter_1": numpy.int64, "parameter_2": numpy.int64},
+        True,
+        does_not_raise,
+    ),
+    "propagate one parameter: int, set name template, mixed original set names": (
+        [
+            parameter_generators.OneAtATime({"parameter_1": [1]}, set_name_template="first@number").parameter_study,
+            parameter_generators.OneAtATime({"parameter_2": [2]}, set_name_template="second@number").parameter_study,
+        ],
+        {"template": _utilities._AtSignTemplate("set@number")},
+        parameter_generators.OneAtATime(
+            {"parameter_1": [1], "parameter_2": [2]}, set_name_template="set@number"
+        ).parameter_study,
+        {"parameter_1": numpy.int64, "parameter_2": numpy.int64},
+        True,
+        does_not_raise,
+    ),
 }
 
 
 @pytest.mark.parametrize(
-    ("studies", "expected_study", "expected_types", "propagate_space", "outcome"),
+    ("studies", "kwargs", "expected_study", "expected_types", "propagate_space", "outcome"),
     propagate_parameter_space_cases.values(),
     ids=propagate_parameter_space_cases.keys(),
 )
 def test_propagate_parameter_space(
     studies: list[xarray.Dataset],
+    kwargs: dict,
     expected_study: xarray.Dataset,
     expected_types: dict[str, type],
     propagate_space: bool,  # noqa: ARG001, placeholder argument for test case compatibility with downstream functions
@@ -705,6 +793,7 @@ def test_propagate_parameter_space(
 
     :param studies: list of N number of parameter study Xarray datasets to merge, where the first study in the list is
         the base study
+    :param kwargs: the function keyword arguments
     :param expected_study: Xarray dataset
     :param expected_types: dictionary with parameter names as the keys and numpy types as values
     :param propagate_space: boolean indicating if parameter space propagation is used to construct the output study
@@ -713,7 +802,7 @@ def test_propagate_parameter_space(
     study_base, study_other = studies
     with outcome:
         try:
-            propagated_study = parameter_generators._propagate_parameter_space(study_base, study_other)
+            propagated_study = parameter_generators._propagate_parameter_space(study_base, study_other, **kwargs)
             for key, parameter_type in expected_types.items():
                 assert propagated_study[key].dtype == parameter_type
             xarray.testing.assert_identical(propagated_study, expected_study)
@@ -722,12 +811,13 @@ def test_propagate_parameter_space(
             pass
 
 
-merge_parameter_space_cases = {
+merge_parameter_space_cases: dict = {
     "concatenate along one parameter: unchanged": (
         [
             parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
         ],
+        {},
         parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
         {"parameter_1": numpy.int64},
         False,
@@ -738,6 +828,7 @@ merge_parameter_space_cases = {
             parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_1": [2]}).parameter_study,
         ],
+        {},
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
@@ -763,6 +854,7 @@ merge_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1.0]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_1": [2.0]}).parameter_study,
         ],
+        {},
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
@@ -788,6 +880,7 @@ merge_parameter_space_cases = {
             parameter_generators.OneAtATime({"parameter_1": [True]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_1": [False]}).parameter_study,
         ],
+        {},
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
@@ -813,6 +906,7 @@ merge_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_1": [2.0]}).parameter_study,
         ],
+        {},
         None,
         None,
         None,
@@ -823,6 +917,7 @@ merge_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_1": [True]}).parameter_study,
         ],
+        {},
         None,
         None,
         None,
@@ -833,6 +928,7 @@ merge_parameter_space_cases = {
             parameter_generators.OneAtATime({"parameter_1": [1.0]}).parameter_study,
             parameter_generators.OneAtATime({"parameter_1": [True]}).parameter_study,
         ],
+        {},
         None,
         None,
         None,
@@ -850,6 +946,7 @@ merge_parameter_space_cases = {
                 {"parameter_1": [1, 2], "parameter_2": [3.0, 5.0], "parameter_3": ["a"]}
             ).parameter_study,
         ],
+        {},
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
@@ -914,6 +1011,7 @@ merge_parameter_space_cases = {
             parameter_generators.CartesianProduct({"parameter_1": [1], "parameter_2": [True]}).parameter_study,
             parameter_generators.CartesianProduct({"parameter_1": [2], "parameter_2": [False]}).parameter_study,
         ],
+        {},
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
@@ -949,6 +1047,7 @@ merge_parameter_space_cases = {
                 {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}
             ).parameter_study,
         ],
+        {},
         parameter_generators.CartesianProduct(
             {"parameter_1": [1, 2], "parameter_2": [3.0], "parameter_3": [True, False]}
         ).parameter_study,
@@ -960,12 +1059,13 @@ merge_parameter_space_cases = {
 
 
 @pytest.mark.parametrize(
-    ("studies", "expected_study", "expected_types", "propagate_space", "outcome"),
+    ("studies", "kwargs", "expected_study", "expected_types", "propagate_space", "outcome"),
     merge_parameter_space_cases.values(),
     ids=merge_parameter_space_cases.keys(),
 )
 def test_merge_parameter_space(
     studies: list[xarray.Dataset],
+    kwargs: dict,
     expected_study: xarray.Dataset,
     expected_types: dict[str, type],
     propagate_space: bool,
@@ -975,6 +1075,7 @@ def test_merge_parameter_space(
 
     :param studies: list of N number of parameter study Xarray datasets to merge, where the first study in the list is
         the base study
+    :param kwargs: the function keyword arguments
     :param expected_study: Xarray dataset
     :param expected_types: dictionary with parameter names as the keys and numpy types as values
     :param propagate_space: boolean indicating if parameter space propagation is used to construct the output study.
@@ -985,7 +1086,7 @@ def test_merge_parameter_space(
             swap_to_hash_index = {_settings._set_coordinate_key: _settings._hash_coordinate_key}
             swap_to_set_index = {_settings._hash_coordinate_key: _settings._set_coordinate_key}
             studies = [study.swap_dims(swap_to_hash_index) for study in studies]
-            merged_study = parameter_generators._merge_parameter_space(studies)
+            merged_study = parameter_generators._merge_parameter_space(studies, **kwargs)
             merged_study = merged_study.swap_dims(swap_to_set_index)
             for key, parameter_type in expected_types.items():
                 assert merged_study[key].dtype == parameter_type
@@ -1007,6 +1108,7 @@ merge_parameter_studies_cases.update(
     {
         "too few parameter studies input": (
             [parameter_generators.OneAtATime({"parameter_1": [1]}).parameter_study],
+            {},
             None,
             None,
             None,
@@ -1041,6 +1143,7 @@ merge_parameter_studies_cases.update(
                     original_index=True,
                 ).parameter_study,
             ],
+            {},
             None,
             None,
             None,
@@ -1053,6 +1156,7 @@ merge_parameter_studies_cases.update(
                 parameter_generators.OneAtATime({"parameter_1": [1.0]}).parameter_study,
                 parameter_generators.OneAtATime({"parameter_1": [2.0], "parameter_2": [3]}).parameter_study,
             ],
+            {},
             None,
             None,
             None,
@@ -1064,10 +1168,43 @@ merge_parameter_studies_cases.update(
                 parameter_generators.CartesianProduct({"parameter_1": [2]}).parameter_study,
                 parameter_generators.CartesianProduct({"parameter_2": [3.0, 4.0]}).parameter_study,
             ],
+            {},
             parameter_generators.CartesianProduct({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}).parameter_study,
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
             True,
             does_not_raise,
+        ),
+        "merge and propagate: three studies, two parameter spaces - int/float, mismatched template request": (
+            [
+                parameter_generators.CartesianProduct({"parameter_1": [1]}).parameter_study,
+                parameter_generators.CartesianProduct({"parameter_1": [2]}).parameter_study,
+                parameter_generators.CartesianProduct({"parameter_2": [3.0, 4.0]}).parameter_study,
+            ],
+            {"template": _utilities._AtSignTemplate("set@number")},
+            None,
+            {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
+            True,
+            pytest.raises(
+                RuntimeError,
+                match=r"Could not fill merged parameter set names. Does the parameter set naming convention match?",
+            ),
+        ),
+        "merge and propagate: three studies, two parameter spaces - int/float, mismatched original set name template": (
+            [
+                parameter_generators.CartesianProduct(
+                    {"parameter_1": [1]}, set_name_template="set@number"
+                ).parameter_study,
+                parameter_generators.CartesianProduct({"parameter_1": [2]}).parameter_study,
+                parameter_generators.CartesianProduct({"parameter_2": [3.0, 4.0]}).parameter_study,
+            ],
+            {},
+            None,
+            {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
+            True,
+            pytest.raises(
+                RuntimeError,
+                match=r"Could not fill merged parameter set names. Does the parameter set naming convention match?",
+            ),
         ),
         "merge and propagate: four studies, two parameter spaces - string/bool": (
             [
@@ -1076,6 +1213,7 @@ merge_parameter_studies_cases.update(
                 parameter_generators.CartesianProduct({"parameter_1": ["b"]}).parameter_study,
                 parameter_generators.CartesianProduct({"parameter_2": [False]}).parameter_study,
             ],
+            {},
             parameter_generators.CartesianProduct(
                 {"parameter_1": ["a", "b"], "parameter_2": [True, False]}
             ).parameter_study,
@@ -1089,6 +1227,7 @@ merge_parameter_studies_cases.update(
                 parameter_generators.CartesianProduct({"parameter_2": [True, False]}).parameter_study,
                 parameter_generators.CartesianProduct({"parameter_3": [1.0, 2.0]}).parameter_study,
             ],
+            {},
             parameter_generators.CartesianProduct(
                 {"parameter_1": [1, 2], "parameter_2": [True, False], "parameter_3": [1.0, 2.0]}
             ).parameter_study,
@@ -1102,6 +1241,7 @@ merge_parameter_studies_cases.update(
                 parameter_generators.OneAtATime({"parameter_2": [2.0]}).parameter_study,
                 parameter_generators.OneAtATime({"parameter_1": [2, 3]}).parameter_study,
             ],
+            {},
             parameter_generators.CartesianProduct({"parameter_1": [1, 2, 3], "parameter_2": [2.0]}).parameter_study,
             {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
             True,
@@ -1112,12 +1252,13 @@ merge_parameter_studies_cases.update(
 
 
 @pytest.mark.parametrize(
-    ("studies", "expected_study", "expected_types", "propagate_space", "outcome"),
+    ("studies", "kwargs", "expected_study", "expected_types", "propagate_space", "outcome"),
     merge_parameter_studies_cases.values(),
     ids=merge_parameter_studies_cases.keys(),
 )
 def test_merge_parameter_studies(
     studies: list[xarray.Dataset],
+    kwargs: dict,
     expected_study: xarray.Dataset,
     expected_types: dict[str, type],
     propagate_space: bool | None,
@@ -1127,6 +1268,7 @@ def test_merge_parameter_studies(
 
     :param studies: list of N number of parameter study Xarray datasets to merge, where the first study in the list is
         the base study
+    :param kwargs: the function keyword arguments
     :param expected_study: Xarray dataset
     :param expected_types: dictionary with parameter names as the keys and numpy types as values
     :param propagate_space: boolean indicating if parameter space propagation is used to construct the output study
@@ -1134,7 +1276,7 @@ def test_merge_parameter_studies(
     """
     with outcome:
         try:
-            merged_study = parameter_generators._merge_parameter_studies(studies)
+            merged_study = parameter_generators._merge_parameter_studies(studies, **kwargs)
             for key, parameter_type in expected_types.items():
                 assert merged_study[key].dtype == parameter_type
             xarray.testing.assert_identical(merged_study, expected_study)
@@ -2150,7 +2292,7 @@ class TestParameterGenerator:
         assert generator.parameter_schema == expected_value
 
     property_output_file_template_cases = {
-        "no arg": ({}, _settings._default_output_file_template),
+        "no arg": ({}, _utilities._AtSignTemplate(_settings._default_set_name_template)),
         "custom": (
             {"output_file_template": "custom"},
             _utilities._AtSignTemplate(f"custom{_settings._template_placeholder}"),
@@ -2347,14 +2489,6 @@ class TestParameterGenerator:
             scons_write._scons_write([], [], env)
         mock_write.assert_called_once_with(**expected_kwargs)
 
-    templates: dict[str, tuple] = {
-        "no template": ({}, None, None, ["parameter_set0"]),
-        "file template": ({}, "out", None, ["out0"]),
-        "set template": ({}, None, "out@number", ["out0"]),
-        "set template, no placeholder": ({}, None, "out", ["out0"]),
-        "set template, overridden": ({}, "out", "overridden", ["out0"]),
-    }
-
     def test_merge_parameter_studies_with_missing_previous_parameter_study(self) -> None:
         # Test exception on missing previous parameter study attribute
         dummy_generator = DummyGenerator({})
@@ -2381,62 +2515,43 @@ class TestParameterGenerator:
             for parameter in set_value:
                 assert type(set_samples[set_name][parameter]) is type(set_value[parameter])
 
+    test_set_names_cases: dict[str, tuple] = {
+        "no template": ({}, ["parameter_set0"]),
+        "file template": ({"output_file_template": "out"}, ["out0"]),
+        "set template": ({"set_name_template": "out@number"}, ["out0"]),
+        "set template, no placeholder": ({"set_name_template": "out"}, ["out0"]),
+        "set template, overridden": ({"output_file_template": "out", "set_name_template": "overridden"}, ["out0"]),
+    }
+
     @pytest.mark.parametrize(
-        ("schema", "file_template", "set_template", "expected"),
-        templates.values(),
-        ids=templates.keys(),
+        ("kwargs", "expected"),
+        test_set_names_cases.values(),
+        ids=test_set_names_cases.keys(),
     )
-    def test_set_names(
-        self, schema: dict, file_template: str | None, set_template: str | None, expected: list[str]
-    ) -> None:
+    def test_set_names(self, kwargs: dict, expected: list[str]) -> None:
         """Check the generated parameter set names against template arguments.
 
-        :param str schema: placeholder string standing in for the schema read from an input file
-        :param str file_template: user supplied string to be used as a template for output file names
-        :param str set_template: user supplied string to be used as a template for parameter names
+        :param kwargs: the output_name_template and set_name_template keyword arguments
         :param list expected: list of expected parameter name strings
         """
-        if not set_template:
-            template_generator = DummyGenerator(schema, output_file_template=file_template, sets=1)
-        else:
-            template_generator = DummyGenerator(
-                schema, output_file_template=file_template, set_name_template=set_template, sets=1
-            )
+        template_generator = DummyGenerator({}, **kwargs, sets=1)
         assert list(template_generator._set_names.values()) == expected
         assert list(template_generator.parameter_study[_settings._set_coordinate_key].values) == expected
 
     @pytest.mark.parametrize(
-        ("schema", "file_template", "set_template", "expected"),
-        templates.values(),
-        ids=templates.keys(),
+        ("kwargs", "expected"),
+        test_set_names_cases.values(),
+        ids=test_set_names_cases.keys(),
     )
-    def test_merge_parameter_studies(
-        self, schema: dict, file_template: str | None, set_template: str | None, expected: list[str]
-    ) -> None:
+    def test_merge_parameter_studies(self, kwargs: dict, expected: list[str]) -> None:
         """Check the generated parameter set names against template arguments after a merge operation.
 
-        :param str schema: placeholder string standing in for the schema read from an input file
-        :param str file_template: user supplied string to be used as a template for output file names
-        :param str set_template: user supplied string to be used as a template for parameter names
+        :param kwargs: the output_name_template and set_name_template keyword arguments
         :param list expected: list of expected parameter name strings
         """
         mock_previous_study_name = "dummy_study.h5"
-        if not set_template:
-            mock_previous_study = DummyGenerator(schema, output_file_template=file_template, sets=1).parameter_study
-            template_generator = DummyGenerator(
-                schema, output_file_template=file_template, previous_parameter_study=mock_previous_study_name, sets=1
-            )
-        else:
-            mock_previous_study = DummyGenerator(
-                schema, output_file_template=file_template, set_name_template=set_template, sets=1
-            ).parameter_study
-            template_generator = DummyGenerator(
-                schema,
-                output_file_template=file_template,
-                set_name_template=set_template,
-                previous_parameter_study=mock_previous_study_name,
-                sets=1,
-            )
+        mock_previous_study = DummyGenerator({}, **kwargs, sets=1).parameter_study
+        template_generator = DummyGenerator({}, **kwargs, previous_parameter_study=mock_previous_study_name, sets=1)
         with patch("waves.parameter_generators._open_parameter_study", return_value=mock_previous_study):
             assert list(template_generator._set_names.values()) == expected
             assert list(template_generator.parameter_study[_settings._set_coordinate_key].values) == expected
@@ -2444,321 +2559,21 @@ class TestParameterGenerator:
             assert list(template_generator._set_names.values()) == expected
             assert list(template_generator.parameter_study[_settings._set_coordinate_key].values) == expected
 
-    init_write_stdout: dict[str, tuple] = {
-        "no-template-1": ({}, None, False, False, [False], 1, 1),
-        "no-template-2": ({}, None, True, False, [False], 1, 1),
-        "no-template-3": ({}, None, False, True, [False, False], 2, 1),
-        "no-template-4": ({}, None, False, False, [True, True], 2, 1),
-        "dry_run-1": ({}, "out", False, True, [False], 1, 1),
-        "dry_run-2": ({}, "out", True, True, [False], 1, 1),
-        "dry_run-3": ({}, "out", True, True, [True, False], 2, 2),
-        "dry_run-4": ({}, "out", False, True, [False, True], 1, 1),
-    }
-
-    @pytest.mark.parametrize(
-        ("schema", "template", "overwrite", "dry_run", "is_file", "sets", "stdout_calls"),
-        init_write_stdout.values(),
-        ids=init_write_stdout.keys(),
-    )
-    def test_write_to_stdout(
-        self,
-        schema: dict,
-        template: str | None,
-        overwrite: bool,
-        dry_run: bool,
-        is_file: bool,
-        sets: int,
-        stdout_calls: int,
-    ) -> None:
-        """Check for conditions that should result in calls to stdout.
-
-        :param str schema: placeholder string standing in for the schema read from an input file
-        :param str template: user supplied string to be used as a template for output file names
-        :param bool overwrite: overwrite existing files
-        :param bool dry_run: skip file write, but show file name and associated contents that would ahve been written
-        :param bool is_file: test specific argument mocks output for pathlib.Path().is_file()
-        :param int sets: test specific argument for the number of sets to build for the test
-        :param int stdout_calls: number of calls to stdout. Should only differ from set count when no template is
-            provides. Should always be 1 when no template is provided.
-        """
-        for output_file_type in _settings._allowable_output_file_types:
-            write_parameter_generator = DummyGenerator(
-                schema,
-                output_file_template=template,
-                output_file_type=output_file_type,
-                overwrite=overwrite,
-                sets=sets,
-            )
-            with (
-                patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-                patch("pathlib.Path.open", mock_open()) as mock_file,
-                patch("sys.stdout.write") as stdout_write,
-                patch("xarray.Dataset.to_netcdf") as xarray_to_netcdf,
-                patch("pathlib.Path.is_file", side_effect=is_file),
-                patch("pathlib.Path.mkdir"),
-            ):
-                write_parameter_generator.write(dry_run=dry_run)
-                mock_file.assert_not_called()
-                xarray_to_netcdf.assert_not_called()
-                assert stdout_write.call_count == stdout_calls
-
-    init_write_files: dict[str, tuple] = {
-        "template-1": ({}, "out", False, [False], 1, 1),
-        "template-2": ({}, "out", False, [False, False], 2, 2),
-        "template-3": ({}, "out", False, [True, True], 2, 0),
-        "template-4": ({}, "out", False, [True, False], 2, 1),
-        "overwrite-2": ({}, "out", True, [False, False], 2, 2),
-        "overwrite-3": ({}, "out", True, [True, True], 2, 2),
-        "overwrite-4": ({}, "out", True, [True, False], 2, 2),
-    }
-
-    @pytest.mark.parametrize(
-        ("schema", "template", "overwrite", "is_file", "sets", "files"),
-        init_write_files.values(),
-        ids=init_write_files.keys(),
-    )
-    def test_write_yaml(
-        self, schema: dict, template: str, overwrite: bool, is_file: list[bool], sets: int, files: int
-    ) -> None:
-        """Check for conditions that should result in calls to builtins.open.
-
-        :param str schema: placeholder string standing in for the schema read from an input file
-        :param str template: user supplied string to be used as a template for output file names
-        :param bool overwrite: overwrite existing files
-        :param list is_file: test specific argument mocks changing output for pathlib.Path().is_file() repeat calls
-        :param int sets: test specific argument for the number of sets to build for the test
-        :param int files: integer number of files that should be written
-        """
-        write_parameter_generator = DummyGenerator(
-            schema,
-            output_file_template=template,
-            output_file_type="yaml",
-            overwrite=overwrite,
-            sets=sets,
-        )
-        with (
-            patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_yaml") as mock_write_yaml,
-            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_dataset") as mock_write_dataset,
-            patch("sys.stdout.write") as stdout_write,
-            patch("pathlib.Path.is_file", side_effect=is_file),
-        ):
-            write_parameter_generator.write()
-            stdout_write.assert_not_called()
-            mock_write_dataset.assert_not_called()
-            assert mock_write_yaml.call_count == files
-
-        mismatched_output_type = DummyGenerator(
-            schema,
-            output_file_template=template,
-            output_file_type="h5",
-            overwrite=overwrite,
-            sets=sets,
-        )
-        with (
-            patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_yaml") as mock_write_yaml,
-            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_dataset") as mock_write_dataset,
-            patch("sys.stdout.write") as stdout_write,
-            patch("pathlib.Path.is_file", side_effect=is_file),
-        ):
-            mismatched_output_type.write(output_file_type="yaml")
-            stdout_write.assert_not_called()
-            mock_write_dataset.assert_not_called()
-            assert mock_write_yaml.call_count == files
-
-    @pytest.mark.parametrize(
-        ("schema", "template", "overwrite", "is_file", "sets", "files"),
-        init_write_files.values(),
-        ids=init_write_files.keys(),
-    )
-    def test_write_dataset(
-        self, schema: dict, template: str, overwrite: bool, is_file: list[bool], sets: int, files: int
-    ) -> None:
-        """Check for conditions that should result in calls to ParameterGenerator._write_netcdf.
-
-        :param str schema: placeholder string standing in for the schema read from an input file
-        :param str template: user supplied string to be used as a template for output file names
-        :param bool overwrite: overwrite existing files
-        :param list is_file: test specific argument mocks changing output for pathlib.Path().is_file() repeat calls
-        :param int sets: test specific argument for the number of sets to build for the test
-        :param int files: integer number of files that should be written
-        """
-        write_parameter_generator = DummyGenerator(
-            schema,
-            output_file_template=template,
-            output_file_type="h5",
-            overwrite=overwrite,
-            sets=sets,
-        )
-        with (
-            patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-            patch("sys.stdout.write") as stdout_write,
-            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_yaml") as mock_write_yaml,
-            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_dataset") as mock_write_dataset,
-            patch("pathlib.Path.is_file", side_effect=is_file),
-            patch("pathlib.Path.mkdir"),
-        ):
-            write_parameter_generator.write()
-            stdout_write.assert_not_called()
-            mock_write_yaml.assert_not_called()
-            assert mock_write_dataset.call_count == files
-
-        mismatched_output_type = DummyGenerator(
-            schema,
-            output_file_template=template,
-            output_file_type="yaml",
-            overwrite=overwrite,
-            sets=sets,
-        )
-        with (
-            patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-            patch("sys.stdout.write") as stdout_write,
-            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_yaml") as mock_write_yaml,
-            patch("waves.parameter_generators.ParameterGenerator._conditionally_write_dataset") as mock_write_dataset,
-            patch("pathlib.Path.is_file", side_effect=is_file),
-            patch("pathlib.Path.mkdir"),
-        ):
-            mismatched_output_type.write(output_file_type="h5")
-            stdout_write.assert_not_called()
-            mock_write_yaml.assert_not_called()
-            assert mock_write_dataset.call_count == files
-
-    init_write_dataset_files = {
-        "equal-datasets": (True, [True], False, 0),
-        "equal-overwrite": (True, [True], True, 1),
-        "different-datasets": (False, [True], False, 1),
-        "not-file-1": (True, [False], False, 1),
-        "not-file-2": (False, [False], False, 1),
-    }
-
-    @pytest.mark.parametrize(
-        ("equals", "is_file", "overwrite", "expected_call_count"),
-        init_write_dataset_files.values(),
-        ids=init_write_dataset_files.keys(),
-    )
-    def test_conditionally_write_dataset(
-        self, equals: bool, is_file: list[bool], overwrite: bool, expected_call_count: int
-    ) -> None:
-        """Check for conditions that should result in calls to xarray.Dataset.to_netcdf.
-
-        :param bool equals: parameter that identifies when the xarray.Dataset objects should be equal
-        :param list is_file: test specific argument mocks changing output for pathlib.Path().is_file() repeat calls
-        :param bool overwrite: parameter that identifies when the file should always be overwritten
-        :param int expected_call_count: amount of times that the xarray.Dataset.to_netcdf function should be called
-        """
-        write_parameter_generator = DummyGenerator({}, overwrite=overwrite)
-
-        with (
-            patch("xarray.Dataset.to_netcdf") as xarray_to_netcdf,
-            patch("xarray.open_dataset", mock_open()),
-            patch("xarray.Dataset.equals", return_value=equals),
-            patch("pathlib.Path.is_file", side_effect=is_file),
-        ):
-            write_parameter_generator._conditionally_write_dataset(pathlib.Path("dummy_string"), xarray.Dataset())
-            assert xarray_to_netcdf.call_count == expected_call_count
-
-    @pytest.mark.parametrize(
-        ("equals", "is_file", "overwrite", "expected_call_count"),
-        init_write_dataset_files.values(),
-        ids=init_write_dataset_files.keys(),
-    )
-    def test_conditionally_write_yaml(
-        self, equals: bool, is_file: list[bool], overwrite: bool, expected_call_count: int
-    ) -> None:
-        """Check for conditions that should result in writing out to file.
-
-        :param bool equals: parameter that identifies when the dictionaries should be equal
-        :param list is_file: test specific argument mocks changing output for pathlib.Path().is_file() repeat calls
-        :param bool overwrite: parameter that identifies when the file should always be overwritten
-        :param int expected_call_count: amount of times that the open.write function should be called
-        """
-        write_parameter_generator = DummyGenerator({}, overwrite=overwrite)
-        existing_dict = {"dummy": "dict"} if equals else {"smart": "dict"}
-
-        with (
-            patch("pathlib.Path.open", mock_open()) as write_yaml_file,
-            patch("yaml.safe_load", return_value=existing_dict),
-            patch("pathlib.Path.is_file", side_effect=is_file),
-        ):
-            write_parameter_generator._conditionally_write_yaml("dummy_string", {"dummy": "dict"})
-            assert write_yaml_file.return_value.write.call_count == expected_call_count
-
-    def test_write_type_override(self) -> None:
-        output_file_type_combinations: tuple[
-            tuple[_settings._allowable_output_file_typing, _settings._allowable_output_file_typing], ...
-        ] = (("yaml", "h5"), ("h5", "yaml"))
-        for instantiated_type, override_type in output_file_type_combinations:
-            write_parameter_generator = DummyGenerator({}, output_file_type=instantiated_type)
-            private_write_arguments = {
-                "yaml": (
-                    write_parameter_generator.parameter_study_to_dict(),
-                    write_parameter_generator.parameter_study_to_dict().items(),
-                    write_parameter_generator._conditionally_write_yaml,
-                ),
-                "h5": (
-                    write_parameter_generator.parameter_study,
-                    write_parameter_generator.parameter_study.groupby(_settings._set_coordinate_key),
-                    write_parameter_generator._conditionally_write_dataset,
-                ),
-            }
-            instantiated_arguments = private_write_arguments[instantiated_type]
-            override_arguments = private_write_arguments[override_type]
-
-            # Bare call should try to write YAML.
-            # TODO: assert called with the correct objects or continue refactoring _write
-            with (
-                patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-                patch("waves.parameter_generators.ParameterGenerator._write") as mock_private_write,
-            ):
-                write_parameter_generator.write()
-                mock_private_write.assert_called_once()
-                assert mock_private_write.call_args[0][0] == instantiated_arguments[0]
-                # FIXME: Can't do boolean comparisons on xarray.Dataset.GroupBy objects.
-                # Prefer to refactor _write interface over complicated test
-                if isinstance(instantiated_arguments[0], dict):
-                    assert mock_private_write.call_args[0][1] == instantiated_arguments[1]
-                assert mock_private_write.call_args[0][2] == instantiated_arguments[2]
-
-            # Override should try to write H5.
-            # TODO: assert called with the correct objects or continue refactoring _write
-            with (
-                patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-                patch("waves.parameter_generators.ParameterGenerator._write") as mock_private_write,
-            ):
-                write_parameter_generator.write(output_file_type=override_type)
-                mock_private_write.assert_called_once()
-                assert mock_private_write.call_args[0][0] == override_arguments[0]
-                # FIXME: Can't do boolean comparisons on xarray.Dataset.GroupBy objects.
-                # Prefer to refactor _write interface over complicated test
-                if isinstance(override_arguments[0], dict):
-                    assert mock_private_write.call_args[0][1] == override_arguments[1]
-                assert mock_private_write.call_args[0][2] == override_arguments[2]
-
-    def test_write_exception(self) -> None:
-        """Calling a non-supported format string should raise an exception."""
-        write_parameter_generator = DummyGenerator({})
-        with (
-            patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-            patch("waves.parameter_generators.ParameterGenerator._write") as mock_private_write,
-            pytest.raises(ChoicesError),
-        ):
-            # Specifically testing bad argument type handling. Ignore static type check.
-            write_parameter_generator.write(output_file_type="unsupported")  # type: ignore[arg-type]
-        mock_private_write.assert_not_called()
-
+    # Deprecate the ParameterGenerator write_meta API and method
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1024
     def test_write_call_to_write_meta(self) -> None:
         write_parameter_generator = DummyGenerator({})
         write_parameter_generator._write_meta_flag = True
-        write_parameter_generator._provided_output_file_template = True
         with (
             patch("waves.parameter_generators.ParameterGenerator._write_meta") as mock_write_meta,
-            patch("waves.parameter_generators.ParameterGenerator._write") as mock_private_write,
+            patch("waves.parameter_generators._write") as mock_private_write,
         ):
             write_parameter_generator.write()
             mock_write_meta.assert_called_once()
             mock_private_write.assert_called_once()
 
+    # Deprecate the ParameterGenerator write_meta API and method
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1024
     def test_write_meta(self) -> None:
         write_meta_parameter_generator = DummyGenerator({})
         with (
@@ -3003,3 +2818,2256 @@ class ParameterDistributions(parameter_generators._ScipyGenerator):
 
     def _generate(self, **kwargs) -> None:
         pass
+
+
+test__return_parameter_study_files_cases = {
+    "MutuallyExclusiveError": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": "output.h5", "output_directory": "directory"},
+        None,
+        pytest.raises(
+            MutuallyExclusiveError,
+            match=(
+                r"The options 'output_directory' and 'output_file' are mutually exclusive."
+                r" Please specify one or the other."
+            ),
+        ),
+    ),
+    "no kwargs, APIError must have one of output directory/file": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {},
+        None,
+        pytest.raises(APIError, match=r"One of 'output_directory' or 'output_file' must be specified."),
+    ),
+    "APIError must have one of output directory/file": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": None, "output_directory": None},
+        None,
+        pytest.raises(APIError, match=r"One of 'output_directory' or 'output_file' must be specified."),
+    ),
+    "unsupported output file type": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": "output.h5", "output_file_type": "notsupported"},
+        None,
+        pytest.raises(
+            ChoicesError,
+            match=(
+                r"Unsupported 'output_file_type': 'notsupported'."
+                r" The 'output_file_type' must be one of \('h5', 'yaml'\)."
+            ),
+        ),
+    ),
+    "CartesianProduct, output file, default output file type": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": "output.h5"},
+        {
+            "output.h5": xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2, 1],
+                        coords={"set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])},
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                        dims="set_name",
+                    ),
+                },
+            ).set_coords("set_hash"),
+        },
+        does_not_raise,
+    ),
+    "CartesianProduct, output file, H5": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": "output.h5", "output_file_type": "h5"},
+        {
+            "output.h5": xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2, 1],
+                        coords={"set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])},
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                        dims="set_name",
+                    ),
+                },
+            ).set_coords("set_hash"),
+        },
+        does_not_raise,
+    ),
+    "CartesianProduct, output file, YAML": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": "output.h5", "output_file_type": "yaml"},
+        {"output.h5": {"parameter_set0": {"parameter_1": 2}, "parameter_set1": {"parameter_1": 1}}},
+        does_not_raise,
+    ),
+    "CartesianProduct, output directory, default output file type": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_directory": pathlib.Path("directory")},
+        {
+            pathlib.Path("directory") / "parameter_set0.h5": xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2],
+                        coords={"set_name": xarray.DataArray(["parameter_set0"], dims=["set_name"])},
+                    ),
+                    "set_hash": xarray.DataArray(["0b588b6a82c1d3d3d19fda304f940342"], dims="set_name"),
+                },
+            ).set_coords("set_hash"),
+            pathlib.Path("directory") / "parameter_set1.h5": xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1],
+                        coords={"set_name": xarray.DataArray(["parameter_set1"], dims=["set_name"])},
+                    ),
+                    "set_hash": xarray.DataArray(["1661dcd0bf4761d25471c1cf5514ceae"], dims="set_name"),
+                },
+            ).set_coords("set_hash"),
+        },
+        does_not_raise,
+    ),
+    "CartesianProduct, output directory, H5": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_directory": pathlib.Path("directory"), "output_file_type": "h5"},
+        {
+            pathlib.Path("directory") / "parameter_set0.h5": xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2],
+                        coords={"set_name": xarray.DataArray(["parameter_set0"], dims=["set_name"])},
+                    ),
+                    "set_hash": xarray.DataArray(["0b588b6a82c1d3d3d19fda304f940342"], dims="set_name"),
+                },
+            ).set_coords("set_hash"),
+            pathlib.Path("directory") / "parameter_set1.h5": xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1],
+                        coords={"set_name": xarray.DataArray(["parameter_set1"], dims=["set_name"])},
+                    ),
+                    "set_hash": xarray.DataArray(["1661dcd0bf4761d25471c1cf5514ceae"], dims="set_name"),
+                },
+            ).set_coords("set_hash"),
+        },
+        does_not_raise,
+    ),
+    "CartesianProduct, output directory, YAML": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_directory": pathlib.Path("directory"), "output_file_type": "yaml"},
+        {
+            pathlib.Path("directory") / "parameter_set0.yaml": {"parameter_1": 2},
+            pathlib.Path("directory") / "parameter_set1.yaml": {"parameter_1": 1},
+        },
+        does_not_raise,
+    ),
+    "CartesianProduct, output file, YAML, set name template": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="set@number"),
+        {"output_directory": pathlib.Path("directory"), "output_file_type": "yaml"},
+        {
+            pathlib.Path("directory") / "set0.yaml": {"parameter_1": 2},
+            pathlib.Path("directory") / "set1.yaml": {"parameter_1": 1},
+        },
+        does_not_raise,
+    ),
+    "CartesianProduct, output file, YAML, path-like set name template": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="set@number/study"),
+        {"output_directory": pathlib.Path("directory"), "output_file_type": "yaml"},
+        {
+            pathlib.Path("directory/set0/study.yaml"): {"parameter_1": 2},
+            pathlib.Path("directory/set1/study.yaml"): {"parameter_1": 1},
+        },
+        does_not_raise,
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("generator", "kwargs", "expected", "outcome"),
+    test__return_parameter_study_files_cases.values(),
+    ids=test__return_parameter_study_files_cases.keys(),
+)
+def test__return_parameter_study_files(
+    generator: parameter_generators.ParameterGenerator,
+    kwargs: dict,
+    expected: dict[pathlib.Path, dict | xarray.Dataset],
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
+    with outcome:
+        parameter_study_files = parameter_generators._return_parameter_study_files(generator, **kwargs)
+        assert expected.keys() == parameter_study_files.keys()
+        for key, expected_value in expected.items():
+            if isinstance(expected_value, xarray.Dataset):
+                xarray.testing.assert_identical(expected_value, parameter_study_files[key])
+            else:
+                assert expected_value == parameter_study_files[key]
+
+
+test__return_parameter_study_files_to_write_cases = {
+    "ValueError not dictionary or xarray": (
+        {pathlib.Path("output.h5"): ["parameter_1"]},
+        [False],
+        None,
+        None,
+        None,
+        pytest.raises(
+            ValueError,
+            match=(
+                r"Parameter study file content must be a dictionary or xarray Dataset."
+                r" This is likely an internal bug. Please contact the developers."
+            ),
+        ),
+    ),
+    "no preexisting files, single file, dataset": (
+        {
+            pathlib.Path("output.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1, 2], coords={"set_name": ["set0", "set1"]})}
+            ),
+        },
+        [False],
+        None,
+        None,
+        {
+            pathlib.Path("output.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1, 2], coords={"set_name": ["set0", "set1"]})}
+            ),
+        },
+        does_not_raise,
+    ),
+    "preexisting files, single file, dataset, same content": (
+        {
+            pathlib.Path("output.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1, 2], coords={"set_name": ["set0", "set1"]})}
+            ),
+        },
+        [True],
+        [
+            xarray.Dataset({"parameter_1": xarray.DataArray([1, 2], coords={"set_name": ["set0", "set1"]})}),
+        ],
+        None,
+        {},
+        does_not_raise,
+    ),
+    "no preexisting files, two files, datasets": (
+        {
+            pathlib.Path("set0.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}
+            ),
+            pathlib.Path("set1.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}
+            ),
+        },
+        [False, False],
+        None,
+        None,
+        {
+            pathlib.Path("set0.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}
+            ),
+            pathlib.Path("set1.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}
+            ),
+        },
+        does_not_raise,
+    ),
+    "preexisting files, two files, datasets, same content": (
+        {
+            pathlib.Path("set0.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}
+            ),
+            pathlib.Path("set1.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}
+            ),
+        },
+        [True, True],
+        [
+            xarray.Dataset({"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}),
+            xarray.Dataset({"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}),
+        ],
+        None,
+        {},
+        does_not_raise,
+    ),
+    "preexisting files, two files, datasets, first content differs": (
+        {
+            pathlib.Path("set0.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}
+            ),
+            pathlib.Path("set1.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}
+            ),
+        },
+        [True, True],
+        [
+            xarray.Dataset({"parameter_1": xarray.DataArray([1.1], coords={"set_name": ["set0"]})}),
+            xarray.Dataset({"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}),
+        ],
+        None,
+        {
+            pathlib.Path("set0.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}
+            ),
+        },
+        does_not_raise,
+    ),
+    "preexisting files, two files, datasets, second content differs": (
+        {
+            pathlib.Path("set0.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}
+            ),
+            pathlib.Path("set1.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}
+            ),
+        },
+        [True, True],
+        [
+            xarray.Dataset({"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}),
+            xarray.Dataset({"parameter_1": xarray.DataArray([2.2], coords={"set_name": ["set1"]})}),
+        ],
+        None,
+        {
+            pathlib.Path("set1.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}
+            ),
+        },
+        does_not_raise,
+    ),
+    "no preexisting files, single file, dict": (
+        {pathlib.Path("output.yaml"): {"parameter_set0": {"parameter_1": 1}, "parameter_set1": {"parameter_1": 2}}},
+        [False],
+        None,
+        None,
+        {
+            pathlib.Path("output.yaml"): {"parameter_set0": {"parameter_1": 1}, "parameter_set1": {"parameter_1": 2}},
+        },
+        does_not_raise,
+    ),
+    "preexisting files, single file, dict, same content": (
+        {pathlib.Path("output.yaml"): {"parameter_set0": {"parameter_1": 1}, "parameter_set1": {"parameter_1": 2}}},
+        [True],
+        None,
+        [{"parameter_set0": {"parameter_1": 1}, "parameter_set1": {"parameter_1": 2}}],
+        {},
+        does_not_raise,
+    ),
+    "no preexisting files, two files, dict": (
+        {
+            pathlib.Path("set0.yaml"): {"parameter_1": 1},
+            pathlib.Path("set1.yaml"): {"parameter_1": 2},
+        },
+        [False, False],
+        None,
+        None,
+        {
+            pathlib.Path("set0.yaml"): {"parameter_1": 1},
+            pathlib.Path("set1.yaml"): {"parameter_1": 2},
+        },
+        does_not_raise,
+    ),
+    "preexisting files, two files, dict, same content": (
+        {
+            pathlib.Path("set0.yaml"): {"parameter_1": 1},
+            pathlib.Path("set1.yaml"): {"parameter_1": 2},
+        },
+        [True, True],
+        None,
+        [
+            {"parameter_1": 1},
+            {"parameter_1": 2},
+        ],
+        {},
+        does_not_raise,
+    ),
+    "preexisting files, two files, dict, first content differs": (
+        {
+            pathlib.Path("set0.yaml"): {"parameter_1": 1},
+            pathlib.Path("set1.yaml"): {"parameter_1": 2},
+        },
+        [True, True],
+        None,
+        [
+            {"parameter_1": 1.1},
+            {"parameter_1": 2},
+        ],
+        {
+            pathlib.Path("set0.yaml"): {"parameter_1": 1},
+        },
+        does_not_raise,
+    ),
+    "preexisting files, two files, dict, second content differs": (
+        {
+            pathlib.Path("set0.yaml"): {"parameter_1": 1},
+            pathlib.Path("set1.yaml"): {"parameter_1": 2},
+        },
+        [True, True],
+        None,
+        [
+            {"parameter_1": 1},
+            {"parameter_1": 2.2},
+        ],
+        {
+            pathlib.Path("set1.yaml"): {"parameter_1": 2},
+        },
+        does_not_raise,
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    (
+        "parameter_study_files",
+        "is_file_side_effects",
+        "open_dataset_side_effects",
+        "safe_load_side_effects",
+        "expected",
+        "outcome",
+    ),
+    test__return_parameter_study_files_to_write_cases.values(),
+    ids=test__return_parameter_study_files_to_write_cases.keys(),
+)
+def test__return_parameter_study_files_to_write(
+    parameter_study_files: dict[pathlib.Path, dict | xarray.Dataset],
+    is_file_side_effects: list[bool],
+    open_dataset_side_effects: list[xarray.Dataset] | None,
+    safe_load_side_effects: list[dict] | None,
+    expected: dict[pathlib.Path, dict | xarray.Dataset],
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
+    with (
+        outcome,
+        patch("pathlib.Path.is_file", side_effect=is_file_side_effects),
+        patch("xarray.open_dataset", side_effect=open_dataset_side_effects),
+        patch("pathlib.Path.open", mock_open()),
+        patch("yaml.safe_load", side_effect=safe_load_side_effects),
+    ):
+        result = parameter_generators._return_parameter_study_files_to_write(parameter_study_files)
+        assert result.keys() == expected.keys()
+        for key, expected_value in expected.items():
+            if isinstance(expected_value, xarray.Dataset):
+                xarray.testing.assert_identical(expected_value, result[key])
+            else:
+                assert expected_value == result[key]
+
+
+test__write_parameter_study_files_cases = {
+    "ValueError not dictionary or xarray": (
+        {pathlib.Path("output.h5"): ["parameter_1"]},
+        {},
+        None,
+        None,
+        None,
+        pytest.raises(
+            ValueError,
+            match=(
+                r"Parameter study file content must be a dictionary or xarray Dataset."
+                r" This is likely an internal bug. Please contact the developers."
+            ),
+        ),
+    ),
+    "output file, dataset": (
+        {
+            pathlib.Path("output.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1, 2], coords={"set_name": ["set0", "set1"]})}
+            ),
+        },
+        {},
+        None,
+        [
+            xarray.Dataset({"parameter_1": xarray.DataArray([1, 2], coords={"set_name": ["set0", "set1"]})}),
+        ],
+        None,
+        does_not_raise,
+    ),
+    "output file, dataset, dry run": (
+        {
+            pathlib.Path("output.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1, 2], coords={"set_name": ["set0", "set1"]})}
+            ),
+        },
+        {"dry_run": True},
+        [
+            "output.h5\n"
+            + str(xarray.Dataset({"parameter_1": xarray.DataArray([1, 2], coords={"set_name": ["set0", "set1"]})}))
+            + "\n",
+        ],
+        None,
+        None,
+        does_not_raise,
+    ),
+    "output files, dataset": (
+        {
+            pathlib.Path("set0.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}
+            ),
+            pathlib.Path("set1.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}
+            ),
+        },
+        {},
+        None,
+        [
+            xarray.Dataset({"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}),
+            xarray.Dataset({"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}),
+        ],
+        None,
+        does_not_raise,
+    ),
+    "output files, dataset, dry run": (
+        {
+            pathlib.Path("set0.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}
+            ),
+            pathlib.Path("set1.h5"): xarray.Dataset(
+                {"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}
+            ),
+        },
+        {"dry_run": True},
+        [
+            "set0.h5\n"
+            + str(xarray.Dataset({"parameter_1": xarray.DataArray([1], coords={"set_name": ["set0"]})}))
+            + "\n",
+            "set1.h5\n"
+            + str(xarray.Dataset({"parameter_1": xarray.DataArray([2], coords={"set_name": ["set1"]})}))
+            + "\n",
+        ],
+        None,
+        None,
+        does_not_raise,
+    ),
+    "output file, dict": (
+        {pathlib.Path("output.yaml"): {"parameter_set0": {"parameter_1": 2}, "parameter_set1": {"parameter_1": 1}}},
+        {},
+        None,
+        None,
+        ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+        does_not_raise,
+    ),
+    "output file, dict, dry-run": (
+        {pathlib.Path("output.yaml"): {"parameter_set0": {"parameter_1": 2}, "parameter_set1": {"parameter_1": 1}}},
+        {"dry_run": True},
+        ["output.yaml\nparameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+        None,
+        None,
+        does_not_raise,
+    ),
+    "output files, dict": (
+        {
+            pathlib.Path("directory") / "parameter_set0.yaml": {"parameter_1": 2},
+            pathlib.Path("directory") / "parameter_set1.yaml": {"parameter_1": 1},
+        },
+        {},
+        None,
+        None,
+        [
+            "parameter_1: 2\n",
+            "parameter_1: 1\n",
+        ],
+        does_not_raise,
+    ),
+    "output files, dict, dry-run": (
+        {
+            pathlib.Path("directory") / "parameter_set0.yaml": {"parameter_1": 2},
+            pathlib.Path("directory") / "parameter_set1.yaml": {"parameter_1": 1},
+        },
+        {"dry_run": True},
+        [
+            f"{pathlib.Path('directory') / 'parameter_set0.yaml'}\nparameter_1: 2\n",
+            f"{pathlib.Path('directory') / 'parameter_set1.yaml'}\nparameter_1: 1\n",
+        ],
+        None,
+        None,
+        does_not_raise,
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("parameter_study_files", "kwargs", "expected_stdout", "expected_to_netcdf", "expected_write", "outcome"),
+    test__write_parameter_study_files_cases.values(),
+    ids=test__write_parameter_study_files_cases.keys(),
+)
+def test__write_parameter_study_files(
+    parameter_study_files: dict[pathlib.Path, dict | xarray.Dataset],
+    kwargs: dict,
+    expected_stdout: list[str] | None,
+    expected_to_netcdf: list[xarray.Dataset] | None,
+    expected_write: list[str] | None,
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
+    with (
+        outcome,
+        patch("sys.stdout.write") as mock_stdout,
+        patch("xarray.Dataset.to_netcdf") as mock_to_netcdf,
+        patch("pathlib.Path.open", mock_open()) as mock_file,
+        patch("pathlib.Path.mkdir"),
+    ):
+        parameter_generators._write_parameter_study_files(parameter_study_files, **kwargs)
+        if expected_stdout is None:
+            mock_stdout.assert_not_called()
+        else:
+            assert mock_stdout.call_count == len(expected_stdout)
+            mock_stdout.assert_has_calls([call(item) for item in expected_stdout])
+        if expected_to_netcdf is None:
+            mock_to_netcdf.assert_not_called()
+        else:
+            # TODO: figure out how to assert the dataset/output association
+            assert mock_to_netcdf.call_count == len(expected_to_netcdf)
+        if expected_write is None:
+            mock_file().assert_not_called()
+        else:
+            assert mock_file().write.call_count == len(expected_write)
+            mock_file().write.assert_has_calls([call(item) for item in expected_write])
+
+
+test__write_parameter_study_meta_file_cases = {
+    "file does not exist": (
+        pathlib.Path("meta_file.txt"),
+        "contents of meta file",
+        {},
+        False,
+        None,
+        "contents of meta file",
+    ),
+    "file does not exist, overwrite": (
+        pathlib.Path("meta_file.txt"),
+        "contents of meta file",
+        {"overwrite": True},
+        False,
+        None,
+        "contents of meta file",
+    ),
+    "file does exist, same contents": (
+        pathlib.Path("meta_file.txt"),
+        "contents of meta file",
+        {},
+        True,
+        "contents of meta file",
+        None,
+    ),
+    "file does exist, same contents, overwrite": (
+        pathlib.Path("meta_file.txt"),
+        "contents of meta file",
+        {"overwrite": True},
+        True,
+        "contents of meta file",
+        "contents of meta file",
+    ),
+    "file does exist, different contents": (
+        pathlib.Path("meta_file.txt"),
+        "contents of meta file",
+        {},
+        True,
+        "different contents of meta file",
+        "contents of meta file",
+    ),
+    "file does exist, different contents, overwrite": (
+        pathlib.Path("meta_file.txt"),
+        "contents of meta file",
+        {"overwrite": True},
+        True,
+        "different contents of meta file",
+        "contents of meta file",
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("meta_file", "meta_file_contents", "kwargs", "mock_is_file", "mock_read", "expected_write"),
+    test__write_parameter_study_meta_file_cases.values(),
+    ids=test__write_parameter_study_meta_file_cases.keys(),
+)
+def test__write_parameter_study_meta_file(
+    meta_file: pathlib.Path,
+    meta_file_contents: str,
+    kwargs: dict,
+    mock_is_file: bool,
+    mock_read: str,
+    expected_write: str | None,
+) -> None:
+    with (
+        patch("pathlib.Path.is_file", return_value=mock_is_file),
+        patch("pathlib.Path.open", mock_open(read_data=mock_read)) as mock_file,
+        patch("pathlib.Path.mkdir"),
+    ):
+        parameter_generators._write_parameter_study_meta_file(meta_file, meta_file_contents, **kwargs)
+        if expected_write is None:
+            mock_file().write.assert_not_called()
+        else:
+            mock_file().write.assert_called_once_with(meta_file_contents)
+
+
+test__write_cases = {
+    "MutuallyExclusiveError": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": "output.h5", "output_directory": "directory"},
+        None,
+        None,
+        None,
+        None,
+        pytest.raises(
+            MutuallyExclusiveError,
+            match=(
+                r"The options 'output_directory' and 'output_file' are mutually exclusive."
+                r" Please specify one or the other."
+            ),
+        ),
+    ),
+    "unsupported output file type": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": "output.h5", "output_file_type": "notsupported"},
+        None,
+        None,
+        None,
+        None,
+        pytest.raises(
+            ChoicesError,
+            match=(
+                r"Unsupported 'output_file_type': 'notsupported'."
+                r" The 'output_file_type' must be one of \('h5', 'yaml'\)."
+            ),
+        ),
+    ),
+    "meta file without output directory/file": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"meta_file": "meta_file.txt"},
+        None,
+        None,
+        None,
+        None,
+        pytest.raises(
+            APIError,
+            match=r"The option 'meta_file' requires one of 'output_directory' or 'output_file'.",
+        ),
+    ),
+    "CartesianProduct: STDOUT": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {},
+        ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    # Module function ignores class attributes
+    "CartesianProduct (class init): output file, default type": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5")),
+        {},
+        ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct: output file, default type": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": pathlib.Path("output.h5")},
+        None,
+        [
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2, 1],
+                        coords={"set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])},
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                        dims="set_name",
+                    ),
+                },
+            ).set_coords("set_hash"),
+        ],
+        None,
+        None,
+        does_not_raise,
+    ),
+    # Module function ignores class attributes
+    "CartesianProduct (class init): output file, default type, overwrite": (
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5"), overwrite=True
+        ),
+        {},
+        ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct: output file, default type, overwrite": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": pathlib.Path("output.h5"), "overwrite": True},
+        None,
+        [
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2, 1],
+                        coords={"set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])},
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                        dims="set_name",
+                    ),
+                },
+            ).set_coords("set_hash"),
+        ],
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct: output file, default type, meta file": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": pathlib.Path("/output.h5"), "meta_file": pathlib.Path("output.txt")},
+        None,
+        [
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2, 1],
+                        coords={"set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])},
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                        dims="set_name",
+                    ),
+                },
+            ).set_coords("set_hash"),
+        ],
+        None,
+        f"{pathlib.Path('/output.h5').resolve()}\n",
+        does_not_raise,
+    ),
+    "CartesianProduct: output file, default type, dry run": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": pathlib.Path("output.h5"), "dry_run": True},
+        [
+            "output.h5\n"
+            + str(
+                xarray.Dataset(
+                    {
+                        "parameter_1": xarray.DataArray(
+                            [2, 1],
+                            coords={
+                                "set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])
+                            },
+                        ),
+                        "set_hash": xarray.DataArray(
+                            ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                            dims="set_name",
+                        ),
+                    },
+                ).set_coords("set_hash")
+            )
+            + "\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct: output file, default type, dry run, overwrite": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": pathlib.Path("output.h5"), "dry_run": True, "overwrite": True},
+        [
+            "output.h5\n"
+            + str(
+                xarray.Dataset(
+                    {
+                        "parameter_1": xarray.DataArray(
+                            [2, 1],
+                            coords={
+                                "set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])
+                            },
+                        ),
+                        "set_hash": xarray.DataArray(
+                            ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                            dims="set_name",
+                        ),
+                    },
+                ).set_coords("set_hash")
+            )
+            + "\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct: output directory, default type": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_directory": pathlib.Path("directory")},
+        None,
+        [
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2],
+                        coords={
+                            "set_name": xarray.DataArray(["parameter_set0"], dims=["set_name"]),
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(["0b588b6a82c1d3d3d19fda304f940342"], dims="set_name"),
+                },
+            ).set_coords("set_hash"),
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1],
+                        coords={
+                            "set_name": xarray.DataArray(["parameter_set1"], dims=["set_name"]),
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(["1661dcd0bf4761d25471c1cf5514ceae"], dims="set_name"),
+                },
+            ).set_coords("set_hash"),
+        ],
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct: output directory, default type, dry run": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_directory": pathlib.Path("directory"), "dry_run": True},
+        [
+            f"{pathlib.Path('directory') / 'parameter_set0.h5'}\n"
+            + str(
+                xarray.Dataset(
+                    {
+                        "parameter_1": xarray.DataArray(
+                            [2],
+                            coords={
+                                "set_name": xarray.DataArray(["parameter_set0"], dims=["set_name"]),
+                            },
+                        ),
+                        "set_hash": xarray.DataArray(["0b588b6a82c1d3d3d19fda304f940342"], dims="set_name"),
+                    },
+                ).set_coords("set_hash")
+            )
+            + "\n",
+            f"{pathlib.Path('directory') / 'parameter_set1.h5'}\n"
+            + str(
+                xarray.Dataset(
+                    {
+                        "parameter_1": xarray.DataArray(
+                            [1],
+                            coords={
+                                "set_name": xarray.DataArray(["parameter_set1"], dims=["set_name"]),
+                            },
+                        ),
+                        "set_hash": xarray.DataArray(["1661dcd0bf4761d25471c1cf5514ceae"], dims="set_name"),
+                    },
+                ).set_coords("set_hash")
+            )
+            + "\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct: output directory, default type, meta file": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_directory": pathlib.Path("/directory"), "meta_file": pathlib.Path("directory/output.txt")},
+        None,
+        [
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2],
+                        coords={
+                            "set_name": xarray.DataArray(["parameter_set0"], dims=["set_name"]),
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(["0b588b6a82c1d3d3d19fda304f940342"], dims="set_name"),
+                },
+            ).set_coords("set_hash"),
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1],
+                        coords={
+                            "set_name": xarray.DataArray(["parameter_set1"], dims=["set_name"]),
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(["1661dcd0bf4761d25471c1cf5514ceae"], dims="set_name"),
+                },
+            ).set_coords("set_hash"),
+        ],
+        None,
+        f"{pathlib.Path('/directory/parameter_set0.h5').resolve()}\n{pathlib.Path('/directory/parameter_set1.h5').resolve()}\n",
+        does_not_raise,
+    ),
+    # Module function ignores class attributes
+    "CartesianProduct (class init): output file, H5": (
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5"), output_file_type="h5"
+        ),
+        {},
+        ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct: output file, H5": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": pathlib.Path("output.h5"), "output_file_type": "h5"},
+        None,
+        [
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2, 1],
+                        coords={
+                            "set_name": xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=["set_name"],
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                        dims="set_name",
+                    ),
+                },
+            ).set_coords("set_hash"),
+        ],
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct: output file, H5, dry run": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": pathlib.Path("output.h5"), "output_file_type": "h5", "dry_run": True},
+        [
+            "output.h5\n"
+            + str(
+                xarray.Dataset(
+                    {
+                        "parameter_1": xarray.DataArray(
+                            [2, 1],
+                            coords={
+                                "set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])
+                            },
+                        ),
+                        "set_hash": xarray.DataArray(
+                            ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                            dims="set_name",
+                        ),
+                    },
+                ).set_coords("set_hash")
+            )
+            + "\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct: output directory, H5": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_directory": pathlib.Path("directory"), "output_file_type": "h5"},
+        None,
+        [
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2],
+                        coords={
+                            "set_name": xarray.DataArray(["parameter_set0"], dims=["set_name"]),
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(["0b588b6a82c1d3d3d19fda304f940342"], dims="set_name"),
+                },
+            ).set_coords("set_hash"),
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1],
+                        coords={
+                            "set_name": xarray.DataArray(["parameter_set1"], dims=["set_name"]),
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(["1661dcd0bf4761d25471c1cf5514ceae"], dims="set_name"),
+                },
+            ).set_coords("set_hash"),
+        ],
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct: output directory, H5, dry run": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_directory": pathlib.Path("directory"), "output_file_type": "h5", "dry_run": True},
+        [
+            f"{pathlib.Path('directory') / 'parameter_set0.h5'}\n"
+            + str(
+                xarray.Dataset(
+                    {
+                        "parameter_1": xarray.DataArray(
+                            [2],
+                            coords={
+                                "set_name": xarray.DataArray(["parameter_set0"], dims=["set_name"]),
+                            },
+                        ),
+                        "set_hash": xarray.DataArray(["0b588b6a82c1d3d3d19fda304f940342"], dims="set_name"),
+                    },
+                ).set_coords("set_hash")
+            )
+            + "\n",
+            f"{pathlib.Path('directory') / 'parameter_set1.h5'}\n"
+            + str(
+                xarray.Dataset(
+                    {
+                        "parameter_1": xarray.DataArray(
+                            [1],
+                            coords={
+                                "set_name": xarray.DataArray(["parameter_set1"], dims=["set_name"]),
+                            },
+                        ),
+                        "set_hash": xarray.DataArray(["1661dcd0bf4761d25471c1cf5514ceae"], dims="set_name"),
+                    },
+                ).set_coords("set_hash")
+            )
+            + "\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    # Module function ignores class attributes
+    "CartesianProduct (class init): output file, YAML": (
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.yaml"), output_file_type="yaml"
+        ),
+        {},
+        ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct: output file, YAML": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
+        None,
+        None,
+        ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct: output file, YAML, dry run": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
+        ["output.yaml\nparameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct: output directory, YAML": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_directory": pathlib.Path("directory"), "output_file_type": "yaml"},
+        None,
+        None,
+        ["parameter_1: 2\n", "parameter_1: 1\n"],
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct two parameters: output file, YAML, set name template": (
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2], "parameter_2": ["a", "b"]}, set_name_template="out"
+        ),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
+        None,
+        None,
+        [
+            "out0:\n  parameter_1: 1\n  parameter_2: a\n"
+            "out1:\n  parameter_1: 1\n  parameter_2: b\n"
+            "out2:\n  parameter_1: 2\n  parameter_2: b\n"
+            "out3:\n  parameter_1: 2\n  parameter_2: a\n"
+        ],
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct two parameters: output file, YAML, set name template, dry run": (
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2], "parameter_2": ["a", "b"]}, set_name_template="out"
+        ),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('output.yaml')}\n"
+            "out0:\n  parameter_1: 1\n  parameter_2: a\n"
+            "out1:\n  parameter_1: 1\n  parameter_2: b\n"
+            "out2:\n  parameter_1: 2\n  parameter_2: b\n"
+            "out3:\n  parameter_1: 2\n  parameter_2: a\n"
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct two parameters: output directory, YAML, set name template": (
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2], "parameter_2": ["a", "b"]}, set_name_template="out"
+        ),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
+        None,
+        None,
+        [
+            "parameter_1: 1\nparameter_2: a\n",
+            "parameter_1: 1\nparameter_2: b\n",
+            "parameter_1: 2\nparameter_2: b\n",
+            "parameter_1: 2\nparameter_2: a\n",
+        ],
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct two parameters: output directory, YAML, set name template, dry run": (
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2], "parameter_2": ["a", "b"]}, set_name_template="out"
+        ),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('/directory/out0.yaml')}\nparameter_1: 1\nparameter_2: a\n",
+            f"{pathlib.Path('/directory/out1.yaml')}\nparameter_1: 1\nparameter_2: b\n",
+            f"{pathlib.Path('/directory/out2.yaml')}\nparameter_1: 2\nparameter_2: b\n",
+            f"{pathlib.Path('/directory/out3.yaml')}\nparameter_1: 2\nparameter_2: a\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    # TODO: VVV Remove uses of output_file_template in favor of set_name_template and ``write(output_directory=)``
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1023
+    "CartesianProduct two parameters: output directory, YAML, output file template, dry run": (
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2], "parameter_2": ["a", "b"]}, output_file_template="out"
+        ),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('/directory/out0.yaml')}\nparameter_1: 1\nparameter_2: a\n",
+            f"{pathlib.Path('/directory/out1.yaml')}\nparameter_1: 1\nparameter_2: b\n",
+            f"{pathlib.Path('/directory/out2.yaml')}\nparameter_1: 2\nparameter_2: b\n",
+            f"{pathlib.Path('/directory/out3.yaml')}\nparameter_1: 2\nparameter_2: a\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1023
+    # TODO: ^^^ Remove uses of output_file_template in favor of set_name_template and ``write(output_directory=)``
+    "CartesianProduct two parameters floats/ints: output directory, YAML, set name template": (
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}, set_name_template="out"
+        ),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
+        None,
+        None,
+        [
+            "parameter_1: 1\nparameter_2: 4.0\n",
+            "parameter_1: 1\nparameter_2: 3.0\n",
+            "parameter_1: 2\nparameter_2: 4.0\n",
+            "parameter_1: 2\nparameter_2: 3.0\n",
+        ],
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct two parameters floats/ints: output directory, YAML, set name template, dry run": (
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}, set_name_template="out"
+        ),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('/directory/out0.yaml')}\nparameter_1: 1\nparameter_2: 4.0\n",
+            f"{pathlib.Path('/directory/out1.yaml')}\nparameter_1: 1\nparameter_2: 3.0\n",
+            f"{pathlib.Path('/directory/out2.yaml')}\nparameter_1: 2\nparameter_2: 4.0\n",
+            f"{pathlib.Path('/directory/out3.yaml')}\nparameter_1: 2\nparameter_2: 3.0\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct two parameters bools/ints: output file, YAML, set name template": (
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2], "parameter_2": [True, False]}, set_name_template="out"
+        ),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
+        None,
+        None,
+        [
+            "out0:\n  parameter_1: 2\n  parameter_2: true\n"
+            "out1:\n  parameter_1: 1\n  parameter_2: true\n"
+            "out2:\n  parameter_1: 2\n  parameter_2: false\n"
+            "out3:\n  parameter_1: 1\n  parameter_2: false\n"
+        ],
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct two parameters bools/ints: output file, YAML, set name template, dry run": (
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2], "parameter_2": [True, False]}, set_name_template="out"
+        ),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('output.yaml')}\n"
+            "out0:\n  parameter_1: 2\n  parameter_2: true\n"
+            "out1:\n  parameter_1: 1\n  parameter_2: true\n"
+            "out2:\n  parameter_1: 2\n  parameter_2: false\n"
+            "out3:\n  parameter_1: 1\n  parameter_2: false\n"
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct two parameters bools/ints: output directory, YAML, set name template": (
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2], "parameter_2": [True, False]}, set_name_template="out"
+        ),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
+        None,
+        None,
+        [
+            "parameter_1: 2\nparameter_2: true\n",
+            "parameter_1: 1\nparameter_2: true\n",
+            "parameter_1: 2\nparameter_2: false\n",
+            "parameter_1: 1\nparameter_2: false\n",
+        ],
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct two parameters bools/ints: output directory, YAML, set name template, dry run": (
+        parameter_generators.CartesianProduct(
+            {"parameter_1": [1, 2], "parameter_2": [True, False]}, set_name_template="out"
+        ),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('/directory/out0.yaml')}\nparameter_1: 2\nparameter_2: true\n",
+            f"{pathlib.Path('/directory/out1.yaml')}\nparameter_1: 1\nparameter_2: true\n",
+            f"{pathlib.Path('/directory/out2.yaml')}\nparameter_1: 2\nparameter_2: false\n",
+            f"{pathlib.Path('/directory/out3.yaml')}\nparameter_1: 1\nparameter_2: false\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct: output directory, YAML, dry run": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
+        {"output_directory": pathlib.Path("directory"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('directory') / 'parameter_set0.yaml'}\nparameter_1: 2\n",
+            f"{pathlib.Path('directory') / 'parameter_set1.yaml'}\nparameter_1: 1\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct: output directory, YAML, pathlike set name template": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="set@number/study"),
+        {"output_directory": pathlib.Path("directory"), "output_file_type": "yaml"},
+        None,
+        None,
+        ["parameter_1: 2\n", "parameter_1: 1\n"],
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct: output directory, YAML, dry run, pathlike set name template": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="set@number/study"),
+        {"output_directory": pathlib.Path("directory"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('directory') / 'set0/study.yaml'}\nparameter_1: 2\n",
+            f"{pathlib.Path('directory') / 'set1/study.yaml'}\nparameter_1: 1\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CartesianProduct: output directory, YAML, meta file, pathlike set name template": (
+        parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="set@number/study"),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "meta_file": "meta.txt"},
+        None,
+        None,
+        ["parameter_1: 2\n", "parameter_1: 1\n"],
+        (
+            f"{pathlib.Path('/directory/set0/study.yaml').resolve()}\n"
+            f"{pathlib.Path('/directory/set1/study.yaml').resolve()}\n"
+        ),
+        does_not_raise,
+    ),
+    "CustomStudy: output file, YAML": (
+        parameter_generators.CustomStudy(
+            {"parameter_names": ["a"], "parameter_samples": numpy.array([[1], [2]], dtype=object)},
+        ),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
+        None,
+        None,
+        ["parameter_set0:\n  a: 2\nparameter_set1:\n  a: 1\n"],
+        None,
+        does_not_raise,
+    ),
+    "CustomStudy: output file, YAML, dry run": (
+        parameter_generators.CustomStudy(
+            {"parameter_names": ["a"], "parameter_samples": numpy.array([[1], [2]], dtype=object)},
+        ),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
+        [f"{pathlib.Path('output.yaml')}\nparameter_set0:\n  a: 2\nparameter_set1:\n  a: 1\n"],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CustomStudy: output directory, YAML, set name template": (
+        parameter_generators.CustomStudy(
+            {"parameter_names": ["a"], "parameter_samples": numpy.array([[1], [2]], dtype=object)},
+            set_name_template="out",
+        ),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
+        None,
+        None,
+        ["a: 2\n", "a: 1\n"],
+        None,
+        does_not_raise,
+    ),
+    "CustomStudy: output directory, YAML, set name template, dry run": (
+        parameter_generators.CustomStudy(
+            {"parameter_names": ["a"], "parameter_samples": numpy.array([[1], [2]], dtype=object)},
+            set_name_template="out",
+        ),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('/directory/out0.yaml')}\na: 2\n",
+            f"{pathlib.Path('/directory/out1.yaml')}\na: 1\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CustomStudy two parameters: output file, YAML, set name template": (
+        parameter_generators.CustomStudy(
+            {"parameter_names": ["a", "b"], "parameter_samples": numpy.array([[1, 3.0], [2, 4.5]], dtype=object)},
+            set_name_template="out",
+        ),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
+        None,
+        None,
+        [
+            "out0:\n  a: 2\n  b: 4.5\nout1:\n  a: 1\n  b: 3.0\n",
+        ],
+        None,
+        does_not_raise,
+    ),
+    "CustomStudy two parameters: output file, YAML, set name template, dry run": (
+        parameter_generators.CustomStudy(
+            {"parameter_names": ["a", "b"], "parameter_samples": numpy.array([[1, 3.0], [2, 4.5]], dtype=object)},
+            set_name_template="out",
+        ),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('output.yaml')}\nout0:\n  a: 2\n  b: 4.5\nout1:\n  a: 1\n  b: 3.0\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CustomStudy two parameters: output directory, YAML, set name template": (
+        parameter_generators.CustomStudy(
+            {"parameter_names": ["a", "b"], "parameter_samples": numpy.array([[1, 3.0], [2, 4.5]], dtype=object)},
+            set_name_template="out",
+        ),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
+        None,
+        None,
+        ["a: 2\nb: 4.5\n", "a: 1\nb: 3.0\n"],
+        None,
+        does_not_raise,
+    ),
+    "CustomStudy two parameters: output directory, YAML, set name template, dry run": (
+        parameter_generators.CustomStudy(
+            {"parameter_names": ["a", "b"], "parameter_samples": numpy.array([[1, 3.0], [2, 4.5]], dtype=object)},
+            set_name_template="out",
+        ),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('/directory/out0.yaml')}\na: 2\nb: 4.5\n",
+            f"{pathlib.Path('/directory/out1.yaml')}\na: 1\nb: 3.0\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "OneAtATime: output file, YAML, set name template": (
+        parameter_generators.OneAtATime({"parameter_1": [1, 2]}, set_name_template="out"),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
+        None,
+        None,
+        ["out0:\n  parameter_1: 1\nout1:\n  parameter_1: 2\n"],
+        None,
+        does_not_raise,
+    ),
+    "OneAtATime: output file, YAML, set name template, dry run": (
+        parameter_generators.OneAtATime({"parameter_1": [1, 2]}, set_name_template="out"),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
+        [f"{pathlib.Path('output.yaml')}\nout0:\n  parameter_1: 1\nout1:\n  parameter_1: 2\n"],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "OneAtATime: output directory, YAML, set name template": (
+        parameter_generators.OneAtATime({"parameter_1": [1, 2]}, set_name_template="out"),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
+        None,
+        None,
+        [
+            "parameter_1: 1\n",
+            "parameter_1: 2\n",
+        ],
+        None,
+        does_not_raise,
+    ),
+    "OneAtATime: output directory, YAML, set name template, dry run": (
+        parameter_generators.OneAtATime({"parameter_1": [1, 2]}, set_name_template="out"),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('/directory/out0.yaml')}\nparameter_1: 1\n",
+            f"{pathlib.Path('/directory/out1.yaml')}\nparameter_1: 2\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "OneAtATime two parameters int/str: output file, YAML, set name template": (
+        parameter_generators.OneAtATime({"parameter_1": [1, 2], "parameter_2": ["a", "b"]}, set_name_template="out"),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
+        None,
+        None,
+        [
+            "out0:\n  parameter_1: 1\n  parameter_2: a\n"
+            "out1:\n  parameter_1: 1\n  parameter_2: b\n"
+            "out2:\n  parameter_1: 2\n  parameter_2: a\n"
+        ],
+        None,
+        does_not_raise,
+    ),
+    "OneAtATime two parameters int/str: output file, YAML, set name template, dry run": (
+        parameter_generators.OneAtATime({"parameter_1": [1, 2], "parameter_2": ["a", "b"]}, set_name_template="out"),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('output.yaml')}\n"
+            "out0:\n  parameter_1: 1\n  parameter_2: a\n"
+            "out1:\n  parameter_1: 1\n  parameter_2: b\n"
+            "out2:\n  parameter_1: 2\n  parameter_2: a\n"
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "OneAtATime two parameters int/str: output directory, YAML, set name template": (
+        parameter_generators.OneAtATime({"parameter_1": [1, 2], "parameter_2": ["a", "b"]}, set_name_template="out"),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
+        None,
+        None,
+        [
+            "parameter_1: 1\nparameter_2: a\n",
+            "parameter_1: 1\nparameter_2: b\n",
+            "parameter_1: 2\nparameter_2: a\n",
+        ],
+        None,
+        does_not_raise,
+    ),
+    "OneAtATime two parameters int/str: output directory, YAML, set name template, dry run": (
+        parameter_generators.OneAtATime({"parameter_1": [1, 2], "parameter_2": ["a", "b"]}, set_name_template="out"),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('/directory/out0.yaml')}\nparameter_1: 1\nparameter_2: a\n",
+            f"{pathlib.Path('/directory/out1.yaml')}\nparameter_1: 1\nparameter_2: b\n",
+            f"{pathlib.Path('/directory/out2.yaml')}\nparameter_1: 2\nparameter_2: a\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "OneAtATime two parameters int/float: output directory, YAML, set name template": (
+        parameter_generators.OneAtATime({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}, set_name_template="out"),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
+        None,
+        None,
+        [
+            "parameter_1: 1\nparameter_2: 3.0\n",
+            "parameter_1: 1\nparameter_2: 4.0\n",
+            "parameter_1: 2\nparameter_2: 3.0\n",
+        ],
+        None,
+        does_not_raise,
+    ),
+    "OneAtATime two parameters int/float: output directory, YAML, set name template, dry run": (
+        parameter_generators.OneAtATime({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}, set_name_template="out"),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('/directory/out0.yaml')}\nparameter_1: 1\nparameter_2: 3.0\n",
+            f"{pathlib.Path('/directory/out1.yaml')}\nparameter_1: 1\nparameter_2: 4.0\n",
+            f"{pathlib.Path('/directory/out2.yaml')}\nparameter_1: 2\nparameter_2: 3.0\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "OneAtATime two parameters int/bool: output file, YAML, set name template": (
+        parameter_generators.OneAtATime({"parameter_1": [1, 2], "parameter_2": [True, False]}, set_name_template="out"),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
+        None,
+        None,
+        [
+            "out0:\n  parameter_1: 1\n  parameter_2: true\n"
+            "out1:\n  parameter_1: 2\n  parameter_2: true\n"
+            "out2:\n  parameter_1: 1\n  parameter_2: false\n"
+        ],
+        None,
+        does_not_raise,
+    ),
+    "OneAtATime two parameters int/bool: output file, YAML, set name template, dry run": (
+        parameter_generators.OneAtATime({"parameter_1": [1, 2], "parameter_2": [True, False]}, set_name_template="out"),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('output.yaml')}\n"
+            "out0:\n  parameter_1: 1\n  parameter_2: true\n"
+            "out1:\n  parameter_1: 2\n  parameter_2: true\n"
+            "out2:\n  parameter_1: 1\n  parameter_2: false\n"
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "OneAtATime two parameters int/bool: output directory, YAML, set name template": (
+        parameter_generators.OneAtATime({"parameter_1": [1, 2], "parameter_2": [True, False]}, set_name_template="out"),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
+        None,
+        None,
+        [
+            "parameter_1: 1\nparameter_2: true\n",
+            "parameter_1: 2\nparameter_2: true\n",
+            "parameter_1: 1\nparameter_2: false\n",
+        ],
+        None,
+        does_not_raise,
+    ),
+    "OneAtATime two parameters int/bool: output directory, YAML, set name template, dry run": (
+        parameter_generators.OneAtATime({"parameter_1": [1, 2], "parameter_2": [True, False]}, set_name_template="out"),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('/directory/out0.yaml')}\nparameter_1: 1\nparameter_2: true\n",
+            f"{pathlib.Path('/directory/out1.yaml')}\nparameter_1: 2\nparameter_2: true\n",
+            f"{pathlib.Path('/directory/out2.yaml')}\nparameter_1: 1\nparameter_2: false\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CatenationStudy: output file, YAML, set name template": (
+        parameter_generators.CatenationStudy(
+            {
+                "1": parameter_generators.CartesianProduct({"parameter_1": [1]}, set_name_template="out"),
+                "2": parameter_generators.CartesianProduct({"parameter_1": [2]}, set_name_template="out"),
+            },
+            set_name_template="out",
+        ),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
+        None,
+        None,
+        ["out0:\n  parameter_1: 1\nout1:\n  parameter_1: 2\n"],
+        None,
+        does_not_raise,
+    ),
+    "CatenationStudy: output file, YAML, set name template, dry run": (
+        parameter_generators.CatenationStudy(
+            {
+                "1": parameter_generators.CartesianProduct({"parameter_1": [1]}, set_name_template="out"),
+                "2": parameter_generators.CartesianProduct({"parameter_1": [2]}, set_name_template="out"),
+            },
+            set_name_template="out",
+        ),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
+        [f"{pathlib.Path('output.yaml')}\nout0:\n  parameter_1: 1\nout1:\n  parameter_1: 2\n"],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CatenationStudy: output directory, YAML, set name template": (
+        parameter_generators.CatenationStudy(
+            {
+                "1": parameter_generators.CartesianProduct({"parameter_1": [1]}, set_name_template="out"),
+                "2": parameter_generators.CartesianProduct({"parameter_1": [2]}, set_name_template="out"),
+            },
+            set_name_template="out",
+        ),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
+        None,
+        None,
+        [
+            "parameter_1: 1\n",
+            "parameter_1: 2\n",
+        ],
+        None,
+        does_not_raise,
+    ),
+    "CatenationStudy: output directory, YAML, set name template, dry run": (
+        parameter_generators.CatenationStudy(
+            {
+                "1": parameter_generators.CartesianProduct({"parameter_1": [1]}, set_name_template="out"),
+                "2": parameter_generators.CartesianProduct({"parameter_1": [2]}, set_name_template="out"),
+            },
+            set_name_template="out",
+        ),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('/directory/out0.yaml')}\nparameter_1: 1\n",
+            f"{pathlib.Path('/directory/out1.yaml')}\nparameter_1: 2\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CatenationStudy two parameters int/str: output file, YAML, set name template": (
+        parameter_generators.CatenationStudy(
+            {
+                "1": parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="out"),
+                "2": parameter_generators.CartesianProduct({"parameter_2": ["a", "b"]}, set_name_template="out"),
+            },
+            set_name_template="out",
+        ),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
+        None,
+        None,
+        [
+            "out0:\n  parameter_1: 1\n  parameter_2: a\n"
+            "out1:\n  parameter_1: 1\n  parameter_2: b\n"
+            "out2:\n  parameter_1: 2\n  parameter_2: b\n"
+            "out3:\n  parameter_1: 2\n  parameter_2: a\n"
+        ],
+        None,
+        does_not_raise,
+    ),
+    "CatenationStudy two parameters int/str: output file, YAML, set name template, dry run": (
+        parameter_generators.CatenationStudy(
+            {
+                "1": parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="out"),
+                "2": parameter_generators.CartesianProduct({"parameter_2": ["a", "b"]}, set_name_template="out"),
+            },
+            set_name_template="out",
+        ),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('output.yaml')}\n"
+            "out0:\n  parameter_1: 1\n  parameter_2: a\n"
+            "out1:\n  parameter_1: 1\n  parameter_2: b\n"
+            "out2:\n  parameter_1: 2\n  parameter_2: b\n"
+            "out3:\n  parameter_1: 2\n  parameter_2: a\n"
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CatenationStudy two parameters int/str: output directory, YAML, set name template": (
+        parameter_generators.CatenationStudy(
+            {
+                "1": parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="out"),
+                "2": parameter_generators.CartesianProduct({"parameter_2": ["a", "b"]}, set_name_template="out"),
+            },
+            set_name_template="out",
+        ),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
+        None,
+        None,
+        [
+            "parameter_1: 1\nparameter_2: a\n",
+            "parameter_1: 1\nparameter_2: b\n",
+            "parameter_1: 2\nparameter_2: b\n",
+            "parameter_1: 2\nparameter_2: a\n",
+        ],
+        None,
+        does_not_raise,
+    ),
+    "CatenationStudy two parameters int/str: output directory, YAML, set name template, dry run": (
+        parameter_generators.CatenationStudy(
+            {
+                "1": parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="out"),
+                "2": parameter_generators.CartesianProduct({"parameter_2": ["a", "b"]}, set_name_template="out"),
+            },
+            set_name_template="out",
+        ),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('/directory/out0.yaml')}\nparameter_1: 1\nparameter_2: a\n",
+            f"{pathlib.Path('/directory/out1.yaml')}\nparameter_1: 1\nparameter_2: b\n",
+            f"{pathlib.Path('/directory/out2.yaml')}\nparameter_1: 2\nparameter_2: b\n",
+            f"{pathlib.Path('/directory/out3.yaml')}\nparameter_1: 2\nparameter_2: a\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CatenationStudy two parameters int/float: output file, YAML, set name template": (
+        parameter_generators.CatenationStudy(
+            {
+                "1": parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="out"),
+                "2": parameter_generators.OneAtATime({"parameter_2": [3.0, 4.0]}, set_name_template="out"),
+            },
+            set_name_template="out",
+        ),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
+        None,
+        None,
+        [
+            "out0:\n  parameter_1: 1\n  parameter_2: 4.0\n"
+            "out1:\n  parameter_1: 1\n  parameter_2: 3.0\n"
+            "out2:\n  parameter_1: 2\n  parameter_2: 4.0\n"
+            "out3:\n  parameter_1: 2\n  parameter_2: 3.0\n"
+        ],
+        None,
+        does_not_raise,
+    ),
+    "CatenationStudy two parameters int/float: output file, YAML, set name template, dry run": (
+        parameter_generators.CatenationStudy(
+            {
+                "1": parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="out"),
+                "2": parameter_generators.OneAtATime({"parameter_2": [3.0, 4.0]}, set_name_template="out"),
+            },
+            set_name_template="out",
+        ),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('output.yaml')}\n"
+            "out0:\n  parameter_1: 1\n  parameter_2: 4.0\n"
+            "out1:\n  parameter_1: 1\n  parameter_2: 3.0\n"
+            "out2:\n  parameter_1: 2\n  parameter_2: 4.0\n"
+            "out3:\n  parameter_1: 2\n  parameter_2: 3.0\n"
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CatenationStudy two parameters int/float: output directory, YAML, set name template": (
+        parameter_generators.CatenationStudy(
+            {
+                "1": parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="out"),
+                "2": parameter_generators.OneAtATime({"parameter_2": [3.0, 4.0]}, set_name_template="out"),
+            },
+            set_name_template="out",
+        ),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
+        None,
+        None,
+        [
+            "parameter_1: 1\nparameter_2: 4.0\n",
+            "parameter_1: 1\nparameter_2: 3.0\n",
+            "parameter_1: 2\nparameter_2: 4.0\n",
+            "parameter_1: 2\nparameter_2: 3.0\n",
+        ],
+        None,
+        does_not_raise,
+    ),
+    "CatenationStudy two parameters int/float: output directory, YAML, set name template, dry run": (
+        parameter_generators.CatenationStudy(
+            {
+                "1": parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="out"),
+                "2": parameter_generators.OneAtATime({"parameter_2": [3.0, 4.0]}, set_name_template="out"),
+            },
+            set_name_template="out",
+        ),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('/directory/out0.yaml')}\nparameter_1: 1\nparameter_2: 4.0\n",
+            f"{pathlib.Path('/directory/out1.yaml')}\nparameter_1: 1\nparameter_2: 3.0\n",
+            f"{pathlib.Path('/directory/out2.yaml')}\nparameter_1: 2\nparameter_2: 4.0\n",
+            f"{pathlib.Path('/directory/out3.yaml')}\nparameter_1: 2\nparameter_2: 3.0\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CatenationStudy two parameters int/bool: output file, YAML, set name template": (
+        parameter_generators.CatenationStudy(
+            {
+                "1": parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="out"),
+                "2": parameter_generators.CartesianProduct({"parameter_2": [True, False]}, set_name_template="out"),
+            },
+            set_name_template="out",
+        ),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
+        None,
+        None,
+        [
+            "out0:\n  parameter_1: 2\n  parameter_2: true\n"
+            "out1:\n  parameter_1: 1\n  parameter_2: true\n"
+            "out2:\n  parameter_1: 2\n  parameter_2: false\n"
+            "out3:\n  parameter_1: 1\n  parameter_2: false\n"
+        ],
+        None,
+        does_not_raise,
+    ),
+    "CatenationStudy two parameters int/bool: output file, YAML, set name template, dry run": (
+        parameter_generators.CatenationStudy(
+            {
+                "1": parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="out"),
+                "2": parameter_generators.CartesianProduct({"parameter_2": [True, False]}, set_name_template="out"),
+            },
+            set_name_template="out",
+        ),
+        {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('output.yaml')}\n"
+            "out0:\n  parameter_1: 2\n  parameter_2: true\n"
+            "out1:\n  parameter_1: 1\n  parameter_2: true\n"
+            "out2:\n  parameter_1: 2\n  parameter_2: false\n"
+            "out3:\n  parameter_1: 1\n  parameter_2: false\n"
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+    "CatenationStudy two parameters int/bool: output directory, YAML, set name template": (
+        parameter_generators.CatenationStudy(
+            {
+                "1": parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="out"),
+                "2": parameter_generators.CartesianProduct({"parameter_2": [True, False]}, set_name_template="out"),
+            },
+            set_name_template="out",
+        ),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
+        None,
+        None,
+        [
+            "parameter_1: 2\nparameter_2: true\n",
+            "parameter_1: 1\nparameter_2: true\n",
+            "parameter_1: 2\nparameter_2: false\n",
+            "parameter_1: 1\nparameter_2: false\n",
+        ],
+        None,
+        does_not_raise,
+    ),
+    "CatenationStudy two parameters int/bool: output directory, YAML, set name template, dry run": (
+        parameter_generators.CatenationStudy(
+            {
+                "1": parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="out"),
+                "2": parameter_generators.CartesianProduct({"parameter_2": [True, False]}, set_name_template="out"),
+            },
+            set_name_template="out",
+        ),
+        {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
+        [
+            f"{pathlib.Path('/directory/out0.yaml')}\nparameter_1: 2\nparameter_2: true\n",
+            f"{pathlib.Path('/directory/out1.yaml')}\nparameter_1: 1\nparameter_2: true\n",
+            f"{pathlib.Path('/directory/out2.yaml')}\nparameter_1: 2\nparameter_2: false\n",
+            f"{pathlib.Path('/directory/out3.yaml')}\nparameter_1: 1\nparameter_2: false\n",
+        ],
+        None,
+        None,
+        None,
+        does_not_raise,
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    (
+        "generator",
+        "kwargs",
+        "expected_stdout",
+        "expected_to_netcdf",
+        "expected_write",
+        "expected_write_meta_file_contents",
+        "outcome",
+    ),
+    test__write_cases.values(),
+    ids=test__write_cases.keys(),
+)
+def test__write(
+    generator: parameter_generators.ParameterGenerator,
+    kwargs: dict,
+    expected_stdout: list[str] | None,
+    expected_to_netcdf: list[xarray.Dataset] | None,
+    expected_write: list[str] | None,
+    expected_write_meta_file_contents: str | None,
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
+    if sum([thing is not None for thing in (expected_stdout, expected_to_netcdf, expected_write)]) > 1:
+        raise ValueError("Do not pass more than one expected output")
+    with (
+        outcome,
+        patch("sys.stdout.write") as mock_stdout,
+        patch("xarray.Dataset.to_netcdf") as mock_to_netcdf,
+        patch("pathlib.Path.is_file", return_value=False),
+        patch("pathlib.Path.open", mock_open()) as mock_file,
+        patch("waves.parameter_generators._write_parameter_study_meta_file") as mock_write_meta_file,
+        patch("pathlib.Path.mkdir"),
+    ):
+        parameter_generators._write(generator, **kwargs)
+        if expected_stdout is None:
+            mock_stdout.assert_not_called()
+        else:
+            assert mock_stdout.call_count == len(expected_stdout)
+            mock_stdout.assert_has_calls([call(item) for item in expected_stdout])
+        if expected_to_netcdf is None:
+            mock_to_netcdf.assert_not_called()
+        else:
+            # TODO: figure out how to assert the dataset/output association
+            assert mock_to_netcdf.call_count == len(expected_to_netcdf)
+        if expected_write is None:
+            mock_file().assert_not_called()
+        else:
+            assert mock_file().write.call_count == len(expected_write)
+            mock_file().write.assert_has_calls([call(item) for item in expected_write])
+        if expected_write_meta_file_contents is None:
+            mock_write_meta_file.assert_not_called()
+        else:
+            mock_write_meta_file.assert_called_once()
+            assert mock_write_meta_file.call_args[0][1] == expected_write_meta_file_contents
+
+
+# In the class method, the generator attributes are not ignored. Override the ``(class init)`` test cases where the
+# generator attributes are respected.
+test_class_write_cases = copy.deepcopy(test__write_cases)
+test_class_write_cases.update(
+    {
+        "CartesianProduct (class init): output file, default type": (
+            parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5")),
+            {},
+            None,
+            [
+                xarray.Dataset(
+                    {
+                        "parameter_1": xarray.DataArray(
+                            [2, 1],
+                            coords={
+                                "set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])
+                            },
+                        ),
+                        "set_hash": xarray.DataArray(
+                            ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                            dims="set_name",
+                        ),
+                    },
+                ).set_coords("set_hash"),
+            ],
+            None,
+            None,
+            does_not_raise,
+        ),
+        "CartesianProduct (class init): output file, default type (overridden)": (
+            parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5")),
+            {"output_file_type": "yaml"},
+            None,
+            None,
+            ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+            None,
+            does_not_raise,
+        ),
+        "CartesianProduct (class init): output file, default type, overwrite": (
+            parameter_generators.CartesianProduct(
+                {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5"), overwrite=True
+            ),
+            {},
+            None,
+            [
+                xarray.Dataset(
+                    {
+                        "parameter_1": xarray.DataArray(
+                            [2, 1],
+                            coords={
+                                "set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])
+                            },
+                        ),
+                        "set_hash": xarray.DataArray(
+                            ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                            dims="set_name",
+                        ),
+                    },
+                ).set_coords("set_hash"),
+            ],
+            None,
+            None,
+            does_not_raise,
+        ),
+        "CartesianProduct (class init): output file, H5": (
+            parameter_generators.CartesianProduct(
+                {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5"), output_file_type="h5"
+            ),
+            {},
+            None,
+            [
+                xarray.Dataset(
+                    {
+                        "parameter_1": xarray.DataArray(
+                            [2, 1],
+                            coords={
+                                "set_name": xarray.DataArray(
+                                    ["parameter_set0", "parameter_set1"],
+                                    dims=["set_name"],
+                                )
+                            },
+                        ),
+                        "set_hash": xarray.DataArray(
+                            ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                            dims="set_name",
+                        ),
+                    },
+                ).set_coords("set_hash"),
+            ],
+            None,
+            None,
+            does_not_raise,
+        ),
+        "CartesianProduct (class init): output file, H5 (overridden)": (
+            parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5")),
+            {"output_file_type": "yaml"},
+            None,
+            None,
+            ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+            None,
+            does_not_raise,
+        ),
+        "CartesianProduct (class init): output file, YAML": (
+            parameter_generators.CartesianProduct(
+                {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.yaml"), output_file_type="yaml"
+            ),
+            {},
+            None,
+            None,
+            ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+            None,
+            does_not_raise,
+        ),
+        "CartesianProduct (class init): output file, YAML, dry run": (
+            parameter_generators.CartesianProduct(
+                {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.yaml"), output_file_type="yaml"
+            ),
+            {"dry_run": True},
+            [f"{pathlib.Path('output.yaml')}\nparameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+            None,
+            None,
+            None,
+            does_not_raise,
+        ),
+        "CartesianProduct (class init): output file (overridden), YAML, dry run": (
+            parameter_generators.CartesianProduct(
+                {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.yaml"), output_file_type="yaml"
+            ),
+            {"output_file": pathlib.Path("different.yaml"), "dry_run": True},
+            [
+                f"{pathlib.Path('different.yaml')}\n"
+                "parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"
+            ],
+            None,
+            None,
+            None,
+            does_not_raise,
+        ),
+        "CartesianProduct (class init): output file, YAML (overridden)": (
+            parameter_generators.CartesianProduct(
+                {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.yaml"), output_file_type="yaml"
+            ),
+            {"output_file_type": "h5"},
+            None,
+            [
+                xarray.Dataset(
+                    {
+                        "parameter_1": xarray.DataArray(
+                            [2, 1],
+                            coords={
+                                "set_name": xarray.DataArray(
+                                    ["parameter_set0", "parameter_set1"],
+                                    dims=["set_name"],
+                                )
+                            },
+                        ),
+                        "set_hash": xarray.DataArray(
+                            ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                            dims="set_name",
+                        ),
+                    },
+                ).set_coords("set_hash"),
+            ],
+            None,
+            None,
+            does_not_raise,
+        ),
+    }
+)
+
+
+@pytest.mark.parametrize(
+    (
+        "generator",
+        "kwargs",
+        "expected_stdout",
+        "expected_to_netcdf",
+        "expected_write",
+        "expected_write_meta_file_contents",
+        "outcome",
+    ),
+    test_class_write_cases.values(),
+    ids=test_class_write_cases.keys(),
+)
+def test_class_write(
+    generator: parameter_generators.ParameterGenerator,
+    kwargs: dict,
+    expected_stdout: list[str] | None,
+    expected_to_netcdf: list[xarray.Dataset] | None,
+    expected_write: list[str] | None,
+    expected_write_meta_file_contents: str | None,
+    outcome: contextlib.nullcontext | pytest.RaisesExc,
+) -> None:
+    if sum([thing is not None for thing in (expected_stdout, expected_to_netcdf, expected_write)]) > 1:
+        raise ValueError("Do not pass more than one expected output")
+    with (
+        outcome,
+        patch("sys.stdout.write") as mock_stdout,
+        patch("xarray.Dataset.to_netcdf") as mock_to_netcdf,
+        patch("pathlib.Path.is_file", return_value=False),
+        patch("pathlib.Path.open", mock_open()) as mock_file,
+        patch("waves.parameter_generators._write_parameter_study_meta_file") as mock_write_meta_file,
+        patch("pathlib.Path.mkdir"),
+    ):
+        generator.write(**kwargs)
+        if expected_stdout is None:
+            mock_stdout.assert_not_called()
+        else:
+            assert mock_stdout.call_count == len(expected_stdout)
+            mock_stdout.assert_has_calls([call(item) for item in expected_stdout])
+        if expected_to_netcdf is None:
+            mock_to_netcdf.assert_not_called()
+        else:
+            # TODO: figure out how to assert the dataset/output association
+            assert mock_to_netcdf.call_count == len(expected_to_netcdf)
+        if expected_write is None:
+            mock_file().assert_not_called()
+        else:
+            assert mock_file().write.call_count == len(expected_write)
+            mock_file().write.assert_has_calls([call(item) for item in expected_write])
+        if expected_write_meta_file_contents is None:
+            mock_write_meta_file.assert_not_called()
+        else:
+            mock_write_meta_file.assert_called_once()
+            assert mock_write_meta_file.call_args[0][1] == expected_write_meta_file_contents

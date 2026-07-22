@@ -89,10 +89,9 @@ for variant_dir in [None, "build"]:
     study = waves.parameter_generators.CartesianProduct(
         {"workflow": ["thing 1", "thing 2"]},
         set_name_template=f"{study_file.stem}@number",
-        output_file=study_file,
         previous_parameter_study=study_file,
     )
-    study.write()
+    study.write(output_file=study_file)
     simulation_variables = {}
     env.ParameterStudySConscript(
         "SConscript",
@@ -113,10 +112,9 @@ study_file = parameter_study_directory / "subdir_study.h5"
 study = waves.parameter_generators.CartesianProduct(
     {"workflow": ["thing 3", "thing 4"]},
     set_name_template=f"{study_file.stem}@number",
-    output_file=study_file,
     previous_parameter_study=study_file,
 )
-study.write()
+study.write(output_file=study_file)
 simulation_variables = {}
 env.ParameterStudySConscript(
     "SConscript",
@@ -138,10 +136,9 @@ study_file = parameter_study_directory / "build_study.h5"
 study = waves.parameter_generators.CartesianProduct(
     {"workflow": ["thing 5", "thing 6"]},
     set_name_template=f"{study_file.stem}@number",
-    output_file=study_file,
     previous_parameter_study=study_file,
 )
-study.write()
+study.write(output_file=study_file)
 simulation_variables = {}
 env.ParameterStudySConscript(
     "SConscript",
