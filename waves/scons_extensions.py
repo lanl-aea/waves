@@ -4995,8 +4995,6 @@ class WAVESEnvironment(SConsEnvironment):
         :param output_file_type: Output file syntax or type. Options are: 'h5', 'yaml'.
 
         :return: SCons NodeList of target nodes
-
-        :raises RuntimeError: if neither 'output_file' nor 'output_directory' is provided
         """
         return parameter_study_write(
             self,
