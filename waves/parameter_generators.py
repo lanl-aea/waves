@@ -2099,19 +2099,19 @@ def _return_parameter_study_files(
     elif output_file is not None and output_file_type == "yaml":
         parameter_study_files = {output_file: generator.parameter_study_to_dict()}
     elif output_directory is not None and output_file_type == "h5":
-        for set_name, subset in generator.parameter_study.groupby(_settings._set_coordinate_key):
+        for set_name, xarray_subset in generator.parameter_study.groupby(_settings._set_coordinate_key):
             if set_name.endswith(output_file_type):
                 filename = set_name
             else:
                 filename = f"{set_name}.{output_file_type}"
-            parameter_study_files[output_directory / filename] = subset
+            parameter_study_files[output_directory / filename] = xarray_subset
     elif output_directory is not None and output_file_type == "yaml":
-        for set_name, subset in generator.parameter_study_to_dict().items():
+        for set_name, dict_subset in generator.parameter_study_to_dict().items():
             if set_name.endswith(output_file_type):
                 filename = set_name
             else:
                 filename = f"{set_name}.{output_file_type}"
-            parameter_study_files[output_directory / filename] = subset
+            parameter_study_files[output_directory / filename] = dict_subset
     return parameter_study_files
 
 
