@@ -25,6 +25,8 @@ Enhancements
 - Explicit ParameterGenerator write method API with full control over output file handling. Allows users to control
   output files at write time instead of at parameter study configure time. Will enable a more flexible SCons
   Pseudo-builder API with enhanced target file output control in the future. By `Kyle Brindley`_.
+- Accept scalar valued parameter values in CartesianProduct and OneAtATime parameter generators (:issue:`1007`,
+  :merge:`1323`). By `Erica Hinrichs`_.
 
 Internal Changes
 ================
