@@ -2479,32 +2479,56 @@ class TestParameterGenerator:
         "no kwargs": (
             [file_system.File("/dummy.h5")],
             {},
-            {"output_file": str(pathlib.Path("/dummy.h5").resolve())},
+            {
+                "output_file": pathlib.Path("/dummy.h5").resolve(),
+                "output_directory": None,
+                "output_file_type": None,
+            },
         ),
         "no kwargs, more than one target": (
             [file_system.File("/directory/dummy.h51"), file_system.File("/directory/dummy.h52")],
             {},
-            {"output_directory": str(pathlib.Path("/directory").resolve())},
+            {
+                "output_file": None,
+                "output_directory": pathlib.Path("/directory").resolve(),
+                "output_file_type": None,
+            },
         ),
         "output file type, H5": (
             [file_system.File("/dummy.h5")],
             {"output_file_type": "h5"},
-            {"output_file": str(pathlib.Path("/dummy.h5").resolve()), "output_file_type": "h5"},
+            {
+                "output_file": pathlib.Path("/dummy.h5").resolve(),
+                "output_directory": None,
+                "output_file_type": "h5",
+            },
         ),
         "output file type, YAML": (
             [file_system.File("/dummy.yaml")],
             {"output_file_type": "yaml"},
-            {"output_file": str(pathlib.Path("/dummy.yaml").resolve()), "output_file_type": "yaml"},
+            {
+                "output_file": pathlib.Path("/dummy.yaml").resolve(),
+                "output_directory": None,
+                "output_file_type": "yaml",
+            },
         ),
         "output file type, more than one target, YAML": (
             [file_system.File("/directory/dummy.yaml1"), file_system.File("/directory/dummy.yaml2")],
             {"output_file_type": "yaml"},
-            {"output_directory": str(pathlib.Path("/directory").resolve()), "output_file_type": "yaml"},
+            {
+                "output_file": None,
+                "output_directory": pathlib.Path("/directory").resolve(),
+                "output_file_type": "yaml",
+            },
         ),
         "unused keyword argument": (
             [file_system.File("/dummy.h5")],
             {"unused": "should not show up in call"},
-            {"output_file": str(pathlib.Path("/dummy.h5").resolve())},
+            {
+                "output_file": pathlib.Path("/dummy.h5").resolve(),
+                "output_directory": None,
+                "output_file_type": None,
+            },
         ),
     }
 
