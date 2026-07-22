@@ -3316,32 +3316,76 @@ def test_parameter_study_sconscript(
 
 
 parameter_study_write_cases: dict[str, tuple] = {
-    "output file": (
+    "output file pseudo-builder argument": (
+        parameter_generators.CartesianProduct({"one": [1, 2]}),
+        {"output_file": "test.h5"},
+        ["test.h5"],
+        does_not_raise,
+    ),
+    "output file class attribute": (
         parameter_generators.CartesianProduct({"one": [1, 2]}, output_file="test.h5"),
         {},
         ["test.h5"],
         does_not_raise,
     ),
-    # TODO: Update expected output file extension when the write methods adds an output file override
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/634
-    "output file and output file type": (
+    "output file, output file type H5 class attribute": (
+        parameter_generators.CartesianProduct({"one": [1, 2]}, output_file="test.h5", output_file_type="h5"),
+        {},
+        ["test.h5"],
+        does_not_raise,
+    ),
+    "output file, output file type H5 pseudo-builder API wins": (
+        parameter_generators.CartesianProduct({"one": [1, 2]}, output_file="test.h5", output_file_type="h5"),
+        {"output_file": "pseudo-builder.h5", "output_file_type": "h5"},
+        ["pseudo-builder.h5"],
+        does_not_raise,
+    ),
+    "output file, output file type YAML pseudo-builder API wins": (
+        parameter_generators.CartesianProduct({"one": [1, 2]}, output_file="test.h5", output_file_type="h5"),
+        {"output_file": "pseudo-builder.yaml", "output_file_type": "yaml"},
+        ["pseudo-builder.yaml"],
+        does_not_raise,
+    ),
+    "output file, output file type mixed class attribute and pseudo-builder API": (
         parameter_generators.CartesianProduct({"one": [1, 2]}, output_file="actually_a_yaml_file.h5"),
         {"output_file_type": "yaml"},
         ["actually_a_yaml_file.h5"],
         does_not_raise,
     ),
+    "output file, output file type mixed pseudo-builder API and class attribute": (
+        parameter_generators.CartesianProduct({"one": [1, 2]}, output_file_type="yaml"),
+        {"output_file": "actually_a_yaml_file2.h5"},
+        ["actually_a_yaml_file2.h5"],
+        does_not_raise,
+    ),
     "output file template": (
-        parameter_generators.CartesianProduct({"one": [1, 2]}, output_file_template="test@number.h5"),
+        parameter_generators.CartesianProduct({"one": [1, 2]}, output_file_template="test@number"),
         {},
         ["test0.h5", "test1.h5"],
         does_not_raise,
     ),
-    # TODO: Update expected output file extension when the write methods adds an output file override
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/634
+    "output file template with extension": (
+        parameter_generators.CartesianProduct({"one": [1, 2]}, output_file_template="test_with_extension@number.h5"),
+        {},
+        ["test_with_extension0.h5", "test_with_extension1.h5"],
+        does_not_raise,
+    ),
+    "output file template, output file type YAML": (
+        parameter_generators.CartesianProduct({"one": [1, 2]}, output_file_template="test@number"),
+        {"output_file_type": "yaml"},
+        ["test0.yaml", "test1.yaml"],
+        does_not_raise,
+    ),
+    "output file template with extension, output file type YAML": (
+        parameter_generators.CartesianProduct({"one": [1, 2]}, output_file_template="test_with_extension@number.yaml"),
+        {"output_file_type": "yaml"},
+        ["test_with_extension0.yaml", "test_with_extension1.yaml"],
+        does_not_raise,
+    ),
     "output file template and output file type": (
         parameter_generators.CartesianProduct({"one": [1, 2]}, output_file_template="actually_a_yaml_file@number.h5"),
         {"output_file_type": "yaml"},
-        ["actually_a_yaml_file0.h5", "actually_a_yaml_file1.h5"],
+        ["actually_a_yaml_file0.h5.yaml", "actually_a_yaml_file1.h5.yaml"],
         does_not_raise,
     ),
 }
