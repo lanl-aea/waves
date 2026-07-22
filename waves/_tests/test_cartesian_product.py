@@ -28,21 +28,40 @@ class TestCartesianProduct:
             {"parameter_1": ["one", "two", "many"]},
             does_not_raise,
         ),
+        "scaler valued parameter int": (
+            {"parameter_1": 1},
+            does_not_raise,
+        ),
+        "scaler valued parameter str": (
+            {"parameter_1": "one"},
+            does_not_raise,
+        ),
+        "test all scalars valued parameters": (
+            {"parameter_1": 1, "parameter_2": "two", "parameter_3": True},
+            does_not_raise,
+        ),
+        "test mixed scalars and lists": (
+            {"parameter_1": 1, "parameter_2": [1, 2]},
+            does_not_raise,
+        ),
+        "numpy scalar type": (
+            {"parameter_1": numpy.int64(42)},
+            does_not_raise,
+        ),
         "not a dict": (
             "not a dict",
-            pytest.raises(SchemaValidationError),
-        ),
-        "bad schema int": (
-            {"parameter_1": 1},
-            pytest.raises(SchemaValidationError),
+            pytest.raises(SchemaValidationError, match=r"parameter_schema must be a dictionary"),
         ),
         "bad schema dict": (
             {"parameter_1": {"thing1": 1}},
-            pytest.raises(SchemaValidationError),
+            pytest.raises(
+                SchemaValidationError,
+                match=r"Parameters must be a sequence of scalar values or a supported scalar value",
+            ),
         ),
-        "bad schema str": (
-            {"parameter_1": "one"},
-            pytest.raises(SchemaValidationError),
+        "bad schema empty": (
+            {"parameter_1": []},
+            pytest.raises(SchemaValidationError, match=r"Parameter 'parameter_1' must have at least one value"),
         ),
     }
 
@@ -482,6 +501,242 @@ class TestCartesianProduct:
                 "parameter_5": bool,
                 "parameter_6": numpy.dtype("U4"),
             },
+        ),
+        "single scalar int": (
+            {"parameter_1": 42},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [42],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["8661a78b1bbef2ce06c8f27f0030ae39"],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {"parameter_1": numpy.int64},
+        ),
+        "single scalar float": (
+            {"parameter_1": 3.14},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [3.14],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["29ca606c0ab080d234d56bd01cda05ef"],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {"parameter_1": numpy.float64},
+        ),
+        "single scalar string": (
+            {"parameter_1": "hello"},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        ["hello"],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["f638f65386fd4b7d6558a27cd5b1654e"],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {"parameter_1": numpy.dtype("U5")},
+        ),
+        "single scalar bool": (
+            {"parameter_1": True},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [True],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["6c2fb5097da66f7bb3795420b802986e"],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {"parameter_1": bool},
+        ),
+        "multiple scalar parameters": (
+            {"parameter_1": 10, "parameter_2": 2.5, "parameter_3": "test"},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [10],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [2.5],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_3": xarray.DataArray(
+                        ["test"],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["48713683c8c26aa9b921b548ca56f201"],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {"parameter_1": numpy.int64, "parameter_2": numpy.float64, "parameter_3": numpy.dtype("U4")},
+        ),
+        "scalar int with list": (
+            {"parameter_1": 5, "parameter_2": [1, 2]},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [5, 5],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [2, 1],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["2fb2d42b512e7843c1aab96b2990ce6b", "bba66d84c35e92cd2dbd9a5cda168997"],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {"parameter_1": numpy.int64, "parameter_2": numpy.int64},
+        ),
+        "multiple scalars with list cartesian product": (
+            {"parameter_1": 100, "parameter_2": "fixed", "parameter_3": [10.0, 20.0]},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [100, 100],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        ["fixed", "fixed"],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_3": xarray.DataArray(
+                        [10.0, 20.0],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["3e0a4ecb94fcecc080b64a788205c45e", "58d6dfc2839ab3e7822d1cf461f90a90"],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {"parameter_1": numpy.int64, "parameter_2": numpy.dtype("U5"), "parameter_3": numpy.float64},
+        ),
+        "scalar with two lists cartesian product": (
+            {"parameter_1": 7, "parameter_2": ["a", "b"], "parameter_3": [1.0, 2.0]},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [7, 7, 7, 7],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        ["a", "a", "b", "b"],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_3": xarray.DataArray(
+                        [2.0, 1.0, 1.0, 2.0],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2", "parameter_set3"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "20cdbecd1293e56c55d5f8a0b9374f51",
+                            "4ed5c5fece70ffd5c18b67974499addc",
+                            "70989af2e36024e93ebe56125ea6b695",
+                            "7b013ec31b0e2822e6a93e84251f4468",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {"parameter_1": numpy.int64, "parameter_2": numpy.dtype("U1"), "parameter_3": numpy.float64},
         ),
     }
 

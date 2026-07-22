@@ -694,8 +694,9 @@ class CartesianProduct(ParameterGenerator):
 
     :param parameter_schema: The YAML loaded parameter study schema dictionary - ``{parameter_name: schema value}``
         CartesianProduct expects "schema value" to be an iterable. For example, when read from a YAML file "schema
-        value" will be a Python list. Each parameter's values must have a consistent data type, but data type may vary
-        between parameters.
+        value" will typically be a Python list. If a scalar value (such as a single integer or string) is provided,
+        it will automatically be wrapped in a single-element list (e.g., ``2`` becomes ``[2]``). Each parameter's
+        values must have a consistent data type, but data type may vary between parameters.
     :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
         Output file is overwritten if the content of the file has changed or if ``overwrite`` is True.
@@ -749,12 +750,26 @@ class CartesianProduct(ParameterGenerator):
         """Validate the Cartesian Product parameter schema. Executed by class initiation."""
         if not isinstance(self._parameter_schema, dict):
             raise SchemaValidationError("parameter_schema must be a dictionary")
+
+        for key, value in self._parameter_schema.items():
+            if not isinstance(value, (list, tuple, set)):
+                if numpy.isscalar(value):
+                    self._parameter_schema[key] = [value]
+                else:
+                    raise SchemaValidationError(
+                        "Parameters must be a sequence of scalar values or a supported scalar value"
+                    )
+            else:
+                self._parameter_schema[key] = value
+
         # TODO: Settle on an input file schema and validation library
         self._parameter_names = list(self._parameter_schema.keys())
         # List, sets, and tuples are the supported PyYAML iterables that will support expected behavior
         for name in self._parameter_names:
             if not isinstance(self._parameter_schema[name], list | set | tuple):
                 raise SchemaValidationError(f"Parameter '{name}' is not one of list, set, or tuple")
+            if len(self._parameter_schema[name]) < 1:
+                raise SchemaValidationError(f"Parameter '{name}' must have at least one value")
 
     def _generate(self, **kwargs) -> None:  # noqa: ARG002
         """Generate the Cartesian Product parameter sets."""
@@ -857,8 +872,9 @@ class OneAtATime(ParameterGenerator):
 
     :param parameter_schema: The YAML loaded parameter study schema dictionary - ``{parameter_name: schema value}``
         OneAtATime expects "schema value" to be an ordered iterable. For example, when read from a YAML file "schema
-        value" will be a Python list. Each parameter's values must have a consistent data type, but data type may vary
-        between parameters.
+        value" will typically be a Python list. If a scalar value (such as a single integer or string) is provided,
+        it will automatically be wrapped in a single-element list (e.g., ``2`` becomes ``[2]``). Each parameter's
+        values must have a consistent data type, but data type may vary between parameters.
     :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
         Output file is overwritten if the content of the file has changed or if ``overwrite`` is True.
@@ -916,6 +932,18 @@ class OneAtATime(ParameterGenerator):
         """Validate the One-at-a-Time parameter schema. Executed by class initiation."""
         if not isinstance(self._parameter_schema, dict):
             raise SchemaValidationError("parameter_schema must be a dictionary")
+
+        for key, value in self._parameter_schema.items():
+            if not isinstance(value, (list, tuple, set)):
+                if numpy.isscalar(value):
+                    self._parameter_schema[key] = [value]
+                else:
+                    raise SchemaValidationError(
+                        "Parameters must be a sequence of scalar values or a supported scalar value"
+                    )
+            else:
+                self._parameter_schema[key] = value
+
         self._parameter_names = list(self._parameter_schema.keys())
         # List and tuples are the supported PyYAML ordered iterables that will support expected behavior
         for name in self._parameter_names:
