@@ -56,22 +56,16 @@ class TestOneAtATime:
             {"parameter_1": {"thing1": 1}},
             pytest.raises(
                 SchemaValidationError,
-                match=r"Parameters must be a sequence of scalar values or a supported scalar value"
+                match=r"Parameters must be a sequence of scalar values or a supported scalar value",
             ),
         ),
         "bad schema empty": (
             {"parameter_1": []},
-            pytest.raises(
-                SchemaValidationError,
-                match=r"Parameter 'parameter_1' must have at least one value"
-            ),
+            pytest.raises(SchemaValidationError, match=r"Parameter 'parameter_1' must have at least one value"),
         ),
         "bad schema set": (
             {"parameter_1": {1, 2}},
-            pytest.raises(
-                SchemaValidationError,
-                match=r"Parameter 'parameter_1' is not a list or tuple"
-            ),
+            pytest.raises(SchemaValidationError, match=r"Parameter 'parameter_1' is not a list or tuple"),
         ),
     }
 
