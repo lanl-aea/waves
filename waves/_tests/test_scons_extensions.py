@@ -3750,7 +3750,12 @@ waves_environment_methods = {
             "kwarg1": "value1",
         },
     ),
-    "ParameterStudyWrite": ("ParameterStudyWrite", "parameter_study_write", ("dummy_generator",), {"kwarg1": "value1"}),
+    "ParameterStudyWrite": (
+        "ParameterStudyWrite",
+        "parameter_study_write",
+        ("dummy_generator",),
+        {"output_file": "output.h5"},
+    ),
     "TarScript": ("TarScript", "tar_script", (["target"], ["source"]), {"shell": "shell", "extension": ".script"}),
     "ProjectCacheDirectory": (
         "ProjectCacheDirectory",
