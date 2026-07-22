@@ -100,12 +100,11 @@ env.QOI(calculated=build_directory / "simulation_1_qois.csv", expected="simulati
 # Create parameter study
 study = waves.parameter_generators.CartesianProduct(
     {"height": [1.0, 2.0], "width": [0.2, 0.4]},
-    output_file=build_directory / "study.h5",
     set_name_template="set_@number",
 )
 
 # Write parameter study definition to file
-env.ParameterStudyWrite(study)
+env.ParameterStudyWrite(study, output_file=build_directory / "study.h5")
 
 # Generate QOIs for each set in the parameter study
 study_qoi_targets = []
