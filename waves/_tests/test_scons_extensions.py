@@ -3754,7 +3754,7 @@ waves_environment_methods = {
         "ParameterStudyWrite",
         "parameter_study_write",
         ("dummy_generator",),
-        {"output_file": "output.h5"},
+        {"output_file": "output.h5", "output_directory": "directory", "output_file_type": "h5"},
     ),
     "TarScript": ("TarScript", "tar_script", (["target"], ["source"]), {"shell": "shell", "extension": ".script"}),
     "ProjectCacheDirectory": (
