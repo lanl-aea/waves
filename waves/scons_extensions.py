@@ -4189,6 +4189,12 @@ def parameter_study_write(
     """
     import yaml
 
+    # Explicit type cast. Internal API expects a Path object, but allow users to pass strings.
+    if output_file is not None:
+        output_file = pathlib.Path(output_file)
+    if output_directory is not None:
+        output_directory = pathlib.Path(output_directory)
+
     if output_file is None and output_directory is None:
         warnings.warn(
             "Neither 'output_file' nor 'output_directory' was provided. "
