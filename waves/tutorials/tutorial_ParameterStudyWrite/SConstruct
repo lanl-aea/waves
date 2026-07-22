@@ -29,6 +29,9 @@ env.ParameterStudyWrite(
     output_file_type="yaml",
 )
 
+# Use the builder API to determine file names and the SConscript call to determine directories
+env.SConscript("SConscript", variant_dir="build/sconscript", exports={"env": env, "generator": generator})
+
 # Use the class attributes to determine file names, H5
 one_file = waves.parameter_generators.CartesianProduct(
     schema,
