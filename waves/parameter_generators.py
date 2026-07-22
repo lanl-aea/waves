@@ -788,7 +788,6 @@ class CartesianProduct(ParameterGenerator):
     :param require_previous_parameter_study: Raise a ``RuntimeError`` if the previous parameter study file is missing.
     :param overwrite: Overwrite existing output files
 
-
     :var self.parameter_study: The final parameter study XArray Dataset object
 
     :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
@@ -961,12 +960,6 @@ class OneAtATime(ParameterGenerator):
         value" will typically be a Python list. If a scalar value (such as a single integer or string) is provided,
         it will automatically be wrapped in a single-element list (e.g., ``2`` becomes ``[2]``). Each parameter's
         values must have a consistent data type, but data type may vary between parameters.
-    :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
-        parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
-        relative path template. May contain the ``@number`` set number placeholder in the file basename but not in the
-        path. If the placeholder is not found it will be appended to the template string. Output files are overwritten
-        if the content of the file has changed or if ``overwrite`` is True. ``output_file_template`` and ``output_file``
-        are mutually exclusive.
     :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
         Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
