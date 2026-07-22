@@ -2093,21 +2093,25 @@ def _return_parameter_study_files(
             f"The 'output_file_type' must be one of {_settings._allowable_output_file_types}."
         )
     # Build output file/content associations
-    parameter_study_files: dict[pathlib.Path, dict | xarray.Dataset]
+    parameter_study_files: dict[pathlib.Path, dict | xarray.Dataset] = {}
     if output_file is not None and output_file_type == "h5":
         parameter_study_files = {output_file: generator.parameter_study}
     elif output_file is not None and output_file_type == "yaml":
         parameter_study_files = {output_file: generator.parameter_study_to_dict()}
     elif output_directory is not None and output_file_type == "h5":
-        parameter_study_files = {
-            output_directory / f"{set_name}.{output_file_type}": subset
-            for set_name, subset in generator.parameter_study.groupby(_settings._set_coordinate_key)
-        }
+        for set_name, subset in generator.parameter_study.groupby(_settings._set_coordinate_key):
+            if set_name.endswith(output_file_type):
+                filename = set_name
+            else:
+                filename = f"{set_name}.{output_file_type}"
+            parameter_study_files[output_directory / filename] = subset
     elif output_directory is not None and output_file_type == "yaml":
-        parameter_study_files = {
-            output_directory / f"{set_name}.{output_file_type}": subset
-            for set_name, subset in generator.parameter_study_to_dict().items()
-        }
+        for set_name, subset in generator.parameter_study_to_dict().items():
+            if set_name.endswith(output_file_type):
+                filename = set_name
+            else:
+                filename = f"{set_name}.{output_file_type}"
+            parameter_study_files[output_directory / filename] = subset
     return parameter_study_files
 
 

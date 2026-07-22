@@ -10,6 +10,7 @@ import re
 import shutil
 import sys
 import typing
+import warnings
 
 import SCons.Builder
 import SCons.Defaults
@@ -4189,13 +4190,20 @@ def parameter_study_write(
     import yaml
 
     if output_file is None and output_directory is None:
-        raise RuntimeError("One of 'output_file' or 'output_directory' is required")
-    output_files = parameter_generators._return_parameter_study_files(
-        parameter_generator,
-        output_file=output_file,
-        output_directory=output_directory,
-        output_file_type=output_file_type,
-    ).keys()
+        warnings.warn(
+            "Neither 'output_file' nor 'output_directory' was provided. "
+            "Will try to use the parameter generator output attributes."
+        )
+        output_file = parameter_generator.output_file
+        output_directory = parameter_generator._output_directory
+    output_files = list(
+        parameter_generators._return_parameter_study_files(
+            parameter_generator,
+            output_file=output_file,
+            output_directory=output_directory,
+            output_file_type=output_file_type,
+        ).keys()
+    )
 
     targets = env.Command(
         target=output_files,
