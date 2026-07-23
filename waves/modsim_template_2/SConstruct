@@ -81,7 +81,7 @@ AddOption(
 )
 
 # Inherit user's full environment and set project options
-build_directory = pathlib.Path(GetOption("build_directory"))
+build_directory = pathlib.Path(GetOption("build_directory")).resolve()
 parameter_study_output = build_directory / "parameter_studies"
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),

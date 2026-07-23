@@ -18,7 +18,7 @@ artifacts = []
 workflow = []
 
 # Post-processing
-parameter_study_file = File(f"#/{parameter_generator.output_file}")
+parameter_study_file = parameter_generator.output_file
 post_processing_source = [
     pathlib.Path(set_name) / "rectangle_compression_datasets.h5"
     for set_name in parameter_generator.parameter_study_to_dict()
