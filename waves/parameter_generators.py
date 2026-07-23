@@ -333,7 +333,7 @@ class ParameterGenerator(ABC):
 
         # Deprecate the ParameterGenerator write_meta API and method
         # https://re-git.lanl.gov/aea/python-projects/waves/-/work_items/1024
-        if self.write_meta:
+        if self._write_meta_flag:
             self._write_meta()
 
     def _scons_write(self, target: list, source: list, env: SCons.Environment.Environment) -> None:  # noqa: ARG002
