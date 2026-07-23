@@ -157,13 +157,8 @@
     - if [[ -z ${recipe_directory} ]]; then exit 1; fi
     - if [[ -z ${conda_artifacts_directory} ]]; then exit 1; fi
     # Job commands
-    - mkdir ${conda_artifacts_directory}
+    - mkdir -p ${conda_artifacts_directory}
     - scons pyproject.toml
-    # FIXME: VVV working around strange AEA RHEL CI server that occurs specifically when building in /scratch
-    # Error is reproducibile with a local user on the AEA RHEL server.
-    # ``Error:   × FileSystem error: 'Permission denied (os error 13)'``
-    - find ${PWD}/.git -type f -perm 444 -exec chmod 644 {} \;
-    # FIXME: ^^^ working around strange AEA RHEL CI server that occurs specifically when building in /scratch
     - VERSION=$(python -m setuptools_scm) rattler-build build --recipe ${recipe_directory} --channel fierromechanics --channel conda-forge --output-dir ${conda_artifacts_directory} ${rattler_build_extra_options}
     # Help downstream deploy pipeline find this job by ID
     - tag_job_file_root="/nettmp/aea_service"

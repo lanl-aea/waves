@@ -58,6 +58,10 @@ aea-conda-build-internal:
     environment_file: "conda-build.yml"
     recipe_directory: "recipe-internal"
     rattler_build_extra_options: "--env-isolation conda-build"
+    # FIXME: VVV working around strange AEA RHEL CI server that occurs specifically when building in /scratch
+    # ``Error:   × FileSystem error: 'Permission denied (os error 13)'``
+    conda_artifacts_directory: "/nettmp/aea_service/${CI_PROJECT_PATH}/${CI_JOB_NAME}/${CI_JOB_ID}"
+    # FIXME: ^^^ working around strange AEA RHEL CI server that occurs specifically when building in /scratch
   artifacts:
     paths:
       - conda-bld/noarch/waves-*-*.conda
@@ -70,6 +74,10 @@ aea-conda-build:
   variables:
     environment_file: "conda-build.yml"
     recipe_directory: "recipe"
+    # FIXME: VVV working around strange AEA RHEL CI server that occurs specifically when building in /scratch
+    # ``Error:   × FileSystem error: 'Permission denied (os error 13)'``
+    conda_artifacts_directory: "/nettmp/aea_service/${CI_PROJECT_PATH}/${CI_JOB_NAME}/${CI_JOB_ID}"
+    # FIXME: ^^^ working around strange AEA RHEL CI server that occurs specifically when building in /scratch
 
 aea-conda-build-matrix:
   extends:
