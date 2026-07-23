@@ -61,6 +61,14 @@ aea-conda-build-internal:
   artifacts:
     paths:
       - conda-bld/noarch/waves-*-*.conda
+  # FIXME: VVV working around strange AEA RHEL CI server that occurs specifically when building in /scratch
+  # ``Error:   × FileSystem error: 'Permission denied (os error 13)'``
+  tags:
+    - shell
+    - aea
+    - linux
+    - sstelmo
+  # FIXME: ^^^ working around strange AEA RHEL CI server that occurs specifically when building in /scratch
 
 aea-conda-build:
   extends:
@@ -70,6 +78,14 @@ aea-conda-build:
   variables:
     environment_file: "conda-build.yml"
     recipe_directory: "recipe"
+  # FIXME: VVV working around strange AEA RHEL CI server that occurs specifically when building in /scratch
+  # ``Error:   × FileSystem error: 'Permission denied (os error 13)'``
+  tags:
+    - shell
+    - aea
+    - linux
+    - sstelmo
+  # FIXME: ^^^ working around strange AEA RHEL CI server that occurs specifically when building in /scratch
 
 aea-conda-build-matrix:
   extends:
@@ -84,8 +100,6 @@ aea-conda-build-matrix:
     # Job variables
     - echo ${conda_artifacts_directory}
     - if [[ -z ${conda_artifacts_directory} ]]; then exit 1; fi
-    # Override default permissions. Set group to rx with no write permissions.
-    - umask 0022
     - mkdir ${conda_artifacts_directory}
     - scons pyproject.toml
     - pytest recipe-matrix/matrix.py -v --no-showlocals --tb=short

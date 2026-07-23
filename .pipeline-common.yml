@@ -157,9 +157,7 @@
     - if [[ -z ${recipe_directory} ]]; then exit 1; fi
     - if [[ -z ${conda_artifacts_directory} ]]; then exit 1; fi
     # Job commands
-    # Override default permissions. Set group to rx with no write permissions.
-    - umask 0022
-    - mkdir ${conda_artifacts_directory}
+    - mkdir -p ${conda_artifacts_directory}
     - scons pyproject.toml
     - VERSION=$(python -m setuptools_scm) rattler-build build --recipe ${recipe_directory} --channel fierromechanics --channel conda-forge --output-dir ${conda_artifacts_directory} ${rattler_build_extra_options}
     # Help downstream deploy pipeline find this job by ID
