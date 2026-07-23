@@ -4,9 +4,7 @@ import pathlib
 
 import matplotlib.pyplot
 import pandas
-import waves
 import xarray
-import yaml
 
 
 def combine_data(

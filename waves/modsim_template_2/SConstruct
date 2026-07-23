@@ -202,7 +202,6 @@ workflow_artifacts: dict = {}
 workflow_configurations = {
     "rectangle_compression-nominal": (
         "rectangle_compression.scons",
-        "nominal",
         waves.parameter_generators.OneAtATime(
             modsim_package.rectangle_compression.nominal(),
             output_file=parameter_study_output / "nominal.yaml",
@@ -211,7 +210,6 @@ workflow_configurations = {
     ),
     "rectangle_compression-mesh_convergence": (
         "rectangle_compression.scons",
-        "mesh_convergence",
         waves.parameter_generators.CartesianProduct(
             modsim_package.rectangle_compression.mesh_convergence(),
             output_file=parameter_study_output / "rectangle_compression-mesh_convergence.h5",
@@ -219,7 +217,7 @@ workflow_configurations = {
         ),
     ),
 }
-for alias, (workflow, study_name, study_definition) in workflow_configurations.items():
+for alias, (workflow, study_definition) in workflow_configurations.items():
     # Marker: workflow-configurations-end-do-not-remove
     # Marker: workflow-naming-conventions-start-do-not-remove
     # Project naming conventions
