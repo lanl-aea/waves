@@ -28,7 +28,7 @@ dependencies:
   - python-build
   - python-gmsh
   - pyyaml
-  - rattler-build >=0.66.2,<0.68.0
+  - rattler-build >=0.66.2
   - ruff
   - salib >=1.5.1
   - scipy >=1
