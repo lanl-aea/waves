@@ -199,8 +199,8 @@ SConscript(
 # Add simulation targets
 workflow_artifacts: dict = {}
 # Marker: workflow-configurations-start-do-not-remove
-workflow_configurations = [
-    (
+workflow_configurations = {
+    "rectangle_compression-nominal": (
         "rectangle_compression.scons",
         "nominal",
         waves.parameter_generators.OneAtATime(
@@ -209,7 +209,7 @@ workflow_configurations = [
             output_file_type="yaml",
         ),
     ),
-    (
+    "rectangle_compression-mesh_convergence": (
         "rectangle_compression.scons",
         "mesh_convergence",
         waves.parameter_generators.CartesianProduct(
@@ -218,12 +218,11 @@ workflow_configurations = [
             previous_parameter_study=parameter_study_output / "rectangle_compression-mesh_convergence.h5",
         ),
     ),
-]
-for workflow, study_name, study_definition in workflow_configurations:
+}
+for alias, (workflow, study_name, study_definition) in workflow_configurations.items():
     # Marker: workflow-configurations-end-do-not-remove
     # Marker: workflow-naming-conventions-start-do-not-remove
     # Project naming conventions
-    alias = f"{pathlib.Path(workflow).stem}-{study_name}"
     workflow_build_directory = build_directory / alias
     workflow_file = modsim_package_dir / workflow
     # Marker: workflow-naming-conventions-end-do-not-remove
@@ -247,7 +246,7 @@ workflow_artifacts[alias].extend(
     SConscript(
         modsim_package_dir / f"{alias}-post_processing.scons",
         variant_dir=build_directory / alias,
-        exports={"env": env, "alias": alias, "parameter_generator": workflow_configurations[1][2]},
+        exports={"env": env, "alias": alias, "parameter_generator": workflow_configurations[alias][2]},
     )
 )
 
