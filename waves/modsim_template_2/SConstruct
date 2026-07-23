@@ -244,7 +244,7 @@ workflow_artifacts[alias].extend(
     SConscript(
         modsim_package_dir / f"{alias}-post_processing.scons",
         variant_dir=build_directory / alias,
-        exports={"env": env, "alias": alias, "parameter_generator": workflow_configurations[alias][2]},
+        exports={"env": env, "alias": alias, "parameter_generator": workflow_configurations[alias][1]},
     )
 )
 
