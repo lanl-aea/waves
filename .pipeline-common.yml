@@ -162,7 +162,7 @@
     # FIXME: VVV working around strange AEA RHEL CI server that occurs specifically when building in /scratch
     # Error is reproducibile with a local user on the AEA RHEL server.
     # ``Error:   × FileSystem error: 'Permission denied (os error 13)'``
-    - chmod 644 ${PWD}/.git/objects/??/*
+    - find ${PWD}/.git -type f -perm 444
     # FIXME: ^^^ working around strange AEA RHEL CI server that occurs specifically when building in /scratch
     - VERSION=$(python -m setuptools_scm) rattler-build build --recipe ${recipe_directory} --channel fierromechanics --channel conda-forge --output-dir ${conda_artifacts_directory} ${rattler_build_extra_options}
     # Help downstream deploy pipeline find this job by ID
