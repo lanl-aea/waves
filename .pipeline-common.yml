@@ -157,8 +157,6 @@
     - if [[ -z ${recipe_directory} ]]; then exit 1; fi
     - if [[ -z ${conda_artifacts_directory} ]]; then exit 1; fi
     # Job commands
-    # Override default permissions. Set group to rx with no write permissions.
-    - umask 0022
     - mkdir ${conda_artifacts_directory}
     - scons pyproject.toml
     # FIXME: VVV working around strange AEA RHEL CI server that occurs specifically when building in /scratch
