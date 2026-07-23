@@ -4,9 +4,7 @@ import pathlib
 
 import matplotlib.pyplot
 import pandas
-import waves
 import xarray
-import yaml
 
 
 def combine_data(
@@ -109,25 +107,3 @@ def sort_dataframe(
     :returns: sorted and indexed dataframe
     """
     return dataframe.reindex(sorted(dataframe.columns), axis=1).sort_values(list(sort_columns)).set_index(index_column)
-
-
-def write_study_definition(
-    study_definition: waves.parameter_generators.ParameterGenerator | dict,
-    path: pathlib.Path,
-    alias: str,
-) -> None:
-    """Write parameter study definition files to path.
-
-    Calls parameter generator write function or writes a YAML dictionary
-
-    :param study_definition: Parameter study definition. WAVES parameter generator or dictionary.
-    :param path: Output directory
-    :param alias: Parameter study dictionary file name
-    """
-    if isinstance(study_definition, waves.parameter_generators.ParameterGenerator):
-        study_definition.write()
-    elif isinstance(study_definition, dict):
-        study_path = path / f"{alias}.yaml"
-        study_path.parent.mkdir(parents=True, exist_ok=True)
-        with study_path.open(mode="w") as study_file:
-            study_file.write(yaml.safe_dump(study_definition))

@@ -33,9 +33,9 @@ construction environment(s), and workflows. The SConstruct file is reponsible fo
 the workflow's construction environment, alias, and parameters under the variable names ``env``, ``alias``, and
 ``parameters``, respectively.
 
-The workflow SConscript calls are constructed in the ``workflow_configurations`` variable as a list of tuples defining
-the: (1) workflow SConscript file ``workflow``, (2) study name ``study_name``, and (3) study definition
-``study_definition``.
+The workflow SConscript calls are constructed in the ``workflow_configurations`` variable as a dictionary of tuples
+where the key is an unique workflow ``alias`` and the tuple defines the: (1) workflow SConscript file ``workflow`` and (2)
+study definition ``study_definition``.
 
 .. admonition:: SConstruct
 

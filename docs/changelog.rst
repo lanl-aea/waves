@@ -9,6 +9,14 @@ Changelog
 ******************
 
 ******************
+1.5.1 (unreleased)
+******************
+
+Documentation
+=============
+- Simplify the parameter study output file behavior in modsim_template_2. By `Kyle Brindley`_.
+
+******************
 1.5.0 (2026-07-22)
 ******************
 

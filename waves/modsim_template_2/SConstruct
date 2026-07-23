@@ -82,6 +82,7 @@ AddOption(
 
 # Inherit user's full environment and set project options
 build_directory = pathlib.Path(GetOption("build_directory"))
+parameter_study_output = build_directory / "parameter_studies"
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
     unconditional_build=GetOption("unconditional_build"),
@@ -120,7 +121,6 @@ modsim_package_dir = pathlib.Path("modsim_package")
 test_source_dir = "modsim_package/tests"
 # The shared cache should be hardcoded to point to the project's shared cache on a shared file system
 shared_cache_dir = project_directory / "shared_cache"
-parameter_study_build_directory = build_directory / "parameter_studies"
 project_variables = {
     "project_directory": project_directory,
     "project_name": project_name,
@@ -131,7 +131,6 @@ project_variables = {
     "documentation_pdf": f"{latex_project_name}-{version}.pdf",
     "report_pdf": f"{latex_project_name}-{version}-report.pdf",
     "test_source_abspath": project_directory / test_source_dir,
-    "parameter_study_build_abspath": parameter_study_build_directory.resolve(),
 }
 for key, value in project_variables.items():
     env[key] = value
@@ -197,34 +196,37 @@ SConscript(
     exports={"env": env, "project_variables": project_variables},
 )
 
-# Define parameter generators
-mesh_convergence_parameter_study_file = (
-    env["parameter_study_build_abspath"] / "rectangle_compression-mesh_convergence.h5"
-)
-mesh_convergence_parameter_generator = waves.parameter_generators.CartesianProduct(
-    modsim_package.rectangle_compression.mesh_convergence(),
-    output_file=mesh_convergence_parameter_study_file,
-    previous_parameter_study=mesh_convergence_parameter_study_file,
-)
-
 # Add simulation targets
-workflow_artifacts = {}
+workflow_artifacts: dict = {}
 # Marker: workflow-configurations-start-do-not-remove
-workflow_configurations = [
-    ("rectangle_compression.scons", "nominal", modsim_package.rectangle_compression.nominal()),
-    ("rectangle_compression.scons", "mesh_convergence", mesh_convergence_parameter_generator),
-]
-for workflow, study_name, study_definition in workflow_configurations:
+workflow_configurations = {
+    "rectangle_compression-nominal": (
+        "rectangle_compression.scons",
+        waves.parameter_generators.OneAtATime(
+            modsim_package.rectangle_compression.nominal(),
+            output_file=parameter_study_output / "nominal.yaml",
+            output_file_type="yaml",
+        ),
+    ),
+    "rectangle_compression-mesh_convergence": (
+        "rectangle_compression.scons",
+        waves.parameter_generators.CartesianProduct(
+            modsim_package.rectangle_compression.mesh_convergence(),
+            output_file=parameter_study_output / "rectangle_compression-mesh_convergence.h5",
+            previous_parameter_study=parameter_study_output / "rectangle_compression-mesh_convergence.h5",
+        ),
+    ),
+}
+for alias, (workflow, study_definition) in workflow_configurations.items():
     # Marker: workflow-configurations-end-do-not-remove
     # Marker: workflow-naming-conventions-start-do-not-remove
     # Project naming conventions
-    alias = f"{pathlib.Path(workflow).stem}-{study_name}"
     workflow_build_directory = build_directory / alias
     workflow_file = modsim_package_dir / workflow
     # Marker: workflow-naming-conventions-end-do-not-remove
 
     # Write workflow parameter file
-    modsim_package.utilities.write_study_definition(study_definition, env["parameter_study_build_abspath"], alias)
+    study_definition.write()
 
     # Call workflow configuration
     workflow_artifacts[alias] = env.ParameterStudySConscript(
@@ -242,7 +244,7 @@ workflow_artifacts[alias].extend(
     SConscript(
         modsim_package_dir / f"{alias}-post_processing.scons",
         variant_dir=build_directory / alias,
-        exports={"env": env, "alias": alias, "parameter_generator": mesh_convergence_parameter_generator},
+        exports={"env": env, "alias": alias, "parameter_generator": workflow_configurations[alias][1]},
     )
 )
 
