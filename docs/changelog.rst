@@ -9,8 +9,12 @@ Changelog
 ******************
 
 ******************
-1.5.1 (unreleased)
+1.5.1 (2026-07-22)
 ******************
+
+Bug fixes
+=========
+- Only print ``meta_file`` attribute warning when user tries to use it directly. By `Kyle Brindley`_.
 
 Documentation
 =============
