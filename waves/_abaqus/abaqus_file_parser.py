@@ -143,7 +143,9 @@ class OdbReportFileParser(AbaqusFileParser):
             sys.exit(f"Couldn't read file {input_file}: {e}")
 
         if not time_stamp:
-            time_stamp = datetime.now(tz=datetime.timezone.utc).strftime(_settings._default_timestamp_format)
+            time_stamp = (
+                datetime.now(tz=datetime.timezone.utc).astimezone().strftime(_settings._default_timestamp_format)
+            )
 
         self.parsed["odb"] = {}
         self.parsed["odb"]["info"] = {}
