@@ -1152,20 +1152,14 @@ def test_system(
         "abaqus_command": " ".join(f'--abaqus-command="{command}"' for command in abaqus_command),
         "cubit_command": " ".join(f'--cubit-command="{command}"' for command in cubit_command),
     }
-    try:
-        for command in commands:
-            if isinstance(command, string.Template):
-                command_string = command.substitute(template_substitution)
-            else:
-                command_string = command
-            subprocess.check_output(
-                command_string, env=system_test_environment, cwd=temporary_path, text=True, shell=True
-            )
-    except Exception:
-        raise
-    else:
-        if not keep_system_tests:
-            temporary_directory.cleanup()
+    for command in commands:
+        if isinstance(command, string.Template):
+            command_string = command.substitute(template_substitution)
+        else:
+            command_string = command
+        subprocess.check_output(command_string, env=system_test_environment, cwd=temporary_path, text=True, shell=True)
+    if not keep_system_tests:
+        temporary_directory.cleanup()
 
 
 def create_test_prefix(request: pytest.FixtureRequest, module_name: str = MODULE_NAME) -> str:
