@@ -1591,7 +1591,7 @@ class OdbReportFileParser(AbaqusFileParser):
         """
         if self.format != "extract":
             self.print_error("Must specify extract format to utilize this routine.")
-            return None  # If extract format wasn't given when parsing the data, this method won't work
+            return  # If extract format wasn't given when parsing the data, this method won't work
         extract: dict = {}
         datasets = []
         try:
@@ -1891,7 +1891,7 @@ class OdbReportFileParser(AbaqusFileParser):
         del extract  # Don't need the dictionary any more, so just remove it
         self.save_dict_to_group(extract_h5, "odb/", odb_dict["odb"], h5_file)
         extract_h5.close()
-        return None
+        return
 
     def save_dict_to_group(self, h5file: h5py.File, path: str, data_member: dict, output_file: str) -> None:
         """Recursively save data from python dictionary to hdf5 file.
