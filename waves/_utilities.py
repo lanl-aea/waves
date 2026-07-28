@@ -349,7 +349,7 @@ def cache_environment(
             environment = return_environment(command, shell=shell)
         except subprocess.CalledProcessError as err:
             print(err.output.decode(), file=sys.stderr)
-            raise err
+            raise
 
     if cache:
         with pathlib.Path(cache).open(mode="w") as cache_file:

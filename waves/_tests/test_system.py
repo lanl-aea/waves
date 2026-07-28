@@ -1161,8 +1161,8 @@ def test_system(
             subprocess.check_output(
                 command_string, env=system_test_environment, cwd=temporary_path, text=True, shell=True
             )
-    except Exception as err:
-        raise err
+    except Exception:
+        raise
     else:
         if not keep_system_tests:
             temporary_directory.cleanup()
