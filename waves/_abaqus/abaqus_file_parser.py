@@ -193,7 +193,8 @@ class OdbReportFileParser(AbaqusFileParser):
         if number_of_instances > 0:
             try:
                 self.parse_instances(f, self.parsed["odb"]["rootAssembly"]["instances"], number_of_instances)
-            except Exception as e:  # TODO: Remove the generic try/except block and error message after alpha release
+            # TODO: Remove the generic try/except block and error message after alpha release
+            except Exception as e:  # noqa: BLE001
                 sys.exit(
                     f"Unknown error occurred parsing odbreport file: {e}. Please report error "
                     f"to {_settings._parsing_error_contact} and send odb or "
@@ -215,7 +216,8 @@ class OdbReportFileParser(AbaqusFileParser):
             self.parsed["odb"]["steps"] = {}
             try:
                 self.parse_steps(f, self.parsed["odb"]["steps"], number_of_steps)
-            except Exception as e:  # TODO: Remove the generic try/except block and error message after alpha release
+            # TODO: Remove the generic try/except block and error message after alpha release
+            except Exception as e:  # noqa: BLE001
                 sys.exit(
                     f"Unknown error occurred parsing odbreport file: {e}. Please report error "
                     f"to {_settings._parsing_error_contact} and send odb or "
@@ -1962,7 +1964,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 )
                 # TODO: In future additions of xarray, consider using option 'invalid_netcdf=True'
             else:
-                raise ValueError(f"Cannot save {type(item)} type to hdf5 file.")
+                raise TypeError(f"Cannot save {type(item)} type to hdf5 file.")
 
 
 # Limit help() and 'from module import *' behavior to the module's public API
