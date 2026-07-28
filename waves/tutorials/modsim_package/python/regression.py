@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """Perform regression testing on simulation output."""
 
 import argparse

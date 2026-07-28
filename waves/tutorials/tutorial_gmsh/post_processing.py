@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """Example of catenating WAVES parameter study results and definition."""
 
 import argparse
