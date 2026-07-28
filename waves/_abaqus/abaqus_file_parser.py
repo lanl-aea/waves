@@ -4,12 +4,12 @@
 """
 
 import contextlib
+import datetime
 import pathlib
 import re
 import sys
 import typing
 from abc import ABC, abstractmethod
-from datetime import datetime
 from itertools import compress
 
 import h5py
@@ -143,9 +143,7 @@ class OdbReportFileParser(AbaqusFileParser):
             sys.exit(f"Couldn't read file {input_file}: {e}")
 
         if not time_stamp:
-            time_stamp = (
-                datetime.now(tz=datetime.timezone.utc).astimezone().strftime(_settings._default_timestamp_format)
-            )
+            time_stamp = datetime.datetime.now().astimezone().strftime(_settings._default_timestamp_format)
 
         self.parsed["odb"] = {}
         self.parsed["odb"]["info"] = {}
