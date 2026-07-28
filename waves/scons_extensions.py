@@ -2295,11 +2295,11 @@ class AbaqusPseudoBuilder:
                 raise ValueError("The length of ``oldjob_type`` and ``oldjob`` do not match.")
             # Check oldjob_type is same length as oldjob
             # Add old job targets to source list
-            for job_name, job_type, num_restart_files in zip(
+            for job_name, _job_type, num_restart_files in zip(
                 oldjob, oldjob_type, oldjob_restart_file_count, strict=True
             ):
                 oldjob_extensions = _utilities._get_abaqus_restart_extensions(
-                    job_type=job_type,
+                    job_type=_job_type,
                     processes=num_restart_files,
                     standard_restart_extensions=self.standard_restart_extensions,
                     explicit_restart_extensions=self.explicit_restart_extensions,
@@ -4135,9 +4135,9 @@ def parameter_study_sconscript(
             return variant_directory
 
     if isinstance(study, parameter_generators.ParameterGenerator):
-        for set_name, parameters in study.parameter_study_to_dict().items():
-            exports.update({"set_name": set_name, "parameters": parameters})
-            build_directory = _variant_subdirectory(variant_dir, set_name, subdirectories)
+        for _set_name, parameters in study.parameter_study_to_dict().items():
+            exports.update({"set_name": _set_name, "parameters": parameters})
+            build_directory = _variant_subdirectory(variant_dir, _set_name, subdirectories)
             sconscript_output.append(env.SConscript(*args, variant_dir=build_directory, exports=exports, **kwargs))
     elif isinstance(study, dict):
         exports.update({"parameters": study})
