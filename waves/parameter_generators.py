@@ -1085,7 +1085,6 @@ class CustomStudy(ParameterGenerator):
             raise SchemaValidationError(
                 "The parameter samples must be an array of shape MxN, where N is the number of parameters."
             )
-        return
 
     def _generate(self, **kwargs) -> None:  # noqa: ARG002
         """Generate the parameter study dataset from the user provided parameter array."""
@@ -1591,7 +1590,6 @@ class CatenationStudy(ParameterGenerator):
                 raise SchemaValidationError(
                     "Each value of a key:value entry must be a ``waves.parameter_generators.ParameterGenerator`` class"
                 )
-        return
 
     def _generate(self, **kwargs) -> None:  # noqa: ARG002
         """Generate the parameter studies and combine them."""

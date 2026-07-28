@@ -169,7 +169,7 @@ def odb_extract(
         )
         file_suffix = output_type
 
-    time_stamp = datetime.datetime.now().strftime(_settings._default_timestamp_format)
+    time_stamp = datetime.datetime.now().astimezone().strftime(_settings._default_timestamp_format)
     job_name = path_output_file.with_suffix(".csv")
     if path_output_file.exists():
         new_output_file = f"{path_output_file.with_suffix('')!s}_{time_stamp}.{file_suffix}"

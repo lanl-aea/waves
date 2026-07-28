@@ -4054,10 +4054,12 @@ test__write_cases = {
         None,
         None,
         [
-            "out0:\n  parameter_1: 1\n  parameter_2: a\n"
-            "out1:\n  parameter_1: 1\n  parameter_2: b\n"
-            "out2:\n  parameter_1: 2\n  parameter_2: b\n"
-            "out3:\n  parameter_1: 2\n  parameter_2: a\n"
+            (
+                "out0:\n  parameter_1: 1\n  parameter_2: a\n"
+                "out1:\n  parameter_1: 1\n  parameter_2: b\n"
+                "out2:\n  parameter_1: 2\n  parameter_2: b\n"
+                "out3:\n  parameter_1: 2\n  parameter_2: a\n"
+            )
         ],
         None,
         does_not_raise,
@@ -4068,11 +4070,13 @@ test__write_cases = {
         ),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
         [
-            f"{pathlib.Path('output.yaml')}\n"
-            "out0:\n  parameter_1: 1\n  parameter_2: a\n"
-            "out1:\n  parameter_1: 1\n  parameter_2: b\n"
-            "out2:\n  parameter_1: 2\n  parameter_2: b\n"
-            "out3:\n  parameter_1: 2\n  parameter_2: a\n"
+            (
+                f"{pathlib.Path('output.yaml')}\n"
+                "out0:\n  parameter_1: 1\n  parameter_2: a\n"
+                "out1:\n  parameter_1: 1\n  parameter_2: b\n"
+                "out2:\n  parameter_1: 2\n  parameter_2: b\n"
+                "out3:\n  parameter_1: 2\n  parameter_2: a\n"
+            )
         ],
         None,
         None,
@@ -4171,10 +4175,12 @@ test__write_cases = {
         None,
         None,
         [
-            "out0:\n  parameter_1: 2\n  parameter_2: true\n"
-            "out1:\n  parameter_1: 1\n  parameter_2: true\n"
-            "out2:\n  parameter_1: 2\n  parameter_2: false\n"
-            "out3:\n  parameter_1: 1\n  parameter_2: false\n"
+            (
+                "out0:\n  parameter_1: 2\n  parameter_2: true\n"
+                "out1:\n  parameter_1: 1\n  parameter_2: true\n"
+                "out2:\n  parameter_1: 2\n  parameter_2: false\n"
+                "out3:\n  parameter_1: 1\n  parameter_2: false\n"
+            )
         ],
         None,
         does_not_raise,
@@ -4185,11 +4191,13 @@ test__write_cases = {
         ),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
         [
-            f"{pathlib.Path('output.yaml')}\n"
-            "out0:\n  parameter_1: 2\n  parameter_2: true\n"
-            "out1:\n  parameter_1: 1\n  parameter_2: true\n"
-            "out2:\n  parameter_1: 2\n  parameter_2: false\n"
-            "out3:\n  parameter_1: 1\n  parameter_2: false\n"
+            (
+                f"{pathlib.Path('output.yaml')}\n"
+                "out0:\n  parameter_1: 2\n  parameter_2: true\n"
+                "out1:\n  parameter_1: 1\n  parameter_2: true\n"
+                "out2:\n  parameter_1: 2\n  parameter_2: false\n"
+                "out3:\n  parameter_1: 1\n  parameter_2: false\n"
+            )
         ],
         None,
         None,
@@ -4425,9 +4433,11 @@ test__write_cases = {
         None,
         None,
         [
-            "out0:\n  parameter_1: 1\n  parameter_2: a\n"
-            "out1:\n  parameter_1: 1\n  parameter_2: b\n"
-            "out2:\n  parameter_1: 2\n  parameter_2: a\n"
+            (
+                "out0:\n  parameter_1: 1\n  parameter_2: a\n"
+                "out1:\n  parameter_1: 1\n  parameter_2: b\n"
+                "out2:\n  parameter_1: 2\n  parameter_2: a\n"
+            )
         ],
         None,
         does_not_raise,
@@ -4436,10 +4446,12 @@ test__write_cases = {
         parameter_generators.OneAtATime({"parameter_1": [1, 2], "parameter_2": ["a", "b"]}, set_name_template="out"),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
         [
-            f"{pathlib.Path('output.yaml')}\n"
-            "out0:\n  parameter_1: 1\n  parameter_2: a\n"
-            "out1:\n  parameter_1: 1\n  parameter_2: b\n"
-            "out2:\n  parameter_1: 2\n  parameter_2: a\n"
+            (
+                f"{pathlib.Path('output.yaml')}\n"
+                "out0:\n  parameter_1: 1\n  parameter_2: a\n"
+                "out1:\n  parameter_1: 1\n  parameter_2: b\n"
+                "out2:\n  parameter_1: 2\n  parameter_2: a\n"
+            )
         ],
         None,
         None,
@@ -4504,9 +4516,11 @@ test__write_cases = {
         None,
         None,
         [
-            "out0:\n  parameter_1: 1\n  parameter_2: true\n"
-            "out1:\n  parameter_1: 2\n  parameter_2: true\n"
-            "out2:\n  parameter_1: 1\n  parameter_2: false\n"
+            (
+                "out0:\n  parameter_1: 1\n  parameter_2: true\n"
+                "out1:\n  parameter_1: 2\n  parameter_2: true\n"
+                "out2:\n  parameter_1: 1\n  parameter_2: false\n"
+            )
         ],
         None,
         does_not_raise,
@@ -4515,10 +4529,12 @@ test__write_cases = {
         parameter_generators.OneAtATime({"parameter_1": [1, 2], "parameter_2": [True, False]}, set_name_template="out"),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
         [
-            f"{pathlib.Path('output.yaml')}\n"
-            "out0:\n  parameter_1: 1\n  parameter_2: true\n"
-            "out1:\n  parameter_1: 2\n  parameter_2: true\n"
-            "out2:\n  parameter_1: 1\n  parameter_2: false\n"
+            (
+                f"{pathlib.Path('output.yaml')}\n"
+                "out0:\n  parameter_1: 1\n  parameter_2: true\n"
+                "out1:\n  parameter_1: 2\n  parameter_2: true\n"
+                "out2:\n  parameter_1: 1\n  parameter_2: false\n"
+            )
         ],
         None,
         None,
@@ -4629,10 +4645,12 @@ test__write_cases = {
         None,
         None,
         [
-            "out0:\n  parameter_1: 1\n  parameter_2: a\n"
-            "out1:\n  parameter_1: 1\n  parameter_2: b\n"
-            "out2:\n  parameter_1: 2\n  parameter_2: b\n"
-            "out3:\n  parameter_1: 2\n  parameter_2: a\n"
+            (
+                "out0:\n  parameter_1: 1\n  parameter_2: a\n"
+                "out1:\n  parameter_1: 1\n  parameter_2: b\n"
+                "out2:\n  parameter_1: 2\n  parameter_2: b\n"
+                "out3:\n  parameter_1: 2\n  parameter_2: a\n"
+            )
         ],
         None,
         does_not_raise,
@@ -4647,11 +4665,13 @@ test__write_cases = {
         ),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
         [
-            f"{pathlib.Path('output.yaml')}\n"
-            "out0:\n  parameter_1: 1\n  parameter_2: a\n"
-            "out1:\n  parameter_1: 1\n  parameter_2: b\n"
-            "out2:\n  parameter_1: 2\n  parameter_2: b\n"
-            "out3:\n  parameter_1: 2\n  parameter_2: a\n"
+            (
+                f"{pathlib.Path('output.yaml')}\n"
+                "out0:\n  parameter_1: 1\n  parameter_2: a\n"
+                "out1:\n  parameter_1: 1\n  parameter_2: b\n"
+                "out2:\n  parameter_1: 2\n  parameter_2: b\n"
+                "out3:\n  parameter_1: 2\n  parameter_2: a\n"
+            )
         ],
         None,
         None,
@@ -4710,10 +4730,12 @@ test__write_cases = {
         None,
         None,
         [
-            "out0:\n  parameter_1: 1\n  parameter_2: 4.0\n"
-            "out1:\n  parameter_1: 1\n  parameter_2: 3.0\n"
-            "out2:\n  parameter_1: 2\n  parameter_2: 4.0\n"
-            "out3:\n  parameter_1: 2\n  parameter_2: 3.0\n"
+            (
+                "out0:\n  parameter_1: 1\n  parameter_2: 4.0\n"
+                "out1:\n  parameter_1: 1\n  parameter_2: 3.0\n"
+                "out2:\n  parameter_1: 2\n  parameter_2: 4.0\n"
+                "out3:\n  parameter_1: 2\n  parameter_2: 3.0\n"
+            )
         ],
         None,
         does_not_raise,
@@ -4728,11 +4750,13 @@ test__write_cases = {
         ),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
         [
-            f"{pathlib.Path('output.yaml')}\n"
-            "out0:\n  parameter_1: 1\n  parameter_2: 4.0\n"
-            "out1:\n  parameter_1: 1\n  parameter_2: 3.0\n"
-            "out2:\n  parameter_1: 2\n  parameter_2: 4.0\n"
-            "out3:\n  parameter_1: 2\n  parameter_2: 3.0\n"
+            (
+                f"{pathlib.Path('output.yaml')}\n"
+                "out0:\n  parameter_1: 1\n  parameter_2: 4.0\n"
+                "out1:\n  parameter_1: 1\n  parameter_2: 3.0\n"
+                "out2:\n  parameter_1: 2\n  parameter_2: 4.0\n"
+                "out3:\n  parameter_1: 2\n  parameter_2: 3.0\n"
+            )
         ],
         None,
         None,
@@ -4791,10 +4815,12 @@ test__write_cases = {
         None,
         None,
         [
-            "out0:\n  parameter_1: 2\n  parameter_2: true\n"
-            "out1:\n  parameter_1: 1\n  parameter_2: true\n"
-            "out2:\n  parameter_1: 2\n  parameter_2: false\n"
-            "out3:\n  parameter_1: 1\n  parameter_2: false\n"
+            (
+                "out0:\n  parameter_1: 2\n  parameter_2: true\n"
+                "out1:\n  parameter_1: 1\n  parameter_2: true\n"
+                "out2:\n  parameter_1: 2\n  parameter_2: false\n"
+                "out3:\n  parameter_1: 1\n  parameter_2: false\n"
+            )
         ],
         None,
         does_not_raise,
@@ -4809,11 +4835,13 @@ test__write_cases = {
         ),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
         [
-            f"{pathlib.Path('output.yaml')}\n"
-            "out0:\n  parameter_1: 2\n  parameter_2: true\n"
-            "out1:\n  parameter_1: 1\n  parameter_2: true\n"
-            "out2:\n  parameter_1: 2\n  parameter_2: false\n"
-            "out3:\n  parameter_1: 1\n  parameter_2: false\n"
+            (
+                f"{pathlib.Path('output.yaml')}\n"
+                "out0:\n  parameter_1: 2\n  parameter_2: true\n"
+                "out1:\n  parameter_1: 1\n  parameter_2: true\n"
+                "out2:\n  parameter_1: 2\n  parameter_2: false\n"
+                "out3:\n  parameter_1: 1\n  parameter_2: false\n"
+            )
         ],
         None,
         None,
@@ -5049,8 +5077,10 @@ test_class_write_cases.update(
             ),
             {"output_file": pathlib.Path("different.yaml"), "dry_run": True},
             [
-                f"{pathlib.Path('different.yaml')}\n"
-                "parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"
+                (
+                    f"{pathlib.Path('different.yaml')}\n"
+                    "parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"
+                )
             ],
             None,
             None,

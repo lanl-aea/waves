@@ -93,9 +93,9 @@ extend-select = [
 extend-ignore = ["B028", "D203", "D213", "PIE808", "PIE790", "SIM108", "PLC0415", "ANN002", "ANN003"]
 
 [tool.ruff.lint.extend-per-file-ignores]
-"*SConstruct" = ["D100", "F821"]
-"*SConscript" = ["D100", "F821"]
-"*.scons" = ["D100", "F821"]
+"*SConstruct" = ["D100", "F821", "EXE001"]
+"*SConscript" = ["D100", "F821", "EXE001"]
+"*.scons" = ["D100", "F821", "EXE001"]
 "waves/_tests/test_*.py" = ["RUF012"]
 
 [tool.mypy]

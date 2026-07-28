@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """Post-process with data catenation and plotting."""
 
 import argparse
@@ -11,7 +10,7 @@ import yaml
 import modsim_package.utilities
 from modsim_package import __version__
 
-TODAY = datetime.date.today()
+TODAY = datetime.datetime.now(tz=datetime.timezone.utc).date()
 DEFAULT_SELECTION_DICT = {
     "E values": "E22",
     "S values": "S22",
