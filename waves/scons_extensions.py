@@ -75,7 +75,6 @@ def print_action_signature_string(
         action_signature_string = target[0].get_executor().get_contents()
     target_text = " and ".join([str(node) for node in target])
     print(f"Building {target_text} with action signature string:\n  {action_signature_string}\n{s}")
-    return
 
 
 def _print_failed_nodes_stdout() -> None:
@@ -2862,7 +2861,6 @@ def _build_odb_extract(
         abaqus_command=env["program"],
         delete_report_file=delete_report_file,
     )
-    return None
 
 
 def sbatch(

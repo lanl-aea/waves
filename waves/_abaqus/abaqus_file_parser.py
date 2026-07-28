@@ -42,7 +42,6 @@ class AbaqusFileParser(ABC):
             self.output_file = f"{input_file}{_settings._default_parsed_extension}"
         self.verbose = verbose
         self.parse(*args, **kwargs)
-        return
 
     # Anybody who wishes to create a class that inherits from this class, must create a method called parse
     @abstractmethod
@@ -1381,7 +1380,6 @@ class OdbReportFileParser(AbaqusFileParser):
                 values[step_number][frame_number] = [None for _ in range(position_length)]
             else:
                 values[step_number][frame_number] = [[None for _ in range(data_length)] for _ in range(position_length)]
-        return
 
     def parse_history_regions(
         self,

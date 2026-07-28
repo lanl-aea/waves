@@ -945,7 +945,6 @@ def _accept(calculated: pathlib.Path, expected: pathlib.Path) -> None:
     new["expected"] = calculated_df["calculated"]
     # Case insensitive sort
     new.sort_index(key=lambda name: name.str.lower()).to_csv(expected)
-    return
 
 
 def _check(diff: pathlib.Path) -> None:

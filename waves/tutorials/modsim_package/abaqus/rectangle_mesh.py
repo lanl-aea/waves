@@ -16,7 +16,7 @@ import mesh
 #
 # ``import modsim_package.abaqus.abaqus_utilities as abaqus_utilities``
 try:
-    import modsim_package.abaqus.abaqus_utilities as abaqus_utilities
+    from modsim_package.abaqus import abaqus_utilities
 except ImportError:
     import abaqus_utilities
 
