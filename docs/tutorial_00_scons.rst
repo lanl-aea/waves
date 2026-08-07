@@ -178,10 +178,6 @@ The ``--unconditional-build`` option is mostly useful for :ref:`testing` and con
 tutorial workflows to force a workflow to execute, even if the required programs are not found. This is useful for
 system testing software availability in the construction environment itself.
 
-By default, |PROJECT| builders redirect task STDOUT and STDERR to a ``*.stdout`` file to avoid cluttering the task
-execution reported by SCons.  The ``--print-build-failures`` will print the associated ``*.stdout`` file of all failed
-tasks at the end of SCons execution.
-
 At the end of this tutorial, you will see how to explore the project specific command-line options help and usage.
 
 6. Add the content below to the ``SConstruct`` file to initialize the :class:`waves.scons_extensions.WAVESEnvironment`
@@ -360,18 +356,17 @@ line in your project configuration.
             /home/roppenheimer/waves-tutorials
             $ scons -h
             scons: Reading SConscript files ...
-            Checking whether '/apps/abaqus/Commands/abq2024' program exists.../apps/abaqus/Commands/abq2024
-            Checking whether '/usr/projects/ea/abaqus/Commands/abq2024' program exists...no
-            Checking whether 'abq2024' program exists.../apps/abaqus/Commands/abq2024
+            Checking whether '/apps/abaqus/Commands/abq2025' program exists.../apps/abaqus/Commands/abq2025
+            Checking whether '/usr/projects/ea/abaqus/Commands/abq2025' program exists...no
+            Checking whether 'abq2025' program exists.../apps/abaqus/Commands/abq2025
             Checking whether 'abaqus' program exists...no
             scons: done reading SConscript files.
             Local Options:
               --build-dir=DIR           SCons build (variant) root directory. Relative or absolute path. (default: 'build')
               --unconditional-build     Boolean flag to force building of conditionally ignored targets, e.g. if the target's
                                            action program is missing and it would normally be ignored. (default: 'False')
-              --print-build-failures    Print task *.stdout target file(s) on build failures. (default: 'False')
               --abaqus-command=COMMAND  Override for the Abaqus command. Repeat to specify more than one (default:
-                                          ['/apps/abaqus/Commands/abq2024', '/usr/projects/ea/abaqus/Commands/abq2024', 'abq2024', 
+                                          ['/apps/abaqus/Commands/abq2025', '/usr/projects/ea/abaqus/Commands/abq2025', 'abq2025', 
                                           'abaqus'])
 
             Default Targets:
@@ -393,18 +388,17 @@ line in your project configuration.
 
             PS > scons -h
             scons: Reading SConscript files ...
-            Checking whether '/apps/abaqus/Commands/abq2024' program exists...no
-            Checking whether '/usr/projects/ea/abaqus/Commands/abq2024' program exists...no
-            Checking whether 'abq2024' program exists...C:\SIMULIA\Commands\abq2024.BAT
+            Checking whether '/apps/abaqus/Commands/abq2025' program exists...no
+            Checking whether '/usr/projects/ea/abaqus/Commands/abq2025' program exists...no
+            Checking whether 'abq2025' program exists...C:\SIMULIA\Commands\abq2025.BAT
             Checking whether 'abaqus' program exists...C:\SIMULIA\Commands\abaqus.BAT
             scons: done reading SConscript files.
             Local Options:
               --build-dir=DIR           SCons build (variant) root directory. Relative or absolute path. (default: 'build')
               --unconditional-build     Boolean flag to force building of conditionally ignored targets, e.g. if the target's
                                            action program is missing and it would normally be ignored. (default: 'False')
-              --print-build-failures    Print task *.stdout target file(s) on build failures. (default: 'False')
               --abaqus-command=COMMAND  Override for the Abaqus command. Repeat to specify more than one (default:
-                                          ['/apps/abaqus/Commands/abq2024', '/usr/projects/ea/abaqus/Commands/abq2024', 'abq2024', 
+                                          ['/apps/abaqus/Commands/abq2025', '/usr/projects/ea/abaqus/Commands/abq2025', 'abq2025', 
                                           'abaqus'])
 
             Default Targets:

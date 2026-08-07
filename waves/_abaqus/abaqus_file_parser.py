@@ -4,12 +4,12 @@
 """
 
 import contextlib
+import datetime
 import pathlib
 import re
 import sys
 import typing
 from abc import ABC, abstractmethod
-from datetime import datetime
 from itertools import compress
 
 import h5py
@@ -42,7 +42,6 @@ class AbaqusFileParser(ABC):
             self.output_file = f"{input_file}{_settings._default_parsed_extension}"
         self.verbose = verbose
         self.parse(*args, **kwargs)
-        return
 
     # Anybody who wishes to create a class that inherits from this class, must create a method called parse
     @abstractmethod
@@ -144,7 +143,7 @@ class OdbReportFileParser(AbaqusFileParser):
             sys.exit(f"Couldn't read file {input_file}: {e}")
 
         if not time_stamp:
-            time_stamp = datetime.now().strftime(_settings._default_timestamp_format)
+            time_stamp = datetime.datetime.now().astimezone().strftime(_settings._default_timestamp_format)
 
         self.parsed["odb"] = {}
         self.parsed["odb"]["info"] = {}
@@ -194,7 +193,8 @@ class OdbReportFileParser(AbaqusFileParser):
         if number_of_instances > 0:
             try:
                 self.parse_instances(f, self.parsed["odb"]["rootAssembly"]["instances"], number_of_instances)
-            except Exception as e:  # TODO: Remove the generic try/except block and error message after alpha release
+            # TODO: Remove the generic try/except block and error message after alpha release
+            except Exception as e:  # noqa: BLE001
                 sys.exit(
                     f"Unknown error occurred parsing odbreport file: {e}. Please report error "
                     f"to {_settings._parsing_error_contact} and send odb or "
@@ -216,7 +216,8 @@ class OdbReportFileParser(AbaqusFileParser):
             self.parsed["odb"]["steps"] = {}
             try:
                 self.parse_steps(f, self.parsed["odb"]["steps"], number_of_steps)
-            except Exception as e:  # TODO: Remove the generic try/except block and error message after alpha release
+            # TODO: Remove the generic try/except block and error message after alpha release
+            except Exception as e:  # noqa: BLE001
                 sys.exit(
                     f"Unknown error occurred parsing odbreport file: {e}. Please report error "
                     f"to {_settings._parsing_error_contact} and send odb or "
@@ -1381,7 +1382,6 @@ class OdbReportFileParser(AbaqusFileParser):
                 values[step_number][frame_number] = [None for _ in range(position_length)]
             else:
                 values[step_number][frame_number] = [[None for _ in range(data_length)] for _ in range(position_length)]
-        return
 
     def parse_history_regions(
         self,
@@ -1593,7 +1593,7 @@ class OdbReportFileParser(AbaqusFileParser):
         """
         if self.format != "extract":
             self.print_error("Must specify extract format to utilize this routine.")
-            return None  # If extract format wasn't given when parsing the data, this method won't work
+            return  # If extract format wasn't given when parsing the data, this method won't work
         extract: dict = {}
         datasets = []
         try:
@@ -1893,7 +1893,7 @@ class OdbReportFileParser(AbaqusFileParser):
         del extract  # Don't need the dictionary any more, so just remove it
         self.save_dict_to_group(extract_h5, "odb/", odb_dict["odb"], h5_file)
         extract_h5.close()
-        return None
+        return
 
     def save_dict_to_group(self, h5file: h5py.File, path: str, data_member: dict, output_file: str) -> None:
         """Recursively save data from python dictionary to hdf5 file.
@@ -1964,7 +1964,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 )
                 # TODO: In future additions of xarray, consider using option 'invalid_netcdf=True'
             else:
-                raise ValueError(f"Cannot save {type(item)} type to hdf5 file.")
+                raise TypeError(f"Cannot save {type(item)} type to hdf5 file.")
 
 
 # Limit help() and 'from module import *' behavior to the module's public API

@@ -19,7 +19,7 @@ requires-python = ">=3.10"
 license = "BSD-3-Clause"
 license-files = ["LICENSE.txt"]
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
     "Intended Audience :: Science/Research",
     "Operating System :: OS Independent",
@@ -32,7 +32,7 @@ dependencies = [
     "h5py",
     "matplotlib",
     "networkx",
-    "numpy",
+    "numpy >=2",
     "pyyaml",
     "salib >=1.4.6",
     "scipy >=1.7",
@@ -75,12 +75,12 @@ markers = [
     "sierra: tests requiring the Sierra executable",
     "sphinx: tests requiring the sphinx-build executable",
 ]
-addopts = "--ignore='build' --ignore='install' --ignore='waves/modsim_template/' --ignore='modsim_template/' --ignore='waves/modsim_template_2/' --ignore='modsim_template_2/' --ignore='waves/tutorials/' --ignore='tutorials/' --tb=long --showlocals --failed-first --strict-markers -m 'not systemtest' --import-mode=importlib -ra"
+addopts = "--ignore='build' --ignore='install' --ignore='tmp' --ignore='waves/modsim_template/' --ignore='modsim_template/' --ignore='waves/modsim_template_2/' --ignore='modsim_template_2/' --ignore='waves/tutorials/' --ignore='tutorials/' --tb=long --showlocals --failed-first --strict-markers -m 'not systemtest' --import-mode=importlib -ra"
 
 [tool.ruff]
 target-version = "py310"
 line-length = 120
-extend-exclude = ["build", "install", "conda-environment", "conda-pkgs", "pip-build-test"]
+extend-exclude = ["build", "install", "conda-environment", "env", "conda-pkgs", "pkgs", "tmp", "pip-build-test"]
 extend-include = ["*SConstruct", "*SConscript", "*.scons"]
 
 [tool.ruff.lint]
@@ -93,9 +93,9 @@ extend-select = [
 extend-ignore = ["B028", "D203", "D213", "PIE808", "PIE790", "SIM108", "PLC0415", "ANN002", "ANN003"]
 
 [tool.ruff.lint.extend-per-file-ignores]
-"*SConstruct" = ["F821"]
-"*SConscript" = ["F821"]
-"*.scons" = ["F821"]
+"*SConstruct" = ["D100", "F821", "EXE001"]
+"*SConscript" = ["D100", "F821", "EXE001"]
+"*.scons" = ["D100", "F821", "EXE001"]
 "waves/_tests/test_*.py" = ["RUF012"]
 
 [tool.mypy]

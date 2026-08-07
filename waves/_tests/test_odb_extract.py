@@ -38,7 +38,7 @@ class FakeProcess:
 def test_get_parser() -> None:
     with patch("sys.argv", ["odb_extract.py", "sample.odb"]):
         cmd_args = odb_extract.get_parser().parse_args()
-        assert cmd_args.abaqus_command == "abq2024"
+        assert cmd_args.abaqus_command == "abq2025"
 
 
 def test_odb_extract() -> None:

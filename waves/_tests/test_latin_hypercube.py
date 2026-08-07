@@ -1,10 +1,12 @@
 """Test LatinHypercube Class."""
 
+import itertools
 import typing
 from unittest.mock import patch
 
 import numpy
 import pytest
+import xarray
 
 from waves._settings import _hash_coordinate_key, _set_coordinate_key
 from waves._tests.common import merge_samplers
@@ -22,24 +24,72 @@ class TestLatinHypercube:
                 "parameter_2": {"distribution": "norm", "loc": -50, "scale": 1},
             },
             42,
-            numpy.array(
-                [
-                    [51.01609863, -51.21478363],
-                    [48.09331069, -49.58609982],
-                    [50.20487353, -49.140834],
-                    [50.37931242, -50.14390653],
-                    [49.67971797, -50.49606915],
-                ]
-            ),
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [51.01609863, 48.09331069, 50.37931242, 50.20487353, 49.67971797],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [-51.21478363, -49.58609982, -50.14390653, -49.140834, -50.49606915],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                [
+                                    "parameter_set0",
+                                    "parameter_set1",
+                                    "parameter_set2",
+                                    "parameter_set3",
+                                    "parameter_set4",
+                                ],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "10a53f8bbab9abcd9538087ed75a554c",
+                            "39c2bf5b15394faeae3e93dcd0a6725e",
+                            "8b77d886a6636ea41b45e7a61dd6c2f9",
+                            "9abbd4182b58a04464f8e4a1377c9e51",
+                            "e515d1a7e6e352140a1a7ae86c5425e8",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
             [{"loc": 50, "scale": 1}, {"loc": -50, "scale": 1}],
         ),
         "good schema 2x1": (
-            {
-                "num_simulations": 2,
-                "parameter_1": {"distribution": "norm", "loc": 50, "scale": 1},
-            },
+            {"num_simulations": 2, "parameter_1": {"distribution": "norm", "loc": 50, "scale": 1}},
             42,
-            numpy.array([[50.2872041], [49.41882358]]),
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [49.41882358, 50.2872041],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["57e4c109b2e72ad106455e7976b1a07f", "ed32dfec2e7e74b8edb368cfb7a548ba"],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
             [{"loc": 50, "scale": 1}],
         ),
         "good schema 1x2": (
@@ -49,13 +99,25 @@ class TestLatinHypercube:
                 "parameter_2": {"distribution": "norm", "loc": -50, "scale": 1},
             },
             42,
-            numpy.array([[49.24806127, -49.84618661]]),
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [49.24806127],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [-49.84618661],
+                        coords={_set_coordinate_key: xarray.DataArray(["parameter_set0"], dims=_set_coordinate_key)},
+                    ),
+                    "set_hash": xarray.DataArray(["dca1ee590a69d20d5fe79641f0c00e8e"], dims=_set_coordinate_key),
+                }
+            ).set_coords("set_hash"),
             [{"loc": 50, "scale": 1}, {"loc": -50, "scale": 1}],
         ),
     }
 
     @pytest.mark.parametrize(
-        ("parameter_schema", "seed", "expected_samples", "expected_scipy_kwds"),
+        ("parameter_schema", "seed", "expected_dataset", "expected_scipy_kwds"),
         generate_input.values(),
         ids=generate_input.keys(),
     )
@@ -63,34 +125,56 @@ class TestLatinHypercube:
         self,
         parameter_schema: dict,
         seed: int,
-        expected_samples: numpy.ndarray,
-        # FIXME: trace the original use of the ``expected_scipy_kwds`` variable and either use in tests or remove.
-        # Remove ``noqa: ARG002`` after fixing.
-        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/960
-        expected_scipy_kwds: list[dict[str, typing.Any]],  # noqa: ARG002
+        expected_dataset: xarray.Dataset,
+        expected_scipy_kwds: list[dict[str, typing.Any]],
     ) -> None:
+        """Test specific instances of LHC generator.
+
+        Test specific instances of the generator to protect against any generator-specific behavior that could
+        accidentally break the assumed behavior of the scipy base class.
+
+        :param parameter_schema: dictionary schema defining number of simulations and the parameter distributions
+        :param seed: integer randomization seed to ensure consistent test output
+        :param expected_dataset: numpy array of the expected parameter study samples.
+        :param expected_scipy_kwds: list containing dictionaries of each parameter, with keywords defining the
+            statistical distribution of samples.
+        """
         parameter_names = [key for key in parameter_schema if key != "num_simulations"]
         kwargs = {"seed": seed}
+        dtype_variants = [float, int, numpy.float32, numpy.float64, numpy.int64, numpy.int32, numpy.int16, numpy.int8]
+        parameter_schema_dtype_variants = [
+            {
+                **parameter_schema,
+                **{
+                    key: {**val, "loc": dtype(val["loc"]), "scale": dtype(val["scale"])}
+                    for key, val in parameter_schema.items()
+                    if key != "num_simulations"
+                },
+            }
+            for dtype in dtype_variants
+        ]
         generator_classes = (
-            LatinHypercube(parameter_schema, **kwargs),
-            ScipySampler("LatinHypercube", parameter_schema, **kwargs),
+            lambda schema: LatinHypercube(schema, **kwargs),
+            lambda schema: ScipySampler("LatinHypercube", schema, **kwargs),
         )
-        for test_generate in generator_classes:
-            samples_array = test_generate._samples
-            assert numpy.allclose(samples_array, expected_samples)
+        generator_instances = [
+            generator_class(schema)
+            for generator_class, schema in itertools.product(generator_classes, parameter_schema_dtype_variants)
+        ]
+        for test_generate in generator_instances:
+            xarray.testing.assert_allclose(test_generate.parameter_study, expected_dataset)
             # Check for type preservation
             for key in test_generate.parameter_study:
                 assert test_generate.parameter_study[key].dtype == numpy.float64
             # Verify that the parameter set name creation method was called
-            expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
-            assert list(test_generate._set_names.values()) == expected_set_names
-            # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
-            expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema["num_simulations"])]
-            set_names = list(test_generate.parameter_study[_set_coordinate_key])
-            assert numpy.all(set_names == expected_set_names)
+            # TODO: _set_names is an ordered object (dictionary). Fix test to compare dictionary-to-dictionary instead
+            # of implied consistency according to value order.
+            assert list(test_generate._set_names.values()) == list(expected_dataset[_set_coordinate_key].to_numpy())
             # Check that the parameter names are correct
             assert parameter_names == test_generate._parameter_names
             assert parameter_names == list(test_generate.parameter_study.keys())
+            for parameter_name, expected_kwds in zip(parameter_names, expected_scipy_kwds, strict=True):
+                assert test_generate.parameter_distributions[parameter_name].kwds == expected_kwds
 
     merge_test = {
         "increase simulations": (

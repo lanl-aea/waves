@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-"""Configure the WAVES Abaqus CAE tutorial."""
 
 import os
 
@@ -8,7 +7,7 @@ import waves
 # Add build directory CLI arg
 AddOption(
     "--build-dir",
-    dest="build_dir",
+    dest="build_directory",
     default="build",
     nargs=1,
     type="string",
@@ -25,9 +24,9 @@ AddOption(
 )
 # Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
 default_abaqus_commands = [
-    "/apps/abaqus/Commands/abq2024",
-    "/usr/projects/ea/abaqus/Commands/abq2024",
-    "abq2024",
+    "/apps/abaqus/Commands/abq2025",
+    "/usr/projects/ea/abaqus/Commands/abq2025",
+    "abq2025",
     "abaqus",
 ]
 AddOption(
@@ -41,9 +40,9 @@ AddOption(
 )
 
 # Inherit user's full environment
+build_directory = GetOption("build_directory")
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
-    build_dir=GetOption("build_dir"),
     unconditional_build=GetOption("unconditional_build"),
     abaqus_commands=GetOption("abaqus_command"),
 )
@@ -60,7 +59,7 @@ env["ABAQUS_PROGRAM"] = env.AddProgram(
 env.Append(BUILDERS={})
 
 # Call SConscript file
-SConscript("SConscript", variant_dir=env["build_dir"], exports={"env": env}, duplicate=True)
+SConscript("SConscript", variant_dir=build_directory, exports={"env": env}, duplicate=True)
 
 # List all aliases in help message.
 # This must come *after* all expected Alias definitions and SConscript files.

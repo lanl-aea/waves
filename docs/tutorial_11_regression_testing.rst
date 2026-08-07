@@ -17,9 +17,9 @@ can be tested should be tested as regularly as possible given compute resource c
 
 This tutorial introduces a project wide alias to allow convenient execution of the simulation workflow through the
 simulation datacheck task introduced in :ref:`tutorial_simulation`. From that tutorial onward, each tutorial has
-propagated a tutorial specific datacheck alias. This tutorial will add a project wide ``datacheck`` alias and apply it
-to a copy of the :ref:`tutorial_post_processing` configuration files. The user may also go back to previous
-tutorials to include the full suite of datacheck tasks in the project wide datacheck regression test alias.
+propagated a tutorial specific datacheck alias. This tutorial will add a ``datacheck`` alias and apply it to a copy of
+the :ref:`tutorial_post_processing` configuration files. The user may also go back to previous tutorials to include the
+full suite of datacheck tasks in the project wide ``datacheck`` alias.
 
 In addition to the datachecks, this tutorial will introduce a full simulation results regression test script and task.
 The regression test task will be added to the regular workflow alias to run everytime the full workflow is run. This
@@ -311,18 +311,17 @@ Build Targets
             PS > Get-Content build\tutorial_11_regression_testing\regression.yaml
             CSV comparison: true
 
-If you haven't added the project-wide datacheck alias to the previous tutorials, you should expect the ``datacheck``
+If you haven't added the ``datacheck`` alias to the previous tutorials, you should expect the ``datacheck``
 alias to run faster than the ``tutorial_11_regression_testing`` alias because the datacheck excludes the solve, extract,
 and post-processing tasks. In these tutorials, the difference in execution time is not large. However, in many
 production modsim projects, the simulations may require hours or even days to complete. In that case, the relatively
 fast running solverprep verification may be tractable for regular testing where the full simulations and post-processing
 are not.
 
-To approximate the time savings of the new project-wide ``datacheck`` alias for a (slightly) larger modsim project, you
-can go back through the previous tutorials and add each tutorial's datacheck task to the new alias. For a fair
-comparison, you will also need to add a comparable alias to collect the full workflow for each tutorial, e.g.
-``full_workflows``. You can then repeat the ``time`` commands above with a more comprehensive ``datacheck`` and
-``full_workflows`` aliases.
+To approximate the time savings of the new ``datacheck`` alias for a (slightly) larger modsim project, you can go back
+through the previous tutorials and add each tutorial's datacheck task to the new alias. For a fair comparison, you will
+also need to add a comparable alias to collect the full workflow for each tutorial, e.g.  ``full_workflows``. You can
+then repeat the ``time`` commands above with a more comprehensive ``datacheck`` and ``full_workflows`` aliases.
 
 ************
 Output Files

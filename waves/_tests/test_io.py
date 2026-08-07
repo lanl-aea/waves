@@ -12,23 +12,29 @@ import xarray
 import waves
 
 test_previous_parameter_study_cases = {
-    "int": {"int": [1]},
-    "float": {"float": [1.0]},
-    "str": {"str": ["a"]},
-    "bool": {"bool": [True]},
-    "int and float": {"int": [1], "float": [1.0]},
-    "int and str": {"int": [1], "str": ["a"]},
-    "int and bool": {"int": [1], "bool": [True]},
-    "float and str": {"float": [1.0], "str": ["a"]},
-    "float and bool": {"float": [1.0], "bool": [True]},
-    "str and bool": {"str": ["a"], "bool": [True]},
-    "int, float, str, bool": {"int": [1], "float": [1.0], "str": ["a"], "bool": [True]},
+    "int": ("CartesianProduct", {"int": [1]}, {"int": [1]}),
+    "float": ("CartesianProduct", {"float": [1.0]}, {"float": [1.0]}),
+    "str": ("CartesianProduct", {"str": ["a"]}, {"str": ["a"]}),
+    "bool": ("CartesianProduct", {"bool": [True]}, {"bool": [True]}),
+    "int and float": ("CartesianProduct", {"int": [1], "float": [1.0]}, {"int": [1], "float": [1.0]}),
+    "int and str": ("CartesianProduct", {"int": [1], "str": ["a"]}, {"int": [1], "str": ["a"]}),
+    "int and bool": ("CartesianProduct", {"int": [1], "bool": [True]}, {"int": [1], "bool": [True]}),
+    "float and str": ("CartesianProduct", {"float": [1.0], "str": ["a"]}, {"float": [1.0], "str": ["a"]}),
+    "float and bool": ("CartesianProduct", {"float": [1.0], "bool": [True]}, {"float": [1.0], "bool": [True]}),
+    "str and bool": ("CartesianProduct", {"str": ["a"], "bool": [True]}, {"str": ["a"], "bool": [True]}),
+    "int, float, str, bool": (
+        "CartesianProduct",
+        {"int": [1], "float": [1.0], "str": ["a"], "bool": [True]},
+        {"int": [1], "float": [1.0], "str": ["a"], "bool": [True]},
+    ),
+    "change set name digits 1->2": ("CartesianProduct", {"int": list(range(0, 10))}, {"int": list(range(0, 11))}),
+    "change set name digits 2->3": ("CartesianProduct", {"int": list(range(0, 100))}, {"int": list(range(0, 101))}),
 }
 
 
 @pytest.mark.systemtest
 @pytest.mark.parametrize(
-    "schema",
+    ("name", "first_schema", "second_schema"),
     test_previous_parameter_study_cases.values(),
     ids=test_previous_parameter_study_cases.keys(),
 )
@@ -36,7 +42,9 @@ def test_previous_parameter_study(
     system_test_directory: pathlib.Path | None,
     keep_system_tests: bool,
     request: pytest.FixtureRequest,
-    schema: dict,
+    name: str,
+    first_schema: dict,
+    second_schema: dict,
 ) -> None:
     """Run real system I/O from the waves.parameter_generators API and check parameter study merge behaviors.
 
@@ -46,7 +54,9 @@ def test_previous_parameter_study(
     :param system_test_directory: custom pytest decorator defined in conftest.py
     :param keep_system_tests: custom pytest decorator defined in conftest.py
     :param request: pytest decorator with test case meta data
-    :param schema: waves.parameter_generators.CartesianProduct schema
+    :param name: WAVES parameter generator class name. Case sensitive.
+    :param first_schema: schema for generator class ``name``
+    :param second_schema: schema for generator class ``name``
     """
     module_name = pathlib.Path(__file__).stem
     test_id = request.node.callspec.id
@@ -75,34 +85,49 @@ def test_previous_parameter_study(
     temp_path.mkdir(parents=True, exist_ok=True)
     # Move to common test utility ^^^
 
-    parameter_study_file = temp_path / "parameter_study.h5"
-    parameter_generator = waves.parameter_generators.CartesianProduct(
-        schema,
-        output_file=parameter_study_file,
+    generator_class = getattr(waves.parameter_generators, name)
+
+    def check_study(
+        memory: waves.parameter_generators.ParameterGenerator,
+        disk_file: pathlib.Path,
+    ) -> None:
+        # Check that xarray thinks the datasets are identical as a sanity check
+        disk = xarray.open_dataset(disk_file, engine="h5netcdf")
+        assert disk.identical(memory.parameter_study)
+        # Check that the verify function does not raise an exception
+        waves.parameter_generators._verify_parameter_study(disk)
+        disk.close()
+        # Check that the open function does not raise an exception
+        disk_waves = waves.parameter_generators._open_parameter_study(disk_file)
+        assert disk_waves.identical(memory.parameter_study)
+        disk_waves.close()
+        # Check that opening as a previous parameter study does not raise an exception
+        _parameter_generator = generator_class(
+            memory.parameter_schema,
+            output_file_type="h5",
+            previous_parameter_study=disk_file,
+            require_previous_parameter_study=True,
+        )
+
+    first_file = temp_path / "first.h5"
+    first_generator = generator_class(
+        first_schema,
+        output_file=first_file,
         output_file_type="h5",
     )
-    parameter_generator.write()
+    first_generator.write()
+    check_study(first_generator, first_file)
 
-    # Check that xarray thinks the datasets are identical as a sanity check
-    disk = xarray.open_dataset(parameter_study_file, engine="h5netcdf")
-    assert disk.identical(parameter_generator.parameter_study)
-
-    # Check that the verify function does not raise an exception
-    waves.parameter_generators._verify_parameter_study(disk)
-    disk.close()
-
-    # Check that the open function does not raise an exception
-    disk_waves = waves.parameter_generators._open_parameter_study(parameter_study_file)
-    assert disk_waves.identical(parameter_generator.parameter_study)
-    disk_waves.close()
-
-    # Check that opening as a previous parameter study does not raise an exception
-    parameter_generator = waves.parameter_generators.CartesianProduct(
-        schema,
-        output_file=parameter_study_file,
+    second_file = temp_path / "second.h5"
+    second_generator = generator_class(
+        second_schema,
+        output_file=second_file,
         output_file_type="h5",
-        previous_parameter_study=parameter_study_file,
+        previous_parameter_study=first_file,
+        require_previous_parameter_study=True,
     )
+    second_generator.write()
+    check_study(second_generator, second_file)
 
     if not keep_system_tests:
         temp_directory.cleanup()

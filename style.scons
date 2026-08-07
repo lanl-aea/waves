@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-"""Configure the Ruff style checks and formatting commands."""
 
 # Inherit the parent construction environment
 Import("env")
@@ -12,12 +11,11 @@ ruff_check = env.Command(
     action=["ruff check . && ruff format . --check"],
 )
 env.AlwaysBuild(ruff_check)
-env.Alias("ruff-check", ruff_check)
 env.Alias("style", ruff_check)
 ruff_format = env.Command(
     target=["ruff-format.txt"],
     source=[pyproject],
-    action=["ruff check . --fix; ruff format ."],
+    action=["ruff format .; ruff check . --fix"],
 )
 env.AlwaysBuild(ruff_format)
-env.Alias("ruff-format", ruff_format)
+env.Alias("style-format", ruff_format)

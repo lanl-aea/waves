@@ -15,10 +15,11 @@ import SCons.Node.FS
 from waves import _utilities, parameter_generators, scons_extensions
 from waves._settings import (
     _abaqus_common_extensions,
-    _abaqus_datacheck_extensions,
     _abaqus_environment_extension,
     _abaqus_explicit_extensions,
-    _abaqus_standard_extensions,
+    _abaqus_explicit_extensions_deprecated,
+    _abaqus_standard_analysis_extensions,
+    _abaqus_standard_datacheck_extensions,
     _cd_action_prefix,
     _redirect_action_suffix,
     _redirect_environment_suffix,
@@ -30,9 +31,85 @@ from waves._tests.common import platform_check
 does_not_raise = contextlib.nullcontext()
 
 # Test setup and helper functions
-fs = SCons.Node.FS.FS()
-
+file_system = SCons.Node.FS.FS()
+scons_test_root_directory = pathlib.Path(SCons.Script.Dir("#").abspath)
 testing_windows, root_fs, testing_macos = platform_check()
+
+test_convert_to_pathlib_list_cases = {
+    "relative path str": ("one.txt", [scons_test_root_directory / "one.txt"]),
+    "absolute path str": ("/one.txt", [pathlib.Path("/one.txt").resolve()]),
+    "SCons absolute path str": ("#/one.txt", [scons_test_root_directory / "one.txt"]),
+    "relative path Path": (pathlib.Path("one.txt"), [scons_test_root_directory / "one.txt"]),
+    "absolute path Path": (pathlib.Path("/one.txt"), [pathlib.Path("/one.txt").resolve()]),
+    "SCons absolute path Path": (pathlib.Path("#/one.txt"), [scons_test_root_directory / "one.txt"]),
+    "relative path File": (file_system.File("one.txt"), [scons_test_root_directory / "one.txt"]),
+    "absolute path File": (file_system.File("/one.txt"), [pathlib.Path("/one.txt").resolve()]),
+    "SCons absolute path File": (file_system.File("#/one.txt"), [scons_test_root_directory / "one.txt"]),
+    "list str": (
+        ["one.txt", "/one.txt", "#/one.txt"],
+        [
+            scons_test_root_directory / "one.txt",
+            pathlib.Path("/one.txt").resolve(),
+            scons_test_root_directory / "one.txt",
+        ],
+    ),
+    "list Path": (
+        [pathlib.Path("one.txt"), pathlib.Path("/one.txt"), pathlib.Path("#/one.txt")],
+        [
+            scons_test_root_directory / "one.txt",
+            pathlib.Path("/one.txt").resolve(),
+            scons_test_root_directory / "one.txt",
+        ],
+    ),
+    "list Node": (
+        [file_system.File("one.txt"), file_system.File("/one.txt"), file_system.File("#/one.txt")],
+        [
+            scons_test_root_directory / "one.txt",
+            pathlib.Path("/one.txt").resolve(),
+            scons_test_root_directory / "one.txt",
+        ],
+    ),
+    "SCons NodeList str": (
+        SCons.Node.NodeList(["one.txt", "/one.txt", "#/one.txt"]),
+        [
+            scons_test_root_directory / "one.txt",
+            pathlib.Path("/one.txt").resolve(),
+            scons_test_root_directory / "one.txt",
+        ],
+    ),
+    "SCons NodeList Path": (
+        SCons.Node.NodeList([pathlib.Path("one.txt"), pathlib.Path("/one.txt"), pathlib.Path("#/one.txt")]),
+        [
+            scons_test_root_directory / "one.txt",
+            pathlib.Path("/one.txt").resolve(),
+            scons_test_root_directory / "one.txt",
+        ],
+    ),
+    "SCons NodeList Node": (
+        SCons.Node.NodeList([file_system.File("one.txt"), file_system.File("/one.txt"), file_system.File("#/one.txt")]),
+        [
+            scons_test_root_directory / "one.txt",
+            pathlib.Path("/one.txt").resolve(),
+            scons_test_root_directory / "one.txt",
+        ],
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("items", "expected"),
+    test_convert_to_pathlib_list_cases.values(),
+    ids=test_convert_to_pathlib_list_cases.keys(),
+)
+def test_convert_to_pathlib_list(
+    items: str | pathlib.Path | SCons.Node.Node | list[str | pathlib.Path | SCons.Node.Node] | SCons.Node.NodeList,
+    expected: list[pathlib.Path],
+) -> None:
+    environment = SCons.Environment.Environment()
+    output = scons_extensions._convert_to_pathlib_list(items, environment=environment)
+    assert output == expected
+    output = scons_extensions._convert_to_pathlib_list(items)
+    assert output == expected
 
 
 mock_decodable = Mock()
@@ -103,155 +180,246 @@ def test_check_program(prog_name: str, shutil_return_value: str | None, message:
 find_program_input = {
     "string": (
         "dummy",
-        ["/installed/executable/dummy"],
-        str(pathlib.Path("/installed/executable/dummy")),
+        {},
+        [str(pathlib.Path("/installed/executable/dummy").resolve())],
+        str(pathlib.Path("/installed/executable/dummy").resolve()),
     ),
     "one path": (
         ["dummy"],
-        ["/installed/executable/dummy"],
-        str(pathlib.Path("/installed/executable/dummy")),
+        {},
+        [str(pathlib.Path("/installed/executable/dummy").resolve())],
+        str(pathlib.Path("/installed/executable/dummy").resolve()),
     ),
     "first missing": (
         ["notfound", "dummy"],
-        [None, "/installed/executable/dummy"],
-        str(pathlib.Path("/installed/executable/dummy")),
+        {},
+        [None, str(pathlib.Path("/installed/executable/dummy").resolve())],
+        str(pathlib.Path("/installed/executable/dummy").resolve()),
     ),
     "two found": (
         ["dummy", "dummy1"],
-        ["/installed/executable/dummy", "/installed/executable/dummy1"],
-        str(pathlib.Path("/installed/executable/dummy")),
+        {},
+        [
+            str(pathlib.Path("/installed/executable/dummy").resolve()),
+            str(pathlib.Path("/installed/executable/dummy1").resolve()),
+        ],
+        str(pathlib.Path("/installed/executable/dummy").resolve()),
     ),
     "none found": (
         ["notfound", "dummy"],
+        {},
         [None, None],
         None,
     ),
     "path with spaces": (
         ["dummy"],
-        ["/installed/executable with space/dummy"],
-        str(pathlib.Path('/installed/"executable with space"/dummy')),
+        {},
+        [str(pathlib.Path("/installed/executable with space/dummy").resolve())],
+        str(pathlib.Path('/installed/"executable with space"/dummy').resolve()),
+    ),
+    "string, no quotes": (
+        "dummy",
+        {"quote_spaces_in_path": False},
+        [str(pathlib.Path("/installed/executable/dummy").resolve())],
+        str(pathlib.Path("/installed/executable/dummy").resolve()),
+    ),
+    "one path, no quotes": (
+        ["dummy"],
+        {"quote_spaces_in_path": False},
+        [str(pathlib.Path("/installed/executable/dummy").resolve())],
+        str(pathlib.Path("/installed/executable/dummy").resolve()),
+    ),
+    "first missing, no quotes": (
+        ["notfound", "dummy"],
+        {"quote_spaces_in_path": False},
+        [None, str(pathlib.Path("/installed/executable/dummy").resolve())],
+        str(pathlib.Path("/installed/executable/dummy").resolve()),
+    ),
+    "two found, no quotes": (
+        ["dummy", "dummy1"],
+        {"quote_spaces_in_path": False},
+        [
+            str(pathlib.Path("/installed/executable/dummy").resolve()),
+            str(pathlib.Path("/installed/executable/dummy1").resolve()),
+        ],
+        str(pathlib.Path("/installed/executable/dummy").resolve()),
+    ),
+    "none found, no quotes": (
+        ["notfound", "dummy"],
+        {"quote_spaces_in_path": False},
+        [None, None],
+        None,
+    ),
+    "path with spaces, no quotes": (
+        ["dummy"],
+        {"quote_spaces_in_path": False},
+        [str(pathlib.Path("/installed/executable with space/dummy").resolve())],
+        str(pathlib.Path("/installed/executable with space/dummy").resolve()),
     ),
 }
 
 
 @pytest.mark.parametrize(
-    ("names", "checkprog_side_effect", "first_found_path"),
+    ("names", "kwargs", "checkprog_side_effect", "first_found_path"),
     find_program_input.values(),
     ids=find_program_input.keys(),
 )
 def test_find_program(
-    names: str | list[str], checkprog_side_effect: list[str | None], first_found_path: str | None
+    names: str | list[str],
+    kwargs: dict[str, typing.Any],
+    checkprog_side_effect: list[str | None],
+    first_found_path: str | None,
 ) -> None:
     env = SCons.Environment.Environment()
 
     # Test function style interface
     with patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect):
-        program = scons_extensions.find_program(env, names)
+        program = scons_extensions.find_program(env, names, **kwargs)
     assert program == first_found_path
 
     # Test SCons AddMethod style interface
     env.AddMethod(scons_extensions.find_program, "FindProgram")
     with patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect):
-        program = env.FindProgram(names)
+        program = env.FindProgram(names, **kwargs)
     assert program == first_found_path
+
+    # Test WAVESEnvironment and WAVESShellEnvironment method
+    waves_env = scons_extensions.WAVESEnvironment()
+    with patch("waves._utilities.cache_environment"):
+        waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
+    for env in (waves_env, waves_shell_env):
+        with patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect):
+            program = env.FindProgram(names, **kwargs)
+        assert program == first_found_path
 
 
 @pytest.mark.parametrize(
-    ("names", "checkprog_side_effect", "first_found_path"),
+    ("names", "kwargs", "checkprog_side_effect", "first_found_path"),
     find_program_input.values(),
     ids=find_program_input.keys(),
 )
 def test_add_program(
-    names: str | list[str], checkprog_side_effect: list[str | None], first_found_path: str | None
+    names: str | list[str],
+    kwargs: dict[str, typing.Any],
+    checkprog_side_effect: list[str | None],
+    first_found_path: str | None,
 ) -> None:
-    # Test function style interface
-    env = SCons.Environment.Environment()
-    original_path = env["ENV"]["PATH"]
-    with (
-        patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
-        patch("pathlib.Path.exists", return_value=True),
-    ):
-        program = scons_extensions.add_program(env, names)
-    assert program == first_found_path
-    if first_found_path is not None:
-        parent_path = str(pathlib.Path(first_found_path).parent.resolve())
-        assert parent_path == env["ENV"]["PATH"].split(os.pathsep)[-1]
-    else:
-        assert original_path == env["ENV"]["PATH"]
+    def assert_logic(
+        program: str | None,
+        env: SCons.Environment.Environment,
+        original_path: str,
+        index: int,
+        first_found_path: str | None = first_found_path,
+    ) -> None:
+        assert program == first_found_path
+        if first_found_path is not None:
+            parent_path = pathlib.Path(first_found_path).parent
+            assert env["ENV"]["PATH"].split(os.pathsep)[index] == str(parent_path)
+        else:
+            assert env["ENV"]["PATH"] == original_path
 
-    # Test SCons AddMethod style interface
-    env = SCons.Environment.Environment()
-    original_path = env["ENV"]["PATH"]
-    env.AddMethod(scons_extensions.add_program, "AddProgram")
-    with (
-        patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
-        patch("pathlib.Path.exists", return_value=True),
-    ):
-        program = env.AddProgram(names)
-    assert program == first_found_path
-    if first_found_path is not None:
-        parent_path = str(pathlib.Path(first_found_path).parent.resolve())
-        assert parent_path == env["ENV"]["PATH"].split(os.pathsep)[-1]
-    else:
-        assert original_path == env["ENV"]["PATH"]
+    for prepend, index in [(True, 0), (False, -1)]:
+        # Test function style interface
+        env = SCons.Environment.Environment()
+        original_path = env["ENV"]["PATH"]
+        with (
+            patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+        ):
+            program = scons_extensions.add_program(env, names, prepend=prepend, **kwargs)
+            assert_logic(program, env, original_path, index)
+
+        # Test SCons AddMethod style interface
+        env = SCons.Environment.Environment()
+        original_path = env["ENV"]["PATH"]
+        env.AddMethod(scons_extensions.add_program, "AddProgram")
+        with (
+            patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+        ):
+            program = env.AddProgram(names, prepend=prepend, **kwargs)
+            assert_logic(program, env, original_path, index)
+
+        # Test WAVESEnvironment and WAVESShellEnvironment method
+        waves_env = scons_extensions.WAVESEnvironment()
+        with patch("waves._utilities.cache_environment"):
+            waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
+        original_path = env["ENV"]["PATH"]
+        for env in (waves_env, waves_shell_env):
+            with (
+                patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+            ):
+                program = env.AddProgram(names, prepend=prepend, **kwargs)
+                assert_logic(program, env, original_path, index)
 
 
 @pytest.mark.parametrize(
-    ("names", "checkprog_side_effect", "first_found_path"),
+    ("names", "kwargs", "checkprog_side_effect", "first_found_path"),
     find_program_input.values(),
     ids=find_program_input.keys(),
 )
 def test_add_cubit(
-    names: str | list[str], checkprog_side_effect: list[str | None], first_found_path: str | None
+    names: str | list[str],
+    kwargs: dict[str, typing.Any],
+    checkprog_side_effect: list[str | None],
+    first_found_path: str | None,
 ) -> None:
-    # Test function style interface
-    env = SCons.Environment.Environment()
-    original_path = env["ENV"]["PATH"]
     if first_found_path is not None:
-        find_cubit_bin_return = pathlib.Path(first_found_path).parent / "bin"
+        # Must strip out double quotes to imitate internal behavior, which passes a quote-less path to find_cubit_bin
+        find_cubit_bin_return = pathlib.Path(first_found_path.replace('"', "")).parent / "bin"
     else:
         find_cubit_bin_return = None
-    with (
-        patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return),
-        patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
-        patch("pathlib.Path.exists", return_value=True),
-    ):
-        program = scons_extensions.add_cubit(env, names)
-    assert program == first_found_path
-    if first_found_path is not None:
-        parent_path = pathlib.Path(first_found_path).parent.resolve()
-        cubit_bin = parent_path / "bin"
-        cubit_library_path = cubit_bin / "python3"
-        assert str(parent_path) == env["ENV"]["PATH"].split(os.pathsep)[-1]
-        assert str(cubit_bin) == env["ENV"]["PYTHONPATH"].split(os.pathsep)[0]
-        assert str(cubit_library_path) == env["ENV"]["LD_LIBRARY_PATH"].split(os.pathsep)[0]
-    else:
-        assert original_path == env["ENV"]["PATH"]
 
-    # Test SCons AddMethod style interface
-    env = SCons.Environment.Environment()
-    env.AddMethod(scons_extensions.add_cubit, "AddCubit")
-    original_path = env["ENV"]["PATH"]
-    if first_found_path is not None:
-        find_cubit_bin_return = pathlib.Path(first_found_path).parent / "bin"
-    else:
-        find_cubit_bin_return = None
-    with (
-        patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return),
-        patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
-        patch("pathlib.Path.exists", return_value=True),
-    ):
-        program = env.AddCubit(names)
-    assert program == first_found_path
-    if first_found_path is not None:
-        parent_path = pathlib.Path(first_found_path).parent.resolve()
-        cubit_bin = parent_path / "bin"
-        cubit_library_path = cubit_bin / "python3"
-        assert str(parent_path) == env["ENV"]["PATH"].split(os.pathsep)[-1]
-        assert str(cubit_bin) == env["ENV"]["PYTHONPATH"].split(os.pathsep)[0]
-        assert str(cubit_library_path) == env["ENV"]["LD_LIBRARY_PATH"].split(os.pathsep)[0]
-    else:
-        assert original_path == env["ENV"]["PATH"]
+    def assert_logic(
+        program: str | None,
+        env: SCons.Environment.Environment,
+        original_path: str,
+        index: int,
+        first_found_path: str | None = first_found_path,
+    ) -> None:
+        assert program == first_found_path
+        if first_found_path is not None:
+            parent_path = pathlib.Path(first_found_path).parent
+            cubit_bin = parent_path / "bin"
+            cubit_library_path = cubit_bin / "python3"
+            assert env["ENV"]["PATH"].split(os.pathsep)[index] == str(parent_path)
+            assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[index] == str(cubit_bin)
+            assert env["ENV"]["LD_LIBRARY_PATH"].split(os.pathsep)[index] == str(cubit_library_path)
+        else:
+            assert env["ENV"]["PATH"] == original_path
+
+    for prepend, index in [(True, 0), (False, -1)]:
+        # Test function style interface
+        env = SCons.Environment.Environment()
+        original_path = env["ENV"]["PATH"]
+        with (
+            patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return),
+            patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+        ):
+            program = scons_extensions.add_cubit(env, names, prepend=prepend, **kwargs)
+            assert_logic(program, env, original_path, index)
+
+        # Test SCons AddMethod style interface
+        env = SCons.Environment.Environment()
+        env.AddMethod(scons_extensions.add_cubit, "AddCubit")
+        original_path = env["ENV"]["PATH"]
+        with (
+            patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return),
+            patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+        ):
+            program = env.AddCubit(names, prepend=prepend, **kwargs)
+            assert_logic(program, env, original_path, index)
+
+        # Test WAVESEnvironment and WAVESShellEnvironment method
+        waves_env = scons_extensions.WAVESEnvironment()
+        with patch("waves._utilities.cache_environment"):
+            waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
+        original_path = env["ENV"]["PATH"]
+        for env in (waves_env, waves_shell_env):
+            with (
+                patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return),
+                patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect),
+            ):
+                program = env.AddCubit(names, prepend=prepend, **kwargs)
+                assert_logic(program, env, original_path, index)
 
 
 def test_add_cubit_python() -> None:
@@ -300,27 +468,31 @@ def test_add_cubit_python() -> None:
     # Test SCons AddMethod style interface
     env = SCons.Environment.Environment()
     env.AddMethod(scons_extensions.add_cubit_python, "AddCubitPython")
+    waves_env = scons_extensions.WAVESEnvironment()
+    with patch("waves._utilities.cache_environment"):
+        waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
     cubit_bin = "/path/to/cubit/bin/"
     cubit_python = "/path/to/cubit/bin/python"
-    # Cubit Python not found mocked by add_program
-    with (
-        patch("waves._utilities.find_cubit_python"),
-        patch("waves.scons_extensions.find_program"),
-        patch("waves.scons_extensions.add_program", return_value=None),
-    ):
-        program = env.AddCubitPython("dummy_cubit_executable")
-    assert program is None
-    assert "PYTHONPATH" not in env["ENV"]
-    # Cubit Python found mocked by add_program
-    with (
-        patch("waves._utilities.find_cubit_python"),
-        patch("waves.scons_extensions.find_program"),
-        patch("waves.scons_extensions.add_program", return_value=cubit_python),
-        patch("waves._utilities.find_cubit_bin", return_value=cubit_bin),
-    ):
-        program = scons_extensions.add_cubit_python(env, "dummy_cubit_executable")
-    assert program == cubit_python
-    assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[0] == str(cubit_bin)
+    for environment in [env, waves_env, waves_shell_env]:
+        # Cubit Python not found mocked by add_program
+        with (
+            patch("waves._utilities.find_cubit_python"),
+            patch("waves.scons_extensions.find_program"),
+            patch("waves.scons_extensions.add_program", return_value=None),
+        ):
+            program = environment.AddCubitPython("dummy_cubit_executable")
+        assert program is None
+        assert "PYTHONPATH" not in environment["ENV"]
+        # Cubit Python found mocked by add_program
+        with (
+            patch("waves._utilities.find_cubit_python"),
+            patch("waves.scons_extensions.find_program"),
+            patch("waves.scons_extensions.add_program", return_value=cubit_python),
+            patch("waves._utilities.find_cubit_bin", return_value=cubit_bin),
+        ):
+            program = environment.AddCubitPython("dummy_cubit_executable")
+        assert program == cubit_python
+        assert environment["ENV"]["PYTHONPATH"].split(os.pathsep)[0] == str(cubit_bin)
 
 
 def dummy_emitter_for_testing(target: list, source: list, env: SCons.Environment.Environment) -> tuple[list, list]:  # noqa: ARG001
@@ -363,11 +535,11 @@ def check_abaqus_solver_targets(nodes: SCons.Node.NodeList, solver: str | None, 
     if suffixes:
         expected_suffixes.extend(suffixes)
     elif solver == "standard":
-        expected_suffixes.extend(_abaqus_standard_extensions)
+        expected_suffixes.extend(_abaqus_standard_analysis_extensions)
     elif solver == "explicit":
-        expected_suffixes.extend(_abaqus_explicit_extensions)
+        expected_suffixes.extend(_abaqus_explicit_extensions_deprecated)
     elif solver == "datacheck":
-        expected_suffixes.extend(_abaqus_datacheck_extensions)
+        expected_suffixes.extend(_abaqus_standard_datacheck_extensions)
     else:
         expected_suffixes.extend(_abaqus_common_extensions)
     suffixes = [str(node).split(stem)[-1] for node in nodes]
@@ -666,6 +838,8 @@ def test_ssh_builder_actions(target: list[str], builder_kwargs: dict, task_kwarg
     def cat() -> SCons.Builder.Builder:
         return SCons.Builder.Builder(
             action=[
+                "cd ${TARGET.dir.abspath} && echo",
+                "$(cd$) ${TARGET.dir.abspath} && echo",
                 "cat ${SOURCE.abspath} | tee ${TARGETS[0].abspath}",
                 "cat ${SOURCES.abspath} | tee ${TARGETS[0].abspath}",
                 "cat ${SOURCES[99].abspath} | tee ${TARGETS[0].abspath}",
@@ -678,6 +852,8 @@ def test_ssh_builder_actions(target: list[str], builder_kwargs: dict, task_kwarg
     build_cat = cat()
     build_cat_action_list = [action.cmd_list for action in build_cat.action.list]
     expected = [
+        "cd ${TARGET.dir.abspath} && echo",
+        "$(cd$) ${TARGET.dir.abspath} && echo",
         "cat ${SOURCE.abspath} | tee ${TARGETS[0].abspath}",
         "cat ${SOURCES.abspath} | tee ${TARGETS[0].abspath}",
         "cat ${SOURCES[99].abspath} | tee ${TARGETS[0].abspath}",
@@ -691,21 +867,32 @@ def test_ssh_builder_actions(target: list[str], builder_kwargs: dict, task_kwarg
     ssh_build_cat = scons_extensions.ssh_builder_actions(cat(), **builder_kwargs)
     ssh_build_cat_action_list = [action.cmd_list for action in ssh_build_cat.action.list]
     expected = [
-        'ssh ${ssh_options} ${remote_server} "mkdir -p ${remote_directory}"',
-        "rsync ${rsync_push_options} ${SOURCES.abspath} ${remote_server}:${remote_directory}",
-        "ssh ${ssh_options} ${remote_server} 'cd ${remote_directory} && cat ${SOURCE.file} | tee ${TARGETS[0].file}'",
-        "ssh ${ssh_options} ${remote_server} 'cd ${remote_directory} && cat ${SOURCES.file} | tee ${TARGETS[0].file}'",
+        '$(ssh$) ${ssh_options} ${remote_server} "mkdir -p ${remote_directory}"',
+        "$(rsync$) ${rsync_push_options} ${SOURCES.abspath} ${remote_server}:${remote_directory}",
+        "$(ssh$) ${ssh_options} ${remote_server} 'cd ${remote_directory} && echo'",
+        "$(ssh$) ${ssh_options} ${remote_server} 'cd ${remote_directory} && echo'",
         (
-            "ssh ${ssh_options} ${remote_server} "
+            "$(ssh$) ${ssh_options} ${remote_server} "
+            "'cd ${remote_directory} && cat ${SOURCE.file} | tee ${TARGETS[0].file}'"
+        ),
+        (
+            "$(ssh$) ${ssh_options} ${remote_server} "
+            "'cd ${remote_directory} && cat ${SOURCES.file} | tee ${TARGETS[0].file}'"
+        ),
+        (
+            "$(ssh$) ${ssh_options} ${remote_server} "
             "'cd ${remote_directory} && cat ${SOURCES[99].file} | tee ${TARGETS[0].file}'"
         ),
         (
-            "ssh ${ssh_options} ${remote_server} "
+            "$(ssh$) ${ssh_options} ${remote_server} "
             "'cd ${remote_directory} && cat ${SOURCES[-1].file} | tee ${TARGETS[0].file}'"
         ),
-        "ssh ${ssh_options} ${remote_server} 'cd ${remote_directory} && cat ${SOURCES[-1].file} > ${TARGETS[-1].file}'",
-        "ssh ${ssh_options} ${remote_server} 'cd ${remote_directory} && echo \"Hello World!\"'",
-        "rsync ${rsync_pull_options} ${remote_server}:${remote_directory}/ ${TARGET.dir.abspath}",
+        (
+            "$(ssh$) ${ssh_options} ${remote_server} "
+            "'cd ${remote_directory} && cat ${SOURCES[-1].file} > ${TARGETS[-1].file}'"
+        ),
+        "$(ssh$) ${ssh_options} ${remote_server} 'cd ${remote_directory} && echo \"Hello World!\"'",
+        "$(rsync$) ${rsync_pull_options} ${remote_server}:${remote_directory}/ ${TARGET.dir.abspath}",
     ]
     # Test builder action(s)
     assert ssh_build_cat_action_list == expected
@@ -721,21 +908,31 @@ def test_ssh_builder_actions(target: list[str], builder_kwargs: dict, task_kwarg
     ssh_python_builder = scons_extensions.ssh_builder_actions(scons_extensions.python_builder_factory())
     ssh_python_builder_action_list = [action.cmd_list for action in ssh_python_builder.action.list]
     expected = [
-        'ssh ${ssh_options} ${remote_server} "mkdir -p ${remote_directory}"',
-        "rsync ${rsync_push_options} ${SOURCES.abspath} ${remote_server}:${remote_directory}",
+        '$(ssh$) ${ssh_options} ${remote_server} "mkdir -p ${remote_directory}"',
+        "$(rsync$) ${rsync_push_options} ${SOURCES.abspath} ${remote_server}:${remote_directory}",
         (
-            "ssh ${ssh_options} ${remote_server} 'cd ${remote_directory} && ${environment} ${action_prefix} "
+            "$(ssh$) ${ssh_options} ${remote_server} 'cd ${remote_directory} && ${environment} ${action_prefix} "
             "${program} ${program_required} ${program_options} "
             "${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}'"
         ),
-        "rsync ${rsync_pull_options} ${remote_server}:${remote_directory}/ ${TARGET.dir.abspath}",
+        "$(rsync$) ${rsync_pull_options} ${remote_server}:${remote_directory}/ ${TARGET.dir.abspath}",
     ]
     assert ssh_python_builder_action_list == expected
 
 
 prepend_env_input = {
-    "path exists": (f"{root_fs}program", True, does_not_raise),
-    "path does not exist": (f"{root_fs}notapath", False, pytest.raises(FileNotFoundError)),
+    "path exists, str": (str(pathlib.Path("/directory/program")), True, does_not_raise),
+    "path exists, pathlib": (pathlib.Path("/directory/program"), True, does_not_raise),
+    "path with spaces, str": (str(pathlib.Path("/directory with spaces/program")), True, does_not_raise),
+    "path with spaces, pathlib": (pathlib.Path("/directory with spaces/program"), True, does_not_raise),
+    "path with spaces and quotes, str": (str(pathlib.Path('/"directory with spaces"/program')), True, does_not_raise),
+    "path with spaces and quotes, pathlib": (pathlib.Path('/"directory with spaces"/program'), True, does_not_raise),
+    "path does not exist, str": (
+        str(pathlib.Path("/directory/not_a_program")),
+        False,
+        pytest.raises(FileNotFoundError),
+    ),
+    "path does not exist, pathlib": (pathlib.Path("/directory/not_a_program"), False, pytest.raises(FileNotFoundError)),
 }
 
 
@@ -744,7 +941,11 @@ prepend_env_input = {
     prepend_env_input.values(),
     ids=prepend_env_input.keys(),
 )
-def test_append_env_path(program: str, mock_exists: bool, outcome: contextlib.nullcontext | pytest.RaisesExc) -> None:
+def test_append_env_path(
+    program: str | pathlib.Path, mock_exists: bool, outcome: contextlib.nullcontext | pytest.RaisesExc
+) -> None:
+    parent_path = str(pathlib.Path(program).parent.resolve())
+
     # Test function interface
     env = SCons.Environment.Environment()
     with (
@@ -752,18 +953,19 @@ def test_append_env_path(program: str, mock_exists: bool, outcome: contextlib.nu
         outcome,
     ):
         scons_extensions.append_env_path(env, program)
-        assert root_fs == env["ENV"]["PATH"].split(os.pathsep)[-1]
+        assert parent_path == env["ENV"]["PATH"].split(os.pathsep)[-1]
         assert "PYTHONPATH" not in env["ENV"]
         assert "LD_LIBRARY_PATH" not in env["ENV"]
 
     # Test AddMethod interface
+    env = SCons.Environment.Environment()
     env.AddMethod(scons_extensions.append_env_path, "AppendEnvPath")
     with (
         patch("pathlib.Path.exists", return_value=mock_exists),
         outcome,
     ):
         env.AppendEnvPath(program)
-        assert root_fs == env["ENV"]["PATH"].split(os.pathsep)[-1]
+        assert parent_path == env["ENV"]["PATH"].split(os.pathsep)[-1]
         assert "PYTHONPATH" not in env["ENV"]
         assert "LD_LIBRARY_PATH" not in env["ENV"]
 
@@ -803,8 +1005,16 @@ def test_substitution_syntax(substitution_dictionary: dict, keyword_arguments: d
     output_dictionary = env.SubstitutionSyntax(substitution_dictionary, **keyword_arguments)
     assert output_dictionary == expected_dictionary
 
+    # Test WAVESEnvironment and WAVESShellEnvironment method
+    waves_env = scons_extensions.WAVESEnvironment()
+    with patch("waves._utilities.cache_environment"):
+        waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
+    for env in (waves_env, waves_shell_env):
+        output_dictionary = env.SubstitutionSyntax(substitution_dictionary, **keyword_arguments)
+        assert output_dictionary == expected_dictionary
 
-shell_environment = {
+
+test_shell_environment_cases = {
     "default kwargs": (
         {},
         {"thing1": "a"},
@@ -828,11 +1038,17 @@ shell_environment = {
 }
 
 
-@pytest.mark.skipif(testing_windows, reason="BASH shell specific function incompatible with Windows")
+@pytest.mark.skipif(
+    testing_windows,
+    reason=(
+        "Trace bad initiation through the correct way to instantiate an SCons environment outside of an SConscript"
+        " file."
+    ),
+)
 @pytest.mark.parametrize(
     ("kwargs", "expected_environment"),
-    shell_environment.values(),
-    ids=shell_environment.keys(),
+    test_shell_environment_cases.values(),
+    ids=test_shell_environment_cases.keys(),
 )
 def test_shell_environment(kwargs: dict, expected_environment: dict[str, str]) -> None:
     expected_kwargs = {
@@ -844,6 +1060,12 @@ def test_shell_environment(kwargs: dict, expected_environment: dict[str, str]) -
 
     with patch("waves._utilities.cache_environment", return_value=expected_environment) as cache_environment:
         env = scons_extensions.shell_environment("dummy", **kwargs)
+        cache_environment.assert_called_once_with("dummy", **expected_kwargs, verbose=True)
+    # Check that the expected dictionary is a subset of the SCons construction environment
+    assert all(env["ENV"].get(key, None) == value for key, value in expected_environment.items())
+
+    with patch("waves._utilities.cache_environment", return_value=expected_environment) as cache_environment:
+        env = scons_extensions.WAVESShellEnvironment("dummy", **kwargs)
         cache_environment.assert_called_once_with("dummy", **expected_kwargs, verbose=True)
     # Check that the expected dictionary is a subset of the SCons construction environment
     assert all(env["ENV"].get(key, None) == value for key, value in expected_environment.items())
@@ -874,7 +1096,7 @@ def test_construct_action_list(actions: list[str], prefix: str, suffix: str, exp
     assert output == expected
 
 
-source_file = fs.File("dummy.py")
+source_file = file_system.File("dummy.py")
 journal_emitter_input = {
     "one target": (
         ["target.cae"],
@@ -981,7 +1203,7 @@ def test_sbatch_abaqus_journal() -> None:
     assert builder.emitter == scons_extensions._abaqus_journal_emitter
 
 
-source_file = fs.File("root.inp")
+source_file = file_system.File("root.inp")
 solver_emitter_input = {
     "empty targets": (
         "job",
@@ -1315,32 +1537,56 @@ def test_abaqus_solver_emitter_factory(factory_kwargs: dict) -> None:
 abaqus_solver_emitter_factory_emitters_cases: dict[str, tuple] = {
     "datacheck defaults": (
         "abaqus_datacheck_emitter",
-        {"suffixes": _abaqus_datacheck_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
+        {
+            "suffixes": _abaqus_standard_datacheck_extensions,
+            "appending_suffixes": None,
+            "stdout_extension": _stdout_extension,
+        },
         {},
     ),
     "datacheck no defaults": (
         "abaqus_datacheck_emitter",
-        {"suffixes": _abaqus_datacheck_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
+        {
+            "suffixes": _abaqus_standard_datacheck_extensions,
+            "appending_suffixes": None,
+            "stdout_extension": _stdout_extension,
+        },
         {"suffixes": (".suffixes",), "appending_suffixes": (".appending",), "stdout_extension": ".out"},
     ),
     "explicit defaults": (
         "abaqus_explicit_emitter",
-        {"suffixes": _abaqus_explicit_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
+        {
+            "suffixes": _abaqus_explicit_extensions,
+            "appending_suffixes": None,
+            "stdout_extension": _stdout_extension,
+        },
         {},
     ),
     "explicit no defaults": (
         "abaqus_explicit_emitter",
-        {"suffixes": _abaqus_explicit_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
+        {
+            "suffixes": _abaqus_explicit_extensions,
+            "appending_suffixes": None,
+            "stdout_extension": _stdout_extension,
+        },
         {"suffixes": (".suffixes",), "appending_suffixes": (".appending",), "stdout_extension": ".out"},
     ),
     "standard defaults": (
         "abaqus_standard_emitter",
-        {"suffixes": _abaqus_standard_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
+        {
+            "suffixes": _abaqus_standard_analysis_extensions,
+            "appending_suffixes": None,
+            "stdout_extension": _stdout_extension,
+        },
         {},
     ),
     "standard no defaults": (
         "abaqus_standard_emitter",
-        {"suffixes": _abaqus_standard_extensions, "appending_suffixes": None, "stdout_extension": _stdout_extension},
+        {
+            "suffixes": _abaqus_standard_analysis_extensions,
+            "appending_suffixes": None,
+            "stdout_extension": _stdout_extension,
+        },
         {"suffixes": (".suffixes",), "appending_suffixes": (".appending",), "stdout_extension": ".out"},
     ),
 }
@@ -1380,7 +1626,88 @@ abaqus_pseudobuilder_input = {
         {},
         {"job": "job"},
         ["job.inp"],
-        [f"job{ext}" for ext in _abaqus_standard_extensions],
+        [f"job{ext}" for ext in _abaqus_standard_analysis_extensions],
+        " -double both $(-cpus 1$)",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "job custom extensions": (
+        {"standard_analysis_extensions": (".odb", ".ext")},
+        {"job": "job"},
+        ["job.inp"],
+        ["job.odb", "job.ext"],
+        " -double both $(-cpus 1$)",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "job standard": (
+        {},
+        {"job": "job", "job_type": "standard"},
+        ["job.inp"],
+        [f"job{ext}" for ext in _abaqus_standard_analysis_extensions],
+        " -double both $(-cpus 1$)",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "job standard custom extensions": (
+        {"standard_analysis_extensions": (".odb", ".ext")},
+        {"job": "job", "job_type": "standard"},
+        ["job.inp"],
+        ["job.odb", "job.ext"],
+        " -double both $(-cpus 1$)",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "job explicit": (
+        {},
+        {"job": "job", "job_type": "explicit"},
+        ["job.inp"],
+        [f"job{ext}" for ext in _abaqus_explicit_extensions],
+        " -double both $(-cpus 1$)",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "job explicit custom extensions": (
+        {"explicit_extensions": (".odb", ".ext")},
+        {"job": "job", "job_type": "explicit"},
+        ["job.inp"],
+        ["job.odb", "job.ext"],
+        " -double both $(-cpus 1$)",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "job standard datacheck": (
+        {},
+        {"job": "job", "job_type": "standard_datacheck"},
+        ["job.inp"],
+        [f"job{ext}" for ext in _abaqus_standard_datacheck_extensions],
+        " -double both $(-cpus 1$)",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "job standard datacheck custom extensions": (
+        {"standard_datacheck_extensions": (".odb", ".ext")},
+        {"job": "job", "job_type": "standard_datacheck"},
+        ["job.inp"],
+        ["job.odb", "job.ext"],
+        " -double both $(-cpus 1$)",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "job explicit datacheck": (
+        {},
+        {"job": "job", "job_type": "explicit_datacheck"},
+        ["job.inp"],
+        [f"job{ext}" for ext in _abaqus_explicit_extensions],
+        " -double both $(-cpus 1$)",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "job explicit datacheck custom extensions": (
+        {"explicit_extensions": (".odb", ".ext")},
+        {"job": "job", "job_type": "explicit_datacheck"},
+        ["job.inp"],
+        ["job.odb", "job.ext"],
         " -double both $(-cpus 1$)",
         {"job": "job"},
         does_not_raise,
@@ -1389,7 +1716,7 @@ abaqus_pseudobuilder_input = {
         {},
         {"job": "job.with.periods"},
         ["job.with.periods.inp"],
-        [f"job.with.periods{ext}" for ext in _abaqus_standard_extensions],
+        [f"job.with.periods{ext}" for ext in _abaqus_standard_analysis_extensions],
         " -double both $(-cpus 1$)",
         {"job": "job.with.periods"},
         does_not_raise,
@@ -1398,7 +1725,7 @@ abaqus_pseudobuilder_input = {
         {},
         {"job": f"subdir{os.path.sep}job"},
         [f"subdir{os.path.sep}job.inp"],
-        [f"subdir{os.path.sep}job{ext}" for ext in _abaqus_standard_extensions],
+        [f"subdir{os.path.sep}job{ext}" for ext in _abaqus_standard_analysis_extensions],
         " -double both $(-cpus 1$)",
         {"job": "job"},
         does_not_raise,
@@ -1407,7 +1734,7 @@ abaqus_pseudobuilder_input = {
         {},
         {"job": f"subdir{os.path.sep}job.with.periods"},
         [f"subdir{os.path.sep}job.with.periods.inp"],
-        [f"subdir{os.path.sep}job.with.periods{ext}" for ext in _abaqus_standard_extensions],
+        [f"subdir{os.path.sep}job.with.periods{ext}" for ext in _abaqus_standard_analysis_extensions],
         " -double both $(-cpus 1$)",
         {"job": "job.with.periods"},
         does_not_raise,
@@ -1416,7 +1743,7 @@ abaqus_pseudobuilder_input = {
         {"override_cpus": 2},
         {"job": "job", "cpus": 3},
         ["job.inp"],
-        [f"job{ext}" for ext in _abaqus_standard_extensions],
+        [f"job{ext}" for ext in _abaqus_standard_analysis_extensions],
         " -double both $(-cpus 2$)",
         {"job": "job"},
         does_not_raise,
@@ -1425,7 +1752,7 @@ abaqus_pseudobuilder_input = {
         {},
         {"job": "job", "inp": "input.inp"},
         ["input.inp"],
-        [f"job{ext}" for ext in _abaqus_standard_extensions],
+        [f"job{ext}" for ext in _abaqus_standard_analysis_extensions],
         " -double both $(-cpus 1$)",
         {"job": "job"},
         does_not_raise,
@@ -1434,7 +1761,7 @@ abaqus_pseudobuilder_input = {
         {},
         {"job": f"subdir{os.path.sep}job", "inp": f"subdir{os.path.sep}input.inp"},
         [f"subdir{os.path.sep}input.inp"],
-        [f"subdir{os.path.sep}job{ext}" for ext in _abaqus_standard_extensions],
+        [f"subdir{os.path.sep}job{ext}" for ext in _abaqus_standard_analysis_extensions],
         " -double both $(-cpus 1$)",
         {"job": "job"},
         does_not_raise,
@@ -1443,7 +1770,7 @@ abaqus_pseudobuilder_input = {
         {},
         {"job": "job", "user": "user.f"},
         ["job.inp", "user.f"],
-        [f"job{ext}" for ext in _abaqus_standard_extensions],
+        [f"job{ext}" for ext in _abaqus_standard_analysis_extensions],
         " -double both $(-cpus 1$) -user user.f",
         {"job": "job"},
         does_not_raise,
@@ -1451,8 +1778,61 @@ abaqus_pseudobuilder_input = {
     "oldjob_str": (
         {},
         {"job": "job", "oldjob": "oldjob"},
-        ["job.inp"] + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(solver="standard")],
-        [f"job{ext}" for ext in _abaqus_standard_extensions],
+        ["job.inp"] + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard")],
+        [f"job{ext}" for ext in _abaqus_standard_analysis_extensions],
+        " -double both $(-cpus 1$) -oldjob oldjob",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "oldjob_str standard": (
+        {},
+        {"job": "job", "oldjob": "oldjob", "oldjob_type": "standard"},
+        ["job.inp"] + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard")],
+        [f"job{ext}" for ext in _abaqus_standard_analysis_extensions],
+        " -double both $(-cpus 1$) -oldjob oldjob",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "oldjob_str standard_datacheck": (
+        {},
+        {"job": "job", "oldjob": "oldjob", "oldjob_type": "standard_datacheck"},
+        ["job.inp"]
+        + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard_datacheck")],
+        [f"job{ext}" for ext in _abaqus_standard_analysis_extensions],
+        " -double both $(-cpus 1$) -oldjob oldjob",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "oldjob_str explicit": (
+        {},
+        {"job": "job", "oldjob": "oldjob", "oldjob_type": "explicit"},
+        ["job.inp"] + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="explicit")],
+        [f"job{ext}" for ext in _abaqus_standard_analysis_extensions],
+        " -double both $(-cpus 1$) -oldjob oldjob",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "oldjob_str explicit_datacheck": (
+        {},
+        {"job": "job", "oldjob": "oldjob", "oldjob_type": "explicit_datacheck"},
+        ["job.inp"]
+        + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="explicit_datacheck")],
+        [f"job{ext}" for ext in _abaqus_standard_analysis_extensions],
+        " -double both $(-cpus 1$) -oldjob oldjob",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "oldjob_str custom extensions": (
+        {
+            "standard_analysis_extensions": (".odb", ".ext"),
+            "standard_restart_extensions": (
+                ".odb",
+                ".restart",
+            ),
+        },
+        {"job": "job", "oldjob": "oldjob"},
+        ["job.inp", "oldjob.odb", "oldjob.restart"],
+        ["job.odb", "job.ext"],
         " -double both $(-cpus 1$) -oldjob oldjob",
         {"job": "job"},
         does_not_raise,
@@ -1460,8 +1840,8 @@ abaqus_pseudobuilder_input = {
     "oldjob_list_of_1": (
         {},
         {"job": "job", "oldjob": ["oldjob"]},
-        ["job.inp"] + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(solver="standard")],
-        [f"job{ext}" for ext in _abaqus_standard_extensions],
+        ["job.inp"] + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard")],
+        [f"job{ext}" for ext in _abaqus_standard_analysis_extensions],
         " -double both $(-cpus 1$) -oldjob oldjob",
         {"job": "job"},
         does_not_raise,
@@ -1470,9 +1850,9 @@ abaqus_pseudobuilder_input = {
         {},
         {"job": "job", "oldjob": ["oldjob_1", "oldjob_2"]},
         ["job.inp"]
-        + [f"oldjob_1{ext}" for ext in _utilities._get_abaqus_restart_extensions(solver="standard")]
-        + [f"oldjob_2{ext}" for ext in _utilities._get_abaqus_restart_extensions(solver="standard")],
-        [f"job{ext}" for ext in _abaqus_standard_extensions],
+        + [f"oldjob_1{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard")]
+        + [f"oldjob_2{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard")],
+        [f"job{ext}" for ext in _abaqus_standard_analysis_extensions],
         " -double both $(-cpus 1$)",
         {"job": "job"},
         does_not_raise,
@@ -1481,10 +1861,22 @@ abaqus_pseudobuilder_input = {
         {},
         {"job": "job", "write_restart": True},
         ["job.inp"],
-        [
-            f"job{ext}"
-            for ext in (_abaqus_standard_extensions + _utilities._get_abaqus_restart_extensions(solver="standard"))
-        ],
+        [f"job{ext}" for ext in _utilities._get_abaqus_job_extensions(job_type="standard", write_restart=True)],
+        " -double both $(-cpus 1$)",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "write restart custom extensions": (
+        {
+            "standard_analysis_extensions": (".odb", ".ext"),
+            "standard_restart_extensions": (
+                ".odb",
+                ".restart",
+            ),
+        },
+        {"job": "job", "write_restart": True},
+        ["job.inp"],
+        ["job.odb", "job.ext", "job.restart"],
         " -double both $(-cpus 1$)",
         {"job": "job"},
         does_not_raise,
@@ -1493,7 +1885,7 @@ abaqus_pseudobuilder_input = {
         {},
         {"job": "job", "double": "constraint"},
         ["job.inp"],
-        [f"job{ext}" for ext in _abaqus_standard_extensions],
+        [f"job{ext}" for ext in _abaqus_standard_analysis_extensions],
         " -double constraint $(-cpus 1$)",
         {"job": "job"},
         does_not_raise,
@@ -1502,7 +1894,16 @@ abaqus_pseudobuilder_input = {
         {},
         {"job": "job", "extra_sources": ["extra.inp"], "extra_targets": ["extra.odb"], "extra_options": "--extra-opt"},
         ["job.inp", "extra.inp"],
-        [f"job{ext}" for ext in _abaqus_standard_extensions] + ["extra.odb"],
+        [f"job{ext}" for ext in _abaqus_standard_analysis_extensions] + ["extra.odb"],
+        " -double both $(-cpus 1$) --extra-opt",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "extras custom extensions": (
+        {"standard_analysis_extensions": (".odb", ".ext")},
+        {"job": "job", "extra_sources": ["extra.inp"], "extra_targets": ["extra.odb"], "extra_options": "--extra-opt"},
+        ["job.inp", "extra.inp"],
+        ["job.odb", "job.ext", "extra.odb"],
         " -double both $(-cpus 1$) --extra-opt",
         {"job": "job"},
         does_not_raise,
@@ -1511,7 +1912,7 @@ abaqus_pseudobuilder_input = {
         {},
         {"job": "job", "kwarg_1": "value_1"},
         ["job.inp"],
-        [f"job{ext}" for ext in _abaqus_standard_extensions],
+        [f"job{ext}" for ext in _abaqus_standard_analysis_extensions],
         " -double both $(-cpus 1$)",
         {"job": "job", "kwarg_1": "value_1"},
         does_not_raise,
@@ -1532,12 +1933,9 @@ abaqus_pseudobuilder_input = {
             "kwarg_1": "value_1",
         },
         ["input.inp"]
-        + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(solver="standard")]
+        + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard")]
         + ["user.f", "extra.inp"],
-        [
-            f"job{ext}"
-            for ext in (_abaqus_standard_extensions + _utilities._get_abaqus_restart_extensions(solver="standard"))
-        ]
+        [f"job{ext}" for ext in (_utilities._get_abaqus_job_extensions(job_type="standard", write_restart=True))]
         + ["extra.odb"],
         " -double constraint $(-cpus 2$) -oldjob oldjob -user user.f --extra-opt",
         {"job": "job", "kwarg_1": "value_1"},
@@ -1547,12 +1945,10 @@ abaqus_pseudobuilder_input = {
         {},
         {"job": "job", "oldjob": "oldjob", "processes": 1, "write_restart": True},
         ["job.inp"]
-        + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(solver="standard", processes=1)],
+        + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard", processes=1)],
         [
             f"job{ext}"
-            for ext in (
-                _abaqus_standard_extensions + _utilities._get_abaqus_restart_extensions(solver="standard", processes=1)
-            )
+            for ext in (_utilities._get_abaqus_job_extensions(job_type="standard", processes=1, write_restart=True))
         ],
         " -double both $(-cpus 1$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
         {"job": "job"},
@@ -1562,12 +1958,10 @@ abaqus_pseudobuilder_input = {
         {},
         {"job": "job", "oldjob": "oldjob", "cpus": 2, "processes": 2, "write_restart": True},
         ["job.inp"]
-        + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(solver="standard", processes=1)],
+        + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard", processes=1)],
         [
             f"job{ext}"
-            for ext in (
-                _abaqus_standard_extensions + _utilities._get_abaqus_restart_extensions(solver="standard", processes=2)
-            )
+            for ext in (_utilities._get_abaqus_job_extensions(job_type="standard", processes=2, write_restart=True))
         ],
         " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
         {"job": "job"},
@@ -1584,12 +1978,76 @@ abaqus_pseudobuilder_input = {
             "oldjob_restart_file_count": 1,
         },
         ["job.inp"]
-        + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(solver="standard", processes=1)],
+        + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard", processes=1)],
         [
             f"job{ext}"
-            for ext in (
-                _abaqus_standard_extensions + _utilities._get_abaqus_restart_extensions(solver="standard", processes=2)
-            )
+            for ext in (_utilities._get_abaqus_job_extensions(job_type="standard", processes=2, write_restart=True))
+        ],
+        " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "oldjob_restart_file_count_1 standard-standard": (
+        {},
+        {
+            "job": "job",
+            "oldjob": "oldjob",
+            "cpus": 2,
+            "processes": 2,
+            "write_restart": True,
+            "oldjob_restart_file_count": 1,
+            "job_type": "standard",
+            "oldjob_type": "standard",
+        },
+        ["job.inp"]
+        + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard", processes=1)],
+        [
+            f"job{ext}"
+            for ext in (_utilities._get_abaqus_job_extensions(job_type="standard", processes=2, write_restart=True))
+        ],
+        " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "oldjob_restart_file_count_1 standard-explicit": (
+        {},
+        {
+            "job": "job",
+            "oldjob": "oldjob",
+            "cpus": 2,
+            "processes": 2,
+            "write_restart": True,
+            "oldjob_restart_file_count": 1,
+            "job_type": "explicit",
+            "oldjob_type": "standard",
+        },
+        ["job.inp"]
+        + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard", processes=1)],
+        [
+            f"job{ext}"
+            for ext in (_utilities._get_abaqus_job_extensions(job_type="explicit", processes=2, write_restart=True))
+        ],
+        " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "oldjob_restart_file_count_1 explicit-explicit": (
+        {},
+        {
+            "job": "job",
+            "oldjob": "oldjob",
+            "cpus": 2,
+            "processes": 2,
+            "write_restart": True,
+            "oldjob_restart_file_count": 1,
+            "job_type": "explicit",
+            "oldjob_type": "explicit",
+        },
+        ["job.inp"]
+        + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="explicit", processes=1)],
+        [
+            f"job{ext}"
+            for ext in (_utilities._get_abaqus_job_extensions(job_type="explicit", processes=2, write_restart=True))
         ],
         " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
         {"job": "job"},
@@ -1606,13 +2064,27 @@ abaqus_pseudobuilder_input = {
             "oldjob_restart_file_count": 2,
         },
         ["job.inp"]
-        + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(solver="standard", processes=2)],
+        + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard", processes=2)],
         [
             f"job{ext}"
-            for ext in (
-                _abaqus_standard_extensions + _utilities._get_abaqus_restart_extensions(solver="standard", processes=2)
-            )
+            for ext in (_utilities._get_abaqus_job_extensions(job_type="standard", processes=2, write_restart=True))
         ],
+        " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "oldjob_restart_file_count_2 custom extension": (
+        {"standard_analysis_extensions": (".odb", ".ext"), "standard_restart_extensions": (".odb", ".ext")},
+        {
+            "job": "job",
+            "oldjob": "oldjob",
+            "cpus": 2,
+            "processes": 2,
+            "write_restart": True,
+            "oldjob_restart_file_count": 2,
+        },
+        ["job.inp", "oldjob.odb", "oldjob.ext"],
+        ["job.odb", "job.ext"],
         " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
         {"job": "job"},
         does_not_raise,
@@ -1621,9 +2093,26 @@ abaqus_pseudobuilder_input = {
         {},
         {"job": "job", "oldjob": ["oldjob_1", "oldjob_2"], "oldjob_restart_file_count": [1, 2]},
         ["job.inp"]
-        + [f"oldjob_1{ext}" for ext in _utilities._get_abaqus_restart_extensions(solver="standard", processes=1)]
-        + [f"oldjob_2{ext}" for ext in _utilities._get_abaqus_restart_extensions(solver="standard", processes=2)],
-        [f"job{ext}" for ext in _abaqus_standard_extensions],
+        + [f"oldjob_1{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard", processes=1)]
+        + [f"oldjob_2{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard", processes=2)],
+        [f"job{ext}" for ext in _abaqus_standard_analysis_extensions],
+        " -double both $(-cpus 1$)",
+        {"job": "job"},
+        does_not_raise,
+    ),
+    "oldjob_restart_file_count_list standard/explicit-explicit": (
+        {},
+        {
+            "job": "job",
+            "oldjob": ["oldjob_1", "oldjob_2"],
+            "oldjob_restart_file_count": [1, 2],
+            "job_type": "explicit",
+            "oldjob_type": ["standard", "explicit"],
+        },
+        ["job.inp"]
+        + [f"oldjob_1{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard", processes=1)]
+        + [f"oldjob_2{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="explicit", processes=2)],
+        [f"job{ext}" for ext in _abaqus_explicit_extensions],
         " -double both $(-cpus 1$)",
         {"job": "job"},
         does_not_raise,
@@ -1631,8 +2120,8 @@ abaqus_pseudobuilder_input = {
     "indivisible_cpus": (
         {},
         {"job": "job", "cpus": 3, "processes": 2},
-        ["job.inp"],
-        [f"job{ext}" for ext in _abaqus_standard_extensions],
+        None,
+        None,
         "",
         {"job": "job"},
         pytest.raises(ValueError, match="Number of CPUs '3' is indivisible by the number of MPI processes '2'"),
@@ -1640,8 +2129,8 @@ abaqus_pseudobuilder_input = {
     "indivisible_override_cpus": (
         {"override_cpus": 3},
         {"job": "job", "cpus": 2, "processes": 2},
-        ["job.inp"],
-        [f"job{ext}" for ext in _abaqus_standard_extensions],
+        None,
+        None,
         "",
         {"job": "job"},
         pytest.raises(ValueError, match="Number of CPUs '3' is indivisible by the number of MPI processes '2'"),
@@ -1650,12 +2139,10 @@ abaqus_pseudobuilder_input = {
         {"override_cpus": 2},
         {"job": "job", "oldjob": "oldjob", "cpus": 3, "processes": 2, "write_restart": True},
         ["job.inp"]
-        + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(solver="standard", processes=1)],
+        + [f"oldjob{ext}" for ext in _utilities._get_abaqus_restart_extensions(job_type="standard", processes=1)],
         [
             f"job{ext}"
-            for ext in (
-                _abaqus_standard_extensions + _utilities._get_abaqus_restart_extensions(solver="standard", processes=2)
-            )
+            for ext in (_utilities._get_abaqus_job_extensions(job_type="standard", processes=2, write_restart=True))
         ],
         " -double both $(-cpus 2$) $(-threads_per_mpi_process 1$) -oldjob oldjob",
         {"job": "job"},
@@ -1664,13 +2151,20 @@ abaqus_pseudobuilder_input = {
     "mismatched_oldjob_lengths": (
         {},
         {"job": "job", "oldjob": ["oldjob_1", "oldjob_2"], "oldjob_restart_file_count": [1]},
-        ["job.inp"]
-        + [f"oldjob_1{ext}" for ext in _utilities._get_abaqus_restart_extensions(solver="standard", processes=1)]
-        + [f"oldjob_2{ext}" for ext in _utilities._get_abaqus_restart_extensions(solver="standard", processes=2)],
-        [f"job{ext}" for ext in _abaqus_standard_extensions],
+        None,
+        None,
         " -double both $(-cpus 1$)",
         {"job": "job"},
         pytest.raises(ValueError, match="The length of ``oldjob_restart_file_count`` and ``oldjob`` do not match"),
+    ),
+    "mismatched_oldjob_type_lengths": (
+        {},
+        {"job": "job", "oldjob": ["oldjob_1", "oldjob_2"], "oldjob_type": ["standard"]},
+        None,
+        None,
+        " -double both $(-cpus 1$)",
+        {"job": "job"},
+        pytest.raises(ValueError, match="The length of ``oldjob_type`` and ``oldjob`` do not match"),
     ),
 }
 
@@ -1683,8 +2177,8 @@ abaqus_pseudobuilder_input = {
 def test_abaqus_pseudo_builder(
     class_kwargs: dict[str, typing.Any],
     call_kwargs: dict[str, typing.Any],
-    sources: list[str],
-    targets: list[str],
+    sources: list[str] | None,
+    targets: list[str] | None,
     options: str,
     builder_kwargs: dict[str, typing.Any],
     outcome: contextlib.nullcontext | pytest.RaisesExc,
@@ -1726,16 +2220,27 @@ copy_substfile_input = {
     ids=copy_substfile_input.keys(),
 )
 def test_copy_substfile(source_list: list[str | pathlib.Path], expected_list: list[str]) -> None:
+    # Test the function interface
     env = SCons.Environment.Environment()
     target_list = scons_extensions.copy_substfile(env, source_list, {})
     target_files = [str(target) for target in target_list]
     assert target_files == expected_list
 
     # Test the Pseudo-Builder style interface
+    env = SCons.Environment.Environment()
     env.AddMethod(scons_extensions.copy_substfile, "CopySubstfile")
     target_list = env.CopySubstfile(source_list, {})
     target_files = [str(target) for target in target_list]
     assert target_files == expected_list
+
+    # Test the WAVESEnvironment and WAVESShellEnvironment method
+    waves_env = scons_extensions.WAVESEnvironment()
+    with patch("waves._utilities.cache_environment"):
+        waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
+    for env in (waves_env, waves_shell_env):
+        target_list = env.CopySubstfile(source_list, {})
+        target_files = [str(target) for target in target_list]
+        assert target_files == expected_list
 
 
 build_subdirectory_input = {
@@ -1754,7 +2259,7 @@ def test_build_subdirectory(target: list[str], expected: pathlib.Path) -> None:
     assert scons_extensions._build_subdirectory(target) == expected
 
 
-source_file = fs.File("dummy.py")
+source_file = file_system.File("dummy.py")
 first_target_emitter_input = {
     "one target": (
         ["target.cub"],
@@ -2110,7 +2615,7 @@ def test_sbatch_first_target_builder_factories(name: str) -> None:
     assert builder.emitter == scons_extensions.first_target_emitter
 
 
-source_file = fs.File("dummy.m")
+source_file = file_system.File("dummy.m")
 matlab_emitter_input = {
     "one target": (
         ["target.matlab"],
@@ -2269,7 +2774,7 @@ def test_conda_environment(builder_kwargs: dict[str, str], task_kwargs: dict[str
             assert node.env[key] == expected_value
 
 
-source_file = fs.File("dummy.odb")
+source_file = file_system.File("dummy.odb")
 abaqus_extract_emitter_input = {
     "empty targets": (
         [],
@@ -2336,8 +2841,8 @@ def test_abaqus_extract() -> None:
     check_action_string(nodes, 3, 1, expected_string)
 
 
-source_file = fs.File("/dummy.source")
-target_file = fs.File("/dummy.target")
+source_file = file_system.File("/dummy.source")
+target_file = file_system.File("/dummy.target")
 build_odb_extract_input = {
     "no kwargs": (
         [target_file],
@@ -2532,16 +3037,24 @@ def test_abaqus_input_scanner(content: str, expected_dependencies: list[str]) ->
 
 sphinx_scanner_input = {
     # Test name, content, expected_dependencies
-    "include directive": (".. include:: dummy.txt", ["dummy.txt"]),
-    "literalinclude directive": (".. literalinclude:: dummy.txt", ["dummy.txt"]),
-    "image directive": (".. image:: dummy.png", ["dummy.png"]),
-    "figure directive": (".. figure:: dummy.png", ["dummy.png"]),
-    "bibliography directive": (".. figure:: dummy.bib", ["dummy.bib"]),
-    "no match": (".. notsuppored:: notsupported.txt", []),
-    "indented": (".. only:: html\n\n   .. include:: dummy.txt", ["dummy.txt"]),
-    "one match multiline": (".. include:: dummy.txt\n.. notsuppored:: notsupported.txt", ["dummy.txt"]),
+    "include directive": (r".. include:: dummy.txt", ["dummy.txt"]),
+    "literalinclude directive": (r".. literalinclude:: dummy.txt", ["dummy.txt"]),
+    "image directive": (r".. image:: dummy.png", ["dummy.png"]),
+    "figure directive": (r".. figure:: dummy.png", ["dummy.png"]),
+    "bibliography directive": (r".. bibliography:: dummy.bib", ["dummy.bib"]),
+    "no match": (r".. notsuppored:: notsupported.txt", []),
+    "indented": (r".. only:: html" + "\n\n" + r"   .. include:: dummy.txt", ["dummy.txt"]),
+    "unordered list": (
+        r"* .. figure:: dummy1.png" + "\n\n" + "  - .. figure:: dummy2.png",
+        ["dummy1.png", "dummy2.png"],
+    ),
+    "list table": (
+        r".. list-table:: title" + "\n" + r"   * - .. figure:: dummy1.png" + "\n" + "     - .. figure:: dummy2.png",
+        ["dummy1.png", "dummy2.png"],
+    ),
+    "one match multiline": (r".. include:: dummy.txt" + "\n" + r".. notsuppored:: notsupported.txt", ["dummy.txt"]),
     "three match multiline": (
-        ".. include:: dummy.txt\n.. figure:: dummy.png\n.. bibliography:: dummy.bib",
+        r".. include:: dummy.txt" + "\n" + r".. figure:: dummy.png" + "\n" + r".. bibliography:: dummy.bib",
         ["dummy.txt", "dummy.png", "dummy.bib"],
     ),
 }
@@ -2648,7 +3161,7 @@ python_script_input = {
     python_script_input.values(),
     ids=python_script_input.keys(),
 )
-def test_parameter_study(
+def test_parameter_study_task(
     node_count: int,
     action_count: int,
     args: tuple,
@@ -2661,6 +3174,7 @@ def test_parameter_study(
         "${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
     )
 
+    # Test the AddMethod style interface
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"PythonScript": scons_extensions.python_builder_factory()})
     env.AddMethod(scons_extensions.parameter_study_task, "ParameterStudyTask")
@@ -2672,9 +3186,24 @@ def test_parameter_study(
         study=study,
         **kwargs,
     )
-
     check_action_string(nodes, node_count, action_count, expected_string)
     assert [pathlib.Path(str(node)) for node in nodes] == [pathlib.Path(node) for node in expected_targets]
+
+    # Test the WAVESEnvironment and WAVESSHellEnvironment methods
+    waves_env = scons_extensions.WAVESEnvironment()
+    with patch("waves._utilities.cache_environment"):
+        waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
+    for env in (waves_env, waves_shell_env):
+        nodes = env.ParameterStudyTask(
+            env.PythonScript,
+            *args,
+            source=["python_script.py"],
+            script_options="",
+            study=study,
+            **kwargs,
+        )
+        check_action_string(nodes, node_count, action_count, expected_string)
+        assert [pathlib.Path(str(node)) for node in nodes] == [pathlib.Path(node) for node in expected_targets]
 
 
 cartesian_product = parameter_generators.CartesianProduct(
@@ -2771,34 +3300,92 @@ def test_parameter_study_sconscript(
         env.ParameterStudySConscript(*args, **kwargs)
         mock_sconscript.assert_called_once_with(*args, **expected)
 
+    # Test WAVESEnvironment and WAVESShellEnvironment method
+    waves_env = scons_extensions.WAVESEnvironment()
+    with patch("waves._utilities.cache_environment"):
+        waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
+    # Git commit 7a95cef7: Normally you expect something like ``patch("SCons.Script.SConscript.SConsEnvironment...")``
+    # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
+    for env in (waves_env, waves_shell_env):
+        with (
+            patch("waves.scons_extensions.SConsEnvironment.SConscript") as mock_sconscript,
+            outcome,
+        ):
+            env.ParameterStudySConscript(*args, **kwargs)
+            mock_sconscript.assert_called_once_with(*args, **expected)
+
 
 parameter_study_write_cases: dict[str, tuple] = {
-    "output file": (
+    "output file pseudo-builder argument": (
+        parameter_generators.CartesianProduct({"one": [1, 2]}),
+        {"output_file": "test.h5"},
+        ["test.h5"],
+        does_not_raise,
+    ),
+    "output file class attribute": (
         parameter_generators.CartesianProduct({"one": [1, 2]}, output_file="test.h5"),
         {},
         ["test.h5"],
         does_not_raise,
     ),
-    # TODO: Update expected output file extension when the write methods adds an output file override
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/634
-    "output file and output file type": (
+    "output file, output file type H5 class attribute": (
+        parameter_generators.CartesianProduct({"one": [1, 2]}, output_file="test.h5", output_file_type="h5"),
+        {},
+        ["test.h5"],
+        does_not_raise,
+    ),
+    "output file, output file type H5 pseudo-builder API wins": (
+        parameter_generators.CartesianProduct({"one": [1, 2]}, output_file="test.h5", output_file_type="h5"),
+        {"output_file": "pseudo-builder.h5", "output_file_type": "h5"},
+        ["pseudo-builder.h5"],
+        does_not_raise,
+    ),
+    "output file, output file type YAML pseudo-builder API wins": (
+        parameter_generators.CartesianProduct({"one": [1, 2]}, output_file="test.h5", output_file_type="h5"),
+        {"output_file": "pseudo-builder.yaml", "output_file_type": "yaml"},
+        ["pseudo-builder.yaml"],
+        does_not_raise,
+    ),
+    "output file, output file type mixed class attribute and pseudo-builder API": (
         parameter_generators.CartesianProduct({"one": [1, 2]}, output_file="actually_a_yaml_file.h5"),
         {"output_file_type": "yaml"},
         ["actually_a_yaml_file.h5"],
         does_not_raise,
     ),
+    "output file, output file type mixed pseudo-builder API and class attribute": (
+        parameter_generators.CartesianProduct({"one": [1, 2]}, output_file_type="yaml"),
+        {"output_file": "actually_a_yaml_file2.h5"},
+        ["actually_a_yaml_file2.h5"],
+        does_not_raise,
+    ),
     "output file template": (
-        parameter_generators.CartesianProduct({"one": [1, 2]}, output_file_template="test@number.h5"),
+        parameter_generators.CartesianProduct({"one": [1, 2]}, output_file_template="test@number"),
         {},
         ["test0.h5", "test1.h5"],
         does_not_raise,
     ),
-    # TODO: Update expected output file extension when the write methods adds an output file override
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/634
+    "output file template with extension": (
+        parameter_generators.CartesianProduct({"one": [1, 2]}, output_file_template="test_with_extension@number.h5"),
+        {},
+        ["test_with_extension0.h5", "test_with_extension1.h5"],
+        does_not_raise,
+    ),
+    "output file template, output file type YAML": (
+        parameter_generators.CartesianProduct({"one": [1, 2]}, output_file_template="test@number"),
+        {"output_file_type": "yaml"},
+        ["test0.yaml", "test1.yaml"],
+        does_not_raise,
+    ),
+    "output file template with extension, output file type YAML": (
+        parameter_generators.CartesianProduct({"one": [1, 2]}, output_file_template="test_with_extension@number.yaml"),
+        {"output_file_type": "yaml"},
+        ["test_with_extension0.yaml", "test_with_extension1.yaml"],
+        does_not_raise,
+    ),
     "output file template and output file type": (
         parameter_generators.CartesianProduct({"one": [1, 2]}, output_file_template="actually_a_yaml_file@number.h5"),
         {"output_file_type": "yaml"},
-        ["actually_a_yaml_file0.h5", "actually_a_yaml_file1.h5"],
+        ["actually_a_yaml_file0.h5.yaml", "actually_a_yaml_file1.h5.yaml"],
         does_not_raise,
     ),
 }
@@ -2825,6 +3412,14 @@ def test_parameter_study_write(
         env.AddMethod(scons_extensions.parameter_study_write, "ParameterStudyWrite")
         targets = env.ParameterStudyWrite(parameter_generator, **kwargs)
         assert [str(target) for target in targets] == expected
+
+    waves_env = scons_extensions.WAVESEnvironment()
+    with patch("waves._utilities.cache_environment"):
+        waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
+    for env in (waves_env, waves_shell_env):
+        with outcome:
+            targets = env.ParameterStudyWrite(parameter_generator, **kwargs)
+            assert [str(target) for target in targets] == expected
 
 
 test_qoi_pseudo_builder_cases: dict[str, tuple] = {
@@ -2870,6 +3465,196 @@ def test_qoi_pseudo_builder(
         assert targets == expected
 
 
+test_tar_script_os_fallback_cases = {
+    "windows": ("Windows", "pwsh", ".ps1"),
+    "linux": ("Linux", "bash", ".sh"),
+    "macos": ("Darwin", "bash", ".sh"),
+}
+
+
+@pytest.mark.parametrize(
+    ("mock_os", "expected_shell", "expected_extension"),
+    test_tar_script_os_fallback_cases.values(),
+    ids=test_tar_script_os_fallback_cases.keys(),
+)
+def test_tar_script_os_fallback(mock_os: str, expected_shell: str, expected_extension: str) -> None:
+    with patch("platform.system", return_value=mock_os):
+        shell, extension = scons_extensions._tar_script_os_fallback()
+        assert shell == expected_shell
+        assert extension == expected_extension
+
+
+test_tar_script_cases = {
+    "default TARSUFFIX without archive extension": (
+        "Linux",
+        "archive",
+        "source.one",
+        {"shell": "shell", "extension": ".script"},
+        {},
+        ["archive.tar", "archive.tar.script"],
+    ),
+    "default TARSUFFIX with archive extension": (
+        "Linux",
+        "archive.tar",
+        "source.one",
+        {"shell": "shell", "extension": ".script"},
+        {},
+        ["archive.tar", "archive.tar.script"],
+    ),
+    "default TARSUFFIX Windows": (
+        "Windows",
+        "archive.windows",
+        "source.one",
+        {},
+        {},
+        ["archive.windows.tar", "archive.windows.tar.ps1"],
+    ),
+    "default TARSUFFIX Linux": (
+        "Linux",
+        "archive.linux",
+        "source.one",
+        {},
+        {},
+        ["archive.linux.tar", "archive.linux.tar.sh"],
+    ),
+    "default TARSUFFIX macOS": (
+        "Darwin",
+        "archive.macos",
+        "source.one",
+        {},
+        {},
+        ["archive.macos.tar", "archive.macos.tar.sh"],
+    ),
+    "nondefault TARSUFFIX without archive extension": (
+        "Linux",
+        "archive",
+        "source.one",
+        {"shell": "shell", "extension": ".script"},
+        {"TARSUFFIX": ".tar.bz2"},
+        ["archive.tar.bz2", "archive.tar.bz2.script"],
+    ),
+    "nondefault TARSUFFIX with archive extension": (
+        "Linux",
+        "archive.tar.bz2",
+        "source.one",
+        {"shell": "shell", "extension": ".script"},
+        {"TARSUFFIX": ".tar.bz2"},
+        ["archive.tar.bz2", "archive.tar.bz2.script"],
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("mock_os", "target", "source", "kwargs", "env_kwargs", "expected"),
+    test_tar_script_cases.values(),
+    ids=test_tar_script_cases.keys(),
+)
+def test_tar_script(
+    mock_os: str,
+    target: str | pathlib.Path | SCons.Node.Node | list[str | pathlib.Path | SCons.Node.Node] | SCons.Node.NodeList,
+    source: str | pathlib.Path | SCons.Node.Node | list[str | pathlib.Path | SCons.Node.Node] | SCons.Node.NodeList,
+    kwargs: dict,
+    env_kwargs: dict,
+    expected: list[str],
+) -> None:
+    expected_action = "write_script(target, source, env)\n${shell} ${TARGETS[-1].abspath}"
+    env = SCons.Environment.Environment(**env_kwargs)
+    with patch("platform.system", return_value=mock_os):
+        output = scons_extensions.tar_script(env, target=target, source=source, **kwargs)
+        assert [str(item) for item in output] == expected
+        check_action_string(output, 2, 1, expected_action)
+        env.AddMethod(scons_extensions.tar_script, "TarScript")
+        output = env.TarScript(target=target, source=source, **kwargs)
+        assert [str(item) for item in output] == expected
+        check_action_string(output, 2, 1, expected_action)
+
+
+test_project_cache_directory_cases = {
+    "default args": (
+        {},
+        None,
+    ),
+    "unshared cache only": (
+        {
+            "cache_directory": "/build/cache",
+        },
+        pathlib.Path("/build/cache").resolve(),
+    ),
+    "specified environment": (
+        {
+            "env": SCons.Environment.Environment(),
+            "cache_directory": "/build/cache",
+        },
+        pathlib.Path("/build/cache").resolve(),
+    ),
+    "write to unshared cache directory": (
+        {
+            "shared_cache_directory": "/shared/cache",
+            "cache_directory": "/build/cache",
+        },
+        pathlib.Path("/build/cache").resolve(),
+    ),
+    "overwrite shared cache directory": (
+        {
+            "shared_cache_directory": pathlib.Path("/shared/cache"),
+            "cache_directory": "/shared/cache",
+            "shared_cache_override": True,
+        },
+        pathlib.Path("/shared/cache").resolve(),
+    ),
+    "read-only of shared cache": (
+        {
+            "shared_cache_directory": "/shared/cache",
+            "cache_directory": pathlib.Path("/shared/cache"),
+            "cache_readonly": True,
+        },
+        pathlib.Path("/shared/cache").resolve(),
+    ),
+    "read-only override": (
+        {
+            "shared_cache_directory": "/shared/cache",
+            "cache_directory": pathlib.Path("/shared/cache"),
+            "cache_readonly": True,
+            "shared_cache_override": True,
+        },
+        pathlib.Path("/shared/cache").resolve(),
+    ),
+    "protect shared cache": (
+        {
+            "shared_cache_directory": pathlib.Path("/shared/cache"),
+            "cache_directory": pathlib.Path("/shared/cache"),
+        },
+        None,
+    ),
+    "custom class kwarg": (
+        {
+            "shared_cache_directory": "/shared/cache",
+            "cache_directory": "/build/cache",
+            "shared_cache_override": True,
+            "custom_class": "custom_cache_class",
+        },
+        pathlib.Path("/build/cache").resolve(),
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("kwargs", "expected_directory"),
+    test_project_cache_directory_cases.values(),
+    ids=test_project_cache_directory_cases.keys(),
+)
+def test_project_cache_directory(
+    kwargs: dict,
+    expected_directory: str,
+) -> None:
+    with patch("SCons.Environment.Environment.CacheDir") as mock_cache:
+        active_cache_directory = scons_extensions.project_cache_directory(**kwargs)
+        assert active_cache_directory == expected_directory
+        custom_class = {key: value for key, value in kwargs.items() if key == "custom_class"}
+        expected_positional = str(expected_directory) if expected_directory else None
+        mock_cache.assert_called_once_with(expected_positional, **custom_class)
+
+
 waves_environment_attributes = {
     "default": ({}),
     "no defaults": (
@@ -2884,6 +3669,8 @@ waves_environment_attributes = {
             "SIERRA_PROGRAM": "different sierra",
             "ANSYS_PROGRAM": "different ansys",
             "SPHINX_BUILD_PROGRAM": "different sphinx-build",
+            "ACTION_PREFIX": "different action prefix",
+            "ACTION_SUFFIX": "different action suffix",
         }
     ),
 }
@@ -2906,97 +3693,219 @@ def test_waves_environment_attributes(kwargs: dict[str, str]) -> None:
         "SIERRA_PROGRAM": "sierra",
         "ANSYS_PROGRAM": "ansys",
         "SPHINX_BUILD_PROGRAM": "sphinx-build",
+        "ACTION_PREFIX": "$(cd$) ${TARGET.dir.abspath} &&",
+        "ACTION_SUFFIX": "> ${TARGETS[-1].abspath} 2>&1",
     }
     expected_attributes.update(**kwargs)
-    env = scons_extensions.WAVESEnvironment(**kwargs)
-    for key, value in expected_attributes.items():
-        assert env[key] == value
+    waves_env = scons_extensions.WAVESEnvironment(**kwargs)
+    with patch("waves._utilities.cache_environment"):
+        waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command", **kwargs)  # type: ignore[arg-type]
+    for env in (waves_env, waves_shell_env):
+        for key, value in expected_attributes.items():
+            assert env[key] == value
 
 
 waves_environment_methods = {
-    "PrintBuildFailures": ("PrintBuildFailures", "print_build_failures"),
-    "CheckProgram": ("CheckProgram", "check_program"),
-    "FindProgram": ("FindProgram", "find_program"),
-    "AddProgram": ("AddProgram", "add_program"),
-    "AddCubit": ("AddCubit", "add_cubit"),
-    "AddCubitPython": ("AddCubitPython", "add_cubit_python"),
-    "CopySubstfile": ("CopySubstfile", "copy_substfile"),
-    "ProjectHelp": ("ProjectHelp", "project_help"),
-    "ProjectAlias": ("ProjectAlias", "project_alias"),
-    "SubstitutionSyntax": ("SubstitutionSyntax", "substitution_syntax"),
-    "ParameterStudyTask": ("ParameterStudyTask", "parameter_study_task"),
-    "ParameterStudySConscript": ("ParameterStudySConscript", "parameter_study_sconscript"),
-    "ParameterStudyWrite": ("ParameterStudyWrite", "parameter_study_write"),
+    "PrintBuildFailures": ("PrintBuildFailures", "print_build_failures", (), {"print_stdout": True}),
+    "CheckProgram": ("CheckProgram", "check_program", ("prog_name",), {}),
+    "FindProgram": ("FindProgram", "find_program", (["names"],), {"quote_spaces_in_path": True}),
+    "AddProgram": ("AddProgram", "add_program", (["names"],), {"quote_spaces_in_path": True, "prepend": True}),
+    "AddCubit": ("AddCubit", "add_cubit", (["names"],), {"quote_spaces_in_path": True, "prepend": True}),
+    "AddCubitPython": ("AddCubitPython", "add_cubit_python", (["names"],), {}),
+    "CopySubstfile": (
+        "CopySubstfile",
+        "copy_substfile",
+        (["source_list"],),
+        {"substitution_dictionary": {"key": "value"}, "build_subdirectory": ".", "symlink": False},
+    ),
+    "ProjectHelp": (
+        "ProjectHelp",
+        "project_help",
+        (),
+        {"append": True, "local_only": True, "target_descriptions": None},
+    ),
+    "ProjectAlias": (
+        "ProjectAlias",
+        "project_alias",
+        ("arg1",),
+        {"description": "description text", "target_descriptions": {}, "kwarg1": "value1"},
+    ),
+    "SubstitutionSyntax": ("SubstitutionSyntax", "substitution_syntax", ({},), {"prefix": "@", "suffix": "@"}),
+    "ParameterStudyTask": (
+        "ParameterStudyTask",
+        "parameter_study_task",
+        ("dummy_builder", "arbitrary_argument"),
+        {"study": {}, "subdirectories": False, "arbitrary_kwarg": "arbitrary value"},
+    ),
+    "ParameterStudySConscript": (
+        "ParameterStudySConscript",
+        "parameter_study_sconscript",
+        ("arg1",),
+        {
+            "variant_dir": None,
+            "exports": None,
+            "study": None,
+            "set_name": "",
+            "subdirectories": False,
+            "kwarg1": "value1",
+        },
+    ),
+    "ParameterStudyWrite": (
+        "ParameterStudyWrite",
+        "parameter_study_write",
+        ("dummy_generator",),
+        {"output_file": "output.h5", "output_directory": "directory", "output_file_type": "h5"},
+    ),
+    "TarScript": ("TarScript", "tar_script", (["target"], ["source"]), {"shell": "shell", "extension": ".script"}),
+    "ProjectCacheDirectory": (
+        "ProjectCacheDirectory",
+        "project_cache_directory",
+        (),
+        {
+            "shared_cache_directory": pathlib.Path("shared_cache"),
+            "cache_directory": "local_cache",
+            "cache_readonly": False,
+            "shared_cache_override": False,
+        },
+    ),
 }
 
 
 @pytest.mark.parametrize(
-    ("method", "function"),
+    ("method", "function", "args", "kwargs"),
     waves_environment_methods.values(),
     ids=waves_environment_methods.keys(),
 )
-def test_waves_environment_methods(method: str, function: str) -> None:
-    args = ["arg1"]
-    kwargs = {"kwarg1": "value1"}
-    env = scons_extensions.WAVESEnvironment()
-    attribute = getattr(env, method)
-    with patch(f"waves.scons_extensions.{function}") as mock_function:
-        attribute(*args, **kwargs)
-        mock_function.assert_called_once_with(env, *args, **kwargs)
+def test_waves_environment_methods(method: str, function: str, args: tuple, kwargs: dict) -> None:
+    waves_env = scons_extensions.WAVESEnvironment()
+    with patch("waves._utilities.cache_environment"):
+        waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
+    for env in (waves_env, waves_shell_env):
+        attribute = getattr(env, method)
+        with patch(f"waves.scons_extensions.{function}") as mock_function:
+            attribute(*args, **kwargs)
+            mock_function.assert_called_once_with(env, *args, **kwargs)
 
 
 waves_environment_builders = {
-    "FirstTargetBuilder": ("FirstTargetBuilder", "first_target_builder_factory", {}),
-    "AbaqusJournal": ("AbaqusJournal", "abaqus_journal_builder_factory", {"program": "${ABAQUS_PROGRAM}"}),
-    "AbaqusSolver": ("AbaqusSolver", "abaqus_solver_builder_factory", {"program": "${ABAQUS_PROGRAM}"}),
+    "FirstTargetBuilder": (
+        "FirstTargetBuilder",
+        "first_target_builder_factory",
+        {"action_prefix": "${ACTION_PREFIX}", "action_suffix": "${ACTION_SUFFIX}"},
+    ),
+    "AbaqusJournal": (
+        "AbaqusJournal",
+        "abaqus_journal_builder_factory",
+        {"program": "${ABAQUS_PROGRAM}", "action_prefix": "${ACTION_PREFIX}", "action_suffix": "${ACTION_SUFFIX}"},
+    ),
+    "AbaqusSolver": (
+        "AbaqusSolver",
+        "abaqus_solver_builder_factory",
+        {"program": "${ABAQUS_PROGRAM}", "action_prefix": "${ACTION_PREFIX}", "action_suffix": "${ACTION_SUFFIX}"},
+    ),
     "AbaqusDatacheck": (
         "AbaqusDatacheck",
         "abaqus_solver_builder_factory",
-        {"program": "${ABAQUS_PROGRAM}", "emitter": scons_extensions.abaqus_datacheck_emitter},
+        {
+            "program": "${ABAQUS_PROGRAM}",
+            "emitter": scons_extensions.abaqus_datacheck_emitter,
+            "action_prefix": "${ACTION_PREFIX}",
+            "action_suffix": "${ACTION_SUFFIX}",
+        },
     ),
     "AbaqusExplicit": (
         "AbaqusExplicit",
         "abaqus_solver_builder_factory",
-        {"program": "${ABAQUS_PROGRAM}", "emitter": scons_extensions.abaqus_explicit_emitter},
+        {
+            "program": "${ABAQUS_PROGRAM}",
+            "emitter": scons_extensions.abaqus_explicit_emitter,
+            "action_prefix": "${ACTION_PREFIX}",
+            "action_suffix": "${ACTION_SUFFIX}",
+        },
     ),
     "AbaqusStandard": (
         "AbaqusStandard",
         "abaqus_solver_builder_factory",
-        {"program": "${ABAQUS_PROGRAM}", "emitter": scons_extensions.abaqus_standard_emitter},
+        {
+            "program": "${ABAQUS_PROGRAM}",
+            "emitter": scons_extensions.abaqus_standard_emitter,
+            "action_prefix": "${ACTION_PREFIX}",
+            "action_suffix": "${ACTION_SUFFIX}",
+        },
     ),
-    "PythonScript": ("PythonScript", "python_builder_factory", {"program": "${PYTHON_PROGRAM}"}),
+    "PythonScript": (
+        "PythonScript",
+        "python_builder_factory",
+        {"program": "${PYTHON_PROGRAM}", "action_prefix": "${ACTION_PREFIX}", "action_suffix": "${ACTION_SUFFIX}"},
+    ),
     "QuinoaSolver": (
         "QuinoaSolver",
         "quinoa_builder_factory",
-        {"program": "${CHARMRUN_PROGRAM}", "subcommand": "${INCITER_PROGRAM}"},
+        {
+            "program": "${CHARMRUN_PROGRAM}",
+            "subcommand": "${INCITER_PROGRAM}",
+            "action_prefix": "${ACTION_PREFIX}",
+            "action_suffix": "${ACTION_SUFFIX}",
+        },
     ),
     "CalculiX": (
         "CalculiX",
         "calculix_builder_factory",
-        {"program": "${CCX_PROGRAM}"},
+        {"program": "${CCX_PROGRAM}", "action_prefix": "${ACTION_PREFIX}", "action_suffix": "${ACTION_SUFFIX}"},
     ),
     "FierroExplicit": (
         "FierroExplicit",
         "fierro_explicit_builder_factory",
-        {"program": "${MPIRUN_PROGRAM}", "subcommand": "${FIERRO_EXPLICIT_PROGRAM}"},
+        {
+            "program": "${MPIRUN_PROGRAM}",
+            "subcommand": "${FIERRO_EXPLICIT_PROGRAM}",
+            "action_prefix": "${ACTION_PREFIX}",
+            "action_suffix": "${ACTION_SUFFIX}",
+        },
     ),
     "FierroImplicit": (
         "FierroImplicit",
         "fierro_implicit_builder_factory",
-        {"program": "${MPIRUN_PROGRAM}", "subcommand": "${FIERRO_IMPLICIT_PROGRAM}"},
+        {
+            "program": "${MPIRUN_PROGRAM}",
+            "subcommand": "${FIERRO_IMPLICIT_PROGRAM}",
+            "action_prefix": "${ACTION_PREFIX}",
+            "action_suffix": "${ACTION_SUFFIX}",
+        },
     ),
     "Sierra": (
         "Sierra",
         "sierra_builder_factory",
-        {"program": "${SIERRA_PROGRAM}"},
+        {"program": "${SIERRA_PROGRAM}", "action_prefix": "${ACTION_PREFIX}", "action_suffix": "${ACTION_SUFFIX}"},
     ),
-    "AnsysAPDL": ("AnsysAPDL", "ansys_apdl_builder_factory", {"program": "${ANSYS_PROGRAM}"}),
-    "SphinxBuild": ("SphinxBuild", "sphinx_build", {"program": "${SPHINX_BUILD_PROGRAM}"}),
-    "SphinxPDF": ("SphinxPDF", "sphinx_latexpdf", {"program": "${SPHINX_BUILD_PROGRAM}"}),
+    "AnsysAPDL": (
+        "AnsysAPDL",
+        "ansys_apdl_builder_factory",
+        {"program": "${ANSYS_PROGRAM}", "action_prefix": "${ACTION_PREFIX}", "action_suffix": "${ACTION_SUFFIX}"},
+    ),
+    "SphinxBuild": (
+        "SphinxBuild",
+        "sphinx_build",
+        {
+            "program": "${SPHINX_BUILD_PROGRAM}",
+        },
+    ),
+    "SphinxPDF": (
+        "SphinxPDF",
+        "sphinx_latexpdf",
+        {
+            "program": "${SPHINX_BUILD_PROGRAM}",
+        },
+    ),
     "Truchas": (
         "Truchas",
         "truchas_builder_factory",
-        {"program": "${MPIRUN_PROGRAM}", "subcommand": "${TRUCHAS_PROGRAM}"},
+        {
+            "program": "${MPIRUN_PROGRAM}",
+            "subcommand": "${TRUCHAS_PROGRAM}",
+            "action_prefix": "${ACTION_PREFIX}",
+            "action_suffix": "${ACTION_SUFFIX}",
+        },
     ),
 }
 
@@ -3007,27 +3916,103 @@ waves_environment_builders = {
     ids=waves_environment_builders.keys(),
 )
 def test_waves_environment_builders(builder: str, factory: str, factory_kwargs: dict[str, str]) -> None:
-    env = scons_extensions.WAVESEnvironment()
-
     args = ["arg1"]
     kwargs = {"kwarg1": "value1"}
     target = [f"{builder}.target"]
     source = [f"{builder}.source"]
-    mock_builder = unittest.mock.Mock()
 
-    attribute = getattr(env, builder)
-    with patch(f"waves.scons_extensions.{factory}", return_value=mock_builder) as mock_factory:
-        attribute(target, source, *args, **kwargs)
-        mock_factory.assert_called_once_with(**factory_kwargs)
-        mock_builder.assert_called_once_with(env, *args, target=target, source=source, **kwargs)
+    waves_env = scons_extensions.WAVESEnvironment()
+    with patch("waves._utilities.cache_environment"):
+        waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
+    for env in (waves_env, waves_shell_env):
+        mock_builder = unittest.mock.Mock()
+        attribute = getattr(env, builder)
+        with patch(f"waves.scons_extensions.{factory}", return_value=mock_builder) as mock_factory:
+            attribute(target, source, *args, **kwargs)
+            mock_factory.assert_called_once_with(**factory_kwargs)
+            mock_builder.assert_called_once_with(env, *args, target=target, source=source, **kwargs)
 
 
 def test_waves_environment_abaqus_pseudo_builder() -> None:
-    env = scons_extensions.WAVESEnvironment()
-
     args = ["arg1"]
     kwargs = {"kwarg1": "value1"}
-    with patch("waves.scons_extensions.AbaqusPseudoBuilder.__call__") as mock_call:
-        # Ignore type checks on a mock argument pass-through test
-        env.AbaqusPseudoBuilder("job", *args, **kwargs)  # type: ignore[arg-type]
-        mock_call.assert_called_once_with(env, "job", *args, **kwargs)
+
+    waves_env = scons_extensions.WAVESEnvironment()
+    with patch("waves._utilities.cache_environment"):
+        waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
+    for env in (waves_env, waves_shell_env):
+        with patch("waves.scons_extensions.AbaqusPseudoBuilder.__call__") as mock_call:
+            # Ignore type checks on a mock argument pass-through test
+            env.AbaqusPseudoBuilder("job", *args, **kwargs)  # type: ignore[arg-type]
+            mock_call.assert_called_once_with(env, "job", *args, **kwargs)
+
+
+# NOTE: update when the ``test_shell_environment_cases`` are updated
+# Should match case-for-case with an added ``ENV`` keyword argument and updated ``expected_environment``
+test_waves_shell_environment_cases = {
+    "default kwargs": (
+        {"ENV": {"thing1": "shouldbereplaced", "thing2": "shouldnotbereplaced"}},
+        {"thing1": "a"},
+        {"thing1": "a", "thing2": "shouldnotbereplaced"},
+    ),
+    "different shell": (
+        {"shell": "different shell", "ENV": {"thing1": "shouldbereplaced", "thing2": "shouldnotbereplaced"}},
+        {"thing1": "a"},
+        {"thing1": "a", "thing2": "shouldnotbereplaced"},
+    ),
+    "no cache": (
+        {
+            "cache": None,
+            "overwrite_cache": False,
+            "ENV": {"thing1": "shouldbereplaced", "thing2": "shouldnotbereplaced"},
+        },
+        {"thing1": "a"},
+        {"thing1": "a", "thing2": "shouldnotbereplaced"},
+    ),
+    "cache": (
+        {
+            "cache": "dummy.yaml",
+            "overwrite_cache": False,
+            "ENV": {"thing1": "shouldbereplaced", "thing2": "shouldnotbereplaced"},
+        },
+        {"thing1": "a"},
+        {"thing1": "a", "thing2": "shouldnotbereplaced"},
+    ),
+    "cache overwrite": (
+        {
+            "cache": "dummy.yaml",
+            "overwrite_cache": True,
+            "ENV": {"thing1": "shouldbereplaced", "thing2": "shouldnotbereplaced"},
+        },
+        {"thing1": "a"},
+        {"thing1": "a", "thing2": "shouldnotbereplaced"},
+    ),
+}
+
+
+@pytest.mark.skipif(
+    testing_windows,
+    reason=(
+        "Trace bad initiation through the correct way to instantiate an SCons environment outside of an SConscript"
+        " file."
+    ),
+)
+@pytest.mark.parametrize(
+    ("kwargs", "shell_environment", "expected_environment"),
+    test_waves_shell_environment_cases.values(),
+    ids=test_waves_shell_environment_cases.keys(),
+)
+def test_waves_shell_environment(kwargs: dict, shell_environment: dict, expected_environment: dict[str, str]) -> None:
+    expected_kwargs = {
+        "shell": "bash",
+        "cache": None,
+        "overwrite_cache": False,
+    }
+    expected_kwargs.update(kwargs)
+    expected_kwargs.pop("ENV")
+
+    with patch("waves._utilities.cache_environment", return_value=shell_environment) as cache_environment:
+        env = scons_extensions.WAVESShellEnvironment("dummy", **kwargs)
+        cache_environment.assert_called_once_with("dummy", **expected_kwargs, verbose=True)
+    # Check that the expected dictionary is a subset of the SCons construction environment
+    assert all(env["ENV"].get(key, None) == value for key, value in expected_environment.items())

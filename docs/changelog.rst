@@ -5,13 +5,316 @@ Changelog
 #########
 
 ******************
-1.1.0 (unreleased)
+1.6.0 (unreleased)
 ******************
 
 Enhancements
 ============
 - Add QOI histogram report. (:merge:`1263`). By `Matthew Fister`_.
 - Add support for 1D QOIs in tolerance report. (:merge:`1266`). By `Matthew Fister`_.
+
+******************
+1.5.1 (2026-07-22)
+******************
+
+Bug fixes
+=========
+- Only print ``meta_file`` attribute warning when user tries to use it directly. By `Kyle Brindley`_.
+
+Documentation
+=============
+- Simplify the parameter study output file behavior in modsim_template_2. By `Kyle Brindley`_.
+
+******************
+1.5.0 (2026-07-22)
+******************
+
+Breaking changes
+================
+- Accept entire ParameterGenerator class objects in CatenationStudy API. Required to preserve generator-specific
+  positional and keyword arguments (:issue:`1022`, :merge:`1325`). By `Kyle Brindley`_.
+- Change the parameter study CLI options ``--output-file-template`` to ``--output-directory`` and ``--write-meta`` flag
+  to ``--meta-file`` argument. Change driven by improved clarity in internal implementation and ease of testing. By
+  `Kyle Brindley`_.
+
+Bug fixes
+=========
+- Respect original parameter generator keyword arguments in CatenationStudy (:issue:`1022`, :merge:`1325`). By `Kyle Brindley`_.
+
+Enhancements
+============
+- Explicit ParameterGenerator write method API with full control over output file handling. Allows users to control
+  output files at write time instead of at parameter study configure time. Will enable a more flexible SCons
+  Pseudo-builder API with enhanced target file output control in the future. By `Kyle Brindley`_.
+- Accept scalar valued parameter values in CartesianProduct and OneAtATime parameter generators (:issue:`1007`,
+  :merge:`1323`). By `Erica Hinrichs`_.
+- Enable output control in the ParameterStudyWrite Pseudo-builder directly. No longer necessary to resolve the absolute
+  path of a parameter study at instantiation. Now possible to resolve output file paths with respect to SCons task
+  definition (:issue:`634`, :merge:`1328`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Refactor the parameter generator write behavior for clarity in internal implementation, improved testing, and
+  opportunity to define self-consistent behavior for an explicit write API. By `Kyle Brindley`_.
+
+******************
+1.4.5 (2026-07-08)
+******************
+
+Bug fixes
+=========
+- Preserve set name templates in CatenationStudy when merging disparate parameter spaces (:issue:`1021`, :merge:`1324`).
+  By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Unit test the warnings message for SALibSampler when SALib produces non-unique parameter sets (:issue:`1016`,
+  :merge:`1321`). By `Kyle Brindley`_.
+
+******************
+1.4.4 (2026-06-11)
+******************
+
+Enhancements
+============
+- Handle target and source list combinations of Abaqus standard/explicit, analysis/datacheck, with-restart/without-restart, and
+  with-MPI/without-MPI in the Abaqus PseudoBuilder (:issue:`821`, :issue:`989`, :merge:`1319`). By `Kyle Brindley`_.
+- More complete target emitter for ``abaqus_explicit_emitter`` and ``AbaqusExplicit`` builder (:issue:`821`, :issue:`989`,
+  :merge:`1319`). By `Kyle Brindley`_.
+- Allow initialization of a shell command environment with the WAVES builders (:issue:`1019`, :merge:`1318`). By `Erica
+  Hinrichs`_ and `Kyle Brindley`_.
+
+Internal Changes
+================
+- Set ``TMPDIR`` on \*nix CI servers to redirect all build artifacts to the CI working directory for more robust
+  cleanup. By `Kyle Brindley`_.
+
+******************
+1.4.3 (2026-05-26)
+******************
+
+Enhancements
+============
+- Experimental enhancement to preserve original indices in parameter studies. Only tested against
+  :class:`waves.parameter_generators.SALibSampler`. Incompatible with parameter study merge behavior such as
+  :class:`waves.parameter_generators.CatenationStudy` and the ``previous_parameter_study`` argument. See the
+  :class:`waves.parameter_generators.SALibSampler` for usage and caveats (:issue:`1014`, :merge:`1312`). By `Kyle
+  Brindley`_.
+- Support scanning for files in directives from unordered list and list-table syntax in the Sphinx scanner
+  (:issue:`1018`, :merge:`1315`). By `Kyle Brindley`_.
+- Simplify the modsim template report workflow definition by co-locating in the documentation source directory. By `Kyle
+  Brindley`_.
+
+Internal Changes
+================
+- Manage cache behavior and environment changes in rattler-build on the CI servers. By `Kyle Brindley`_.
+- Enable parallel safe rattler-build matrix for testing version combinations of Python and key dependencies. By `Kyle
+  Brindley`_.
+- Skip visualize unit tests with frequent intermittent false negatives on Windows. By `Kyle Brindley`_.
+
+******************
+1.4.2 (2026-04-23)
+******************
+
+Bug fixes
+=========
+- Update the sensitivity tutorial to use a known WAVES parameter generator compatible sample-analyze method pair for
+  sensitivity analysis and add a warning about SALib compatibilities (:issue:`1013`, :merge:`1311`). By `Kyle
+  Brindley`_.
+
+Documentation
+=============
+- Update the SALibSampler with known WAVES parameter generator compatible sample-analyze method pairs for sensitivity
+  analysis (:issue:`1013`, :merge:`1311`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Fix the Windows conda-build CI test (:merge:`1309`). By `Kyle Brindley`_.
+- Skip intermediate shell invocation during shell environment recovery function. Users may need to catch
+  ``FileNotFoundError`` when handling environment recovery that cannot succeed because the shell is missing, e.g.
+  workflows executing on Windows that can only fully configure with a bash shell (:issue:`1011`, :merge:`1310`). By
+  `Kyle Brindley`_.
+- Test the internal shell environment recovery function against real shell execution (:issue:`1011`, :merge:`1310`). By
+  `Kyle Brindley`_.
+- Test SALib analysis functions for compatibility with WAVES re-ordered parameter samples (:issue:`1013`,
+  :merge:`1311`). By `Kyle Brindley`_.
+
+******************
+1.4.1 (2026-04-21)
+******************
+
+Bug fixes
+=========
+- Fix behavior when merging parameter studies with parameters containing strings of mixed length (:issue:`991`,
+  :merge:`1308`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Add caching support with unshared and protected shared cache options to the modsim templates (:issue:`905`,
+  :merge:`1286`). By `Chris Johnson`_.
+
+******************
+1.4.0 (2026-04-06)
+******************
+
+Bug fixes
+=========
+- Fix the behavior of the project alias function when no SCons environment is provided. By `Kyle Brindley`_.
+- Manage XArray netcdf bug where post-merged datasets may have truncated strings in coordinates:
+  https://github.com/primap-community/primap2/issues/325, https://github.com/pydata/xarray/issues/9037. By
+  (:merge:`1306`) `Kyle Brindley`_.
+
+New Features
+============
+- Add project cache directory function and WAVES Environment method to assist active cache directory assignment and
+  protection of the shared cache (:issue:`1004`, :merge:`1304`). By `Chris Johnson`_.
+
+******************
+1.3.1 (2026-03-19)
+******************
+
+Bug fixes
+=========
+- Consistent append or prepend PATH-like modifications in the ``add_cubit`` method. All PATH-like modifications are now
+  performed with the same behavior to avoid mixing different versions of Cubit executables to incorrect Python and
+  compiled libraries when more than one version is found in the construction environment (:merge:`1302`). By `Kyle
+  Brindley`_.
+
+Enhancements
+============
+- Default to prepending PATH in the ``add_program`` method. Matches user expectations when updating an environment PATH
+  with more than one version of the same software. Last added version is found on PATH first (:merge:`1302`). By `Kyle
+  Brindley`_.
+- Allow prepend/append selection in ``add_program`` and ``add_cubit`` PATH modifications (:merge:`1302`). By `Kyle
+  Brindley`_.
+
+Documentation
+=============
+- Update WAVESEnvironment methods with more complete docstrings and explicit API descriptions where they previously
+  pointed to the underlying method's API (:merge:`1303`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Handle OS-specific test expecations in resolved absolute paths, e.g. Windows "C:\" prefix (:merge:`1302`). By `Kyle
+  Brindley`_.
+- More complete testing of the WAVESEnvironment methods (:merge:`1303`). By `Kyle Brindley`_.
+
+******************
+1.3.0 (2026-03-17)
+******************
+
+New Features
+============
+- Provide a shell script based method to workaround command line length restrictions for large archive creation
+  (:issue:`1003`, :merge:`1300`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Minor simplifications to tutorial and modsim template SCons command-line options and environment setup. By `Kyle
+  Brindley`_.
+- Enable archive of mesh convergence workflow in modsim templates on Windows (:issue:`1003`, :merge:`1300`). By `Kyle
+  Brindley`_.
+- Simplify the Gmsh+CalculiX tutorial SCons configuration by reducing pass through variables. By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Set the WAVES CLI command-line call internally for developer testing to avoid putting developer test behavior in
+  tutorials and user-facing files (:merge:`1299`). By `Kyle Brindley`_.
+- More complete cleanup after Windows CI server jobs. By `Kyle Brindley`_.
+- Force the writing tutorials 'solver' to explicitly run with Python on Windows to fix the CI test hanging behavior. By
+  `Kyle Brindley`_.
+- Remove the Windows modsim template archive alias skip in the system tests (:issue:`1003`, :merge:`1300`). By `Kyle
+  Brindley`_.
+
+******************
+1.2.1 (2026-03-11)
+******************
+
+Bug fixes
+=========
+- Replace WAVES <1.2.0 and >=1.2.0 action prefix patterns in SSH builder actions (:merge:`1297`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Use a more SCons native solution to finding the project root directory and root configuration file in the tutorials
+  and modsim templates (:issue:`1001`, :merge:`1295`). By `Kyle Brindley`_.
+- Simplify alias definitions in tutorials and modsim templates (:merge:`1296`). By `Kyle Brindley`_.
+- Replace custom QOI regression test script with WAVES QOI module and pseudo-builder in modsim templates
+  (:merge:`1296`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Removed the explicit VTK dependency pins (:issue:`901`, :merge:`901`). By `Erica Hinrichs`_.
+
+******************
+1.2.0 (2026-03-09)
+******************
+
+Internal Changes
+================
+- Stricter unit tests for parameter generator generate method by including calculated parameter set hash indices
+  (:issue:`997`, :merge:`1292`). By `Chris Johnson`_.
+- Run system tests against a Cubit 17 and 16 version (:issue:`996`, :merge:`1291`). By `Kyle Brindley`_.
+- Update the Conda recipe matrix test script to be stand-alone and not depend on CI job variables. By `Kyle Brindley`_.
+- Add Python 3.14 and SCons 4.9,4.10 to Conda recipe dependency matrix tests. By `Kyle Brindley`_.
+
+Enhancements
+============
+- Escape the ``cd`` command in the default action prefix to avoid putting system absolute paths and binaries in task
+  definition source lists. Helps when using a shared project cache from more than one server (:issue:`995`,
+  :merge:`1289`). By `Kyle Brindley`_.
+- Allow action prefix and suffix overrides for the WAVES construction environment. Enables overrides to default
+  behavior once at the environment level instead of once per builder (:issue:`994`, :merge:`1290`). By `Kyle Brindley`_.
+- Verify parameter study content hashes at generation to catch mismatched or unsupported type errors earlier
+  with a meaningful user error message (:issue:`993`, :merge:`1287`). By `Chris Johnson`_.
+- Convert parameter schema NumPy input types to Python built-in types prior to generation (:issue:`992`, :merge:`1288`).
+  By `Chris Johnson`_.
+
+******************
+1.1.1 (2026-01-14)
+******************
+
+Bug fixes
+=========
+- Add set number placeholder to set name templates that lack it (:issue:`990`, :merge:`1281`). By  `Chris Johnson`_.
+
+Documentation
+=============
+- Update PyPI package classifiers to reflect stable release status. By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Parameter generator attributes derived from the user supplied keyword arguments are now read-only attributes (:issue:`949`,
+  :merge:`1279`). By `Chris Johnson`_.
+- More robust third-party executable path handling in system test pass through constructions (:merge:`1275`). By `Kyle
+  Brindley`_.
+- Internal API type hint updates to match implemented use for static type checking (:merge:`1278`). By `Kyle Brindley`_.
+- Use and test Abaqus 2025. Preserves scheduled testing against Abaqus 2024 and 2023. By `Kyle Brindley`_.
+- Convert from deprecated ``boa`` packager back to vanilla ``conda-build`` as an interim solution to migrating to the
+  conda-forge preferred ``rattler-build`` packager with an updated recipe syntax. By `Kyle Brindley`_.
+- Drop support for numpy v1, which reached end-of-life in 2025. By `Kyle Brindley`_.
+
+******************
+1.1.0 (2025-11-19)
+******************
+
+New Features
+============
+- Add CatenationStudy parameter generator (:issue:`845`, :merge:`1262`). By  `Chris Johnson`_.
+
+Internal Changes
+================
+- Add system tests Cubit tutorial on Windows (:issue:`983`, :merge:`1271`). By `Kyle Brindley`_.
+
+Enhancements
+============
+- Allow path handling overrides in the SCons extensions programs (``find_program``, ``add_program``, ``add_cubit``) to
+  change the behavior of quoting path parts containing spaces. Allows Windows users to manage PYTHONPATH for programs
+  installed in ``C:\Program Files``, e.g. Cubit (:issue:`983`, :merge:`1271`). By `Kyle Brindley`_.
+- Avoid quoting spaces in path parts in the Cubit tutorial. Allows execution of the tutorial on Windows (:issue:`983`,
+  :merge:`1271`). By `Kyle Brindley`_.
+- Include an OS-agnostic text replacement script in the Cubit tutorials. Replaces the ``sed`` command to allow tutorial
+  to run on Windows (:issue:`983`, :merge:`1271`). By `Kyle Brindley`_.
 
 ******************
 1.0.2 (2025-11-13)
@@ -32,7 +335,7 @@ Internal Changes
 
 Enhancements
 ============
-- Add QOI histogram report. (:merge:`1263`). By `Matthew Fister`_.
+- Add QOI histogram report (:merge:`1263`). By `Matthew Fister`_.
 
 ******************
 1.0.1 (2025-10-10)
@@ -969,7 +1272,7 @@ Breaking changes
 - Remove the largely unused ``post_action`` builder behavior in favor of more modifiable builders and action modifier
   functions. Similar behavior can be provided on a per-target basis with the `SCons AddPostAction`_ feature
   (:issue:`725`, :merge:`898`). By `Kyle Brindley`_.
-- Replace the rsync options with a keyword argument in the  SSH builder actions (:issue:`728`, :merge:`899`). By `Kyle
+- Replace the rsync options with a keyword argument in the SSH builder actions (:issue:`728`, :merge:`899`). By `Kyle
   Brindley`_.
 
 New Features
@@ -1056,7 +1359,7 @@ Internal Changes
 Documentation
 =============
 - Clean up the index by removing the Python method entries (:issue:`699`, :merge:`873`). By `Kyle Brindley`_.
-- Update the GitHub URLs for the migration to https://github.com/lanl-aea (:issue:`700`, :merge:`874`).  By `Kyle
+- Update the GitHub URLs for the migration to https://github.com/lanl-aea (:issue:`700`, :merge:`874`). By `Kyle
   Brindley`_.
 
 ******************
@@ -2955,7 +3258,7 @@ Documentation
 Internal Changes
 ================
 - Remove remnants of the parameter study file I/O that is no longer necessary from the cartesian product configuration
-  (:issue:`184`, :merge:`161`).  By `Kyle Brindley`_.
+  (:issue:`184`, :merge:`161`). By `Kyle Brindley`_.
 - Remove the ``.jnl`` file from the list of targets appended by the Abaqus journal builder (:issue:`180`, :merge:`162`).
   By `Matthew Fister`_.
 - Explicitly manage the ``.jnl`` target additions for more complete SCons clean operations (:issue:`185`, :merge:`168`).
@@ -3201,7 +3504,7 @@ Internal Changes
   Brindley`_.
 - Move Conda package constants into a package internal settings file. Remove as many project settings from SCons
   configuration files as possible (:issue:`64`, :merge:`55`). By `Kyle Brindley`_.
-- Separate the parametery study utility from the parameter generators module (:issue:`64`, :merge:`55`).  By `Kyle
+- Separate the parametery study utility from the parameter generators module (:issue:`64`, :merge:`55`). By `Kyle
   Brindley`_.
 - Handle parameter study utility missing positional arguments gracefully by printing usage (:issue:`64`, :merge:`55`).
   By `Kyle Brindley`_.

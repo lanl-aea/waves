@@ -1,7 +1,5 @@
 #! /usr/bin/env python
-"""Configure the WAVES modsim template project."""
 
-import inspect
 import os
 import pathlib
 import sys
@@ -11,7 +9,7 @@ import waves
 # Accept command line options with fall back default values
 AddOption(
     "--build-dir",
-    dest="variant_dir_base",
+    dest="build_directory",
     default="build",
     nargs=1,
     type="string",
@@ -37,17 +35,39 @@ AddOption(
     help="Run the Abaqus Solve task using N CPUs. (default: '%default')",
 )
 AddOption(
-    "--print-build-failures",
-    dest="print_build_failures",
-    default=False,
+    "--cache-dir",
+    dest="cache_directory",
+    default=None,
+    action="store",
+    metavar="DIR",
+    help="SCons cache directory. Relative or absolute path. (default: '%default')",
+)
+AddOption(
+    "--shared-cache-dir",
+    dest="shared_cache_directory",
     action="store_true",
-    help="Print task *.stdout target file(s) on build failures. (default: '%default')",
+    default=False,
+    help=(
+        "Override the ``--cache-dir`` with the shared project cache. Must also use SCons native "
+        "``--cache-readonly`` option to access the shared project cache (default: '%default')."
+    ),
+)
+AddOption(
+    "--shared-cache-override",
+    dest="shared_cache_override",
+    action="store_true",
+    default=False,
+    help=(
+        "WARNING: MAKES THE PROJECT SHARED BUILD CACHE WRITABLE."
+        " Allow write access to the project shared build cache. MUST NOT SPECIFY ``--cache-readonly`` or SCons will"
+        " override this option when configuring the build cache directory."
+    ),
 )
 # Python optparse appends to the default list instead of overriding. Must implement default/override ourselves.
 default_abaqus_commands = [
-    "/apps/abaqus/Commands/abq2024",
-    "/usr/projects/ea/abaqus/Commands/abq2024",
-    "abq2024",
+    "/apps/abaqus/Commands/abq2025",
+    "/usr/projects/ea/abaqus/Commands/abq2025",
+    "abq2025",
     "abaqus",
 ]
 AddOption(
@@ -61,28 +81,28 @@ AddOption(
 )
 
 # Inherit user's full environment and set project options
+build_directory = pathlib.Path(GetOption("build_directory"))
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
-    variant_dir_base=pathlib.Path(GetOption("variant_dir_base")),
     unconditional_build=GetOption("unconditional_build"),
     solve_cpus=GetOption("solve_cpus"),
-    print_build_failures=GetOption("print_build_failures"),
-    abaqus_commands=GetOption("abaqus_command"),
     TARFLAGS="-c -j",
     TARSUFFIX=".tar.bz2",
 )
-
-# Conditionally print failed task *.stdout files
-env.PrintBuildFailures(print_stdout=env["print_build_failures"])
+env.PrintBuildFailures()
 
 # Empty defaults list to avoid building all simulation targets by default
 env.Default()
 
+# Make the modsim package importable for: (1) SConscript files and (2) Python and Abaqus Python environments
+project_directory = pathlib.Path(Dir("#").abspath)
+sys.path.insert(0, str(project_directory))
+env.PrependENVPath("PYTHONPATH", project_directory)
+
+from modsim_package import __version__ as version  # noqa: E402
+
 # Set project internal variables and variable substitution dictionaries
-project_configuration = pathlib.Path(inspect.getfile(lambda: None))
-project_dir = project_configuration.parent
-project_name = project_dir.name
-version = "0.1.0"
+project_name = project_directory.name
 author_list = [
     "Kyle Brindley",
     "Prabhu S. Khalsa",
@@ -94,12 +114,12 @@ author_list = [
 ]
 author_latex = r" \and ".join(author_list)
 latex_project_name = project_name.replace("_", "-")
-documentation_source_dir = pathlib.Path("docs")
 modsim_package_dir = pathlib.Path("modsim_package")
 test_source_dir = "modsim_package/tests"
+# The shared cache should be hardcoded to point to the project's shared cache on a shared file system
+shared_cache_dir = project_directory / "shared_cache"
 project_variables = {
-    "project_configuration": project_configuration,
-    "project_dir": project_dir,
+    "project_directory": project_directory,
     "project_name": project_name,
     "version": version,
     "author_list": author_list,
@@ -107,24 +127,31 @@ project_variables = {
     "author_latex": author_latex,
     "documentation_pdf": f"{latex_project_name}-{version}.pdf",
     "report_pdf": f"{latex_project_name}-{version}-report.pdf",
-    "documentation_abspath": project_dir / documentation_source_dir,
-    "modsim_package_abspath": project_dir / modsim_package_dir,
-    "test_source_abspath": project_dir / test_source_dir,
-    "datacheck_alias": "datacheck",
-    "regression_alias": "regression",
+    "test_source_abspath": project_directory / test_source_dir,
 }
 for key, value in project_variables.items():
     env[key] = value
 
-# Make the modsim package importable for: (1) SConscript files and (2) Python and Abaqus Python environments
-sys.path.insert(0, str(project_dir))
-env.PrependENVPath("PYTHONPATH", project_dir)
+# Set cache properties
+if GetOption("shared_cache_directory"):
+    cache_dir = shared_cache_dir
+    print(
+        (f"WARNING: Overriding ``--cache-dir`` with the project's shared build cache directory {shared_cache_dir}"),
+        file=sys.stderr,
+    )
+else:
+    cache_dir = GetOption("cache_directory")
+build_cache_directory = env.ProjectCacheDirectory(
+    shared_cache_dir,
+    cache_dir,
+    GetOption("cache_readonly"),
+    GetOption("shared_cache_override"),
+)
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env["SPHINX_BUILD"] = env.AddProgram(["sphinx-build"])
-env["ABAQUS_PROGRAM"] = env.AddProgram(
-    env["abaqus_commands"] if env["abaqus_commands"] is not None else default_abaqus_commands
-)
+abaqus_commands = GetOption("abaqus_command")
+env["ABAQUS_PROGRAM"] = env.AddProgram(abaqus_commands if abaqus_commands is not None else default_abaqus_commands)
 
 # Add WAVES builders and scanners
 env.Append(
@@ -134,10 +161,17 @@ env.Append(
     }
 )
 env.Append(SCANNERS=waves.scons_extensions.sphinx_scanner())
+env.AddMethod(
+    waves.scons_extensions.QOIPseudoBuilder(
+        collection_dir=(build_directory / "qoi").resolve(),
+        build_dir=build_directory.resolve(),
+    ),
+    "QOI",
+)
 
 # Dump the Conda environment as documentation of as-built target environment
 environment_target = env.CondaEnvironment(
-    target=[env["variant_dir_base"] / "environment.yaml"],
+    target=[build_directory / "environment.yaml"],
     source=[],
 )
 env.AlwaysBuild(environment_target)
@@ -145,21 +179,17 @@ env.Alias("environment", environment_target)
 
 # Add documentation target(s)
 # Project documentation
-build_dir = env["variant_dir_base"] / documentation_source_dir
 SConscript(
-    documentation_source_dir / "SConscript",
-    variant_dir=build_dir,
+    "docs/docs.scons",
+    variant_dir=build_directory / "docs",
     exports={"env": env, "project_variables": project_variables},
 )
 
 # Analysis report
-report_dir = pathlib.Path("report")
-build_dir = env["variant_dir_base"] / report_dir
 SConscript(
-    report_dir / "SConscript",
-    variant_dir=build_dir,
+    "docs/report.scons",
+    variant_dir=build_directory / "report",
     exports={"env": env, "project_variables": project_variables},
-    duplicate=True,
 )
 
 # Add simulation targets
@@ -169,14 +199,14 @@ workflow_configurations = [
     "rectangle_compression-mesh_convergence.scons",
 ]
 for workflow in workflow_configurations:
-    build_dir = env["variant_dir_base"] / pathlib.Path(workflow).stem
-    SConscript(workflow, variant_dir=build_dir, exports={"env": env}, duplicate=False)
+    workflow_build_directory = build_directory / pathlib.Path(workflow).stem
+    SConscript(workflow, variant_dir=workflow_build_directory, exports={"env": env}, duplicate=False)
 # Marker: workflow-configurations-start-do-not-remove
 
 # Add unit test target
 test_workflow = "unit_testing.scons"
-test_build_dir = env["variant_dir_base"] / pathlib.Path(test_workflow).stem
-SConscript(test_workflow, variant_dir=test_build_dir, exports={"env": env}, duplicate=False)
+test_build_directory = build_directory / pathlib.Path(test_workflow).stem
+SConscript(test_workflow, variant_dir=test_build_directory, exports={"env": env}, duplicate=False)
 
 # Add default target list to help message
 # Add aliases to help message so users know what build target options are available

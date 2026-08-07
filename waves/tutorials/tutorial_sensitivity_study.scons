@@ -5,8 +5,6 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
-  * ``regression_alias`` - String for the alias collecting the regression test suite targets
   * ``archive_prefix`` - String prefix for archive target(s) containing identifying project and version information
   * ``project_configuration`` - String absolute path to the project SCons configuration file
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
@@ -48,11 +46,10 @@ datacheck = []
 parameter_generator = waves.parameter_generators.SALibSampler(
     "sobol",
     parameter_schema(),
-    output_file=parameter_study_file,
     previous_parameter_study=parameter_study_file,
     **kwargs,
 )
-parameter_generator.write()
+parameter_generator.write(output_file=parameter_study_file)
 
 # Comment used in tutorial code snippets: marker-3
 
@@ -201,12 +198,12 @@ archive_target = env.Tar(
 # Collector alias based on parent directory name
 env.Alias(workflow_name, workflow)
 env.Alias(f"{workflow_name}_datacheck", datacheck)
-env.Alias(env["datacheck_alias"], datacheck)
-env.Alias(env["regression_alias"], datacheck)
+env.Alias("datacheck", datacheck)
+env.Alias("regression", datacheck)
 env.Alias(f"{workflow_name}_archive", archive_target)
 
 if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
     Ignore([".", workflow_name], workflow)
     Ignore([".", f"{workflow_name}_datacheck"], datacheck)
-    Ignore([".", env["datacheck_alias"], env["regression_alias"]], datacheck)
+    Ignore([".", "datacheck", "regression"], datacheck)

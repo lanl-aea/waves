@@ -1,15 +1,15 @@
 #! /usr/bin/env python
-"""Configure the WAVES writing builders tutorial."""
 
 import os
 import pathlib
+import platform
 
 import scons_extensions
 import waves
 
 AddOption(
     "--build-dir",
-    dest="variant_dir_base",
+    dest="build_directory",
     default="build",
     nargs=1,
     type="string",
@@ -28,9 +28,9 @@ AddOption(
     help="Run the solver task using N CPUs. (default: '%default')",
 )
 
+build_directory = pathlib.Path(GetOption("build_directory"))
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
-    variant_dir_base=pathlib.Path(GetOption("variant_dir_base")),
     solve_cpus=GetOption("solve_cpus"),
 )
 env["ENV"]["PYTHONDONTWRITEBYTECODE"] = 1
@@ -50,7 +50,7 @@ env["solver"] = env.AddProgram([solver_executable])
 # on Windows, force execution with the Python interpretter and absolute path.
 #
 # VVV Code specific to making tutorial execution more robust VVV
-if env["solver"] is None:
+if env["solver"] is None or platform.system().lower() == "windows":
     env["solver"] = f"python {solver_executable}"
 # ^^^ Code specific to making tutorial execution more robust ^^^
 
@@ -68,8 +68,8 @@ workflow_configurations = [
     "implicit_workflow.scons",
 ]
 for workflow in workflow_configurations:
-    build_dir = env["variant_dir_base"] / pathlib.Path(workflow).stem
-    SConscript(workflow, variant_dir=build_dir, exports={"env": env}, duplicate=False)
+    workflow_build_directory = build_directory / pathlib.Path(workflow).stem
+    SConscript(workflow, variant_dir=workflow_build_directory, exports={"env": env}, duplicate=False)
 
 # Print project local help
 env.ProjectHelp()

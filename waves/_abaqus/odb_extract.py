@@ -169,7 +169,7 @@ def odb_extract(
         )
         file_suffix = output_type
 
-    time_stamp = datetime.datetime.now().strftime(_settings._default_timestamp_format)
+    time_stamp = datetime.datetime.now().astimezone().strftime(_settings._default_timestamp_format)
     job_name = path_output_file.with_suffix(".csv")
     if path_output_file.exists():
         new_output_file = f"{path_output_file.with_suffix('')!s}_{time_stamp}.{file_suffix}"
@@ -243,10 +243,10 @@ def get_odb_report_args(odb_report_args: str, input_file: pathlib.Path, job_name
     :param input_file: ``.odb`` file.
     :param job_name: Report file.
     """
-    input_file = _quote_spaces_in_path(input_file)
-    job_name = _quote_spaces_in_path(job_name)
+    input_file_string = _quote_spaces_in_path(input_file)
+    job_name_string = _quote_spaces_in_path(job_name.with_suffix(""))
 
-    required_arguments = f"-job {job_name.with_suffix('')} -odb {input_file} -mode CSV -blocked"
+    required_arguments = f"-job {job_name_string} -odb {input_file_string} -mode CSV -blocked"
     if not odb_report_args:
         odb_report_args = f"-all {required_arguments}"
     else:

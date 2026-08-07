@@ -3,8 +3,9 @@ channels:
   - nodefaults
 
 dependencies:
-  - boa
-  - pytest
+  - pandas
+  - pytest >=6
+  - rattler-build >=0.66.2
   - scons >=4.6
   - setuptools >=77
   - setuptools_scm >=8

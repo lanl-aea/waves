@@ -1,3 +1,7 @@
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
+
 include: ".pipeline-common.yml"
 
 stages:
@@ -8,82 +12,35 @@ default:
     - windows
     - pn2606796
 
-.win-job-environment: &win-job-environment
-  variables:
-    GIT_STRATEGY: clone
-    conda_installation: "C:/ProgramData/miniconda3"
-    environment_file: "environment-win.yml"
-  before_script:
-    - $PSVersionTable
-    - $env:username
-    - git config --list --show-origin | Select-String -Pattern "symlinks="
-    - git ls-tree -r HEAD | Select-String -Pattern "^120" | Measure-Object -Line
-    - Get-ChildItem -Recurse | Where-Object { $_.LinkType -eq 'SymbolicLink' } | Measure-Object -Line
-    - if ([string]::IsNullOrEmpty($environment_file)) { exit 1 }
-    - if ([string]::IsNullOrEmpty($conda_installation)) { exit 1 }
-    # Common job variables
-    - $prefix="$pwd\conda-environment"
-    - $conda_pkgs_dirs="$pwd\conda-pkgs"
-    - Write-Output $conda_installation
-    - Write-Output $environment_file
-    - Write-Output $prefix
-    - Write-Output $conda_pkgs_dirs
-    - if (!(Test-Path -Path $conda_installation -PathType Container)) { exit 1 }
-    - if ([string]::IsNullOrEmpty($prefix)) { exit 1 }
-    # Environment creation
-    - $env:CONDA_PKGS_DIRS=$conda_pkgs_dirs
-    - (& "$conda_installation\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | ?{$_} | Invoke-Expression
-    - conda info
-    - conda env create --prefix $prefix --file $environment_file --yes
-    - conda activate $prefix
-    - python -c "import getpass; print(getpass.getuser())"
-  after_script:
-    - Remove-Item -Force -Recurse $pwd\conda-environment -ErrorAction Continue
-    - Remove-Item -Force -Recurse $pwd\conda-pkgs -ErrorAction Continue
-
 win-developer-test:
   extends:
     - .win-job-environment
     - .developer-test-no-third-party
   stage: test
-  rules:
-    - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
-    - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
 
 win-conda-build:
-  # VVV TODO: Remove when conda-build CI jobs run on the new Windows CI server
-  tags:
-    - powershell
-    - aea
-  # ^^^ TODO: Remove when conda-build CI jobs run on the new Windows CI server
   extends:
     - .win-job-environment
   stage: test
-  rules:
-    - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
-    - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
   variables:
     environment_file: "conda-build.yml"
     recipe_directory: "recipe"
-    # VVV TODO: Remove when conda-build CI jobs run on the new Windows CI server
-    conda_installation: "C:/ProgramData/anaconda3"
-    # ^^^ TODO: Remove when conda-build CI jobs run on the new Windows CI server
   script:
     # Job variables
+    - $temporary_directory=(Join-Path ([System.IO.Path]::GetTempPath()) "$CI_JOB_ID")
+    - Write-Output $temporary_directory
+    - if (!(Test-Path -Path $temporary_directory)) { New-Item -ItemType Directory -Path $temporary_directory }
     - Write-Output $recipe_directory
     - if ([string]::IsNullOrEmpty($recipe_directory)) { exit 1 }
     # Job commands
     - scons pyproject.toml
     - $env:VERSION=python -m setuptools_scm
-    - conda mambabuild $recipe_directory --channel conda-forge --no-anaconda-upload
+    - rattler-build build --recipe $recipe_directory --channel conda-forge --output-dir $temporary_directory\conda-bld
 
 win-pip-build:
   extends:
     - .win-job-environment
   stage: test
-  rules:
-    - if: $PARENT_CI_PIPELINE_SOURCE == "schedule"
-    - if: $PARENT_CI_PIPELINE_SOURCE == "merge_request_event"
   variables:
     distribution_name: "waves"
     environment_file: "pip-build.yml"

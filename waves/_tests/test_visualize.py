@@ -7,8 +7,11 @@ import networkx
 import pytest
 
 from waves import _visualize
+from waves._tests.common import check_ci_user, platform_check
 
 does_not_raise = contextlib.nullcontext()
+testing_windows, root_fs, testing_macos = platform_check()
+testing_ci_user = check_ci_user()
 
 test_ancestor_subgraph_cases = {
     "node not found": (
@@ -244,6 +247,10 @@ def test_check_regex_exclude(
     )
 
 
+@pytest.mark.skipif(
+    testing_windows and testing_ci_user,
+    reason="frequent source of Windows CI false negatives with intermittent TCL file handling issues",
+)
 def test_visualize() -> None:
     """Sign-of-life test for the visualize figure."""
     graph = networkx.DiGraph()
@@ -253,6 +260,10 @@ def test_visualize() -> None:
     _visualize.visualize(graph)
 
 
+@pytest.mark.skipif(
+    testing_windows and testing_ci_user,
+    reason="frequent source of Windows CI false negatives with intermittent TCL file handling issues",
+)
 def test_plot() -> None:
     """Check that the expected plot output function is called."""
     figure, _axes = matplotlib.pyplot.subplots()

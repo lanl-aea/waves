@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-"""Configure the WAVES Truchas tutorial."""
 
 import os
 import pathlib
@@ -9,7 +8,7 @@ import waves
 # Accept command line options with fall back default values
 AddOption(
     "--build-dir",
-    dest="build_dir",
+    dest="build_directory",
     default="build",
     nargs=1,
     type="string",
@@ -31,8 +30,8 @@ AddOption(
     help=f"Override for the Truchas command. Repeat to specify more than one (default: {default_truchas_commands})",
 )
 default_cubit_commands = [
-    "/apps/Cubit-16.12/cubit",
-    "/usr/projects/ea/Cubit/Cubit-16.12/cubit",
+    "/apps/Cubit-17.06/cubit",
+    "/usr/projects/ea/Cubit/Cubit-17.06/cubit",
     "cubit",
 ]
 AddOption(
@@ -46,13 +45,13 @@ AddOption(
 )
 
 # Inherit user's full environment and set project options
+build_directory = pathlib.Path(GetOption("build_directory"))
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
-    build_dir=pathlib.Path(GetOption("build_dir")),
     truchas_commands=GetOption("truchas_command"),
     cubit_commands=GetOption("cubit_command"),
 )
-env["parameter_study_directory"] = env["build_dir"] / "parameter_studies"
+env["parameter_study_directory"] = build_directory / "parameter_studies"
 
 # Always copy (no sym-links) when duplicating
 env.SetOption("duplicate", "copy")
@@ -108,10 +107,9 @@ mesh_convergence_parameter_generator = waves.parameter_generators.CartesianProdu
         "global_seed": [1.0, 0.5, 0.25, 0.125],
         "displacement": [-0.01],
     },
-    output_file=mesh_convergence_parameter_study_file,
     previous_parameter_study=mesh_convergence_parameter_study_file,
 )
-mesh_convergence_parameter_generator.write()
+mesh_convergence_parameter_generator.write(output_file=mesh_convergence_parameter_study_file)
 
 # Add workflow(s)
 workflow_configurations = [
@@ -121,7 +119,7 @@ workflow_configurations = [
 for study_name, study_definition in workflow_configurations:
     env.ParameterStudySConscript(
         "SConscript",
-        variant_dir=env["build_dir"] / study_name,
+        variant_dir=build_directory / study_name,
         exports={"env": env, "env_cubit": env_cubit, "alias": study_name},
         study=study_definition,
         subdirectories=True,

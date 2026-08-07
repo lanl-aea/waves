@@ -700,10 +700,16 @@ test__propagate_identical_attrs_cases = {
     ),
     "datetime": (
         [
-            {"a": datetime.datetime(2025, 1, 1), "b": datetime.datetime(2025, 1, 1)},
-            {"a": datetime.datetime(2025, 1, 1), "b": datetime.datetime(2024, 1, 1)},
+            {
+                "a": datetime.datetime(2025, 1, 1, tzinfo=datetime.timezone.utc),
+                "b": datetime.datetime(2025, 1, 1, tzinfo=datetime.timezone.utc),
+            },
+            {
+                "a": datetime.datetime(2025, 1, 1, tzinfo=datetime.timezone.utc),
+                "b": datetime.datetime(2024, 1, 1, tzinfo=datetime.timezone.utc),
+            },
         ],
-        {"a": datetime.datetime(2025, 1, 1)},
+        {"a": datetime.datetime(2025, 1, 1, tzinfo=datetime.timezone.utc)},
     ),
     "single_dict": (
         [{"a": 1, "b": 2}],

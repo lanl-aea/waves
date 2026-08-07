@@ -3,7 +3,6 @@ channels:
   - nodefaults
 
 dependencies:
-  - boa
   - calculix
   - ccx2paraview >=3.2
   - h5netcdf
@@ -12,7 +11,6 @@ dependencies:
   - meshio
   - mypy
   - networkx
-  # Required to satisfy undocumented SALib dependencies on numpy version
   - numpy >=2
   - pandas
   - pip
@@ -22,8 +20,8 @@ dependencies:
   - python-build
   - python-gmsh
   - pyyaml
+  - rattler-build >=0.66.2
   - ruff
-  # Required to satisfy undocumented SALib dependencies on numpy version
   - salib >=1.5.1
   - scipy >=1
   - scons >=4.6

@@ -186,6 +186,14 @@ project_aliases = {
         {"dummy_alias2": "dummy_hint2"},
         True,
     ),
+    "No environment": (
+        [None, "dummy_alias3"],
+        {"description": "dummy_hint3", "expected3": "kwarg"},
+        ("dummy_alias3",),
+        {"expected3": "kwarg"},
+        {"dummy_alias3": "dummy_hint3"},
+        True,
+    ),
     "None": ([None, None], {}, (), {}, {}, False),
 }
 

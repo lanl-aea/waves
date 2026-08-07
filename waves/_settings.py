@@ -9,12 +9,30 @@ _project_name = f"{_project_name_short} Analysis for Verified Engineering Simula
 # SCons extensions
 _abaqus_environment_file = "abaqus_v6.env"
 _abaqus_environment_extension = f".{_abaqus_environment_file}"
+_abaqus_job_type_typing = typing.Literal["standard", "standard_datacheck", "explicit", "explicit_datacheck"]
 _abaqus_common_extensions = (".odb", ".dat", ".msg", ".com", ".prt")
-_abaqus_datacheck_extensions = (".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt")
-_abaqus_explicit_extensions = (".odb", ".dat", ".msg", ".com", ".prt", ".sta")
-_abaqus_explicit_restart_extensions = (".odb", ".prt", ".mdl", ".sim", ".stt", ".res", ".abq", ".pac", ".sel")
-_abaqus_standard_extensions = (".odb", ".dat", ".msg", ".com", ".prt", ".sta")
-_abaqus_standard_restart_extensions = (".odb", ".prt", ".mdl", ".sim", ".stt", ".res")
+_abaqus_standard_analysis_extensions = (".odb", ".dat", ".msg", ".com", ".prt", ".sta")
+_abaqus_standard_datacheck_extensions = (".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt")
+_abaqus_standard_restart_extensions = (".odb", ".prt", ".mdl", ".stt", ".res")
+# VVV DO NOT USE IN NEW CODE AFTER WAVESv1.4.3 VVV
+# Only used to avoid breaking changes in the otherwise deprecated ``abaqus_solver`` builder
+_abaqus_explicit_extensions_deprecated = (".odb", ".dat", ".msg", ".com", ".prt", ".sta")
+# ^^^ DO NOT USE IN NEW CODE AFTER WAVESv1.4.3 ^^^
+_abaqus_explicit_extensions = (
+    ".odb",
+    ".dat",
+    ".msg",
+    ".com",
+    ".prt",
+    ".sta",
+    ".abq",
+    ".mdl",
+    ".pac",
+    ".stt",
+    ".res",
+    ".sel",
+)
+_abaqus_explicit_restart_extensions = (".odb", ".prt", ".mdl", ".stt", ".res", ".abq", ".pac", ".sel")
 _matlab_environment_extension = ".matlab.env"
 _sbatch_wrapper_options = "--wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap"
 _sierra_environment_extension = ".env"
@@ -33,7 +51,7 @@ _scons_tree_status = {
 }
 _scons_substfile_suffix = ".in"
 _stdout_extension = ".stdout"
-_cd_action_prefix = "cd ${TARGET.dir.abspath} &&"
+_cd_action_prefix = "$(cd$) ${TARGET.dir.abspath} &&"
 _redirect_action_suffix = "> ${TARGETS[-1].abspath} 2>&1"
 _redirect_environment_suffix = "> ${TARGETS[-2].abspath} 2>&1"
 
@@ -45,16 +63,16 @@ _default_previous_parameter_study = None
 _default_require_previous_parameter_study = False
 _default_overwrite = False
 _default_dry_run = False
-_default_write_meta = False
+_default_write_meta_flag = False
 _default_output_file_template = None
 _default_output_file = None
 _parameter_study_meta_file = "parameter_study_meta.txt"
 _allowable_output_file_typing = typing.Literal["h5", "yaml"]
 _allowable_output_file_types = typing.get_args(_allowable_output_file_typing)
 _default_output_file_type_api = _allowable_output_file_types[0]
-_default_output_file_type_cli = _allowable_output_file_types[1]
 _hash_coordinate_key = "set_hash"
 _set_coordinate_key = "set_name"
+_original_coordinate_key = "original_index"
 _installed_docs_index = _project_root_abspath / "docs/index.html"
 _modsim_template_directory = _project_root_abspath / "modsim_template"
 _tutorials_directory = _project_root_abspath / "tutorials"
@@ -170,4 +188,4 @@ _default_node_color = "#5AC7CB"  # Light blue from Waves Logo
 _default_edge_color = "#B7DEBE"  # Light green from Waves Logo
 
 # Remove third-party packages from the project namespace
-del pathlib
+del pathlib, typing

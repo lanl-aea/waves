@@ -6,7 +6,7 @@ Tutorial 10: Unit Testing
 
 Unit testing is a software development practice that allows developers to verify the functionality of individual units
 or components of their codebase. In modsim repositories, unit tests play a vital role in verifying custom scripting
-libraries tailored to the project. This tutorial introduces a project-wide alias, streamlining the execution of unit
+libraries tailored to the project. This tutorial introduces a ``unit_test`` alias, streamlining the execution of unit
 tests using the `pytest`_ :cite:`pytest` framework.
 
 **********
@@ -130,9 +130,7 @@ SConstruct
       :diff: tutorials_tutorial_09_post_processing_SConstruct
 
 Our test alias is initialized similarly to that of the workflow aliases. In order to clarify that the tests are not
-part of a modsim workflow, the ``unit_testing`` call is made separately from the workflow loop. Additionally, a
-regression test alias is added as a collector alias for future expansion beyond the unit tests in
-:ref:`tutorial_regression_testing`.
+part of a modsim workflow, the ``unit_testing`` call is made separately from the workflow loop.
 
 *************
 Build Targets

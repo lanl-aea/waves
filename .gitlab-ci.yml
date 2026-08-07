@@ -29,7 +29,6 @@ aea-developer-test:
     abaqus_command_prefix: "/apps/abaqus/Commands"
     cubit_command_prefix: "/apps"
   artifacts:
-    expire_in: '2 hrs'
     paths:
       - build/pytest/coverage
       - build/docs/html-internal
@@ -58,10 +57,18 @@ aea-conda-build-internal:
   variables:
     environment_file: "conda-build.yml"
     recipe_directory: "recipe-internal"
+    rattler_build_extra_options: "--env-isolation conda-build"
   artifacts:
-    expire_in: '2 hrs'
     paths:
-      - conda-bld/noarch/waves-*-*.tar.bz2
+      - conda-bld/noarch/waves-*-*.conda
+  # FIXME: VVV working around strange AEA RHEL CI server that occurs specifically when building in /scratch
+  # ``Error:   × FileSystem error: 'Permission denied (os error 13)'``
+  tags:
+    - shell
+    - aea
+    - linux
+    - sstelmo
+  # FIXME: ^^^ working around strange AEA RHEL CI server that occurs specifically when building in /scratch
 
 aea-conda-build:
   extends:
@@ -71,6 +78,14 @@ aea-conda-build:
   variables:
     environment_file: "conda-build.yml"
     recipe_directory: "recipe"
+  # FIXME: VVV working around strange AEA RHEL CI server that occurs specifically when building in /scratch
+  # ``Error:   × FileSystem error: 'Permission denied (os error 13)'``
+  tags:
+    - shell
+    - aea
+    - linux
+    - sstelmo
+  # FIXME: ^^^ working around strange AEA RHEL CI server that occurs specifically when building in /scratch
 
 aea-conda-build-matrix:
   extends:
@@ -80,13 +95,15 @@ aea-conda-build-matrix:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   variables:
     environment_file: "conda-build.yml"
+    conda_artifacts_directory: "conda-bld"
   script:
-    # Override default permissions. Set group to rx with no write permissions.
-    - umask 0022
+    # Job variables
+    - echo ${conda_artifacts_directory}
+    - if [[ -z ${conda_artifacts_directory} ]]; then exit 1; fi
     - mkdir ${conda_artifacts_directory}
     - scons pyproject.toml
     - pytest recipe-matrix/matrix.py -v --no-showlocals --tb=short
-  timeout: 4h
+  timeout: 8h
 
 # https://re-git.lanl.gov/aea/developer-operations/aea-conda
 aea-conda-deploy:
@@ -98,7 +115,7 @@ aea-conda-deploy:
     AEA_CONDA_DEPLOY_JOB: aea-conda-deploy-curl-jobid
     PARENT_CI_PROJECT_ID: $CI_PROJECT_ID
     AEA_CONDA_PACKAGE_JOB: aea-conda-build-internal
-    AEA_CONDA_PACKAGE_ARTIFACTS: conda-bld/noarch/waves-*-*.tar.bz2
+    AEA_CONDA_PACKAGE_ARTIFACTS: conda-bld/noarch/waves-*-*.conda
   trigger:
     project: aea/developer-operations/aea-conda
     branch: main
@@ -112,7 +129,6 @@ aea-pip-build:
   variables:
     environment_file: "pip-build.yml"
   artifacts:
-    expire_in: '2 hrs'
     paths:
       - build/dist/waves-*.tar.gz
       - build/dist/waves-*.whl
@@ -216,9 +232,6 @@ hpc:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-  variables:
-    PARENT_CI_PIPELINE_SOURCE: $CI_PIPELINE_SOURCE
-    PARENT_CI_COMMIT_BRANCH: $CI_COMMIT_BRANCH
 
 win:
   stage: test
@@ -228,9 +241,6 @@ win:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-  variables:
-    PARENT_CI_PIPELINE_SOURCE: $CI_PIPELINE_SOURCE
-    PARENT_CI_COMMIT_BRANCH: $CI_COMMIT_BRANCH
 
 mac:
   stage: test
@@ -240,6 +250,3 @@ mac:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-  variables:
-    PARENT_CI_PIPELINE_SOURCE: $CI_PIPELINE_SOURCE
-    PARENT_CI_COMMIT_BRANCH: $CI_COMMIT_BRANCH

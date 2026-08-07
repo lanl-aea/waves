@@ -9,7 +9,7 @@ dependencies:
   - matplotlib-base
   - mypy
   - networkx
-  - numpy
+  - numpy >=2
   - pytest >=6
   - pyyaml
   - salib >=1.4.6

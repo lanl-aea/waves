@@ -1,12 +1,13 @@
 """Test CustomStudy Class."""
 
 import contextlib
-from unittest.mock import call, mock_open, patch
+from unittest.mock import patch
 
 import numpy
 import pytest
+import xarray
 
-from waves._settings import _allowable_output_file_typing, _hash_coordinate_key, _set_coordinate_key
+from waves._settings import _hash_coordinate_key, _set_coordinate_key
 from waves._tests.common import merge_samplers
 from waves.exceptions import SchemaValidationError
 from waves.parameter_generators import CustomStudy
@@ -24,6 +25,13 @@ class TestCustomStudy:
         ),
         "good schema numpy array": (
             {"parameter_names": ["a", "b"], "parameter_samples": numpy.array([[1, 2.0], [3, 4.5]])},
+            does_not_raise,
+        ),
+        "mixed length strings": (
+            {
+                "parameter_names": ["parameter_1"],
+                "parameter_samples": numpy.array([["one"], ["two"], ["many"]], dtype=object),
+            },
             does_not_raise,
         ),
         "not a dict": (
@@ -60,39 +68,397 @@ class TestCustomStudy:
             assert isinstance(test_validate, CustomStudy)
 
     test_generate_cases = {
+        "mixed length strings": (
+            {
+                "parameter_names": ["parameter_1"],
+                "parameter_samples": numpy.array([["one"], ["two"], ["many"]], dtype=object),
+            },
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        ["many", "one", "two"],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1", "parameter_set2"], dims=_set_coordinate_key
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "1780094887590cdd640fcd69c04fc323",
+                            "489dc5ad052f9d061c2b85fcf217072d",
+                            "5a1506e07dcd8f7126021ee5aec04afc",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {"parameter_1": numpy.dtype("U4")},
+        ),
         "one_parameter": (
-            {"parameter_names": ["a"], "parameter_samples": numpy.array([[1], [2]], dtype=object)},
-            numpy.array([[1], [2]], dtype=object),
-            {"a": numpy.int64},
+            {"parameter_names": ["parameter_1"], "parameter_samples": numpy.array([[1], [2]], dtype=object)},
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2, 1],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"], dims=_set_coordinate_key
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {"parameter_1": numpy.int64},
         ),
         "two_parameter": (
-            {"parameter_names": ["a", "b"], "parameter_samples": numpy.array([[1, 10.0], [2, 20.0]], dtype=object)},
-            numpy.array([[1, 10.0], [2, 20.0]], dtype=object),
-            {"a": numpy.int64, "b": numpy.float64},
+            {
+                "parameter_names": ["parameter_1", "parameter_2"],
+                "parameter_samples": numpy.array([[1, 10.0], [2, 20.0]], dtype=object),
+            },
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1, 2],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [10.0, 20.0],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        [
+                            "ad786a85fdef9bb1f2fc7a915e58446e",
+                            "d3d9a8defeae15fd99bb31fbc4cbf2bf",
+                        ],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {"parameter_1": numpy.int64, "parameter_2": numpy.float64},
+        ),
+        "all numpy typing": (
+            {
+                "parameter_names": [
+                    "parameter_1",
+                    "parameter_2",
+                    "parameter_3",
+                    "parameter_4",
+                    "parameter_5",
+                    "parameter_6",
+                ],
+                "parameter_samples": numpy.array(
+                    [
+                        [
+                            numpy.int16(1),
+                            numpy.int32(-1),
+                            numpy.int64(-10),
+                            numpy.float64(1.23),
+                            numpy.bool_(True),
+                            numpy.str_("zero"),
+                        ],
+                        [
+                            numpy.int16(1),
+                            numpy.int32(-1),
+                            numpy.int64(-10),
+                            numpy.float64(1.23),
+                            numpy.bool_(True),
+                            numpy.str_("one"),
+                        ],
+                    ],
+                    dtype=object,
+                ),
+            },
+            # Same expected output for numpy typing, mixed typing, and built-in typing
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1, 1],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [-1, -1],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_3": xarray.DataArray(
+                        [-10, -10],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_4": xarray.DataArray(
+                        [1.23, 1.23],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_5": xarray.DataArray(
+                        [True, True],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_6": xarray.DataArray(
+                        ["zero", "one"],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["501f23f42f3aabd912e1b70072701434", "c88259b8113aeb6880829e4c092dd445"],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {
+                "parameter_1": numpy.int64,
+                "parameter_2": numpy.int64,
+                "parameter_3": numpy.int64,
+                "parameter_4": numpy.float64,
+                "parameter_5": bool,
+                "parameter_6": numpy.dtype("U4"),
+            },
+        ),
+        "mixed numpy typing": (
+            {
+                "parameter_names": [
+                    "parameter_1",
+                    "parameter_2",
+                    "parameter_3",
+                    "parameter_4",
+                    "parameter_5",
+                    "parameter_6",
+                ],
+                "parameter_samples": numpy.array(
+                    [
+                        [1, numpy.int32(-1), -10, numpy.float64(1.23), numpy.bool_(True), "zero"],
+                        [1, numpy.int32(-1), -10, numpy.float64(1.23), numpy.bool_(True), "one"],
+                    ],
+                    dtype=object,
+                ),
+            },
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1, 1],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [-1, -1],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_3": xarray.DataArray(
+                        [-10, -10],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_4": xarray.DataArray(
+                        [1.23, 1.23],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_5": xarray.DataArray(
+                        [True, True],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_6": xarray.DataArray(
+                        ["zero", "one"],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["501f23f42f3aabd912e1b70072701434", "c88259b8113aeb6880829e4c092dd445"],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {
+                "parameter_1": numpy.int64,
+                "parameter_2": numpy.int64,
+                "parameter_3": numpy.int64,
+                "parameter_4": numpy.float64,
+                "parameter_5": bool,
+                "parameter_6": numpy.dtype("U4"),
+            },
+        ),
+        "all built-in typing": (
+            {
+                "parameter_names": [
+                    "parameter_1",
+                    "parameter_2",
+                    "parameter_3",
+                    "parameter_4",
+                    "parameter_5",
+                    "parameter_6",
+                ],
+                "parameter_samples": numpy.array(
+                    [
+                        [1, -1, -10, 1.23, True, "zero"],
+                        [1, -1, -10, 1.23, True, "one"],
+                    ],
+                    dtype=object,
+                ),
+            },
+            xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1, 1],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_2": xarray.DataArray(
+                        [-1, -1],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_3": xarray.DataArray(
+                        [-10, -10],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_4": xarray.DataArray(
+                        [1.23, 1.23],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_5": xarray.DataArray(
+                        [True, True],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "parameter_6": xarray.DataArray(
+                        ["zero", "one"],
+                        coords={
+                            _set_coordinate_key: xarray.DataArray(
+                                ["parameter_set0", "parameter_set1"],
+                                dims=_set_coordinate_key,
+                            )
+                        },
+                    ),
+                    "set_hash": xarray.DataArray(
+                        ["501f23f42f3aabd912e1b70072701434", "c88259b8113aeb6880829e4c092dd445"],
+                        dims=_set_coordinate_key,
+                    ),
+                }
+            ).set_coords("set_hash"),
+            {
+                "parameter_1": numpy.int64,
+                "parameter_2": numpy.int64,
+                "parameter_3": numpy.int64,
+                "parameter_4": numpy.float64,
+                "parameter_5": bool,
+                "parameter_6": numpy.dtype("U4"),
+            },
         ),
     }
 
     @pytest.mark.parametrize(
-        ("parameter_schema", "expected_array", "expected_types"),
+        ("parameter_schema", "expected_dataset", "expected_types"),
         test_generate_cases.values(),
         ids=test_generate_cases.keys(),
     )
     def test_generate(
-        self, parameter_schema: dict, expected_array: numpy.ndarray, expected_types: dict[str, type]
+        self, parameter_schema: dict, expected_dataset: xarray.Dataset, expected_types: dict[str, type]
     ) -> None:
         test_generate = CustomStudy(parameter_schema)
-        generate_array = test_generate._samples
-        assert numpy.all(generate_array == expected_array)
+        xarray.testing.assert_identical(test_generate.parameter_study, expected_dataset)
         for key in test_generate.parameter_study:
             assert test_generate.parameter_study[key].dtype == expected_types[str(key)]
         # Verify that the parameter set name creation method was called
-        assert list(test_generate._set_names.values()) == [f"parameter_set{num}" for num in range(len(expected_array))]
-        # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
-        expected_set_names = [f"parameter_set{num}" for num in range(len(expected_array))]
-        set_names = list(test_generate.parameter_study[_set_coordinate_key])
-        assert numpy.all(set_names == expected_set_names)
+        # TODO: _set_names is an ordered object (dictionary). Fix test to compare dictionary-to-dictionary instead of
+        # implied consistency according to value order.
+        assert list(test_generate._set_names.values()) == list(expected_dataset[_set_coordinate_key].to_numpy())
 
     merge_test = {
+        "mixed length strings": (
+            {"parameter_names": ["parameter_1"], "parameter_samples": numpy.array([["one"]], dtype=object)},
+            {"parameter_names": ["parameter_1"], "parameter_samples": numpy.array([["many"]], dtype=object)},
+            numpy.array([["many"], ["one"]], dtype=object),
+            {"parameter_1": numpy.dtype("U4")},
+        ),
         "single set unchanged": (
             {"parameter_names": ["ints"], "parameter_samples": numpy.array([[1]], dtype=object)},
             {"parameter_names": ["ints"], "parameter_samples": numpy.array([[1]], dtype=object)},
@@ -169,71 +535,3 @@ class TestCustomStudy:
                 == test_merge2.parameter_study[_set_coordinate_key].values.tolist()
             )
             assert test_merge2._set_hashes == test_merge2.parameter_study[_hash_coordinate_key].values.tolist()
-
-    test_write_yaml_cases = {
-        "one parameter yaml": (
-            {"parameter_names": ["a"], "parameter_samples": numpy.array([[1], [2]], dtype=object)},
-            "out",
-            None,
-            "yaml",
-            2,
-            [call("a: 2\n"), call("a: 1\n")],
-        ),
-        "two parameter yaml": (
-            {"parameter_names": ["a", "b"], "parameter_samples": numpy.array([[1, 2.0], [3, 4.5]], dtype=object)},
-            "out",
-            None,
-            "yaml",
-            2,
-            [call("a: 1\nb: 2.0\n"), call("a: 3\nb: 4.5\n")],
-        ),
-        "one parameter one file yaml": (
-            {"parameter_names": ["a"], "parameter_samples": numpy.array([[1], [2]], dtype=object)},
-            None,
-            "parameter_study.yaml",
-            "yaml",
-            1,
-            [call("parameter_set0:\n  a: 2\nparameter_set1:\n  a: 1\n")],
-        ),
-        "two parameter one file yaml": (
-            {"parameter_names": ["a", "b"], "parameter_samples": numpy.array([[1, 2.0], [3, 4.5]], dtype=object)},
-            None,
-            "parameter_study.yaml",
-            "yaml",
-            1,
-            [call("parameter_set0:\n  a: 1\n  b: 2.0\nparameter_set1:\n  a: 3\n  b: 4.5\n")],
-        ),
-    }
-
-    @pytest.mark.parametrize(
-        ("parameter_schema", "output_file_template", "output_file", "output_type", "file_count", "expected_calls"),
-        test_write_yaml_cases.values(),
-        ids=test_write_yaml_cases.keys(),
-    )
-    def test_write_yaml(
-        self,
-        parameter_schema: dict,
-        output_file_template: str | None,
-        output_file: str | None,
-        output_type: _allowable_output_file_typing,
-        file_count: int,
-        expected_calls: int,
-    ) -> None:
-        with (
-            patch("waves.parameter_generators.ParameterGenerator._write_meta"),
-            patch("pathlib.Path.open", mock_open()) as mock_file,
-            patch("xarray.Dataset.to_netcdf") as xarray_to_netcdf,
-            patch("sys.stdout.write") as stdout_write,
-            patch("pathlib.Path.is_file", return_value=False),
-        ):
-            test_write_yaml = CustomStudy(
-                parameter_schema,
-                output_file_template=output_file_template,
-                output_file=output_file,
-                output_file_type=output_type,
-            )
-            test_write_yaml.write()
-            stdout_write.assert_not_called()
-            xarray_to_netcdf.assert_not_called()
-            assert mock_file.call_count == file_count
-            mock_file().write.assert_has_calls(expected_calls, any_order=False)

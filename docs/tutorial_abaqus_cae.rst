@@ -200,12 +200,12 @@ output below.
    /home/roppenheimer/waves-tutorials/tutorial_abaqus_cae
    $ scons submit_beam_cae --debug=explain
    scons: Reading SConscript files ...
-   Checking whether /apps/abaqus/Commands/abq2024 program exists.../apps/abaqus/Commands/abq2024
-   Checking whether abq2024 program exists...no
+   Checking whether /apps/abaqus/Commands/abq2025 program exists.../apps/abaqus/Commands/abq2025
+   Checking whether abq2025 program exists...no
    scons: done reading SConscript files.
    scons: Building targets ...
    scons: rebuilding `build/beam.odb' because `build/beam.cae' changed
-   cd /home/roppenheimer/waves-tutorials/tutorial_abaqus_cae/build && /apps/abaqus/Commands/abq2024 cae -noGui /home/roppenheimer/waves-tutorials/tutorial_abaqus_cae/build/submit_cae.py -- --input-file /home/roppenheimer/waves-tutorials/tutorial_abaqus_cae/build/beam.cae --job-name beam --model-name Beam > /home/roppenheimer/waves-tutorials/tutorial_abaqus_cae/build/beam.odb.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_abaqus_cae/build && /apps/abaqus/Commands/abq2025 cae -noGui /home/roppenheimer/waves-tutorials/tutorial_abaqus_cae/build/submit_cae.py -- --input-file /home/roppenheimer/waves-tutorials/tutorial_abaqus_cae/build/beam.cae --job-name beam --model-name Beam > /home/roppenheimer/waves-tutorials/tutorial_abaqus_cae/build/beam.odb.stdout 2>&1
    scons: done building targets.
 
 ************

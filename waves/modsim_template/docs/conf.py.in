@@ -7,7 +7,7 @@ import unittest.mock
 # Meta data from SCons project
 project = "@project_name@"
 VERSION = "@version@"
-project_dir = pathlib.Path(r"@project_dir@").resolve()
+project_directory = pathlib.Path(r"@project_directory@").resolve()
 author = "@author_html@"
 author_latex = r"@author_latex@"
 
@@ -31,7 +31,7 @@ copyright = f"2022-{datetime.date.today().year} Triad National Security, LLC. Al
 rst_prolog = f".. |PROJECT| replace:: {project.upper()}\n.. |project| replace:: {project}\n.. include:: targets.txt"
 
 # -- General configuration ---------------------------------------------------
-master_doc = "index"
+root_doc = "index"
 
 
 # Add custom style sheet to make the html docs wider
@@ -87,5 +87,5 @@ latex_elements = {
     "maketitle": f"\\newcommand\\sphinxbackoftitlepage{{{copyright_latex}}}\\sphinxmaketitle",
 }
 latex_documents = [
-    (master_doc, latex_basename, latex_project.upper(), author_latex, "manual"),
+    (root_doc, latex_basename, latex_project.upper(), author_latex, "manual"),
 ]

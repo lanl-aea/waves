@@ -3,17 +3,20 @@
     GIT_STRATEGY: clone
     conda_installation: "/apps/miniconda3/3.13-miniconda-25.5.1"
     environment_file: "environment.yml"
-    conda_artifacts_directory: "conda-bld"
   before_script:
+    # FIXME: trace the Gitlab-CI behavior that unsets LANG VVV
+    - if [[ -z "${LANG}" ]]; then export LANG='en_US.UTF-8'; fi
+    - function check_variable () { echo "$1"; if [[ -z $1 ]]; then exit 1; fi; }
+    - check_variable "${LANG}"
+    # FIXME: trace the Gitlab-CI behavior that unsets LANG ^^^
     - function check_directory_variable () { echo "$1"; if [[ -z $1 ]] || [[ ! -d $1 ]]; then exit 1; fi; }
     - check_directory_variable "${conda_installation}"
     - echo ${environment_file}
     - if [[ -z ${environment_file} ]]; then exit 1; fi
-    - echo ${conda_artifacts_directory}
-    - if [[ -z ${conda_artifacts_directory} ]]; then exit 1; fi
     # Common job variables
-    - prefix="$PWD/conda-environment"
-    - conda_pkgs_dirs="$PWD/conda-pkgs"
+    - export TMPDIR=${PWD}/tmp
+    - prefix="${TMPDIR}/env"
+    - conda_pkgs_dirs="${TMPDIR}/pkgs"
     - echo ${prefix}
     - echo ${conda_pkgs_dirs}
     - if [[ -z ${prefix} ]]; then exit 1; fi
@@ -28,8 +31,60 @@
     - conda activate ${prefix}
     - conda info
     - conda env export
+    # texlive module setting LC_ALL breaks Abaqus 2025
+    - unset LC_ALL
+    # Set cache directories for some common Python packages
+    - export MPLCONFIGDIR="${TMPDIR}/matplotlib"
+    - export RATTLER_CACHE_DIR="${TMPDIR}/rattler"
+    - export PYTEST_ADDOPTS="--basetemp=${TMPDIR}/pytest-temp"
   after_script:
-    - rm -r $PWD/conda-environment $PWD/conda-pkgs || true
+    - rm -r ${PWD}/tmp || true
+
+.win-job-environment: &win-job-environment
+  variables:
+    GIT_STRATEGY: clone
+    conda_installation: "C:/ProgramData/miniconda3"
+    environment_file: "environment-win.yml"
+  before_script:
+    - $PSVersionTable
+    - $env:username
+    - git config --list --show-origin | Select-String -Pattern "symlinks="
+    - git ls-tree -r HEAD | Select-String -Pattern "^120" | Measure-Object -Line
+    - Get-ChildItem -Recurse | Where-Object { $_.LinkType -eq 'SymbolicLink' } | Measure-Object -Line
+    - if ([string]::IsNullOrEmpty($environment_file)) { exit 1 }
+    - if ([string]::IsNullOrEmpty($conda_installation)) { exit 1 }
+    # Common job variables
+    - if ([string]::IsNullOrEmpty($CI_JOB_ID)) { exit 1 }
+    - Write-Output $CI_JOB_ID
+    - $temporary_directory=(New-Item -ItemType Directory -Path (Join-Path ([System.IO.Path]::GetTempPath()) "$CI_JOB_ID"))
+    - Write-Output $temporary_directory
+    - $prefix="$temporary_directory\env"
+    - $conda_pkgs_dirs="$temporary_directory\pkgs"
+    - Write-Output $conda_installation
+    - Write-Output $environment_file
+    - Write-Output $prefix
+    - Write-Output $conda_pkgs_dirs
+    - if (!(Test-Path -Path $conda_installation -PathType Container)) { exit 1 }
+    - if ([string]::IsNullOrEmpty($prefix)) { exit 1 }
+    # Environment creation
+    - $env:CONDA_PKGS_DIRS=$conda_pkgs_dirs
+    - (& "$conda_installation\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | ?{$_} | Invoke-Expression
+    - conda info
+    - conda env create --prefix $prefix --file $environment_file --yes
+    - conda activate $prefix
+    - conda info
+    - python -c "import getpass; print(getpass.getuser())"
+    # Set cache directories for some common Python packages
+    - $cache_directories="$temporary_directory\cache"
+    - $env:PYTEST_ADDOPTS="--basetemp=$cache_directories\pytest-temp"
+    - $env:MPLCONFIGDIR="$cache_directories\matplotlib"
+    - $env:RATTLER_CACHE_DIR="$cache_directories\rattler"
+  after_script:
+    - if ([string]::IsNullOrEmpty($CI_JOB_ID)) { exit 1 }
+    - Write-Output $CI_JOB_ID
+    - $temporary_directory=(Join-Path ([System.IO.Path]::GetTempPath()) "$CI_JOB_ID")
+    - Write-Output $temporary_directory
+    - Remove-Item -Force -Recurse $temporary_directory -ErrorAction Continue
 
 .developer-test: &developer-test
   script:
@@ -38,8 +93,8 @@
     - check_directory_variable "${cubit_command_prefix}"
     - echo ${PARENT_CI_PIPELINE_SOURCE}
     # Job commands
-    - scons regression --keep-going --unconditional-build --abaqus-command=${abaqus_command_prefix}/abq2024 --cubit-command=${cubit_command_prefix}/Cubit-16.16/cubit
-    - if [[ $PARENT_CI_PIPELINE_SOURCE == "schedule" ]]; then scons systemtest --keep-going --unconditional-build --abaqus-command=${abaqus_command_prefix}/abq2023 --cubit-command=${cubit_command_prefix}/Cubit-16.12/cubit; fi
+    - scons regression --keep-going --unconditional-build --abaqus-command=${abaqus_command_prefix}/abq2025 --cubit-command=${cubit_command_prefix}/Cubit-17.06/cubit
+    - if [[ $PARENT_CI_PIPELINE_SOURCE == "schedule" ]]; then scons systemtest --keep-going --unconditional-build --abaqus-command=${abaqus_command_prefix}/abq2024 --abaqus-command=${abaqus_command_prefix}/abq2023 --cubit-command=${cubit_command_prefix}/Cubit-16.16/cubit; fi
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
     reports:
@@ -88,9 +143,13 @@
     - source pip-build-test/bin/activate
     - python -m pip install --verbose --disable-pip-version-check --require-virtualenv --no-cache-dir build/dist/${distribution_filename}-${version}.tar.gz pytest pytest-xdist
     - cd pip-build-test/lib/python*/site-packages/waves
-    - python -m pytest -vvv -n 4 -m "not require_third_party and not sphinx"
+    - python -m pytest --basetemp=$PWD/pytest-temp -vvv -n 4 -m "not require_third_party and not sphinx" --system-test-dir=$PWD/systemtest
 
 .conda-build: &conda-build
+  variables:
+    recipe_directory: "recipe"
+    conda_artifacts_directory: "conda-bld"
+    rattler_build_extra_options: ""
   script:
     # Job variables
     - echo ${recipe_directory}
@@ -98,11 +157,9 @@
     - if [[ -z ${recipe_directory} ]]; then exit 1; fi
     - if [[ -z ${conda_artifacts_directory} ]]; then exit 1; fi
     # Job commands
-    # Override default permissions. Set group to rx with no write permissions.
-    - umask 0022
-    - mkdir ${conda_artifacts_directory}
+    - mkdir -p ${conda_artifacts_directory}
     - scons pyproject.toml
-    - VERSION=$(python -m setuptools_scm) conda mambabuild ${recipe_directory} --channel fierromechanics --channel conda-forge --no-anaconda-upload --output-folder ${conda_artifacts_directory}
+    - VERSION=$(python -m setuptools_scm) rattler-build build --recipe ${recipe_directory} --channel fierromechanics --channel conda-forge --output-dir ${conda_artifacts_directory} ${rattler_build_extra_options}
     # Help downstream deploy pipeline find this job by ID
     - tag_job_file_root="/nettmp/aea_service"
     - tag_job_file_parent="${tag_job_file_root}/${CI_PROJECT_PATH}"

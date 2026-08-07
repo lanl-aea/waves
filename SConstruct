@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-"""Configure the WAVES project."""
 
 import os
 import pathlib
@@ -12,17 +11,17 @@ warnings.filterwarnings(action="ignore", message="tag", category=UserWarning, mo
 
 # ========================================================================================================= SETTINGS ===
 # Set project meta variables
-project_dir = pathlib.Path(Dir(".").abspath)
+project_directory = pathlib.Path(Dir("#").abspath)
 project_name = "waves"
-package_dir = pathlib.Path("waves")
+package_directory = pathlib.Path("waves")
 distribution_name_default = "waves"
 version = setuptools_scm.get_version()
 project_variables = {
-    "project_dir": project_dir,
-    "package_dir": project_dir / package_dir,
+    "project_directory": project_directory,
+    "package_directory": project_directory / package_directory,
     "version": version,
     "documentation_pdf": f"{project_name}-{version}.pdf",
-    "tutorials_dir": project_dir / "waves/tutorials",
+    "tutorials_dir": project_directory / "waves/tutorials",
     "modsim_dir": "modsim_package",
     "abaqus_dir": "modsim_package/abaqus",
     "argparse_types_dir": "modsim_package/argparse_types",
@@ -34,7 +33,7 @@ project_variables = {
 # ============================================================================================= COMMAND LINE OPTIONS ===
 AddOption(
     "--build-dir",
-    dest="build_dir",
+    dest="build_directory",
     default="build",
     nargs=1,
     type="string",
@@ -93,20 +92,17 @@ AddOption(
 
 # ========================================================================================= CONSTRUCTION ENVIRONMENT ===
 # Inherit user's full environment and set project options
+build_directory = pathlib.Path(GetOption("build_directory"))
+prefix = pathlib.Path(GetOption("prefix"))
+distribution_name = GetOption("distribution_name")
 env = Environment(
     ENV=os.environ.copy(),
-    build_dir=pathlib.Path(GetOption("build_dir")),
-    prefix=pathlib.Path(GetOption("prefix")),
-    distribution_name=GetOption("distribution_name"),
     unconditional_build=GetOption("unconditional_build"),
     abaqus_command=GetOption("abaqus_command"),
     cubit_command=GetOption("cubit_command"),
 )
-build_directory = pathlib.Path(env["build_dir"])
 print(f"Using build directory...{build_directory}")
-prefix = pathlib.Path(env["prefix"])
 print(f"Using install prefix directory...{prefix}")
-distribution_name = env["distribution_name"]
 distribution_filename = distribution_name.replace("-", "_")
 package_specification = f"{distribution_filename}-{version}"
 print(f"Using distribution name...{distribution_name}")
@@ -140,7 +136,7 @@ env.Substfile(
 )
 
 # Build
-installed_documentation = package_dir / "docs"
+installed_documentation = package_directory / "docs"
 packages = env.Command(
     target=[
         build_directory / f"dist/{package_specification}.tar.gz",
@@ -148,8 +144,8 @@ packages = env.Command(
     ],
     source=["pyproject.toml"],
     action=[
-        Copy(package_dir / "README.rst", "README.rst"),
-        Copy(package_dir / "pyproject.toml", "pyproject.toml"),
+        Copy(package_directory / "README.rst", "README.rst"),
+        Copy(package_directory / "pyproject.toml", "pyproject.toml"),
         Delete(Dir(installed_documentation)),
         Copy(Dir(installed_documentation), Dir(build_directory / "docs/html")),
         Delete(Dir(installed_documentation / ".doctrees")),
@@ -160,8 +156,8 @@ packages = env.Command(
         Delete(Dir(package_specification)),
         Delete(Dir(f"{distribution_filename}.egg-info")),
         Delete(Dir(installed_documentation)),
-        Delete(package_dir / "README.rst"),
-        Delete(package_dir / "pyproject.toml"),
+        Delete(package_directory / "README.rst"),
+        Delete(package_directory / "pyproject.toml"),
     ],
 )
 env.Depends(packages, [Alias("html"), Alias("man")])

@@ -13,12 +13,10 @@ available substitutions.
 """
 
 import copy
-import getpass
 import importlib
 import inspect
 import os
 import pathlib
-import shlex
 import shutil
 import string
 import subprocess
@@ -29,8 +27,8 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from waves import _settings, _utilities
-from waves._tests.common import platform_check
+from waves import _WAVES_CLI_COMMAND, _settings, _utilities
+from waves._tests.common import check_ci_user, platform_check
 
 MODULE_NAME = pathlib.Path(__file__).stem
 PACKAGE_PARENT_PATH = _settings._project_root_abspath.parent
@@ -41,32 +39,6 @@ testing_windows, root_fs, testing_macos = platform_check()
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
 testing_hpc = shutil.which("sbatch") is not None
 python_313_or_above = sys.version_info >= (3, 13)
-
-
-# TODO: Remove user check when Windows CI server Gitlab-Runner account has access to the Abaqus licesnse server
-# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
-def check_ci_user() -> bool:
-    user = getpass.getuser().lower()
-    return "pn2606796" in user or user == "gitlab-runner"
-
-
-test_check_ci_user_cases = {
-    "windows ci user": ("PN2606796$", True),
-    "windows ci user without trailing service account character": ("PN2606796", True),
-    "macos ci user": ("gitlab-runner", True),
-    "player character": ("roppenheimer", False),
-}
-
-
-@pytest.mark.parametrize(
-    ("mock_user", "expected"),
-    test_check_ci_user_cases.values(),
-    ids=test_check_ci_user_cases.keys(),
-)
-def test_check_ci_user(mock_user: str, expected: bool) -> None:
-    with patch("getpass.getuser", return_value=mock_user):
-        testing_ci_user = check_ci_user()
-    assert testing_ci_user is expected
 
 
 def check_installed(package_name: str = "waves") -> bool:
@@ -143,12 +115,11 @@ def test_augment_system_test_environment(args: tuple[dict, bool], expected: dict
     assert args[0] == original_environment
 
 
-# TODO: Remove user check when Windows CI server Gitlab-Runner account has access to the Abaqus licesnse server
+# TODO: Remove user check when Windows CI server Gitlab-Runner account has access to the Abaqus license server
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
 testing_ci_user = check_ci_user()
 installed = check_installed()
 system_test_environment = augment_system_test_environment(os.environ.copy(), installed)
-waves_command = "waves" if installed else "python -m waves._main"
 odb_extract_command = "odb_extract" if installed else "python -m waves._abaqus.odb_extract"
 
 fetch_template = string.Template("${waves_command} fetch ${fetch_options} --destination ${temporary_directory}")
@@ -242,7 +213,7 @@ system_tests: list = [
         marks=[pytest.mark.scons],
     ),
     pytest.param(
-        [fetch_template, string.Template("scons . --waves-command='${waves_command}'")],
+        [fetch_template, string.Template("scons .")],
         "tutorials/tutorial_qoi",
         marks=[pytest.mark.scons],
         id="tutorial_qoi",
@@ -258,7 +229,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -273,7 +244,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -292,7 +263,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -321,7 +292,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -332,9 +303,7 @@ require_third_party_system_tests: list = [
     pytest.param(
         [
             fetch_template,
-            string.Template(
-                "scons . --sconstruct=tutorial_00_SConstruct ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
-            ),
+            string.Template("scons . --sconstruct=tutorial_00_SConstruct ${unconditional_build} ${abaqus_command}"),
         ],
         "--tutorial 0",
         marks=[pytest.mark.require_third_party, pytest.mark.scons],
@@ -343,7 +312,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_01_geometry --sconstruct=tutorial_01_geometry_SConstruct ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_01_geometry --sconstruct=tutorial_01_geometry_SConstruct ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 1",
@@ -351,7 +320,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -373,7 +342,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_02_partition_mesh --sconstruct=tutorial_02_partition_mesh_SConstruct ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_02_partition_mesh --sconstruct=tutorial_02_partition_mesh_SConstruct ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 2",
@@ -381,7 +350,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -393,7 +362,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_argparse_types --sconstruct=tutorial_argparse_types_SConstruct ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_argparse_types --sconstruct=tutorial_argparse_types_SConstruct ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "tutorials",
@@ -401,7 +370,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -413,7 +382,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_03_solverprep --sconstruct=tutorial_03_solverprep_SConstruct ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_03_solverprep --sconstruct=tutorial_03_solverprep_SConstruct ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 3",
@@ -421,7 +390,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -433,7 +402,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_04_simulation --sconstruct=tutorial_04_simulation_SConstruct ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_04_simulation --sconstruct=tutorial_04_simulation_SConstruct ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 4",
@@ -441,7 +410,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -453,33 +422,46 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons abaqus ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"
+                "scons abaqus_cubit sierra_cubit fierro_cubit ${unconditional_build} ${abaqus_command} ${cubit_command}"
             ),
         ],
         "tutorials/tutorial_cubit",
         marks=[
             pytest.mark.require_third_party,
             pytest.mark.scons,
+            pytest.mark.cubit,
+            pytest.mark.skipif(
+                testing_macos,
+                reason="Cubit does not support import within external Python interpreter on Apple Silicon",
+            ),
+        ],
+        id="tutorial_cubit-cubit_only",
+    ),
+    pytest.param(
+        [
+            fetch_template,
+            string.Template("scons abaqus ${unconditional_build} ${abaqus_command} ${cubit_command}"),
+        ],
+        "tutorials/tutorial_cubit",
+        marks=[
+            pytest.mark.require_third_party,
+            pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            pytest.mark.cubit,
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
                 reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
-            pytest.mark.cubit,
             pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
-            # TODO: Fix Cubit PATH search behavior on Windows
-            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/983
-            pytest.mark.skipif(testing_windows, reason="Cubit PATH search behavior broken on Windows"),
         ],
+        id="tutorial_cubit-abaqus_full",
     ),
     pytest.param(
         [
             fetch_template,
-            string.Template(
-                "scons fierro ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"
-            ),
+            string.Template("scons fierro ${unconditional_build} ${abaqus_command} ${cubit_command}"),
         ],
         "tutorials/tutorial_cubit",
         marks=[
@@ -489,17 +471,16 @@ require_third_party_system_tests: list = [
             pytest.mark.fierro,
             pytest.mark.skipif(
                 testing_macos,
-                reason="Cubit does not support import within external Python interpretter on Apple Silicon",
+                reason="Cubit does not support import within external Python interpreter on Apple Silicon",
             ),
             pytest.mark.skipif(testing_windows, reason="Fierro does not support Windows"),
         ],
+        id="tutorial_cubit-fierro_full",
     ),
     pytest.param(
         [
             fetch_template,
-            string.Template(
-                "scons sierra ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"
-            ),
+            string.Template("scons sierra ${unconditional_build} ${abaqus_command} ${cubit_command}"),
         ],
         "tutorials/tutorial_cubit",
         marks=[
@@ -515,20 +496,19 @@ require_third_party_system_tests: list = [
             pytest.mark.skipif(testing_macos, reason="Sierra does not support macOS"),
             pytest.mark.skipif(testing_windows, reason="Sierra does not support Windows"),
         ],
+        id="tutorial_cubit-sierra_full",
     ),
     pytest.param(
         [
             fetch_template,
-            string.Template(
-                "scons abaqus ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"
-            ),
+            string.Template("scons abaqus ${unconditional_build} ${abaqus_command} ${cubit_command}"),
         ],
         "tutorials/tutorial_cubit_alternate",
         marks=[
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -538,18 +518,16 @@ require_third_party_system_tests: list = [
             pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
             # TODO: Fix Cubit PATH search behavior on Windows
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/983
-            pytest.mark.skipif(testing_windows, reason="Cubit PATH search behavior broken on Windows"),
-            # TODO: Remove this skip when Cubit python interpretter search is fixed
+            pytest.mark.skipif(testing_windows, reason="Cubit Python interpreter search behavior broken on Windows"),
+            # TODO: Remove this skip when Cubit python interpreter search is fixed
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/917
-            pytest.mark.skipif(testing_hpc, reason="Cubit Python interpretter search fails on HPC"),
+            pytest.mark.skipif(testing_hpc, reason="Cubit Python interpreter search fails on HPC"),
         ],
     ),
     pytest.param(
         [
             fetch_template,
-            string.Template(
-                "scons fierro ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"
-            ),
+            string.Template("scons fierro ${unconditional_build} ${abaqus_command} ${cubit_command}"),
         ],
         "tutorials/tutorial_cubit_alternate",
         marks=[
@@ -558,17 +536,15 @@ require_third_party_system_tests: list = [
             pytest.mark.cubit,
             pytest.mark.fierro,
             pytest.mark.skipif(testing_windows, reason="Fierro does not support Windows"),
-            # TODO: Remove this skip when Cubit python interpretter search is fixed
+            # TODO: Remove this skip when Cubit python interpreter search is fixed
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/917
-            pytest.mark.skipif(testing_hpc, reason="Cubit Python interpretter search fails on HPC"),
+            pytest.mark.skipif(testing_hpc, reason="Cubit Python interpreter search fails on HPC"),
         ],
     ),
     pytest.param(
         [
             fetch_template,
-            string.Template(
-                "scons sierra ${unconditional_build} --print-build-failures ${abaqus_command} ${cubit_command}"
-            ),
+            string.Template("scons sierra ${unconditional_build} ${abaqus_command} ${cubit_command}"),
         ],
         "tutorials/tutorial_cubit_alternate",
         marks=[
@@ -583,15 +559,15 @@ require_third_party_system_tests: list = [
             pytest.mark.skipif(
                 python_313_or_above, reason="Sierra version on CI server is incompatible with Python 3.13"
             ),
-            # TODO: Remove this skip when Cubit python interpretter search is fixed
+            # TODO: Remove this skip when Cubit python interpreter search is fixed
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/917
-            pytest.mark.skipif(testing_hpc, reason="Cubit Python interpretter search fails on HPC"),
+            pytest.mark.skipif(testing_hpc, reason="Cubit Python interpreter search fails on HPC"),
         ],
     ),
     pytest.param(
         [
             fetch_template,
-            string.Template("scons quinoa-local ${unconditional_build} --print-build-failures ${cubit_command}"),
+            string.Template("scons quinoa-local ${unconditional_build} ${cubit_command}"),
         ],
         "tutorials/tutorial_quinoa",
         marks=[
@@ -599,6 +575,15 @@ require_third_party_system_tests: list = [
             pytest.mark.scons,
             pytest.mark.cubit,
             pytest.mark.quinoa,
+            # TODO: Remove CI skip after Quinoa team fixes AEA RHEL behavior
+            pytest.mark.skip(reason="Quinoa installation broken on AEA RHEL9 CI servers"),
+            # TODO: Remove global 'installed' skip after CI/rattler-build environment issues are fixed
+            # Skipping on installation (e.g. rattler-build or actually installed) to preserve the in-repo tests.
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/1009
+            pytest.mark.skipif(installed, reason="Quinoa fails in the rattler-build environment"),
+            # TODO: Remove HPC skip after Quinoa team fixes HPC behavior
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/1002
+            pytest.mark.skipif(testing_hpc, reason="Quinoa fails on HPC"),
             pytest.mark.skipif(testing_macos, reason="Quinoa does not support macOS"),
             pytest.mark.skipif(testing_windows, reason="Quinoa does not support Windows"),
         ],
@@ -607,7 +592,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_escape_sequences --sconstruct=tutorial_escape_sequences_SConstruct --solve-cpus=1 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_escape_sequences --sconstruct=tutorial_escape_sequences_SConstruct --solve-cpus=1 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "tutorials",
@@ -615,7 +600,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -629,7 +614,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_remote_execution --sconstruct=tutorial_remote_execution_SConstruct ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_remote_execution --sconstruct=tutorial_remote_execution_SConstruct ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "tutorials",
@@ -644,7 +629,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_sbatch --sconstruct=tutorial_sbatch_SConstruct ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_sbatch --sconstruct=tutorial_sbatch_SConstruct ${unconditional_build} ${abaqus_command}"
             ),
         ],
         "tutorials",
@@ -652,7 +637,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -664,7 +649,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_05_parameter_substitution --sconstruct=tutorial_05_parameter_substitution_SConstruct ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_05_parameter_substitution --sconstruct=tutorial_05_parameter_substitution_SConstruct ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 5",
@@ -672,7 +657,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -684,7 +669,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_06_include_files --sconstruct=tutorial_06_include_files_SConstruct ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_06_include_files --sconstruct=tutorial_06_include_files_SConstruct ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 6",
@@ -692,7 +677,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -704,7 +689,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_07_cartesian_product --sconstruct=tutorial_07_cartesian_product_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_07_cartesian_product --sconstruct=tutorial_07_cartesian_product_SConstruct --jobs=4 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 7",
@@ -712,7 +697,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -725,7 +710,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_07_latin_hypercube --sconstruct=tutorial_07_latin_hypercube_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_07_latin_hypercube --sconstruct=tutorial_07_latin_hypercube_SConstruct --jobs=4 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "tutorials",
@@ -733,7 +718,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -745,7 +730,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_07_sobol_sequence --sconstruct=tutorial_07_sobol_sequence_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_07_sobol_sequence --sconstruct=tutorial_07_sobol_sequence_SConstruct --jobs=4 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "tutorials",
@@ -753,7 +738,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -765,7 +750,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_07_one_at_a_time --sconstruct=tutorial_07_one_at_a_time_SConstruct --jobs=3 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_07_one_at_a_time --sconstruct=tutorial_07_one_at_a_time_SConstruct --jobs=3 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "tutorials one at a time",
@@ -773,7 +758,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -785,7 +770,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_08_data_extraction --sconstruct=tutorial_08_data_extraction_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_08_data_extraction --sconstruct=tutorial_08_data_extraction_SConstruct --jobs=4 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 8",
@@ -793,7 +778,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -805,7 +790,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_09_post_processing --sconstruct=tutorial_09_post_processing_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_09_post_processing --sconstruct=tutorial_09_post_processing_SConstruct --jobs=4 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 9",
@@ -813,7 +798,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -825,7 +810,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons unit_testing --sconstruct=tutorial_10_unit_testing_SConstruct ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons unit_testing --sconstruct=tutorial_10_unit_testing_SConstruct ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 10",
@@ -833,7 +818,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -845,7 +830,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_sensitivity_study --sconstruct=tutorial_sensitivity_study_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_sensitivity_study --sconstruct=tutorial_sensitivity_study_SConstruct --jobs=4 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "tutorials",
@@ -853,7 +838,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -865,7 +850,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons datacheck --sconstruct=tutorial_11_regression_testing_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons datacheck --sconstruct=tutorial_11_regression_testing_SConstruct --jobs=4 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 11",
@@ -873,7 +858,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -885,7 +870,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_12_archival tutorial_12_archival_archive --sconstruct=tutorial_12_archival_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_12_archival tutorial_12_archival_archive --sconstruct=tutorial_12_archival_SConstruct --jobs=4 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "--tutorial 12",
@@ -893,7 +878,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -905,7 +890,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_abaqus_pseudo_builder --sconstruct=tutorial_abaqus_pseudo_builder_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_abaqus_pseudo_builder --sconstruct=tutorial_abaqus_pseudo_builder_SConstruct --jobs=4 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "tutorials",
@@ -913,7 +898,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -925,7 +910,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_task_reuse --sconstruct=tutorial_task_reuse_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_task_reuse --sconstruct=tutorial_task_reuse_SConstruct --jobs=4 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "tutorials",
@@ -933,7 +918,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -945,7 +930,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_mesh_convergence --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_mesh_convergence --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "tutorials",
@@ -953,7 +938,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -973,7 +958,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -985,7 +970,7 @@ require_third_party_system_tests: list = [
         [
             fetch_template,
             string.Template(
-                "scons tutorial_part_image --sconstruct=tutorial_part_image_SConstruct --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"  # noqa: E501
+                "scons tutorial_part_image --sconstruct=tutorial_part_image_SConstruct --jobs=4 ${unconditional_build} ${abaqus_command}"  # noqa: E501
             ),
         ],
         "tutorials",
@@ -993,7 +978,7 @@ require_third_party_system_tests: list = [
             pytest.mark.require_third_party,
             pytest.mark.scons,
             pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
                 testing_windows and testing_ci_user,
@@ -1007,16 +992,19 @@ require_third_party_system_tests: list = [
             fetch_template,
             # TODO: return to testing ``.`` all targets if/when system tests are less fragile
             string.Template(
-                "scons --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"
+                "scons --jobs=4 ${unconditional_build} ${abaqus_command}"
                 " datacheck"
+                " qoi-regression"
                 " rectangle_compression-nominal-datacheck"
                 " rectangle_compression-nominal-images"
                 " rectangle_compression-nominal"
                 " rectangle_compression-nominal-archive"
+                " rectangle_compression-nominal-qoi-regression"
                 " rectangle_compression-mesh_convergence-datacheck"
                 " rectangle_compression-mesh_convergence-images"
                 " rectangle_compression-mesh_convergence"
                 " rectangle_compression-mesh_convergence-archive"
+                " rectangle_compression-mesh_convergence-qoi-regression"
                 " unit_testing"
             ),
             string.Template(
@@ -1033,8 +1021,11 @@ require_third_party_system_tests: list = [
             pytest.mark.sphinx,
             pytest.mark.abaqus,
             pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
-                testing_windows, reason="The archive tasks' command line is too long for Windows Powershell"
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
             # TODO: Fix HPC CI system tests that run TeXLive
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
@@ -1047,64 +1038,19 @@ require_third_party_system_tests: list = [
             fetch_template,
             # TODO: return to testing ``.`` all targets if/when system tests are less fragile
             string.Template(
-                "scons --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"
+                "scons --jobs=4 ${unconditional_build} ${abaqus_command}"
                 " datacheck"
-                " rectangle_compression-nominal-datacheck"
-                " rectangle_compression-nominal-images"
-                " rectangle_compression-nominal"
-                " rectangle_compression-mesh_convergence-datacheck"
-                " rectangle_compression-mesh_convergence-images"
-                " rectangle_compression-mesh_convergence"
-                " unit_testing"
-            ),
-            string.Template(
-                "${waves_command} visualize rectangle_compression-nominal --output-file nominal.png ${abaqus_command}"
-            ),
-            string.Template(
-                "${waves_command} print_study build/rectangle_compression-mesh_convergence/mesh_convergence.h5"
-            ),
-        ],
-        "modsim_template",
-        marks=[
-            pytest.mark.require_third_party,
-            pytest.mark.scons,
-            pytest.mark.sphinx,
-            pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
-            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
-            pytest.mark.skipif(
-                testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
-            ),
-            pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
-            pytest.mark.skipif(
-                not testing_windows,
-                reason=(
-                    "Windows specific test variation. "
-                    "On other operating systems, this test is covered by 'modsim_template_full'"
-                ),
-            ),
-            # TODO: Fix HPC CI system tests that run TeXLive
-            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
-            pytest.mark.skipif(testing_hpc, reason="HPC CI server fails TeXLive PDF builds"),
-        ],
-        id="modsim_template_without_archive",
-    ),
-    pytest.param(
-        [
-            fetch_template,
-            # TODO: return to testing ``.`` all targets if/when system tests are less fragile
-            string.Template(
-                "scons --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"
-                " datacheck"
+                " qoi-regression"
                 " rectangle_compression-nominal-datacheck"
                 " rectangle_compression-nominal-images"
                 " rectangle_compression-nominal"
                 " rectangle_compression-nominal-archive"
+                " rectangle_compression-nominal-qoi-regression"
                 " rectangle_compression-mesh_convergence-datacheck"
                 " rectangle_compression-mesh_convergence-images"
                 " rectangle_compression-mesh_convergence"
                 " rectangle_compression-mesh_convergence-archive"
+                " rectangle_compression-mesh_convergence-qoi-regression"
                 " unit_testing"
             ),
             string.Template(
@@ -1121,62 +1067,17 @@ require_third_party_system_tests: list = [
             pytest.mark.sphinx,
             pytest.mark.abaqus,
             pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
+            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus license server
+            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
             pytest.mark.skipif(
-                testing_windows, reason="The archive tasks' command line is too long for Windows Powershell"
+                testing_windows and testing_ci_user,
+                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
             ),
             # TODO: Fix HPC CI system tests that run TeXLive
             # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
             pytest.mark.skipif(testing_hpc, reason="HPC CI server fails TeXLive PDF builds"),
         ],
         id="modsim_template_2_full",
-    ),
-    pytest.param(
-        [
-            fetch_template,
-            # TODO: return to testing ``.`` all targets if/when system tests are less fragile
-            string.Template(
-                "scons --jobs=4 ${unconditional_build} --print-build-failures ${abaqus_command}"
-                " datacheck"
-                " rectangle_compression-nominal-datacheck"
-                " rectangle_compression-nominal-images"
-                " rectangle_compression-nominal"
-                " rectangle_compression-mesh_convergence-datacheck"
-                " rectangle_compression-mesh_convergence-images"
-                " rectangle_compression-mesh_convergence"
-                " unit_testing"
-            ),
-            string.Template(
-                "${waves_command} visualize rectangle_compression-nominal --output-file nominal.png ${abaqus_command}"
-            ),
-            string.Template(
-                "${waves_command} print_study build/parameter_studies/rectangle_compression-mesh_convergence.h5"
-            ),
-        ],
-        "modsim_template_2",
-        marks=[
-            pytest.mark.require_third_party,
-            pytest.mark.scons,
-            pytest.mark.sphinx,
-            pytest.mark.abaqus,
-            # TODO: Remove user check when Windows CI Gitlab-Runner account can access the Abaqus licesnse server
-            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/984
-            pytest.mark.skipif(
-                testing_windows and testing_ci_user,
-                reason="Windows CI server Gitlab-Runner user does not have access to Abaqus license server",
-            ),
-            pytest.mark.skipif(testing_macos, reason="Cannot install Abaqus on macOS"),
-            pytest.mark.skipif(
-                not testing_windows,
-                reason=(
-                    "Windows specific test variation. "
-                    "On other operating systems, this test is covered by 'modsim_template_full'"
-                ),
-            ),
-            # TODO: Fix HPC CI system tests that run TeXLive
-            # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/891
-            pytest.mark.skipif(testing_hpc, reason="HPC CI server fails TeXLive PDF builds"),
-        ],
-        id="modsim_template_2_without_archive",
     ),
 ]
 
@@ -1243,31 +1144,22 @@ def test_system(
     temporary_path.mkdir(parents=True, exist_ok=True)
     # Move to common test utility ^^^
     template_substitution = {
-        "waves_command": waves_command,
+        "waves_command": _WAVES_CLI_COMMAND,
         "odb_extract_command": odb_extract_command,
         "fetch_options": fetch_options,
         "temporary_directory": temporary_path,
         "unconditional_build": "--unconditional-build" if unconditional_build else "",
-        "abaqus_command": " ".join(f"--abaqus-command={command}" for command in abaqus_command),
-        "cubit_command": " ".join(f"--cubit-command={command}" for command in cubit_command),
+        "abaqus_command": " ".join(f'--abaqus-command="{command}"' for command in abaqus_command),
+        "cubit_command": " ".join(f'--cubit-command="{command}"' for command in cubit_command),
     }
-    try:
-        for command in commands:
-            if isinstance(command, string.Template):
-                command_string = command.substitute(template_substitution)
-            else:
-                command_string = command
-            # TODO: Find a better way to split ``--waves-command='python -m waves._main'`` correctly for Windows
-            if "--waves-command" in command_string:
-                command_list = shlex.split(command_string, posix=True)
-            else:
-                command_list = shlex.split(command_string, posix=not testing_windows)
-            subprocess.check_output(command_list, env=system_test_environment, cwd=temporary_path, text=True)
-    except Exception as err:
-        raise err
-    else:
-        if not keep_system_tests:
-            temporary_directory.cleanup()
+    for command in commands:
+        if isinstance(command, string.Template):
+            command_string = command.substitute(template_substitution)
+        else:
+            command_string = command
+        subprocess.check_output(command_string, env=system_test_environment, cwd=temporary_path, text=True, shell=True)
+    if not keep_system_tests:
+        temporary_directory.cleanup()
 
 
 def create_test_prefix(request: pytest.FixtureRequest, module_name: str = MODULE_NAME) -> str:
