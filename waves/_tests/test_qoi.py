@@ -1081,7 +1081,7 @@ test__within_tolerance_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        False,
+        0,
     ),
     "scalar, in tolerance": (
         xarray.DataArray(
@@ -1089,7 +1089,7 @@ test__within_tolerance_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        True,
+        1,
     ),
     "scalar, in tolerance: preserve attributes": (
         xarray.DataArray(
@@ -1097,7 +1097,7 @@ test__within_tolerance_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={"custom_attr": "custom_attr1"},
         ),
-        True,
+        1,
     ),
     "scalar, out of tolerance": (
         xarray.DataArray(
@@ -1105,7 +1105,7 @@ test__within_tolerance_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        False,
+        0,
     ),
     "scalar, infinite upper bound": (
         xarray.DataArray(
@@ -1113,7 +1113,7 @@ test__within_tolerance_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        True,
+        1,
     ),
     "scalar, NaN upper bound": (
         xarray.DataArray(
@@ -1121,7 +1121,7 @@ test__within_tolerance_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        True,
+        1,
     ),
     "scalar, infinite lower bound": (
         xarray.DataArray(
@@ -1129,7 +1129,7 @@ test__within_tolerance_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        True,
+        1,
     ),
     "scalar, NaN lower bound": (
         xarray.DataArray(
@@ -1137,7 +1137,7 @@ test__within_tolerance_cases = {
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
             attrs={},
         ),
-        True,
+        1,
     ),
     "1D, completely in tolerance": (
         xarray.DataArray(
@@ -1148,7 +1148,7 @@ test__within_tolerance_cases = {
             },
             attrs={},
         ),
-        True,
+        1,
     ),
     "1D, out of tolerance": (
         xarray.DataArray(
@@ -1159,7 +1159,7 @@ test__within_tolerance_cases = {
             },
             attrs={},
         ),
-        False,
+        0,
     ),
     "1D, partially nan, in tolerance": (
         xarray.DataArray(
@@ -1170,7 +1170,7 @@ test__within_tolerance_cases = {
             },
             attrs={},
         ),
-        True,
+        1,
     ),
 }
 
@@ -1180,8 +1180,10 @@ test__within_tolerance_cases = {
     test__within_tolerance_cases.values(),
     ids=test__within_tolerance_cases.keys(),
 )
-def test__within_tolerance(qoi_array: xarray.DataArray, expected: bool) -> None:
-    assert expected == qoi._within_tolerance(qoi_array)
+def test__within_tolerance(qoi_array: xarray.DataArray, expected: int) -> None:
+    output = qoi._within_tolerance(qoi_array)
+    assert type(output) is int
+    assert expected == output
 
 
 test_write_qoi_set_to_csv_cases = test__read_qoi_set_cases
@@ -1201,7 +1203,52 @@ def test_write_qoi_set_to_csv(expected: str, qoi_set: xarray.Dataset) -> None:
 
 
 def test__plot_qoi_tolerance_check() -> None:
-    pass
+    scalar_qoi = xarray.DataArray(
+        [1.0, 2.0, 0.5, 3.0],
+        coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
+        name="scalar_qoi",
+    )
+    oned_qoi = xarray.DataArray(
+        [[1.0, 2.0, 0.5, 3.0], [1.5, 2.5, 1.0, 3.5]],
+        coords={
+            "version": ["abcdef", "ghijkl"],
+            "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+        },
+        name="oned_qoi",
+    )
+    twod_qoi = xarray.DataArray(
+        [
+            [[1.0, 2.0, 0.5, 3.0], [1.5, 2.5, 1.0, 3.5]],
+            [[0.8, 1.8, 0.3, 2.8], [1.2, 2.2, 0.7, 3.2]],
+        ],
+        coords={
+            "load_case": ["lc0", "lc1"],
+            "version": ["abcdef", "ghijkl"],
+            "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+        },
+        name="twod_qoi",
+    )
+    axes = object()
+
+    with (
+        patch("waves.qoi._plot_scalar_tolerance_check") as mock_plot_scalar_tolerance_check,
+        patch("waves.qoi._plot_1d_tolerance_check") as mock_plot_1d_tolerance_check,
+    ):
+        qoi._plot_qoi_tolerance_check(scalar_qoi, axes)  # type: ignore[arg-type]
+        mock_plot_scalar_tolerance_check.assert_called_once_with(scalar_qoi, axes)
+        mock_plot_1d_tolerance_check.assert_not_called()
+
+        mock_plot_scalar_tolerance_check.reset_mock()
+        mock_plot_1d_tolerance_check.reset_mock()
+        qoi._plot_qoi_tolerance_check(oned_qoi, axes)  # type: ignore[arg-type]
+        mock_plot_scalar_tolerance_check.assert_not_called()
+        mock_plot_1d_tolerance_check.assert_called_once_with(oned_qoi, axes)
+
+        mock_plot_scalar_tolerance_check.reset_mock()
+        mock_plot_1d_tolerance_check.reset_mock()
+        qoi._plot_qoi_tolerance_check(twod_qoi, axes)  # type: ignore[arg-type]
+        mock_plot_scalar_tolerance_check.assert_not_called()
+        mock_plot_1d_tolerance_check.assert_not_called()
 
 
 def test__plot_scalar_tolerance_check() -> None:
@@ -1340,7 +1387,7 @@ def test__can_plot_scalar_qoi_history(qoi_array: xarray.DataArray, expected: boo
 
 
 test__can_plot_qoi_tolerance_check_cases = {
-    "all_floats": (
+    "scalar": (
         xarray.DataArray(
             [1.0, 2.0, 0.5, 3.0],
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
@@ -1367,7 +1414,7 @@ test__can_plot_qoi_tolerance_check_cases = {
         ),
         False,
     ),
-    "some_nan": (
+    "scalar with null values": (
         xarray.DataArray(
             [1.0, numpy.nan, numpy.nan, numpy.nan],
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"]},
@@ -1376,7 +1423,7 @@ test__can_plot_qoi_tolerance_check_cases = {
         ),
         False,
     ),
-    "non_scalar": (
+    "1d": (
         xarray.DataArray(
             [[1.0, 1.0], [1.0, 1.0], [1.0, 1.0], [1.0, 1.0]],
             coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"], "extra_dim": [0, 1]},
@@ -1384,6 +1431,28 @@ test__can_plot_qoi_tolerance_check_cases = {
             attrs={},
         ),
         True,
+    ),
+    "1d with null values": (
+        xarray.DataArray(
+            [[1.0, numpy.nan], [1.0, numpy.nan], [1.0, numpy.nan], [1.0, numpy.nan]],
+            coords={"value_type": ["calculated", "expected", "lower_limit", "upper_limit"], "extra_dim": [0, 1]},
+            name="qoi1",
+            attrs={},
+        ),
+        False,
+    ),
+    "2d": (
+        xarray.DataArray(
+            [[[1.0, 1.0], [1.0, 1.0]], [[1.0, 1.0], [1.0, 1.0]], [[1.0, 1.0], [1.0, 1.0]], [[1.0, 1.0], [1.0, 1.0]]],
+            coords={
+                "value_type": ["calculated", "expected", "lower_limit", "upper_limit"],
+                "extra_dim": [0, 1],
+                "second_dim": [0, 1],
+            },
+            name="qoi1",
+            attrs={},
+        ),
+        False,
     ),
 }
 
