@@ -514,16 +514,17 @@ def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
         raise RuntimeError(f"Unknown file suffix '{suffix}'")
 
 
-def _within_tolerance(qoi: xarray.DataArray) -> bool:
+def _within_tolerance(qoi: xarray.DataArray) -> int:
     """Check if QOI is within tolerance.
 
     :param qoi: QOI.
+
+    :returns: ``1`` when the QOI is within tolerance, otherwise ``0``
     """
     lower_limit = qoi.sel(value_type="lower_limit").fillna(-numpy.inf)
     upper_limit = qoi.sel(value_type="upper_limit").fillna(numpy.inf)
     calculated = qoi.sel(value_type="calculated")
-    # netcdf4 doesn't support bool, so make it an int
-    return ((calculated >= lower_limit) & (calculated <= upper_limit)).all().item()
+    return int(((calculated >= lower_limit) & (calculated <= upper_limit)).all().item())
 
 
 def write_qoi_set_to_csv(qoi_set: xarray.Dataset, output: pathlib.Path) -> None:
@@ -590,13 +591,8 @@ def _can_plot_qoi_tolerance_check(qoi: xarray.DataArray) -> bool:
     if "value_type" not in qoi.dims:
         return False
     qoi_dim = len(qoi.squeeze().dims) - 1  # Count does not include the "value_type" dim
-    if qoi_dim == 0 or qoi_dim == 1:  # Scalar or 1D QOI
-        # Not a pandas object in the unit tests, so the linter suggestion is wrong.
-        if qoi.isnull().any():  # noqa: PD003
-            return False
-    else:
-        return False
-    return True
+    # Not a pandas object in the unit tests, so the linter suggestion is wrong.
+    return qoi_dim in {0, 1} and not qoi.isnull().any()  # noqa: PD003
 
 
 def _plot_scalar_tolerance_check(
@@ -663,7 +659,7 @@ def _plot_1d_tolerance_check(
     qoi: xarray.DataArray,
     axes: matplotlib.axes.Axes,
 ) -> None:
-    """Plot a tolerance check for a scalar QOI DataArray.
+    """Plot a tolerance check for a 1D QOI DataArray.
 
     :param qoi: Quantity of interest data array as built by :meth:`create_qoi`
     :param axes: Matplotlib axes for plotting
@@ -674,7 +670,6 @@ def _plot_1d_tolerance_check(
 
     # Determine dimension to plot on x-axis
     x_dim = next(dim for dim in qoi.dims if dim != "value_type")
-    name = _get_plotting_name(qoi)
     axes.plot(qoi[x_dim], qoi.sel(value_type="lower_limit"), "--^", color="black")
     axes.plot(qoi[x_dim], qoi.sel(value_type="upper_limit"), "--v", color="black")
     axes.plot(qoi[x_dim], qoi.sel(value_type="expected"), ":", color="grey")
@@ -975,8 +970,7 @@ def _diff(calculated: pathlib.Path, expected: pathlib.Path, output: pathlib.Path
     qoi_set = xarray.merge((_read_qoi_set(calculated), _read_qoi_set(expected)), join="outer", compat="no_conflicts")
     # Add within_tolerance as attribute so it shows up in the CSV
     for qoi in qoi_set.data_vars.values():
-        # netcdf4 doesn't support bool, so make it an int
-        qoi.attrs["within_tolerance"] = int(_within_tolerance(qoi))
+        qoi.attrs["within_tolerance"] = _within_tolerance(qoi)
     write_qoi_set_to_csv(qoi_set, output)
 
 
