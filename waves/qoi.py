@@ -517,9 +517,10 @@ def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
 def _within_tolerance(qoi: xarray.DataArray) -> int:
     """Check if QOI is within tolerance.
 
-    :param qoi: QOI.
+    :param qoi: Quantity of interest data array as built by :meth:`create_qoi`.
 
-    :returns: ``1`` when the QOI is within tolerance, otherwise ``0``
+    :returns: ``1`` when the QOI is within tolerance, otherwise ``0``. ``int`` is used instead of ``bool`` to
+        keep the in-memory representation consistent with on-disk NetCDF data.
     """
     lower_limit = qoi.sel(value_type="lower_limit").fillna(-numpy.inf)
     upper_limit = qoi.sel(value_type="upper_limit").fillna(numpy.inf)
