@@ -514,17 +514,18 @@ def _read_qoi_set(from_file: pathlib.Path) -> xarray.Dataset:
         raise RuntimeError(f"Unknown file suffix '{suffix}'")
 
 
-def _add_tolerance_attribute(qoi_set: xarray.Dataset) -> None:
-    """Add a ``"within_tolerance"`` attribute to each QOI in a QOI Dataset in place.
+def _within_tolerance(qoi: xarray.DataArray) -> int:
+    """Check if QOI is within tolerance.
 
-    :param qoi_set: QOI set.
+    :param qoi: Quantity of interest data array as built by :meth:`create_qoi`.
+
+    :returns: ``1`` when the QOI is within tolerance, otherwise ``0``. ``int`` is used instead of ``bool`` to
+        keep the in-memory representation consistent with on-disk NetCDF data.
     """
-    for qoi in qoi_set.data_vars.values():
-        lower_limit = qoi.sel(value_type="lower_limit").fillna(-numpy.inf)
-        upper_limit = qoi.sel(value_type="upper_limit").fillna(numpy.inf)
-        calculated = qoi.sel(value_type="calculated")
-        # netcdf4 doesn't support bool, so make it an int
-        qoi.attrs["within_tolerance"] = int(((calculated >= lower_limit) & (calculated <= upper_limit)).all().item())
+    lower_limit = qoi.sel(value_type="lower_limit").fillna(-numpy.inf)
+    upper_limit = qoi.sel(value_type="upper_limit").fillna(numpy.inf)
+    calculated = qoi.sel(value_type="calculated")
+    return int(((calculated >= lower_limit) & (calculated <= upper_limit)).all().item())
 
 
 def write_qoi_set_to_csv(qoi_set: xarray.Dataset, output: pathlib.Path) -> None:
@@ -571,9 +572,11 @@ def _plot_qoi_tolerance_check(qoi: xarray.DataArray, axes: matplotlib.axes.Axes)
     :param qoi: Quantity of interest data array as built by :meth:`create_qoi`
     :param axes: Matplotlib axes for plotting
     """
-    qoi_dim = len(qoi.squeeze().dims)  # Count includes the "value_type" dim
-    if qoi_dim == 1:  # Scalar QOI
+    qoi_dim = len(qoi.squeeze().dims) - 1  # Count does not include the "value_type" dim
+    if qoi_dim == 0:  # Scalar QOI
         _plot_scalar_tolerance_check(qoi, axes)
+    elif qoi_dim == 1:  # 1D QOI
+        _plot_1d_tolerance_check(qoi, axes)
 
 
 def _can_plot_qoi_tolerance_check(qoi: xarray.DataArray) -> bool:
@@ -581,24 +584,16 @@ def _can_plot_qoi_tolerance_check(qoi: xarray.DataArray) -> bool:
 
     Requires the following:
         1. "value_type" is a dimension
-        2. "within_tolerance" is an attribute
-        3. The QOI is scalar
-        4. No values (e.g. calculated, expected, lower_limit, upper_limit) are null
+        2. The QOI is scalar or 1D
+        3. No values (e.g. calculated, expected, lower_limit, upper_limit) are null
 
     :param qoi: Quantity of interest data array as built by :meth:`create_qoi`
     """
     if "value_type" not in qoi.dims:
         return False
-    if "within_tolerance" not in qoi.attrs:
-        return False
-    qoi_dim = len(qoi.squeeze().dims)  # Count includes the "value_type" dim
-    if qoi_dim == 1:  # Scalar QOI
-        # Not a pandas object in the unit tests, so the linter suggestion is wrong.
-        if qoi.isnull().any():  # noqa: PD003
-            return False
-    else:
-        return False
-    return True
+    qoi_dim = len(qoi.squeeze().dims) - 1  # Count does not include the "value_type" dim
+    # Not a pandas object in the unit tests, so the linter suggestion is wrong.
+    return qoi_dim in {0, 1} and not qoi.isnull().any()  # noqa: PD003
 
 
 def _plot_scalar_tolerance_check(
@@ -615,11 +610,13 @@ def _plot_scalar_tolerance_check(
     expected = qoi.sel(value_type="expected").item()
     lower_limit = qoi.sel(value_type="lower_limit").item()
     upper_limit = qoi.sel(value_type="upper_limit").item()
-    within_tolerance = qoi.attrs["within_tolerance"]
+    within_tolerance = _within_tolerance(qoi)
     # TODO: draw arrow if bar is clipped by xmin, xmax
 
-    # Bar color is always green if within tolerance, red otherwise
+    # Color red if not in tolerance
     bar_color = "green" if within_tolerance else "red"
+    title_color = "black" if within_tolerance else "red"
+
     # If tolerance on both sides, within_tolerance is good, out of tolerance is bad
     lower_line = lower_limit
     upper_line = upper_limit
@@ -650,34 +647,39 @@ def _plot_scalar_tolerance_check(
     # Add calculated value as annotation above bar
     axes.annotate(
         f"{calculated:.3e}",
-        xy=(calculated, 0.555),
-        xytext=(numpy.clip(calculated, xmin, xmax), 0.55),
+        xy=(calculated, 0.5),
+        xytext=(numpy.clip(calculated, xmin, xmax), 0.4),
         annotation_clip=False,
         ha="center",
         fontsize=8,
     )
-
-    # Add QOI name and values to left of plot
-    if not within_tolerance:
-        color = "red"
-        fontweight = "bold"
-    else:
-        color = "black"
-        fontweight = "normal"
-    axes.annotate(
-        text=f"{name}\n min: {lower_limit:.2e}, max: {upper_limit:.2e}, exp: {expected:.2e}, calc: {calculated:.2e}",
-        xy=(-0.05, 0.5),
-        textcoords="axes fraction",
-        annotation_clip=False,
-        ha="right",
-        va="center",
-        fontweight=fontweight,
-        color=color,
-        fontsize=8,
-    )
+    axes.set_title(name, color=title_color)
 
 
-def _write_qoi_report(qoi_archive: xarray.DataTree, output: pathlib.Path, plots_per_page: int = 16) -> None:
+def _plot_1d_tolerance_check(
+    qoi: xarray.DataArray,
+    axes: matplotlib.axes.Axes,
+) -> None:
+    """Plot a tolerance check for a 1D QOI DataArray.
+
+    :param qoi: Quantity of interest data array as built by :meth:`create_qoi`
+    :param axes: Matplotlib axes for plotting
+    """
+    name = _get_plotting_name(qoi)
+    title_color = "black" if _within_tolerance(qoi) else "red"
+    line_color = "green" if _within_tolerance(qoi) else "red"
+
+    # Determine dimension to plot on x-axis
+    x_dim = next(dim for dim in qoi.dims if dim != "value_type")
+    axes.plot(qoi[x_dim], qoi.sel(value_type="lower_limit"), "--^", color="black")
+    axes.plot(qoi[x_dim], qoi.sel(value_type="upper_limit"), "--v", color="black")
+    axes.plot(qoi[x_dim], qoi.sel(value_type="expected"), ":", color="grey")
+    axes.plot(qoi[x_dim], qoi.sel(value_type="calculated"), "-o", color=line_color)
+    axes.set_title(name, color=title_color)
+    axes.tick_params(labelsize=8)
+
+
+def _write_qoi_report(qoi_archive: xarray.DataTree, output: pathlib.Path, plots_per_page: int = 8) -> None:
     """Write a QOI report to a PDF.
 
     QOI archive must contain QOIs with only the "value_type" dimension. Multi-dimensional QOIs and QOI values across
@@ -696,13 +698,13 @@ def _write_qoi_report(qoi_archive: xarray.DataTree, output: pathlib.Path, plots_
         if _can_plot_qoi_tolerance_check(qoi)
     ]
     page_margins = {
-        "left": 0.6,  # plot on right half of page because text will go on left side
+        "left": 0.1,  # leave margin on left edge
         "right": 0.9,  # leave margin on right edge
         "top": (1.0 - 1.0 / plots_per_page),  # top margin equal to single plot height
         "bottom": (0.5 / plots_per_page),  # bottom margin equal to half of single plot height
         "hspace": 1.0,
     }
-    _pdf_report(qois, output, page_margins, plots_per_page, _plot_qoi_tolerance_check, {})
+    _pdf_report(qois, output, page_margins, plots_per_page, _plot_qoi_tolerance_check)
 
 
 def _get_plotting_name(qoi: xarray.DataArray) -> str:
@@ -967,7 +969,9 @@ def _diff(calculated: pathlib.Path, expected: pathlib.Path, output: pathlib.Path
     :param output: output path for differences between calculated and expected QOI values
     """
     qoi_set = xarray.merge((_read_qoi_set(calculated), _read_qoi_set(expected)), join="outer", compat="no_conflicts")
-    _add_tolerance_attribute(qoi_set)
+    # Add within_tolerance as attribute so it shows up in the CSV
+    for qoi in qoi_set.data_vars.values():
+        qoi.attrs["within_tolerance"] = _within_tolerance(qoi)
     write_qoi_set_to_csv(qoi_set, output)
 
 

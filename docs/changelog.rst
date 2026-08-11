@@ -8,6 +8,11 @@ Changelog
 1.6.0 (unreleased)
 ******************
 
+Enhancements
+============
+- Add QOI histogram report. (:merge:`1263`). By `Matthew Fister`_.
+- Add support for 1D QOIs in tolerance report. (:merge:`1266`). By `Matthew Fister`_.
+
 ******************
 1.5.1 (2026-07-22)
 ******************
