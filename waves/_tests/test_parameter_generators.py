@@ -836,19 +836,21 @@ merge_parameter_space_cases: dict = {
         xarray.Dataset(
             {
                 "parameter_1": xarray.DataArray(
-                    [1, 2], coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]}
+                    [2, 1],
+                    dims=["set_name"],
+                    coords={
+                        "set_name": ["parameter_set1", "parameter_set0"],
+                        "set_hash": (
+                            "set_name",
+                            [
+                                "0b588b6a82c1d3d3d19fda304f940342",
+                                "1661dcd0bf4761d25471c1cf5514ceae",
+                            ],
+                        ),
+                    },
                 ),
-                _settings._hash_coordinate_key: xarray.DataArray(
-                    [
-                        "1661dcd0bf4761d25471c1cf5514ceae",
-                        "0b588b6a82c1d3d3d19fda304f940342",
-                    ],
-                    coords={_settings._set_coordinate_key: ["parameter_set0", "parameter_set1"]},
-                ),
-            }
-        )
-        .set_coords(_settings._hash_coordinate_key)
-        .sortby(_settings._hash_coordinate_key),
+            },
+        ),
         {"parameter_1": numpy.int64},
         False,
         does_not_raise,
@@ -3639,14 +3641,17 @@ test__write_cases = {
                 {
                     "parameter_1": xarray.DataArray(
                         [2, 1],
-                        coords={"set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])},
-                    ),
-                    "set_hash": xarray.DataArray(
-                        ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
-                        dims="set_name",
+                        dims=["set_name"],
+                        coords={
+                            "set_name": ["parameter_set0", "parameter_set1"],
+                            "set_hash": (
+                                "set_name",
+                                ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                            ),
+                        },
                     ),
                 },
-            ).set_coords("set_hash"),
+            ),
         ],
         None,
         None,
@@ -3673,14 +3678,17 @@ test__write_cases = {
                 {
                     "parameter_1": xarray.DataArray(
                         [2, 1],
-                        coords={"set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])},
-                    ),
-                    "set_hash": xarray.DataArray(
-                        ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
                         dims="set_name",
+                        coords={
+                            "set_name": ["parameter_set0", "parameter_set1"],
+                            "set_hash": (
+                                "set_name",
+                                ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                            ),
+                        },
                     ),
                 },
-            ).set_coords("set_hash"),
+            ),
         ],
         None,
         None,
@@ -3695,14 +3703,17 @@ test__write_cases = {
                 {
                     "parameter_1": xarray.DataArray(
                         [2, 1],
-                        coords={"set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])},
-                    ),
-                    "set_hash": xarray.DataArray(
-                        ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
-                        dims="set_name",
+                        dims=["set_name"],
+                        coords={
+                            "set_name": ["parameter_set0", "parameter_set1"],
+                            "set_hash": (
+                                "set_name",
+                                ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                            ),
+                        },
                     ),
                 },
-            ).set_coords("set_hash"),
+            ),
         ],
         None,
         f"{pathlib.Path('/output.h5').resolve()}\n",
@@ -3718,16 +3729,17 @@ test__write_cases = {
                     {
                         "parameter_1": xarray.DataArray(
                             [2, 1],
+                            dims=["set_name"],
                             coords={
-                                "set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])
+                                "set_name": ["parameter_set0", "parameter_set1"],
+                                "set_hash": (
+                                    "set_name",
+                                    ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                                ),
                             },
                         ),
-                        "set_hash": xarray.DataArray(
-                            ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
-                            dims="set_name",
-                        ),
                     },
-                ).set_coords("set_hash")
+                ),
             )
             + "\n",
         ],
@@ -3746,16 +3758,17 @@ test__write_cases = {
                     {
                         "parameter_1": xarray.DataArray(
                             [2, 1],
+                            dims=["set_name"],
                             coords={
-                                "set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])
+                                "set_name": ["parameter_set0", "parameter_set1"],
+                                "set_hash": (
+                                    "set_name",
+                                    ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                                ),
                             },
                         ),
-                        "set_hash": xarray.DataArray(
-                            ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
-                            dims="set_name",
-                        ),
                     },
-                ).set_coords("set_hash")
+                ),
             )
             + "\n",
         ],
@@ -3773,24 +3786,26 @@ test__write_cases = {
                 {
                     "parameter_1": xarray.DataArray(
                         [2],
+                        dims=["set_name"],
                         coords={
-                            "set_name": xarray.DataArray(["parameter_set0"], dims=["set_name"]),
+                            "set_name": ["parameter_set0"],
+                            "set_hash": ("set_name", ["0b588b6a82c1d3d3d19fda304f940342"]),
                         },
                     ),
-                    "set_hash": xarray.DataArray(["0b588b6a82c1d3d3d19fda304f940342"], dims="set_name"),
                 },
-            ).set_coords("set_hash"),
+            ),
             xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
                         [1],
+                        dims=["set_name"],
                         coords={
-                            "set_name": xarray.DataArray(["parameter_set1"], dims=["set_name"]),
+                            "set_name": ["parameter_set1"],
+                            "set_hash": ("set_name", ["1661dcd0bf4761d25471c1cf5514ceae"]),
                         },
                     ),
-                    "set_hash": xarray.DataArray(["1661dcd0bf4761d25471c1cf5514ceae"], dims="set_name"),
                 },
-            ).set_coords("set_hash"),
+            ),
         ],
         None,
         None,
@@ -3806,13 +3821,14 @@ test__write_cases = {
                     {
                         "parameter_1": xarray.DataArray(
                             [2],
+                            dims=["set_name"],
                             coords={
-                                "set_name": xarray.DataArray(["parameter_set0"], dims=["set_name"]),
+                                "set_name": ["parameter_set0"],
+                                "set_hash": ("set_name", ["0b588b6a82c1d3d3d19fda304f940342"]),
                             },
                         ),
-                        "set_hash": xarray.DataArray(["0b588b6a82c1d3d3d19fda304f940342"], dims="set_name"),
                     },
-                ).set_coords("set_hash")
+                )
             )
             + "\n",
             f"{pathlib.Path('directory') / 'parameter_set1.h5'}\n"
@@ -3821,13 +3837,14 @@ test__write_cases = {
                     {
                         "parameter_1": xarray.DataArray(
                             [1],
+                            dims=["set_name"],
                             coords={
-                                "set_name": xarray.DataArray(["parameter_set1"], dims=["set_name"]),
+                                "set_name": ["parameter_set1"],
+                                "set_hash": ("set_name", ["1661dcd0bf4761d25471c1cf5514ceae"]),
                             },
                         ),
-                        "set_hash": xarray.DataArray(["1661dcd0bf4761d25471c1cf5514ceae"], dims="set_name"),
                     },
-                ).set_coords("set_hash")
+                )
             )
             + "\n",
         ],
@@ -3845,24 +3862,26 @@ test__write_cases = {
                 {
                     "parameter_1": xarray.DataArray(
                         [2],
+                        dims=["set_name"],
                         coords={
-                            "set_name": xarray.DataArray(["parameter_set0"], dims=["set_name"]),
+                            "set_name": ["parameter_set0"],
+                            "set_hash": ("set_name", ["0b588b6a82c1d3d3d19fda304f940342"]),
                         },
                     ),
-                    "set_hash": xarray.DataArray(["0b588b6a82c1d3d3d19fda304f940342"], dims="set_name"),
                 },
-            ).set_coords("set_hash"),
+            ),
             xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
                         [1],
+                        dims=["set_name"],
                         coords={
-                            "set_name": xarray.DataArray(["parameter_set1"], dims=["set_name"]),
+                            "set_name": ["parameter_set1"],
+                            "set_hash": ("set_name", ["1661dcd0bf4761d25471c1cf5514ceae"]),
                         },
                     ),
-                    "set_hash": xarray.DataArray(["1661dcd0bf4761d25471c1cf5514ceae"], dims="set_name"),
                 },
-            ).set_coords("set_hash"),
+            ),
         ],
         None,
         f"{pathlib.Path('/directory/parameter_set0.h5').resolve()}\n{pathlib.Path('/directory/parameter_set1.h5').resolve()}\n",
@@ -3889,19 +3908,17 @@ test__write_cases = {
                 {
                     "parameter_1": xarray.DataArray(
                         [2, 1],
+                        dims=["set_name"],
                         coords={
-                            "set_name": xarray.DataArray(
-                                ["parameter_set0", "parameter_set1"],
-                                dims=["set_name"],
-                            )
+                            "set_name": ["parameter_set0", "parameter_set1"],
+                            "set_hash": (
+                                "set_name",
+                                ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                            ),
                         },
                     ),
-                    "set_hash": xarray.DataArray(
-                        ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
-                        dims="set_name",
-                    ),
                 },
-            ).set_coords("set_hash"),
+            ),
         ],
         None,
         None,
@@ -3917,16 +3934,17 @@ test__write_cases = {
                     {
                         "parameter_1": xarray.DataArray(
                             [2, 1],
+                            dims=["set_name"],
                             coords={
-                                "set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])
+                                "set_name": ["parameter_set0", "parameter_set1"],
+                                "set_hash": (
+                                    "set_name",
+                                    ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                                ),
                             },
                         ),
-                        "set_hash": xarray.DataArray(
-                            ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
-                            dims="set_name",
-                        ),
                     },
-                ).set_coords("set_hash")
+                )
             )
             + "\n",
         ],
@@ -3944,24 +3962,26 @@ test__write_cases = {
                 {
                     "parameter_1": xarray.DataArray(
                         [2],
+                        dims=["set_name"],
                         coords={
-                            "set_name": xarray.DataArray(["parameter_set0"], dims=["set_name"]),
+                            "set_name": ["parameter_set0"],
+                            "set_hash": ("set_name", ["0b588b6a82c1d3d3d19fda304f940342"]),
                         },
                     ),
-                    "set_hash": xarray.DataArray(["0b588b6a82c1d3d3d19fda304f940342"], dims="set_name"),
                 },
-            ).set_coords("set_hash"),
+            ),
             xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
                         [1],
+                        dims=["set_name"],
                         coords={
-                            "set_name": xarray.DataArray(["parameter_set1"], dims=["set_name"]),
+                            "set_name": ["parameter_set1"],
+                            "set_hash": ("set_name", ["1661dcd0bf4761d25471c1cf5514ceae"]),
                         },
                     ),
-                    "set_hash": xarray.DataArray(["1661dcd0bf4761d25471c1cf5514ceae"], dims="set_name"),
                 },
-            ).set_coords("set_hash"),
+            ),
         ],
         None,
         None,
@@ -3977,13 +3997,14 @@ test__write_cases = {
                     {
                         "parameter_1": xarray.DataArray(
                             [2],
+                            dims=["set_name"],
                             coords={
-                                "set_name": xarray.DataArray(["parameter_set0"], dims=["set_name"]),
+                                "set_name": ["parameter_set0"],
+                                "set_hash": ("set_name", ["0b588b6a82c1d3d3d19fda304f940342"]),
                             },
                         ),
-                        "set_hash": xarray.DataArray(["0b588b6a82c1d3d3d19fda304f940342"], dims="set_name"),
                     },
-                ).set_coords("set_hash")
+                ),
             )
             + "\n",
             f"{pathlib.Path('directory') / 'parameter_set1.h5'}\n"
@@ -3992,13 +4013,14 @@ test__write_cases = {
                     {
                         "parameter_1": xarray.DataArray(
                             [1],
+                            dims=["set_name"],
                             coords={
-                                "set_name": xarray.DataArray(["parameter_set1"], dims=["set_name"]),
+                                "set_name": ["parameter_set1"],
+                                "set_hash": ("set_name", ["1661dcd0bf4761d25471c1cf5514ceae"]),
                             },
                         ),
-                        "set_hash": xarray.DataArray(["1661dcd0bf4761d25471c1cf5514ceae"], dims="set_name"),
                     },
-                ).set_coords("set_hash")
+                )
             )
             + "\n",
         ],
@@ -4961,16 +4983,17 @@ test_class_write_cases.update(
                     {
                         "parameter_1": xarray.DataArray(
                             [2, 1],
+                            dims=["set_name"],
                             coords={
-                                "set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])
+                                "set_name": ["parameter_set0", "parameter_set1"],
+                                "set_hash": (
+                                    "set_name",
+                                    ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                                ),
                             },
                         ),
-                        "set_hash": xarray.DataArray(
-                            ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
-                            dims="set_name",
-                        ),
                     },
-                ).set_coords("set_hash"),
+                )
             ],
             None,
             None,
@@ -4996,16 +5019,17 @@ test_class_write_cases.update(
                     {
                         "parameter_1": xarray.DataArray(
                             [2, 1],
+                            dims=["set_name"],
                             coords={
-                                "set_name": xarray.DataArray(["parameter_set0", "parameter_set1"], dims=["set_name"])
+                                "set_name": ["parameter_set0", "parameter_set1"],
+                                "set_hash": (
+                                    "set_name",
+                                    ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                                ),
                             },
                         ),
-                        "set_hash": xarray.DataArray(
-                            ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
-                            dims="set_name",
-                        ),
                     },
-                ).set_coords("set_hash"),
+                ),
             ],
             None,
             None,
@@ -5022,19 +5046,17 @@ test_class_write_cases.update(
                     {
                         "parameter_1": xarray.DataArray(
                             [2, 1],
+                            dims=["set_name"],
                             coords={
-                                "set_name": xarray.DataArray(
-                                    ["parameter_set0", "parameter_set1"],
-                                    dims=["set_name"],
-                                )
+                                "set_name": ["parameter_set0", "parameter_set1"],
+                                "set_hash": (
+                                    "set_name",
+                                    ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                                ),
                             },
                         ),
-                        "set_hash": xarray.DataArray(
-                            ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
-                            dims="set_name",
-                        ),
                     },
-                ).set_coords("set_hash"),
+                ),
             ],
             None,
             None,
@@ -5098,19 +5120,17 @@ test_class_write_cases.update(
                     {
                         "parameter_1": xarray.DataArray(
                             [2, 1],
+                            dims=["set_name"],
                             coords={
-                                "set_name": xarray.DataArray(
-                                    ["parameter_set0", "parameter_set1"],
-                                    dims=["set_name"],
-                                )
+                                "set_name": ["parameter_set0", "parameter_set1"],
+                                "set_hash": (
+                                    "set_name",
+                                    ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                                ),
                             },
                         ),
-                        "set_hash": xarray.DataArray(
-                            ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
-                            dims="set_name",
-                        ),
                     },
-                ).set_coords("set_hash"),
+                ),
             ],
             None,
             None,
