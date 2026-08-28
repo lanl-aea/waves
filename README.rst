@@ -15,7 +15,7 @@
 .. _MODSIM-TEMPLATE: https://github.com/lanl-aea/waves/tree/main/waves/modsim_template
 .. _MODSIM-TEMPLATE documentation: https://lanl-aea.github.io/waves/modsim-template/index.html
 .. _MODSIM-TEMPLATE-2: https://github.com/lanl-aea/waves/tree/main/waves/modsim_template_2
-.. _MODSIM-TEMPLATE-2 documentation: https://lanl-aea.github.io/waves/modsim-template-2/index.html
+.. _MODSIM-TEMPLATE 2 documentation: https://lanl-aea.github.io/waves/modsim-template-2/index.html
 
 .. _`Kyle Brindley`: kbrindley@lanl.gov
 .. _`Thomas Roberts`: tproberts@lanl.gov
