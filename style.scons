@@ -28,7 +28,7 @@ typos_check = env.Command(
 env.AlwaysBuild(typos_check)
 env.Alias("typos", typos_check)
 typos_fix = env.Command(
-    target=["typos-check.txt"],  # Dummy target will never exist
+    target=["typos-fix.txt"],  # Dummy target will never exist
     source=[pyproject],
     action=["typos . --write-changes"],
 )
