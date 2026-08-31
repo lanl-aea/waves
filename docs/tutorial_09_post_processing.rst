@@ -228,7 +228,7 @@ Build Targets
 Output Files
 ************
 
-7. Observe the catenated parameter results and paramter study dataset in the post-processing task's STDOUT file
+7. Observe the catenated parameter results and parameter study dataset in the post-processing task's STDOUT file
 
 .. only:: not epub
 

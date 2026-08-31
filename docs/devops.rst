@@ -64,7 +64,7 @@ HPC CI server environment
 
 For computing policy reasons, HPC CI pipelines are owned by the launching user and launched with the user's account. The
 HPC CI server environment is created in the user owned CI job directory, which is cleaned out for each CI job. This
-means there is no shared environment available on HPC and developers must create and mantain their own development
+means there is no shared environment available on HPC and developers must create and maintain their own development
 environment. It is strongly recommended that developers create this environment in their scratch space, e.g.
 ``${system_scratch}/$USER/conda/envs/waves-env``.
 
@@ -303,6 +303,21 @@ their branch.
 
    $ scons ruff-format
 
+The continuous integration server also runs a separate spell checker task using `typos`_ with associated aliases or
+the collector alias ``typos``.
+
+.. code-block::
+
+   $ scons typos
+
+Reported typos can be fixed with the alias ``typos-fix``. Developers are encouraged to make a full review of the
+recommended changes to ensure that false positives in function names are not autocorrected. Exceptions for false
+positives can be added to the configuration in ``pyproject.toml`` under the ``[tool.typos...]`` section(s).
+
+.. code-block::
+
+   $ scons typos-fix
+
 |PROJECT| has dedicated target aliases for the unit and system tests. To run the unit tests, activate a conda
 environment and run
 
@@ -471,7 +486,7 @@ The Windows CI jobs usually run in under 6 minutes.
 There are several known Windows CI fragile false-negative failure mechanisms. If one of these failures is observed,
 try re-running the CI job without change.
 
-* Incorrect or imcomplete CI environment build:
+* Incorrect or incomplete CI environment build:
   ``Script file 'C:\ProgramData\anaconda3\envs\waves-dev\Scripts\sphinx-build-script.py' is not present.``
 
 MacOS

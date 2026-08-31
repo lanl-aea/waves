@@ -163,7 +163,7 @@ SConstruct
 
 Note that Fierro differs from other solvers in the tutorials. Fierro is deployed as a Conda package and is available in
 the launching Conda environment. It is still good practice to check if the executable is available and provide helpful
-feedback to developers about the excutable status and workflow configuration.
+feedback to developers about the executable status and workflow configuration.
 
 The structure has changed enough from the core tutorials that a diff view is not as useful. Instead the contents of the
 SConstruct file is duplicated below.

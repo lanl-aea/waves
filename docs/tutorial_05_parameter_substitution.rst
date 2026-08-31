@@ -178,7 +178,7 @@ in the previous tutorials. The ``width`` and ``height`` parameters are used in t
 that each of these scripts is called using a command-line interface that has default parameters. See the
 :ref:`waves_tutorial_cli` to see what the default values are. As mentioned in :ref:`tutorial_geometry`, the argument
 parser for each of these scripts will supply a default value for each command-line argument that is not specified
-(assuming a defualt value was specified in the argument parser definition).  This allowed us to simplify the command
+(assuming a default value was specified in the argument parser definition).  This allowed us to simplify the command
 passed to the :meth:`waves.scons_extensions.abaqus_journal_builder_factory` builder. The advantage to coding this behavior ahead of time is that
 we get parameter substitution into our journal files when we need it. The ``width``, ``height``, and ``global_seed``
 keys of the ``simulation_variables`` dictionary will be used later in this tutorial to specify the values passed to the
@@ -188,10 +188,10 @@ The final key-value pair defined in the ``simulation_variables`` dictionary is `
 used in a slightly different way than the others, as the script that utilizes this parameter does not function with a
 command-line interface. Recall from earlier in this tutorial, we created a new file called
 ``rectangle_compression.inp.in`` and added the ``@displacement@`` key.  This text file parameter substitution is
-the primary reason the ``@`` characters are required in the ``simulation_variables`` keys.  Disussion of exactly how
+the primary reason the ``@`` characters are required in the ``simulation_variables`` keys.  Discussion of exactly how
 this is implemented with the :meth:`waves.scons_extensions.copy_substfile` method will come later in this tutorial.
 
-8. Modify your ``tutorial_05_parameter_substitution.scons`` file by using the highlighed lines below to modify the
+8. Modify your ``tutorial_05_parameter_substitution.scons`` file by using the highlighted lines below to modify the
    ``subcommand_options`` for the code pertaining to ``# Geometry``, ``# Partition``, and ``# Mesh``.
 
 .. admonition:: waves-tutorials/tutorial_05_parameter_substitution.scons
@@ -223,7 +223,7 @@ the completed action string as part of the task definition. If the substituted p
 recognize that the tasks need to be re-executed in the same way that tasks need to be re-executed when the contents of a
 source file change.
 
-9. Modify your ``tutorial_05_parameter_substitution.scons`` file by using the highlighed lines below to modify the
+9. Modify your ``tutorial_05_parameter_substitution.scons`` file by using the highlighted lines below to modify the
    code pertaining to ``# SolverPrep``.
 
 .. admonition:: waves-tutorials/tutorial_05_parameter_substitution.scons

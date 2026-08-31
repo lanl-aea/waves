@@ -138,7 +138,7 @@ Output Files
 
 Explore the contents of the ``build`` directory using the ``tree`` command against the ``build`` directory, as shown
 below. Note that the output files from the previous tutorials also exist in the ``build`` directory, but the directory
-is specified by name to reduce clutter in the ouptut shown.
+is specified by name to reduce clutter in the output shown.
 
 .. code-block:: bash
 

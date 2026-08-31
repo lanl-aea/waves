@@ -222,7 +222,7 @@ def ssh_builder_actions(
        target compute server. If mixed server execution is required, a build directory on a shared network drive
        and interrupted workflow execution should be preferred over SSH wrapped builders.
 
-    If the remote server and remote directory strings are not specified at builder instantation, then the task
+    If the remote server and remote directory strings are not specified at builder instantiation, then the task
     definitions *must* specify these keyword arguments. If a portion of the remote server and/or remote directory are
     known to be constant across all possible tasks, users may define their own substitution keyword arguments. For
     example, the following remote directory uses common leading path elements and introduces a new keyword variable
@@ -253,7 +253,7 @@ def ssh_builder_actions(
     * All original builder actions are wrapped in single quotes as ``'{original action}'`` to preserve the ``&&`` as
       part of the ``remote_server`` command. Shell variables, e.g. ``$USER``, will not be expanded on the
       ``remote_server``. If quotes are included in the original builder actions, they should be double quotes.
-    * Returns the entire ``remote_directory`` to the original builder ``${TARGET.dir.abspath}`` with ``rysnc``.
+    * Returns the entire ``remote_directory`` to the original builder ``${TARGET.dir.abspath}`` with ``rsync``.
       ``rsync`` must exist on the local system.
 
     .. code-block::
@@ -613,7 +613,7 @@ def append_env_path(
     env: SCons.Environment.Environment,
     program: str | pathlib.Path,
 ) -> None:
-    """Append SCons contruction environment ``PATH`` with the program's parent directory.
+    """Append SCons construction environment ``PATH`` with the program's parent directory.
 
     Uses the `SCons AppendENVPath`_ method. If the program parent directory is already on ``PATH``, the ``PATH``
     directory order is preserved.
@@ -777,7 +777,7 @@ def add_cubit_python(
 ) -> str | None:
     """Modify environment variables with the paths required to ``import cubit`` with the Cubit Python interpreter.
 
-    Returns the absolute path of the first Cubit Python intepreter found. Prepends ``PATH`` with Cubit Python parent
+    Returns the absolute path of the first Cubit Python interpreter found. Prepends ``PATH`` with Cubit Python parent
     directory if a program is found and the directory is not already on ``PATH``. Prepends ``PYTHONPATH`` with
     ``parent/bin``.
 
@@ -795,14 +795,14 @@ def add_cubit_python(
     :param env: The SCons construction environment object to modify
     :param names: list of string program names for the main Cubit executable. May include an absolute path.
 
-    :return: Absolute path of the Cubit Python intepreter. None if none of the names are found.
+    :return: Absolute path of the Cubit Python interpreter. None if none of the names are found.
     """
     # Search for Cubit executable
     cubit_executable = find_program(env, names)
     if cubit_executable is None:
         return None
 
-    # Search for Cubit Python interpretter
+    # Search for Cubit Python interpreter
     cubit_python: str | None = None
     try:
         cubit_python = str(_utilities.find_cubit_python([cubit_executable]))
@@ -1114,7 +1114,7 @@ def first_target_builder_factory(
         default, SCons performs actions in the parent directory of the SConstruct file. However, many computational
         science and engineering programs leave output files in the current working directory, so it is convenient and
         sometimes necessary to change to the target's parent directory prior to execution.
-    :param program: This variable is intended to containg the primary command line executable absolute or relative path
+    :param program: This variable is intended to containing the primary command line executable absolute or relative path
     :param program_required: This variable is intended to contain a space delimited string of required program options
         and arguments that are crucial to builder behavior and should not be modified except by advanced users.
     :param program_options: This variable is intended to contain a space delimited string of optional program options
@@ -2100,7 +2100,7 @@ class AbaqusPseudoBuilder:
         :param job: Abaqus job name *without* file extension.
         :param inp: Abaqus input file name *with* file extension. Defaults to ``job``.inp.
         :param user: User subroutine.
-        :param cpus: CPUs to use for simulation. Is superceded by ``override_cpus`` if provided during object
+        :param cpus: CPUs to use for simulation. Is superseded by ``override_cpus`` if provided during object
             instantiation.  The CPUs option is escaped in the action string, i.e. changing the number of CPUs will not
             trigger a rebuild.
         :param processes: Number of MPI processes. This option is escaped in the action string, i.e. changing the
@@ -2950,7 +2950,7 @@ def sphinx_scanner() -> SCons.Scanner.Scanner:
     * ``.. figure:: file.extension``
     * ``.. bibliography:: file.extension``
 
-    inside ``.rst`` and ``.txt`` files. Searchs for directives with leading white space and inside unordered list
+    inside ``.rst`` and ``.txt`` files. Searches for directives with leading white space and inside unordered list
     syntax.
 
     .. code-block:: rst
@@ -4629,9 +4629,9 @@ class WAVESEnvironment(SConsEnvironment):
     def AddCubitPython(self, names: collections.abc.Sequence[str]) -> str | None:  # noqa: N802
         """Modify environment variables with the paths required to ``import cubit`` with the Cubit Python interpreter.
 
-        Returns the absolute path of the first Cubit Python intepreter found. Prepends ``PATH`` with Cubit Python parent
-        directory if a program is found and the directory is not already on ``PATH``. Prepends ``PYTHONPATH`` with
-        ``parent/bin``.
+        Returns the absolute path of the first Cubit Python interpreter found. Prepends ``PATH`` with Cubit Python
+        parent directory if a program is found and the directory is not already on ``PATH``. Prepends ``PYTHONPATH``
+        with ``parent/bin``.
 
         Returns None if no Cubit Python interpreter is found.
 
@@ -4645,7 +4645,7 @@ class WAVESEnvironment(SConsEnvironment):
 
         :param names: list of string program names for the main Cubit executable. May include an absolute path.
 
-        :return: Absolute path of the Cubit Python intepreter. None if none of the names are found.
+        :return: Absolute path of the Cubit Python interpreter. None if none of the names are found.
         """
         return add_cubit_python(self, names)
 

@@ -12,7 +12,7 @@ Version Numbers
 
 The |project| project follows the `PEP-440`_ standard for version numbering. The
 production release version number uses the three component ("major.minor.micro")
-scheme. The developement version number follows the production
+scheme. The development version number follows the production
 release number with an appended ".dev" local version number. The version numbers
 correspond to git tags in the `upstream repository`_ which point to a static
 release of the |project| project.

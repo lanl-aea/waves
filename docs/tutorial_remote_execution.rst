@@ -12,7 +12,7 @@ This tutorial implements the same workflow introduced in :ref:`tutorial_simulati
 on a remote server via SSH. You may need to update the server name to match your local system or local remote server.
 
 This tutorial assumes that the local system has an installation of Abaqus and that the Abaqus installation on the local
-system is indentical to the installation on the remote server. You may need to update both Abaqus paths to match the
+system is identical to the installation on the remote server. You may need to update both Abaqus paths to match the
 respective systems.
 
 **********
@@ -103,7 +103,7 @@ Output Files
 
 Explore the contents of the ``build`` directory using the ``tree`` command against the ``build`` directory, as shown
 below. Note that the output files from the previous tutorials also exist in the ``build`` directory, but the directory
-is specified by name to reduce clutter in the ouptut shown.
+is specified by name to reduce clutter in the output shown.
 
 .. code-block:: bash
 

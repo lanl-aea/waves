@@ -196,7 +196,7 @@ def find_cubit_python(options: collections.abc.Sequence[str], python_command: st
     :param python_command: Cubit's Python executable file basename or ``pathlib.Path.rglob`` pattern. Override the
         python command returned by :meth:`waves._utilities.cubit_os_python`
 
-    :returns: Cubit Python intepreter executable absolute path
+    :returns: Cubit Python interpreter executable absolute path
 
     :raise FileNotFoundError: If the Cubit command or Cubit Python interpreter is not found
     """
@@ -265,7 +265,7 @@ def return_environment(
     :param shell: the shell to use when executing command by absolute or relative path
     :param string_option: the shell's option to execute a string command
     :param separator: the shell's command separator, e.g. ``;`` or ``&&``.
-    :param environment: environment command to print environment on STDOUT with null terminated seperators
+    :param environment: environment command to print environment on STDOUT with null terminated separators
 
     :returns: shell environment dictionary
 
@@ -359,7 +359,7 @@ def cache_environment(
 
 
 def create_valid_identifier(identifier: str) -> str:
-    """Create a valid Python identifier from an arbitray string by replacing invalid characters with underscores.
+    """Create a valid Python identifier from an arbitrary string by replacing invalid characters with underscores.
 
     :param identifier: String to convert to valid Python identifier
     """

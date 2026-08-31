@@ -19,7 +19,7 @@ SConstruct
 ==========
 
 The project configuration SConstruct file is responsible for configuring project wide variables, command line options,
-construction environment(s), and workflows. The SConstruct file is reponsible for calling workflow SConscript files with
+construction environment(s), and workflows. The SConstruct file is responsible for calling workflow SConscript files with
 the workflow's construction environment
 
 .. code-block::
@@ -39,7 +39,7 @@ SConscript file is used as the build directory name. The SConscript calls are co
        :end-before: workflow-configurations-start-do-not-remove
 
 Because the project assumes that SConscript files are located in the project root, the logic contained in this workflow
-configuration loop must be updated if the SConscript files are relocated. The only contraints placed by the project
+configuration loop must be updated if the SConscript files are relocated. The only constraints placed by the project
 design is the construction of a unique build directory for every iteration of the for loop.
 
 Workflow SConscript

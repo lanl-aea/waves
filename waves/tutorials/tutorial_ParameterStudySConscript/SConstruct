@@ -2,7 +2,7 @@
 """Demonstration project for :meth:`waves.scons_extensions.parameter_study_sconcript` wrapped SConscript calls.
 
 Contains examples of calling SConscript without a study, with a study dictionary, and with a study parameter generator.
-Constains an example of using parameter set names as build subdirectories and as direct variant directories.
+Contains an example of using parameter set names as build subdirectories and as direct variant directories.
 
 .. code-block::
    :caption: bash

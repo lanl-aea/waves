@@ -71,7 +71,7 @@ def main(
         # Export Genesis file for Sierra workflow
         cubit.cmd(f"export mesh '{sierra_mesh_file}' overwrite")
     else:
-        raise RuntimeError(f"Uknown solver '{solver}'")
+        raise RuntimeError(f"Unknown solver '{solver}'")
 
 
 def get_parser() -> argparse.ArgumentParser:

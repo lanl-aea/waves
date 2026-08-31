@@ -84,7 +84,7 @@ paths can be determined at configure time it is possible to write an associated 
 populate known builder targets.
 
 Well defined exit criteria is necessary to return reliable task states on solver failures and successes. Most builders
-should avoid modifying the default solver behavior to provide users with the documented, and therfore expected,
+should avoid modifying the default solver behavior to provide users with the documented, and therefore expected,
 behavior. However, when solvers under report non-zero exit codes for fatal errors, false positives, it may be necessary
 to do extra work, such as log file inspection, to return more reliable exit codes and avoid attempting downstream tasks
 when the solver task is known to have failed. This is especially important when the solver writes partial output results
@@ -170,8 +170,8 @@ similar builders.
 
 Unit tests are not sufficient to verify desired solver behavior. System tests that run a real, but minimal, example
 problem should also be implemented to ensure that the builder action string, task re-execution, file handling
-expecations, and command line options are appropriate for workflow use. The system tests should be complete enough to
-verify that the third-party solver behavior still matches the assumptions in the buider design. For |PROJECT|, the
+expectations, and command line options are appropriate for workflow use. The system tests should be complete enough to
+verify that the third-party solver behavior still matches the assumptions in the builder design. For |PROJECT|, the
 tutorials serve as system tests for builder design. For a project specific builder, a minimal working example should be
 included in the project as an inexpensive verification check and easy-to-use troubleshooting task.
 
@@ -255,7 +255,7 @@ previous tasks would also be removed. In this case, it is probably better to lea
 
 Finally, the user target list construction combined with the builder ``--output-file`` option handling results in the
 ``*.stdout`` file name change from ``implicit.out.stdout`` to ``implicit.out0.stdout``. A builder factory emitter could
-be written to look for the ``solve_cpus`` environment varible to match emitted solver output targets to solver output
+be written to look for the ``solve_cpus`` environment variable to match emitted solver output targets to solver output
 handling. Changing the ``*.stdout`` naming convention for greater consistency is possible to handle in the builder
 factory, but would be more difficult to implement robustly and document clearly, so matching the extension of the first
 expected target is probably best.

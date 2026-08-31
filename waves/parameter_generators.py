@@ -1282,9 +1282,9 @@ class SALibSampler(ParameterGenerator, ABC):
     pairs are tested for compatibility with the WAVES set hash re-ordering:
 
     * fast_sampler: discrepancy, pawn, rsa
-    * finite_diff: discrepance, pawn, rsa
+    * finite_diff: discrepancy, pawn, rsa
     * latin: discrepancy, pawn, rsa
-    * sobol: discrepany, pawn, rsa
+    * sobol: discrepancy, pawn, rsa
 
     The ``original_index`` argument attempts to preserve the original SALib parameter set order. For sampler classes
     that may produce duplicate parameter sets, e.g. morris, the ``original_index`` behavior cannot by honored because
@@ -1296,9 +1296,9 @@ class SALibSampler(ParameterGenerator, ABC):
     sorting behavior.
 
     * fast_sampler: fast, delta, discrepancy, pawn, rbd_fast, rsa
-    * finite_diff: dgsm, delta, discrepance, pawn, rbd_fast, rsa
+    * finite_diff: dgsm, delta, discrepancy, pawn, rbd_fast, rsa
     * latin: delta, discrepancy, pawn, rbd_fast, rsa
-    * sobol: sobol, delta, discrepany, pawn, rbd_fast, rsa
+    * sobol: sobol, delta, discrepancy, pawn, rbd_fast, rsa
 
     The following sample-analyze pairs have been tested in the past and are not compatible with WAVES parameter studies.
     Note that the morris sampler class produces duplicate parameter sets, which is incompatible with the WAVES parameter
@@ -2121,7 +2121,7 @@ def _return_parameter_study_files_to_write(
 ) -> dict[pathlib.Path, dict | xarray.Dataset]:
     """Return a dictionary of parameter study files that do not exist or whose contents have changed.
 
-    :param parmater_study_files: dictionary of ``{path: content}`` pairs
+    :param parameter_study_files: dictionary of ``{path: content}`` pairs
 
     :raises ValueError: if any content is not a dictionary or xarray Dataset.
     """
@@ -2154,7 +2154,7 @@ def _write_parameter_study_files(
 
     Prints the file name that would be written followed by its content when dry run is True.
 
-    :param parmater_study_files: dictionary of ``{path: content}`` pairs
+    :param parameter_study_files: dictionary of ``{path: content}`` pairs
     :param dry_run: Print contents of new or overwritten parameter study output file(s) to STDOUT and exit.
 
     :raises ValueError: if any content is not a dictionary or xarray Dataset.

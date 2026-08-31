@@ -92,7 +92,7 @@ tests:
 about:
   license: BSD-3-Clause
   license_file: LICENSE.txt
-  summary: Computational science and engineering parameteric study workflows
+  summary: Computational science and engineering parametric study workflows
   description: |
     WAVES (LANL code C23004) is a computational science and engineering workflow tool that integrates parametric studies
     with traditional software build systems.

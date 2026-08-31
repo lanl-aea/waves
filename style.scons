@@ -1,6 +1,5 @@
 #! /usr/bin/env python
 
-# Inherit the parent construction environment
 Import("env")
 
 pyproject = env.FindFile("pyproject.toml", "#")
@@ -19,3 +18,19 @@ ruff_format = env.Command(
 )
 env.AlwaysBuild(ruff_format)
 env.Alias("style-format", ruff_format)
+env.Alias("style-fix", ruff_format)
+
+typos_check = env.Command(
+    target=["typos-check.txt"],  # Dummy target will never exist
+    source=[pyproject],
+    action=["typos ."],
+)
+env.AlwaysBuild(typos_check)
+env.Alias("typos", typos_check)
+typos_fix = env.Command(
+    target=["typos-fix.txt"],  # Dummy target will never exist
+    source=[pyproject],
+    action=["typos . --write-changes"],
+)
+env.AlwaysBuild(typos_fix)
+env.Alias("typos-fix", typos_fix)

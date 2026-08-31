@@ -10,7 +10,7 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``env_cubit`` - The Cubit Python SCons construction environment with the following required keys
 
-  * ``python`` - String path for the Cubit Python intepreter
+  * ``python`` - String path for the Cubit Python interpreter
 """
 
 import pathlib

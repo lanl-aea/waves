@@ -114,7 +114,7 @@ examples of a Git log from the current project.
      07a30ee (origin/144-add-a-setup-page-to-the-user-manual, 144-add-a-setup-page-to-the-user-manual) MAINT: fix quickstart anchor
      eda85cd DOC: add quickstart time estimate
      4bc1acf DOC: starting point clarifications
-     5621d50 DOC: startup options dicussion
+     5621d50 DOC: startup options discussion
      bdcd044 DOC: clarify time estimate format
      842920b DOC: draft guesses at tutorial time estimates
      be5e2e2 DOC: commit to hours and minutes

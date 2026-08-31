@@ -47,7 +47,7 @@ env["solver"] = env.AddProgram([solver_executable])
 
 # Users should typically rely on AddProgram behavior for third-party software as above, which checks for execute
 # permissions and PATH resolution. If a tutorial user forgets to change the execute permissions on Linux, or is running
-# on Windows, force execution with the Python interpretter and absolute path.
+# on Windows, force execution with the Python interpreter and absolute path.
 #
 # VVV Code specific to making tutorial execution more robust VVV
 if env["solver"] is None or platform.system().lower() == "windows":
