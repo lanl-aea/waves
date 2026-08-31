@@ -4629,9 +4629,9 @@ class WAVESEnvironment(SConsEnvironment):
     def AddCubitPython(self, names: collections.abc.Sequence[str]) -> str | None:  # noqa: N802
         """Modify environment variables with the paths required to ``import cubit`` with the Cubit Python interpreter.
 
-        Returns the absolute path of the first Cubit Python interpreter found. Prepends ``PATH`` with Cubit Python parent
-        directory if a program is found and the directory is not already on ``PATH``. Prepends ``PYTHONPATH`` with
-        ``parent/bin``.
+        Returns the absolute path of the first Cubit Python interpreter found. Prepends ``PATH`` with Cubit Python
+        parent directory if a program is found and the directory is not already on ``PATH``. Prepends ``PYTHONPATH``
+        with ``parent/bin``.
 
         Returns None if no Cubit Python interpreter is found.
 
