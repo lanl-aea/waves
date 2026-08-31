@@ -100,15 +100,23 @@ extend-ignore = ["B028", "D203", "D213", "PIE808", "PIE790", "SIM108", "PLC0415"
 
 [tool.typos.files]
 extend-exclude = [
-   "**/tutorial_truchas/cube_compression.inp.in",
+    "**/tutorial_truchas/cube_compression.inp.in",
+    "pyproject.toml.in",
 ]
 
 [tool.typos.default]
 extend-ignore-re = [
     "[Pp][Nn][0-9]+",  # LANL property numbers, e.g. pn2606796
-    "[0-9]+CAN[0-9]+",  # LANL contract number, e.g. 89233218CNA000001
+    "[0-9]+CNA[0-9]+",  # LANL contract number, e.g. 89233218CNA000001
     "Dassault Systemes",
+    "[a-zA-Z0-9]{16}",  # Partial md5sum hashes, e.g. parameter generator Xarray datasets in STDOUT
 ]
+
+[tool.typos.default.extend-words]
+SConstruct = "SConstruct"
+
+[tool.typos.default.extend-identifiers]
+sieBlocks = "sieBlocks"  # Abaqus Python attribute
 
 [tool.mypy]
 disable_error_code = "import-untyped"
