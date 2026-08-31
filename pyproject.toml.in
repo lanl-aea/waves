@@ -13,7 +13,7 @@ authors = [
     {name = "Chris Johnson", email = "clj@lanl.gov"},
     {name = "Scott Ouellette", email = "souellette@lanl.gov"}
 ]
-description = "Computational science and engineering parameteric study workflows"
+description = "Computational science and engineering parametric study workflows"
 readme = "README.rst"
 requires-python = ">=3.10"
 license = "BSD-3-Clause"
@@ -97,6 +97,18 @@ extend-ignore = ["B028", "D203", "D213", "PIE808", "PIE790", "SIM108", "PLC0415"
 "*SConscript" = ["D100", "F821", "EXE001"]
 "*.scons" = ["D100", "F821", "EXE001"]
 "waves/_tests/test_*.py" = ["RUF012"]
+
+[tool.typos.files]
+extend-exclude = [
+   "**/tutorial_truchas/cube_compression.inp.in",
+]
+
+[tool.typos.default]
+extend-ignore-re = [
+    "[Pp][Nn][0-9]+",  # LANL property numbers, e.g. pn2606796
+    "[0-9]+CAN[0-9]+",  # LANL contract number, e.g. 89233218CNA000001
+    "Dassault Systemes",
+]
 
 [tool.mypy]
 disable_error_code = "import-untyped"
