@@ -411,7 +411,7 @@ SConstruct File
 ***************
 
 In :ref:`tutorialsconstruct`, we created the ``SConstruct`` file. For convenience, we will add a collector alias
-matching the tutorial directory name in the SContruct file. This collector alias will point to the list of targets to
+matching the tutorial directory name in the SConstruct file. This collector alias will point to the list of targets to
 build specified in the ``waves-tutorials/tutorial_01_geometry.scons`` file.
 
 12. Modify the ``waves-tutorials/SConstruct`` file by adding the

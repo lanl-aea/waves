@@ -23,7 +23,7 @@ Start Options
 The :ref:`waves_quickstart` introduces the core concepts motivating |PROJECT| without diving into the details of implementation.
 
 For a detailed discussion of recommended best practices for `SCons`_  and `MODSIM-TEMPLATE`_ project setup, meta data,
-and features, start with :ref:`tutorialsconstruct`. Most of the ``SContruct`` file introduced in
+and features, start with :ref:`tutorialsconstruct`. Most of the ``SConstruct`` file introduced in
 :ref:`tutorialsconstruct` is boilerplate code, so users may want to skip straight to the workflow task definitions in
 :ref:`tutorial_geometry`.
 

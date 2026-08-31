@@ -2592,7 +2592,7 @@ Internal Changes
 
 Bug fixes
 =========
-- Add ``__init__.py`` file creation earlier in the tutorials to match the ``PYTHONPATH`` ``SContruct`` changes made in
+- Add ``__init__.py`` file creation earlier in the tutorials to match the ``PYTHONPATH`` ``SConstruct`` changes made in
   :merge:`375` (:issue:`355`, :merge:`383`). By `Kyle Brindley`_.
 
 Documentation
