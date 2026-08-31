@@ -8,10 +8,18 @@ Changelog
 1.6.0 (unreleased)
 ******************
 
+Documentation
+=============
+- Miscellaneous typo corrections. By `Kyle Brindley`_.
+
 Enhancements
 ============
 - Add QOI histogram report. (:merge:`1263`). By `Matthew Fister`_.
 - Add support for 1D QOIs in tolerance report. (:merge:`1266`). By `Matthew Fister`_.
+
+Internal Changes
+================
+- Adopt the ``typos`` spell checker and implement as a CI job. By `Kyle Brindley`_.
 
 ******************
 1.5.1 (2026-07-22)
