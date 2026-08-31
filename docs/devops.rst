@@ -303,6 +303,21 @@ their branch.
 
    $ scons ruff-format
 
+The continuous integration server also runs a separate spell checker task using `typos`_ with associated aliases or
+the collector alias ``typos``.
+
+.. code-block::
+
+   $ scons typos
+
+Reported typos can be fixed with the alias ``typos-fix``. Developers are encouraged to make a full review of the
+recommended changes to ensure that false positives in function names are not autocorrected. Exceptions for false
+positives can be added to the configuration in ``pyproject.toml`` under the ``[tool.typos...]`` section(s).
+
+.. code-block::
+
+   $ scons typos-fix
+
 |PROJECT| has dedicated target aliases for the unit and system tests. To run the unit tests, activate a conda
 environment and run
 

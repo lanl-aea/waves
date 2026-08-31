@@ -114,6 +114,7 @@
 .. _`SCons Tar`: https://scons.org/doc/production/HTML/scons-man.html#b-Tar
 .. _`setuptools_scm`: https://setuptools-scm.readthedocs.io/en/latest/
 .. _`Tutorial: setuptools_scm`: https://lanl-aea.github.io/waves/tutorial_setuptools_scm.html
+.. _`typos`: https://github.com/crate-ci/typos/tree/master
 .. _`Software Carpentry`: https://software-carpentry.org/
 .. _`Software Carpentry: Python Novice`: https://swcarpentry.github.io/python-novice-inflammation/
 .. _`Sphinx automodule`: https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#directive-automodule
