@@ -213,13 +213,13 @@ SConscript
 
 The ``abaqus_source_list`` contains the names of all the files that are used to build the Abaqus model. The
 ``{model}_compression.inp`` file is the primary input file, and the other files in the ``abaqus_source_list`` are
-included within it. See the `Abaqus *INCLUDE`_ keyword documentaiton :cite:`ABAQUS` for more information about how
+included within it. See the `Abaqus *INCLUDE`_ keyword documentation :cite:`ABAQUS` for more information about how
 this is implemented.
 
 Each file in the ``abaqus_source_list`` is specified with its absolute path with the SCons ``#`` project root feature
 which is replaced by the parent directory of the ``SConstruct`` file. After constructing the ``abaqus_source_list``, we
 must first convert each string (which represent the absolute paths of each file in the list) to a `Python pathlib`_
-object. While not strictly neccessary for the :meth:`waves.scons_extensions.copy_substfile` pseudo-builder, the `Python
+object. While not strictly necessary for the :meth:`waves.scons_extensions.copy_substfile` pseudo-builder, the `Python
 pathlib`_ objects are used elsewhere in the ``SConscript`` file.
 
 Just as in the previous tutorials, we now need to extend the ``workflow`` list. Recall that we have already extended the

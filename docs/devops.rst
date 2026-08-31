@@ -64,7 +64,7 @@ HPC CI server environment
 
 For computing policy reasons, HPC CI pipelines are owned by the launching user and launched with the user's account. The
 HPC CI server environment is created in the user owned CI job directory, which is cleaned out for each CI job. This
-means there is no shared environment available on HPC and developers must create and mantain their own development
+means there is no shared environment available on HPC and developers must create and maintain their own development
 environment. It is strongly recommended that developers create this environment in their scratch space, e.g.
 ``${system_scratch}/$USER/conda/envs/waves-env``.
 
@@ -486,7 +486,7 @@ The Windows CI jobs usually run in under 6 minutes.
 There are several known Windows CI fragile false-negative failure mechanisms. If one of these failures is observed,
 try re-running the CI job without change.
 
-* Incorrect or imcomplete CI environment build:
+* Incorrect or incomplete CI environment build:
   ``Script file 'C:\ProgramData\anaconda3\envs\waves-dev\Scripts\sphinx-build-script.py' is not present.``
 
 MacOS

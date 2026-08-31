@@ -4,7 +4,7 @@
 Tutorial 12: Data Archival
 ##########################
 
-The final step of any analysis workflow should be to archive your simulation files used in reporting and documenation,
+The final step of any analysis workflow should be to archive your simulation files used in reporting and documentation,
 both input and output files. The archival task is generally performed once at the end of a project and limited to the
 final, peer-reviewed simulation results. However, if the task of archiving these files is added to the automated
 workflow, it is easier to guarantee that the archived files are in sync with the simulation results. Of course, it's not
@@ -164,7 +164,7 @@ changes made in this tutorial.
 Note that we retrieve the project configuration ``SConstruct`` file name and location with a `Python lambda expression`_
 :cite:`python`. We do this to recover the absolute path to the current configuration file and because some projects may
 choose to use a non-default filename for the project configuration file. In Python 3, you would normally use the
-``__file__`` attribute; however, this attribute is not defined for `SCons`_ configuation files. Instead, we can recover
+``__file__`` attribute; however, this attribute is not defined for `SCons`_ configuration files. Instead, we can recover
 the configuration file name and absolute path with the same method used in :ref:`tutorial_geometry` and
 :ref:`tutorial_partition_mesh` for the Abaqus Python 2 journal files. For consistency with the configuration file
 path, we assume that the parent directory of the configuration file is the same as the project root directory.

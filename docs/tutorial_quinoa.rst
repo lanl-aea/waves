@@ -18,7 +18,7 @@ Tutorial: Quinoa
 
    Most WAVES tutorials are used as system tests in the regression test suite to ensure that the tutorial files are
    up-to-date and functional. The ``quinoa-local`` alias *without* sbatch submission is part of the regression suite,
-   but neither the sbatch submission nor the ``quinoa-remote`` alias is regression tested. The SSH remote excution and
+   but neither the sbatch submission nor the ``quinoa-remote`` alias is regression tested. The SSH remote execution and
    sbatch behavior was tested when the tutorial was written and is expected to run correctly. If you run into problems
    running this tutorial, please contact the WAVES development team.
 

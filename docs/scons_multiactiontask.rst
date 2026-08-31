@@ -9,12 +9,12 @@ SCons Multi-Action Tasks
 Most build systems use intermediate target files to identify which tasks need to be performed again on subsequent
 execution. The :ref:`scons_quickstart` uses this behavior to allow conditional re-building of partial workflows. For
 example, if the ``rectangle_mesh.py`` journal file changes, the geometry and partitioning tasks do not need to be
-re-executed because the ``rectangle_geometry.cae`` and ``rectangle_paritition.cae`` targets do not depend on
+re-executed because the ``rectangle_geometry.cae`` and ``rectangle_partition.cae`` targets do not depend on
 the source ``rectangle_mesh.py``.
 
 This conditional re-build granularity comes at the cost of roughly tripling the disk space required to store the Abaqus
 CAE files. Sometimes disk space is limited, such as for large models where even a single copy of the file may consume
-large amounts of disk space or when a smaller model is built in a large parameteric study. In these cases it is
+large amounts of disk space or when a smaller model is built in a large parametric study. In these cases it is
 necessary to operate on a common file from multiple actions. `SCons`_ provides a solution to this by allowing a task
 definition to include a list of actions. The state machine stored by `Scons`_ will not store the target state until all
 actions have been performed, which avoids re-build state ambiguity when performing more than one action on a single

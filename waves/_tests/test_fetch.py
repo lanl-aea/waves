@@ -368,7 +368,7 @@ def test_build_copy_tuples(
 def test_print_list() -> None:
     test_list = ["one", "two"]
 
-    # Default arugments
+    # Default arguments
     with patch("builtins.print") as mock_print:
         _fetch.print_list(test_list)
         mock_print.assert_has_calls(

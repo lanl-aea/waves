@@ -195,7 +195,7 @@ Documentation
 
 Internal Changes
 ================
-- Handle OS-specific test expecations in resolved absolute paths, e.g. Windows "C:\" prefix (:merge:`1302`). By `Kyle
+- Handle OS-specific test expectations in resolved absolute paths, e.g. Windows "C:\" prefix (:merge:`1302`). By `Kyle
   Brindley`_.
 - More complete testing of the WAVESEnvironment methods (:merge:`1303`). By `Kyle Brindley`_.
 
@@ -527,7 +527,7 @@ Internal Changes
 
 New Features
 ============
-- Experimental Quantity of Intereset (QOI) module for advanced post-processing and regression testing (:issue:`904`,
+- Experimental Quantity of Interest (QOI) module for advanced post-processing and regression testing (:issue:`904`,
   :merge:`1164`). By `Matthew Fister`_ and `Kyle Brindley`_.
 
 Internal Changes
@@ -1472,7 +1472,7 @@ Internal Changes
 
 Enhancements
 ============
-- Change the parameter generator API deafult output file type H5 files. Matches tutorial behavior to default behavior
+- Change the parameter generator API default output file type H5 files. Matches tutorial behavior to default behavior
   for reduced configuration during preferred usage (:merge:`834`). By `Kyle Brindley`_.
 - Better consistency in ``--dry-run`` option string, as opposed to ``--dryrun`` (:merge:`836`). By `Kyle Brindley`_.
 - Add an option for transparent backgrounds in the visualize images (:issue:`669`, :merge:`837`). By `Kyle Brindley`_.
@@ -1644,7 +1644,7 @@ Documentation
   (:issue:`612`, :merge:`776`). By `Kyle Brindley`_.
 - Add a reference section to the multi-action task tutorial (:issue:`623`, :merge:`782`). By `Kyle Brindley`_.
 - Add a references section to the native SCons quickstart tutorial (:issue:`622`, :merge:`783`). By `Kyle Brindley`_.
-- Complete the refernces section of the post-processing tutorial and add a brief discussion about the purpose of the
+- Complete the references section of the post-processing tutorial and add a brief discussion about the purpose of the
   generator expression (:issue:`573`, :merge:`786`). By `Kyle Brindley`_.
 - Address the CEA-TEC edits in the computational practices discussion (:issue:`629`, :merge:`787`). By `Kyle Brindley`_.
 
@@ -1729,7 +1729,7 @@ Enhancements
 ============
 - Stream the wrapped scons command STDOUT from the waves build subcommand (:merge:`745`). By `Kyle Brindley`_.
 - Submit all targets simultaneously in the waves build subcommand (:merge:`745`). By `Kyle Brindley`_.
-- Build the Conda environment artifact to the build directoy in the modsim template (:merge:`761`). By `Kyle Brindley`_.
+- Build the Conda environment artifact to the build directory in the modsim template (:merge:`761`). By `Kyle Brindley`_.
 - Use pathlib objects in the modsim template and reduce str conversions which are no longer necessary in SCons 4.6.0
   (:merge:`762`). By `Kyle Brindley`_.
 
@@ -1983,10 +1983,10 @@ Breaking changes
 - Deprecate the too-general ``parameter_study <study type>`` command-line utility name in favor of ``waves <study
   type>`` to avoid utility conflicts with other packages (:issue:`494`, :merge:`612`). By `Kyle Brindley`_.
 - Standardize the builder program path keyword from ``<thing>_program`` to ``program`` for greater consistency in
-  builder APIs. The older keywords are preseved for backward compatibility, but they raise a deprecation warning
+  builder APIs. The older keywords are preserved for backward compatibility, but they raise a deprecation warning
   (:issue:`495`, :merge:`613`). By `Kyle Brindley`_.
 - Rename the ``waves.builders`` module as ``waves.scons_extensions`` to reflect the growing scope of SCons extensions
-  beyond a collection of builders. Backward compatilibity is maintained by duplicating the module under the old name
+  beyond a collection of builders. Backward compatibility is maintained by duplicating the module under the old name
   with a deprecation warning (:issue:`492`, :merge:`618`, :issue:`512`, :merge:`621`, :merge:`627`, :merge:`628`). By
   `Kyle Brindley`_.
 
@@ -2011,7 +2011,7 @@ Internal Changes
 - Reduce the runtime dependency from the full matplotlib to matplotlib-base following the conda-forge recommendation:
   https://conda-forge.org/docs/maintainer/knowledge_base.html#matplotlib (:issue:`440`, :merge:`611`). By `Kyle
   Brindley`_.
-- Explore a draft correlation coefficients post-procesing tutorial (:merge:`615`). By `Kyle Brindley`_.
+- Explore a draft correlation coefficients post-processing tutorial (:merge:`615`). By `Kyle Brindley`_.
 - Update to use Abaqus 2023 (:issue:`509`, :merge:`617`). By `Kyle Brindley`_.
 - More complete clean behavior for the documentation targets to reduce dev/main source conflicts during Gitlab-Pages
   builds (:issue:`516`, :merge:`625`, :merge:`626`). By `Kyle Brindley`_.
@@ -2197,7 +2197,7 @@ Internal Changes
 - Fix test for sta_parse.py to achieve 100 percent coverage (:issue:`435`, :merge:`533`). By `Prabhu Khalsa`_.
 - Added ``sphinx-copybutton`` package to environment via pip (:issue:`436`, :merge:`532`). By `Sergio Cordova`_.
 - Added ``sphinx-copybutton`` package to environment via conda-forge (:issue:`437`, :merge:`537`). By `Sergio Cordova`_.
-- Remove unecessary ``LD_LIBRARY_PATH`` operations in Gitlab-CI configuration (:issue:`438`, :merge:`538`). By `Kyle
+- Remove unnecessary ``LD_LIBRARY_PATH`` operations in Gitlab-CI configuration (:issue:`438`, :merge:`538`). By `Kyle
   Brindley`_.
 - Add waves subcommand sign-of-life tests to the external/GitHub conda-build recipe tests (:issue:`430`, :merge:`539`).
   By `Kyle Brindley`_.
@@ -2298,7 +2298,7 @@ Documentation
 
 Internal Changes
 ================
-- Remove unecessary elements of conda recipes (:merge:`491`). By `Kyle Brindley`_.
+- Remove unnecessary elements of conda recipes (:merge:`491`). By `Kyle Brindley`_.
 - Default to the external/GitHub/conda-forge documentation variant (:issue:`405`, :merge:`493`). By `Kyle Brindley`_.
 
 ******************
@@ -2653,7 +2653,7 @@ Internal Changes
 - Standardize on ``pathlib`` constructed absolute paths (:issue:`346`, :merge:`374`). By `Kyle Brindley`_.
 - Make all ``PATH``-like modifications once in the project configuration instead of distributed ``sys.path`` calls
   (:issue:`345`, :merge:`375`). By `Kyle Brindley`_.
-- Remove unecessary tutorial and quickstart intermediate workflow directories (:issue:`347`, :merge:`376`). By `Kyle
+- Remove unnecessary tutorial and quickstart intermediate workflow directories (:issue:`347`, :merge:`376`). By `Kyle
   Brindley`_.
 
 ******************
@@ -2783,7 +2783,7 @@ Internal Changes
   repository instead of the Conda environment, so the build commands must modify PYTHONPATH (:issue:`307`,
   :merge:`317`, :merge:`318`). By `Kyle Brindley`_.
 - Add Conda managed Git package to the development environment (:issue:`285`, :merge:`322`). By `Kyle Brindley`_.
-- Remove unused packages from quickstart template environemnt file (:issue:`309`, :merge:`325`). By `Kyle Brindley`_.
+- Remove unused packages from quickstart template environment file (:issue:`309`, :merge:`325`). By `Kyle Brindley`_.
 - Remove the duplicate tutorial suite regression tests. WAVES-EABM documentation test build now lives in the quickstart
   template and individual tutorial configuration are tested directly (:issue:`310`, :merge:`326`). By `Kyle Brindley`_.
 
@@ -2931,7 +2931,7 @@ Internal Changes
 
 Documentation
 =============
-- Fix the type hint for the ``previous_parameter_study`` of the paramter generators' API (:merge:`271`). By `Kyle
+- Fix the type hint for the ``previous_parameter_study`` of the parameter generators' API (:merge:`271`). By `Kyle
   Brindley`_.
 - Add the parameter study extension feature to the parameter study tutorials (:issue:`267`, :merge:`273`). By `Kyle
   Brindley`_.
@@ -3089,7 +3089,7 @@ Internal Changes
 
 Breaking changes
 ================
-- Parmeter study writes to YAML syntax by default to provide syntactically correct STDOUT default behavior. Note that
+- Parameter study writes to YAML syntax by default to provide syntactically correct STDOUT default behavior. Note that
   the ``write()`` feature isn't used in the WAVES-EABM tutorials, so the user manual documentation is unchanged.
   (:issue:`218`, :merge:`212`). By `Kyle Brindley`_.
 - Remove the parameter study python syntax output. Recommend using YAML syntax and the PyYAML package if parameter study
@@ -3165,7 +3165,7 @@ Documentation
 - Add a Cubit example draft to the tutorials (:issue:`203`, :merge:`186`). By `Kyle Brindley`_.
 - Separate the internal and external API (:issue:`200`, :merge:`188`). By `Kyle Brindley`_.
 - Add private methods to the internal API (:merge:`190`). By `Kyle Brindley`_.
-- Add a mulit-action task example using the general purpose SCons Command builder (:issue:`196`, :merge:`198`). By `Kyle
+- Add a multi-action task example using the general purpose SCons Command builder (:issue:`196`, :merge:`198`). By `Kyle
   Brindley`_.
 - Add a Latin Hypercube tutorial (:issue:`211`, :merge:`200`). By `Kyle Brindley`_.
 
@@ -3363,7 +3363,7 @@ Internal Changes
 - Clean at the end of a branch's Gitlab-Pages job to avoid incomplete clean operations when main/dev differ in their
   target file(s) (:issue:`152`, :merge:`125`). By `Kyle Brindley`_.
 - Improve directory location change logic in the Gitlab-Pages job (:issue:`154`, :merge:`126`). By `Kyle Brindley`_.
-- Keep the SConstruct markers to avoid unecessarily long and possibly confusing diffs in the tutorial documentation
+- Keep the SConstruct markers to avoid unnecessarily long and possibly confusing diffs in the tutorial documentation
   (:issue:`158`, :merge:`129`). By `Kyle Brindley`_.
 
 Enhancements
@@ -3421,7 +3421,7 @@ Internal Changes
 ================
 - Create a list of files to be copied to the documentation build directory for include statements in ``.rst`` files
   (:issue:`120`, :merge:`90`). By `Thomas Roberts`_.
-- Specify Sphinx v4.5.0 in the enviroment file (:issue:`121`, :merge:`91`). By `Thomas Roberts`_.
+- Specify Sphinx v4.5.0 in the environment file (:issue:`121`, :merge:`91`). By `Thomas Roberts`_.
 - Removed duplicate code in the docs/SConscript file (:issue:`128`, :merge:`93`). By `Sergio Cordova`_
 - Changed test_builders so journal.stdout is not created by two targets (:issue:`130`, :merge:`95`). By `Prabhu Khalsa`_
 - Create per-tutorial EABM stub project configuration files (SConstruct) to aid in incremental changes in the tutorial
@@ -3462,7 +3462,7 @@ Documentation
 
 Internal Changes
 ================
-- Collect target list with a Python built-in list for consistency across SConscript solutions with the paramerization
+- Collect target list with a Python built-in list for consistency across SConscript solutions with the parameterization
   solution (:issue:`89`, :merge:`65`). By `Kyle Brindley`_.
 - Make the Abaqus and documentation builders thread safe for SCons parallel threading feature, ``--jobs`` option
   (:issue:`62`, :merge:`66`). By `Kyle Brindley`_.

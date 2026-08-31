@@ -12,7 +12,7 @@ def main(input_file: pathlib.Path, output_file: pathlib.Path, pattern: str, repl
     :param input_file: input file to read for text substitutions
     :param output_file: output file to write with text substitutions
     :param pattern: Python re module's ``re.sub`` search pattern regex
-    :param replacement: Python re module's ``re.sub`` replacment string
+    :param replacement: Python re module's ``re.sub`` replacement string
     """
     # Avoid modifying the contents or timestamp on the input file.
     # Required to get conditional re-builds with a build system such as GNU Make, CMake, or SCons

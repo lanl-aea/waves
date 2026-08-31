@@ -173,7 +173,7 @@ Step-By-Step SConscript Discussion
       :emphasize-lines: 16, 19
 
 The beginning portion of the ``SConscript`` file consists of a series of straight forward Python package import
-statements. There are, however, two notable lines in the included code above. The first hightlighted line imports the
+statements. There are, however, two notable lines in the included code above. The first highlighted line imports the
 ``parameter_schema`` dictionary into the ``SConscript`` file's name space from the
 ``rectangle_compression_cartesian_product`` module that you created in the
 :ref:`tutorial_cartesian_product_waves_parameter_study_file` portion of this tutorial.  The second import line should

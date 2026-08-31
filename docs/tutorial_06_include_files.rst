@@ -76,7 +76,7 @@ Directory Structure
 
             $ pwd
             /home/roppenheimer/waves-tutorials
-            $ waves fetch --overwrite tutorials/tutorial_05_parameter_substitution.scons && cp tutorial_05_parameter_substitution.scons tutorial_06_include_filess.scons
+            $ waves fetch --overwrite tutorials/tutorial_05_parameter_substitution.scons && cp tutorial_05_parameter_substitution.scons tutorial_06_include_files.scons
             WAVES fetch
             Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -262,7 +262,7 @@ changes made in this tutorial.
       :language: Python
       :diff: tutorials_tutorial_05_parameter_substitution_SConstruct
 
-The first change you made allows for us to import modules from the ``modsim_package`` package. This step is neccessary to
+The first change you made allows for us to import modules from the ``modsim_package`` package. This step is necessary to
 be able to import the ``modsim_package.python`` module in the ``tutorial_06_include_files.scons`` file.
 
 The last change to be made is adding ``tutorial_06_include_files`` to the ``workflow_configurations`` list. This
@@ -496,7 +496,7 @@ The output should look similar to the figure below.
 
 Note that the directed graph has not grown larger than the one shown in :ref:`tutorial_parameter_substitution`.
 While we have added a new parameter file, the dependence is implicitly captured in the simulation variable values passed
-to the subsitution dictionary. If the values in the parameter file change, the substituted
+to the substitution dictionary. If the values in the parameter file change, the substituted
 ``rectangle_compression.inp`` file contents will also change. So while the parameter file is not explicitly
 included in the directed graph, the contents of the ``rectangle_compression.inp`` file will still correctly prompt
 re-builds when the parameter file changes.
