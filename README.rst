@@ -138,7 +138,7 @@ installation from the command line as ``waves docs``. The documentation is also 
 * GitHub: https://lanl-aea.github.io/waves/index.html
 * LANL: https://aea.re-pages.lanl.gov/python-projects/waves/
 
-The `MODSIM-TEMPLATE documentation`_ and `MODSIM-TEMPLATE 2 documentation`_ are hosted as a separate webpage as a demonstration for what modsim project
+The `MODSIM-TEMPLATE documentation`_ and `MODSIM-TEMPLATE 2 documentation`_ are hosted as separate webpages as a demonstration for what modsim project
 documentation can look like.
 
 Modsim Template

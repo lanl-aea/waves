@@ -213,6 +213,7 @@ pages:
     - project_root=$PWD
     - rm -rf public
     - mkdir -p public/modsim-template
+    - mkdir -p public/modsim-template_2
     - cp -r build/docs/html-internal/* public/
     - cp -r build/pytest/coverage public/coverage
     # Build modsim template documentation
@@ -220,7 +221,7 @@ pages:
     - PYTHONPATH=${project_root} scons html
     - cp -r build/docs/html/* ${project_root}/public/modsim-template
     # Build modsim template 2 documentation
-    - cd waves/modsim_template_2
+    - cd ../waves/modsim_template_2
     - PYTHONPATH=${project_root} scons html
     - cp -r build/docs/html/* ${project_root}/public/modsim-template_2
   artifacts:

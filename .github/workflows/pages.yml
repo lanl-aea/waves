@@ -37,12 +37,9 @@ jobs:
       - name: Conda environment
         shell: bash -el {0}
         run: conda env update --file pip-build.yml
-      - name: Build modsim documentation
+      - name: Build documentation
         shell: bash -el {0}
-        run: repository_root=$(pwd) && mkdir -p ${repository_root}/pages/modsim-template && scons html && cp -r build/docs/html/* ${repository_root}/pages/ && cd waves/modsim_template && PYTHONPATH=${repository_root} scons html && cp -r build/docs/html/* ${repository_root}/pages/modsim-template
-      - name: Build modsim 2 documentation
-        shell: bash -el {0}
-        run: repository_root=$(pwd) && mkdir -p ${repository_root}/pages/modsim-template_2 && scons html && cp -r build/docs/html/* ${repository_root}/pages/ && cd waves/modsim_template_2 && PYTHONPATH=${repository_root} scons html && cp -r build/docs/html/* ${repository_root}/pages/modsim-template-2
+        run: repository_root=$(pwd) && mkdir -p ${repository_root}/pages/modsim-template && mkdir -p ${repository_root}/pages/modsim-template_2 && scons html && cp -r build/docs/html/* ${repository_root}/pages/ && cd waves/modsim_template && PYTHONPATH=${repository_root} scons html && cp -r build/docs/html/* ${repository_root}/pages/modsim-template && cd ../waves/modsim_template_2 && PYTHONPATH=${repository_root} scons html && cp -r build/docs/html/* ${repository_root}/pages/modsim_template_2
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
