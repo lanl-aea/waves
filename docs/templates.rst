@@ -44,15 +44,15 @@ source list construction.
 
 However, these advanced features restrict source and/or build tree structure. The ``duplicate=True`` and
 :meth:`waves.scons_extensions.abaqus_input_scanner` features require that the SConscript files must be co-located with
-the source files they describe. Therefore, the part and simulation SConscript files (``rectangle`` and
-``rectangle_compression``) are found in the ``modsim_package`` directory in ``modsim_template_2``.
+the source files they describe. Therefore, the part and simulation SConscript files (``rectangle.scons`` and
+``rectangle_compression.scons``) are found in the ``modsim_package`` directory in ``modsim_template_2``.
 
 The :meth:`scons_extensions.parameter_study_sconscript` feature allows projects to unpack parameter studies during an
 SConscript call. This removes the need for separate ``nominal`` and ``mesh_convergence`` simulation workflow files,
 which are replaced by a single ``rectangle_compression`` workflow file. Combining these simulation workflows reduces new
 simulation definitions to an entry in SConstruct, but does require that workflow specific post-processing tasks be moved
-to dedicated SConscript files: ``rectangle_compression-nominal-regression`` and
-``rectangle_compression-mesh_convergence-post_processing``.
+to dedicated SConscript files: ``rectangle_compression-nominal-regression.scons`` and
+``rectangle_compression-mesh_convergence-post_processing.scons``.
 
 To preserve the build tree structure with nested SConscript calls, all SConscript files must be found in the same parent
 directory, so the downstream workflow SConscript files (``rectangle_compression-nominal-regression`` and
