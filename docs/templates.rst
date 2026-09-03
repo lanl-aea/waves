@@ -36,11 +36,11 @@ There are currently two template projects available: ``modsim_template`` and ``m
 build tree structures and may be difficult for novice command line users to navigate.
 
 ``modsim_template_2`` uses the `SCons SConscript`_ ``duplicate=True`` default behavior :cite:`SCons,scons-user` to
-reduce the number of explicit file copy operations with :meth:`waves.scons_extensions.copy_substfile` and the Abaqus
-input file scanner, :meth:`waves.scons_extensions.abaqus_input_scanner`, to reduce the size of Abaqus solver source file
-lists. This template also uses the :meth:`waves.scons_extensions.parameter_study_sconscript`` call to further reduce
-task duplication. These features help reduce SConstruct and SConscript verbosity and aid in automated source list
-construction.
+reduce the number of explicit file copy operations with :meth:`waves.scons_extensions.copy_substfile` and uses the
+Abaqus input file scanner, :meth:`waves.scons_extensions.abaqus_input_scanner`, to reduce the size of Abaqus solver
+source file lists. This template also uses the :meth:`waves.scons_extensions.parameter_study_sconscript`` call to
+further reduce task duplication. These features help reduce SConstruct and SConscript verbosity and aid in automated
+source list construction.
 
 However, these advanced features restrict source and/or build tree structure. The ``duplicate=True`` and
 :meth:`waves.scons_extensions.abaqus_input_scanner` features require that the SConscript files must be co-located with
