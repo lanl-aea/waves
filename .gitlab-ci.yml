@@ -217,12 +217,10 @@ pages:
     - cp -r build/docs/html-internal/* public/
     - cp -r build/pytest/coverage public/coverage
     # Build modsim template documentation
-    - cd waves/modsim_template
-    - PYTHONPATH=${project_root} scons html
+    - PYTHONPATH=${project_root} scons -C waves/modsim_template html
     - cp -r build/docs/html/* ${project_root}/public/modsim-template
     # Build modsim template 2 documentation
-    - cd ../waves/modsim_template_2
-    - PYTHONPATH=${project_root} scons html
+    - PYTHONPATH=${project_root} scons -C waves/modsim_template_2 html
     - cp -r build/docs/html/* ${project_root}/public/modsim-template_2
   artifacts:
     paths:
