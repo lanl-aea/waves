@@ -212,13 +212,15 @@ pages:
   script:
     - project_root=$PWD
     - rm -rf public
-    - mkdir -p public/modsim-template
+    - mkdir -p public/modsim-template public/modsim-template_2
     - cp -r build/docs/html-internal/* public/
     - cp -r build/pytest/coverage public/coverage
     # Build modsim template documentation
-    - cd waves/modsim_template
-    - PYTHONPATH=${project_root} scons html
-    - cp -r build/docs/html/* ${project_root}/public/modsim-template
+    - PYTHONPATH=${project_root} scons -C waves/modsim_template html
+    - cp -r ${project_root}/waves/modsim_template/build/docs/html/* ${project_root}/public/modsim-template
+    # Build modsim template 2 documentation
+    - PYTHONPATH=${project_root} scons -C waves/modsim_template_2 html
+    - cp -r ${project_root}/waves/modsim_template_2/build/docs/html/* ${project_root}/public/modsim-template_2
   artifacts:
     paths:
       # It MUST be called public

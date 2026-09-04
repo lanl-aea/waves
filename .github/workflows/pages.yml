@@ -39,7 +39,7 @@ jobs:
         run: conda env update --file pip-build.yml
       - name: Build documentation
         shell: bash -el {0}
-        run: repository_root=$(pwd) && mkdir -p ${repository_root}/pages/modsim-template && scons html && cp -r build/docs/html/* ${repository_root}/pages/ && cd waves/modsim_template && PYTHONPATH=${repository_root} scons html && cp -r build/docs/html/* ${repository_root}/pages/modsim-template
+        run: repository_root=$(pwd) && mkdir -p ${repository_root}/pages/modsim-template ${repository_root}/pages/modsim-template_2 && scons html && cp -r build/docs/html/* ${repository_root}/pages/ && PYTHONPATH=${repository_root} scons -C waves/modsim_template html && cp -r ${repository_root}/waves/modsim_template/build/docs/html/* ${repository_root}/pages/modsim-template && PYTHONPATH=${repository_root} scons -C waves/modsim_template_2 html && cp -r ${repository_root}/waves/modsim_template_2/build/docs/html/* ${repository_root}/pages/modsim_template_2
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
