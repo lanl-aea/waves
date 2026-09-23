@@ -8,14 +8,18 @@ Changelog
 1.6.0 (unreleased)
 ******************
 
+******************
+1.5.2 (2026-09-23)
+******************
+
 Documentation
 =============
 - Miscellaneous typo corrections. By `Kyle Brindley`_.
 
 Enhancements
 ============
-- Add QOI histogram report. (:merge:`1263`). By `Matthew Fister`_.
-- Add support for 1D QOIs in tolerance report. (:merge:`1266`). By `Matthew Fister`_.
+- Add QOI histogram report (:merge:`1263`). By `Matthew Fister`_.
+- Add support for 1D QOIs in tolerance report (:merge:`1266`). By `Matthew Fister`_.
 - Update sbatch builders to escape the sbatch command and avoid task re-execution if the sbatch executable changes
   (:issue:`1031`, :merge:`1337`). By `Kyle Brindley`_.
 
