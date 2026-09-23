@@ -1194,7 +1194,7 @@ def test_abaqus_journal(
 
 def test_sbatch_abaqus_journal() -> None:
     expected = (
-        'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${action_prefix} '
+        '$(sbatch$) --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${action_prefix} '
         "${program} -information environment ${environment_suffix} && ${action_prefix} "
         '${program} ${required} ${abaqus_options} -- ${journal_options} ${action_suffix}"'
     )
@@ -2193,7 +2193,7 @@ def test_abaqus_pseudo_builder(
 
 def test_sbatch_abaqus_solver() -> None:
     expected = (
-        'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "'
+        '$(sbatch$) --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "'
         "${action_prefix} ${program} -information environment ${environment_suffix} && "
         '${action_prefix} ${program} ${required} ${abaqus_options} ${action_suffix}"'
     )
@@ -2593,7 +2593,7 @@ def test_sbatch_first_target_builder_factories(name: str) -> None:
 
     .. code-block::
 
-       @catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
+       @catenate_actions(program="$(sbatch$)", options=_settings._sbatch_wrapper_options)
        def sbatch_thing_builder_factory(*args, **kwargs):
            return thing_builder_factory(*args, **kwargs)
 
@@ -2602,7 +2602,7 @@ def test_sbatch_first_target_builder_factories(name: str) -> None:
     :param name: wrapped builder factory name
     """
     expected = (
-        f'sbatch {_sbatch_wrapper_options} "'
+        f'$(sbatch$) {_sbatch_wrapper_options} "'
         "${environment} ${action_prefix} ${program} ${program_required} ${program_options} "
         '${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"'
     )
@@ -2937,7 +2937,7 @@ def test_sbatch(
 ) -> None:
     # Set default expectations to match default argument values
     expected_kwargs = {
-        "program": "sbatch",
+        "program": "$(sbatch$)",
         "required": "--wait --output=${TARGETS[-1].abspath}",
         "action_prefix": _cd_action_prefix,
     }
