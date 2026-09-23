@@ -1260,7 +1260,7 @@ def abaqus_journal(
     return builder
 
 
-@catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
+@catenate_actions(program="$(sbatch$)", options=_settings._sbatch_wrapper_options)
 def sbatch_abaqus_journal(*args, **kwargs) -> SCons.Builder.Builder:
     """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_journal`.
 
@@ -1270,12 +1270,12 @@ def sbatch_abaqus_journal(*args, **kwargs) -> SCons.Builder.Builder:
     .. code-block::
        :caption: Sbatch Abaqus journal builder action keywords
 
-       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${action_prefix} ${program} -information environment ${environment_suffix} && ${action_prefix} ${program} ${required} ${abaqus_options} -- ${journal_options} ${action_suffix}"
+       $(sbatch$) --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${action_prefix} ${program} -information environment ${environment_suffix} && ${action_prefix} ${program} ${required} ${abaqus_options} -- ${journal_options} ${action_suffix}"
 
     .. code-block::
        :caption: Sbatch Abaqus journal builder action default expansion
 
-       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGETS[-1].abspath} 2>&1"
+       $(sbatch$) --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGETS[-1].abspath} 2>&1"
     """  # noqa: E501
     return abaqus_journal(*args, **kwargs)
 
@@ -1378,7 +1378,7 @@ def abaqus_journal_builder_factory(
     return builder
 
 
-@catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
+@catenate_actions(program="$(sbatch$)", options=_settings._sbatch_wrapper_options)
 def sbatch_abaqus_journal_builder_factory(*args, **kwargs) -> SCons.Builder.Builder:
     """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_journal_builder_factory`.
 
@@ -1388,7 +1388,7 @@ def sbatch_abaqus_journal_builder_factory(*args, **kwargs) -> SCons.Builder.Buil
     .. code-block::
        :caption: action string construction
 
-       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
+       $(sbatch$) --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
     """  # noqa: E501
     return abaqus_journal_builder_factory(*args, **kwargs)
 
@@ -2322,7 +2322,7 @@ class AbaqusPseudoBuilder:
         return self.builder(target=targets, source=sources, job=job_option, program_options=options, **kwargs)
 
 
-@catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
+@catenate_actions(program="$(sbatch$)", options=_settings._sbatch_wrapper_options)
 def sbatch_abaqus_solver_builder_factory(*args, **kwargs) -> SCons.Builder.Builder:
     """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_solver_builder_factory`.
 
@@ -2332,12 +2332,12 @@ def sbatch_abaqus_solver_builder_factory(*args, **kwargs) -> SCons.Builder.Build
     .. code-block::
        :caption: action string construction
 
-       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
+       $(sbatch$) --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
     """  # noqa: E501
     return abaqus_solver_builder_factory(*args, **kwargs)
 
 
-@catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
+@catenate_actions(program="$(sbatch$)", options=_settings._sbatch_wrapper_options)
 def sbatch_abaqus_solver(*args, **kwargs) -> SCons.Builder.Builder:
     """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_solver`.
 
@@ -2347,12 +2347,12 @@ def sbatch_abaqus_solver(*args, **kwargs) -> SCons.Builder.Builder:
     .. code-block::
        :caption: Sbatch Abaqus solver builder action default expansion
 
-       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${action_prefix} ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} ${required} ${action_suffix}"
+       $(sbatch$) --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${action_prefix} ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} ${required} ${action_suffix}"
 
     .. code-block::
        :caption: Sbatch Abaqus solver builder action default expansion
 
-       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${TARGETS[-1].abspath} 2>&1"
+       $(sbatch$) --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${TARGETS[-1].abspath} 2>&1"
     """  # noqa: E501
     return abaqus_solver(*args, **kwargs)
 
@@ -2517,7 +2517,7 @@ def python_builder_factory(
     return builder
 
 
-@catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
+@catenate_actions(program="$(sbatch$)", options=_settings._sbatch_wrapper_options)
 def sbatch_python_builder_factory(*args, **kwargs) -> SCons.Builder.Builder:
     """Thin pass through wrapper of :meth:`waves.scons_extensions.python_builder_factory`.
 
@@ -2527,7 +2527,7 @@ def sbatch_python_builder_factory(*args, **kwargs) -> SCons.Builder.Builder:
     .. code-block::
        :caption: action string construction
 
-       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
+       $(sbatch$) --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
     """  # noqa: E501
     return python_builder_factory(*args, **kwargs)
 
@@ -2864,7 +2864,7 @@ def _build_odb_extract(
 
 
 def sbatch(
-    program: str = "sbatch",
+    program: str = "$(sbatch$)",
     required: str = "--wait --output=${TARGETS[-1].abspath}",
     action_prefix: str = _settings._cd_action_prefix,
 ) -> SCons.Builder.Builder:
@@ -2900,7 +2900,7 @@ def sbatch(
     .. code-block::
        :caption: SLURM sbatch builder action default expansion
 
-       cd ${TARGET.dir.abspath} && sbatch --wait --output=${TARGETS[-1].abspath} ${sbatch_options} --wrap "${slurm_job}"
+       cd ${TARGET.dir.abspath} && $(sbatch$) --wait --output=${TARGETS[-1].abspath} ${sbatch_options} --wrap "${slurm_job}"
 
     .. code-block::
        :caption: SConstruct
@@ -2915,7 +2915,7 @@ def sbatch(
     :param action_prefix: Advanced behavior. Most users should accept the defaults.
 
     :return: SLURM sbatch builder
-    """
+    """  # noqa: E501
     action = ['${action_prefix} ${program} ${required} ${sbatch_options} --wrap "${slurm_job}"']
     sbatch_builder = SCons.Builder.Builder(
         action=action,
@@ -3236,7 +3236,7 @@ def quinoa_builder_factory(
     return builder
 
 
-@catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
+@catenate_actions(program="$(sbatch$)", options=_settings._sbatch_wrapper_options)
 def sbatch_quinoa_builder_factory(*args, **kwargs) -> SCons.Builder.Builder:
     """Thin pass through wrapper of :meth:`waves.scons_extensions.quinoa_builder_factory`.
 
@@ -3246,7 +3246,7 @@ def sbatch_quinoa_builder_factory(*args, **kwargs) -> SCons.Builder.Builder:
     .. code-block::
        :caption: action string construction
 
-       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
+       $(sbatch$) --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
     """  # noqa: E501
     return quinoa_builder_factory(*args, **kwargs)
 
@@ -3646,7 +3646,7 @@ def sierra_builder_factory(
     return builder
 
 
-@catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
+@catenate_actions(program="$(sbatch$)", options=_settings._sbatch_wrapper_options)
 def sbatch_sierra_builder_factory(*args, **kwargs) -> SCons.Builder.Builder:
     """Thin pass through wrapper of :meth:`waves.scons_extensions.sierra_builder_factory`.
 
@@ -3656,7 +3656,7 @@ def sbatch_sierra_builder_factory(*args, **kwargs) -> SCons.Builder.Builder:
     .. code-block::
        :caption: action string construction
 
-       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
+       $(sbatch$) --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
     """  # noqa: E501
     return sierra_builder_factory(*args, **kwargs)
 
