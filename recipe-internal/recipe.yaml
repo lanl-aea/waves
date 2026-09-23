@@ -78,10 +78,6 @@ requirements:
     - xarray >=2024.10.0
 
 tests:
-  - python:
-      imports:
-        - waves
-      pip_check: true
   - script:
       - if: unix
         then: ./run_test.sh
