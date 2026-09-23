@@ -2915,7 +2915,7 @@ def sbatch(
     :param action_prefix: Advanced behavior. Most users should accept the defaults.
 
     :return: SLURM sbatch builder
-    """
+    """  # noqa: E501
     action = ['${action_prefix} ${program} ${required} ${sbatch_options} --wrap "${slurm_job}"']
     sbatch_builder = SCons.Builder.Builder(
         action=action,
