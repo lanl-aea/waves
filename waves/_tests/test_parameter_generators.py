@@ -4876,7 +4876,8 @@ def test__write(
             mock_write_study_files.assert_not_called()
         else:
             mock_write_study_files.assert_called_once()
-            # TODO: assert dry run argument is as expected
+            expected_dry_run = kwargs.get("dry_run", False)
+            assert mock_write_study_files.call_args[1]["dry_run"] is expected_dry_run
             parameter_study_files = mock_write_study_files.call_args[0][0]
             assert sorted(expected_write_parameter_study_files.keys()) == sorted(parameter_study_files.keys())
             for key, expected_value in expected_write_parameter_study_files.items():
@@ -5100,7 +5101,8 @@ def test_class_write(
             mock_write_study_files.assert_not_called()
         else:
             mock_write_study_files.assert_called_once()
-            # TODO: assert dry run argument is as expected
+            expected_dry_run = kwargs.get("dry_run", False)
+            assert mock_write_study_files.call_args[1]["dry_run"] is expected_dry_run
             parameter_study_files = mock_write_study_files.call_args[0][0]
             assert sorted(expected_write_parameter_study_files.keys()) == sorted(parameter_study_files.keys())
             for key, expected_value in expected_write_parameter_study_files.items():
