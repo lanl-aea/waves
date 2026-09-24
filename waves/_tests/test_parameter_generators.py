@@ -4877,7 +4877,7 @@ def test__write(
         else:
             mock_write_study_files.assert_called_once()
             # TODO: assert dry run argument is as expected
-            parameter_study_files = mock_write_meta_file.call_args[0][1]
+            parameter_study_files = mock_write_study_files.call_args[0][0]
             assert sorted(expected_write_parameter_study_files.keys()) == sorted(parameter_study_files.keys())
             for key, expected_value in expected_write_parameter_study_files.items():
                 parameter_study_data = parameter_study_files[key]
@@ -4885,7 +4885,7 @@ def test__write(
                 if isinstance(expected_value, dict):
                     assert expected_value == parameter_study_data
                 elif isinstance(expected_value, xarray.Dataset):
-                    expected_value.testing.assert_identical(parameter_study_data)
+                    xarray.testing.assert_identical(parameter_study_data, expected_value)
         if expected_write_meta_file_contents is None:
             mock_write_meta_file.assert_not_called()
         else:
@@ -5101,7 +5101,7 @@ def test_class_write(
         else:
             mock_write_study_files.assert_called_once()
             # TODO: assert dry run argument is as expected
-            parameter_study_files = mock_write_meta_file.call_args[0][1]
+            parameter_study_files = mock_write_study_files.call_args[0][0]
             assert sorted(expected_write_parameter_study_files.keys()) == sorted(parameter_study_files.keys())
             for key, expected_value in expected_write_parameter_study_files.items():
                 parameter_study_data = parameter_study_files[key]
@@ -5109,7 +5109,7 @@ def test_class_write(
                 if isinstance(expected_value, dict):
                     assert expected_value == parameter_study_data
                 elif isinstance(expected_value, xarray.Dataset):
-                    expected_value.testing.assert_identical(parameter_study_data)
+                    xarray.testing.assert_identical(parameter_study_data, expected_value)
         if expected_write_meta_file_contents is None:
             mock_write_meta_file.assert_not_called()
         else:
