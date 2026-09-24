@@ -3631,7 +3631,7 @@ test__write_cases = {
     "CartesianProduct: STDOUT": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {},
-        ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+        "parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n",
         None,
         None,
         does_not_raise,
@@ -3640,7 +3640,7 @@ test__write_cases = {
     "CartesianProduct (class init): output file, default type": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5")),
         {},
-        ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+        "parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n",
         None,
         None,
         does_not_raise,
@@ -3649,7 +3649,8 @@ test__write_cases = {
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_file": pathlib.Path("output.h5")},
         None,
-        {pathlib.Path("output.h5"): xarray.Dataset(
+        {
+            pathlib.Path("output.h5"): xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
                         [2, 1],
@@ -3674,7 +3675,7 @@ test__write_cases = {
             {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5"), overwrite=True
         ),
         {},
-        ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+        "parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n",
         None,
         None,
         does_not_raise,
@@ -3877,7 +3878,7 @@ test__write_cases = {
             {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5"), output_file_type="h5"
         ),
         {},
-        ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+        "parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n",
         None,
         None,
         does_not_raise,
@@ -4001,7 +4002,7 @@ test__write_cases = {
             {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.yaml"), output_file_type="yaml"
         ),
         {},
-        ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+        "parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n",
         None,
         None,
         does_not_raise,
@@ -4264,7 +4265,7 @@ test__write_cases = {
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
         None,
         None,
-        ["parameter_set0:\n  a: 2\nparameter_set1:\n  a: 1\n"],
+        "parameter_set0:\n  a: 2\nparameter_set1:\n  a: 1\n",
         None,
         does_not_raise,
     ),
@@ -4898,8 +4899,8 @@ test_class_write_cases.update(
             parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5")),
             {},
             None,
-            [
-                xarray.Dataset(
+            {
+                pathlib.Path("output.h5"): xarray.Dataset(
                     {
                         "parameter_1": xarray.DataArray(
                             [2, 1],
@@ -4913,18 +4914,16 @@ test_class_write_cases.update(
                             },
                         ),
                     },
-                )
-            ],
-            None,
+                ),
+            },
             None,
             does_not_raise,
         ),
         "CartesianProduct (class init): output file, default type (overridden)": (
             parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5")),
             {"output_file_type": "yaml"},
+            "parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n",
             None,
-            None,
-            ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
             None,
             does_not_raise,
         ),
@@ -4934,8 +4933,8 @@ test_class_write_cases.update(
             ),
             {},
             None,
-            [
-                xarray.Dataset(
+            {
+                pathlib.Path("output.h5"): xarray.Dataset(
                     {
                         "parameter_1": xarray.DataArray(
                             [2, 1],
@@ -4950,8 +4949,7 @@ test_class_write_cases.update(
                         ),
                     },
                 ),
-            ],
-            None,
+            },
             None,
             does_not_raise,
         ),
@@ -4961,8 +4959,8 @@ test_class_write_cases.update(
             ),
             {},
             None,
-            [
-                xarray.Dataset(
+            {
+                pathlib.Path("output.h5"): xarray.Dataset(
                     {
                         "parameter_1": xarray.DataArray(
                             [2, 1],
@@ -4977,8 +4975,7 @@ test_class_write_cases.update(
                         ),
                     },
                 ),
-            ],
-            None,
+            },
             None,
             does_not_raise,
         ),
@@ -4986,8 +4983,7 @@ test_class_write_cases.update(
             parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5")),
             {"output_file_type": "yaml"},
             None,
-            None,
-            ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+            {pathlib.Path("output.yaml"): "parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"},
             None,
             does_not_raise,
         ),
@@ -4997,8 +4993,7 @@ test_class_write_cases.update(
             ),
             {},
             None,
-            None,
-            ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
+            {pathlib.Path("output.yaml"): "parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"},
             None,
             does_not_raise,
         ),
@@ -5007,9 +5002,8 @@ test_class_write_cases.update(
                 {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.yaml"), output_file_type="yaml"
             ),
             {"dry_run": True},
-            [f"{pathlib.Path('output.yaml')}\nparameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
             None,
-            None,
+            {pathlib.Path("output.yaml"): "parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"},
             None,
             does_not_raise,
         ),
@@ -5018,14 +5012,13 @@ test_class_write_cases.update(
                 {"parameter_1": [1, 2]}, output_file=pathlib.Path("output.yaml"), output_file_type="yaml"
             ),
             {"output_file": pathlib.Path("different.yaml"), "dry_run": True},
-            [
-                (
-                    f"{pathlib.Path('different.yaml')}\n"
-                    "parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"
-                )
-            ],
             None,
-            None,
+            {
+                pathlib.Path('different.yaml'): {
+                    "parameter_set0": {"parameter_1": 2},
+                    "parameter_set1": {"parameter_1": 1},
+                }
+            },
             None,
             does_not_raise,
         ),
@@ -5035,8 +5028,8 @@ test_class_write_cases.update(
             ),
             {"output_file_type": "h5"},
             None,
-            [
-                xarray.Dataset(
+            {
+                pathlib.Path("output.yaml"): xarray.Dataset(
                     {
                         "parameter_1": xarray.DataArray(
                             [2, 1],
@@ -5051,8 +5044,7 @@ test_class_write_cases.update(
                         ),
                     },
                 ),
-            ],
-            None,
+            },
             None,
             does_not_raise,
         ),
