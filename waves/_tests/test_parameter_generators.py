@@ -4481,9 +4481,9 @@ test__write_cases = {
         None,
         {
             pathlib.Path("output.yaml"): {
-                {"out0": {"parameter_1": 1, "parameter_2": True}},
-                {"out1": {"parameter_1": 2, "parameter_2": True}},
-                {"out2": {"parameter_1": 1, "parameter_2": False}},
+                "out0": {"parameter_1": 1, "parameter_2": True},
+                "out1": {"parameter_1": 2, "parameter_2": True},
+                "out2": {"parameter_1": 1, "parameter_2": False},
             }
         },
         None,
@@ -4495,9 +4495,9 @@ test__write_cases = {
         None,
         {
             pathlib.Path("output.yaml"): {
-                {"out0": {"parameter_1": 1, "parameter_2": True}},
-                {"out1": {"parameter_1": 2, "parameter_2": True}},
-                {"out2": {"parameter_1": 1, "parameter_2": False}},
+                "out0": {"parameter_1": 1, "parameter_2": True},
+                "out1": {"parameter_1": 2, "parameter_2": True},
+                "out2": {"parameter_1": 1, "parameter_2": False},
             }
         },
         None,
