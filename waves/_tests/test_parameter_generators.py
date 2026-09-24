@@ -3729,20 +3729,22 @@ test__write_cases = {
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_file": pathlib.Path("output.h5"), "dry_run": True},
         None,
-        {pathlib.Path("output.h5"): xarray.Dataset(
-            {
-                "parameter_1": xarray.DataArray(
-                    [2, 1],
-                    dims=["set_name"],
-                    coords={
-                        "set_name": ["parameter_set0", "parameter_set1"],
-                        "set_hash": (
-                            "set_name",
-                            ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
-                        ),
-                    },
-                ),
-            },
+        {
+            pathlib.Path("output.h5"): xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2, 1],
+                        dims=["set_name"],
+                        coords={
+                            "set_name": ["parameter_set0", "parameter_set1"],
+                            "set_hash": (
+                                "set_name",
+                                ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
+                            ),
+                        },
+                    ),
+                },
+            ),
         },
         None,
         does_not_raise,
@@ -3775,7 +3777,7 @@ test__write_cases = {
         {"output_directory": pathlib.Path("directory")},
         None,
         {
-            pathlib.Path("directory/parameter_set0.h5": xarray.Dataset(
+            pathlib.Path("directory/parameter_set0.h5"): xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
                         [2],
@@ -3787,7 +3789,7 @@ test__write_cases = {
                     ),
                 },
             ),
-            pathlib.Path("directory/parameter_set1.h5": xarray.Dataset(
+            pathlib.Path("directory/parameter_set1.h5"): xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
                         [1],
@@ -3819,8 +3821,8 @@ test__write_cases = {
                         },
                     ),
                 },
-            )
-            pathlib.Path('directory/parameter_set1.h5': xarray.Dataset(
+            ),
+            pathlib.Path('directory/parameter_set1.h5'): xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
                         [1],
@@ -3831,7 +3833,7 @@ test__write_cases = {
                         },
                     ),
                 },
-            )
+            ),
         },
         None,
         does_not_raise,
@@ -3852,8 +3854,8 @@ test__write_cases = {
                         },
                     ),
                 },
-            )
-            pathlib.Path('/directory/parameter_set1.h5': xarray.Dataset(
+            ),
+            pathlib.Path('/directory/parameter_set1.h5'): xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
                         [1],
@@ -4008,7 +4010,7 @@ test__write_cases = {
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
         None,
-        {pathlib.Path("output.yaml"): {"parameter_set0": {"parameter_1": 2}, "parameter_set1": {"parameter_1": 1}},
+        {pathlib.Path("output.yaml"): {"parameter_set0": {"parameter_1": 2}, "parameter_set1": {"parameter_1": 1}}},
         None,
         does_not_raise,
     ),
@@ -4016,7 +4018,7 @@ test__write_cases = {
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
         None,
-        {pathlib.Path("output.yaml"): {"parameter_set0": {"parameter_1": 2}, "parameter_set1": {"parameter_1": 1}},
+        {pathlib.Path("output.yaml"): {"parameter_set0": {"parameter_1": 2}, "parameter_set1": {"parameter_1": 1}}},
         None,
         does_not_raise,
     ),
@@ -4189,7 +4191,7 @@ test__write_cases = {
             pathlib.Path("/directory/out1.yaml"): {"parameter_1": 1, "parameter_2": True},
             pathlib.Path("/directory/out2.yaml"): {"parameter_1": 2, "parameter_2": False},
             pathlib.Path("/directory/out3.yaml"): {"parameter_1": 1, "parameter_2": False},
-        }
+        },
         None,
         does_not_raise,
     ),
@@ -4204,7 +4206,7 @@ test__write_cases = {
             pathlib.Path("/directory/out1.yaml"): {"parameter_1": 1, "parameter_2": True},
             pathlib.Path("/directory/out2.yaml"): {"parameter_1": 2, "parameter_2": False},
             pathlib.Path("/directory/out3.yaml"): {"parameter_1": 1, "parameter_2": False},
-        }
+        },
         None,
         does_not_raise,
     ),
@@ -4272,7 +4274,7 @@ test__write_cases = {
         ),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
         None,
-        {pathlib.Path("output.yaml"): {"parameter_set0": {"a": 2}, "parameter_set1": {"a": 1}},
+        {pathlib.Path("output.yaml"): {"parameter_set0": {"a": 2}, "parameter_set1": {"a": 1}}},
         None,
         does_not_raise,
     ),
@@ -4311,7 +4313,7 @@ test__write_cases = {
         ),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
         None,
-        {pathlib.Path("output.yaml"): {"out0": {"a": 2, "b": 4.5}}, {"out1": {"a": 1, "b": 3.0}}},
+        {pathlib.Path("output.yaml"): {"out0": {"a": 2, "b": 4.5}, "out1": {"a": 1, "b": 3.0}}},
         None,
         does_not_raise,
     ),
@@ -4322,7 +4324,7 @@ test__write_cases = {
         ),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
         None,
-        {pathlib.Path("output.yaml"): {"out0": {"a": 2, "b": 4.5}}, {"out1": {"a": 1, "b": 3.0}}},
+        {pathlib.Path("output.yaml"): {"out0": {"a": 2, "b": 4.5}, "out1": {"a": 1, "b": 3.0}}},
         None,
         does_not_raise,
     ),
@@ -4358,7 +4360,7 @@ test__write_cases = {
         parameter_generators.OneAtATime({"parameter_1": [1, 2]}, set_name_template="out"),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
         None,
-        {pathlib.Path("output.yaml"): {"out0": {"parameter_1": 1}, "out1": {"parameter_1": 2}},
+        {pathlib.Path("output.yaml"): {"out0": {"parameter_1": 1}, "out1": {"parameter_1": 2}}},
         None,
         does_not_raise,
     ),
@@ -4366,7 +4368,7 @@ test__write_cases = {
         parameter_generators.OneAtATime({"parameter_1": [1, 2]}, set_name_template="out"),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
         None,
-        {pathlib.Path("output.yaml"): {"out0": {"parameter_1": 1}, "out1": {"parameter_1": 2}},
+        {pathlib.Path("output.yaml"): {"out0": {"parameter_1": 1}, "out1": {"parameter_1": 2}}},
         None,
         does_not_raise,
     ),
@@ -4398,9 +4400,9 @@ test__write_cases = {
         None,
         {
             pathlib.Path("output.yaml"): {
-                {"out0": "parameter_1": 1, "parameter_2": "a"},
-                {"out1": "parameter_1": 1, "parameter_2": "b"},
-                {"out2": "parameter_1": 2, "parameter_2": "a"},
+                "out0": {"parameter_1": 1, "parameter_2": "a"},
+                "out1": {"parameter_1": 1, "parameter_2": "b"},
+                "out2": {"parameter_1": 2, "parameter_2": "a"},
             },
         },
         None,
@@ -4412,9 +4414,9 @@ test__write_cases = {
         None,
         {
             pathlib.Path("output.yaml"): {
-                {"out0": "parameter_1": 1, "parameter_2": "a"},
-                {"out1": "parameter_1": 1, "parameter_2": "b"},
-                {"out2": "parameter_1": 2, "parameter_2": "a"},
+                "out0": {"parameter_1": 1, "parameter_2": "a"},
+                "out1": {"parameter_1": 1, "parameter_2": "b"},
+                "out2": {"parameter_1": 2, "parameter_2": "a"},
             },
         },
         None,
@@ -4501,9 +4503,9 @@ test__write_cases = {
         {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
         None,
         {
-            pathlib.Path("/directory/out0.yaml"): {"parameter_1": 1, "parameter_2": True}},
-            pathlib.Path("/directory/out1.yaml"): {"parameter_1": 2, "parameter_2": True}},
-            pathlib.Path("/directory/out2.yaml"): {"parameter_1": 1, "parameter_2": False}},
+            pathlib.Path("/directory/out0.yaml"): {"parameter_1": 1, "parameter_2": True},
+            pathlib.Path("/directory/out1.yaml"): {"parameter_1": 2, "parameter_2": True},
+            pathlib.Path("/directory/out2.yaml"): {"parameter_1": 1, "parameter_2": False},
         },
         None,
         does_not_raise,
@@ -4513,9 +4515,9 @@ test__write_cases = {
         {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
         None,
         {
-            pathlib.Path("/directory/out0.yaml"): {"parameter_1": 1, "parameter_2": True}},
-            pathlib.Path("/directory/out1.yaml"): {"parameter_1": 2, "parameter_2": True}},
-            pathlib.Path("/directory/out2.yaml"): {"parameter_1": 1, "parameter_2": False}},
+            pathlib.Path("/directory/out0.yaml"): {"parameter_1": 1, "parameter_2": True},
+            pathlib.Path("/directory/out1.yaml"): {"parameter_1": 2, "parameter_2": True},
+            pathlib.Path("/directory/out2.yaml"): {"parameter_1": 1, "parameter_2": False},
         },
         None,
         does_not_raise,
@@ -4530,7 +4532,7 @@ test__write_cases = {
         ),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
         None,
-        {pathlib.Path("output.yaml"): {"out0": "parameter_1": 1, "parameter_1": 2}},
+        {pathlib.Path("output.yaml"): {"out0": {"parameter_1": 1, "parameter_1": 2}}},
         None,
         does_not_raise,
     ),
@@ -4544,7 +4546,7 @@ test__write_cases = {
         ),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
         None,
-        {pathlib.Path("output.yaml"): {"out0": "parameter_1": 1, "parameter_1": 2}},
+        {pathlib.Path("output.yaml"): {"out0": {"parameter_1": 1, "parameter_1": 2}}},
         None,
         does_not_raise,
     ),
@@ -4869,7 +4871,16 @@ def test__write(
             mock_write_study_files.assert_not_called()
         else:
             mock_write_study_files.assert_called_once()
-            assert mock_write_meta_file.call_args[0][1] == expected_write_parameter_study_files
+            # TODO: assert dry run argument is as expected
+            parameter_study_files = mock_write_meta_file.call_args[0][1]
+            assert sorted(expected_write_parameter_study_files.keys()) == sorted(parameter_study_files.keys())
+            for key, expected_value in expected_write_parameter_study_files.items():
+                parameter_study_data = parameter_study_files[key]
+                assert type(expected_value) == type(parameter_study_data)
+                if isinstance(expected_value, dict):
+                    assert expected_value == parameter_study_data
+                elif isinstance(expected_value, xarray.Dataset):
+                    expected_value.testing.assert_identical(parameter_study_data)
         if expected_write_meta_file_contents is None:
             mock_write_meta_file.assert_not_called()
         else:
