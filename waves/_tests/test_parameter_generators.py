@@ -3595,7 +3595,6 @@ test__write_cases = {
         None,
         None,
         None,
-        None,
         pytest.raises(
             MutuallyExclusiveError,
             match=(
@@ -3607,7 +3606,6 @@ test__write_cases = {
     "unsupported output file type": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_file": "output.h5", "output_file_type": "notsupported"},
-        None,
         None,
         None,
         None,
@@ -3625,7 +3623,6 @@ test__write_cases = {
         None,
         None,
         None,
-        None,
         pytest.raises(
             APIError,
             match=r"The option 'meta_file' requires one of 'output_directory' or 'output_file'.",
@@ -3637,7 +3634,6 @@ test__write_cases = {
         ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
         None,
         None,
-        None,
         does_not_raise,
     ),
     # Module function ignores class attributes
@@ -3647,15 +3643,13 @@ test__write_cases = {
         ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
         None,
         None,
-        None,
         does_not_raise,
     ),
     "CartesianProduct: output file, default type": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_file": pathlib.Path("output.h5")},
         None,
-        [
-            xarray.Dataset(
+        {pathlib.Path("output.h5"): xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
                         [2, 1],
@@ -3670,8 +3664,7 @@ test__write_cases = {
                     ),
                 },
             ),
-        ],
-        None,
+        },
         None,
         does_not_raise,
     ),
@@ -3684,15 +3677,13 @@ test__write_cases = {
         ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
         None,
         None,
-        None,
         does_not_raise,
     ),
     "CartesianProduct: output file, default type, overwrite": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_file": pathlib.Path("output.h5"), "overwrite": True},
         None,
-        [
-            xarray.Dataset(
+        {pathlib.Path("output.h5"): xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
                         [2, 1],
@@ -3707,8 +3698,7 @@ test__write_cases = {
                     ),
                 },
             ),
-        ],
-        None,
+        },
         None,
         does_not_raise,
     ),
@@ -3716,8 +3706,7 @@ test__write_cases = {
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_file": pathlib.Path("/output.h5"), "meta_file": pathlib.Path("output.txt")},
         None,
-        [
-            xarray.Dataset(
+        {pathlib.Path("/output.h5"): xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
                         [2, 1],
@@ -3732,66 +3721,52 @@ test__write_cases = {
                     ),
                 },
             ),
-        ],
-        None,
+        },
         f"{pathlib.Path('/output.h5').resolve()}\n",
         does_not_raise,
     ),
     "CartesianProduct: output file, default type, dry run": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_file": pathlib.Path("output.h5"), "dry_run": True},
-        [
-            "output.h5\n"
-            + str(
-                xarray.Dataset(
-                    {
-                        "parameter_1": xarray.DataArray(
-                            [2, 1],
-                            dims=["set_name"],
-                            coords={
-                                "set_name": ["parameter_set0", "parameter_set1"],
-                                "set_hash": (
-                                    "set_name",
-                                    ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
-                                ),
-                            },
+        None,
+        {pathlib.Path("output.h5"): xarray.Dataset(
+            {
+                "parameter_1": xarray.DataArray(
+                    [2, 1],
+                    dims=["set_name"],
+                    coords={
+                        "set_name": ["parameter_set0", "parameter_set1"],
+                        "set_hash": (
+                            "set_name",
+                            ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
                         ),
                     },
                 ),
-            )
-            + "\n",
-        ],
-        None,
-        None,
+            },
+        },
         None,
         does_not_raise,
     ),
     "CartesianProduct: output file, default type, dry run, overwrite": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_file": pathlib.Path("output.h5"), "dry_run": True, "overwrite": True},
-        [
-            "output.h5\n"
-            + str(
-                xarray.Dataset(
-                    {
-                        "parameter_1": xarray.DataArray(
-                            [2, 1],
-                            dims=["set_name"],
-                            coords={
-                                "set_name": ["parameter_set0", "parameter_set1"],
-                                "set_hash": (
-                                    "set_name",
-                                    ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
-                                ),
-                            },
+        None,
+        {pathlib.Path("output.h5"): xarray.Dataset(
+            {
+                "parameter_1": xarray.DataArray(
+                    [2, 1],
+                    dims=["set_name"],
+                    coords={
+                        "set_name": ["parameter_set0", "parameter_set1"],
+                        "set_hash": (
+                            "set_name",
+                            ["0b588b6a82c1d3d3d19fda304f940342", "1661dcd0bf4761d25471c1cf5514ceae"],
                         ),
                     },
                 ),
-            )
-            + "\n",
-        ],
-        None,
-        None,
+            },
+            ),
+        },
         None,
         does_not_raise,
     ),
@@ -3799,8 +3774,8 @@ test__write_cases = {
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_directory": pathlib.Path("directory")},
         None,
-        [
-            xarray.Dataset(
+        {
+            pathlib.Path("directory/parameter_set0.h5": xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
                         [2],
@@ -3812,7 +3787,7 @@ test__write_cases = {
                     ),
                 },
             ),
-            xarray.Dataset(
+            pathlib.Path("directory/parameter_set1.h5": xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
                         [1],
@@ -3824,50 +3799,40 @@ test__write_cases = {
                     ),
                 },
             ),
-        ],
-        None,
+        },
         None,
         does_not_raise,
     ),
     "CartesianProduct: output directory, default type, dry run": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_directory": pathlib.Path("directory"), "dry_run": True},
-        [
-            f"{pathlib.Path('directory') / 'parameter_set0.h5'}\n"
-            + str(
-                xarray.Dataset(
-                    {
-                        "parameter_1": xarray.DataArray(
-                            [2],
-                            dims=["set_name"],
-                            coords={
-                                "set_name": ["parameter_set0"],
-                                "set_hash": ("set_name", ["0b588b6a82c1d3d3d19fda304f940342"]),
-                            },
-                        ),
-                    },
-                )
-            )
-            + "\n",
-            f"{pathlib.Path('directory') / 'parameter_set1.h5'}\n"
-            + str(
-                xarray.Dataset(
-                    {
-                        "parameter_1": xarray.DataArray(
-                            [1],
-                            dims=["set_name"],
-                            coords={
-                                "set_name": ["parameter_set1"],
-                                "set_hash": ("set_name", ["1661dcd0bf4761d25471c1cf5514ceae"]),
-                            },
-                        ),
-                    },
-                )
-            )
-            + "\n",
-        ],
         None,
-        None,
+        {
+            pathlib.Path('directory/parameter_set0.h5'): xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [2],
+                        dims=["set_name"],
+                        coords={
+                            "set_name": ["parameter_set0"],
+                            "set_hash": ("set_name", ["0b588b6a82c1d3d3d19fda304f940342"]),
+                        },
+                    ),
+                },
+            )
+            pathlib.Path('directory/parameter_set1.h5': xarray.Dataset(
+                {
+                    "parameter_1": xarray.DataArray(
+                        [1],
+                        dims=["set_name"],
+                        coords={
+                            "set_name": ["parameter_set1"],
+                            "set_hash": ("set_name", ["1661dcd0bf4761d25471c1cf5514ceae"]),
+                        },
+                    ),
+                },
+            )
+        },
         None,
         does_not_raise,
     ),
@@ -3875,8 +3840,8 @@ test__write_cases = {
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_directory": pathlib.Path("/directory"), "meta_file": pathlib.Path("directory/output.txt")},
         None,
-        [
-            xarray.Dataset(
+        {
+            pathlib.Path('directory/parameter_set0.h5'): xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
                         [2],
@@ -3887,8 +3852,8 @@ test__write_cases = {
                         },
                     ),
                 },
-            ),
-            xarray.Dataset(
+            )
+            pathlib.Path('directory/parameter_set1.h5': xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
                         [1],
@@ -3899,9 +3864,8 @@ test__write_cases = {
                         },
                     ),
                 },
-            ),
-        ],
-        None,
+            )
+        },
         f"{pathlib.Path('/directory/parameter_set0.h5').resolve()}\n{pathlib.Path('/directory/parameter_set1.h5').resolve()}\n",
         does_not_raise,
     ),
@@ -3914,15 +3878,13 @@ test__write_cases = {
         ["parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"],
         None,
         None,
-        None,
         does_not_raise,
     ),
     "CartesianProduct: output file, H5": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}),
         {"output_file": pathlib.Path("output.h5"), "output_file_type": "h5"},
         None,
-        [
-            xarray.Dataset(
+        {pathlib.Path("output.h5"): xarray.Dataset(
                 {
                     "parameter_1": xarray.DataArray(
                         [2, 1],
@@ -3937,8 +3899,7 @@ test__write_cases = {
                     ),
                 },
             ),
-        ],
-        None,
+        },
         None,
         does_not_raise,
     ),
@@ -4945,24 +4906,33 @@ test__write_cases = {
 def test__write(
     generator: parameter_generators.ParameterGenerator,
     kwargs: dict,
+    expected_stdout: str | None,
     expected_write_parameter_study_files: dict | None,
     expected_write_meta_file_contents: str | None,
     outcome: contextlib.nullcontext | pytest.RaisesExc,
 ) -> None:
+    if expected_stdout is not None and (
+        expected_write_parameter_study_files is not None or expected_write_meta_file_contents is not None
+    ):
+        raise ValueError("Do not pass expected STDOUT and expected write together")
     with (
         outcome,
         # Mock all files as non-existent. Expect all parameter study files to be written.
         patch("pathlib.Path.is_file", return_value=False),
+        patch("sys.stdout.write") as mock_stdout,
         patch("waves.parameter_generators._write_parameter_study_files") as mock_write_study_files,
         patch("waves.parameter_generators._write_parameter_study_meta_file") as mock_write_meta_file,
         # Avoid real file I/O
         patch("pathlib.Path.open"),
-        patch("sys.stdout.write"),
         patch("pathlib.Path.mkdir"),
         patch("xarray.Dataset.to_netcdf"),
     ):
         parameter_generators._write(generator, **kwargs)
-        if expected_write_parameter_study_files_call is None:
+        if expected_stdout is None:
+            mock_stdout.assert_not_called()
+        else:
+            mock_stdout.assert_called_once_with(expected_stdout)
+        if expected_write_parameter_study_files is None:
             mock_write_study_files.assert_not_called()
         else:
             mock_write_study_files.assert_called_once()
