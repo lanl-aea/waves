@@ -8,6 +8,10 @@ Changelog
 1.6.0 (unreleased)
 ******************
 
+Internal Changes
+================
+- More robust parameter study write unit tests (:issue:`1030`, :merge:`1338`). By `Kyle Brindley`_.
+
 ******************
 1.5.2 (2026-09-23)
 ******************
