@@ -4925,8 +4925,8 @@ test_class_write_cases.update(
         "CartesianProduct (class init): output file, default type (overridden)": (
             parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, output_file=pathlib.Path("output.h5")),
             {"output_file_type": "yaml"},
-            "parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n",
             None,
+            {pathlib.Path("output.h5"): {"parameter_set0": {"parameter_1": 2}, "parameter_set1": {"parameter_1": 1}}},
             None,
             does_not_raise,
         ),
