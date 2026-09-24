@@ -4231,8 +4231,8 @@ test__write_cases = {
         {"output_directory": pathlib.Path("directory"), "output_file_type": "yaml"},
         None,
         {
-            pathlib.Path("directory/set0/study/"): {"parameter_1": 2},
-            pathlib.Path("directory/set1/study/"): {"parameter_1": 1},
+            pathlib.Path("directory/set0/study.yaml"): {"parameter_1": 2},
+            pathlib.Path("directory/set1/study.yaml"): {"parameter_1": 1},
         },
         None,
         does_not_raise,
@@ -4242,8 +4242,8 @@ test__write_cases = {
         {"output_directory": pathlib.Path("directory"), "output_file_type": "yaml", "dry_run": True},
         None,
         {
-            pathlib.Path("directory/set0/study/"): {"parameter_1": 2},
-            pathlib.Path("directory/set1/study/"): {"parameter_1": 1},
+            pathlib.Path("directory/set0/study.yaml"): {"parameter_1": 2},
+            pathlib.Path("directory/set1/study.yaml"): {"parameter_1": 1},
         },
         None,
         does_not_raise,
@@ -4253,8 +4253,8 @@ test__write_cases = {
         {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "meta_file": "meta.txt"},
         None,
         {
-            pathlib.Path("/directory/set0/study/"): {"parameter_1": 2},
-            pathlib.Path("/directory/set1/study/"): {"parameter_1": 1},
+            pathlib.Path("/directory/set0/study.yaml"): {"parameter_1": 2},
+            pathlib.Path("/directory/set1/study.yaml"): {"parameter_1": 1},
         },
         (
             f"{pathlib.Path('/directory/set0/study.yaml').resolve()}\n"
@@ -4340,8 +4340,8 @@ test__write_cases = {
         {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
         None,
         {
-            pathlib.Path("directory/out0.yaml"): {"a": 2, "b": 4.5},
-            pathlib.Path("directory/out1.yaml"): {"a": 1, "b": 3.0},
+            pathlib.Path("/directory/out0.yaml"): {"a": 2, "b": 4.5},
+            pathlib.Path("/directory/out1.yaml"): {"a": 1, "b": 3.0},
         },
         None,
         does_not_raise,
@@ -4996,7 +4996,7 @@ test_class_write_cases.update(
             ),
             {},
             None,
-            {pathlib.Path("output.yaml"): "parameter_set0:\n  parameter_1: 2\nparameter_set1:\n  parameter_1: 1\n"},
+            {pathlib.Path("output.yaml"): {"parameter_set0": {"parameter_1": 2}, "parameter_set1": {"parameter_1": 1}}},
             None,
             does_not_raise,
         ),
