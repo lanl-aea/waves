@@ -4216,26 +4216,28 @@ test__write_cases = {
             pathlib.Path('directory/parameter_set0.yaml'): {"parameter_1": 2},
             pathlib.Path('directory/parameter_set1.yaml'): {"parameter_1": 1},
         },
+        None,
         does_not_raise,
     ),
     "CartesianProduct: output directory, YAML, pathlike set name template": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="set@number/study"),
         {"output_directory": pathlib.Path("directory"), "output_file_type": "yaml"},
         None,
-        None,
-        ["parameter_1: 2\n", "parameter_1: 1\n"],
+        {
+            pathlib.Path("directory/set0/study/"): {"parameter_1": 2},
+            pathlib.Path("directory/set1/study/"): {"parameter_1": 1},
+        },
         None,
         does_not_raise,
     ),
     "CartesianProduct: output directory, YAML, dry run, pathlike set name template": (
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="set@number/study"),
         {"output_directory": pathlib.Path("directory"), "output_file_type": "yaml", "dry_run": True},
-        [
-            f"{pathlib.Path('directory') / 'set0/study.yaml'}\nparameter_1: 2\n",
-            f"{pathlib.Path('directory') / 'set1/study.yaml'}\nparameter_1: 1\n",
-        ],
         None,
-        None,
+        {
+            pathlib.Path("directory/set0/study/"): {"parameter_1": 2},
+            pathlib.Path("directory/set1/study/"): {"parameter_1": 1},
+        },
         None,
         does_not_raise,
     ),
@@ -4243,8 +4245,10 @@ test__write_cases = {
         parameter_generators.CartesianProduct({"parameter_1": [1, 2]}, set_name_template="set@number/study"),
         {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "meta_file": "meta.txt"},
         None,
-        None,
-        ["parameter_1: 2\n", "parameter_1: 1\n"],
+        {
+            pathlib.Path("/directory/set0/study/"): {"parameter_1": 2},
+            pathlib.Path("/directory/set1/study/"): {"parameter_1": 1},
+        },
         (
             f"{pathlib.Path('/directory/set0/study.yaml').resolve()}\n"
             f"{pathlib.Path('/directory/set1/study.yaml').resolve()}\n"
@@ -4267,9 +4271,8 @@ test__write_cases = {
             {"parameter_names": ["a"], "parameter_samples": numpy.array([[1], [2]], dtype=object)},
         ),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
-        [f"{pathlib.Path('output.yaml')}\nparameter_set0:\n  a: 2\nparameter_set1:\n  a: 1\n"],
         None,
-        None,
+        {pathlib.Path("output.yaml"): {"parameter_set0": {"a": 2}, "parameter_set1": {"a": 1}},
         None,
         does_not_raise,
     ),
@@ -4280,8 +4283,10 @@ test__write_cases = {
         ),
         {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
         None,
-        None,
-        ["a: 2\n", "a: 1\n"],
+        {
+            pathlib.Path("/directory/out0.yaml"): {"a": 2},
+            pathlib.Path("/directory/out1.yaml"): {"a": 1},
+        },
         None,
         does_not_raise,
     ),
@@ -4291,12 +4296,11 @@ test__write_cases = {
             set_name_template="out",
         ),
         {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
-        [
-            f"{pathlib.Path('/directory/out0.yaml')}\na: 2\n",
-            f"{pathlib.Path('/directory/out1.yaml')}\na: 1\n",
-        ],
         None,
-        None,
+        {
+            pathlib.Path("/directory/out0.yaml"): {"a": 2},
+            pathlib.Path("/directory/out1.yaml"): {"a": 1},
+        },
         None,
         does_not_raise,
     ),
@@ -4307,10 +4311,7 @@ test__write_cases = {
         ),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
         None,
-        None,
-        [
-            "out0:\n  a: 2\n  b: 4.5\nout1:\n  a: 1\n  b: 3.0\n",
-        ],
+        {pathlib.Path("output.yaml"): {"out0": {"a": 2, "b": 4.5}}, {"out1": {"a": 1, "b": 3.0}}},
         None,
         does_not_raise,
     ),
@@ -4320,11 +4321,8 @@ test__write_cases = {
             set_name_template="out",
         ),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
-        [
-            f"{pathlib.Path('output.yaml')}\nout0:\n  a: 2\n  b: 4.5\nout1:\n  a: 1\n  b: 3.0\n",
-        ],
         None,
-        None,
+        {pathlib.Path("output.yaml"): {"out0": {"a": 2, "b": 4.5}}, {"out1": {"a": 1, "b": 3.0}}},
         None,
         does_not_raise,
     ),
@@ -4335,8 +4333,10 @@ test__write_cases = {
         ),
         {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
         None,
-        None,
-        ["a: 2\nb: 4.5\n", "a: 1\nb: 3.0\n"],
+        {
+            pathlib.Path("directory/out0.yaml"): {"a": 2, "b": 4.5},
+            pathlib.Path("directory/out1.yaml"): {"a": 1, "b": 3.0},
+        },
         None,
         does_not_raise,
     ),
@@ -4346,12 +4346,11 @@ test__write_cases = {
             set_name_template="out",
         ),
         {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
-        [
-            f"{pathlib.Path('/directory/out0.yaml')}\na: 2\nb: 4.5\n",
-            f"{pathlib.Path('/directory/out1.yaml')}\na: 1\nb: 3.0\n",
-        ],
         None,
-        None,
+        {
+            pathlib.Path("/directory/out0.yaml"): {"a": 2, "b": 4.5},
+            pathlib.Path("/directory/out1.yaml"): {"a": 1, "b": 3.0},
+        },
         None,
         does_not_raise,
     ),
@@ -4359,17 +4358,15 @@ test__write_cases = {
         parameter_generators.OneAtATime({"parameter_1": [1, 2]}, set_name_template="out"),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
         None,
-        None,
-        ["out0:\n  parameter_1: 1\nout1:\n  parameter_1: 2\n"],
+        {pathlib.Path("output.yaml"): {"out0": {"parameter_1": 1}, "out1": {"parameter_1": 2}},
         None,
         does_not_raise,
     ),
     "OneAtATime: output file, YAML, set name template, dry run": (
         parameter_generators.OneAtATime({"parameter_1": [1, 2]}, set_name_template="out"),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
-        [f"{pathlib.Path('output.yaml')}\nout0:\n  parameter_1: 1\nout1:\n  parameter_1: 2\n"],
         None,
-        None,
+        {pathlib.Path("output.yaml"): {"out0": {"parameter_1": 1}, "out1": {"parameter_1": 2}},
         None,
         does_not_raise,
     ),
@@ -4377,23 +4374,21 @@ test__write_cases = {
         parameter_generators.OneAtATime({"parameter_1": [1, 2]}, set_name_template="out"),
         {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
         None,
-        None,
-        [
-            "parameter_1: 1\n",
-            "parameter_1: 2\n",
-        ],
+        {
+            pathlib.Path("/directory/out0.yaml"): {"parameter_1": 1},
+            pathlib.Path("/directory/out1.yaml"): {"parameter_1": 2},
+        },
         None,
         does_not_raise,
     ),
     "OneAtATime: output directory, YAML, set name template, dry run": (
         parameter_generators.OneAtATime({"parameter_1": [1, 2]}, set_name_template="out"),
         {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
-        [
-            f"{pathlib.Path('/directory/out0.yaml')}\nparameter_1: 1\n",
-            f"{pathlib.Path('/directory/out1.yaml')}\nparameter_1: 2\n",
-        ],
         None,
-        None,
+        {
+            pathlib.Path("/directory/out0.yaml"): {"parameter_1": 1},
+            pathlib.Path("/directory/out1.yaml"): {"parameter_1": 2},
+        },
         None,
         does_not_raise,
     ),
@@ -4401,30 +4396,27 @@ test__write_cases = {
         parameter_generators.OneAtATime({"parameter_1": [1, 2], "parameter_2": ["a", "b"]}, set_name_template="out"),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
         None,
-        None,
-        [
-            (
-                "out0:\n  parameter_1: 1\n  parameter_2: a\n"
-                "out1:\n  parameter_1: 1\n  parameter_2: b\n"
-                "out2:\n  parameter_1: 2\n  parameter_2: a\n"
-            )
-        ],
+        {
+            pathlib.Path("output.yaml"): {
+                {"out0": "parameter_1": 1, "parameter_2": "a"},
+                {"out1": "parameter_1": 1, "parameter_2": "b"},
+                {"out2": "parameter_1": 2, "parameter_2": "a"},
+            },
+        },
         None,
         does_not_raise,
     ),
     "OneAtATime two parameters int/str: output file, YAML, set name template, dry run": (
         parameter_generators.OneAtATime({"parameter_1": [1, 2], "parameter_2": ["a", "b"]}, set_name_template="out"),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
-        [
-            (
-                f"{pathlib.Path('output.yaml')}\n"
-                "out0:\n  parameter_1: 1\n  parameter_2: a\n"
-                "out1:\n  parameter_1: 1\n  parameter_2: b\n"
-                "out2:\n  parameter_1: 2\n  parameter_2: a\n"
-            )
-        ],
         None,
-        None,
+        {
+            pathlib.Path("output.yaml"): {
+                {"out0": "parameter_1": 1, "parameter_2": "a"},
+                {"out1": "parameter_1": 1, "parameter_2": "b"},
+                {"out2": "parameter_1": 2, "parameter_2": "a"},
+            },
+        },
         None,
         does_not_raise,
     ),
@@ -4432,25 +4424,23 @@ test__write_cases = {
         parameter_generators.OneAtATime({"parameter_1": [1, 2], "parameter_2": ["a", "b"]}, set_name_template="out"),
         {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
         None,
-        None,
-        [
-            "parameter_1: 1\nparameter_2: a\n",
-            "parameter_1: 1\nparameter_2: b\n",
-            "parameter_1: 2\nparameter_2: a\n",
-        ],
+        {
+            pathlib.Path("/directory/out0.yaml"): {"parameter_1": 1, "parameter_2": "a"},
+            pathlib.Path("/directory/out1.yaml"): {"parameter_1": 1, "parameter_2": "b"},
+            pathlib.Path("/directory/out2.yaml"): {"parameter_1": 2, "parameter_2": "a"},
+        },
         None,
         does_not_raise,
     ),
     "OneAtATime two parameters int/str: output directory, YAML, set name template, dry run": (
         parameter_generators.OneAtATime({"parameter_1": [1, 2], "parameter_2": ["a", "b"]}, set_name_template="out"),
         {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
-        [
-            f"{pathlib.Path('/directory/out0.yaml')}\nparameter_1: 1\nparameter_2: a\n",
-            f"{pathlib.Path('/directory/out1.yaml')}\nparameter_1: 1\nparameter_2: b\n",
-            f"{pathlib.Path('/directory/out2.yaml')}\nparameter_1: 2\nparameter_2: a\n",
-        ],
         None,
-        None,
+        {
+            pathlib.Path("/directory/out0.yaml"): {"parameter_1": 1, "parameter_2": "a"},
+            pathlib.Path("/directory/out1.yaml"): {"parameter_1": 1, "parameter_2": "b"},
+            pathlib.Path("/directory/out2.yaml"): {"parameter_1": 2, "parameter_2": "a"},
+        },
         None,
         does_not_raise,
     ),
@@ -4458,25 +4448,23 @@ test__write_cases = {
         parameter_generators.OneAtATime({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}, set_name_template="out"),
         {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
         None,
-        None,
-        [
-            "parameter_1: 1\nparameter_2: 3.0\n",
-            "parameter_1: 1\nparameter_2: 4.0\n",
-            "parameter_1: 2\nparameter_2: 3.0\n",
-        ],
+        {
+            pathlib.Path("/directory/out0.yaml"): {"parameter_1": 1, "parameter_2": 3.0},
+            pathlib.Path("/directory/out1.yaml"): {"parameter_1": 1, "parameter_2": 4.0},
+            pathlib.Path("/directory/out2.yaml"): {"parameter_1": 2, "parameter_2": 3.0},
+        },
         None,
         does_not_raise,
     ),
     "OneAtATime two parameters int/float: output directory, YAML, set name template, dry run": (
         parameter_generators.OneAtATime({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]}, set_name_template="out"),
         {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
-        [
-            f"{pathlib.Path('/directory/out0.yaml')}\nparameter_1: 1\nparameter_2: 3.0\n",
-            f"{pathlib.Path('/directory/out1.yaml')}\nparameter_1: 1\nparameter_2: 4.0\n",
-            f"{pathlib.Path('/directory/out2.yaml')}\nparameter_1: 2\nparameter_2: 3.0\n",
-        ],
         None,
-        None,
+        {
+            pathlib.Path("/directory/out0.yaml"): {"parameter_1": 1, "parameter_2": 3.0},
+            pathlib.Path("/directory/out1.yaml"): {"parameter_1": 1, "parameter_2": 4.0},
+            pathlib.Path("/directory/out2.yaml"): {"parameter_1": 2, "parameter_2": 3.0},
+        },
         None,
         does_not_raise,
     ),
@@ -4484,30 +4472,27 @@ test__write_cases = {
         parameter_generators.OneAtATime({"parameter_1": [1, 2], "parameter_2": [True, False]}, set_name_template="out"),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml"},
         None,
-        None,
-        [
-            (
-                "out0:\n  parameter_1: 1\n  parameter_2: true\n"
-                "out1:\n  parameter_1: 2\n  parameter_2: true\n"
-                "out2:\n  parameter_1: 1\n  parameter_2: false\n"
-            )
-        ],
+        {
+            pathlib.Path("output.yaml"): {
+                {"out0": {"parameter_1": 1, "parameter_2": True}},
+                {"out1": {"parameter_1": 2, "parameter_2": True}},
+                {"out2": {"parameter_1": 1, "parameter_2": False}},
+            }
+        },
         None,
         does_not_raise,
     ),
     "OneAtATime two parameters int/bool: output file, YAML, set name template, dry run": (
         parameter_generators.OneAtATime({"parameter_1": [1, 2], "parameter_2": [True, False]}, set_name_template="out"),
         {"output_file": pathlib.Path("output.yaml"), "output_file_type": "yaml", "dry_run": True},
-        [
-            (
-                f"{pathlib.Path('output.yaml')}\n"
-                "out0:\n  parameter_1: 1\n  parameter_2: true\n"
-                "out1:\n  parameter_1: 2\n  parameter_2: true\n"
-                "out2:\n  parameter_1: 1\n  parameter_2: false\n"
-            )
-        ],
         None,
-        None,
+        {
+            pathlib.Path("output.yaml"): {
+                {"out0": {"parameter_1": 1, "parameter_2": True}},
+                {"out1": {"parameter_1": 2, "parameter_2": True}},
+                {"out2": {"parameter_1": 1, "parameter_2": False}},
+            }
+        },
         None,
         does_not_raise,
     ),
@@ -4515,25 +4500,23 @@ test__write_cases = {
         parameter_generators.OneAtATime({"parameter_1": [1, 2], "parameter_2": [True, False]}, set_name_template="out"),
         {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml"},
         None,
-        None,
-        [
-            "parameter_1: 1\nparameter_2: true\n",
-            "parameter_1: 2\nparameter_2: true\n",
-            "parameter_1: 1\nparameter_2: false\n",
-        ],
+        {
+            pathlib.Path("/directory/out0.yaml"): {"parameter_1": 1, "parameter_2": True}},
+            pathlib.Path("/directory/out1.yaml"): {"parameter_1": 2, "parameter_2": True}},
+            pathlib.Path("/directory/out2.yaml"): {"parameter_1": 1, "parameter_2": False}},
+        },
         None,
         does_not_raise,
     ),
     "OneAtATime two parameters int/bool: output directory, YAML, set name template, dry run": (
         parameter_generators.OneAtATime({"parameter_1": [1, 2], "parameter_2": [True, False]}, set_name_template="out"),
         {"output_directory": pathlib.Path("/directory"), "output_file_type": "yaml", "dry_run": True},
-        [
-            f"{pathlib.Path('/directory/out0.yaml')}\nparameter_1: 1\nparameter_2: true\n",
-            f"{pathlib.Path('/directory/out1.yaml')}\nparameter_1: 2\nparameter_2: true\n",
-            f"{pathlib.Path('/directory/out2.yaml')}\nparameter_1: 1\nparameter_2: false\n",
-        ],
         None,
-        None,
+        {
+            pathlib.Path("/directory/out0.yaml"): {"parameter_1": 1, "parameter_2": True}},
+            pathlib.Path("/directory/out1.yaml"): {"parameter_1": 2, "parameter_2": True}},
+            pathlib.Path("/directory/out2.yaml"): {"parameter_1": 1, "parameter_2": False}},
+        },
         None,
         does_not_raise,
     ),
