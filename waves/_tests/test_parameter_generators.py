@@ -4831,6 +4831,7 @@ test__write_cases = {
     (
         "generator",
         "kwargs",
+        "expected_stdout",
         "expected_write_parameter_study_files_call",
         "expected_write_meta_file_contents",
         "outcome",
@@ -5064,8 +5065,7 @@ test_class_write_cases.update(
         "generator",
         "kwargs",
         "expected_stdout",
-        "expected_to_netcdf",
-        "expected_write",
+        "expected_write_parameter_study_files_call",
         "expected_write_meta_file_contents",
         "outcome",
     ),
@@ -5075,39 +5075,46 @@ test_class_write_cases.update(
 def test_class_write(
     generator: parameter_generators.ParameterGenerator,
     kwargs: dict,
-    expected_stdout: list[str] | None,
-    expected_to_netcdf: list[xarray.Dataset] | None,
-    expected_write: list[str] | None,
+    expected_stdout: str | None,
+    expected_write_parameter_study_files: dict | None,
     expected_write_meta_file_contents: str | None,
     outcome: contextlib.nullcontext | pytest.RaisesExc,
 ) -> None:
-    if sum([thing is not None for thing in (expected_stdout, expected_to_netcdf, expected_write)]) > 1:
-        raise ValueError("Do not pass more than one expected output")
+    if expected_stdout is not None and (
+        expected_write_parameter_study_files is not None or expected_write_meta_file_contents is not None
+    ):
+        raise ValueError("Do not pass expected STDOUT and expected write together")
     with (
         outcome,
-        patch("sys.stdout.write") as mock_stdout,
-        patch("xarray.Dataset.to_netcdf") as mock_to_netcdf,
+        # Mock all files as non-existent. Expect all parameter study files to be written.
         patch("pathlib.Path.is_file", return_value=False),
-        patch("pathlib.Path.open", mock_open()) as mock_file,
+        patch("sys.stdout.write") as mock_stdout,
+        patch("waves.parameter_generators._write_parameter_study_files") as mock_write_study_files,
         patch("waves.parameter_generators._write_parameter_study_meta_file") as mock_write_meta_file,
+        # Avoid real file I/O
+        patch("pathlib.Path.open"),
         patch("pathlib.Path.mkdir"),
+        patch("xarray.Dataset.to_netcdf"),
     ):
         generator.write(**kwargs)
         if expected_stdout is None:
             mock_stdout.assert_not_called()
         else:
-            assert mock_stdout.call_count == len(expected_stdout)
-            mock_stdout.assert_has_calls([call(item) for item in expected_stdout])
-        if expected_to_netcdf is None:
-            mock_to_netcdf.assert_not_called()
+            mock_stdout.assert_called_once_with(expected_stdout)
+        if expected_write_parameter_study_files is None:
+            mock_write_study_files.assert_not_called()
         else:
-            # TODO: figure out how to assert the dataset/output association
-            assert mock_to_netcdf.call_count == len(expected_to_netcdf)
-        if expected_write is None:
-            mock_file().assert_not_called()
-        else:
-            assert mock_file().write.call_count == len(expected_write)
-            mock_file().write.assert_has_calls([call(item) for item in expected_write])
+            mock_write_study_files.assert_called_once()
+            # TODO: assert dry run argument is as expected
+            parameter_study_files = mock_write_meta_file.call_args[0][1]
+            assert sorted(expected_write_parameter_study_files.keys()) == sorted(parameter_study_files.keys())
+            for key, expected_value in expected_write_parameter_study_files.items():
+                parameter_study_data = parameter_study_files[key]
+                assert type(expected_value) == type(parameter_study_data)
+                if isinstance(expected_value, dict):
+                    assert expected_value == parameter_study_data
+                elif isinstance(expected_value, xarray.Dataset):
+                    expected_value.testing.assert_identical(parameter_study_data)
         if expected_write_meta_file_contents is None:
             mock_write_meta_file.assert_not_called()
         else:
