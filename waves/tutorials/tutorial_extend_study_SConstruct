@@ -82,7 +82,11 @@ env.PrependENVPath("PYTHONPATH", project_dir)
 # Comments used in tutorial code snippets: marker-5
 
 # Add builders and pseudo-builders
-env.Append(BUILDERS={})
+env.Append(
+    BUILDERS={
+        "AbaqusExtract": waves.scons_extensions.abaqus_extract(program=env["ABAQUS_PROGRAM"]),
+    }
+)
 
 # Comments used in tutorial code snippets: marker-6
 
