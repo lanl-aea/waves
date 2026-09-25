@@ -1,14 +1,20 @@
+"""Read simulation output, process data, recommend new parameter sets, write updated parameter study."""
+
 import argparse
+import copy
 import pathlib
 import typing
 
+import waves
+
 from modsim_package.python.rectangle_compression_sobol_sequence import parameter_schema
+
 
 def main(
     input_file: typing.Sequence[pathlib.Path],
     parameter_study_file: pathlib.Path,
     output_file: pathlib.Path | None = None,
-) -> None:  # noqa: ARG001
+) -> None:
     """Read simulation output, process data, recommend new parameter sets, write updated parameter study."""
     set_count = len(input_file)
     if set_count < 8:
@@ -42,16 +48,13 @@ def get_parser() -> argparse.ArgumentParser:
         "-p",
         "--parameter-study-file",
         type=pathlib.Path,
-        default=default_parameter_study_file,
         help="An optional h5 file with a WAVES parameter study Xarray Dataset (default: %(default)s)",
     )
     parser.add_argument(
         "-o",
         "--output-file",
         type=pathlib.Path,
-        help=(
-            "The parameter study with new parameter sets."
-        ),
+        help=("The parameter study with new parameter sets."),
     )
     return parser
 
