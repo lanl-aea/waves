@@ -149,7 +149,7 @@ Post-processing script
 
 .. admonition:: waves-tutorials/modsim_package/python/tutorial_extend_study.py
 
-   .. literalinclude:: tutorial_extend_study.py
+   .. literalinclude:: python_tutorial_extend_study.py
       :language: Python
 
 This post-processing script is a stripped down version of the ``post_processing.py`` script introduced in
@@ -159,7 +159,7 @@ demonstrate the workflow and task structure of an automatically extending workfl
 
 In real projects, the purpose of extending a parameter is to perform an optimization or uncertainty quantification
 workflow. A post-processing script more similar to the ``post_processing.py`` script of :ref:`tutorial_post_processing`
-or :ref:`_tutorial_sensitivity_study` would perform some kind of sensitivity analysis or uncertainty quantification and
+or :ref:`tutorial_sensitivity_study` would perform some kind of sensitivity analysis or uncertainty quantification and
 recommend new parameter sets to meet an objective function. Such a workflow may also require several post-processing
 steps, such as training a reduced-order or surrogate model which is used to investigate a larger parameter space before
 recommending parameter sets to investigate with the original, higher cost simulations.
