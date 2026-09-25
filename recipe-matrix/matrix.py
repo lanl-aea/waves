@@ -26,9 +26,10 @@ command_template = string.Template(
 
 package_versions = {
     "python": ["3.10", "3.11", "3.12", "3.13", "3.14"],
-    "scons": ["4.6", "4.7", "4.8", "4.9", "4.10"],
+    "scons": ["4.6", "4.7", "4.8", "4.9", "4.10", "4.11"],
 }
 remove_cases = [
+    {"python": "3.10", "scons": "4.11"},
     {"python": "3.13", "scons": "4.6"},
     {"python": "3.14", "scons": "4.6"},
     {"python": "3.14", "scons": "4.7"},
