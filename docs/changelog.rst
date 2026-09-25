@@ -8,12 +8,21 @@ Changelog
 1.6.0 (unreleased)
 ******************
 
+******************
+1.5.3 (2026-09-25)
+******************
+
+Bug fixes
+=========
+- Fix handling of SCons File and Dir objects in ParameterStudyWrite functions (:issue:`1032`, :merge:`1339`). By `Kyle
+  Brindley`_.
+
 Internal Changes
 ================
 - More robust parameter study write unit tests (:issue:`1030`, :merge:`1338`). By `Kyle Brindley`_.
 
 ******************
-1.5.2 (2026-09-23)
+1.5.2 (2026-09-24)
 ******************
 
 Documentation

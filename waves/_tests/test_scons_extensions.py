@@ -3322,6 +3322,36 @@ parameter_study_write_cases: dict[str, tuple] = {
         ["test.h5"],
         does_not_raise,
     ),
+    "output file pseudo-builder argument, pathlib": (
+        parameter_generators.CartesianProduct({"one": [1, 2]}),
+        {"output_file": pathlib.Path("test.h5")},
+        ["test.h5"],
+        does_not_raise,
+    ),
+    "output file pseudo-builder argument, File": (
+        parameter_generators.CartesianProduct({"one": [1, 2]}),
+        {"output_file": file_system.File("test.h5")},
+        ["test.h5"],
+        does_not_raise,
+    ),
+    "output directory pseudo-builder argument": (
+        parameter_generators.CartesianProduct({"one": [1, 2]}),
+        {"output_directory": "test"},
+        [str(pathlib.Path("test/parameter_set0.h5")), str(pathlib.Path("test/parameter_set1.h5"))],
+        does_not_raise,
+    ),
+    "output directory pseudo-builder argument, pathlib": (
+        parameter_generators.CartesianProduct({"one": [1, 2]}),
+        {"output_directory": pathlib.Path("test")},
+        [str(pathlib.Path("test/parameter_set0.h5")), str(pathlib.Path("test/parameter_set1.h5"))],
+        does_not_raise,
+    ),
+    "output directory pseudo-builder argument, Dir": (
+        parameter_generators.CartesianProduct({"one": [1, 2]}),
+        {"output_directory": SCons.Script.Dir("test")},
+        [str(pathlib.Path("test/parameter_set0.h5")), str(pathlib.Path("test/parameter_set1.h5"))],
+        does_not_raise,
+    ),
     "output file class attribute": (
         parameter_generators.CartesianProduct({"one": [1, 2]}, output_file="test.h5"),
         {},

@@ -4150,8 +4150,8 @@ def parameter_study_sconscript(
 def parameter_study_write(
     env: SCons.Environment.Environment,
     parameter_generator: parameter_generators.ParameterGenerator,
-    output_file: str | pathlib.Path | None = None,
-    output_directory: str | pathlib.Path | None = None,
+    output_file: str | pathlib.Path | SCons.Node.FS.File | None = None,
+    output_directory: str | pathlib.Path | SCons.Node.FS.Dir | None = None,
     output_file_type: _settings._allowable_output_file_typing = _settings._default_output_file_type_api,
 ) -> SCons.Node.NodeList:
     """Pseudo-builder to write a parameter generator's parameter study file.
@@ -4186,10 +4186,12 @@ def parameter_study_write(
     import yaml
 
     # Explicit type cast. Internal API expects a Path object, but allow users to pass strings.
+    # Cast to str first because SCons <4.10 File/Dir objects are incompatible with pathlib.Path, but all handled types
+    # cast to str in the same way.
     if output_file is not None:
-        output_file = pathlib.Path(output_file)
+        output_file = pathlib.Path(str(output_file))
     if output_directory is not None:
-        output_directory = pathlib.Path(output_directory)
+        output_directory = pathlib.Path(str(output_directory))
 
     if output_file is None and output_directory is None:
         warnings.warn(
@@ -4962,8 +4964,8 @@ class WAVESEnvironment(SConsEnvironment):
     def ParameterStudyWrite(  # noqa: N802
         self,
         parameter_generator: parameter_generators.ParameterGenerator,
-        output_file: str | pathlib.Path | None = None,
-        output_directory: str | pathlib.Path | None = None,
+        output_file: str | pathlib.Path | SCons.Node.FS.File | None = None,
+        output_directory: str | pathlib.Path | SCons.Node.FS.Dir | None = None,
         output_file_type: _settings._allowable_output_file_typing = _settings._default_output_file_type_api,
     ) -> SCons.Node.NodeList:
         """Pseudo-builder to write a parameter generator's parameter study file.
