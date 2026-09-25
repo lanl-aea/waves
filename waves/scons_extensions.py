@@ -4964,8 +4964,8 @@ class WAVESEnvironment(SConsEnvironment):
     def ParameterStudyWrite(  # noqa: N802
         self,
         parameter_generator: parameter_generators.ParameterGenerator,
-        output_file: str | pathlib.Path | None = None,
-        output_directory: str | pathlib.Path | None = None,
+        output_file: str | pathlib.Path | SCons.Node.FS.File | None = None,
+        output_directory: str | pathlib.Path | SCons.Node.FS.Dir | None = None,
         output_file_type: _settings._allowable_output_file_typing = _settings._default_output_file_type_api,
     ) -> SCons.Node.NodeList:
         """Pseudo-builder to write a parameter generator's parameter study file.
