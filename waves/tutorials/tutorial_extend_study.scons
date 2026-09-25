@@ -175,7 +175,7 @@ workflow.extend(
         target=[extended_parameter_study_file.name],
         source=["#/modsim_package/python/tutorial_extend_study.py", parameter_study_file.name, *post_processing_source],
         subcommand_options=(
-            "--input-file ${SOURCES[1:].abspath} --parameter-study-file ${SOURCES[0].abspath}"
+            "--input-file ${SOURCES[2:].abspath} --parameter-study-file ${SOURCES[1].abspath}"
             " --output-file ${TARGETS[0].abspath}"
         ),
     )

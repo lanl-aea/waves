@@ -3,6 +3,7 @@
 import argparse
 import copy
 import pathlib
+import shutil
 import typing
 
 import waves
@@ -11,12 +12,12 @@ from modsim_package.python.rectangle_compression_sobol_sequence import parameter
 
 
 def main(
-    input_file: typing.Sequence[pathlib.Path],
+    input_files: typing.Sequence[pathlib.Path],
     parameter_study_file: pathlib.Path,
     output_file: pathlib.Path | None = None,
 ) -> None:
     """Read simulation output, process data, recommend new parameter sets, write updated parameter study."""
-    set_count = len(input_file)
+    set_count = len(input_files)
     if set_count < 8:
         new_schema = copy.deepcopy(parameter_schema())
         new_schema["num_simulations"] = set_count + 2
@@ -26,6 +27,8 @@ def main(
             scramble=False,
         )
         new_generator.write(output_file=output_file)
+    else:
+        shutil.copyfile(parameter_study_file, output_file)
 
 
 def get_parser() -> argparse.ArgumentParser:
