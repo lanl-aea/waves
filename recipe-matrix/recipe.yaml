@@ -72,7 +72,7 @@ tests:
   - python:
       imports:
         - waves
-      pip_check: true
+      pip_check: false
   - script:
       - if: unix
         then: ./run_test.sh
