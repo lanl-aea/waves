@@ -3337,19 +3337,19 @@ parameter_study_write_cases: dict[str, tuple] = {
     "output directory pseudo-builder argument": (
         parameter_generators.CartesianProduct({"one": [1, 2]}),
         {"output_directory": "test"},
-        ["test/parameter_set0.h5", "test/parameter_set1.h5"],
+        [str(pathlib.Path("test/parameter_set0.h5")), str(pathlib.Path("test/parameter_set1.h5"))],
         does_not_raise,
     ),
     "output directory pseudo-builder argument, pathlib": (
         parameter_generators.CartesianProduct({"one": [1, 2]}),
         {"output_directory": pathlib.Path("test")},
-        ["test/parameter_set0.h5", "test/parameter_set1.h5"],
+        [str(pathlib.Path("test/parameter_set0.h5")), str(pathlib.Path("test/parameter_set1.h5"))],
         does_not_raise,
     ),
     "output directory pseudo-builder argument, Dir": (
         parameter_generators.CartesianProduct({"one": [1, 2]}),
         {"output_directory": SCons.Script.Dir("test")},
-        ["test/parameter_set0.h5", "test/parameter_set1.h5"],
+        [str(pathlib.Path("test/parameter_set0.h5")), str(pathlib.Path("test/parameter_set1.h5"))],
         does_not_raise,
     ),
     "output file class attribute": (
