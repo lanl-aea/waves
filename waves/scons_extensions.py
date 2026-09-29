@@ -4477,6 +4477,7 @@ class WAVESEnvironment(SConsEnvironment):
         FIERRO_IMPLICIT_PROGRAM: str = "fierro-parallel-implicit",  # noqa: N803
         INCITER_PROGRAM: str = "inciter",  # noqa: N803
         MPIRUN_PROGRAM: str = "mpirun",  # noqa: N803
+        ODB_EXTRACT_PROGRAM: str = "odb_extract",  # noqa: N803
         PYTHON_PROGRAM: str = "python",  # noqa: N803
         SIERRA_PROGRAM: str = "sierra",  # noqa: N803
         SPHINX_BUILD_PROGRAM: str = "sphinx-build",  # noqa: N803
@@ -4494,6 +4495,7 @@ class WAVESEnvironment(SConsEnvironment):
             FIERRO_IMPLICIT_PROGRAM=FIERRO_IMPLICIT_PROGRAM,
             INCITER_PROGRAM=INCITER_PROGRAM,
             MPIRUN_PROGRAM=MPIRUN_PROGRAM,
+            ODB_EXTRACT_PROGRAM=ODB_EXTRACT_PROGRAM,
             PYTHON_PROGRAM=PYTHON_PROGRAM,
             SIERRA_PROGRAM=SIERRA_PROGRAM,
             SPHINX_BUILD_PROGRAM=SPHINX_BUILD_PROGRAM,
@@ -5143,6 +5145,43 @@ class WAVESEnvironment(SConsEnvironment):
         """
         pseudo_builder = AbaqusPseudoBuilder(builder=self.AbaqusSolver, override_cpus=override_cpus)
         return pseudo_builder(self, job, *args, **kwargs)
+
+    def ODBExtract(  # noqa: N802
+        self,
+        source: str | pathlib.Path | SCons.Node.Node,
+        output_file: str | pathlib.Path | SCons.Node.Node | None = None,
+        output_file_type: typing.Literal["h5", "json", "yaml"] = "h5",
+        odb_report_args: str | None = None,
+        abaqus_command: str = "${ABAQUS_COMMAND}",
+        delete_report_file: bool = False,
+        verbose: bool = False,
+        program: str = "${ODB_EXTRACT_PROGRAM}",
+        action_prefix: str = "${ACTION_PREFIX}",
+        action_suffix: str = "${ACTION_SUFFIX}",
+    ) -> SCons.Node.NodeList:
+        if not isinstance(source, (list, SCons.Node.NodeList)):
+            source = [source]
+        if output_file is None:
+            output_file = pathlib.Path(str(source[0])).with_suffix(f".{output_file_type}")
+        target = [output_file]
+        program_required = (
+            "${SOURCES[0].abspath} --output-file ${TARGETS[0].abspath}"
+            f" --output-file-type {output_file_type}"
+            f" --abaqus-command {abaqus_command}"
+        )
+        if odb_report_args is not None:
+            program_required += f" --odb-report-args {odb_report_args}"
+        if delete_report_file:
+            program_required += " --delete-report-file"
+        if verbose:
+            program_required += " --verbose"
+        builder = first_target_builder_factory(
+            program=program,
+            program_required=program_required,
+            action_prefix=action_prefix,
+            action_suffix=action_suffix,
+        )
+        return builder(self, target=target, source=source)
 
     def PythonScript(  # noqa: N802
         self, target: list, source: list, *args, **kwargs
