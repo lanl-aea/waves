@@ -2892,7 +2892,7 @@ def odb_extract_emitter(
     return first_target_emitter(target, source, env)
 
 
-def odb_extract(
+def odb_extract_builder_factory(
     environment: str = "",
     action_prefix: str = _settings._cd_action_prefix,
     program: str = "odb_extract",
@@ -2904,9 +2904,74 @@ def odb_extract(
     action_suffix: str = _settings._redirect_action_suffix,
     emitter: collections.abc.Callable[
         [list, list, SCons.Environment.Environment], tuple[list, list]
-    ] = odb_extract_emitter,
+    ] = first_target_emitter,
     **kwargs,
 ) -> SCons.Builder.Builder:
+    """ODB extract builder factory.
+
+    This builder factory extends :meth:`waves.scons_extensions.first_target_builder_factory`. This builder factory uses
+    the :meth:`waves.scons_extensions.first_target_emitter`. At least one task target must be specified in the task
+    definition and the last target will always be the expected STDOUT and STDERR redirection output file,
+    ``TARGETS[-1]`` ending in ``*.stdout``.
+
+    To produce behavior similar to :meth:`waves.scons_extensions.abaqus_extract`, use the
+    :meth:`waves.scons_extensions.odb_extract_emitter`, which is compatible with the expected
+    :meth:`waves.scons_extensions.first_target_emitter` behavior, but does not require a target and manages the
+    ODB extract ``*_datasets.h5`` file and Abaqus report ``*.csv`` file.
+
+    .. warning::
+
+       Users overriding the ``emitter`` keyword argument are responsible for providing an emitter with equivalent STDOUT
+       file handling behavior as :meth:`waves.scons_extensions.first_target_emitter` or updating the ``action_suffix``
+       option to match their emitter's behavior.
+
+    With the default options this builder requires the following sources file provided in the order:
+
+    1. ODB file to extract: ``*.odb``
+
+    .. code-block::
+       :caption: action string construction
+
+       ${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}
+
+    .. code-block::
+       :caption: action string default expansion
+
+       cd ${TARGET.dir.abspath} && odb_extract ${SOURCES[0].abspath} --output-file ${TARGETS[0].abspath} > ${TARGETS[-1].abspath} 2>&1
+
+    .. code-block::
+       :caption: SConstruct
+
+       import waves
+       env = Environment()
+       env.Append(BUILDERS={"ODBExtract": waves.scons_extensions.odb_extract_builder_factory()})
+       env.ODBExtract(source=["simulation.odb"])
+
+    The builder returned by this factory accepts all SCons Builder arguments. The arguments of this function are also
+    available as keyword arguments of the builder. When provided during task definition, the task keyword arguments
+    override the builder keyword arguments.
+
+    :param environment: This variable is intended primarily for use with builders and tasks that can not execute from an
+        SCons construction environment. For instance, when tasks execute on a remote server with SSH wrapped actions
+        using :meth:`waves.scons_extensions.ssh_builder_actions` and therefore must initialize the remote environment as
+        part of the builder action.
+    :param action_prefix: This variable is intended to perform directory change operations prior to program execution
+    :param program: The ODB extract program absolute or relative path
+    :param program_required: Space delimited string of required ODB extract options and arguments that are
+        crucial to builder behavior and should not be modified except by advanced users
+    :param program_options: Space delimited string of optional ODB extract options and arguments that can be
+        freely modified by the user
+    :param subcommand: A subcommand absolute or relative path
+    :param subcommand_required: Space delimited string of required subcommand options and arguments
+        that are crucial to builder behavior and should not be modified except by advanced users.
+    :param subcommand_options: Space delimited string of optional subcommand options and arguments
+        that can be freely modified by the user
+    :param action_suffix: This variable is intended to perform program STDOUT and STDERR redirection operations.
+    :param emitter: An SCons emitter function. This is not a keyword argument in the action string.
+    :param kwargs: Any additional keyword arguments are passed directly to the SCons builder object.
+
+    :return: ODB extract builder
+    """  # noqa: E501
     builder = first_target_builder_factory(
         environment=environment,
         action_prefix=action_prefix,

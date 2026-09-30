@@ -2396,6 +2396,22 @@ builder_factory_tests.update(
 )
 builder_factory_tests.update(
     first_target_builder_factory_test_cases(
+        "odb_extract_builder_factory",
+        {
+            "environment": "",
+            "action_prefix": _cd_action_prefix,
+            "program": "odb_extract",
+            "program_required": "${SOURCES[0].abspath} --output-file ${TARGETS[0].abspath}",
+            "program_options": "",
+            "subcommand": "",
+            "subcommand_required": "",
+            "subcommand_options": "",
+            "action_suffix": _redirect_action_suffix,
+        },
+    )
+)
+builder_factory_tests.update(
+    first_target_builder_factory_test_cases(
         "quinoa_builder_factory",
         {
             "environment": "",
