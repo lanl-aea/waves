@@ -1731,39 +1731,39 @@ def abaqus_datacheck_emitter(
 ) -> tuple[list, list]:
     """Abaqus solver emitter for datacheck targets.
 
-    SCons emitter for :meth:`waves.scons_extensions.abaqus_solver_builder_factory` based builders. Built on
-    :meth:`waves.scons_extensions.abaqus_solver_emitter_factory`.
+            SCons emitter for :meth:`waves.scons_extensions.abaqus_solver_builder_factory` based builders. Built on
+            :meth:`waves.scons_extensions.abaqus_solver_emitter_factory`.
 
-    Appends the target list with ``job`` task keyword argument named targets before passing through the
-    :meth:`waves.scons_extensions.first_target_emitter` emitter.
+            Appends the target list with ``job`` task keyword argument named targets before passing through the
+            :meth:`waves.scons_extensions.first_target_emitter` emitter.
 
-    Searches for the ``job`` task keyword argument and appends the target list with ``f"{job}{suffix}"`` targets using
-    the ``suffixes`` list.
+            Searches for the ``job`` task keyword argument and appends the target list with ``f"{job}{suffix}"`` targets using
+            the ``suffixes`` list.
 
-    Searches for a file ending in the stdout extension. If none is found, creates a target by appending the stdout
-    extension to the first target in the ``target`` list. The associated Builder requires at least one target for this
-    reason. The stdout file is always placed at the end of the returned target list.
+            Searches for a file ending in the stdout extension. If none is found, creates a target by appending the stdout
+            extension to the first target in the ``target`` list. The associated Builder requires at least one target for this
+            reason. The stdout file is always placed at the end of the returned target list.
 
-    This is an SCons emitter function and not an emitter factory. The suffix arguments: ``suffixes`` and
-    ``appending_suffixes`` are only relevant for developers writing new emitters which call this function as a base. The
-    suffixes list emits targets where the suffix replaces the first target's suffix, e.g. for ``target.ext`` emit a new
-    target ``target.suffix``. The appending suffixes list emits targets where the suffix appends the first target's
-    suffix, e.g.  for ``target.ext`` emit a new target ``target.ext.appending_suffix``.
+            This is an SCons emitter function and not an emitter factory. The suffix arguments: ``suffixes`` and
+            ``appending_suffixes`` are only relevant for developers writing new emitters which call this function as a base. The
+            suffixes list emits targets where the suffix replaces the first target's suffix, e.g. for ``target.ext`` emit a new
+            target ``target.suffix``. The appending suffixes list emits targets where the suffix appends the first target's
+            suffix, e.g.  for ``target.ext`` emit a new target ``target.ext.appending_suffix``.
 
-    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
-    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file with the ``.stdout``
-    extension as a target, e.g. ``target.stdout`` or ``parameter_set1/target.stdout``.
+            The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
+            a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
+            subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file with the ``.stdout``
+            extension as a target, e.g. ``target.stdout`` or ``parameter_set1/target.stdout``.
 
-    .. code-block::
-       :caption: SConstruct
+            .. code-block::
+               :caption: SConstruct
 
-       import waves
-       env = Environment()
-       env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
-       env["ABAQUS_PROGRAM"] = env.AddProgram(["abaqus"])
-       env.Append(BUILDERS={
-           "AbaqusDatacheck": waves.scons_extensions.abaqus_solver_builder_factory(
+               import waves
+               env = Environment()
+               env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
+               env["ABAQUS_PROGRAM"] = env.AddProgram(["abaqus"])
+               env.Append(BUILDERS={
+                   "AbaqusDatacheck": waves.scons_extensions.abaqus_solver_builder_factory(
                program=env["ABAQUS_PROGRAM"],
                emitter=waves.scons_extensions.abaqus_datacheck_emitter,
            )
@@ -2986,6 +2986,21 @@ def odb_extract_builder_factory(
         **kwargs,
     )
     return builder
+
+
+@catenate_actions(program="$(sbatch$)", options=_settings._sbatch_wrapper_options)
+def sbatch_odb_extract_builder_factory(*args, **kwargs) -> SCons.Builder.Builder:
+    """Thin pass through wrapper of :meth:`waves.scons_extensions.odb_extract_builder_factory`.
+
+    Catenate the actions and submit with `SLURM`_ `sbatch`_. Accepts the ``sbatch_options`` builder keyword argument to
+    modify sbatch behavior.
+
+    .. code-block::
+       :caption: action string construction
+
+       $(sbatch$) --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
+    """  # noqa: E501
+    return odb_extract_builder_factory(*args, **kwargs)
 
 
 def sbatch(

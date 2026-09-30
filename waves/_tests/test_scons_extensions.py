@@ -2598,6 +2598,7 @@ sbatch_first_target_builder_factory_names = [
     "python_builder_factory",
     "abaqus_journal_builder_factory",
     "abaqus_solver_builder_factory",
+    "odb_extract_builder_factory",
     "quinoa_builder_factory",
     "sierra_builder_factory",
 ]
