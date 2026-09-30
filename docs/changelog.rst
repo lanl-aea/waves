@@ -8,6 +8,10 @@ Changelog
 1.6.0 (unreleased)
 ******************
 
+******************
+1.5.4 (2026-09-30)
+******************
+
 Documentation
 =============
 - Update the tutorial for automating parameter study extensions (:issue:`1029`, :merge:`1340`). By `Kyle Brindley`_.
