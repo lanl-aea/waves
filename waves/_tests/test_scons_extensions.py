@@ -1106,7 +1106,7 @@ journal_emitter_input = {
     "subdirectory": (
         ["set1/dummy.cae"],
         [source_file],
-        ["set1/dummy.cae", f"set1{os.sep}dummy.cae.abaqus_v6.env", f"set1{os.sep}dummy.cae.stdout"],
+        ["set1/dummy.cae", str(pathlib.Path("set1/dummy.cae.abaqus_v6.env")), str(pathlib.Path("set1/dummy.cae.stdout"))],
     ),
 }
 
@@ -1260,13 +1260,13 @@ solver_emitter_input = {
         [source_file],
         [
             "set1/job.sta",
-            f"set1{os.sep}job.odb",
-            f"set1{os.sep}job.dat",
-            f"set1{os.sep}job.msg",
-            f"set1{os.sep}job.com",
-            f"set1{os.sep}job.prt",
-            f"set1{os.sep}job.abaqus_v6.env",
-            f"set1{os.sep}job.stdout",
+            str(pathlib.Path("set1/job.odb")),
+            str(pathlib.Path("set1/job.dat")),
+            str(pathlib.Path("set1/job.msg")),
+            str(pathlib.Path("set1/job.com")),
+            str(pathlib.Path("set1/job.prt")),
+            str(pathlib.Path("set1/job.abaqus_v6.env")),
+            str(pathlib.Path("set1/job.stdout")),
         ],
         does_not_raise,
     ),
@@ -1275,7 +1275,7 @@ solver_emitter_input = {
         [".odb"],
         ["set1/job.sta"],
         [source_file],
-        ["set1/job.sta", f"set1{os.sep}job.odb", f"set1{os.sep}job.abaqus_v6.env", f"set1{os.sep}job.stdout"],
+        ["set1/job.sta", str(pathlib.Path("set1/job.odb")), str(pathlib.Path("set1/job.abaqus_v6.env")), str(pathlib.Path("set1/job.stdout"))],
         does_not_raise,
     ),
     "missing job_name": (
@@ -2284,7 +2284,7 @@ first_target_emitter_input = {
     "subdirectory": (
         ["set1/dummy.cub"],
         [source_file],
-        ["set1/dummy.cub", f"set1{os.sep}dummy.cub.stdout"],
+        ["set1/dummy.cub", str(pathlib.Path("set1/dummy.cub.stdout"))],
     ),
     "subdirectory only stdout": (
         ["set1/subdir1.stdout"],
@@ -2642,7 +2642,7 @@ matlab_emitter_input = {
     "subdirectory": (
         ["set1/dummy.matlab"],
         [source_file],
-        ["set1/dummy.matlab", f"set1{os.sep}dummy.matlab.matlab.env", f"set1{os.sep}dummy.matlab.stdout"],
+        ["set1/dummy.matlab", str(pathlib.Path("set1/dummy.matlab.matlab.env")), str(pathlib.Path("set1/dummy.matlab.stdout"))],
     ),
 }
 
@@ -2814,13 +2814,13 @@ abaqus_extract_emitter_input = {
     "subdirectory": (
         ["set1/dummy.h5"],
         [source_file],
-        ["set1/dummy.h5", f"set1{os.sep}dummy_datasets.h5", f"set1{os.sep}dummy.csv"],
+        ["set1/dummy.h5", str(pathlib.Path("set1/dummy_datasets.h5")), str(pathlib.Path("set1/dummy.csv"))],
         {},
     ),
     "subdirectory new name": (
         ["set1/new_name.h5"],
         [source_file],
-        ["set1/new_name.h5", f"set1{os.sep}new_name_datasets.h5", f"set1{os.sep}new_name.csv"],
+        ["set1/new_name.h5", str(pathlib.Path("set1/new_name_datasets.h5")), str(pathlib.Path("set1/new_name.csv"))],
         {},
     ),
     "one target delete report": (
@@ -2832,7 +2832,7 @@ abaqus_extract_emitter_input = {
     "subdirectory delete report": (
         ["set1/dummy.h5"],
         [source_file],
-        ["set1/dummy.h5", f"set1{os.sep}dummy_datasets.h5"],
+        ["set1/dummy.h5", str(pathlib.Path("set1/dummy_datasets.h5"))],
         {"delete_report_file": True},
     ),
 }
