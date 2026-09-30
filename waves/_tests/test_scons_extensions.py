@@ -1106,7 +1106,11 @@ journal_emitter_input = {
     "subdirectory": (
         ["set1/dummy.cae"],
         [source_file],
-        ["set1/dummy.cae", f"set1{os.sep}dummy.cae.abaqus_v6.env", f"set1{os.sep}dummy.cae.stdout"],
+        [
+            "set1/dummy.cae",
+            str(pathlib.Path("set1/dummy.cae.abaqus_v6.env")),
+            str(pathlib.Path("set1/dummy.cae.stdout")),
+        ],
     ),
 }
 
@@ -1260,13 +1264,13 @@ solver_emitter_input = {
         [source_file],
         [
             "set1/job.sta",
-            f"set1{os.sep}job.odb",
-            f"set1{os.sep}job.dat",
-            f"set1{os.sep}job.msg",
-            f"set1{os.sep}job.com",
-            f"set1{os.sep}job.prt",
-            f"set1{os.sep}job.abaqus_v6.env",
-            f"set1{os.sep}job.stdout",
+            str(pathlib.Path("set1/job.odb")),
+            str(pathlib.Path("set1/job.dat")),
+            str(pathlib.Path("set1/job.msg")),
+            str(pathlib.Path("set1/job.com")),
+            str(pathlib.Path("set1/job.prt")),
+            str(pathlib.Path("set1/job.abaqus_v6.env")),
+            str(pathlib.Path("set1/job.stdout")),
         ],
         does_not_raise,
     ),
@@ -1275,7 +1279,12 @@ solver_emitter_input = {
         [".odb"],
         ["set1/job.sta"],
         [source_file],
-        ["set1/job.sta", f"set1{os.sep}job.odb", f"set1{os.sep}job.abaqus_v6.env", f"set1{os.sep}job.stdout"],
+        [
+            "set1/job.sta",
+            str(pathlib.Path("set1/job.odb")),
+            str(pathlib.Path("set1/job.abaqus_v6.env")),
+            str(pathlib.Path("set1/job.stdout")),
+        ],
         does_not_raise,
     ),
     "missing job_name": (
@@ -2284,7 +2293,7 @@ first_target_emitter_input = {
     "subdirectory": (
         ["set1/dummy.cub"],
         [source_file],
-        ["set1/dummy.cub", f"set1{os.sep}dummy.cub.stdout"],
+        ["set1/dummy.cub", str(pathlib.Path("set1/dummy.cub.stdout"))],
     ),
     "subdirectory only stdout": (
         ["set1/subdir1.stdout"],
@@ -2386,6 +2395,22 @@ builder_factory_tests.update(
             "action_prefix": _cd_action_prefix,
             "program": "abaqus",
             "program_required": "-interactive -ask_delete no -job ${job} -input ${SOURCE.filebase}",
+            "program_options": "",
+            "subcommand": "",
+            "subcommand_required": "",
+            "subcommand_options": "",
+            "action_suffix": _redirect_action_suffix,
+        },
+    )
+)
+builder_factory_tests.update(
+    first_target_builder_factory_test_cases(
+        "odb_extract_builder_factory",
+        {
+            "environment": "",
+            "action_prefix": _cd_action_prefix,
+            "program": "odb_extract",
+            "program_required": "${SOURCES[0].abspath} --output-file ${TARGETS[0].abspath}",
             "program_options": "",
             "subcommand": "",
             "subcommand_required": "",
@@ -2582,6 +2607,7 @@ sbatch_first_target_builder_factory_names = [
     "python_builder_factory",
     "abaqus_journal_builder_factory",
     "abaqus_solver_builder_factory",
+    "odb_extract_builder_factory",
     "quinoa_builder_factory",
     "sierra_builder_factory",
 ]
@@ -2625,7 +2651,11 @@ matlab_emitter_input = {
     "subdirectory": (
         ["set1/dummy.matlab"],
         [source_file],
-        ["set1/dummy.matlab", f"set1{os.sep}dummy.matlab.matlab.env", f"set1{os.sep}dummy.matlab.stdout"],
+        [
+            "set1/dummy.matlab",
+            str(pathlib.Path("set1/dummy.matlab.matlab.env")),
+            str(pathlib.Path("set1/dummy.matlab.stdout")),
+        ],
     ),
 }
 
@@ -2797,13 +2827,13 @@ abaqus_extract_emitter_input = {
     "subdirectory": (
         ["set1/dummy.h5"],
         [source_file],
-        ["set1/dummy.h5", f"set1{os.sep}dummy_datasets.h5", f"set1{os.sep}dummy.csv"],
+        ["set1/dummy.h5", str(pathlib.Path("set1/dummy_datasets.h5")), str(pathlib.Path("set1/dummy.csv"))],
         {},
     ),
     "subdirectory new name": (
         ["set1/new_name.h5"],
         [source_file],
-        ["set1/new_name.h5", f"set1{os.sep}new_name_datasets.h5", f"set1{os.sep}new_name.csv"],
+        ["set1/new_name.h5", str(pathlib.Path("set1/new_name_datasets.h5")), str(pathlib.Path("set1/new_name.csv"))],
         {},
     ),
     "one target delete report": (
@@ -2815,7 +2845,7 @@ abaqus_extract_emitter_input = {
     "subdirectory delete report": (
         ["set1/dummy.h5"],
         [source_file],
-        ["set1/dummy.h5", f"set1{os.sep}dummy_datasets.h5"],
+        ["set1/dummy.h5", str(pathlib.Path("set1/dummy_datasets.h5"))],
         {"delete_report_file": True},
     ),
 }
@@ -2896,6 +2926,79 @@ def test_build_odb_extract(
     mock_odb_extract.assert_has_calls(calls)
     mock_unlink.assert_has_calls([call(missing_ok=True)])
     assert mock_unlink.call_count == len(target)
+
+
+source_file = file_system.File("dummy.odb")
+odb_extract_emitter_input = {
+    "empty targets": (
+        [],
+        [source_file],
+        ["dummy.h5", "dummy_datasets.h5", "dummy.csv", "dummy.h5.stdout"],
+        {},
+    ),
+    "one target": (
+        ["new_name.h5"],
+        [source_file],
+        ["new_name.h5", "new_name_datasets.h5", "new_name.csv", "new_name.h5.stdout"],
+        {},
+    ),
+    "bad extension": (
+        ["new_name.txt"],
+        [source_file],
+        ["dummy.h5", "new_name.txt", "dummy_datasets.h5", "dummy.csv", "dummy.h5.stdout"],
+        {},
+    ),
+    "subdirectory": (
+        ["set1/dummy.h5"],
+        [source_file],
+        [
+            "set1/dummy.h5",
+            str(pathlib.Path("set1/dummy_datasets.h5")),
+            str(pathlib.Path("set1/dummy.csv")),
+            str(pathlib.Path("set1/dummy.h5.stdout")),
+        ],
+        {},
+    ),
+    "subdirectory new name": (
+        ["set1/new_name.h5"],
+        [source_file],
+        [
+            "set1/new_name.h5",
+            str(pathlib.Path("set1/new_name_datasets.h5")),
+            str(pathlib.Path("set1/new_name.csv")),
+            str(pathlib.Path("set1/new_name.h5.stdout")),
+        ],
+        {},
+    ),
+    "one target delete report": (
+        ["new_name.h5"],
+        [source_file],
+        ["new_name.h5", "new_name_datasets.h5", "new_name.h5.stdout"],
+        {"delete_report_file": True},
+    ),
+    "subdirectory delete report": (
+        ["set1/dummy.h5"],
+        [source_file],
+        [
+            "set1/dummy.h5",
+            str(pathlib.Path("set1/dummy_datasets.h5")),
+            str(pathlib.Path("set1/dummy.h5.stdout")),
+        ],
+        {"delete_report_file": True},
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("target", "source", "expected", "env"),
+    odb_extract_emitter_input.values(),
+    ids=odb_extract_emitter_input.keys(),
+)
+def test_odb_extract_emitter(
+    target: list[str], source: list[SCons.Node.FS.FS.File], expected: list[str], env: dict
+) -> None:
+    target, source = scons_extensions.odb_extract_emitter(target, source, env)
+    assert target == expected
 
 
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
@@ -3859,6 +3962,19 @@ waves_environment_builders = {
         {
             "program": "${ABAQUS_PROGRAM}",
             "emitter": scons_extensions.abaqus_standard_emitter,
+            "action_prefix": "${ACTION_PREFIX}",
+            "action_suffix": "${ACTION_SUFFIX}",
+        },
+    ),
+    "ODBExtract": (
+        "ODBExtract",
+        "odb_extract_builder_factory",
+        {
+            "program": "${ODB_EXTRACT_PROGRAM}",
+            "program_required": (
+                "${SOURCES[0].abspath} --output-file ${TARGETS[0].abspath} --abaqus-command ${ABAQUS_PROGRAM}"
+            ),
+            "emitter": scons_extensions.odb_extract_emitter,
             "action_prefix": "${ACTION_PREFIX}",
             "action_suffix": "${ACTION_SUFFIX}",
         },

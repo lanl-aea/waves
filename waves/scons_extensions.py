@@ -1762,12 +1762,14 @@ def abaqus_datacheck_emitter(
        env = Environment()
        env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
        env["ABAQUS_PROGRAM"] = env.AddProgram(["abaqus"])
-       env.Append(BUILDERS={
-           "AbaqusDatacheck": waves.scons_extensions.abaqus_solver_builder_factory(
-               program=env["ABAQUS_PROGRAM"],
-               emitter=waves.scons_extensions.abaqus_datacheck_emitter,
-           )
-       })
+       env.Append(
+           BUILDERS={
+               "AbaqusDatacheck": waves.scons_extensions.abaqus_solver_builder_factory(
+                   program=env["ABAQUS_PROGRAM"],
+                   emitter=waves.scons_extensions.abaqus_datacheck_emitter,
+               )
+           }
+       )
        env.AbaqusDatacheck(target=["job.odb"], source=["input.inp"], job="job")
 
     .. note::
@@ -2861,6 +2863,146 @@ def _build_odb_extract(
         abaqus_command=env["program"],
         delete_report_file=delete_report_file,
     )
+
+
+def odb_extract_emitter(
+    target: list,
+    source: list,
+    env: SCons.Environment.Environment,
+) -> tuple[list, list]:
+    """Prepend the ODB extract builder target H5 file if none is specified.
+
+    Appends the ``source[0].csv`` Abaqus report file unless ``delete_report_file`` is ``True``. Always appends the
+    ``target[0]_datasets.h5`` file. Always appends a ``*.stdout`` file.
+
+    If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
+    directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
+    least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.h5``. When in doubt,
+    provide the expected H5 file as a target, e.g. ``source[0].h5``.
+
+    Searches for a file ending in the stdout extension. If none is found, creates a target by appending the stdout
+    extension to the first target in the ``target`` list. The stdout file is always placed at the end of the returned
+    target list.
+
+    :param target: The target file list of strings
+    :param source: The source file list of SCons.Node.FS.File objects
+    :param env: The builder's SCons construction environment object
+
+    :return: target, source
+    """
+    target, source = _abaqus_extract_emitter(target, source, env)
+    return first_target_emitter(target, source, env)
+
+
+def odb_extract_builder_factory(
+    environment: str = "",
+    action_prefix: str = _settings._cd_action_prefix,
+    program: str = "odb_extract",
+    program_required: str = "${SOURCES[0].abspath} --output-file ${TARGETS[0].abspath}",
+    program_options: str = "",
+    subcommand: str = "",
+    subcommand_required: str = "",
+    subcommand_options: str = "",
+    action_suffix: str = _settings._redirect_action_suffix,
+    emitter: collections.abc.Callable[
+        [list, list, SCons.Environment.Environment], tuple[list, list]
+    ] = first_target_emitter,
+    **kwargs,
+) -> SCons.Builder.Builder:
+    """ODB extract builder factory.
+
+    This builder factory extends :meth:`waves.scons_extensions.first_target_builder_factory`. This builder factory uses
+    the :meth:`waves.scons_extensions.first_target_emitter`. At least one task target must be specified in the task
+    definition and the last target will always be the expected STDOUT and STDERR redirection output file,
+    ``TARGETS[-1]`` ending in ``*.stdout``.
+
+    To produce behavior similar to :meth:`waves.scons_extensions.abaqus_extract`, use the
+    :meth:`waves.scons_extensions.odb_extract_emitter`, which is compatible with the expected
+    :meth:`waves.scons_extensions.first_target_emitter` behavior, but does not require a target and manages the
+    ODB extract ``*_datasets.h5`` file and Abaqus report ``*.csv`` file.
+
+    .. warning::
+
+       Users overriding the ``emitter`` keyword argument are responsible for providing an emitter with equivalent STDOUT
+       file handling behavior as :meth:`waves.scons_extensions.first_target_emitter` or updating the ``action_suffix``
+       option to match their emitter's behavior.
+
+    With the default options this builder requires the following sources file provided in the order:
+
+    1. ODB file to extract: ``*.odb``
+
+    .. code-block::
+       :caption: action string construction
+
+       ${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}
+
+    .. code-block::
+       :caption: action string default expansion
+
+       cd ${TARGET.dir.abspath} && odb_extract ${SOURCES[0].abspath} --output-file ${TARGETS[0].abspath} > ${TARGETS[-1].abspath} 2>&1
+
+    .. code-block::
+       :caption: SConstruct
+
+       import waves
+       env = Environment()
+       env.Append(BUILDERS={"ODBExtract": waves.scons_extensions.odb_extract_builder_factory()})
+       env.ODBExtract(source=["simulation.odb"])
+
+    The builder returned by this factory accepts all SCons Builder arguments. The arguments of this function are also
+    available as keyword arguments of the builder. When provided during task definition, the task keyword arguments
+    override the builder keyword arguments.
+
+    :param environment: This variable is intended primarily for use with builders and tasks that can not execute from an
+        SCons construction environment. For instance, when tasks execute on a remote server with SSH wrapped actions
+        using :meth:`waves.scons_extensions.ssh_builder_actions` and therefore must initialize the remote environment as
+        part of the builder action.
+    :param action_prefix: This variable is intended to perform directory change operations prior to program execution
+    :param program: The ODB extract program absolute or relative path
+    :param program_required: Space delimited string of required ODB extract options and arguments that are
+        crucial to builder behavior and should not be modified except by advanced users
+    :param program_options: Space delimited string of optional ODB extract options and arguments that can be
+        freely modified by the user
+    :param subcommand: A subcommand absolute or relative path
+    :param subcommand_required: Space delimited string of required subcommand options and arguments
+        that are crucial to builder behavior and should not be modified except by advanced users.
+    :param subcommand_options: Space delimited string of optional subcommand options and arguments
+        that can be freely modified by the user
+    :param action_suffix: This variable is intended to perform program STDOUT and STDERR redirection operations.
+    :param emitter: An SCons emitter function. This is not a keyword argument in the action string.
+    :param kwargs: Any additional keyword arguments are passed directly to the SCons builder object.
+
+    :return: ODB extract builder
+    """  # noqa: E501
+    builder = first_target_builder_factory(
+        environment=environment,
+        action_prefix=action_prefix,
+        program=program,
+        program_required=program_required,
+        program_options=program_options,
+        subcommand=subcommand,
+        subcommand_required=subcommand_required,
+        subcommand_options=subcommand_options,
+        action_suffix=action_suffix,
+        emitter=emitter,
+        **kwargs,
+    )
+    return builder
+
+
+@catenate_actions(program="$(sbatch$)", options=_settings._sbatch_wrapper_options)
+def sbatch_odb_extract_builder_factory(*args, **kwargs) -> SCons.Builder.Builder:
+    """Thin pass through wrapper of :meth:`waves.scons_extensions.odb_extract_builder_factory`.
+
+    Catenate the actions and submit with `SLURM`_ `sbatch`_. Accepts the ``sbatch_options`` builder keyword argument to
+    modify sbatch behavior.
+
+    .. code-block::
+       :caption: action string construction
+
+       $(sbatch$) --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
+    """  # noqa: E501
+    return odb_extract_builder_factory(*args, **kwargs)
 
 
 def sbatch(
@@ -4477,6 +4619,7 @@ class WAVESEnvironment(SConsEnvironment):
         FIERRO_IMPLICIT_PROGRAM: str = "fierro-parallel-implicit",  # noqa: N803
         INCITER_PROGRAM: str = "inciter",  # noqa: N803
         MPIRUN_PROGRAM: str = "mpirun",  # noqa: N803
+        ODB_EXTRACT_PROGRAM: str = "odb_extract",  # noqa: N803
         PYTHON_PROGRAM: str = "python",  # noqa: N803
         SIERRA_PROGRAM: str = "sierra",  # noqa: N803
         SPHINX_BUILD_PROGRAM: str = "sphinx-build",  # noqa: N803
@@ -4494,6 +4637,7 @@ class WAVESEnvironment(SConsEnvironment):
             FIERRO_IMPLICIT_PROGRAM=FIERRO_IMPLICIT_PROGRAM,
             INCITER_PROGRAM=INCITER_PROGRAM,
             MPIRUN_PROGRAM=MPIRUN_PROGRAM,
+            ODB_EXTRACT_PROGRAM=ODB_EXTRACT_PROGRAM,
             PYTHON_PROGRAM=PYTHON_PROGRAM,
             SIERRA_PROGRAM=SIERRA_PROGRAM,
             SPHINX_BUILD_PROGRAM=SPHINX_BUILD_PROGRAM,
@@ -5143,6 +5287,40 @@ class WAVESEnvironment(SConsEnvironment):
         """
         pseudo_builder = AbaqusPseudoBuilder(builder=self.AbaqusSolver, override_cpus=override_cpus)
         return pseudo_builder(self, job, *args, **kwargs)
+
+    def ODBExtract(  # noqa: N802
+        self,
+        target: list,
+        source: list,
+        *args,
+        **kwargs,
+    ) -> SCons.Node.NodeList:
+        """Define tasks with builder returned by :meth:`waves.scons_extensions.odb_extract_builder_factory`.
+
+        Uses the :meth:`waves.scons_extensions.odb_extract_emitter`.
+
+        :var program: ``${ODB_EXTRACT_PROGRAM}``
+        :var program_required: ``${SOURCES[0].abspath} --output-file ${TARGETS[0].abspath} --abaqus-command
+            ${ABAQUS_PROGRAM}``
+        :var emitter: :meth:`waves.scons_extensions.abaqus_standard_emitter`
+        :var action_prefix: ``${ACTION_PREFIX}``
+        :var action_suffix: ``${ACTION_SUFFIX}``
+
+        :param target: The task target list
+        :param source: The task source list
+        :param args: All positional arguments are passed through to the builder (*not* to the builder factory)
+        :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
+        """
+        builder = odb_extract_builder_factory(
+            program="${ODB_EXTRACT_PROGRAM}",
+            program_required=(
+                "${SOURCES[0].abspath} --output-file ${TARGETS[0].abspath} --abaqus-command ${ABAQUS_PROGRAM}"
+            ),
+            emitter=odb_extract_emitter,
+            action_prefix="${ACTION_PREFIX}",
+            action_suffix="${ACTION_SUFFIX}",
+        )
+        return builder(self, *args, target=target, source=source, **kwargs)
 
     def PythonScript(  # noqa: N802
         self, target: list, source: list, *args, **kwargs

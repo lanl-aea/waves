@@ -12,9 +12,16 @@ Documentation
 =============
 - Update the tutorial for automating parameter study extensions (:issue:`1029`, :merge:`1340`). By `Kyle Brindley`_.
 
+Enhancements
+============
+- Add ODB extract command-line style builder factory and WAVESEnvironment builder (:issue:`1342`, :merge:`1033`). By
+  `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Add SCons v4.11 to Conda recipe test matrix. By `Kyle Brindley`_.
+- Resolve OS-specific path-like test expectations with pathlib for improved construction and read-ability
+  (:issue:`1342`, :merge:`1033`). By `Kyle Brindley`_.
 
 ******************
 1.5.3 (2026-09-25)
