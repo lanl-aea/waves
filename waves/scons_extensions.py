@@ -1762,12 +1762,14 @@ def abaqus_datacheck_emitter(
        env = Environment()
        env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
        env["ABAQUS_PROGRAM"] = env.AddProgram(["abaqus"])
-       env.Append(BUILDERS={
-           "AbaqusDatacheck": waves.scons_extensions.abaqus_solver_builder_factory(
-       program=env["ABAQUS_PROGRAM"],
-       emitter=waves.scons_extensions.abaqus_datacheck_emitter,
-           )
-       })
+       env.Append(
+           BUILDERS={
+               "AbaqusDatacheck": waves.scons_extensions.abaqus_solver_builder_factory(
+                   program=env["ABAQUS_PROGRAM"],
+                   emitter=waves.scons_extensions.abaqus_datacheck_emitter,
+               )
+           }
+       )
        env.AbaqusDatacheck(target=["job.odb"], source=["input.inp"], job="job")
 
     .. note::
