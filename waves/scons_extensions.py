@@ -2863,6 +2863,68 @@ def _build_odb_extract(
     )
 
 
+def odb_extract_emitter(
+    target: list,
+    source: list,
+    env: SCons.Environment.Environment,
+) -> tuple[list, list]:
+    """Prepend the ODB extract builder target H5 file if none is specified.
+
+    .. Calls :meth:`waves.scons_extensions._abaqus_extract_emitter` and :meth:`waves.scons_extensions.first_target_emitter` in that order.
+
+    Appends the ``source[0].csv`` Abaqus report file unless ``delete_report_file`` is ``True``. Always appends the
+    ``target[0]_datasets.h5`` file. Always appends a ``*.stdout`` file.
+
+    If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
+    directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
+    least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.h5``. When in doubt,
+    provide the expected H5 file as a target, e.g. ``source[0].h5``.
+
+    Searches for a file ending in the stdout extension. If none is found, creates a target by appending the stdout
+    extension to the first target in the ``target`` list. The stdout file is always placed at the end of the returned
+    target list.
+
+    :param target: The target file list of strings
+    :param source: The source file list of SCons.Node.FS.File objects
+    :param env: The builder's SCons construction environment object
+
+    :return: target, source
+    """
+    target, source = _abaqus_extract_emitter(target, source, env)
+    return first_target_emitter(target, source, env)
+
+
+def odb_extract(
+    environment: str = "",
+    action_prefix: str = _settings._cd_action_prefix,
+    program: str = "odb_extract",
+    program_required: str = "${SOURCES[0].abspath} --output-file ${TARGETS[0].abspath}",
+    program_options: str = "",
+    subcommand: str = "",
+    subcommand_required: str = "",
+    subcommand_options: str = "",
+    action_suffix: str = _settings._redirect_action_suffix,
+    emitter: collections.abc.Callable[
+        [list, list, SCons.Environment.Environment], tuple[list, list]
+    ] = odb_extract_emitter,
+    **kwargs,
+) -> SCons.Builder.Builder:
+    builder = first_target_builder_factory(
+        environment=environment,
+        action_prefix=action_prefix,
+        program=program,
+        program_required=program_required,
+        program_options=program_options,
+        subcommand=subcommand,
+        subcommand_required=subcommand_required,
+        subcommand_options=subcommand_options,
+        action_suffix=action_suffix,
+        emitter=emitter,
+        **kwargs,
+    )
+    return builder
+
+
 def sbatch(
     program: str = "$(sbatch$)",
     required: str = "--wait --output=${TARGETS[-1].abspath}",
