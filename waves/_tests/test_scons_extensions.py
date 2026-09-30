@@ -2898,6 +2898,79 @@ def test_build_odb_extract(
     assert mock_unlink.call_count == len(target)
 
 
+source_file = file_system.File("dummy.odb")
+odb_extract_emitter_input = {
+    "empty targets": (
+        [],
+        [source_file],
+        ["dummy.h5", "dummy_datasets.h5", "dummy.csv", "dummy.h5.stdout"],
+        {},
+    ),
+    "one target": (
+        ["new_name.h5"],
+        [source_file],
+        ["new_name.h5", "new_name_datasets.h5", "new_name.csv", "new_name.h5.stdout"],
+        {},
+    ),
+    "bad extension": (
+        ["new_name.txt"],
+        [source_file],
+        ["dummy.h5", "new_name.txt", "dummy_datasets.h5", "dummy.csv", "dummy.h5.stdout"],
+        {},
+    ),
+    "subdirectory": (
+        ["set1/dummy.h5"],
+        [source_file],
+        [
+            "set1/dummy.h5",
+            str(pathlib.Path("set1/dummy_datasets.h5")),
+            str(pathlib.Path("set1/dummy.csv")),
+            str(pathlib.Path("set1/dummy.h5.stdout")),
+        ],
+        {},
+    ),
+    "subdirectory new name": (
+        ["set1/new_name.h5"],
+        [source_file],
+        [
+            "set1/new_name.h5",
+            str(pathlib.Path("set1/new_name_datasets.h5")),
+            str(pathlib.Path("set1/new_name.csv")),
+            str(pathlib.Path("set1/new_name.h5.stdout")),
+        ],
+        {},
+    ),
+    "one target delete report": (
+        ["new_name.h5"],
+        [source_file],
+        ["new_name.h5", "new_name_datasets.h5", "new_name.h5.stdout"],
+        {"delete_report_file": True},
+    ),
+    "subdirectory delete report": (
+        ["set1/dummy.h5"],
+        [source_file],
+        [
+            "set1/dummy.h5",
+            str(pathlib.Path("set1/dummy_datasets.h5")),
+            str(pathlib.Path("set1/dummy.h5.stdout")),
+        ],
+        {"delete_report_file": True},
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    ("target", "source", "expected", "env"),
+    odb_extract_emitter_input.values(),
+    ids=odb_extract_emitter_input.keys(),
+)
+def test_odb_extract_emitter(
+    target: list[str], source: list[SCons.Node.FS.FS.File], expected: list[str], env: dict
+) -> None:
+    target, source = scons_extensions.odb_extract_emitter(target, source, env)
+    assert target == expected
+
+
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
 # target per set.
 sbatch_input = {
