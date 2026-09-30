@@ -1106,7 +1106,11 @@ journal_emitter_input = {
     "subdirectory": (
         ["set1/dummy.cae"],
         [source_file],
-        ["set1/dummy.cae", str(pathlib.Path("set1/dummy.cae.abaqus_v6.env")), str(pathlib.Path("set1/dummy.cae.stdout"))],
+        [
+            "set1/dummy.cae",
+            str(pathlib.Path("set1/dummy.cae.abaqus_v6.env")),
+            str(pathlib.Path("set1/dummy.cae.stdout")),
+        ],
     ),
 }
 
@@ -1275,7 +1279,12 @@ solver_emitter_input = {
         [".odb"],
         ["set1/job.sta"],
         [source_file],
-        ["set1/job.sta", str(pathlib.Path("set1/job.odb")), str(pathlib.Path("set1/job.abaqus_v6.env")), str(pathlib.Path("set1/job.stdout"))],
+        [
+            "set1/job.sta",
+            str(pathlib.Path("set1/job.odb")),
+            str(pathlib.Path("set1/job.abaqus_v6.env")),
+            str(pathlib.Path("set1/job.stdout")),
+        ],
         does_not_raise,
     ),
     "missing job_name": (
@@ -2642,7 +2651,11 @@ matlab_emitter_input = {
     "subdirectory": (
         ["set1/dummy.matlab"],
         [source_file],
-        ["set1/dummy.matlab", str(pathlib.Path("set1/dummy.matlab.matlab.env")), str(pathlib.Path("set1/dummy.matlab.stdout"))],
+        [
+            "set1/dummy.matlab",
+            str(pathlib.Path("set1/dummy.matlab.matlab.env")),
+            str(pathlib.Path("set1/dummy.matlab.stdout")),
+        ],
     ),
 }
 
