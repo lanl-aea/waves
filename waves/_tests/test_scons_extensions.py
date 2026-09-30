@@ -3952,6 +3952,19 @@ waves_environment_builders = {
             "action_suffix": "${ACTION_SUFFIX}",
         },
     ),
+    "ODBExtract": (
+        "ODBExtract",
+        "odb_extract_builder_factory",
+        {
+            "program": "${ODB_EXTRACT_PROGRAM}",
+            "program_required": (
+                "${SOURCES[0].abspath} --output-file ${TARGETS[0].abspath} --abaqus-command ${ABAQUS_PROGRAM}"
+            ),
+            "emitter": scons_extensions.odb_extract_emitter,
+            "action_prefix": "${ACTION_PREFIX}",
+            "action_suffix": "${ACTION_SUFFIX}",
+        },
+    ),
     "PythonScript": (
         "PythonScript",
         "python_builder_factory",

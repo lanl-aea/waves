@@ -5273,40 +5273,37 @@ class WAVESEnvironment(SConsEnvironment):
 
     def ODBExtract(  # noqa: N802
         self,
-        source: str | pathlib.Path | SCons.Node.Node,
-        output_file: str | pathlib.Path | SCons.Node.Node | None = None,
-        output_file_type: typing.Literal["h5", "json", "yaml"] = "h5",
-        odb_report_args: str | None = None,
-        abaqus_command: str = "${ABAQUS_COMMAND}",
-        delete_report_file: bool = False,
-        verbose: bool = False,
-        program: str = "${ODB_EXTRACT_PROGRAM}",
-        action_prefix: str = "${ACTION_PREFIX}",
-        action_suffix: str = "${ACTION_SUFFIX}",
+        target: list,
+        source: list,
+        *args,
+        **kwargs,
     ) -> SCons.Node.NodeList:
-        if not isinstance(source, (list, SCons.Node.NodeList)):
-            source = [source]
-        if output_file is None:
-            output_file = pathlib.Path(str(source[0])).with_suffix(f".{output_file_type}")
-        target = [output_file]
-        program_required = (
-            "${SOURCES[0].abspath} --output-file ${TARGETS[0].abspath}"
-            f" --output-file-type {output_file_type}"
-            f" --abaqus-command {abaqus_command}"
+        """Define tasks with builder returned by :meth:`waves.scons_extensions.odb_extract_builder_factory`.
+
+        Uses the :meth:`waves.scons_extensions.odb_extract_emitter`.
+
+        :var program: ``${ODB_EXTRACT_PROGRAM}``
+        :var program_required: ``${SOURCES[0].abspath} --output-file ${TARGETS[0].abspath} --abaqus-command
+            ${ABAQUS_PROGRAM}``
+        :var emitter: :meth:`waves.scons_extensions.abaqus_standard_emitter`
+        :var action_prefix: ``${ACTION_PREFIX}``
+        :var action_suffix: ``${ACTION_SUFFIX}``
+
+        :param target: The task target list
+        :param source: The task source list
+        :param args: All positional arguments are passed through to the builder (*not* to the builder factory)
+        :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
+        """
+        builder = odb_extract_builder_factory(
+            program="${ODB_EXTRACT_PROGRAM}",
+            program_required=(
+                "${SOURCES[0].abspath} --output-file ${TARGETS[0].abspath} --abaqus-command ${ABAQUS_PROGRAM}"
+            ),
+            emitter=odb_extract_emitter,
+            action_prefix="${ACTION_PREFIX}",
+            action_suffix="${ACTION_SUFFIX}",
         )
-        if odb_report_args is not None:
-            program_required += f" --odb-report-args {odb_report_args}"
-        if delete_report_file:
-            program_required += " --delete-report-file"
-        if verbose:
-            program_required += " --verbose"
-        builder = first_target_builder_factory(
-            program=program,
-            program_required=program_required,
-            action_prefix=action_prefix,
-            action_suffix=action_suffix,
-        )
-        return builder(self, target=target, source=source)
+        return builder(self, *args, target=target, source=source, **kwargs)
 
     def PythonScript(  # noqa: N802
         self, target: list, source: list, *args, **kwargs
