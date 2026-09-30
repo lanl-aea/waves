@@ -2870,8 +2870,6 @@ def odb_extract_emitter(
 ) -> tuple[list, list]:
     """Prepend the ODB extract builder target H5 file if none is specified.
 
-    .. Calls :meth:`waves.scons_extensions._abaqus_extract_emitter` and :meth:`waves.scons_extensions.first_target_emitter` in that order.
-
     Appends the ``source[0].csv`` Abaqus report file unless ``delete_report_file`` is ``True``. Always appends the
     ``target[0]_datasets.h5`` file. Always appends a ``*.stdout`` file.
 
