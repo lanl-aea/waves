@@ -25,11 +25,10 @@ command_template = string.Template(
 )
 
 package_versions = {
-    "python": ["3.10", "3.11", "3.12", "3.13", "3.14"],
+    "python": ["3.11", "3.12", "3.13", "3.14"],
     "scons": ["4.6", "4.7", "4.8", "4.9", "4.10", "4.11"],
 }
 remove_cases = [
-    {"python": "3.10", "scons": "4.11"},
     {"python": "3.13", "scons": "4.6"},
     {"python": "3.14", "scons": "4.6"},
     {"python": "3.14", "scons": "4.7"},
@@ -69,7 +68,7 @@ def test_matrix(request: pytest.FixtureRequest, python_version: str, scons_versi
     """Run the conda-recipe build against a matrix of dependencies.
 
     :param request: pytest request fixture used to recover the parameterized test ID
-    :param python_version: the Python version with major and minor version numbers, e.g. "3.10"
+    :param python_version: the Python version with major and minor version numbers, e.g. "3.11"
     :param scons_version: the SCons version with major and minor version numbers, e.g. "4.6"
     """
     test_id = request.node.callspec.id

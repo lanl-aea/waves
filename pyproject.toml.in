@@ -15,7 +15,7 @@ authors = [
 ]
 description = "Computational science and engineering parametric study workflows"
 readme = "README.rst"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = "BSD-3-Clause"
 license-files = ["LICENSE.txt"]
 classifiers = [
@@ -78,7 +78,7 @@ markers = [
 addopts = "--ignore='build' --ignore='install' --ignore='tmp' --ignore='waves/modsim_template/' --ignore='modsim_template/' --ignore='waves/modsim_template_2/' --ignore='modsim_template_2/' --ignore='waves/tutorials/' --ignore='tutorials/' --tb=long --showlocals --failed-first --strict-markers -m 'not systemtest' --import-mode=importlib -ra"
 
 [tool.ruff]
-target-version = "py310"
+target-version = "py311"
 line-length = 120
 extend-exclude = ["build", "install", "conda-environment", "env", "conda-pkgs", "pkgs", "tmp", "pip-build-test"]
 extend-include = ["*SConstruct", "*SConscript", "*.scons"]
