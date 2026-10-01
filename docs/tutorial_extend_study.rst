@@ -4,12 +4,6 @@
 Automatically Extending a Parameter Study
 #########################################
 
-.. warning::
-
-   The ``waves build`` feature is considered experimental. The feature should be treated like an alpha feature whose
-   design, behavior, and interface may change without notice. This feature is documented to solicit user feedback on
-   preferred behavior and usefulness.
-
 .. include:: wip_warning.txt
 
 **********
