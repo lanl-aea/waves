@@ -216,9 +216,5 @@ try:
     # SCons >=4.9.0
     Help(alias_help, append=True, local_only=True)
 except TypeError:
-    try:
-        # SCons >=4.6,<4.9.0
-        Help(alias_help, append=True, keep_local=True)
-    except TypeError:
-        # SCons <4.6
-        Help(alias_help, append=True)
+    # SCons >=4.6,<4.9.0
+    Help(alias_help, append=True, keep_local=True)

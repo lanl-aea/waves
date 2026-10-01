@@ -6,6 +6,6 @@ dependencies:
   - ccx2paraview >=3.2
   - ipython
   - python-gmsh
-  - scons >=4
+  - scons >=4.6
   - vtk
   - waves >=0.11.0

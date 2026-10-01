@@ -18,16 +18,6 @@ def test_project_help_default_targets() -> None:
     ]
     mock_help.assert_has_calls(calls)
 
-    # Raise TypeError mocking SCons <4.6.0
-    with patch("SCons.Script.SConscript.SConsEnvironment.Help", side_effect=[TypeError, TypeError, None]) as mock_help:
-        scons_extensions.project_help_default_targets()
-    calls = [
-        call(ANY, "\nDefault Targets:\n", append=True, local_only=True),
-        call(ANY, "\nDefault Targets:\n", append=True, keep_local=True),
-        call(ANY, "\nDefault Targets:\n", append=True),
-    ]
-    mock_help.assert_has_calls(calls)
-
     # No environment provided
     with patch("SCons.Script.SConscript.SConsEnvironment.Help", side_effect=[None, None]) as mock_help:
         scons_extensions.project_help_default_targets()
@@ -60,16 +50,6 @@ def test_project_help_aliases() -> None:
     calls = [
         call(ANY, "\nTarget Aliases:\n", append=True, local_only=True),
         call(ANY, "\nTarget Aliases:\n", append=True, keep_local=True),
-    ]
-    mock_help.assert_has_calls(calls)
-
-    # Raise TypeError mocking SCons <4.6.0
-    with patch("SCons.Script.SConscript.SConsEnvironment.Help", side_effect=[TypeError, TypeError, None]) as mock_help:
-        scons_extensions.project_help_aliases()
-    calls = [
-        call(ANY, "\nTarget Aliases:\n", append=True, local_only=True),
-        call(ANY, "\nTarget Aliases:\n", append=True, keep_local=True),
-        call(ANY, "\nTarget Aliases:\n", append=True),
     ]
     mock_help.assert_has_calls(calls)
 
