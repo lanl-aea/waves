@@ -5302,7 +5302,7 @@ class WAVESEnvironment(SConsEnvironment):
         :var program: ``${ODB_EXTRACT_PROGRAM}``
         :var program_required: ``${SOURCES[0].abspath} --output-file ${TARGETS[0].abspath} --abaqus-command
             ${ABAQUS_PROGRAM}``
-        :var emitter: :meth:`waves.scons_extensions.abaqus_standard_emitter`
+        :var emitter: :meth:`waves.scons_extensions.odb_extract_emitter`
         :var action_prefix: ``${ACTION_PREFIX}``
         :var action_suffix: ``${ACTION_SUFFIX}``
 
