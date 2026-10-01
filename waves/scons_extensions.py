@@ -2946,7 +2946,13 @@ def odb_extract_builder_factory(
 
        import waves
        env = Environment()
-       env.Append(BUILDERS={"ODBExtract": waves.scons_extensions.odb_extract_builder_factory()})
+       env.Append(
+           BUILDERS={
+               "ODBExtract": waves.scons_extensions.odb_extract_builder_factory(
+                   emitter=waves.scons_extensions.odb_extract_emitter
+               )
+           }
+       )
        env.ODBExtract(source=["simulation.odb"])
 
     The builder returned by this factory accepts all SCons Builder arguments. The arguments of this function are also
