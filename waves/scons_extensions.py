@@ -445,12 +445,8 @@ def project_help_default_targets(
         # SCons >=4.9.0
         SConsEnvironment.Help(env, default_targets_help, append=append, local_only=local_only)
     except TypeError:
-        try:
-            # SCons >=4.6,<4.9.0
-            SConsEnvironment.Help(env, default_targets_help, append=append, keep_local=local_only)
-        except TypeError:
-            # SCons <4.6
-            SConsEnvironment.Help(env, default_targets_help, append=append)
+        # SCons >=4.6,<4.9.0
+        SConsEnvironment.Help(env, default_targets_help, append=append, keep_local=local_only)
 
 
 def project_help_aliases(
@@ -486,12 +482,8 @@ def project_help_aliases(
         # SCons >=4.9.0
         SConsEnvironment.Help(env, alias_help, append=append, local_only=local_only)
     except TypeError:
-        try:
-            # SCons >=4.6,<4.9.0
-            SConsEnvironment.Help(env, alias_help, append=append, keep_local=local_only)
-        except TypeError:
-            # SCons <4.6
-            SConsEnvironment.Help(env, alias_help, append=append)
+        # SCons >=4.6,<4.9.0
+        SConsEnvironment.Help(env, alias_help, append=append, keep_local=local_only)
 
 
 def project_alias(

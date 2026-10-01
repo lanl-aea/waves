@@ -428,7 +428,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 for i, line_value in enumerate(line_values[2:]):
                     try:
                         connectivity_list.append(int(line_value.strip()))
-                    except ValueError:  # noqa: PERF203
+                    except ValueError:
                         # Sometimes the section category name is a string at the end of the line
                         section_category_name = " ".join(line_values[i - 1 :])
                 try:
@@ -459,7 +459,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 for i, line_value in enumerate(line_values[2:]):
                     try:
                         connectivity_list.append(int(line_value.strip()))
-                    except ValueError:  # noqa: PERF203
+                    except ValueError:
                         # Sometimes the section category name is a string at the end of the line
                         element["sectionCategory"] = {}
                         element["sectionCategory"]["name"] = " ".join(line_values[i - 1 :])

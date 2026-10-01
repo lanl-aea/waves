@@ -10,6 +10,7 @@ import unittest
 from unittest.mock import Mock, call, patch
 
 import pytest
+import SCons.Environment
 import SCons.Node.FS
 
 from waves import _utilities, parameter_generators, scons_extensions
@@ -3383,10 +3384,8 @@ def test_parameter_study_sconscript(
     env = SCons.Environment.Environment()
 
     # Test function style call
-    # Git commit 7a95cef7: Normally you expect something like ``patch("SCons.Script.SConscript.SConsEnvironment...")``
-    # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with (
-        patch("waves.scons_extensions.SConsEnvironment.SConscript") as mock_sconscript,
+        patch("SCons.Script.SConscript.SConsEnvironment.SConscript") as mock_sconscript,
         outcome,
     ):
         scons_extensions.parameter_study_sconscript(env, *args, **kwargs)
@@ -3394,10 +3393,8 @@ def test_parameter_study_sconscript(
 
     # Test AddMethod style call
     env.AddMethod(scons_extensions.parameter_study_sconscript, "ParameterStudySConscript")
-    # Git commit 7a95cef7: Normally you expect something like ``patch("SCons.Script.SConscript.SConsEnvironment...")``
-    # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with (
-        patch("waves.scons_extensions.SConsEnvironment.SConscript") as mock_sconscript,
+        patch("SCons.Script.SConscript.SConsEnvironment.SConscript") as mock_sconscript,
         outcome,
     ):
         env.ParameterStudySConscript(*args, **kwargs)
@@ -3407,11 +3404,9 @@ def test_parameter_study_sconscript(
     waves_env = scons_extensions.WAVESEnvironment()
     with patch("waves._utilities.cache_environment"):
         waves_shell_env = scons_extensions.WAVESShellEnvironment("dummy_command")
-    # Git commit 7a95cef7: Normally you expect something like ``patch("SCons.Script.SConscript.SConsEnvironment...")``
-    # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     for env in (waves_env, waves_shell_env):
         with (
-            patch("waves.scons_extensions.SConsEnvironment.SConscript") as mock_sconscript,
+            patch("SCons.Script.SConscript.SConsEnvironment.SConscript") as mock_sconscript,
             outcome,
         ):
             env.ParameterStudySConscript(*args, **kwargs)
