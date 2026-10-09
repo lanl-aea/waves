@@ -26,6 +26,7 @@ Internal Changes
 - Add SCons v4.11 to Conda recipe test matrix. By `Kyle Brindley`_.
 - Resolve OS-specific path-like test expectations with pathlib for improved construction and read-ability
   (:issue:`1342`, :merge:`1033`). By `Kyle Brindley`_.
+- Added modsim template 2 documentation (:issue:`1028`. :merge:`1028`) and updated the path (:issue:`1034`, :merge:`1034`). By `Erica Hinrichs`_.
 
 ******************
 1.5.3 (2026-09-25)
