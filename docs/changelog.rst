@@ -8,6 +8,10 @@ Changelog
 1.6.0 (unreleased)
 ******************
 
+******************
+1.5.5 (2026-10-19)
+******************
+
 Internal Changes
 ================
 - Drop support for Python 3.10 and SCons <4.6 (:issue:`1036`, :merge:`1344`). By `Kyle Brindley`_.
